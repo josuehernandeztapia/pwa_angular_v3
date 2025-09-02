@@ -1,0 +1,115 @@
+[
+  {
+    "id": "history-001",
+    "documentId": "doc-001",
+    "action": "uploaded",
+    "timestamp": "2024-01-16T09:15:00Z",
+    "actor": "Juan Pérez García",
+    "actorType": "client",
+    "description": "Documento subido por el cliente",
+    "details": {
+      "fileName": "INE_Juan_Perez.pdf",
+      "fileSize": 2048576,
+      "version": 1
+    }
+  },
+  {
+    "id": "history-002",
+    "documentId": "doc-001",
+    "action": "auto_processed",
+    "timestamp": "2024-01-16T09:16:30Z",
+    "actor": "Sistema OCR",
+    "actorType": "system",
+    "description": "Procesamiento automático completado",
+    "details": {
+      "ocrSuccess": true,
+      "dataExtracted": {
+        "name": "JUAN PEREZ GARCIA",
+        "curp": "PEGJ850315HDFRZN03",
+        "expirationDate": "2029-03-15"
+      },
+      "qualityScore": 95
+    }
+  },
+  {
+    "id": "history-003",
+    "documentId": "doc-001",
+    "action": "queued_for_review",
+    "timestamp": "2024-01-16T09:17:00Z",
+    "actor": "Sistema",
+    "actorType": "system",
+    "description": "Documento enviado a cola de revisión",
+    "details": {
+      "priority": "normal",
+      "estimatedReviewTime": "2-4 horas"
+    }
+  },
+  {
+    "id": "history-004",
+    "documentId": "doc-001",
+    "action": "review_started",
+    "timestamp": "2024-02-01T13:45:00Z",
+    "actor": "María González",
+    "actorType": "reviewer",
+    "description": "Revisión iniciada por el equipo de validación",
+    "details": {
+      "reviewer": "María González",
+      "reviewerId": "reviewer-002"
+    }
+  },
+  {
+    "id": "history-005",
+    "documentId": "doc-001", 
+    "action": "approved",
+    "timestamp": "2024-02-01T14:20:00Z",
+    "actor": "María González",
+    "actorType": "reviewer",
+    "description": "Documento aprobado exitosamente",
+    "details": {
+      "reviewNotes": "Documento válido y legible, información consistente",
+      "reviewDuration": "35 minutos",
+      "autoApproval": false
+    }
+  },
+  {
+    "id": "history-006",
+    "documentId": "doc-001",
+    "action": "client_notified",
+    "timestamp": "2024-02-01T14:25:00Z",
+    "actor": "Sistema de Notificaciones",
+    "actorType": "system",
+    "description": "Cliente notificado de la aprobación",
+    "details": {
+      "notificationMethods": ["email", "sms"],
+      "emailSent": true,
+      "smsSent": true
+    }
+  },
+  {
+    "id": "history-007",
+    "documentId": "doc-001",
+    "action": "data_updated",
+    "timestamp": "2024-02-01T14:30:00Z",
+    "actor": "Sistema",
+    "actorType": "system",
+    "description": "Información del cliente actualizada con datos del documento",
+    "details": {
+      "fieldsUpdated": ["curp", "address", "idExpiration"],
+      "automaticUpdate": true
+    }
+  },
+  {
+    "id": "history-008",
+    "documentId": "doc-001",
+    "action": "archived",
+    "timestamp": "2024-02-01T14:35:00Z",
+    "actor": "Sistema",
+    "actorType": "system",
+    "description": "Documento archivado en sistema de almacenamiento seguro",
+    "details": {
+      "archiveLocation": "secure-storage-bucket-001",
+      "retentionPeriod": "7 años",
+      "encryptionLevel": "AES-256"
+    }
+  }
+]

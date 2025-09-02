@@ -1,0 +1,685 @@
+name: 🧪 Comprehensive Testing Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run nightly at 2 AM UTC
+    - cron: '0 2 * * *'
+
+env:
+  NODE_VERSION: '18'
+  PNPM_VERSION: '8.x'
+  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+  PACT_BROKER_BASE_URL: ${{ secrets.PACT_BROKER_BASE_URL }}
+  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ===== STATIC ANALYSIS & LINTING =====
+  static-analysis:
+    name: 🔍 Static Analysis
+    runs-on: ubuntu-latest
+    outputs:
+      affected-projects: ${{ steps.affected.outputs.projects }}
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🧹 Run ESLint
+        run: |
+          npm run lint
+          npm run lint:report
+        continue-on-error: false
+
+      - name: 🎯 TypeScript Compilation Check
+        run: npm run build:check
+
+      - name: 🔒 Security Audit
+        run: |
+          npm audit --audit-level moderate
+          npm run security:check
+        continue-on-error: true
+
+      - name: 📊 Bundle Analysis
+        run: |
+          npm run build:analyze
+          npm run bundle:size-check
+
+      - name: 📤 Upload ESLint Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eslint-results
+          path: reports/eslint/
+
+  # ===== UNIT TESTING =====
+  unit-tests:
+    name: 🧪 Unit Tests
+    runs-on: ubuntu-latest
+    needs: [static-analysis]
+    strategy:
+      matrix:
+        test-suite: 
+          - services
+          - components
+          - utilities
+          - integration
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🧪 Run Unit Tests - ${{ matrix.test-suite }}
+        run: |
+          case "${{ matrix.test-suite }}" in
+            "services")
+              npm run test:services -- --code-coverage
+              ;;
+            "components")
+              npm run test:components -- --code-coverage
+              ;;
+            "utilities")
+              npm run test:utilities -- --code-coverage
+              ;;
+            "integration")
+              npm run test:integration -- --code-coverage
+              ;;
+          esac
+
+      - name: 📊 Upload Coverage Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.test-suite }}
+          path: coverage/
+
+      - name: 📤 Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.test-suite }}
+          path: reports/tests/
+
+  # ===== CONTRACT TESTING =====
+  contract-tests:
+    name: 📜 Contract Tests
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🔄 Install Pact CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/pact-foundation/pact-ruby-standalone/master/install.sh | bash
+          export PATH="$PATH:$HOME/pact/bin"
+
+      - name: 🧪 Run Pact Consumer Tests
+        run: npm run test:pact:consumer
+
+      - name: 📤 Publish Pact Contracts
+        if: github.ref == 'refs/heads/main'
+        run: |
+          export PATH="$PATH:$HOME/pact/bin"
+          pact-broker publish pacts \
+            --consumer-app-version ${{ github.sha }} \
+            --branch ${{ github.ref_name }} \
+            --broker-base-url ${{ env.PACT_BROKER_BASE_URL }} \
+            --broker-token ${{ env.PACT_BROKER_TOKEN }}
+
+      - name: 🔍 Can I Deploy?
+        if: github.event_name == 'pull_request'
+        run: |
+          export PATH="$PATH:$HOME/pact/bin"
+          pact-broker can-i-deploy \
+            --pacticipant conductores-pwa-frontend \
+            --version ${{ github.sha }} \
+            --to-environment production \
+            --broker-base-url ${{ env.PACT_BROKER_BASE_URL }} \
+            --broker-token ${{ env.PACT_BROKER_TOKEN }}
+
+      - name: 📤 Upload Contract Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pact-results
+          path: |
+            pacts/
+            reports/pact/
+
+  # ===== ACCESSIBILITY TESTING =====
+  accessibility-tests:
+    name: ♿ Accessibility Tests
+    runs-on: ubuntu-latest
+    needs: [static-analysis]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🏗️ Build application
+        run: npm run build:prod
+
+      - name: 🚀 Start application server
+        run: |
+          npm run serve:prod &
+          npx wait-on http://localhost:4200 --timeout 60000
+
+      - name: ♿ Run Accessibility Tests
+        run: |
+          npm run test:a11y
+          npm run test:a11y:report
+
+      - name: 📤 Upload Accessibility Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-results
+          path: reports/accessibility/
+
+  # ===== VISUAL REGRESSION TESTING =====
+  visual-tests:
+    name: 📸 Visual Regression Tests
+    runs-on: ubuntu-latest
+    needs: [static-analysis]
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+        device: [desktop, tablet, mobile]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: 🏗️ Build application
+        run: npm run build:prod
+
+      - name: 🚀 Start application server
+        run: |
+          npm run serve:prod &
+          npx wait-on http://localhost:4200 --timeout 60000
+
+      - name: 📸 Run Visual Tests
+        run: |
+          npm run test:visual:${{ matrix.browser }} -- --project=${{ matrix.device }}
+        env:
+          PLAYWRIGHT_BROWSER: ${{ matrix.browser }}
+
+      - name: 📤 Upload Visual Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-results-${{ matrix.browser }}-${{ matrix.device }}
+          path: |
+            test-results/
+            visual-report/
+
+  # ===== E2E TESTING =====
+  e2e-tests:
+    name: 🔄 E2E Tests
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+    strategy:
+      matrix:
+        browser: [chrome, firefox, edge]
+        test-suite: [auth, dashboard, clients, quotes, documents, performance]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🏗️ Build application
+        run: npm run build:prod
+
+      - name: 🚀 Start application & API mock server
+        run: |
+          npm run serve:prod &
+          npm run mock:api &
+          npx wait-on http://localhost:4200 http://localhost:3000 --timeout 120000
+
+      - name: 🧪 Run E2E Tests
+        uses: cypress-io/github-action@v6
+        with:
+          install: false
+          browser: ${{ matrix.browser }}
+          spec: cypress/e2e/*${{ matrix.test-suite }}*.cy.ts
+          record: true
+          parallel: true
+          group: 'E2E-${{ matrix.browser }}-${{ matrix.test-suite }}'
+        env:
+          CYPRESS_RECORD_KEY: ${{ env.CYPRESS_RECORD_KEY }}
+
+      - name: 📤 Upload E2E Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results-${{ matrix.browser }}-${{ matrix.test-suite }}
+          path: |
+            cypress/videos/
+            cypress/screenshots/
+            cypress/reports/
+
+  # ===== PERFORMANCE TESTING =====
+  performance-tests:
+    name: ⚡ Performance Tests
+    runs-on: ubuntu-latest
+    needs: [e2e-tests]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🏗️ Build application for performance
+        run: npm run build:prod:performance
+
+      - name: 🚀 Start production server
+        run: |
+          npm run serve:prod &
+          npm run mock:api &
+          npx wait-on http://localhost:4200 http://localhost:3000 --timeout 60000
+
+      - name: 📊 Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli
+          lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: 🔧 Install k6
+        run: |
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+
+      - name: ⚡ Run Load Tests
+        run: |
+          k6 run --out json=load-test-results.json src/tests/load/dashboard-load.test.js
+          k6 run --out json=api-performance-results.json src/tests/load/api-performance.test.js
+
+      - name: 📊 Generate Performance Report
+        run: npm run performance:report
+
+      - name: 📤 Upload Performance Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: |
+            lighthouse-reports/
+            k6-results/
+            reports/performance/
+
+  # ===== CHAOS ENGINEERING =====
+  chaos-tests:
+    name: 🌪️ Chaos Engineering
+    runs-on: ubuntu-latest
+    needs: [e2e-tests]
+    if: github.event_name == 'schedule' || github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🌪️ Run Chaos Tests
+        run: |
+          npm run test:chaos
+          npm run chaos:report
+
+      - name: 📤 Upload Chaos Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chaos-results
+          path: reports/chaos/
+
+  # ===== MUTATION TESTING =====
+  mutation-tests:
+    name: 🧬 Mutation Testing
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+    if: github.event_name == 'schedule' || github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🧬 Run Mutation Tests
+        run: |
+          npm run test:mutation
+          npm run mutation:report
+        timeout-minutes: 60
+
+      - name: 📤 Upload Mutation Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-results
+          path: reports/mutation/
+
+  # ===== COVERAGE CONSOLIDATION =====
+  coverage-consolidation:
+    name: 📊 Coverage Consolidation
+    runs-on: ubuntu-latest
+    needs: [unit-tests, e2e-tests, contract-tests]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 📥 Download all coverage reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-*
+          path: coverage-reports/
+          merge-multiple: true
+
+      - name: 📊 Merge coverage reports
+        run: |
+          npm run coverage:merge
+          npm run coverage:report
+
+      - name: 📤 Upload to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/merged/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+
+      - name: 🔍 SonarCloud Analysis
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.organization=conductores-pwa
+            -Dsonar.projectKey=conductores-pwa-frontend
+            -Dsonar.sources=src
+            -Dsonar.tests=src
+            -Dsonar.inclusions=src/**/*.ts
+            -Dsonar.test.inclusions=src/**/*.spec.ts
+            -Dsonar.typescript.lcov.reportPaths=coverage/merged/lcov.info
+            -Dsonar.javascript.lcov.reportPaths=coverage/merged/lcov.info
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+
+      - name: 📤 Upload Final Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-coverage-report
+          path: coverage/merged/
+
+  # ===== QUALITY GATES =====
+  quality-gates:
+    name: 🚦 Quality Gates
+    runs-on: ubuntu-latest
+    needs: [
+      static-analysis,
+      unit-tests,
+      contract-tests,
+      accessibility-tests,
+      visual-tests,
+      e2e-tests,
+      performance-tests,
+      coverage-consolidation
+    ]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 📥 Download all test results
+        uses: actions/download-artifact@v4
+        with:
+          path: all-results/
+
+      - name: 🚦 Evaluate Quality Gates
+        run: |
+          npm run quality:gates
+        env:
+          MINIMUM_COVERAGE: 90
+          MAX_BUNDLE_SIZE: 5242880  # 5MB
+          MAX_LIGHTHOUSE_SCORE: 90
+          MAX_ACCESSIBILITY_VIOLATIONS: 0
+
+      - name: 📊 Generate Quality Report
+        run: |
+          npm run quality:report
+          npm run quality:badge
+
+      - name: 📤 Upload Quality Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-report
+          path: reports/quality/
+
+      - name: 💬 Comment PR with Quality Summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const qualitySummary = fs.readFileSync('reports/quality/summary.md', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: qualitySummary
+            });
+
+  # ===== DEPLOYMENT READINESS =====
+  deployment-readiness:
+    name: 🚀 Deployment Readiness
+    runs-on: ubuntu-latest
+    needs: [quality-gates]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🚦 All Tests Passed
+        run: |
+          echo "✅ All quality gates passed!"
+          echo "🚀 Application is ready for deployment"
+
+      - name: 📦 Create Release Artifact
+        run: |
+          npm run build:prod
+          tar -czf conductores-pwa-${{ github.sha }}.tar.gz dist/
+
+      - name: 📤 Upload Release Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifact
+          path: conductores-pwa-${{ github.sha }}.tar.gz
+
+      - name: 🏷️ Create Release Tag
+        if: success()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a v1.${{ github.run_number }} -m "Release v1.${{ github.run_number }}"
+          git push origin v1.${{ github.run_number }}
+
+  # ===== NOTIFICATION =====
+  notification:
+    name: 📢 Notification
+    runs-on: ubuntu-latest
+    needs: [deployment-readiness]
+    if: always()
+
+    steps:
+      - name: 📊 Pipeline Status
+        run: |
+          if [[ "${{ needs.deployment-readiness.result }}" == "success" ]]; then
+            echo "✅ Pipeline completed successfully!"
+            echo "STATUS=success" >> $GITHUB_ENV
+          else
+            echo "❌ Pipeline failed!"
+            echo "STATUS=failure" >> $GITHUB_ENV
+          fi
+
+      - name: 🔔 Slack Notification
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ env.STATUS }}
+          channel: '#engineering'
+          text: |
+            🧪 Testing Pipeline ${{ env.STATUS == 'success' && 'Completed' || 'Failed' }}
+            
+            📋 **Branch:** ${{ github.ref }}
+            👤 **Author:** ${{ github.actor }}
+            🔗 **Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            📊 **Test Results:**
+            - Unit Tests: ${{ needs.unit-tests.result }}
+            - E2E Tests: ${{ needs.e2e-tests.result }}
+            - Performance: ${{ needs.performance-tests.result }}
+            - Accessibility: ${{ needs.accessibility-tests.result }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+# ===== CLEANUP =====
+cleanup:
+  name: 🧹 Cleanup
+  runs-on: ubuntu-latest
+  needs: [notification]
+  if: always()
+
+  steps:
+    - name: 🗑️ Delete old artifacts
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const artifacts = await github.rest.actions.listArtifactsForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          });
+          
+          const oldArtifacts = artifacts.data.artifacts
+            .filter(artifact => {
+              const age = new Date() - new Date(artifact.created_at);
+              return age > 7 * 24 * 60 * 60 * 1000; // 7 days
+            });
+          
+          for (const artifact of oldArtifacts) {
+            await github.rest.actions.deleteArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: artifact.id,
+            });
+          }

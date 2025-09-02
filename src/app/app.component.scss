@@ -1,0 +1,100 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f7fafc;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 280px; // Desktop navigation width
+  padding: 24px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  transition: margin-left 0.3s ease;
+  
+  // When navigation is collapsed
+  &.nav-collapsed {
+    margin-left: 70px;
+  }
+}
+
+// Mobile responsive adjustments
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 16px;
+    padding-bottom: calc(76px + 16px + env(safe-area-inset-bottom)); // Account for bottom nav
+  }
+}
+
+// Responsive layout adjustments
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-content {
+    margin-left: 280px;
+    padding: 20px;
+  }
+}
+
+// Large screens
+@media (min-width: 1440px) {
+  .main-content {
+    margin-left: 300px;
+    padding: 32px;
+    max-width: calc(100% - 300px);
+  }
+}
+
+// Ensure smooth transitions
+* {
+  box-sizing: border-box;
+}
+
+// Global styles for the app
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+// Focus styles for accessibility
+*:focus {
+  outline: 2px solid #4299e1;
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+// Selection styles
+::selection {
+  background: rgba(66, 153, 225, 0.3);
+  color: inherit;
+}
+
+::-moz-selection {
+  background: rgba(66, 153, 225, 0.3);
+  color: inherit;
+}

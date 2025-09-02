@@ -1,0 +1,2127 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+import { CustomValidators } from '../../../validators/custom-validators';
+import { BusinessFlow, Market } from '../../../models/types';
+import { ApiService } from '../../../services/api.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+// Dynamic Wizard Step Interface
+interface WizardStep {
+  id: string;
+  label: string;
+  required: boolean;
+  visible: boolean;
+  completed: boolean;
+  validationFields?: string[];
+}
+
+@Component({
+  selector: 'app-nueva-oportunidad',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  template: `
+    <div class="nueva-oportunidad-container">
+      <div class="header-section">
+        <div class="breadcrumb">
+          <button class="back-btn" (click)="goBack()">
+            ⬅️ Regresar
+          </button>
+          <h1>➕ Nueva Oportunidad</h1>
+          <div class="smart-context" *ngIf="smartContext.market || smartContext.suggestedFlow">
+            <span class="context-tag" *ngIf="smartContext.market">
+              📍 {{ getMarketName(smartContext.market) }}
+            </span>
+            <span class="context-tag" *ngIf="smartContext.suggestedFlow">
+              🎯 {{ smartContext.suggestedFlow === 'COTIZACION' ? 'Sugerido: Cotizador' : 'Sugerido: Simulador' }}
+            </span>
+          </div>
+        </div>
+        <p class="subtitle">
+          {{ smartContext.market ? 
+            `Creando oportunidad para ${getMarketName(smartContext.market)} con contexto inteligente del Dashboard` : 
+            'El primer paso para ayudar a un transportista a obtener su unidad' 
+          }}
+        </p>
+        
+        <!-- Progress Indicator -->
+        <div class="progress-indicator">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+          </div>
+          <div class="progress-steps">
+            <span 
+              *ngFor="let step of visibleSteps; let i = index" 
+              class="step"
+              [class.active]="getStepStatus(i) === 'current'"
+              [class.completed]="getStepStatus(i) === 'completed'"
+              [class.pending]="getStepStatus(i) === 'pending'"
+            >
+              <span class="step-icon">{{ getStepIcon(i) }}</span>
+              <span class="step-label">{{ step.label }}</span>
+              <span class="step-progress" *ngIf="getStepStatus(i) === 'current' && getCurrentStepProgress() > 0">
+                ({{ (getCurrentStepProgress() * 100) | number:'1.0-0' }}%)
+              </span>
+            </span>
+          </div>
+        </div>
+        
+        <!-- Draft Recovery Banner -->
+        <div class="draft-banner" *ngIf="hasDraftAvailable && !draftRecovered">
+          <div class="banner-content">
+            <span class="banner-icon">💾</span>
+            <div class="banner-text">
+              <strong>Borrador encontrado</strong>
+              <p>Tienes una oportunidad sin terminar del {{ formatDraftDate(draftData.timestamp) }}</p>
+            </div>
+            <div class="banner-actions">
+              <button class="btn-link" (click)="recoverDraft()">Continuar</button>
+              <button class="btn-link secondary" (click)="discardDraft()">Descartar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-container">
+        <form [formGroup]="opportunityForm" (ngSubmit)="onSubmit()" class="opportunity-form">
+          
+          <!-- Step 1: Client Information -->
+          <div class="form-section">
+            <h2>👤 Información del Cliente</h2>
+            
+            <div class="form-group">
+              <label for="clientName">Nombre Completo *</label>
+              <div class="smart-input-container">
+                <input
+                  id="clientName"
+                  type="text"
+                  formControlName="clientName"
+                  class="form-input"
+                  [class.error]="isFieldInvalid('clientName')"
+                  [class.checking]="isCheckingDuplicates"
+                  [class.has-suggestions]="clientSuggestions.length > 0"
+                  placeholder="Ej: Juan Pérez García"
+                  (focus)="onClientNameFocus()"
+                  (blur)="onClientNameBlur()"
+                  (keydown)="handleClientNameKeydown($event)"
+                  autocomplete="off"
+                >
+                <div class="input-status" *ngIf="isCheckingDuplicates">
+                  <span class="checking-icon">🔍</span>
+                </div>
+                
+                <!-- Intelligent Autocomplete Dropdown -->
+                <div class="autocomplete-dropdown" *ngIf="showSuggestions && clientSuggestions.length > 0">
+                  <div class="suggestion-header">
+                    <span class="suggestion-icon">💡</span>
+                    <strong>Sugerencias inteligentes</strong>
+                  </div>
+                  <div class="suggestions-list">
+                    <div 
+                      *ngFor="let suggestion of clientSuggestions; trackBy: trackBySuggestion; let i = index" 
+                      class="suggestion-item"
+                      [class.highlighted]="i === selectedSuggestionIndex"
+                      (click)="selectSuggestion(suggestion)"
+                      (mouseenter)="selectedSuggestionIndex = i"
+                    >
+                      <div class="suggestion-content">
+                        <div class="suggestion-name">{{ suggestion.name }}</div>
+                        <div class="suggestion-details">
+                          <span class="detail-item" *ngIf="suggestion.phone">📞 {{ suggestion.phone }}</span>
+                          <span class="detail-item" *ngIf="suggestion.market">🏢 {{ suggestion.market }}</span>
+                          <span class="detail-item suggestion-type">{{ suggestion.type }}</span>
+                        </div>
+                      </div>
+                      <span class="select-arrow">→</span>
+                    </div>
+                  </div>
+                  <div class="suggestion-footer" *ngIf="!isCheckingDuplicates">
+                    <span class="suggestion-hint">Use ↑↓ para navegar, Enter para seleccionar</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Similar Clients Warning -->
+              <div class="similar-clients-warning" *ngIf="similarClients.length > 0">
+                <div class="warning-header">
+                  <span class="warning-icon">⚠️</span>
+                  <strong>Clientes similares encontrados</strong>
+                </div>
+                <div class="similar-clients-list">
+                  <div 
+                    *ngFor="let client of similarClients" 
+                    class="similar-client-item"
+                    (click)="selectSimilarClient(client)"
+                  >
+                    <div class="client-avatar">{{ getClientInitials(client.name) }}</div>
+                    <div class="client-info">
+                      <div class="client-name">{{ client.name }}</div>
+                      <div class="client-details">{{ client.phone || 'Sin teléfono' }} • {{ client.market || 'Sin mercado' }}</div>
+                    </div>
+                    <button type="button" class="btn-use-client">Usar este cliente</button>
+                  </div>
+                </div>
+                <div class="continue-anyway">
+                  <button type="button" class="btn-link" (click)="clearSimilarClients()">
+                    Continuar con cliente nuevo
+                  </button>
+                </div>
+              </div>
+              
+              <div *ngIf="isFieldInvalid('clientName')" class="error-message">
+                <span *ngIf="opportunityForm.get('clientName')?.errors?.['required']">
+                  El nombre del cliente es requerido
+                </span>
+                <span *ngIf="opportunityForm.get('clientName')?.errors?.['clientName']">
+                  {{ opportunityForm.get('clientName')?.errors?.['clientName']?.message }}
+                </span>
+              </div>
+            </div>
+
+            <div class="form-row priority-contact">
+              <div class="form-group primary-contact">
+                <label for="phone" class="primary-label">
+                  📱 WhatsApp *
+                  <span class="contact-priority">Principal vía de contacto</span>
+                </label>
+                <div class="whatsapp-input">
+                  <span class="country-prefix">🇲🇽 +52</span>
+                  <input
+                    id="phone"
+                    type="tel"
+                    formControlName="phone"
+                    class="form-input whatsapp-field"
+                    [class.error]="isFieldInvalid('phone')"
+                    placeholder="55 1234 5678"
+                    maxlength="12"
+                  >
+                  <span class="whatsapp-icon">💬</span>
+                </div>
+                <div *ngIf="isFieldInvalid('phone')" class="error-message">
+                  <span *ngIf="opportunityForm.get('phone')?.errors?.['required']">
+                    El número de WhatsApp es requerido para contacto
+                  </span>
+                  <span *ngIf="opportunityForm.get('phone')?.errors?.['mexicanPhone']">
+                    Formato inválido. Ej: 55 1234 5678
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group secondary-contact">
+                <label for="email" class="secondary-label">
+                  📧 Email
+                  <span class="contact-optional">Opcional</span>
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  formControlName="email"
+                  class="form-input email-field"
+                  [class.error]="isFieldInvalid('email')"
+                  placeholder="cliente@correo.com"
+                >
+                <div *ngIf="isFieldInvalid('email')" class="error-message">
+                  <span *ngIf="opportunityForm.get('email')?.errors?.['email']">
+                    Formato de email inválido
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Opportunity Type Selection -->
+          <div class="form-section">
+            <h2>🎯 ¿Qué quieres modelar para {{ clientNameValue || 'este cliente' }}?</h2>
+            <p class="section-description">
+              Selecciona el tipo de oportunidad que mejor se adapte a las necesidades del cliente
+            </p>
+
+            <div class="opportunity-cards">
+              <div 
+                class="opportunity-card"
+                [class.selected]="opportunityType === 'COTIZACION'"
+                [class.suggested]="smartContext.suggestedFlow === 'COTIZACION'"
+                (click)="selectOpportunityType('COTIZACION')"
+              >
+                <div class="card-icon">💰</div>
+                <div class="card-content">
+                  <h3>Adquisición de Unidad</h3>
+                  <p>Cliente listo para comprar. Generar cotización rápida y transparente.</p>
+                  <div class="card-tag">Modo Cotizador</div>
+                </div>
+              </div>
+
+              <div 
+                class="opportunity-card"
+                [class.selected]="opportunityType === 'SIMULACION'"
+                [class.suggested]="smartContext.suggestedFlow === 'SIMULACION'"
+                (click)="selectOpportunityType('SIMULACION')"
+              >
+                <div class="card-icon">🎯</div>
+                <div class="card-content">
+                  <h3>Plan de Ahorro</h3>
+                  <p>Modelar capacidad de ahorro y proyecciones financieras.</p>
+                  <div class="card-tag">Modo Simulador</div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="opportunityTypeError" class="error-message">
+              Debe seleccionar un tipo de oportunidad
+            </div>
+          </div>
+
+          <!-- Step 3: Dynamic Market Configuration -->
+          <div class="form-section" *ngIf="opportunityType && shouldShowStep('market')">
+            <h2>{{ getMarketStepTitle() }}</h2>
+            <p class="section-description">{{ getMarketStepDescription() }}</p>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="market">Mercado *</label>
+                <select
+                  id="market"
+                  formControlName="market"
+                  class="form-select"
+                  [class.error]="isFieldInvalid('market')"
+                  (change)="onMarketChange()"
+                >
+                  <option value="">Seleccionar mercado...</option>
+                  <option value="aguascalientes">🌵 Aguascalientes</option>
+                  <option value="edomex">🏔️ Estado de México</option>
+                </select>
+                <div *ngIf="isFieldInvalid('market')" class="error-message">
+                  <span *ngIf="opportunityForm.get('market')?.errors?.['required']">
+                    El mercado es requerido
+                  </span>
+                </div>
+              </div>
+
+              <!-- Municipality selector (only for EdoMex) -->
+              <div class="form-group" *ngIf="marketValue === 'edomex'">
+                <label for="municipality">Municipio *</label>
+                <select
+                  id="municipality"
+                  formControlName="municipality"
+                  class="form-select"
+                  [class.error]="isFieldInvalid('municipality')"
+                >
+                  <option value="">Seleccionar municipio...</option>
+                  
+                  <!-- ZMVM Municipalities -->
+                  <optgroup label="Zona Metropolitana">
+                    <option value="ecatepec">Ecatepec de Morelos</option>
+                    <option value="nezahualcoyotl">Ciudad Nezahualcóyotl</option>
+                    <option value="naucalpan">Naucalpan de Juárez</option>
+                    <option value="tlalnepantla">Tlalnepantla de Baz</option>
+                    <option value="chimalhuacan">Chimalhuacán</option>
+                    <option value="valle_chalco">Valle de Chalco Solidaridad</option>
+                    <option value="la_paz">La Paz</option>
+                    <option value="ixtapaluca">Ixtapaluca</option>
+                    <option value="coacalco">Coacalco de Berriozábal</option>
+                    <option value="tultitlan">Tultitlán</option>
+                    <option value="cuautitlan_izcalli">Cuautitlán Izcalli</option>
+                    <option value="atizapan">Atizapán de Zaragoza</option>
+                  </optgroup>
+                  
+                  <!-- Central Zone -->
+                  <optgroup label="Zona Central">
+                    <option value="toluca">Toluca de Lerdo</option>
+                    <option value="metepec">Metepec</option>
+                    <option value="lerma">Lerma</option>
+                    <option value="zinacantepec">Zinacantepec</option>
+                    <option value="almoloya_juarez">Almoloya de Juárez</option>
+                  </optgroup>
+                  
+                  <!-- Eastern Zone -->
+                  <optgroup label="Zona Oriente">
+                    <option value="texcoco">Texcoco</option>
+                    <option value="chalco">Chalco</option>
+                    <option value="chicoloapan">Chicoloapan</option>
+                  </optgroup>
+                  
+                  <!-- Northern Zone -->
+                  <optgroup label="Zona Norte">
+                    <option value="tepotzotlan">Tepotzotlán</option>
+                    <option value="villa_nicolas_romero">Villa Nicolás Romero</option>
+                    <option value="isidro_fabela">Isidro Fabela</option>
+                  </optgroup>
+                  
+                  <!-- Southern Zone -->
+                  <optgroup label="Zona Sur">
+                    <option value="valle_bravo">Valle de Bravo</option>
+                    <option value="temascaltepec">Temascaltepec</option>
+                    <option value="tejupilco">Tejupilco</option>
+                  </optgroup>
+                </select>
+                <div *ngIf="isFieldInvalid('municipality')" class="error-message">
+                  <span *ngIf="opportunityForm.get('municipality')?.errors?.['required']">
+                    El municipio es requerido para Estado de México
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="clientType">Tipo de Cliente *</label>
+                <select
+                  id="clientType"
+                  formControlName="clientType"
+                  class="form-select"
+                  [class.error]="isFieldInvalid('clientType')"
+                >
+                  <option value="">Seleccionar tipo...</option>
+                  <option value="Individual">👤 Individual</option>
+                  <option value="Colectivo">👥 Colectivo (Tanda)</option>
+                </select>
+                <div *ngIf="isFieldInvalid('clientType')" class="error-message">
+                  <span *ngIf="opportunityForm.get('clientType')?.errors?.['required']">
+                    El tipo de cliente es requerido
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Business Flow (determined automatically) -->
+            <div class="info-card" *ngIf="marketValue && clientTypeValue">
+              <div class="info-icon">ℹ️</div>
+              <div class="info-content">
+                <h4>Flujo de Negocio Sugerido</h4>
+                <p>
+                  <strong>{{ getBusinessFlowLabel() }}</strong> - 
+                  {{ getBusinessFlowDescription() }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: Ecosystem Selection (EdoMex Only) -->
+          <div class="form-section" *ngIf="shouldShowStep('ecosystem')">
+            <h2>🏪 Selección de Ecosistema</h2>
+            <p class="section-description">
+              En Estado de México, los clientes se organizan por ecosistemas territoriales
+            </p>
+
+            <div class="ecosystem-cards">
+              <div 
+                *ngFor="let ecosystem of getAvailableEcosystems()" 
+                class="ecosystem-card"
+                [class.selected]="selectedEcosystem === ecosystem.id"
+                (click)="selectEcosystem(ecosystem.id)"
+              >
+                <div class="ecosystem-icon">{{ ecosystem.icon }}</div>
+                <div class="ecosystem-content">
+                  <h3>{{ ecosystem.name }}</h3>
+                  <p>{{ ecosystem.description }}</p>
+                  <div class="ecosystem-stats">
+                    <span class="stat">{{ ecosystem.activeClients }} activos</span>
+                    <span class="stat">{{ ecosystem.avgSavings }}% ahorro promedio</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Step 4: Additional Notes -->
+          <div class="form-section" *ngIf="opportunityType && marketValue">
+            <h2>📝 Notas Adicionales</h2>
+            
+            <div class="form-group">
+              <label for="notes">Observaciones</label>
+              <textarea
+                id="notes"
+                formControlName="notes"
+                class="form-textarea"
+                rows="4"
+                placeholder="Información adicional sobre el cliente o la oportunidad..."
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions" *ngIf="opportunityType">
+            <button 
+              type="button" 
+              class="btn-secondary"
+              (click)="saveDraft()"
+              [disabled]="isLoading"
+            >
+              📄 Guardar Borrador
+            </button>
+            
+            <button 
+              type="submit" 
+              class="btn-primary"
+              [disabled]="opportunityForm.invalid || isLoading"
+            >
+              <span *ngIf="!isLoading">
+                {{ opportunityType === 'COTIZACION' ? '💰 Continuar a Cotizador' : '🎯 Continuar a Simulador' }}
+              </span>
+              <span *ngIf="isLoading" class="loading">
+                ⏳ Procesando...
+              </span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Helper Sidebar -->
+        <div class="helper-sidebar">
+          <div class="helper-card">
+            <h3>💡 Guía Rápida</h3>
+            
+            <div class="helper-section">
+              <h4>🎯 ¿Cuándo usar Cotizador?</h4>
+              <ul>
+                <li>Cliente con decisión de compra</li>
+                <li>Tiene claridad sobre enganche</li>
+                <li>Necesita información de pagos</li>
+              </ul>
+            </div>
+
+            <div class="helper-section">
+              <h4>📊 ¿Cuándo usar Simulador?</h4>
+              <ul>
+                <li>Cliente explora opciones</li>
+                <li>Necesita planear ahorro</li>
+                <li>Quiere ver proyecciones</li>
+              </ul>
+            </div>
+
+            <div class="helper-section">
+              <h4>🏪 Diferencias por Mercado</h4>
+              <div class="market-comparison">
+                <div class="market-item">
+                  <strong>Aguascalientes:</strong>
+                  <span>Plazos: 12-24 meses</span>
+                  <span>Enganche: 20% mín.</span>
+                </div>
+                <div class="market-item">
+                  <strong>Estado de México:</strong>
+                  <span>Plazos: 48-60 meses</span>
+                  <span>Individual: 25% mín.</span>
+                  <span>Colectivo: 15% mín.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  styles: [`
+    .nueva-oportunidad-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      padding: 20px;
+    }
+
+    .header-section {
+      margin-bottom: 32px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #e2e8f0;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #4a5568;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-section h1 {
+      margin: 0;
+      color: #2d3748;
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: #718096;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .form-container {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .opportunity-form {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-section {
+      margin-bottom: 40px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .form-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .form-section h2 {
+      color: #2d3748;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 16px 0;
+    }
+
+    .section-description {
+      color: #718096;
+      margin: 0 0 24px 0;
+      font-size: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #2d3748;
+      font-size: 0.95rem;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s;
+      background: #f7fafc;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #4299e1;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+    }
+
+    .form-input.error, .form-select.error, .form-textarea.error {
+      border-color: #e53e3e;
+      background: #fed7d7;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .error-message {
+      color: #e53e3e;
+      font-size: 0.85rem;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .opportunity-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+
+    .opportunity-card {
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .opportunity-card:hover {
+      border-color: #4299e1;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(66, 153, 225, 0.15);
+    }
+
+    .opportunity-card.selected {
+      border-color: #4299e1;
+      background: linear-gradient(135deg, #ebf8ff, #f0f9ff);
+      box-shadow: 0 8px 25px rgba(66, 153, 225, 0.2);
+    }
+
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .card-content h3 {
+      margin: 0 0 12px 0;
+      color: #2d3748;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .card-content p {
+      margin: 0 0 16px 0;
+      color: #718096;
+      line-height: 1.5;
+    }
+
+    .card-tag {
+      background: #4299e1;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .info-card {
+      display: flex;
+      gap: 16px;
+      background: #f0f9ff;
+      border: 1px solid #bee3f8;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 16px;
+    }
+
+    .info-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .info-content h4 {
+      margin: 0 0 8px 0;
+      color: #2b6cb0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .info-content p {
+      margin: 0;
+      color: #2c5282;
+      line-height: 1.5;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: flex-end;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .btn-primary, .btn-secondary {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4299e1, #3182ce);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #3182ce, #2c5282);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(66, 153, 225, 0.3);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: #f7fafc;
+      color: #4a5568;
+      border: 2px solid #e2e8f0;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #edf2f7;
+      border-color: #cbd5e0;
+    }
+
+    .loading {
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .helper-sidebar {
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+    }
+
+    .helper-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .helper-card h3 {
+      margin: 0 0 24px 0;
+      color: #2d3748;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .helper-section {
+      margin-bottom: 24px;
+    }
+
+    .helper-section h4 {
+      margin: 0 0 12px 0;
+      color: #4a5568;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .helper-section ul {
+      margin: 0;
+      padding: 0 0 0 20px;
+      color: #718096;
+      font-size: 0.9rem;
+    }
+
+    .helper-section li {
+      margin-bottom: 6px;
+    }
+
+    .market-comparison {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .market-item {
+      background: #f7fafc;
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 4px solid #4299e1;
+    }
+
+    .market-item strong {
+      display: block;
+      color: #2d3748;
+      margin-bottom: 6px;
+    }
+
+    .market-item span {
+      display: block;
+      color: #718096;
+      font-size: 0.85rem;
+      margin-bottom: 2px;
+    }
+
+    /* Smart Context Styles */
+    .smart-context {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .context-tag {
+      background: linear-gradient(135deg, #4299e1, #3182ce);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Progress Indicator Styles */
+    .progress-indicator {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 20px 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4299e1, #3182ce);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+    }
+
+    .step {
+      color: #718096;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .step.completed {
+      color: #48bb78;
+      font-weight: 600;
+    }
+
+    .step.active {
+      color: #4299e1;
+      font-weight: 600;
+    }
+
+    /* Draft Banner Styles */
+    .draft-banner {
+      background: linear-gradient(135deg, #fef5e7, #fed7aa);
+      border: 1px solid #f6ad55;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .banner-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .banner-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .banner-text {
+      flex: 1;
+    }
+
+    .banner-text strong {
+      color: #c05621;
+      font-size: 1rem;
+    }
+
+    .banner-text p {
+      color: #9c4221;
+      margin: 4px 0 0 0;
+      font-size: 0.9rem;
+    }
+
+    .banner-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-link {
+      background: none;
+      border: none;
+      color: #4299e1;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .btn-link.secondary {
+      color: #718096;
+    }
+
+    /* Smart Input Styles */
+    .smart-input-container {
+      position: relative;
+    }
+
+    .form-input.checking {
+      border-color: #f6ad55;
+      background: #fef5e7;
+    }
+
+    .input-status {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .checking-icon {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Similar Clients Warning Styles */
+    .similar-clients-warning {
+      background: #fef5e7;
+      border: 1px solid #f6ad55;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    .warning-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .warning-icon {
+      font-size: 1.2rem;
+    }
+
+    .warning-header strong {
+      color: #c05621;
+      font-size: 1rem;
+    }
+
+    .similar-clients-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .similar-client-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .similar-client-item:hover {
+      border-color: #f6ad55;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(246, 173, 85, 0.2);
+    }
+
+    .client-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #4299e1, #3182ce);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .client-info {
+      flex: 1;
+    }
+
+    .client-name {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 2px;
+    }
+
+    .client-details {
+      font-size: 0.85rem;
+      color: #718096;
+    }
+
+    .btn-use-client {
+      background: #4299e1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-use-client:hover {
+      background: #3182ce;
+    }
+
+    .continue-anyway {
+      text-align: center;
+      padding-top: 12px;
+      border-top: 1px solid #fed7aa;
+    }
+
+    /* Enhanced Opportunity Cards */
+    .opportunity-card.selected::before {
+      content: '✓';
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 24px;
+      height: 24px;
+      background: #48bb78;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* Auto-suggestion hint */
+    .opportunity-card.suggested::after {
+      content: '🎯 Sugerido';
+      position: absolute;
+      top: -8px;
+      left: 16px;
+      background: linear-gradient(135deg, #f6ad55, #ed8936);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 1024px) {
+      .form-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .helper-sidebar {
+        position: static;
+        order: -1;
+      }
+
+      .progress-steps {
+        font-size: 0.75rem;
+      }
+
+      .similar-clients-list {
+        max-height: 200px;
+        overflow-y: auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nueva-oportunidad-container {
+        padding: 16px;
+      }
+      
+      .opportunity-form {
+        padding: 24px;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      
+      .opportunity-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .btn-primary, .btn-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  `]
+})
+export class NuevaOportunidadComponent implements OnInit {
+  opportunityForm!: FormGroup;
+  opportunityType: 'COTIZACION' | 'SIMULACION' | null = null;
+  opportunityTypeError = false;
+  isLoading = false;
+  
+  // Smart Context Integration
+  smartContext: any = {
+    market: undefined,
+    suggestedFlow: undefined,
+    timestamp: undefined,
+    returnContext: undefined
+  };
+  
+  // Progress Tracking - Dynamic Steps
+  currentStep = 1;
+  totalSteps = 4; // Will be calculated dynamically
+  visibleSteps: WizardStep[] = [];
+  
+  // Draft Management
+  hasDraftAvailable = false;
+  draftRecovered = false;
+  draftData: any = null;
+  private draftKey = 'nueva-oportunidad-draft';
+  private autoSaveInterval: any;
+  
+  // Anti-duplicate System
+  isCheckingDuplicates = false;
+  similarClients: any[] = [];
+  
+  // Intelligent Autocomplete System
+  clientSuggestions: any[] = [];
+  showSuggestions = false;
+  selectedSuggestionIndex = -1;
+  private suggestionTimeout: any;
+  
+  // Dynamic Fields State
+  selectedEcosystem = '';
+  availableEcosystems: any[] = [];
+  
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private apiService: ApiService
+  ) {}
+
+  ngOnInit() {
+    this.loadSmartContext();
+    this.checkForDrafts();
+    this.initializeForm();
+    this.setupDuplicateDetection();
+    this.initializeDynamicSteps();
+    this.startAutoSave();
+  }
+
+  ngOnDestroy() {
+    if (this.autoSaveInterval) {
+      clearInterval(this.autoSaveInterval);
+    }
+  }
+
+  /**
+   * SMART CONTEXT INTEGRATION
+   * Load intelligence from Dashboard navigation
+   */
+  private loadSmartContext(): void {
+    this.route.queryParams.subscribe(params => {
+      this.smartContext = {
+        market: params['market'],
+        suggestedFlow: params['suggestedFlow'],
+        timestamp: params['timestamp'],
+        returnContext: params['returnContext']
+      };
+      
+      // Auto-suggest opportunity type based on business intelligence
+      if (this.smartContext.suggestedFlow && !this.opportunityType) {
+        this.opportunityType = this.smartContext.suggestedFlow;
+        this.updateCurrentStep();
+      }
+    });
+  }
+
+  /**
+   * DRAFT MANAGEMENT SYSTEM
+   * Check for existing drafts and offer recovery
+   */
+  private checkForDrafts(): void {
+    const savedDraft = localStorage.getItem(this.draftKey);
+    if (savedDraft) {
+      try {
+        this.draftData = JSON.parse(savedDraft);
+        // Only show draft if it's less than 24 hours old
+        const draftAge = Date.now() - this.draftData.timestamp;
+        if (draftAge < 24 * 60 * 60 * 1000) {
+          this.hasDraftAvailable = true;
+        } else {
+          // Clean up old draft
+          localStorage.removeItem(this.draftKey);
+        }
+      } catch (error) {
+        console.error('Error parsing draft:', error);
+        localStorage.removeItem(this.draftKey);
+      }
+    }
+  }
+
+  initializeForm() {
+    this.opportunityForm = this.fb.group({
+      clientName: ['', [Validators.required, CustomValidators.clientName]],
+      phone: ['', [Validators.required, CustomValidators.mexicanPhone]],
+      email: ['', [Validators.email]],
+      market: [this.smartContext.market || '', [Validators.required]], // Smart pre-population
+      municipality: [''], // Required only for EdoMex
+      clientType: ['', [Validators.required]],
+      ecosystem: [''], // Dynamic field for EdoMex
+      notes: ['']
+    });
+    
+    // Watch form changes for dynamic step recalculation
+    this.opportunityForm.valueChanges.subscribe(() => {
+      this.recalculateSteps();
+      this.updateCurrentStep();
+    });
+  }
+
+  /**
+   * DYNAMIC WIZARD CORE - The Brain of Adaptive Flow
+   * Initialize and manage dynamic step visibility
+   */
+  private initializeDynamicSteps(): void {
+    this.recalculateSteps();
+  }
+
+  private recalculateSteps(): void {
+    const market = this.marketValue;
+    const clientType = this.clientTypeValue;
+    const opportunityType = this.opportunityType;
+
+    // Base steps that always exist
+    const baseSteps: WizardStep[] = [
+      {
+        id: 'client-info',
+        label: 'Cliente',
+        required: true,
+        visible: true,
+        completed: this.isStepCompleted('client-info'),
+        validationFields: ['clientName', 'phone']
+      },
+      {
+        id: 'opportunity-type',
+        label: 'Tipo',
+        required: true,
+        visible: true,
+        completed: this.isStepCompleted('opportunity-type'),
+        validationFields: []
+      }
+    ];
+
+    // Dynamic steps based on business rules
+    const dynamicSteps: WizardStep[] = [];
+
+    // Market Configuration - Always needed but varies by complexity
+    if (market === 'aguascalientes' && clientType === 'Individual') {
+      // AGS Individual: Simplified market step
+      dynamicSteps.push({
+        id: 'market-simple',
+        label: 'Configuración',
+        required: true,
+        visible: true,
+        completed: this.isStepCompleted('market-simple'),
+        validationFields: ['market', 'clientType']
+      });
+    } else if (market === 'edomex') {
+      // EdoMex: Full market configuration
+      dynamicSteps.push({
+        id: 'market-full',
+        label: 'Mercado',
+        required: true,
+        visible: true,
+        completed: this.isStepCompleted('market-full'),
+        validationFields: ['market', 'clientType']
+      });
+
+      // EdoMex requires ecosystem selection
+      if (clientType) {
+        dynamicSteps.push({
+          id: 'ecosystem',
+          label: 'Ecosistema',
+          required: true,
+          visible: true,
+          completed: this.isStepCompleted('ecosystem'),
+          validationFields: ['ecosystem']
+        });
+      }
+    } else {
+      // Default market step for other combinations
+      dynamicSteps.push({
+        id: 'market-default',
+        label: 'Mercado',
+        required: true,
+        visible: true,
+        completed: this.isStepCompleted('market-default'),
+        validationFields: ['market', 'clientType']
+      });
+    }
+
+
+    // Final confirmation step
+    const finalSteps: WizardStep[] = [
+      {
+        id: 'confirmation',
+        label: 'Confirmar',
+        required: true,
+        visible: true,
+        completed: this.isStepCompleted('confirmation'),
+        validationFields: []
+      }
+    ];
+
+    // Combine all visible steps
+    this.visibleSteps = [...baseSteps, ...dynamicSteps, ...finalSteps];
+    this.totalSteps = this.visibleSteps.length;
+  }
+
+  /**
+   * Check if a specific step is completed based on its validation fields
+   */
+  private isStepCompleted(stepId: string): boolean {
+    switch (stepId) {
+      case 'client-info':
+        return this.validateClientInfo();
+      
+      case 'opportunity-type':
+        return this.validateOpportunityType();
+      
+      case 'market-simple':
+      case 'market-full':
+      case 'market-default':
+        return this.validateMarketConfiguration();
+      
+      case 'ecosystem':
+        return this.validateEcosystemSelection();
+      
+      
+      case 'confirmation':
+        return this.opportunityForm.valid && !!this.opportunityType;
+      
+      default:
+        return false;
+    }
+  }
+
+  // === BUSINESS RULES VALIDATION ===
+  private validateClientInfo(): boolean {
+    const clientName = this.opportunityForm.get('clientName');
+    const phone = this.opportunityForm.get('phone');
+
+    // Basic validation: name is required
+    if (!clientName?.value || !clientName.valid) {
+      return false;
+    }
+
+    // Business rule: WhatsApp is now mandatory for all clients
+    if (!phone?.value || !phone.valid) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private validateOpportunityType(): boolean {
+    if (!this.opportunityType) {
+      return false;
+    }
+
+    // Business rule: EdoMex Individual clients prefer Simulacion
+    if (this.marketValue === 'edomex' && this.clientTypeValue === 'Individual' && this.opportunityType === 'COTIZACION') {
+      console.warn('EdoMex Individual clients typically use Simulacion flow');
+    }
+
+    // Business rule: AGS clients prefer Cotizacion for quick sales
+    if (this.marketValue === 'aguascalientes' && this.opportunityType === 'SIMULACION') {
+      console.info('AGS clients often prefer Cotizacion for faster processing');
+    }
+
+    return true;
+  }
+
+  private validateMarketConfiguration(): boolean {
+    const market = this.marketValue;
+    const clientType = this.clientTypeValue;
+
+    if (!market || !clientType) {
+      return false;
+    }
+
+    // Business rule: Validate market-clientType combinations
+    if (market === 'aguascalientes') {
+      return ['Individual', 'Colectivo'].includes(clientType);
+    }
+
+    if (market === 'edomex') {
+      return ['Individual', 'Colectivo'].includes(clientType);
+    }
+
+    return false;
+  }
+
+  private validateEcosystemSelection(): boolean {
+    // Only required for EdoMex market
+    if (this.marketValue !== 'edomex') {
+      return true;
+    }
+
+    const ecosystem = this.opportunityForm.get('ecosystem')?.value;
+    if (!ecosystem) {
+      return false;
+    }
+
+    // Business rule: Validate ecosystem availability
+    const validEcosystems = ['comercial', 'industrial', 'residencial'];
+    return validEcosystems.includes(ecosystem);
+  }
+
+  /**
+   * ANTI-DUPLICATE DETECTION SYSTEM
+   * Real-time search for similar clients
+   */
+  private setupDuplicateDetection(): void {
+    this.opportunityForm.get('clientName')?.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap(name => {
+          if (name && name.length >= 3) {
+            this.isCheckingDuplicates = true;
+            return this.apiService.searchClients(name);
+          }
+          return of([]);
+        })
+      )
+      .subscribe({
+        next: (clients) => {
+          this.similarClients = clients.slice(0, 3); // Show max 3 similar clients
+          this.isCheckingDuplicates = false;
+        },
+        error: (error) => {
+          console.error('Error searching clients:', error);
+          this.isCheckingDuplicates = false;
+          this.similarClients = [];
+        }
+      });
+  }
+
+  /**
+   * AUTO-SAVE DRAFT SYSTEM
+   * Save draft every 10 seconds when form has data
+   */
+  private startAutoSave(): void {
+    this.autoSaveInterval = setInterval(() => {
+      if (this.opportunityForm.dirty && !this.draftRecovered) {
+        this.saveDraftToStorage();
+      }
+    }, 10000); // Every 10 seconds
+  }
+
+  private saveDraftToStorage(): void {
+    const draft = {
+      formData: this.opportunityForm.value,
+      opportunityType: this.opportunityType,
+      smartContext: this.smartContext,
+      timestamp: Date.now(),
+      currentStep: this.currentStep
+    };
+    
+    localStorage.setItem(this.draftKey, JSON.stringify(draft));
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.opportunityForm.get(fieldName);
+    return !!(field && field.invalid && (field.dirty || field.touched));
+  }
+
+  selectOpportunityType(type: 'COTIZACION' | 'SIMULACION' | 'VENTA_DIRECTA') {
+    this.opportunityType = type;
+    this.opportunityTypeError = false;
+  }
+
+  getBusinessFlowLabel(): string {
+    const market = this.marketValue;
+    const clientType = this.clientTypeValue;
+    const opType = this.opportunityType;
+
+    if (opType === 'VENTA_DIRECTA') {
+      return 'Venta Directa';
+    } else if (opType === 'COTIZACION') {
+      return 'Venta a Plazo';
+    } else {
+      if (clientType === 'Individual') {
+        return 'Plan de Ahorro';
+      } else {
+        return 'Crédito Colectivo';
+      }
+    }
+  }
+
+  getBusinessFlowDescription(): string {
+    const market = this.marketValue;
+    const clientType = this.clientTypeValue;
+    const opType = this.opportunityType;
+
+    if (opType === 'VENTA_DIRECTA') {
+      return `Venta directa de contado en ${market === 'aguascalientes' ? 'Aguascalientes' : 'Estado de México'} - proceso simplificado`;
+    } else if (opType === 'COTIZACION') {
+      return `Cotización para financiamiento en ${market === 'aguascalientes' ? 'Aguascalientes' : 'Estado de México'}`;
+    } else {
+      if (clientType === 'Individual') {
+        return 'Simulación de ahorro individual para alcanzar enganche necesario';
+      } else {
+        return 'Simulación de tanda colectiva con efecto bola de nieve';
+      }
+    }
+  }
+
+  get clientNameValue(): string {
+    return this.opportunityForm.get('clientName')?.value || '';
+  }
+
+  get marketValue(): string {
+    return this.opportunityForm.get('market')?.value || '';
+  }
+
+  get clientTypeValue(): string {
+    return this.opportunityForm.get('clientType')?.value || '';
+  }
+
+  get municipalityValue(): string {
+    return this.opportunityForm.get('municipality')?.value || '';
+  }
+
+
+  // === SMART CONTEXT METHODS ===
+  getMarketName(market: string): string {
+    const marketNames: { [key: string]: string } = {
+      'aguascalientes': 'Aguascalientes',
+      'edomex': 'Estado de México'
+    };
+    return marketNames[market] || market;
+  }
+
+  onMarketChange(): void {
+    const market = this.marketValue;
+    
+    // Clear municipality when market changes
+    this.opportunityForm.get('municipality')?.setValue('');
+    
+    // Update municipality validation based on market
+    if (market === 'edomex') {
+      this.opportunityForm.get('municipality')?.setValidators([Validators.required]);
+    } else {
+      this.opportunityForm.get('municipality')?.clearValidators();
+    }
+    this.opportunityForm.get('municipality')?.updateValueAndValidity();
+  }
+
+  // === DYNAMIC WIZARD HELPER METHODS ===
+  
+  /**
+   * Determine if a specific step should be visible
+   */
+  shouldShowStep(stepType: string): boolean {
+    const market = this.marketValue;
+    const clientType = this.clientTypeValue;
+    const opportunityType = this.opportunityType;
+
+    switch (stepType) {
+      case 'market':
+        return !!opportunityType;
+      
+      case 'ecosystem':
+        return market === 'edomex' && !!clientType;
+      
+      
+      default:
+        return true;
+    }
+  }
+
+  /**
+   * Get dynamic step titles based on context
+   */
+  getMarketStepTitle(): string {
+    const market = this.marketValue;
+    const clientType = this.clientTypeValue;
+
+    if (market === 'aguascalientes' && clientType === 'Individual') {
+      return '⚡ Configuración Rápida'; // Simplified for AGS Individual
+    } else if (market === 'edomex') {
+      return '🏔️ Configuración Estado de México'; // Full config for EdoMex
+    } else {
+      return '📍 Configuración del Mercado'; // Default
+    }
+  }
+
+  getMarketStepDescription(): string {
+    const market = this.marketValue;
+    const clientType = this.clientTypeValue;
+
+    if (market === 'aguascalientes' && clientType === 'Individual') {
+      return 'Configuración simplificada para Aguascalientes Individual';
+    } else if (market === 'edomex') {
+      return 'Configuración completa requerida para Estado de México';
+    } else {
+      return 'Selecciona el mercado y tipo de cliente para continuar';
+    }
+  }
+
+  /**
+   * Ecosystem management for EdoMex
+   */
+  getAvailableEcosystems(): any[] {
+    // Mock data - in real app this would come from API based on market
+    return [
+      {
+        id: 'centro',
+        name: 'Centro Histórico',
+        description: 'Zona céntrica con alta actividad comercial',
+        icon: '🏛️',
+        activeClients: 45,
+        avgSavings: 85
+      },
+      {
+        id: 'industrial',
+        name: 'Zona Industrial',
+        description: 'Área industrial con empresas manufactureras',
+        icon: '🏭',
+        activeClients: 32,
+        avgSavings: 78
+      },
+      {
+        id: 'residencial',
+        name: 'Zona Residencial',
+        description: 'Área residencial con familias trabajadoras',
+        icon: '🏘️',
+        activeClients: 28,
+        avgSavings: 92
+      }
+    ];
+  }
+
+  selectEcosystem(ecosystemId: string): void {
+    this.selectedEcosystem = ecosystemId;
+    this.opportunityForm.patchValue({ ecosystem: ecosystemId });
+    this.recalculateSteps();
+  }
+
+
+  // === PROGRESS TRACKING ===
+  getProgressPercentage(): number {
+    return this.calculateDynamicProgress();
+  }
+
+  private calculateDynamicProgress(): number {
+    const completedSteps = this.visibleSteps.filter(step => step.completed).length;
+    const totalVisibleSteps = this.visibleSteps.length;
+    
+    if (totalVisibleSteps === 0) return 0;
+    
+    // Add partial progress for current step based on field completion
+    const currentStepProgress = this.getCurrentStepProgress();
+    const baseProgress = (completedSteps / totalVisibleSteps) * 100;
+    const partialProgress = currentStepProgress * (100 / totalVisibleSteps);
+    
+    return Math.min(baseProgress + partialProgress, 100);
+  }
+
+  private getCurrentStepProgress(): number {
+    const currentVisibleStep = this.visibleSteps[this.currentStep - 1];
+    if (!currentVisibleStep || currentVisibleStep.completed) return 0;
+
+    // Calculate progress based on required fields completion
+    const requiredFields = currentVisibleStep.validationFields || [];
+    if (requiredFields.length === 0) return 0;
+
+    const completedFields = requiredFields.filter(field => {
+      const control = this.opportunityForm.get(field);
+      return control?.value && control.valid;
+    }).length;
+
+    return completedFields / requiredFields.length;
+  }
+
+  private updateCurrentStep(): void {
+    // Find the first incomplete step
+    const firstIncompleteStep = this.visibleSteps.findIndex(step => !step.completed);
+    
+    if (firstIncompleteStep === -1) {
+      // All steps completed
+      this.currentStep = this.visibleSteps.length;
+    } else {
+      // Set current step to first incomplete (1-indexed)
+      this.currentStep = firstIncompleteStep + 1;
+    }
+    
+    // Update totalSteps based on visible steps
+    this.totalSteps = this.visibleSteps.length;
+  }
+
+  getStepStatus(stepIndex: number): string {
+    const step = this.visibleSteps[stepIndex];
+    if (!step) return 'pending';
+    
+    if (step.completed) return 'completed';
+    if (stepIndex + 1 === this.currentStep) return 'current';
+    if (stepIndex + 1 < this.currentStep) return 'completed';
+    return 'pending';
+  }
+
+  getStepIcon(stepIndex: number): string {
+    const status = this.getStepStatus(stepIndex);
+    const step = this.visibleSteps[stepIndex];
+    
+    switch (status) {
+      case 'completed':
+        return '✅';
+      case 'current':
+        return step?.icon || '⏳';
+      default:
+        return step?.icon || '⭕';
+    }
+  }
+
+  // === DRAFT RECOVERY METHODS ===
+  formatDraftDate(timestamp: number): string {
+    return new Date(timestamp).toLocaleDateString('es-MX', {
+      day: 'numeric',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  recoverDraft(): void {
+    if (this.draftData) {
+      // Restore form data
+      this.opportunityForm.patchValue(this.draftData.formData);
+      this.opportunityType = this.draftData.opportunityType;
+      this.currentStep = this.draftData.currentStep;
+      
+      // Mark as recovered
+      this.draftRecovered = true;
+      this.hasDraftAvailable = false;
+      
+      // Merge smart context (new context takes precedence)
+      this.smartContext = {
+        ...this.draftData.smartContext,
+        ...this.smartContext
+      };
+    }
+  }
+
+  discardDraft(): void {
+    localStorage.removeItem(this.draftKey);
+    this.hasDraftAvailable = false;
+    this.draftData = null;
+  }
+
+  // === ANTI-DUPLICATE METHODS ===
+  getClientInitials(name: string): string {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .slice(0, 2)
+      .join('')
+      .toUpperCase();
+  }
+
+  selectSimilarClient(client: any): void {
+    // Pre-populate form with existing client data
+    this.opportunityForm.patchValue({
+      clientName: client.name,
+      phone: client.phone || '',
+      email: client.email || '',
+      market: client.market || this.smartContext.market || ''
+    });
+    
+    // Clear similar clients
+    this.similarClients = [];
+    
+    // Navigate directly to opportunity selection since we have existing client
+    this.currentStep = 2;
+  }
+
+  clearSimilarClients(): void {
+    this.similarClients = [];
+  }
+
+  // === ENHANCED SAVE METHODS ===
+  saveDraft(): void {
+    this.saveDraftToStorage();
+    // TODO: Also save to backend when API is ready
+    console.log('Draft saved locally and will sync with backend');
+  }
+
+  onSubmit() {
+    if (!this.opportunityType) {
+      this.opportunityTypeError = true;
+      return;
+    }
+
+    if (this.opportunityForm.valid) {
+      this.isLoading = true;
+      this.currentStep = 4;
+
+      // Enhanced client data with business intelligence
+      const enhancedClientData = {
+        ...this.opportunityForm.value,
+        opportunityType: this.opportunityType,
+        businessFlow: this.getBusinessFlowLabel(),
+        smartContext: this.smartContext,
+        createdAt: new Date(),
+        // Business intelligence metadata
+        source: 'nueva-oportunidad-wizard',
+        advisorContext: {
+          dashboardFilter: this.smartContext.market,
+          suggestedFlow: this.smartContext.suggestedFlow,
+          createdFromContext: this.smartContext.returnContext
+        }
+      };
+
+      // Real API Integration
+      this.apiService.createClient(enhancedClientData).subscribe({
+        next: (createdClient) => {
+          console.log('Client created successfully:', createdClient);
+          
+          // Clear draft after successful creation
+          localStorage.removeItem(this.draftKey);
+          
+          // Navigate with enhanced context
+          this.navigateToNextStep(createdClient);
+        },
+        error: (error) => {
+          console.error('Error creating client:', error);
+          this.isLoading = false;
+          // TODO: Show user-friendly error message
+        }
+      });
+    } else {
+      // Enhanced validation feedback
+      Object.keys(this.opportunityForm.controls).forEach(key => {
+        this.opportunityForm.get(key)?.markAsTouched();
+      });
+      
+      // Focus first invalid field
+      const firstInvalidControl = Object.keys(this.opportunityForm.controls)
+        .find(key => this.opportunityForm.get(key)?.invalid);
+      
+      if (firstInvalidControl) {
+        const element = document.getElementById(firstInvalidControl);
+        element?.focus();
+        element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }
+
+  /**
+   * INTELLIGENT NAVIGATION
+   * Navigate to appropriate next step with enhanced context
+   */
+  private navigateToNextStep(createdClient?: any): void {
+    const navigationContext = {
+      clientId: createdClient?.id,
+      clientName: this.clientNameValue,
+      source: 'nueva-oportunidad',
+      smartContext: this.smartContext
+    };
+
+    if (this.opportunityType === 'COTIZACION') {
+      // Cotizador routing with business rules
+      if (this.marketValue === 'aguascalientes' && this.clientTypeValue === 'Individual') {
+        this.router.navigate(['/cotizador/ags-individual'], {
+          queryParams: navigationContext
+        });
+      } else if (this.marketValue === 'edomex' && this.clientTypeValue === 'Colectivo') {
+        this.router.navigate(['/cotizador/edomex-colectivo'], {
+          queryParams: navigationContext
+        });
+      } else {
+        // Default cotizador with context
+        this.router.navigate(['/cotizador'], {
+          queryParams: navigationContext
+        });
+      }
+    } else {
+      // Simulador routing with business rules
+      if (this.marketValue === 'aguascalientes') {
+        this.router.navigate(['/simulador/ags-ahorro'], {
+          queryParams: navigationContext
+        });
+      } else if (this.clientTypeValue === 'Individual') {
+        this.router.navigate(['/simulador/edomex-individual'], {
+          queryParams: navigationContext
+        });
+      } else {
+        this.router.navigate(['/simulador/tanda-colectiva'], {
+          queryParams: navigationContext
+        });
+      }
+    }
+
+    this.isLoading = false;
+  }
+
+  // === INTELLIGENT AUTOCOMPLETE ===
+  onClientNameFocus(): void {
+    this.generateClientSuggestions();
+    this.showSuggestions = true;
+    this.selectedSuggestionIndex = -1;
+  }
+
+  onClientNameBlur(): void {
+    // Delay hiding to allow for suggestion selection
+    this.suggestionTimeout = setTimeout(() => {
+      this.showSuggestions = false;
+      this.selectedSuggestionIndex = -1;
+    }, 150);
+  }
+
+  handleClientNameKeydown(event: KeyboardEvent): void {
+    if (!this.showSuggestions || this.clientSuggestions.length === 0) return;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        this.selectedSuggestionIndex = Math.min(
+          this.selectedSuggestionIndex + 1,
+          this.clientSuggestions.length - 1
+        );
+        break;
+      
+      case 'ArrowUp':
+        event.preventDefault();
+        this.selectedSuggestionIndex = Math.max(this.selectedSuggestionIndex - 1, 0);
+        break;
+      
+      case 'Enter':
+        event.preventDefault();
+        if (this.selectedSuggestionIndex >= 0 && this.selectedSuggestionIndex < this.clientSuggestions.length) {
+          this.selectSuggestion(this.clientSuggestions[this.selectedSuggestionIndex]);
+        }
+        break;
+      
+      case 'Escape':
+        this.showSuggestions = false;
+        this.selectedSuggestionIndex = -1;
+        break;
+    }
+  }
+
+  private generateClientSuggestions(): void {
+    const currentName = this.clientNameValue.toLowerCase().trim();
+    
+    // Generate smart suggestions based on context and common patterns
+    this.clientSuggestions = [];
+
+    // Suggestions based on market context
+    if (this.smartContext.market === 'aguascalientes') {
+      this.clientSuggestions.push(
+        { name: 'María González Hernández', phone: '449-123-4567', market: 'AGS', type: '📊 Cotización recurrente' },
+        { name: 'Carlos López Torres', phone: '449-234-5678', market: 'AGS', type: '💰 Cliente premium' },
+        { name: 'Ana Patricia Morales', phone: '449-345-6789', market: 'AGS', type: '🎯 Simulación activa' }
+      );
+    } else if (this.smartContext.market === 'edomex') {
+      this.clientSuggestions.push(
+        { name: 'Roberto Sánchez Martínez', phone: '55-9876-5432', market: 'EdoMex', type: '🏢 Cliente corporativo' },
+        { name: 'Laura Jiménez Ruiz', phone: '55-8765-4321', market: 'EdoMex', type: '👥 Cliente familiar' },
+        { name: 'Miguel Ángel Torres', phone: '55-7654-3210', market: 'EdoMex', type: '🚗 Renovación pendiente' }
+      );
+    }
+
+    // Filter suggestions if user is typing
+    if (currentName.length >= 2) {
+      this.clientSuggestions = this.clientSuggestions.filter(suggestion =>
+        suggestion.name.toLowerCase().includes(currentName) ||
+        suggestion.name.toLowerCase().split(' ').some(part => part.startsWith(currentName))
+      );
+    }
+
+    // Add generic suggestions based on typing patterns
+    if (currentName.length >= 3) {
+      this.clientSuggestions.unshift(
+        { name: this.formatSuggestionName(currentName), type: '✨ Completar automáticamente' }
+      );
+    }
+
+    // Limit to 5 suggestions for UX
+    this.clientSuggestions = this.clientSuggestions.slice(0, 5);
+  }
+
+  private formatSuggestionName(input: string): string {
+    return input.split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  }
+
+  selectSuggestion(suggestion: any): void {
+    if (this.suggestionTimeout) {
+      clearTimeout(this.suggestionTimeout);
+    }
+
+    // Fill form with suggestion data
+    this.opportunityForm.patchValue({
+      clientName: suggestion.name,
+      phone: suggestion.phone || '',
+      market: suggestion.market || this.smartContext.market || this.opportunityForm.get('market')?.value
+    });
+
+    this.showSuggestions = false;
+    this.selectedSuggestionIndex = -1;
+
+    // Trigger validation and step recalculation
+    this.recalculateSteps();
+  }
+
+  trackBySuggestion(index: number, suggestion: any): any {
+    return suggestion.name + suggestion.type;
+  }
+
+  goBack() {
+    this.router.navigate(['/dashboard']);
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "path": "dist/conductores-pwa/main*.js",
+      "maxSize": "500kb",
+      "compression": "gzip"
+    },
+    {
+      "path": "dist/conductores-pwa/vendor*.js",
+      "maxSize": "2mb",
+      "compression": "gzip"
+    },
+    {
+      "path": "dist/conductores-pwa/runtime*.js",
+      "maxSize": "10kb",
+      "compression": "gzip"
+    },
+    {
+      "path": "dist/conductores-pwa/styles*.css",
+      "maxSize": "100kb",
+      "compression": "gzip"
+    }
+  ]
+}

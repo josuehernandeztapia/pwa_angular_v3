@@ -1,0 +1,334 @@
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { delay, map } from 'rxjs/operators';
+import { FinancialCalculatorService } from './financial-calculator.service';
+import { Quote, BusinessFlow, Market } from '../models/types';
+
+// Port exacto de React getProductPackage types
+export interface ProductComponent {
+  id: string;
+  name: string;
+  price: number;
+  isOptional: boolean;
+  isMultipliedByTerm?: boolean;
+}
+
+export interface ProductPackage {
+  name: string;
+  rate: number;
+  terms: number[];
+  minDownPaymentPercentage: number;
+  maxDownPaymentPercentage?: number; // Para rangos variables como EdoMex
+  defaultMembers?: number;
+  maxMembers?: number; // Máximo lógico para crédito colectivo
+  components: ProductComponent[];
+}
+
+export interface CotizadorConfig {
+  totalPrice: number;
+  downPayment: number;
+  term: number;
+  market: Market;
+  clientType: 'Individual' | 'Colectivo';
+  businessFlow: BusinessFlow;
+}
+
+export interface AmortizationRow {
+  payment: number;
+  principalPayment: number;
+  interestPayment: number;
+  balance: number;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CotizadorEngineService {
+
+  constructor(private financialCalc: FinancialCalculatorService) { }
+
+  /**
+   * Port exacto de getProductPackage desde React simulationService.ts líneas 550-613
+   */
+  getProductPackage(market: string): Observable<ProductPackage> {
+    const packages: { [key: string]: ProductPackage } = {
+      // --- Aguascalientes ---
+      'aguascalientes-plazo': {
+        name: "Paquete Venta a Plazo - Aguascalientes",
+        rate: 0.255,
+        terms: [12, 24],
+        minDownPaymentPercentage: 0.60,
+        components: [
+          { id: 'vagoneta_19p', name: 'Vagoneta H6C (19 Pasajeros)', price: 799000, isOptional: false },
+          { id: 'gnv', name: 'Conversión GNV', price: 54000, isOptional: false }
+        ]
+      },
+      'aguascalientes-directa': {
+        name: "Paquete Compra de Contado - Aguascalientes",
+        rate: 0,
+        terms: [],
+        minDownPaymentPercentage: 0.50, // 50% para compra de contado
+        components: [
+          { id: 'vagoneta_19p', name: 'Vagoneta H6C (19 Pasajeros)', price: 799000, isOptional: false },
+          { id: 'gnv', name: 'Conversión GNV', price: 54000, isOptional: true } // Opcional en contado
+        ]
+      },
+      // --- Estado de México ---
+      'edomex-plazo': {
+        name: "Paquete Venta a Plazo (Individual) - EdoMex",
+        rate: 0.299,
+        terms: [48, 60],
+        minDownPaymentPercentage: 0.20, // Rango 20-25%, este es el mínimo
+        maxDownPaymentPercentage: 0.25, // Máximo sugerido para individual
+        components: [
+          { id: 'vagoneta_ventanas', name: 'Vagoneta H6C (Ventanas)', price: 749000, isOptional: false },
+          { id: 'gnv', name: 'Conversión GNV', price: 54000, isOptional: false },
+          { id: 'tec', name: 'Paquete Tec (GPS, Cámaras)', price: 12000, isOptional: false },
+          { id: 'bancas', name: 'Bancas', price: 22000, isOptional: false },
+          { id: 'seguro', name: 'Seguro Anual', price: 36700, isOptional: false, isMultipliedByTerm: true }
+        ]
+      },
+      'edomex-directa': {
+        name: "Paquete Compra de Contado - EdoMex",
+        rate: 0,
+        terms: [],
+        minDownPaymentPercentage: 0.50, // 50% para compra de contado
+        components: [
+          { id: 'vagoneta_ventanas', name: 'Vagoneta H6C (Ventanas)', price: 749000, isOptional: false },
+          { id: 'gnv', name: 'Conversión GNV', price: 54000, isOptional: false }, // Obligatorio en EdoMex contado
+          { id: 'bancas', name: 'Bancas', price: 22000, isOptional: false }, // Obligatorio en EdoMex contado
+          // GPS+Cámaras+Seguro SOLO para venta a plazo/crédito, NO contado
+        ]
+      },
+      'edomex-colectivo': {
+        name: "Paquete Crédito Colectivo - EdoMex",
+        rate: 0.299,
+        terms: [60],
+        minDownPaymentPercentage: 0.15, // Rango 15-20%, este es el mínimo
+        maxDownPaymentPercentage: 0.20, // Máximo sugerido para colectivo
+        defaultMembers: 5, // Mínimo 5 miembros
+        maxMembers: 20, // Sin límite rígido, máximo lógico ~20
+        components: [
+          { id: 'vagoneta_ventanas', name: 'Vagoneta H6C (Ventanas)', price: 749000, isOptional: false },
+          { id: 'gnv', name: 'Conversión GNV', price: 54000, isOptional: false },
+          { id: 'tec', name: 'Paquete Tec (GPS, Cámaras)', price: 12000, isOptional: false },
+          { id: 'bancas', name: 'Bancas', price: 22000, isOptional: false },
+          { id: 'seguro', name: 'Seguro Anual', price: 36700, isOptional: false, isMultipliedByTerm: true }
+        ]
+      }
+    };
+
+    const selectedPackage = packages[market];
+    if (!selectedPackage) {
+      throw new Error(`Paquete no encontrado para mercado: ${market}`);
+    }
+
+    // Port exacto de mockApi delay desde React
+    return of(selectedPackage).pipe(delay(600));
+  }
+
+  /**
+   * Calculate total package price including optional components
+   */
+  calculatePackagePrice(packageData: ProductPackage, term: number = 1, selectedOptionals: string[] = []): number {
+    return packageData.components.reduce((total, component) => {
+      // Skip optional components not selected
+      if (component.isOptional && !selectedOptionals.includes(component.id)) {
+        return total;
+      }
+
+      let price = component.price;
+      
+      // Multiply by term if specified (like annual insurance)
+      if (component.isMultipliedByTerm) {
+        const years = Math.ceil(term / 12);
+        price = price * years;
+      }
+
+      return total + price;
+    }, 0);
+  }
+
+  /**
+   * Port exacto de getBalance calculation desde React
+   */
+  getBalance(principal: number, rate: number, term: number, paymentsMade: number): number {
+    if (rate === 0) return principal - (principal / term * paymentsMade);
+    
+    const monthlyRate = rate / 12;
+    const monthlyPayment = this.financialCalc.annuity(principal, monthlyRate, term);
+    
+    let balance = principal;
+    for (let i = 0; i < paymentsMade; i++) {
+      const interestPayment = balance * monthlyRate;
+      const principalPayment = monthlyPayment - interestPayment;
+      balance = Math.max(0, balance - principalPayment);
+    }
+    
+    return balance;
+  }
+
+  // Generate complete quote with financial calculations using real product packages
+  generateQuoteWithPackage(market: string, selectedOptionals: string[] = [], downPayment: number = 0, term: number = 12): Observable<Quote & { packageData: ProductPackage }> {
+    return this.getProductPackage(market).pipe(
+      delay(100),
+      map(packageData => {
+        const totalPrice = this.calculatePackagePrice(packageData, term, selectedOptionals);
+        const finalDownPayment = downPayment || (totalPrice * packageData.minDownPaymentPercentage);
+        const amountToFinance = totalPrice - finalDownPayment;
+        
+        const monthlyRate = packageData.rate / 12;
+        const monthlyPayment = monthlyRate > 0 
+          ? this.financialCalc.annuity(amountToFinance, monthlyRate, term)
+          : 0; // For direct sales
+
+        return {
+          totalPrice,
+          downPayment: finalDownPayment,
+          amountToFinance,
+          term,
+          monthlyPayment,
+          market: market as Market,
+          clientType: packageData.defaultMembers ? 'Colectivo' : 'Individual',
+          flow: this.getBusinessFlowFromMarket(market),
+          packageData
+        };
+      })
+    );
+  }
+
+  // Generate complete quote with financial calculations (legacy method)
+  generateQuote(config: CotizadorConfig): Quote {
+    const amountToFinance = config.totalPrice - config.downPayment;
+    const monthlyRate = this.getMonthlyRate(config.market);
+    const monthlyPayment = this.financialCalc.annuity(amountToFinance, monthlyRate, config.term);
+
+    return {
+      totalPrice: config.totalPrice,
+      downPayment: config.downPayment,
+      amountToFinance,
+      term: config.term,
+      monthlyPayment,
+      market: config.market,
+      clientType: config.clientType,
+      flow: config.businessFlow
+    };
+  }
+
+  /**
+   * Port exacto de business flow logic desde React
+   */
+  private getBusinessFlowFromMarket(market: string): BusinessFlow {
+    if (market.includes('directa')) return BusinessFlow.VentaDirecta;
+    if (market.includes('colectivo')) return BusinessFlow.CreditoColectivo;
+    if (market.includes('plazo')) return BusinessFlow.VentaPlazo;
+    return BusinessFlow.AhorroProgramado;
+  }
+
+  // Generate complete amortization table
+  generateAmortizationTable(quote: Quote): AmortizationRow[] {
+    const monthlyRate = this.getMonthlyRate(quote.market as Market);
+    const rows: AmortizationRow[] = [];
+    let balance = quote.amountToFinance;
+
+    for (let payment = 1; payment <= quote.term; payment++) {
+      const interestPayment = balance * monthlyRate;
+      const principalPayment = quote.monthlyPayment - interestPayment;
+      balance = Math.max(0, balance - principalPayment);
+
+      rows.push({
+        payment,
+        principalPayment,
+        interestPayment,
+        balance
+      });
+    }
+
+    return rows;
+  }
+
+  // Get monthly interest rate based on market
+  private getMonthlyRate(market: Market): number {
+    const annualRate = this.financialCalc.getTIRMin(market);
+    return annualRate / 12;
+  }
+
+  // Validate quote configuration against business rules
+  validateConfiguration(config: CotizadorConfig): { valid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    // Minimum down payment validation
+    const minDownPaymentPct = this.getMinimumDownPayment(config.market, config.clientType);
+    const actualDownPaymentPct = config.downPayment / config.totalPrice;
+    
+    if (actualDownPaymentPct < minDownPaymentPct) {
+      errors.push(`El enganche mínimo para ${config.clientType} en ${config.market} es ${(minDownPaymentPct * 100).toFixed(0)}%`);
+    }
+
+    // Term validation
+    const allowedTerms = this.getAllowedTerms(config.market);
+    if (!allowedTerms.includes(config.term)) {
+      errors.push(`Los plazos permitidos para ${config.market} son: ${allowedTerms.join(', ')} meses`);
+    }
+
+    // Price validation
+    if (config.totalPrice <= 0) {
+      errors.push('El precio total debe ser mayor a cero');
+    }
+
+    if (config.downPayment >= config.totalPrice) {
+      errors.push('El enganche no puede ser igual o mayor al precio total');
+    }
+
+    return {
+      valid: errors.length === 0,
+      errors
+    };
+  }
+
+  // Get minimum down payment percentage based on market and client type
+  private getMinimumDownPayment(market: Market, clientType: string): number {
+    if (market === 'aguascalientes') {
+      return 0.60; // 60% for Aguascalientes (matches package requirement)
+    }
+    if (market === 'edomex') {
+      return clientType === 'Colectivo' ? 0.15 : 0.25; // 15% for Colectivo, 25% for Individual in EdoMex
+    }
+    return 0.20; // Default fallback
+  }
+
+  // Get allowed terms based on market
+  private getAllowedTerms(market: Market): number[] {
+    if (market === 'aguascalientes') {
+      return [12, 24]; // AGS: 12/24 months
+    }
+    if (market === 'edomex') {
+      return [48, 60]; // EdoMex: 48/60 months
+    }
+    return [12, 24]; // Default fallback
+  }
+
+  // Calculate total interest paid over the loan term
+  getTotalInterest(quote: Quote): number {
+    const totalPayments = quote.monthlyPayment * quote.term;
+    return totalPayments - quote.amountToFinance;
+  }
+
+  // Get financial summary for display
+  getFinancialSummary(quote: Quote): {
+    totalCost: number;
+    totalInterest: number;
+    effectiveRate: number;
+    paymentToIncomeRatio?: number;
+  } {
+    const totalInterest = this.getTotalInterest(quote);
+    const totalCost = quote.totalPrice + totalInterest;
+    const effectiveRate = this.financialCalc.getTIRMin(quote.market as Market);
+
+    return {
+      totalCost,
+      totalInterest,
+      effectiveRate: effectiveRate * 100 // Convert to percentage
+    };
+  }
+}

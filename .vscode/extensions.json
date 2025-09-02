@@ -1,0 +1,26 @@
+{
+  "recommendations": [
+    "angular.ng-template",
+    "ms-vscode.vscode-typescript-next",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-eslint",
+    "bradlc.vscode-tailwindcss",
+    "formulahendry.auto-rename-tag",
+    "christian-kohler.path-intellisense",
+    "ms-vscode.vscode-json",
+    "redhat.vscode-yaml",
+    "ms-playwright.playwright",
+    "ms-vscode.test-adapter-converter",
+    "hbenl.vscode-test-explorer",
+    "streetsidesoftware.code-spell-checker",
+    "usernamehw.errorlens",
+    "johnpapa.angular2",
+    "cyrilletuzi.angular-schematics",
+    "alexiv.vscode-angular2-files",
+    "mikael.angular-beastcode",
+    "ms-vscode.vscode-chrome-debug-core"
+  ],
+  "unwantedRecommendations": [
+    "ms-vscode.vscode-typescript-tslint-plugin"
+  ]
+}

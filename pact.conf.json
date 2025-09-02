@@ -1,0 +1,47 @@
+{
+  "consumer": {
+    "name": "conductores-pwa-frontend",
+    "version": "1.0.0"
+  },
+  "provider": {
+    "name": "conductores-api-backend",
+    "version": "1.0.0"
+  },
+  "pactFileWriteMode": "update",
+  "pacts": [
+    {
+      "consumer": {
+        "name": "conductores-pwa-frontend"
+      },
+      "provider": {
+        "name": "conductores-api-backend"
+      }
+    }
+  ],
+  "pactBroker": {
+    "url": "http://localhost:9292",
+    "username": "pact_workshop",
+    "password": "pact_workshop",
+    "publishVerificationResult": true,
+    "publishResults": true
+  },
+  "pactUrls": [
+    "./pacts/conductores-pwa-frontend-conductores-api-backend.json"
+  ],
+  "providerBaseUrl": "http://localhost:3000",
+  "publishVerificationResults": true,
+  "providerVersion": "1.0.0",
+  "consumerVersionSelectors": [
+    {
+      "tag": "master",
+      "latest": true
+    },
+    {
+      "tag": "production",
+      "latest": true
+    }
+  ],
+  "enablePending": true,
+  "includeWipPactsSince": "2024-01-01",
+  "logLevel": "INFO"
+}

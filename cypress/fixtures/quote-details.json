@@ -1,0 +1,118 @@
+{
+  "id": "quote-001",
+  "number": "COT-2024-001",
+  "status": "approved",
+  "createdAt": "2024-02-01T10:00:00Z",
+  "expiresAt": "2024-02-15T23:59:59Z",
+  "approvedAt": "2024-02-02T16:45:00Z",
+  "approvedBy": "Ricardo Montoya",
+  "client": {
+    "id": "client-001",
+    "name": "Juan Pérez García",
+    "email": "juan.perez@email.com",
+    "phone": "5551234567",
+    "rfc": "PEGJ850315ABC"
+  },
+  "product": {
+    "id": "product-001",
+    "name": "Tsuru Estándar",
+    "variant": "premium",
+    "color": "blanco",
+    "year": 2024,
+    "basePrice": 250000,
+    "features": ["GPS", "seguro-extendido"],
+    "specifications": {
+      "engine": "1.6L 4 cilindros",
+      "transmission": "Manual 5 velocidades",
+      "fuelType": "Gasolina",
+      "doors": 4,
+      "seats": 5
+    }
+  },
+  "pricing": {
+    "basePrice": 250000,
+    "additionalFeatures": 30000,
+    "totalPrice": 280000,
+    "currency": "MXN",
+    "breakdown": {
+      "vehiclePrice": 250000,
+      "GPS": 15000,
+      "seguroExtendido": 15000,
+      "taxes": 0,
+      "fees": 0
+    }
+  },
+  "financing": {
+    "downPayment": 50000,
+    "financedAmount": 230000,
+    "interestRate": 12.5,
+    "paymentTerms": 48,
+    "monthlyPayment": 4800,
+    "totalInterest": 100400,
+    "totalAmount": 330400,
+    "paymentSchedule": [
+      {
+        "paymentNumber": 1,
+        "dueDate": "2024-03-01",
+        "amount": 4800,
+        "principal": 2408.33,
+        "interest": 2391.67,
+        "balance": 227591.67
+      },
+      {
+        "paymentNumber": 2,
+        "dueDate": "2024-04-01", 
+        "amount": 4800,
+        "principal": 2433.42,
+        "interest": 2366.58,
+        "balance": 225158.25
+      }
+    ]
+  },
+  "documents": [
+    {
+      "id": "doc-quote-001",
+      "name": "Cotización Oficial",
+      "type": "pdf",
+      "url": "/api/quotes/quote-001/pdf",
+      "createdAt": "2024-02-01T10:00:00Z"
+    }
+  ],
+  "history": [
+    {
+      "id": "history-001",
+      "action": "created",
+      "timestamp": "2024-02-01T10:00:00Z",
+      "actor": "Sistema",
+      "description": "Cotización creada"
+    },
+    {
+      "id": "history-002", 
+      "action": "submitted",
+      "timestamp": "2024-02-01T15:30:00Z",
+      "actor": "Juan Pérez García",
+      "description": "Cotización enviada para aprobación"
+    },
+    {
+      "id": "history-003",
+      "action": "approved",
+      "timestamp": "2024-02-02T16:45:00Z",
+      "actor": "Ricardo Montoya",
+      "description": "Cotización aprobada con condiciones estándar"
+    }
+  ],
+  "notes": [
+    {
+      "id": "note-001",
+      "content": "Cliente interesado en financiamiento a 48 meses",
+      "createdAt": "2024-02-01T12:00:00Z",
+      "createdBy": "Asesor"
+    },
+    {
+      "id": "note-002",
+      "content": "Aprobación expedita por buen historial crediticio",
+      "createdAt": "2024-02-02T16:45:00Z", 
+      "createdBy": "Ricardo Montoya"
+    }
+  ]
+}

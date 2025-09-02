@@ -1,0 +1,189 @@
+/* ===== CONDUCTORES PWA - PREMIUM FINTECH THEME =====
+ * Global styles and theme imports
+ * Version: Centro de Comando
+ */
+
+/* Import Premium FinTech Theme */
+@import 'styles/theme-premium.css';
+
+/* ===== GLOBAL RESET & BASE STYLES ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-gray-950);
+  color: var(--bg-gray-100);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== PREMIUM COMPONENT STYLES ===== */
+
+/* Premium buttons */
+.btn-primary {
+  background: var(--gradient-primary);
+  background: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600));
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-card);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevated);
+  background: linear-gradient(135deg, var(--primary-cyan-300), var(--primary-cyan-500));
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
+  color: var(--bg-gray-950);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-card);
+}
+
+.btn-accent:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevated);
+  background: linear-gradient(135deg, var(--accent-amber-300), var(--accent-amber-500));
+}
+
+/* Premium cards */
+.premium-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease;
+}
+
+.premium-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-elevated);
+  border-color: var(--primary-cyan-400);
+}
+
+/* Command Center Layout */
+.command-center-layout {
+  min-height: 100vh;
+  background: var(--command-center-bg);
+}
+
+/* Premium form inputs */
+.premium-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--bg-gray-100);
+  padding: 14px 16px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.premium-input:focus {
+  outline: none;
+  border-color: var(--primary-cyan-400);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
+}
+
+.premium-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Status indicators */
+.status-excellent { 
+  background: linear-gradient(135deg, var(--success-500), var(--success-600));
+  color: white;
+}
+.status-good { 
+  background: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600));
+  color: white;
+}
+.status-warning { 
+  background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
+  color: var(--bg-gray-950);
+}
+.status-critical { 
+  background: linear-gradient(135deg, var(--error-500), var(--error-600));
+  color: white;
+}
+
+/* Premium animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.5s ease-out;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-gray-800);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-cyan-600);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-cyan-500);
+}
+
+/* Utility classes */
+.text-gradient-primary {
+  background: linear-gradient(135deg, var(--primary-cyan-300), var(--primary-cyan-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "id": "req-001",
+    "type": "ine",
+    "name": "Identificación oficial (INE)",
+    "description": "Credencial para votar vigente por ambos lados",
+    "required": true,
+    "category": "identificacion",
+    "acceptedFormats": ["pdf", "jpg", "png"],
+    "maxFileSize": 5242880,
+    "tooltip": "La credencial debe estar vigente y legible por ambos lados",
+    "validationRules": {
+      "expirationCheck": true,
+      "bothSides": true,
+      "ocrExtraction": true
+    }
+  },
+  {
+    "id": "req-002", 
+    "type": "comprobante-domicilio",
+    "name": "Comprobante de domicilio",
+    "description": "Recibo de servicios no mayor a 3 meses",
+    "required": true,
+    "category": "domicilio",
+    "acceptedFormats": ["pdf", "jpg", "png"],
+    "maxFileSize": 5242880,
+    "tooltip": "Recibo de luz, agua, gas o teléfono no mayor a 3 meses",
+    "examples": [
+      "Recibo CFE",
+      "Recibo de agua",
+      "Estado de cuenta bancario",
+      "Recibo telefónico"
+    ],
+    "validationRules": {
+      "dateCheck": true,
+      "maxAge": 90
+    }
+  },
+  {
+    "id": "req-003",
+    "type": "rfc",
+    "name": "Constancia de situación fiscal",
+    "description": "Constancia fiscal actualizada del SAT",
+    "required": true,
+    "category": "fiscal",
+    "acceptedFormats": ["pdf"],
+    "maxFileSize": 2097152,
+    "tooltip": "Documento emitido por el SAT con situación fiscal actualizada",
+    "validationRules": {
+      "satValidation": true,
+      "currentYear": true
+    }
+  },
+  {
+    "id": "req-004",
+    "type": "comprobante-ingresos",
+    "name": "Comprobante de ingresos",
+    "description": "Recibos de nómina o estados de cuenta",
+    "required": true,
+    "category": "ingresos",
+    "acceptedFormats": ["pdf", "jpg", "png"],
+    "maxFileSize": 10485760,
+    "tooltip": "Últimos 3 recibos de nómina o estados de cuenta bancarios",
+    "quantity": {
+      "min": 3,
+      "max": 6,
+      "recommended": 3
+    },
+    "validationRules": {
+      "incomeVerification": true,
+      "consecutiveMonths": true
+    }
+  },
+  {
+    "id": "req-005",
+    "type": "acta-nacimiento",
+    "name": "Acta de nacimiento",
+    "description": "Acta de nacimiento certificada",
+    "required": false,
+    "category": "identificacion",
+    "acceptedFormats": ["pdf"],
+    "maxFileSize": 3145728,
+    "tooltip": "Acta de nacimiento certificada, requerida para algunos productos"
+  },
+  {
+    "id": "req-006",
+    "type": "referencias-comerciales",
+    "name": "Referencias comerciales",
+    "description": "Cartas de referencia comercial",
+    "required": false,
+    "category": "referencias",
+    "acceptedFormats": ["pdf", "doc", "docx"],
+    "maxFileSize": 5242880,
+    "tooltip": "Cartas de referencia de proveedores o clientes comerciales",
+    "quantity": {
+      "min": 2,
+      "max": 5,
+      "recommended": 3
+    }
+  },
+  {
+    "id": "req-007",
+    "type": "estados-cuenta",
+    "name": "Estados de cuenta bancarios",
+    "description": "Estados de cuenta de los últimos 6 meses",
+    "required": true,
+    "category": "financieros",
+    "acceptedFormats": ["pdf"],
+    "maxFileSize": 10485760,
+    "tooltip": "Estados de cuenta bancarios de los últimos 6 meses",
+    "quantity": {
+      "min": 3,
+      "max": 6,
+      "recommended": 6
+    },
+    "validationRules": {
+      "bankStatementValidation": true,
+      "consecutiveMonths": true,
+      "balanceCheck": true
+    }
+  }
+]

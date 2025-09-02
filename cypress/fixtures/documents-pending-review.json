@@ -1,0 +1,81 @@
+[
+  {
+    "id": "doc-004",
+    "clientId": "client-001",
+    "clientName": "Juan Pérez García",
+    "type": "comprobante-domicilio",
+    "name": "Comprobante de domicilio",
+    "status": "in_review",
+    "uploadedAt": "2024-02-03T16:30:00Z",
+    "fileName": "comprobante-domicilio.pdf",
+    "fileSize": 1024768,
+    "fileUrl": "/uploads/client-001/comprobante-domicilio.pdf",
+    "priority": "normal",
+    "daysInQueue": 1
+  },
+  {
+    "id": "doc-006",
+    "clientId": "client-002", 
+    "clientName": "María López Silva",
+    "type": "rfc",
+    "name": "Constancia de situación fiscal",
+    "status": "in_review",
+    "uploadedAt": "2024-02-02T14:15:00Z",
+    "fileName": "RFC_Maria_Lopez.pdf",
+    "fileSize": 896512,
+    "fileUrl": "/uploads/client-002/rfc.pdf",
+    "priority": "high",
+    "daysInQueue": 2,
+    "urgentReason": "Cliente con cotización aprobada pendiente de firma"
+  },
+  {
+    "id": "doc-007",
+    "clientId": "client-003",
+    "clientName": "Carlos Rodríguez Martín",
+    "type": "comprobante-ingresos",
+    "name": "Comprobante de ingresos",
+    "status": "in_review",
+    "uploadedAt": "2024-02-01T11:45:00Z",
+    "fileName": "Nominas_Carlos_Rodriguez.pdf",
+    "fileSize": 2048000,
+    "fileUrl": "/uploads/client-003/nominas.pdf",
+    "priority": "normal",
+    "daysInQueue": 3
+  },
+  {
+    "id": "doc-008",
+    "clientId": "client-004",
+    "clientName": "Ana Martínez López",
+    "type": "estados-cuenta",
+    "name": "Estados de cuenta bancarios",
+    "status": "in_review",
+    "uploadedAt": "2024-01-31T09:30:00Z",
+    "fileName": "Estados_Cuenta_Ana.pdf",
+    "fileSize": 3145728,
+    "fileUrl": "/uploads/client-004/estados-cuenta.pdf",
+    "priority": "normal",
+    "daysInQueue": 4,
+    "notes": "Cliente solicita revisión expedita"
+  },
+  {
+    "id": "doc-009",
+    "clientId": "client-005",
+    "clientName": "Roberto García Hernández",
+    "type": "ine",
+    "name": "INE Vigente",
+    "status": "in_review",
+    "uploadedAt": "2024-02-03T08:20:00Z",
+    "fileName": "INE_Roberto_Garcia.pdf",
+    "fileSize": 1536000,
+    "fileUrl": "/uploads/client-005/ine.pdf",
+    "priority": "low",
+    "daysInQueue": 1,
+    "autoProcessed": true,
+    "ocrData": {
+      "name": "ROBERTO GARCIA HERNANDEZ",
+      "curp": "GAHR750820HDFRCB05",
+      "address": "CALLE MORELOS 456, COL REFORMA",
+      "expirationDate": "2030-08-20"
+    }
+  }
+]

@@ -1,0 +1,310 @@
+<!-- AVI Interview Component -->
+<div class="avi-interview-container">
+  
+  <!-- Header con progreso -->
+  <div class="interview-header" *ngIf="isInterviewActive || showResults">
+    <div class="progress-section">
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+      </div>
+      <div class="progress-info">
+        <span class="question-count">{{ answeredQuestions.length }} / {{ totalQuestions }}</span>
+        <span class="time-remaining" *ngIf="estimatedTimeRemaining > 0">
+          ~{{ estimatedTimeRemaining.toFixed(1) }}min restantes
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado: Antes de comenzar -->
+  <div class="interview-start" *ngIf="!isInterviewActive && !showResults">
+    <div class="start-card">
+      <div class="avi-logo">
+        <span class="logo-icon">🎤</span>
+        <h1>Entrevista AVI</h1>
+        <p class="subtitle">Sistema Automatizado de Evaluación Vocal</p>
+      </div>
+      
+      <div class="interview-info">
+        <div class="info-item">
+          <span class="icon">📋</span>
+          <span>{{ totalQuestions }} preguntas personalizadas</span>
+        </div>
+        <div class="info-item">
+          <span class="icon">⏱️</span>
+          <span>~45 minutos de duración</span>
+        </div>
+        <div class="info-item">
+          <span class="icon">🔬</span>
+          <span>Análisis científico dual engine</span>
+        </div>
+        <div class="info-item">
+          <span class="icon">🎯</span>
+          <span>Detección de inconsistencias en tiempo real</span>
+        </div>
+      </div>
+      
+      <button class="start-btn" (click)="startInterview()">
+        Comenzar Entrevista
+      </button>
+    </div>
+  </div>
+
+  <!-- Estado: Entrevista activa -->
+  <div class="interview-active" *ngIf="isInterviewActive && currentQuestion">
+    <div class="question-card">
+      <!-- Info de la pregunta -->
+      <div class="question-header">
+        <div class="question-meta">
+          <span class="category">{{ formatCategoryName(currentQuestion.category) }}</span>
+          <span class="weight" [class.critical]="currentQuestion.weight >= 8">
+            Peso: {{ currentQuestion.weight }}/10
+          </span>
+          <span class="stress-level">
+            Estrés: {{ currentQuestion.stressLevel }}/5
+          </span>
+        </div>
+      </div>
+
+      <!-- La pregunta -->
+      <div class="question-text">
+        <h2>{{ currentQuestion.question }}</h2>
+        <div class="question-time">
+          Tiempo estimado: {{ currentQuestion.estimatedTime }}s
+        </div>
+      </div>
+
+      <!-- Área de respuesta -->
+      <div class="response-area">
+        <div class="input-container">
+          <textarea 
+            [(ngModel)]="currentResponse"
+            placeholder="Escriba su respuesta aquí..."
+            class="response-input"
+            [disabled]="isProcessingResponse"
+            rows="4">
+          </textarea>
+          
+          <!-- Controles de voz -->
+          <div class="voice-controls">
+            <button 
+              class="voice-btn" 
+              [class.recording]="isRecording"
+              (click)="toggleRecording()"
+              [disabled]="isProcessingResponse">
+              <span class="voice-icon">{{ isRecording ? '🔴' : '🎤' }}</span>
+              {{ isRecording ? 'Detener' : 'Grabar' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Indicadores de estrés en tiempo real -->
+        <div class="stress-indicators" *ngIf="stressIndicators | async as indicators">
+          <div class="indicator-list" *ngIf="indicators.length > 0">
+            <span class="indicator-label">Detectado:</span>
+            <span class="indicator" *ngFor="let indicator of indicators">{{ indicator }}</span>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="action-buttons">
+          <button 
+            class="skip-btn" 
+            (click)="skipQuestion()"
+            *ngIf="currentQuestion.weight <= 4"
+            [disabled]="isProcessingResponse">
+            Saltar
+          </button>
+          
+          <button 
+            class="submit-btn"
+            (click)="submitResponse()"
+            [disabled]="!currentResponse.trim() || isProcessingResponse"
+            [class.processing]="isProcessingResponse">
+            {{ isProcessingResponse ? 'Procesando...' : 'Siguiente' }}
+          </button>
+        </div>
+
+        <!-- Preguntas de seguimiento (si las hay) -->
+        <div class="follow-up-questions" *ngIf="currentQuestion.followUpQuestions && currentQuestion.followUpQuestions.length > 0">
+          <div class="follow-up-header">Preguntas de seguimiento sugeridas:</div>
+          <ul class="follow-up-list">
+            <li *ngFor="let followUp of currentQuestion.followUpQuestions">{{ followUp }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado: Analizando -->
+  <div class="analyzing-state" *ngIf="isAnalyzing">
+    <div class="analyzing-card">
+      <div class="spinner"></div>
+      <h2>Analizando respuestas...</h2>
+      <p>Ejecutando motores científico y heurístico</p>
+      <div class="analysis-steps">
+        <div class="step">🔬 Análisis matemático avanzado</div>
+        <div class="step">🎯 Validación de patrones de negocio</div>
+        <div class="step">🤖 Consolidación dual engine</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado: Resultados -->
+  <div class="results-state" *ngIf="showResults && dualEngineResult">
+    <div class="results-container">
+      
+      <!-- Score principal -->
+      <div class="main-score-card">
+        <div class="score-header">
+          <h1>Score Final</h1>
+          <div class="consensus-level" [class]="dualEngineResult.consensus.level.toLowerCase()">
+            Consenso: {{ dualEngineResult.consensus.level }}
+          </div>
+        </div>
+        
+        <div class="score-display">
+          <div class="consolidated-score" [class]="getRiskLevelClass()">
+            <span class="score-number">{{ dualEngineResult.consolidatedScore.totalScore }}</span>
+            <span class="score-label">/ 1000</span>
+          </div>
+          <div class="risk-level" [class]="getRiskLevelClass()">
+            {{ dualEngineResult.consolidatedScore.riskLevel }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparación de engines -->
+      <div class="engines-comparison">
+        <div class="engine-result">
+          <h3>🔬 Engine Científico</h3>
+          <div class="engine-score">{{ dualEngineResult.scientificScore.totalScore }}</div>
+          <div class="engine-risk">{{ dualEngineResult.scientificScore.riskLevel }}</div>
+          <div class="engine-time">{{ dualEngineResult.scientificScore.processingTime }}ms</div>
+          
+          <div class="engine-advantages">
+            <div class="advantages-title">Ventajas:</div>
+            <ul>
+              <li *ngFor="let advantage of dualEngineResult.consensus.scientificAdvantages">
+                {{ advantage }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="engine-result">
+          <h3>🎯 Engine Heurístico</h3>
+          <div class="engine-score">{{ dualEngineResult.heuristicScore.totalScore }}</div>
+          <div class="engine-risk">{{ dualEngineResult.heuristicScore.riskLevel }}</div>
+          <div class="engine-time">{{ dualEngineResult.heuristicScore.processingTime }}ms</div>
+          
+          <div class="engine-advantages">
+            <div class="advantages-title">Ventajas:</div>
+            <ul>
+              <li *ngFor="let advantage of dualEngineResult.consensus.heuristicAdvantages">
+                {{ advantage }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Consenso y análisis -->
+      <div class="consensus-analysis">
+        <h3>Análisis de Consenso</h3>
+        <div class="consensus-info">
+          <div class="consensus-item">
+            <span class="label">Diferencia de Score:</span>
+            <span class="value">{{ dualEngineResult.consensus.scoreDifference }} puntos</span>
+          </div>
+          <div class="consensus-item">
+            <span class="label">Acuerdo en Risk Level:</span>
+            <span class="value" [class.positive]="dualEngineResult.consensus.riskLevelAgreement">
+              {{ dualEngineResult.consensus.riskLevelAgreement ? 'Sí' : 'No' }}
+            </span>
+          </div>
+          <div class="consensus-description">
+            {{ dualEngineResult.consensus.agreement }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Red Flags -->
+      <div class="red-flags-section" *ngIf="dualEngineResult.consolidatedScore.redFlags.length > 0">
+        <h3>🚨 Red Flags Detectadas</h3>
+        <div class="red-flags-list">
+          <div 
+            class="red-flag-item" 
+            *ngFor="let flag of dualEngineResult.consolidatedScore.redFlags"
+            [class]="flag.severity.toLowerCase()">
+            <div class="flag-header">
+              <span class="flag-severity">{{ flag.severity }}</span>
+              <span class="flag-impact">Impacto: {{ flag.impact }}/10</span>
+            </div>
+            <div class="flag-reason">{{ flag.reason }}</div>
+            <div class="flag-question">Pregunta: {{ flag.questionId }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Scores -->
+      <div class="category-scores">
+        <h3>Scores por Categoría</h3>
+        <div class="categories-grid">
+          <div 
+            class="category-item" 
+            *ngFor="let entry of getCategoryScoreEntries()">
+            <div class="category-name">{{ entry.category }}</div>
+            <div class="category-score">{{ entry.score }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recomendaciones -->
+      <div class="recommendations-section">
+        <h3>Recomendaciones del Sistema</h3>
+        <div class="recommendations-list">
+          <div 
+            class="recommendation-item" 
+            *ngFor="let recommendation of dualEngineResult.recommendations">
+            {{ recommendation }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Métricas técnicas -->
+      <div class="technical-metrics">
+        <h3>Métricas Técnicas</h3>
+        <div class="metrics-grid">
+          <div class="metric">
+            <span class="metric-label">Tiempo Total:</span>
+            <span class="metric-value">{{ formatTime(dualEngineResult.processingTime) }}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Confiabilidad Científica:</span>
+            <span class="metric-value">{{ (dualEngineResult.engineReliability.scientific * 100).toFixed(1) }}%</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Confiabilidad Heurística:</span>
+            <span class="metric-value">{{ (dualEngineResult.engineReliability.heuristic * 100).toFixed(1) }}%</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Confiabilidad General:</span>
+            <span class="metric-value">{{ (dualEngineResult.engineReliability.overall * 100).toFixed(1) }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción final -->
+      <div class="final-actions">
+        <button class="restart-btn" (click)="restartInterview()">
+          Nueva Entrevista
+        </button>
+        <button class="export-btn" disabled>
+          Exportar Reporte
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

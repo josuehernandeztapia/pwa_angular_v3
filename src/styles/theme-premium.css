@@ -1,0 +1,166 @@
+/* ===== PREMIUM FINTECH THEME =====
+ * Sistema de colores estratégico para Conductores PWA
+ * Versión: Centro de Comando Premium
+ */
+
+:root {
+  /* === PRIMARY BRAND COLORS === */
+  /* Tecnología y Confianza - Cyan/Teal spectrum */
+  --primary-cyan-50: #ecfeff;
+  --primary-cyan-100: #cffafe;
+  --primary-cyan-200: #a5f3fc;
+  --primary-cyan-300: #67e8f9;   /* Main interactive color */
+  --primary-cyan-400: #22d3ee;   /* Primary action buttons */
+  --primary-cyan-500: #06b6d4;   /* Primary brand color */
+  --primary-cyan-600: #0891b2;
+  --primary-cyan-700: #0e7490;
+  --primary-cyan-800: #155e75;
+  --primary-cyan-900: #164e63;
+
+  /* === ACCENT COLORS === */
+  /* High Touch - Amber/Gold spectrum (El toque humano) */
+  --accent-amber-50: #fffbeb;
+  --accent-amber-100: #fef3c7;
+  --accent-amber-200: #fde68a;
+  --accent-amber-300: #fcd34d;
+  --accent-amber-400: #fbbf24;
+  --accent-amber-500: #f59e0b;   /* Main accent - Human touch */
+  --accent-amber-600: #d97706;
+  --accent-amber-700: #b45309;
+  --accent-amber-800: #92400e;
+  --accent-amber-900: #78350f;
+
+  /* === PREMIUM BACKGROUNDS === */
+  /* Inmersión y Foco - Dark premium spectrum */
+  --bg-gray-50: #f9fafb;
+  --bg-gray-100: #f3f4f6;
+  --bg-gray-200: #e5e7eb;
+  --bg-gray-300: #d1d5db;
+  --bg-gray-400: #9ca3af;
+  --bg-gray-500: #6b7280;
+  --bg-gray-600: #4b5563;
+  --bg-gray-700: #374151;
+  --bg-gray-800: #1f2937;
+  --bg-gray-900: #111827;
+  --bg-gray-950: #030712;   /* Main dark background */
+
+  /* === SEMANTIC COLORS === */
+  /* Success - Emerald */
+  --success-50: #ecfdf5;
+  --success-500: #10b981;
+  --success-600: #059669;
+  --success-700: #047857;
+
+  /* Warning - Orange */
+  --warning-50: #fff7ed;
+  --warning-500: #f97316;
+  --warning-600: #ea580c;
+
+  /* Error - Red */
+  --error-50: #fef2f2;
+  --error-500: #ef4444;
+  --error-600: #dc2626;
+
+  /* Info - Blue */
+  --info-50: #eff6ff;
+  --info-500: #3b82f6;
+  --info-600: #2563eb;
+
+  /* === COMPONENT SPECIFIC === */
+  /* Glass morphism effects */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-backdrop: blur(12px);
+
+  /* Premium shadows */
+  --shadow-premium: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-elevated: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* Interactive states */
+  --hover-overlay: rgba(255, 255, 255, 0.05);
+  --active-overlay: rgba(255, 255, 255, 0.1);
+}
+
+/* === UTILITY CLASSES === */
+.text-primary-cyan { color: var(--primary-cyan-400); }
+.text-accent-amber { color: var(--accent-amber-500); }
+.bg-primary-cyan { background-color: var(--primary-cyan-400); }
+.bg-accent-amber { background-color: var(--accent-amber-500); }
+
+/* Premium gradients */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600));
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
+}
+
+.gradient-premium-dark {
+  background: linear-gradient(135deg, var(--bg-gray-900), var(--bg-gray-950));
+}
+
+/* Glass morphism components */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+}
+
+/* Health Score color system */
+.health-score-excellent { color: var(--success-500); }
+.health-score-good { color: var(--primary-cyan-400); }
+.health-score-warning { color: var(--accent-amber-500); }
+.health-score-critical { color: var(--error-500); }
+
+/* Interactive states */
+.interactive-hover:hover {
+  background-color: var(--hover-overlay);
+  transition: all 0.2s ease;
+}
+
+.interactive-active:active {
+  background-color: var(--active-overlay);
+  transition: all 0.1s ease;
+}
+
+/* Command Center specific */
+.command-center-bg {
+  background: var(--bg-gray-950);
+  background-image: 
+    radial-gradient(circle at 25% 25%, var(--primary-cyan-900) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, var(--accent-amber-900) 0%, transparent 50%);
+}
+
+.data-visualization {
+  /* Para gráficos y elementos de datos */
+  --chart-primary: var(--primary-cyan-400);
+  --chart-secondary: var(--accent-amber-500);
+  --chart-success: var(--success-500);
+  --chart-warning: var(--warning-500);
+  --chart-error: var(--error-500);
+}
+
+/* Animation utilities */
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 20px var(--primary-cyan-500);
+  }
+  to {
+    box-shadow: 0 0 30px var(--primary-cyan-400), 0 0 40px var(--primary-cyan-300);
+  }
+}
+
+/* Responsive breakpoints awareness */
+@media (max-width: 768px) {
+  :root {
+    --shadow-premium: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    --shadow-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+}
