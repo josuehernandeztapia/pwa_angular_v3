@@ -7,18 +7,8 @@ import { DataService } from './data.service';
 // Port exacto de TypeScript declarations desde React types.ts líneas 3-14
 declare global {
   interface HTMLElementTagNameMap {
-    'metamap-button': HTMLMetaMapButtonElement;
+    'metamap-button': HTMLElement;
   }
-}
-
-interface HTMLMetaMapButtonElement extends HTMLElement {
-  clientid: string;
-  flowid: string;
-  metadata: string;
-  addEventListener(type: 'metamap:verificationSuccess', listener: (event: CustomEvent) => void): void;
-  addEventListener(type: 'metamap:userFinished', listener: (event: CustomEvent) => void): void;
-  removeEventListener(type: 'metamap:verificationSuccess', listener: (event: CustomEvent) => void): void;
-  removeEventListener(type: 'metamap:userFinished', listener: (event: CustomEvent) => void): void;
 }
 
 @Injectable({
@@ -64,7 +54,7 @@ export class MetaMapService {
     client: Client,
     onSuccess?: (data: any) => void,
     onExit?: (reason: string) => void
-  ): Observable<HTMLMetaMapButtonElement | null> {
+  ): Observable<(HTMLElement & { clientid?: string; flowid?: string; metadata?: string }) | null> {
     return new Observable(observer => {
       const container = document.getElementById(containerId);
       if (!container) {
@@ -73,29 +63,31 @@ export class MetaMapService {
       }
 
       // Create metamap-button element (exact port from React)
-      const metamapButton = document.createElement('metamap-button') as HTMLMetaMapButtonElement;
-      metamapButton.clientid = this.METAMAP_CONFIG.clientId;
-      metamapButton.flowid = this.METAMAP_CONFIG.flowId;
-      metamapButton.metadata = JSON.stringify({ 
+      const metamapButton = document.createElement('metamap-button') as HTMLElement & { clientid?: string; flowid?: string; metadata?: string };
+      (metamapButton as any).clientid = this.METAMAP_CONFIG.clientId;
+      (metamapButton as any).flowid = this.METAMAP_CONFIG.flowId;
+      (metamapButton as any).metadata = JSON.stringify({ 
         clientId: client.id, 
         clientName: client.name 
       });
 
       // Port exacto de event listeners desde React useEffect
-      const handleSuccess = (event: CustomEvent) => {
-        const verificationData = event.detail;
+      const handleSuccess = (event: Event) => {
+        const detail = (event as CustomEvent).detail;
+        const verificationData = detail;
         this.kycSuccessSubject.next({ clientId: client.id, verificationData });
         onSuccess?.(verificationData);
       };
 
-      const handleExit = (event: CustomEvent) => {
-        const reason = event.detail?.reason || 'User cancelled';
+      const handleExit = (event: Event) => {
+        const detail = (event as CustomEvent).detail as any;
+        const reason = detail?.reason || 'User cancelled';
         this.kycExitSubject.next({ clientId: client.id, reason });
         onExit?.(reason);
       };
 
-      metamapButton.addEventListener('metamap:verificationSuccess', handleSuccess);
-      metamapButton.addEventListener('metamap:userFinished', handleExit);
+      metamapButton.addEventListener('metamap:verificationSuccess', handleSuccess as any);
+      metamapButton.addEventListener('metamap:userFinished', handleExit as any);
 
       // Add to container
       container.appendChild(metamapButton);
@@ -105,10 +97,10 @@ export class MetaMapService {
 
       // Cleanup function
       return () => {
-        metamapButton.removeEventListener('metamap:verificationSuccess', handleSuccess);
-        metamapButton.removeEventListener('metamap:userFinished', handleExit);
+        metamapButton.removeEventListener('metamap:verificationSuccess', handleSuccess as any);
+        metamapButton.removeEventListener('metamap:userFinished', handleExit as any);
         if (metamapButton.parentNode) {
-          metamapButton.parentNode.removeChild(metamapButton);
+          (metamapButton.parentNode as Node).removeChild(metamapButton);
         }
       };
     });
@@ -153,10 +145,10 @@ export class MetaMapService {
             }
           ],
           // Update health score on KYC completion
-          healthScore: Math.min(client.healthScore + 15, 100)
+          healthScore: Math.min((client.healthScore || 0) + 15, 100)
         };
 
-        this.clientData.updateClient(updatedClient).subscribe(() => {
+        this.clientData.updateClient(updatedClient.id, updatedClient).subscribe(() => {
           observer.next(updatedClient);
           observer.complete();
         });
@@ -302,7 +294,7 @@ export class MetaMapService {
           ]
         };
 
-        this.clientData.updateClient(updatedClient).subscribe(() => {
+        this.clientData.updateClient(updatedClient.id, updatedClient).subscribe(() => {
           observer.next(updatedClient);
           observer.complete();
         });

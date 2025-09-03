@@ -66,14 +66,14 @@ export class PostSalesApiService {
    * Obtener expediente post-venta completo
    */
   getPostSalesRecord(vin: string): Observable<{
-    record: PostSalesRecord;
+    record: any;
     services: PostSalesService[];
     contacts: PostSalesContact[];
     reminders: MaintenanceReminder[];
     revenue: PostSalesRevenue | null;
   } | null> {
     return this.http.get<{
-      record: PostSalesRecord;
+      record: any;
       services: PostSalesService[];
       contacts: PostSalesContact[];
       reminders: MaintenanceReminder[];

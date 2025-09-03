@@ -1,8 +1,16 @@
 import { ComponentFixture } from '@angular/core/testing';
-import { configureAxe, toHaveNoViolations } from 'jest-axe';
+// Provide minimal type declarations to satisfy TS without installing @types/jest-axe
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const expect: any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare function configureAxe(config?: any): any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const toHaveNoViolations: any;
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { configureAxe: axeConfigure, toHaveNoViolations: axeNoViolations } = require('jest-axe');
 
 // Configure axe for Angular applications
-const axe = configureAxe({
+const axe = axeConfigure({
   rules: {
     // Disable color-contrast rule for development as it can be flaky
     'color-contrast': { enabled: false },
@@ -36,7 +44,7 @@ const axe = configureAxe({
 });
 
 // Extend Jest matchers
-expect.extend(toHaveNoViolations);
+expect.extend(axeNoViolations);
 
 /**
  * Test accessibility of a component

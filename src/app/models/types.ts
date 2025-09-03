@@ -34,7 +34,7 @@ export type Market = 'all' | 'aguascalientes' | 'edomex';
 
 export interface Document {
   id: string;
-  name: 'INE Vigente' | 'Comprobante de domicilio' | 'Constancia de situación fiscal' | 'Copia de la concesión' | 'Tarjeta de circulación' | 'Factura de la unidad actual' | 'Carta de antigüedad de la ruta' | 'Verificación Biométrica (Metamap)' | 'Expediente Completo' | 'Contrato Venta a Plazo' | 'Identificación' | 'Carta Aval de Ruta' | 'Convenio de Dación en Pago' | 'Acta Constitutiva de la Ruta' | 'Poder del Representante Legal';
+  name: 'INE Vigente' | 'Comprobante de domicilio' | 'Constancia de situación fiscal' | 'Copia de la concesión' | 'Tarjeta de circulación' | 'Factura de la unidad actual' | 'Carta de antigüedad de la ruta' | 'Verificación Biométrica (Metamap)' | 'Verificación Biométrica KYC' | 'Expediente Completo' | 'Contrato Venta a Plazo' | 'Identificación' | 'Carta Aval de Ruta' | 'Convenio de Dación en Pago' | 'Acta Constitutiva de la Ruta' | 'Poder del Representante Legal';
   status: DocumentStatus;
   isOptional?: boolean;
   tooltip?: string;
@@ -43,6 +43,12 @@ export interface Document {
   fileUrl?: string;
   fileName?: string;
   fileSize?: number;
+  // Extended lifecycle fields used in tests and services
+  reviewedAt?: Date;
+  completedAt?: Date;
+  verificationId?: string;
+  verificationScore?: number;
+  reviewNotes?: string;
 }
 
 export interface EventLog {
@@ -113,7 +119,13 @@ export interface CollectiveCreditGroup {
   monthlyPaymentGoal?: number;
 }
 
-export type ImportMilestoneStatus = 'completed' | 'in_progress' | 'pending';
+export type ImportMilestoneStatus = {
+  status: 'completed' | 'in_progress' | 'pending';
+  startedAt?: Date;
+  completedAt?: Date;
+  estimatedDays?: number;
+  notes?: string;
+};
 
 // POST-SALES SYSTEM TYPES
 export interface DeliveryData {
@@ -317,9 +329,9 @@ export type ImportStatus = {
     enAduana: ImportMilestoneStatus;
     liberada: ImportMilestoneStatus;
     // POST-SALES PHASES
-    entregada: ImportMilestoneStatus;
-    documentosTransferidos: ImportMilestoneStatus;
-    placasEntregadas: ImportMilestoneStatus;
+    entregada?: ImportMilestoneStatus;
+    documentosTransferidos?: ImportMilestoneStatus;
+    placasEntregadas?: ImportMilestoneStatus;
     // Unidad asignada cuando se completa unidadFabricada
     assignedUnit?: VehicleUnit;
     // Post-sales delivery data

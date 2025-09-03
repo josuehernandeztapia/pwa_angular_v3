@@ -144,8 +144,8 @@ export class IntegratedImportTrackerService {
       this.contractTriggersService.getTriggerHistory(50).pipe(
         map(triggers => triggers.filter(t => t.clientId === clientId))
       ),
-      this.deliveriesService.list({ clientIds: [clientId], limit: 10 }).pipe(
-        map(response => response.orders),
+      this.deliveriesService.list({ clientId: clientId, limit: 10 }).pipe(
+        map(response => response.items),
         catchError(() => of([]))
       )
     ]).pipe(
@@ -163,7 +163,7 @@ export class IntegratedImportTrackerService {
           syncStatus: this.determineSyncStatus(importStatus, deliveryOrders, triggers),
           lastSyncDate: new Date(),
           estimatedDeliveryDate: this.calculateEstimatedDeliveryDate(importStatus),
-          actualDeliveryDate: latestDeliveryOrder?.actualDeliveryDate ? new Date(latestDeliveryOrder.actualDeliveryDate) : undefined
+          actualDeliveryDate: latestDeliveryOrder?.updatedAt ? new Date(latestDeliveryOrder.updatedAt) : undefined
         };
 
         // Actualizar caché
@@ -348,14 +348,29 @@ export class IntegratedImportTrackerService {
         const deliveryStatus = this.mapImportMilestoneToDeliveryStatus(milestone, status);
         if (deliveryStatus && deliveryOrder.status !== deliveryStatus) {
           // Actualizar delivery order para mantener sincronía
-          this.deliveriesService.transition(deliveryOrder.id, {
-            toStatus: deliveryStatus,
-            triggeredBy: 'import_milestone_update',
-            metadata: {
-              milestone,
-              updatedFromImportTracker: true
-            }
-          }).subscribe();
+          // Build valid transition request using DeliveryEvent
+          const eventMapping: Record<string, string> = {
+            'PO_ISSUED': 'ISSUE_PO',
+            'IN_PRODUCTION': 'START_PROD',
+            'READY_AT_FACTORY': 'FACTORY_READY',
+            'AT_ORIGIN_PORT': 'LOAD_ORIGIN',
+            'ON_VESSEL': 'DEPART_VESSEL',
+            'AT_DEST_PORT': 'ARRIVE_DEST',
+            'IN_CUSTOMS': 'CUSTOMS_CLEAR',
+            'RELEASED': 'RELEASE',
+            'AT_WH': 'ARRIVE_WH',
+            'READY_FOR_HANDOVER': 'SCHEDULE_HANDOVER'
+          };
+          const event = eventMapping[deliveryStatus];
+          if (event) {
+            this.deliveriesService.transition(deliveryOrder.id, {
+              event: event as any,
+              meta: {
+                milestone,
+                updatedFromImportTracker: true
+              }
+            }).subscribe();
+          }
         }
       }),
       map(() => {}),
@@ -400,7 +415,7 @@ export class IntegratedImportTrackerService {
   }> {
     return combineLatest([
       this.getIntegratedImportStatus(clientId),
-      this.deliveriesService.list({ clientIds: [clientId] }),
+      this.deliveriesService.list({ clientId: clientId }),
       this.contractTriggersService.getTriggerHistory(100),
       this.getImportMilestoneHistory(clientId)
     ]).pipe(
@@ -410,10 +425,10 @@ export class IntegratedImportTrackerService {
         const reportData = {
           client: { id: clientId }, // En implementación real vendría del cliente
           importStatus,
-          deliveryOrders: deliveriesResponse.orders,
+          deliveryOrders: deliveriesResponse.items,
           triggerHistory: clientTriggers,
           milestoneHistory,
-          timeline: this.generateIntegratedTimeline(importStatus, deliveriesResponse.orders, clientTriggers, milestoneHistory)
+          timeline: this.generateIntegratedTimeline(importStatus, deliveriesResponse.items, clientTriggers, milestoneHistory)
         };
 
         return {
@@ -447,7 +462,7 @@ export class IntegratedImportTrackerService {
     
     for (const milestone of milestones) {
       const status = importStatus[milestone];
-      if (status.status === 'pending') {
+      if (status && status.status === 'pending') {
         totalDays += status.estimatedDays || 0;
       }
     }
@@ -512,8 +527,8 @@ export class IntegratedImportTrackerService {
   }
 
   private getDeliveryOrderForClient(clientId: string): Observable<DeliveryOrder | null> {
-    return this.deliveriesService.list({ clientIds: [clientId], limit: 1 }).pipe(
-      map(response => response.orders[0] || null),
+    return this.deliveriesService.list({ clientId: clientId, limit: 1 }).pipe(
+      map(response => response.items[0] || null),
       catchError(() => of(null))
     );
   }
@@ -736,9 +751,9 @@ export class IntegratedImportTrackerService {
     console.log('🚛 Assigning vehicle to client through integrated tracker:', clientId);
 
     // Validar que el cliente esté en el estado correcto (unidadFabricada completed)
-    return this.getEnhancedImportStatus(clientId).pipe(
+    return this.getIntegratedImportStatus(clientId).pipe(
       map(importStatus => {
-        if (importStatus.unidadFabricada !== 'completed') {
+        if (!importStatus || importStatus.unidadFabricada.status !== 'completed') {
           throw new Error('El cliente debe tener el milestone "unidadFabricada" completado para asignar unidad');
         }
         return importStatus;
@@ -961,7 +976,7 @@ export class IntegratedImportTrackerService {
     console.log('📋 Generando resumen completo de asignaciones para cliente:', clientId);
 
     return combineLatest([
-      this.getEnhancedImportStatus(clientId),
+      this.getIntegratedImportStatus(clientId),
       this.getClientContractsWithVehicles(clientId)
     ]).pipe(
       map(([importStatus, contractsWithVehicles]) => {
@@ -1303,7 +1318,7 @@ export class IntegratedImportTrackerService {
 
         // Verificar que las fases previas estén completas
         if (phase === 'entregada') {
-          if (status.liberada !== 'completed') {
+          if (!status.liberada || status.liberada.status !== 'completed') {
             return { canComplete: false, reason: 'Debe completar fase "liberada" primero' };
           }
           if (!status.assignedUnit) {
@@ -1312,13 +1327,13 @@ export class IntegratedImportTrackerService {
         }
 
         if (phase === 'documentosTransferidos') {
-          if (status.entregada !== 'completed') {
+          if (!status.entregada || status.entregada.status !== 'completed') {
             return { canComplete: false, reason: 'Debe completar fase "entregada" primero' };
           }
         }
 
         if (phase === 'placasEntregadas') {
-          if (status.documentosTransferidos !== 'completed') {
+          if (!status.documentosTransferidos || status.documentosTransferidos.status !== 'completed') {
             return { canComplete: false, reason: 'Debe completar fase "documentosTransferidos" primero' };
           }
         }

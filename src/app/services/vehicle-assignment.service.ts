@@ -228,11 +228,11 @@ export class VehicleAssignmentService {
         documents: [],
         events: [],
         importStatus: {
-          pedidoPlanta: 'completed',
-          unidadFabricada: 'completed',
-          transitoMaritimo: 'pending',
-          enAduana: 'pending',
-          liberada: 'pending',
+          pedidoPlanta: { status: 'completed' },
+          unidadFabricada: { status: 'completed' },
+          transitoMaritimo: { status: 'pending' },
+          enAduana: { status: 'pending' },
+          liberada: { status: 'pending' },
           assignedUnit: unit
         }
       };

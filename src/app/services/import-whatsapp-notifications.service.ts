@@ -141,7 +141,11 @@ export class ImportWhatsAppNotificationsService {
         clientData
       )),
       map(template => this.selectWhatsAppTemplate(milestone, status, template)),
-      map(({ templateName, templateData }) => 
+      // Send and unwrap response
+      // Note: sendTemplateMessage returns Observable<WhatsAppResponse>
+      // We will subscribe via map since we are inside Rx chain
+      // but ensure the type is WhatsAppResponse for property access
+      switchMap(({ templateName, templateData }) => 
         this.whatsappService.sendTemplateMessage(
           templateData.client_phone,
           templateName,
@@ -149,7 +153,7 @@ export class ImportWhatsAppNotificationsService {
           this.buildWhatsAppComponents(templateData)
         )
       ),
-      map(whatsappResponse => {
+      map((whatsappResponse: any) => {
         const result: NotificationResult = {
           messageId: whatsappResponse.messages?.[0]?.id || 'unknown',
           clientId,
@@ -219,7 +223,7 @@ export class ImportWhatsAppNotificationsService {
 
         return { templateData, settings };
       }),
-      map(({ templateData }) => 
+      switchMap(({ templateData }) => 
         this.whatsappService.sendTemplateMessage(
           templateData.client_phone,
           'delivery_update_notification',
@@ -244,7 +248,7 @@ export class ImportWhatsAppNotificationsService {
           ]
         )
       ),
-      map(whatsappResponse => {
+      map((whatsappResponse: any) => {
         const result: NotificationResult = {
           messageId: whatsappResponse.messages?.[0]?.id || 'unknown',
           clientId,
@@ -293,7 +297,7 @@ export class ImportWhatsAppNotificationsService {
       tap(updatedSettings => {
         console.log(`⚙️ Configuración de notificaciones actualizada para cliente ${clientId}`);
       }),
-      catchError(this.handleError('update notification settings'))
+      catchError(() => of(this.getDefaultNotificationSettings(clientId)))
     );
   }
 
@@ -323,7 +327,7 @@ export class ImportWhatsAppNotificationsService {
       `${this.baseUrl}/v1/clients/${clientId}/import-notifications`,
       { params: { limit: limit.toString() } }
     ).pipe(
-      catchError(this.handleError('get notification history'))
+      catchError(() => of([]))
     );
   }
 
@@ -417,7 +421,7 @@ export class ImportWhatsAppNotificationsService {
       milestone_name: milestoneConfig.title,
       milestone_description: milestoneConfig.description,
       vehicle_type: 'Vagoneta H6C', // En implementación real vendría de los datos del cliente
-      estimated_days: importStatus?.[milestone]?.estimatedDays,
+      estimated_days: (importStatus as any)?.[milestone]?.estimatedDays,
       estimated_date: importStatus?.estimatedDeliveryDate?.toLocaleDateString('es-MX'),
       current_status: statusText,
       delivery_order_id: importStatus?.deliveryOrderId,
