@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 declare var Conekta: any;
@@ -369,30 +369,24 @@ export class ConektaPaymentService {
     };
 
     return this.createSubscriptionPlan(planData).pipe(
-      map(async (plan) => {
-        // Create customer if needed
-        let customer: ConektaCustomer;
-        try {
-          customer = await this.createCustomer({
-            name: clientData.name,
-            email: clientData.email,
-            phone: clientData.phone
-          }).toPromise();
-        } catch (error) {
-          // Customer might already exist, try to get it
-          throw error;
-        }
-
-        // Create subscription
-        const subscriptionData: Omit<Subscription, 'id' | 'status'> = {
-          plan_id: plan.id!,
-          customer_id: customer.id!,
-          subscription_start: startDate.getTime()
-        };
-
-        const subscription = await this.createSubscription(subscriptionData).toPromise();
-
-        return { plan, subscription };
+      // Switch to sequential observable chain instead of mixing promises inside map
+      switchMap((plan) => {
+        return this.createCustomer({
+          name: clientData.name,
+          email: clientData.email,
+          phone: clientData.phone
+        }).pipe(
+          switchMap((customer) => {
+            const subscriptionData: Omit<Subscription, 'id' | 'status'> = {
+              plan_id: plan.id!,
+              customer_id: customer.id!,
+              subscription_start: startDate.getTime()
+            };
+            return this.createSubscription(subscriptionData).pipe(
+              map((subscription) => ({ plan, subscription }))
+            );
+          })
+        );
       }),
       catchError(this.handleError)
     );

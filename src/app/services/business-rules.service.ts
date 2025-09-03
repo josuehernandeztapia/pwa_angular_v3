@@ -168,13 +168,16 @@ export class BusinessRulesService {
     }
 
     if (!client.ecosystemId) {
-      return of({
+      return of<EcosystemValidation>({
         isValid: false,
         ecosystemId: '',
+        routeName: '',
         requiredDocuments: this.getEcosystemRequiredDocuments(),
         missingDocuments: this.getEcosystemRequiredDocuments(),
         validationStatus: 'incomplete',
-        validationNotes: ['Cliente no asignado a ecosistema']
+        validationNotes: ['Cliente no asignado a ecosistema'],
+        hasCartaAvalRuta: false,
+        hasCartaAntiguedadRuta: false
       }).pipe(delay(300));
     }
 
@@ -190,13 +193,16 @@ export class BusinessRulesService {
     const validation: EcosystemValidation = {
       isValid: missingDocs.length === 0 && hasActaConstitutiva,
       ecosystemId: client.ecosystemId,
+      routeName: 'Ruta asignada',
       requiredDocuments: requiredDocs,
       missingDocuments: missingDocs,
       validationStatus: hasActaConstitutiva ? 'approved' : 'pending',
-      validationNotes: this.getEcosystemValidationNotes(client)
+      validationNotes: this.getEcosystemValidationNotes(client),
+      hasCartaAvalRuta: client.documents.some(d => d.name.includes('Carta Aval de Ruta') && d.status === 'Aprobado'),
+      hasCartaAntiguedadRuta: client.documents.some(d => d.name.includes('Carta de Antigüedad') && d.status === 'Aprobado')
     };
 
-    return of(validation).pipe(delay(800));
+    return of<EcosystemValidation>(validation).pipe(delay(800));
   }
 
   /**
@@ -275,12 +281,12 @@ export class BusinessRulesService {
     const recommendations: string[] = [];
 
     // Down payment validation (60% minimum for AGS)
-    if (client.paymentPlan && client.paymentPlan.downPaymentPercentage < 0.60) {
+    if (client.paymentPlan && (client.paymentPlan.downPaymentPercentage ?? 0) < 0.60) {
       errors.push('Enganche mínimo para AGS es 60%');
     }
 
     // Term validation (12 or 24 months only)
-    if (client.paymentPlan && ![12, 24].includes(client.paymentPlan.term)) {
+    if (client.paymentPlan && ![12, 24].includes(client.paymentPlan.term ?? -1)) {
       errors.push('Plazos permitidos en AGS: 12 o 24 meses');
     }
 
@@ -382,7 +388,7 @@ export class BusinessRulesService {
 
     // Validar enganche del grupo (15-20% para colectivo)
     if (client.paymentPlan) {
-      const downPaymentPct = client.paymentPlan.downPaymentPercentage;
+      const downPaymentPct = client.paymentPlan.downPaymentPercentage ?? 0;
       if (downPaymentPct < 0.15) {
         errors.push('Enganche mínimo para crédito colectivo: 15%');
       } else if (downPaymentPct > 0.20) {
@@ -410,7 +416,7 @@ export class BusinessRulesService {
 
     // Payment-to-income ratio validation
     if (client.paymentPlan && client.monthlyIncome) {
-      const paymentRatio = client.paymentPlan.monthlyPayment / client.monthlyIncome;
+      const paymentRatio = (client.paymentPlan.monthlyPayment ?? 0) / client.monthlyIncome;
       if (paymentRatio > 0.35) {
         warnings.push('Relación pago/ingreso alta (>35%). Evaluar riesgo.');
       }

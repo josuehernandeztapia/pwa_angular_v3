@@ -92,7 +92,7 @@ export class CreditScoringService {
     this.statusDB.set(scoringId, initialStatus);
 
     // Simulate scoring process
-    return new Observable(observer => {
+    return new Observable<{ scoringId: string; status: ScoringStatus }>(observer => {
       // Simulate KINBAN/HASE API call delay
       setTimeout(() => {
         const scoringResult = this.simulateScoring(scoringRequest, scoringId);
@@ -413,7 +413,7 @@ export class CreditScoringService {
    */
   isScoringValid(scoringId: string): Observable<boolean> {
     return this.getScoringResult(scoringId).pipe(
-      map(scoring => {
+      map((scoring): boolean => {
         if (!scoring) return false;
         return scoring.expiresAt > new Date();
       })

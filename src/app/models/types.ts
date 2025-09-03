@@ -89,14 +89,19 @@ export interface SavingsPlan {
 }
 
 export interface PaymentPlan {
-  monthlyGoal: number;
-  currentMonthProgress: number;
-  currency: 'MXN';
-  methods: {
+  monthlyGoal?: number;
+  currentMonthProgress?: number;
+  currency?: 'MXN';
+  methods?: {
     collection: boolean;
     voluntary: boolean;
   };
   collectionDetails?: CollectionDetails;
+  // Extended fields used by business rules and services
+  downPaymentPercentage?: number;
+  term?: number; // in months
+  monthlyPayment?: number;
+  interestRate?: number; // monthly/annual interest rate as fraction
 }
 
 export interface CollectiveCreditMember {
@@ -124,6 +129,11 @@ export interface CollectiveCreditGroup {
   savingsGoal?: number;
   currentSavings?: number;
   monthlyPaymentGoal?: number;
+  // Extended fields for mock specs
+  ecosystemId?: string;
+  status?: 'active' | 'inactive' | string;
+  createdAt?: Date;
+  totalMembers?: number;
 }
 
 export type ImportMilestoneStatus = {
@@ -352,8 +362,17 @@ export type ImportStatus = {
 export interface Ecosystem {
     id: string;
     name: string;
-    documents: Document[];
-    status: 'Activo' | 'Expediente Pendiente';
+    documents?: Document[];
+    status: 'Activo' | 'Expediente Pendiente' | string;
+    // Extended fields for mock service specs
+    market?: Market;
+    vehicleType?: string;
+    capacity?: number;
+    requirements?: string[];
+    weeklyEarnings?: number;
+    monthlyEarnings?: number;
+    createdAt?: Date;
+    lastModified?: Date;
 }
 
 export interface Quote {
@@ -396,7 +415,7 @@ export interface ProtectionScenario {
 export interface Client {
   id: string;
   name: string;
-  avatarUrl: string;
+  avatarUrl?: string;
   flow: BusinessFlow;
   status: string;
   savingsPlan?: SavingsPlan;

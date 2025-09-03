@@ -82,7 +82,7 @@ export class EcosystemDataService {
   getEcosystemsWithPendingDocs(): Observable<Ecosystem[]> {
     return of(Array.from(this.ecosystemsDB.values()).filter(eco => 
       eco.status === 'Expediente Pendiente' || 
-      eco.documents.some(doc => doc.status === DocumentStatus.Pendiente)
+      (eco.documents ?? []).some(doc => doc.status === DocumentStatus.Pendiente)
     )).pipe(delay(300));
   }
 
@@ -140,7 +140,7 @@ export class EcosystemDataService {
       return of(null).pipe(delay(200));
     }
 
-    const updatedDocuments = ecosystem.documents.map(doc =>
+    const updatedDocuments = (ecosystem.documents ?? []).map(doc =>
       doc.id === documentId ? { ...doc, status } : doc
     );
 
@@ -181,7 +181,7 @@ export class EcosystemDataService {
 
     const updatedEcosystem = {
       ...ecosystem,
-      documents: [...ecosystem.documents, newDocument]
+      documents: [...(ecosystem.documents ?? []), newDocument]
     };
 
     this.ecosystemsDB.set(ecosystemId, updatedEcosystem);
@@ -216,9 +216,9 @@ export class EcosystemDataService {
     const active = ecosystems.filter(eco => eco.status === 'Activo').length;
     const pending = ecosystems.filter(eco => eco.status === 'Expediente Pendiente').length;
     
-    const totalDocs = ecosystems.reduce((sum, eco) => sum + eco.documents.length, 0);
+    const totalDocs = ecosystems.reduce((sum, eco) => sum + (eco.documents ?? []).length, 0);
     const approvedDocs = ecosystems.reduce((sum, eco) => 
-      sum + eco.documents.filter(doc => doc.status === DocumentStatus.Aprobado).length, 0);
+      sum + (eco.documents ?? []).filter(doc => doc.status === DocumentStatus.Aprobado).length, 0);
     
     const documentCompletionRate = totalDocs > 0 ? (approvedDocs / totalDocs) * 100 : 0;
 
@@ -247,7 +247,7 @@ export class EcosystemDataService {
       return of(null).pipe(delay(200));
     }
 
-    const updatedDocuments = ecosystem.documents.map(doc => ({
+    const updatedDocuments = (ecosystem.documents ?? []).map(doc => ({
       ...doc,
       status: DocumentStatus.Aprobado
     }));
@@ -279,10 +279,10 @@ export class EcosystemDataService {
       return of(null).pipe(delay(200));
     }
 
-    const total = ecosystem.documents.length;
-    const approved = ecosystem.documents.filter(doc => doc.status === DocumentStatus.Aprobado).length;
-    const pending = ecosystem.documents.filter(doc => doc.status === DocumentStatus.Pendiente).length;
-    const rejected = ecosystem.documents.filter(doc => doc.status === DocumentStatus.Rechazado).length;
+    const total = (ecosystem.documents ?? []).length;
+    const approved = (ecosystem.documents ?? []).filter(doc => doc.status === DocumentStatus.Aprobado).length;
+    const pending = (ecosystem.documents ?? []).filter(doc => doc.status === DocumentStatus.Pendiente).length;
+    const rejected = (ecosystem.documents ?? []).filter(doc => doc.status === DocumentStatus.Rechazado).length;
     const percentage = total > 0 ? (approved / total) * 100 : 0;
 
     return of({

@@ -52,8 +52,9 @@ describe('ConektaPaymentService', () => {
     spyOnProperty(environment, 'services', 'get').and.returnValue({
       metamap: { clientId: 'test', flowId: 'test', baseUrl: 'test' },
       conekta: { publicKey: 'key_test_123', baseUrl: 'https://api.conekta.io' },
-      mifiel: { appId: 'test', baseUrl: 'test' }
-    });
+      mifiel: { appId: 'test', baseUrl: 'test' },
+      openai: { apiKey: 'test', baseUrl: 'https://api.openai.com/v1', models: { transcription: 'gpt-4o-transcribe', fallback: 'whisper-1' } }
+    } as any);
     
     // Mock process.env for Node.js environment
     if (typeof process !== 'undefined') {

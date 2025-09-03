@@ -224,11 +224,11 @@ export class ClientDataService {
         downPayment: 400000, 
         remainderAmount: 453000, // 853000 (AGS Package) - 400000
         importStatus: { 
-          pedidoPlanta: 'completed', 
-          unidadFabricada: 'completed', 
-          transitoMaritimo: 'completed', 
-          enAduana: 'completed', 
-          liberada: 'completed' 
+          pedidoPlanta: { status: 'completed' }, 
+          unidadFabricada: { status: 'completed' }, 
+          transitoMaritimo: { status: 'completed' }, 
+          enAduana: { status: 'completed' }, 
+          liberada: { status: 'completed' } 
         } 
       },
       ...collectiveCreditClients,

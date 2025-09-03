@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
 import { catchError, retry, tap, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { StorageService } from './storage.service';
@@ -122,28 +122,26 @@ export class BackendApiService {
           updatedAt: Date.now()
         });
       }),
-      catchError(async (error) => {
+      catchError((error) => {
         // Queue for offline sync
-        const tempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        const clientWithId = { ...clientData, id: tempId };
-        
-        await this.storage.queueOfflineAction({
-          type: 'CREATE_CLIENT',
-          data: clientWithId,
-          retryCount: 0
-        });
-
-        // Save to local storage with temp ID
-        await this.storage.saveClient({
-          id: tempId,
-          personalInfo: clientWithId,
-          ecosystemId: clientData.ecosystem_id || '',
-          formProgress: {},
-          documents: [],
-          createdAt: Date.now(),
-          updatedAt: Date.now()
-        });
-
+        (async () => {
+          const tempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          const clientWithId = { ...clientData, id: tempId };
+          await this.storage.queueOfflineAction({
+            type: 'CREATE_CLIENT',
+            data: clientWithId,
+            retryCount: 0
+          });
+          await this.storage.saveClient({
+            id: tempId,
+            personalInfo: clientWithId,
+            ecosystemId: clientData.ecosystem_id || '',
+            formProgress: {},
+            documents: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now()
+          });
+        })();
         return throwError(() => error);
       })
     );
@@ -164,14 +162,15 @@ export class BackendApiService {
           });
         }
       }),
-      catchError(async (error) => {
+      catchError((error) => {
         // Queue for offline sync
-        await this.storage.queueOfflineAction({
-          type: 'UPDATE_CLIENT',
-          data: { clientId, clientData },
-          retryCount: 0
-        });
-
+        (async () => {
+          await this.storage.queueOfflineAction({
+            type: 'UPDATE_CLIENT',
+            data: { clientId, clientData },
+            retryCount: 0
+          });
+        })();
         return throwError(() => error);
       })
     );
@@ -181,13 +180,19 @@ export class BackendApiService {
     const url = `${this.baseUrl}${environment.endpoints.clients}/${clientId}`;
     
     return this.http.get<ClientRecord>(url, { headers: this.getAuthHeaders() }).pipe(
-      catchError(async (error) => {
+      catchError((error) => {
         // Try to get from local storage
-        const localClient = await this.storage.getClient(clientId);
-        if (localClient) {
-          return localClient.personalInfo as ClientRecord;
-        }
-        return throwError(() => error);
+        return new Observable<ClientRecord>((observer) => {
+          (async () => {
+            const localClient = await this.storage.getClient(clientId);
+            if (localClient) {
+              observer.next(localClient.personalInfo as ClientRecord);
+              observer.complete();
+              return;
+            }
+            observer.error(error);
+          })();
+        });
       })
     );
   }
@@ -200,10 +205,10 @@ export class BackendApiService {
     };
     
     return this.http.get<ClientRecord[]>(url, options).pipe(
-      catchError(async (error) => {
+      catchError((error) => {
         console.error('Error fetching clients:', error);
         // Return empty array for offline mode
-        return [];
+        return of([]);
       })
     );
   }
@@ -224,26 +229,25 @@ export class BackendApiService {
           status: 'approved'
         });
       }),
-      catchError(async (error) => {
+      catchError((error) => {
         // Queue for offline sync
-        const tempId = `temp_contract_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        const contractWithId = { ...contractData, id: tempId };
-        
-        await this.storage.queueOfflineAction({
-          type: 'CREATE_CONTRACT',
-          data: contractWithId,
-          retryCount: 0
-        });
-
-        await this.storage.saveQuote({
-          id: tempId,
-          clientId: contractData.client_id,
-          ecosystemId: contractData.ecosystem_id,
-          quoteDetails: contractWithId,
-          createdAt: Date.now(),
-          status: 'draft'
-        });
-
+        (async () => {
+          const tempId = `temp_contract_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          const contractWithId = { ...contractData, id: tempId };
+          await this.storage.queueOfflineAction({
+            type: 'CREATE_CONTRACT',
+            data: contractWithId,
+            retryCount: 0
+          });
+          await this.storage.saveQuote({
+            id: tempId,
+            clientId: contractData.client_id,
+            ecosystemId: contractData.ecosystem_id,
+            quoteDetails: contractWithId,
+            createdAt: Date.now(),
+            status: 'draft'
+          });
+        })();
         return throwError(() => error);
       })
     );
@@ -253,13 +257,19 @@ export class BackendApiService {
     const url = `${this.baseUrl}${environment.endpoints.quotes}/${contractId}`;
     
     return this.http.get<ContractRecord>(url, { headers: this.getAuthHeaders() }).pipe(
-      catchError(async (error) => {
+      catchError((error) => {
         // Try local storage
-        const localQuote = await this.storage.getQuote(contractId);
-        if (localQuote) {
-          return localQuote.quoteDetails as ContractRecord;
-        }
-        return throwError(() => error);
+        return new Observable<ContractRecord>((observer) => {
+          (async () => {
+            const localQuote = await this.storage.getQuote(contractId);
+            if (localQuote) {
+              observer.next(localQuote.quoteDetails as ContractRecord);
+              observer.complete();
+              return;
+            }
+            observer.error(error);
+          })();
+        });
       })
     );
   }
@@ -268,10 +278,15 @@ export class BackendApiService {
     const url = `${this.baseUrl}${environment.endpoints.clients}/${clientId}/contracts`;
     
     return this.http.get<ContractRecord[]>(url, { headers: this.getAuthHeaders() }).pipe(
-      catchError(async (error) => {
+      catchError(() => {
         // Try local storage
-        const localQuotes = await this.storage.getQuotesByClient(clientId);
-        return localQuotes.map(q => q.quoteDetails as ContractRecord);
+        return new Observable<ContractRecord[]>((observer) => {
+          (async () => {
+            const localQuotes = await this.storage.getQuotesByClient(clientId);
+            observer.next(localQuotes.map(q => q.quoteDetails as ContractRecord));
+            observer.complete();
+          })();
+        });
       })
     );
   }
@@ -505,15 +520,7 @@ export class BackendApiService {
     const url = `${this.baseUrl}/health`;
     
     return this.http.get<{ status: string; timestamp: string }>(url, { headers: this.getAuthHeaders() }).pipe(
-      catchError(() => {
-        return new Observable(observer => {
-          observer.next({
-            status: 'offline',
-            timestamp: new Date().toISOString()
-          });
-          observer.complete();
-        });
-      })
+      catchError(() => of({ status: 'offline', timestamp: new Date().toISOString() }))
     );
   }
 }

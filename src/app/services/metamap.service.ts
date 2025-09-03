@@ -314,7 +314,7 @@ export class MetaMapService {
       }
 
       const checkSDK = () => {
-        const sdkLoaded = !!(window as any).Mati || document.querySelector('metamap-button');
+        const sdkLoaded = !!(window as any).Mati || !!document.querySelector('metamap-button') || Array.from(document.querySelectorAll('div')).some(d => (d as any).dataset?.tag === 'METAMAP-BUTTON');
         observer.next(sdkLoaded);
         observer.complete();
       };

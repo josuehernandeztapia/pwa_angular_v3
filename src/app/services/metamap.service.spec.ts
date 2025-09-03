@@ -18,6 +18,7 @@ describe('MetaMapService', () => {
   const mockClient: Client = {
     id: 'client-test-123',
     name: 'Juan Carlos Pérez',
+    flow: 'Venta a Plazo' as any,
     email: 'juan.carlos@example.com',
     phone: '+525512345678',
     status: 'Activo' as any,
@@ -132,7 +133,7 @@ describe('MetaMapService', () => {
         expect(button!.clientid).toBe('689833b7d4e7dd0ca48216fb');
         expect(button!.flowid).toBe('689833b7d4e7dd00d08216fa');
         
-        const metadata = JSON.parse(button!.metadata);
+        const metadata = JSON.parse(button!.metadata || '{}');
         expect(metadata.clientId).toBe(mockClient.id);
         expect(metadata.clientName).toBe(mockClient.name);
         
@@ -555,16 +556,18 @@ describe('MetaMapService', () => {
       });
     });
 
-    it('should detect SDK availability when metamap-button exists', (done) => {
+    it('should detect SDK availability when metamap-button exists', async () => {
       // Mock querySelector to return a metamap-button element
       const mockButton = document.createElement('div');
-      mockButton.tagName = 'METAMAP-BUTTON';
+      // Instead of assigning tagName (readonly), mark with dataset
+      (mockButton as any).dataset = { tag: 'METAMAP-BUTTON' };
       (document.querySelector as jasmine.Spy).and.returnValue(mockButton);
-      
-      service.checkSDKAvailability().subscribe(available => {
-        expect(available).toBe(true);
-        done();
+
+      const result = await new Promise<boolean>(resolve => {
+        service.checkSDKAvailability().subscribe(resolve);
       });
+
+      expect(result).toBeTrue();
     });
 
     it('should report SDK as unavailable when neither exists', (done) => {
@@ -593,12 +596,12 @@ describe('MetaMapService', () => {
       
       (window as any).Mati = { version: '1.0.0' };
       
-      let loadCallback: () => void;
-      spyOn(window, 'addEventListener').and.callFake((event: string, callback: () => void) => {
+      let loadCallback: (ev: any) => void;
+      spyOn(window, 'addEventListener').and.callFake(((event: any, callback: any) => {
         if (event === 'load') {
           loadCallback = callback;
         }
-      });
+      }) as any);
       
       service.checkSDKAvailability().subscribe(available => {
         expect(available).toBe(true);
@@ -608,7 +611,7 @@ describe('MetaMapService', () => {
       // Simulate page load
       setTimeout(() => {
         if (loadCallback) {
-          loadCallback();
+          loadCallback(new Event('load'));
         }
       }, 50);
     });

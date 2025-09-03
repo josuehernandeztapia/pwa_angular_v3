@@ -495,9 +495,14 @@ export class ConfigurationService {
               weight: 10,
               required: true
             }
-          ]
+          ],
+          [BusinessFlow.AhorroProgramado]: [],
+          [BusinessFlow.VentaDirecta]: [],
+          [BusinessFlow.Individual]: []
         },
         market: {
+          all: [],
+          aguascalientes: [],
           edomex: [
             {
               id: 'municipality_confirm',
@@ -555,6 +560,58 @@ export class ConfigurationService {
         minimumConfidenceScore: 0.75,
         requiresHumanReview: true,
         autoApprovalThreshold: 0.90
+      },
+      analytics: {
+        stressIndicators: {
+          enabled: true,
+          metrics: {
+            responseTime: { track: true, thresholds: { normal: 5, slow: 10, critical: 20 } },
+            pauseAnalysis: { track: true, longPauseThreshold: 3, maxPausesPerQuestion: 5 },
+            repetitionRequests: { track: true, maxRepetitions: 3 },
+            uncertaintyWords: { track: true, keywords: ['mmm', 'no sé'], threshold: 3 },
+            voiceAnalysis: { enabled: true, toneChanges: true, speedVariation: true, volumeChanges: false }
+          }
+        },
+        effectivenessMetrics: {
+          enabled: true,
+          tracking: {
+            correctnessRate: true,
+            consistencyBetweenSessions: true,
+            confidenceCorrelation: true,
+            abandonmentByQuestion: true,
+            completionTime: true,
+            humanReviewAgreement: true
+          },
+          segmentation: { byDemographics: false, byExperience: false, byMarket: true, byBusinessFlow: true }
+        },
+        realTimeMonitoring: {
+          enabled: true,
+          alertsThreshold: { highAbandonmentRate: 30, lowConfidenceRate: 50, longResponseTime: 20 },
+          adaptiveQuestioning: { enabled: true, skipOnHighStress: true, simplifyOnConfusion: true, reorderOnDifficulty: true }
+        }
+      },
+      optimization: {
+        weightOptimization: {
+          enabled: true,
+          algorithm: 'manual_override',
+          factors: {
+            correctnessWeight: 0.4,
+            responseTimeWeight: 0.2,
+            stressIndicatorWeight: 0.2,
+            consistencyWeight: 0.1,
+            humanAgreementWeight: 0.1
+          },
+          adjustmentRules: []
+        },
+        questionLifecycle: {
+          enabled: true,
+          retirement: { lowPerformanceThreshold: 0.3, minSampleSize: 50, autoRemove: false },
+          promotion: { highPerformanceThreshold: 0.8, increaseWeight: true },
+          rotation: { enabled: true, newQuestionIntroduction: 0.1, testPeriod: 14 }
+        },
+        smartOrdering: { enabled: true, strategy: 'adaptive_flow', rules: [], dynamicReordering: true },
+        abTesting: { enabled: false, testTypes: ['question_wording'], sampleSize: 200, confidenceLevel: 0.95, maxTestDuration: 14, autoImplementWinner: false },
+        learningSystem: { enabled: false, modelType: 'rule_based', trainingData: { includeStressMetrics: true, includeOutcomes: true, includeHumanFeedback: false, retentionPeriod: 90 }, continuousLearning: { enabled: false, updateFrequency: 'weekly', minSampleForUpdate: 100 } }
       }
     };
 
@@ -972,13 +1029,11 @@ export class ConfigurationService {
           rollbackOnFailure: true
         }
       },
-      randomQuestionsOptimization: {
+      realTimeOptimization: {
         enabled: true,
-        adaptiveSelection: true,
-        weightedPool: true,
-        poolSize: 10,
-        confidenceThreshold: 0.7,
-        autoAdjust: true
+        adaptiveUI: true,
+        personalizedExperience: false,
+        loadOptimization: true
       }
     };
 

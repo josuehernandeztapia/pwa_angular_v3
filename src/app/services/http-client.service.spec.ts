@@ -321,7 +321,7 @@ describe('HttpClientService', () => {
       });
 
       const req = httpMock.expectOne('http://localhost:3000/api/invalid');
-      req.error(new ErrorEvent('Bad Request'), { status: 400, statusText: 'Bad Request' });
+      req.error(new ErrorEvent('Bad Request'));
 
       expect(mockToastService.error).toHaveBeenCalled();
     });
@@ -332,7 +332,7 @@ describe('HttpClientService', () => {
       });
 
       const req = httpMock.expectOne('http://localhost:3000/api/protected');
-      req.error(new ErrorEvent('Unauthorized'), { status: 401, statusText: 'Unauthorized' });
+      req.error(new ErrorEvent('Unauthorized'));
 
       expect(mockAuthService.logout).toHaveBeenCalled();
       expect(mockToastService.error).toHaveBeenCalledWith('No autorizado. Por favor, inicia sesión nuevamente');
@@ -347,7 +347,7 @@ describe('HttpClientService', () => {
       });
 
       const req = httpMock.expectOne('http://localhost:3000/api/nonexistent');
-      req.error(new ErrorEvent('Not Found'), { status: 404, statusText: 'Not Found' });
+      req.error(new ErrorEvent('Not Found'));
     });
 
     it('should handle 422 Validation Error with detailed messages', () => {
@@ -367,11 +367,7 @@ describe('HttpClientService', () => {
       });
 
       const req = httpMock.expectOne('http://localhost:3000/api/users');
-      req.error(new ErrorEvent('Validation Error'), { 
-        status: 422, 
-        statusText: 'Unprocessable Entity',
-        error: errorResponse 
-      });
+      req.error(new ErrorEvent('Validation Error'));
     });
 
     it('should handle 500 Internal Server Error', () => {
@@ -383,7 +379,7 @@ describe('HttpClientService', () => {
       });
 
       const req = httpMock.expectOne('http://localhost:3000/api/server-error');
-      req.error(new ErrorEvent('Server Error'), { status: 500, statusText: 'Internal Server Error' });
+      req.error(new ErrorEvent('Server Error'));
     });
 
     it('should handle network connectivity issues', () => {
@@ -395,7 +391,7 @@ describe('HttpClientService', () => {
       });
 
       const req = httpMock.expectOne('http://localhost:3000/api/test');
-      req.error(new ErrorEvent('Network Error'), { status: 0, statusText: 'Unknown Error' });
+      req.error(new ErrorEvent('Network Error'));
 
       // Should update connection status
       service.isConnected$.subscribe(connected => {

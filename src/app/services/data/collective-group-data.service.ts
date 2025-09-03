@@ -31,7 +31,7 @@ export class CollectiveGroupDataService {
       return clientList.map(c => ({ 
         clientId: c.id, 
         name: c.name, 
-        avatarUrl: c.avatarUrl, 
+        avatarUrl: c.avatarUrl || `https://picsum.photos/seed/${c.id}/100/100`, 
         status: 'active' as const, 
         individualContribution: c.events
           .filter(e => e.type === EventType.Contribution && e.details?.amount)

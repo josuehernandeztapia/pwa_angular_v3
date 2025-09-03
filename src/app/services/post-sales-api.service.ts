@@ -53,7 +53,7 @@ export class PostSalesApiService {
       remindersCreated?: number;
       error?: string;
     }>(`${this.baseUrl}/events/vehicle-delivered`, event).pipe(
-      catchError(this.handleError('sendVehicleDeliveredEvent'))
+      catchError(() => of({ success: false, error: 'Error en evento de entrega' }))
     );
   }
 
@@ -107,7 +107,7 @@ export class PostSalesApiService {
       record?: PostSalesRecord;
       error?: string;
     }>(`${this.baseUrl}/post-sales/${vin}`, updates).pipe(
-      catchError(this.handleError('updatePostSalesRecord'))
+      catchError(() => of({ success: false, error: 'Error al actualizar expediente' }))
     );
   }
 
@@ -143,7 +143,7 @@ export class PostSalesApiService {
       nextMaintenance?: { date: Date; km: number };
       error?: string;
     }>(`${this.baseUrl}/post-sales/${vin}/service`, serviceData).pipe(
-      catchError(this.handleError('registerService'))
+      catchError(() => of({ success: false, error: 'Error al registrar servicio' }))
     );
   }
 
@@ -200,7 +200,7 @@ export class PostSalesApiService {
       reminder?: MaintenanceReminder;
       error?: string;
     }>(`${this.baseUrl}/post-sales/${vin}/reminders/schedule`, reminderData).pipe(
-      catchError(this.handleError('scheduleMaintenanceReminder'))
+      catchError(() => of({ success: false, error: 'Error al programar recordatorio' }))
     );
   }
 
@@ -259,7 +259,7 @@ export class PostSalesApiService {
       estimatedDelivery?: Date;
       error?: string;
     }>(`${this.baseUrl}/surveys/send`, data).pipe(
-      catchError(this.handleError('sendSurvey'))
+      catchError(() => of({ success: false, error: 'Error al enviar encuesta' }))
     );
   }
 
@@ -284,7 +284,7 @@ export class PostSalesApiService {
       contact?: PostSalesContact;
       error?: string;
     }>(`${this.baseUrl}/post-sales/${vin}/contact`, contactData).pipe(
-      catchError(this.handleError('registerContact'))
+      catchError(() => of({ success: false, error: 'Error al registrar contacto' }))
     );
   }
 
@@ -337,7 +337,7 @@ export class PostSalesApiService {
       followUpRequired?: boolean;
       error?: string;
     }>(`${this.baseUrl}/surveys/${vin}/response`, response).pipe(
-      catchError(this.handleError('processSurveyResponse'))
+      catchError(() => of({ success: false, error: 'Error al procesar encuesta' }))
     );
   }
 
@@ -413,7 +413,7 @@ export class PostSalesApiService {
       odooOrderId?: string;
       error?: string;
     }>(`${this.baseUrl}/warranty/ticket`, data).pipe(
-      catchError(this.handleError('createWarrantyTicket'))
+      catchError(() => of({ success: false, error: 'Error al crear ticket' }))
     );
   }
 

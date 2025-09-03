@@ -166,10 +166,10 @@ export interface AVIConfiguration {
   questions: {
     core: AVIQuestion[];
     businessFlow: {
-      [key in BusinessFlow]?: AVIQuestion[];
+      [key in BusinessFlow]: AVIQuestion[];
     };
     market: {
-      [key in Market]?: AVIQuestion[];
+      [key in Market]: AVIQuestion[];
     };
   };
   randomQuestions: {
