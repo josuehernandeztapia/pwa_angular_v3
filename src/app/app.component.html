@@ -1,13 +1,14 @@
 <!-- App Layout with Navigation and Content -->
+<a class="skip-link" href="#main-content">Saltar al contenido</a>
 <div class="app-layout">
   <!-- Desktop/Tablet Navigation -->
-  <app-navigation></app-navigation>
+  <app-navigation role="navigation" aria-label="Navegación principal"></app-navigation>
   
   <!-- Main Content Area -->
-  <div class="main-content">
+  <main id="main-content" class="main-content" role="main">
     <router-outlet></router-outlet>
-  </div>
+  </main>
 
   <!-- Mobile Bottom Navigation -->
-  <app-bottom-nav-bar></app-bottom-nav-bar>
+  <app-bottom-nav-bar role="navigation" aria-label="Navegación inferior"></app-bottom-nav-bar>
 </div>

@@ -80,6 +80,10 @@
   /* Interactive states */
   --hover-overlay: rgba(255, 255, 255, 0.05);
   --active-overlay: rgba(255, 255, 255, 0.1);
+  /* Accessibility tokens */
+  --focus-ring-color: rgba(34, 211, 238, 0.6);
+  /* Prefer dark color scheme for UI chrome */
+  color-scheme: dark;
 }
 
 /* === UTILITY CLASSES === */

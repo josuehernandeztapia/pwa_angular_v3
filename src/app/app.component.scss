@@ -98,3 +98,21 @@
   background: rgba(66, 153, 225, 0.3);
   color: inherit;
 }
+
+// Skip link styles
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 16px;
+  background: #111827;
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: top 0.2s ease;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 12px;
+  outline: 3px solid var(--focus-ring-color);
+}
