@@ -18,11 +18,11 @@ interface EventGroup {
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
             <div class="icon-container">
-              =�
+              📜
             </div>
             <div>
               <h3 class="text-xl font-bold text-white">Historial de Eventos</h3>
-              <p class="text-sm text-gray-400">Registro cronol�gico de actividades</p>
+              <p class="text-sm text-gray-400">Registro cronológico de actividades</p>
             </div>
           </div>
           <div class="log-controls flex items-center gap-3">
@@ -125,9 +125,9 @@ interface EventGroup {
                                   [class]="getActorBadgeClass(event.actor)">
                               {{ event.actor }}
                             </span>
-                            <span>"</span>
+                            <span>•</span>
                             <span>{{ formatTime(event.timestamp) }}</span>
-                            <span *ngIf="event.type !== 'System'">"</span>
+                            <span *ngIf="event.type !== 'System'">•</span>
                             <span *ngIf="event.type !== 'System'" class="event-type">{{ getEventTypeLabel(event.type) }}</span>
                           </div>
                         </div>
@@ -147,7 +147,7 @@ interface EventGroup {
                       <div class="details-grid grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Payment Details -->
                         <div *ngIf="event.details?.paymentMethod" class="detail-item">
-                          <span class="detail-label text-gray-400 text-xs">M�todo de Pago:</span>
+                          <span class="detail-label text-gray-400 text-xs">Método de Pago:</span>
                           <span class="detail-value text-white text-sm font-medium">{{ event.details.paymentMethod }}</span>
                         </div>
                         
@@ -254,7 +254,7 @@ interface EventGroup {
                   (click)="showEventActions(event)"
                   class="action-menu-btn p-1 hover:bg-gray-700 rounded-md transition-colors"
                 >
-                  <span class="text-gray-400 hover:text-white">�</span>
+                  <span class="text-gray-400 hover:text-white">⋮</span>
                 </button>
               </div>
             </div>
@@ -264,7 +264,7 @@ interface EventGroup {
 
       <!-- Empty State -->
       <div class="empty-state text-center py-12" *ngIf="filteredEvents.length === 0">
-        <div class="empty-icon text-6xl mb-4">=�</div>
+        <div class="empty-icon text-6xl mb-4">🗒️</div>
         <h4 class="text-xl font-semibold text-gray-300 mb-2">No hay eventos</h4>
         <p class="text-gray-500">{{ getEmptyStateMessage() }}</p>
       </div>
@@ -276,7 +276,7 @@ interface EventGroup {
           [disabled]="isLoadingMore"
           class="load-more-btn px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
         >
-          {{ isLoadingMore ? 'Cargando...' : 'Cargar M�s Eventos' }}
+          {{ isLoadingMore ? 'Cargando...' : 'Cargar Más Eventos' }}
         </button>
       </div>
     </div>
@@ -565,9 +565,9 @@ export class EventLogComponent implements OnInit {
 
   getAmountLabel(eventType: EventType): string {
     const labels = {
-      [EventType.Contribution]: 'Aportaci�n',
-      [EventType.Collection]: 'Recaudaci�n',
-      [EventType.AdvisorAction]: 'Transacci�n',
+      [EventType.Contribution]: 'Aportación',
+      [EventType.Collection]: 'Recaudación',
+      [EventType.AdvisorAction]: 'Transacción',
       [EventType.System]: 'Ajuste'
     };
     return labels[eventType] || 'Monto';
@@ -575,9 +575,9 @@ export class EventLogComponent implements OnInit {
 
   getEventTypeLabel(eventType: EventType): string {
     const labels = {
-      [EventType.Contribution]: 'Contribuci�n',
-      [EventType.Collection]: 'Recaudaci�n',
-      [EventType.AdvisorAction]: 'Acci�n del Asesor',
+      [EventType.Contribution]: 'Contribución',
+      [EventType.Collection]: 'Recaudación',
+      [EventType.AdvisorAction]: 'Acción del Asesor',
       [EventType.System]: 'Sistema'
     };
     return labels[eventType] || 'Evento';
@@ -585,7 +585,7 @@ export class EventLogComponent implements OnInit {
 
   getEmptyStateMessage(): string {
     const messages = {
-      'all': 'No se han registrado eventos a�n',
+      'all': 'No se han registrado eventos aún',
       'payments': 'No se han registrado pagos',
       'documents': 'No se han subido documentos',
       'system': 'No hay eventos del sistema'
