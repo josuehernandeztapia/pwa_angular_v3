@@ -400,17 +400,16 @@ Pipeline Stages:
 
 ## 📚 Documentación
 
-### 📖 Documentación Completa (150,000+ líneas documentadas)
+### 📖 Documentación Quirúrgica Empresarial (150+ páginas)
 
 | Documento | Descripción | Ubicación | Estado |
 |-----------|-------------|-----------|--------|
-| **📚 Master Index** | Índice completo de documentación | [DOCUMENTATION-SYSTEM-COMPLETE.md](DOCUMENTATION-SYSTEM-COMPLETE.md) | ✅ |
-| **🏗️ Technical Architecture** | Arquitectura técnica completa (Angular 17+ Signals) | [TECHNICAL_ARCHITECTURE.md](TECHNICAL_ARCHITECTURE.md) | ✅ |
-| **🚗 Post-Sales System** | Sistema post-ventas de 8 fases completo | [POST_SALES_SYSTEM.md](POST_SALES_SYSTEM.md) | ✅ |
-| **🔌 API Documentation** | APIs, servicios e integraciones (25+ servicios) | [API_DOCUMENTATION.md](API_DOCUMENTATION.md) | ✅ |
-| **🧪 Testing Complete** | Ecosistema completo de testing | [TESTING-FINAL-SUMMARY.md](TESTING-FINAL-SUMMARY.md) | ✅ |
-| **🔧 Developer Config** | Comandos para Claude Code | [CLAUDE.md](CLAUDE.md) | ✅ |
-| **📊 Integration Report** | Validación de integración (100% success) | [INTEGRATION-VALIDATION-REPORT.md](INTEGRATION-VALIDATION-REPORT.md) | ✅ |
+| **🏢 Enterprise Documentation** | Documentación empresarial completa - Arquitectura, servicios y lógica de negocio (1,391 líneas) | [ENTERPRISE_DOCUMENTATION.md](ENTERPRISE_DOCUMENTATION.md) | ✅ |
+| **🔧 Technical Appendix** | Matriz de dependencias técnicas y debugging (987 líneas) | [TECHNICAL_APPENDIX.md](TECHNICAL_APPENDIX.md) | ✅ |
+| **🚨 Troubleshooting Runbook** | Procedimientos de resolución de problemas críticos | [TROUBLESHOOTING_RUNBOOK.md](TROUBLESHOOTING_RUNBOOK.md) | ✅ |
+| **🚀 Deployment Guide** | Guía completa de despliegue e integración de producción | [DEPLOYMENT_INTEGRATION_GUIDE.md](DEPLOYMENT_INTEGRATION_GUIDE.md) | ✅ |
+| **✅ Handover Checklist** | Lista de verificación para transición empresarial | [HANDOVER_CHECKLIST.md](HANDOVER_CHECKLIST.md) | ✅ |
+| **🔧 Developer Config** | Comandos específicos para Claude Code | [CLAUDE.md](CLAUDE.md) | ✅ |
 
 ### 🔗 Links Útiles
 
