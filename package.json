@@ -50,7 +50,8 @@
     "quality:badge": "node scripts/quality-badge.js",
     "mock:api": "json-server --watch db.json --port 3000",
     "test:all": "npm run test:unit && npm run test:accessibility && npm run test:visual && npm run test:mutation:quick && npm run coverage:generate",
-    "prepare": "husky"
+    "prepare": "husky",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit"
   },
   "lint-staged": {
     "*.{ts,js}": [
