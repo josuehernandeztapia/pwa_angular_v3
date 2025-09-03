@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { DashboardStats, ActivityFeedItem, Market } from '../models/types';
@@ -8,7 +8,7 @@ import { DashboardStats, ActivityFeedItem, Market } from '../models/types';
   providedIn: 'root'
 })
 export class DashboardService {
-  private baseUrl = environment.api.baseUrl;
+  private baseUrl = environment.apiUrl;
   
   // Real-time activity feed
   private activityFeedSubject = new BehaviorSubject<ActivityFeedItem[]>([]);
@@ -23,13 +23,13 @@ export class DashboardService {
    * Get dashboard statistics from backend
    */
   getDashboardStats(market?: Market): Observable<DashboardStats> {
-    const params = market ? { market } : {};
+    const params = market && market !== 'all' ? new HttpParams().set('market', market) : undefined;
     
     if (environment.features.enableMockData) {
       return of(this.getMockDashboardStats(market));
     }
     
-    return this.http.get<DashboardStats>(`${this.baseUrl}/api/dashboard/stats`, { params });
+    return this.http.get<DashboardStats>(`${this.baseUrl}/dashboard/stats`, { params });
   }
 
   /**
@@ -40,7 +40,7 @@ export class DashboardService {
       return of(this.getMockActivityFeed().slice(0, limit));
     }
     
-    return this.http.get<ActivityFeedItem[]>(`${this.baseUrl}/api/dashboard/activity`, {
+    return this.http.get<ActivityFeedItem[]>(`${this.baseUrl}/dashboard/activity`, {
       params: { limit: limit.toString() }
     });
   }
