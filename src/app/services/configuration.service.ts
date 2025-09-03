@@ -128,17 +128,28 @@ export class ConfigurationService {
    */
   getAVIQuestionsByCategory(category?: string): any[] {
     const aviConfig = this.getAVIConfiguration();
+    const allQuestions: any[] = [
+      ...aviConfig.questions.core,
+      ...Object.values(aviConfig.questions.businessFlow).flat().filter(Boolean) as any[],
+      ...Object.values(aviConfig.questions.market).flat().filter(Boolean) as any[]
+    ];
     if (category) {
-      return aviConfig.questions.filter(q => q.category === category);
+      return allQuestions.filter((q: any) => q.category === category);
     }
-    return aviConfig.questions;
+    return allQuestions;
   }
 
   /**
    * Get critical AVI questions (weight >= 9)
    */
   getCriticalAVIQuestions(): any[] {
-    return this.getAVIConfiguration().questions.filter(q => q.weight >= 9);
+    const aviConfig = this.getAVIConfiguration();
+    const allQuestions: any[] = [
+      ...aviConfig.questions.core,
+      ...Object.values(aviConfig.questions.businessFlow).flat().filter(Boolean) as any[],
+      ...Object.values(aviConfig.questions.market).flat().filter(Boolean) as any[]
+    ];
+    return allQuestions.filter((q: any) => q.weight >= 9);
   }
 
   /**
@@ -269,6 +280,12 @@ export class ConfigurationService {
             'Programa de ahorro con menor riesgo crediticio',
             'Capacidad de ahorro es indicador principal'
           ]
+        },
+        [BusinessFlow.Individual]: {
+          minScore: 620,
+          preferredGrades: ['A+', 'A', 'B+'],
+          maxLoanToValue: 0.75,
+          notes: ['Perfil individual estándar']
         }
       },
       scoringThresholds: {
@@ -302,7 +319,8 @@ export class ConfigurationService {
           [BusinessFlow.CreditoColectivo]: 15,
           [BusinessFlow.VentaDirecta]: -10,
           [BusinessFlow.VentaPlazo]: 0,
-          [BusinessFlow.AhorroProgramado]: 0
+          [BusinessFlow.AhorroProgramado]: 0,
+          [BusinessFlow.Individual]: 0
         }
       }
     };
@@ -360,7 +378,8 @@ export class ConfigurationService {
           edomex: 0.15
         },
         [BusinessFlow.VentaDirecta]: {},
-        [BusinessFlow.AhorroProgramado]: {}
+        [BusinessFlow.AhorroProgramado]: {},
+        [BusinessFlow.Individual]: { aguascalientes: 0.20, edomex: 0.20 }
       },
       recommendations: {
         recommendedBonus: 0.10,
@@ -393,7 +412,7 @@ export class ConfigurationService {
         requiresImmediateCapacity: true
       },
       [BusinessFlow.AhorroProgramado]: {
-        interestRate: 0,
+        interestRate: 0.12,
         focusOnSavingsCapacity: true
       },
       [BusinessFlow.VentaPlazo]: {
@@ -409,6 +428,12 @@ export class ConfigurationService {
         groupRequirements: {
           minMembers: 5,
           avgScoreRequired: 650
+        }
+      },
+      [BusinessFlow.Individual]: {
+        maxTerm: {
+          aguascalientes: 36,
+          edomex: 36
         }
       }
     };
@@ -490,6 +515,12 @@ export class ConfigurationService {
         enabled: true,
         selectionCount: 2,
         weightedSelection: true,
+        optimization: {
+          enabled: true,
+          learningAlgorithm: 'simple_weighted',
+          adjustmentFrequency: 'weekly',
+          minSampleSize: 50
+        },
         pool: [
           {
             id: 'family_size',
@@ -941,11 +972,13 @@ export class ConfigurationService {
           rollbackOnFailure: true
         }
       },
-      realTimeOptimization: {
-        enabled: false,
-        adaptiveUI: false,
-        personalizedExperience: false,
-        loadOptimization: true
+      randomQuestionsOptimization: {
+        enabled: true,
+        adaptiveSelection: true,
+        weightedPool: true,
+        poolSize: 10,
+        confidenceThreshold: 0.7,
+        autoAdjust: true
       }
     };
 

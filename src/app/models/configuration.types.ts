@@ -416,7 +416,7 @@ export interface AVIQuestion {
     range?: { min: number; max: number };
   };
   // Enhanced properties for optimization
-  analytics: {
+  analytics?: {
     performanceMetrics: {
       averageResponseTime: number;
       stressLevel: number; // 0-1 scale
@@ -428,7 +428,7 @@ export interface AVIQuestion {
     sampleSize: number;
     status: 'active' | 'testing' | 'retired' | 'problematic';
   };
-  optimization: {
+  optimization?: {
     autoAdjustWeight: boolean;
     minWeight: number;
     maxWeight: number;
@@ -459,7 +459,7 @@ export interface RandomQuestion {
   difficultyLevel: 'easy' | 'medium' | 'hard';
   tags: string[];
   // Enhanced properties for optimization
-  analytics: {
+  analytics?: {
     performanceMetrics: {
       averageResponseTime: number;
       stressLevel: number;
@@ -471,7 +471,7 @@ export interface RandomQuestion {
     sampleSize: number;
     status: 'active' | 'testing' | 'retired' | 'problematic';
   };
-  optimization: {
+  optimization?: {
     autoAdjustWeight: boolean;
     minWeight: number;
     maxWeight: number;

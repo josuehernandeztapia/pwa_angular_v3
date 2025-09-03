@@ -176,13 +176,13 @@ export class ContractService {
       clientName: client.name,
       templateId: template.id,
       contractType,
-      market: client.market,
+      market: (client.market || 'aguascalientes') as any,
       flow: client.flow,
       contractData,
       status: 'draft',
       createdDate: new Date(),
       signatories,
-      legalNotes: this.generateLegalNotes(contractType, client.market, client.flow)
+      legalNotes: this.generateLegalNotes(contractType, (client.market || 'aguascalientes') as any, client.flow)
     };
 
     return of(contract).pipe(delay(500));

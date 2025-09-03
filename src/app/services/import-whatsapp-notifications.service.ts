@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, forkJoin, map, catchError, tap } from 'rxjs';
+import { Observable, of, forkJoin, map, catchError, tap, switchMap } from 'rxjs';
 import { WhatsappService } from './whatsapp.service';
 import { IntegratedImportStatus, ImportMilestoneEvent } from './integrated-import-tracker.service';
 import { Client, ImportStatus } from '../models/types';

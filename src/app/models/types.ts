@@ -6,6 +6,7 @@ export enum BusinessFlow {
   AhorroProgramado = 'Plan de Ahorro',
   CreditoColectivo = 'Crédito Colectivo',
   VentaDirecta = 'Venta Directa',
+  Individual = 'Individual'
 }
 
 export enum DocumentStatus {
@@ -34,12 +35,14 @@ export type Market = 'all' | 'aguascalientes' | 'edomex';
 
 export interface Document {
   id: string;
-  name: 'INE Vigente' | 'Comprobante de domicilio' | 'Constancia de situación fiscal' | 'Copia de la concesión' | 'Tarjeta de circulación' | 'Factura de la unidad actual' | 'Carta de antigüedad de la ruta' | 'Verificación Biométrica (Metamap)' | 'Verificación Biométrica KYC' | 'Expediente Completo' | 'Contrato Venta a Plazo' | 'Identificación' | 'Carta Aval de Ruta' | 'Convenio de Dación en Pago' | 'Acta Constitutiva de la Ruta' | 'Poder del Representante Legal';
+  name: string;
   status: DocumentStatus;
   isOptional?: boolean;
   tooltip?: string;
   // Additional properties for API operations (optional for compatibility)
   uploadedAt?: Date;
+  // Optional expiration for documents that expire
+  expirationDate?: Date;
   fileUrl?: string;
   fileName?: string;
   fileSize?: number;

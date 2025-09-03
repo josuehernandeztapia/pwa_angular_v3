@@ -145,8 +145,8 @@ export class IntegratedImportTrackerService {
         map(triggers => triggers.filter(t => t.clientId === clientId))
       ),
       this.deliveriesService.list({ clientId: clientId, limit: 10 }).pipe(
-        map(response => response.items),
-        catchError(() => of([]))
+        map(response => response.items as any[]),
+        catchError(() => of([] as any[]))
       )
     ]).pipe(
       map(([importStatus, triggers, deliveryOrders]) => {
@@ -247,8 +247,7 @@ export class IntegratedImportTrackerService {
           deliveryOrder.id,
           'order_created',
           {
-            clientName: 'Cliente', // En implementación real vendría de los datos del cliente
-            businessFlow: deliveryOrder.businessFlow,
+            clientName: 'Cliente',
             market: deliveryOrder.market
           }
         ).subscribe({
@@ -289,7 +288,6 @@ export class IntegratedImportTrackerService {
       metadata: {
         triggerSource: 'contract_payment_threshold',
         market: deliveryOrder.market,
-        businessFlow: deliveryOrder.businessFlow,
         sku: deliveryOrder.sku
       }
     }).pipe(
@@ -642,7 +640,7 @@ export class IntegratedImportTrackerService {
         type: 'delivery_order',
         date: order.createdAt,
         title: `Orden de Entrega Creada`,
-        description: `Orden ${order.id} - ${order.businessFlow}`,
+        description: `Orden ${order.id}`,
         success: true
       });
     });
@@ -1372,12 +1370,7 @@ export class IntegratedImportTrackerService {
         userMessage = 'Error del servidor. Intenta más tarde';
       }
 
-      throw ({
-        operation,
-        originalError: error,
-        userMessage,
-        timestamp: new Date().toISOString()
-      });
+      return of(undefined as unknown as T);
     };
   }
 }

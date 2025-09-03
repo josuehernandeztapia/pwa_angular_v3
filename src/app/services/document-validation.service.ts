@@ -113,7 +113,7 @@ export class DocumentValidationService {
    * Generate complete compliance report for client
    */
   generateComplianceReport(client: Client): Observable<DocumentComplianceReport> {
-    const requiredDocs = this.getRequiredDocuments(client.market, client.flow, client);
+    const requiredDocs = this.getRequiredDocuments((client.market || 'all') as any, client.flow, client);
     const submittedDocs = client.documents || [];
     
     // Find missing documents
@@ -159,7 +159,7 @@ export class DocumentValidationService {
 
     const report: DocumentComplianceReport = {
       clientId: client.id,
-      market: client.market,
+      market: (client.market || 'all') as any,
       flow: client.flow,
       overallScore,
       requiredDocuments: requiredDocs,
@@ -227,12 +227,20 @@ export class DocumentValidationService {
     if (constitutiveAct) {
       validationDetails['constitutive_act'] = this.validateDocumentSync(constitutiveAct);
     }
+    const rfc = rfcRuta;
     if (rfc) {
       validationDetails['rfc'] = this.validateDocumentSync(rfc);
     }
-    if (bankStatements) {
-      validationDetails['bank_statements'] = this.validateDocumentSync(bankStatements);
-    }
+
+    // Derivar estatus adicionales para compatibilidad
+    const rfcValid = rfcRutaValid;
+    const memberRegistry = documents.find(d => d.name.includes('Padrón') || d.name.includes('Registro de Socios'));
+    const boardResolution = documents.find(d => d.name.includes('Poder del Representante Legal'));
+    const bankStatements = documents.find(d => d.name.includes('Estado de Cuenta') || d.name.includes('Estados de Cuenta'));
+
+    const memberRegistryValid = memberRegistry ? this.validateDocumentSync(memberRegistry).valid : false;
+    const boardResolutionValid = boardResolution ? this.validatePoderes(boardResolution) : false;
+    const bankStatementsValid = bankStatements ? this.validateDocumentSync(bankStatements).valid : false;
 
     const overallValid = constitutiveActValid && rfcValid && bankStatementsValid && 
                         memberRegistryValid && boardResolutionValid;
@@ -503,7 +511,7 @@ export class DocumentValidationService {
             corrections.push({
               type: 'data',
               description: 'Corregir formato de fecha',
-              originalValue: document.uploadDate,
+              originalValue: document.uploadedAt,
               correctedValue: new Date().toISOString(),
               confidence: 70
             });
@@ -648,7 +656,7 @@ export class DocumentValidationService {
   }
 
   private isDocumentRecent(document: Document, days: number): boolean {
-    const documentDate = new Date(document.uploadDate);
+    const documentDate = new Date(document.uploadedAt as any);
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
     
@@ -682,7 +690,7 @@ export class DocumentValidationService {
       issues.push('Falta identificación oficial (INE)');
     }
 
-    const expiredDocs = invalidDocs.filter(d => d.expirationDate && new Date(d.expirationDate) < new Date());
+    const expiredDocs = invalidDocs.filter(d => (d as any).expirationDate && new Date((d as any).expirationDate) < new Date());
     if (expiredDocs.length > 0) {
       issues.push(`${expiredDocs.length} documento(s) vencido(s)`);
     }
@@ -749,11 +757,11 @@ export class DocumentValidationService {
     
     notes.push(`Documentos válidos: ${validCount}/${totalCount}`);
     
-    if (validationStatus.constitutiveActValid) {
+    if (validationStatus['constitutiveActValid']) {
       notes.push('✓ Acta Constitutiva aprobada');
     }
     
-    if (!validationStatus.rfcValid) {
+    if (!validationStatus['rfcValid']) {
       notes.push('⚠ RFC del ecosistema pendiente');
     }
     
