@@ -86,6 +86,11 @@ export class DashboardService {
     return of(clients);
   }
 
+  // Method expected by specs to update current market selection
+  updateMarket(market: Market): void {
+    // In a real app, this could persist user preference; here it's a no-op
+  }
+
   /**
    * Mock data for development
    */

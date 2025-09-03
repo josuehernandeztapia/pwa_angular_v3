@@ -43,8 +43,14 @@ const axe = axeConfigure({
   }
 });
 
-// Extend Jest matchers
-expect.extend(axeNoViolations);
+// Extend Jest matchers if available; otherwise, provide fallback for Jasmine
+try {
+  if (typeof expect !== 'undefined' && typeof expect.extend === 'function') {
+    expect.extend(axeNoViolations);
+  }
+} catch {
+  // No-op in Jasmine; we'll implement a simple fallback assertion
+}
 
 /**
  * Test accessibility of a component
@@ -52,7 +58,11 @@ expect.extend(axeNoViolations);
 export async function testAccessibility(fixture: ComponentFixture<any>): Promise<void> {
   const element = fixture.nativeElement;
   const results = await axe(element);
-  expect(results).toHaveNoViolations();
+  if (typeof (expect as any).toHaveNoViolations === 'function') {
+    expect(results).toHaveNoViolations();
+  } else {
+    expect(results.violations.length).toBe(0);
+  }
 }
 
 /**
@@ -60,7 +70,11 @@ export async function testAccessibility(fixture: ComponentFixture<any>): Promise
  */
 export async function testElementAccessibility(element: HTMLElement): Promise<void> {
   const results = await axe(element);
-  expect(results).toHaveNoViolations();
+  if (typeof (expect as any).toHaveNoViolations === 'function') {
+    expect(results).toHaveNoViolations();
+  } else {
+    expect(results.violations.length).toBe(0);
+  }
 }
 
 /**
@@ -73,7 +87,11 @@ export async function testAccessibilityWithConfig(
   const element = fixture.nativeElement;
   const customAxe = configureAxe(config);
   const results = await customAxe(element);
-  expect(results).toHaveNoViolations();
+  if (typeof (expect as any).toHaveNoViolations === 'function') {
+    expect(results).toHaveNoViolations();
+  } else {
+    expect(results.violations.length).toBe(0);
+  }
 }
 
 /**

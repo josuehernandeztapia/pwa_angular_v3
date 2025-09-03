@@ -450,6 +450,23 @@ export class ClienteFormComponent implements OnInit {
     }
   }
 
+  // Methods referenced by specs
+  createClient(): void {
+    // Delegate to onSubmit (create flow)
+    this.isEditMode = false;
+    this.onSubmit();
+  }
+
+  updateClient(): void {
+    // Delegate to onSubmit (update flow)
+    this.isEditMode = true;
+    this.onSubmit();
+  }
+
+  onMarketChange(market: string): void {
+    this.clienteForm.patchValue({ market });
+  }
+
   onRfcInput(event: any): void {
     // Convertir a mayúsculas
     const value = event.target.value.toUpperCase();

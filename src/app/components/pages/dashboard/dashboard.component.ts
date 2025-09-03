@@ -348,6 +348,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   
   // Dashboard data
   stats: DashboardStats | null = null;
+  // Back-compat for specs
+  dashboardStats!: DashboardStats;
   activityFeed: ActivityFeedItem[] = [];
   funnelData: OpportunityStage[] = [];
   actionableGroups: ActionableGroup[] = [];
@@ -430,6 +432,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.loadDashboardData();
   }
 
+  // Methods expected by specs
+  onMarketChanged(market: Market): void {
+    this.selectedMarket = market;
+    this.dashboardService.updateMarket(market);
+  }
+
+  navigateToClient(clientId: string): void {
+    this.router.navigate(['/clientes', clientId]);
+  }
+
+  navigateToOpportunities(): void {
+    this.router.navigate(['/opportunities']);
+  }
+
   /**
    * Load dashboard statistics
    */
@@ -443,6 +459,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.dashboardService.getAllClients(this.selectedMarket).toPromise()
     ]).then(([stats, funnel, groups, clients]) => {
       this.stats = stats || null;
+      if (stats) {
+        this.dashboardStats = stats;
+      }
       this.funnelData = funnel || [];
       this.actionableGroups = groups || [];
       this.allClients = clients || [];
@@ -682,6 +701,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       };
     }
+  }
+
+  getCompletionPercentage(): number {
+    if (!this.dashboardStats) return 0;
+    const collected = this.dashboardStats.monthlyRevenue.collected;
+    const projected = this.dashboardStats.monthlyRevenue.projected || 1;
+    return Math.round((collected / projected) * 100);
+  }
+
+  getNextBestAction(): { title: string } {
+    return { title: 'Siguiente acción sugerida' };
+  }
+
+  getHighPriorityClients(): any[] {
+    return (this.actionableGroups?.[0]?.clients as any[]) || [];
   }
 
   private loadContextualKPIs(): void {

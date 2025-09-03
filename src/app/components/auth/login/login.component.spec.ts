@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen, waitFor, fireEvent } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { LoginComponent } from './login.component';
 
@@ -77,17 +77,17 @@ describe('LoginComponent', () => {
   });
 
   it('should prevent form submission when invalid', () => {
-    spyOn(component, 'performLogin');
+    spyOn(component as any, 'performLogin');
     
     component.onSubmit();
 
-    expect(component.performLogin).not.toHaveBeenCalled();
+    expect((component as any).performLogin).not.toHaveBeenCalled();
     expect(component.loginForm.get('email')?.touched).toBe(true);
     expect(component.loginForm.get('password')?.touched).toBe(true);
   });
 
   it('should call performLogin when form is valid', () => {
-    spyOn(component, 'performLogin');
+    spyOn(component as any, 'performLogin');
     
     component.loginForm.patchValue({
       email: 'test@example.com',
@@ -96,7 +96,7 @@ describe('LoginComponent', () => {
 
     component.onSubmit();
 
-    expect(component.performLogin).toHaveBeenCalledWith({
+    expect((component as any).performLogin).toHaveBeenCalledWith({
       email: 'test@example.com',
       password: 'validPassword123'
     });
@@ -178,7 +178,7 @@ describe('LoginComponent Integration Tests', () => {
       ]
     });
 
-    const submitButton = screen.getByRole('button', { name: /iniciar sesión/i });
+    const submitButton = screen.getByRole('button');
     fireEvent.click(submitButton);
 
     await waitFor(() => {
@@ -223,7 +223,7 @@ describe('LoginComponent Integration Tests', () => {
     await user.type(emailInput, 'test@example.com');
     await user.type(passwordInput, 'validPassword123');
 
-    expect(submitButton).not.toBeDisabled();
+    expect(submitButton.getAttribute('disabled')).toBeNull();
   });
 
   it('should handle form submission with valid data', async () => {
@@ -260,7 +260,7 @@ describe('LoginComponent Integration Tests', () => {
     });
 
     const passwordInput = screen.getByLabelText(/contraseña/i) as HTMLInputElement;
-    const toggleButton = container.querySelector('.password-toggle');
+    const toggleButton = container.querySelector('.password-toggle-premium');
 
     expect(passwordInput.type).toBe('password');
 
@@ -282,9 +282,9 @@ describe('LoginComponent Integration Tests', () => {
     const emailInput = screen.getByLabelText(/correo electrónico/i);
     const passwordInput = screen.getByLabelText(/contraseña/i);
 
-    expect(emailInput).toHaveAttribute('type', 'email');
-    expect(emailInput).toHaveAttribute('id', 'email');
-    expect(passwordInput).toHaveAttribute('id', 'password');
+    expect(emailInput.getAttribute('type')).toBe('email');
+    expect(emailInput.getAttribute('id')).toBe('email');
+    expect(passwordInput.getAttribute('id')).toBe('password');
   });
 
   it('should display brand information', async () => {

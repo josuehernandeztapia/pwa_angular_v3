@@ -35,6 +35,15 @@ export class ToastService {
     this.show('info', message, duration);
   }
 
+  // Aliases for backwards-compat with specs
+  showSuccess(message: string, duration: number = 3000): void {
+    this.success(message, duration);
+  }
+
+  showError(message: string, duration: number = 5000): void {
+    this.error(message, duration);
+  }
+
   private show(type: Toast['type'], message: string, duration: number): void {
     const toast: Toast = {
       id: Date.now().toString(),

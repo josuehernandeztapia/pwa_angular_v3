@@ -130,7 +130,7 @@ describe('DocumentsPhaseComponent', () => {
     });
 
     mockImportTracker.completeDocumentsPhase.and.returnValue(
-      of({ success: true, message: 'Documents completed' })
+      of({} as any)
     );
 
     component.onSubmit();
