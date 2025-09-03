@@ -136,7 +136,7 @@ interface EventGroup {
                       <!-- Event Amount (if applicable) -->
                       <div *ngIf="event.details?.amount" class="event-amount">
                         <div class="amount-display px-3 py-2 rounded-lg" [class]="getAmountDisplayClass(event)">
-                          <span class="amount-value font-bold text-lg">{{ formatCurrency(event.details.amount) }}</span>
+                          <span class="amount-value font-bold text-lg">{{ formatCurrency(event.details?.amount || 0) }}</span>
                           <div class="amount-label text-xs opacity-80">{{ getAmountLabel(event.type) }}</div>
                         </div>
                       </div>
@@ -148,25 +148,25 @@ interface EventGroup {
                         <!-- Payment Details -->
                         <div *ngIf="event.details?.paymentMethod" class="detail-item">
                           <span class="detail-label text-gray-400 text-xs">Método de Pago:</span>
-                          <span class="detail-value text-white text-sm font-medium">{{ event.details.paymentMethod }}</span>
+                          <span class="detail-value text-white text-sm font-medium">{{ event.details?.paymentMethod }}</span>
                         </div>
                         
                         <!-- Reference Number -->
                         <div *ngIf="event.details?.reference" class="detail-item">
                           <span class="detail-label text-gray-400 text-xs">Referencia:</span>
-                          <span class="detail-value text-white text-sm font-medium font-mono">{{ event.details.reference }}</span>
+                          <span class="detail-value text-white text-sm font-medium font-mono">{{ event.details?.reference }}</span>
                         </div>
                         
                         <!-- Document Name -->
                         <div *ngIf="event.details?.documentName" class="detail-item">
                           <span class="detail-label text-gray-400 text-xs">Documento:</span>
-                          <span class="detail-value text-white text-sm font-medium">{{ event.details.documentName }}</span>
+                          <span class="detail-value text-white text-sm font-medium">{{ event.details?.documentName }}</span>
                         </div>
                         
                         <!-- Status -->
                         <div *ngIf="event.details?.status" class="detail-item">
                           <span class="detail-label text-gray-400 text-xs">Estado:</span>
-                          <span class="detail-value text-white text-sm font-medium">{{ event.details.status }}</span>
+                          <span class="detail-value text-white text-sm font-medium">{{ event.details?.status }}</span>
                         </div>
                       </div>
                     </div>
@@ -239,7 +239,7 @@ interface EventGroup {
               
               <div class="col-span-2 flex items-center">
                 <span *ngIf="event.details?.amount" class="amount-text font-mono text-sm" [class]="getAmountTextClass(event)">
-                  {{ formatCurrency(event.details.amount) }}
+                  {{ formatCurrency(event.details?.amount || 0) }}
                 </span>
                 <span *ngIf="!event.details?.amount" class="text-gray-500 text-sm">-</span>
               </div>
@@ -564,23 +564,27 @@ export class EventLogComponent implements OnInit {
   }
 
   getAmountLabel(eventType: EventType): string {
-    const labels = {
+    const labels: Record<EventType, string> = {
       [EventType.Contribution]: 'Aportación',
       [EventType.Collection]: 'Recaudación',
       [EventType.AdvisorAction]: 'Transacción',
-      [EventType.System]: 'Ajuste'
+      [EventType.ClientAction]: 'Transacción',
+      [EventType.System]: 'Ajuste',
+      [EventType.GoalAchieved]: 'Meta'
     };
-    return labels[eventType] || 'Monto';
+    return labels[eventType];
   }
 
   getEventTypeLabel(eventType: EventType): string {
-    const labels = {
+    const labels: Record<EventType, string> = {
       [EventType.Contribution]: 'Contribución',
       [EventType.Collection]: 'Recaudación',
       [EventType.AdvisorAction]: 'Acción del Asesor',
-      [EventType.System]: 'Sistema'
+      [EventType.ClientAction]: 'Acción del Cliente',
+      [EventType.System]: 'Sistema',
+      [EventType.GoalAchieved]: 'Meta Alcanzada'
     };
-    return labels[eventType] || 'Evento';
+    return labels[eventType];
   }
 
   getEmptyStateMessage(): string {

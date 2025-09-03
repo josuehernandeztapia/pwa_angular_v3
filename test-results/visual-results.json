@@ -1,0 +1,183 @@
+{
+  "config": {
+    "configFile": "/workspace/playwright.config.ts",
+    "rootDir": "/workspace/src/tests/visual",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/workspace/src/tests/visual/setup/global-setup.ts",
+    "globalTeardown": "/workspace/src/tests/visual/setup/global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "project": "Conductores PWA",
+      "description": "Visual regression tests for UI components and pages"
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/visual-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspace/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspace/src/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspace/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/workspace/src/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspace/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/workspace/src/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspace/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/workspace/src/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspace/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/workspace/src/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspace/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "iPad",
+        "name": "iPad",
+        "testDir": "/workspace/src/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspace/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "High DPI",
+        "name": "High DPI",
+        "testDir": "/workspace/src/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 2,
+    "webServer": {
+      "command": "npm run serve:test",
+      "url": "http://localhost:4200",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [],
+  "errors": [
+    {
+      "message": "Error: No tests found",
+      "stack": "Error: No tests found"
+    }
+  ],
+  "stats": {
+    "startTime": "2025-09-03T17:01:37.135Z",
+    "duration": 8803.509,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

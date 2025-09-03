@@ -113,9 +113,9 @@ interface GNVOverageTemplate {
 })
 export class WhatsappService {
   private readonly baseUrl = 'https://graph.facebook.com/v18.0';
-  private readonly phoneNumberId = process.env['WHATSAPP_PHONE_NUMBER_ID'] || 'your-phone-number-id';
-  private readonly accessToken = process.env['WHATSAPP_ACCESS_TOKEN'] || 'your-access-token';
-  private readonly webhookVerifyToken = process.env['WHATSAPP_WEBHOOK_VERIFY_TOKEN'] || 'your-verify-token';
+  private readonly phoneNumberId = (environment as any).whatsappPhoneNumberId || 'your-phone-number-id';
+  private readonly accessToken = (environment as any).whatsappAccessToken || 'your-access-token';
+  private readonly webhookVerifyToken = (environment as any).whatsappWebhookVerifyToken || 'your-verify-token';
 
   constructor(private http: HttpClient) {}
 

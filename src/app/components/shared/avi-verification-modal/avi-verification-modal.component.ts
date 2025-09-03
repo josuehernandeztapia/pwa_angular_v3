@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { VoiceValidationService, VoiceValidationResult } from '../../../services/voice-validation.service';
+import { VoiceValidationService } from '../../../services/voice-validation.service';
 import { AviQuestionGeneratorService, MicroLocalQuestion } from '../../../services/avi-question-generator.service';
 import { AviSimpleConfigService, SimpleAviQuestion } from '../../../services/avi-simple-config.service';
 import { VoiceFraudDetectionService, VoiceFraudAnalysis, VoiceMetrics } from '../../../services/voice-fraud-detection.service';
@@ -1095,23 +1095,15 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     this.recordingStartTime = Date.now();
 
     // Start voice recording
-    this.voiceValidation.startRecording().subscribe({
-      next: (audioData) => {
-        // Handle real-time audio data
-        this.processAudioStream(audioData);
-      },
-      error: (error) => {
-        console.error('Recording error:', error);
-        this.isRecording = false;
-      }
-    });
+    this.voiceValidation.startRecording();
   }
 
   private async stopRecording(): Promise<void> {
     this.isRecording = false;
     
     try {
-      const result = await this.voiceValidation.stopRecording().toPromise();
+      this.voiceValidation.stopRecording();
+      const result = await this.voiceValidation.getValidationResult(this.sessionData.clientId) as any;
       if (!result) return;
       
       // ✅ NUEVO: Start voice evaluation
@@ -1155,7 +1147,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  private processVoiceResult(result: VoiceValidationResult): void {
+  private processVoiceResult(result: any): void {
     // Process based on current status
     if (this.sessionData.status === 'asking_questions') {
       this.processTransportQuestionResponse(result);
@@ -1164,7 +1156,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  private processTransportQuestionResponse(result: VoiceValidationResult): void {
+  private processTransportQuestionResponse(result: any): void {
     const currentQuestion = this.getCurrentTransportQuestion();
     if (!currentQuestion) return;
 
@@ -1252,7 +1244,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     this.currentQuestion = this.sessionData.microLocalQuestions[0] || null;
   }
 
-  private processMicroLocalResponse(result: VoiceValidationResult): void {
+  private processMicroLocalResponse(result: any): void {
     if (!this.currentQuestion) return;
 
     // Calculate response timing

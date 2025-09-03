@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { SimuladorEngineService, SavingsScenario, CollectiveScenarioConfig } from '../../../../services/simulador-engine.service';
@@ -30,7 +30,7 @@ interface KpiData {
 @Component({
   selector: 'app-tanda-colectiva',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   template: `
     <div class="container mx-auto p-6 space-y-6">
       <!-- Header -->
@@ -588,7 +588,7 @@ interface KpiData {
                 <div class="flex items-center justify-between text-sm">
                   <span class="text-orange-700 font-medium">Impacto estimado en timeline:</span>
                   <span class="text-orange-800 font-bold">
-                    {{ whatIfEvents.filter(e => e.type === 'extra').length > 0 ? '-1 a -2 meses' : '+1 a +2 meses' }}
+                    {{ getDeltaImpactText() }}
                   </span>
                 </div>
               </div>
@@ -743,7 +743,7 @@ export class TandaColectivaComponent implements OnInit, OnDestroy {
     if (!this.simulationResult) return;
 
     // Store scenario data for client creation
-    const clientData: Partial<Client> = {
+    const clientData: any = {
       simulatorData: {
         type: 'EDOMEX_COLLECTIVE',
         scenario: this.simulationResult.scenario,
@@ -953,6 +953,11 @@ export class TandaColectivaComponent implements OnInit, OnDestroy {
     ];
   }
 
+  getDeltaImpactText(): string {
+    const hasExtra = Array.isArray(this.whatIfEvents) && this.whatIfEvents.filter(e => e?.type === 'extra').length > 0;
+    return hasExtra ? '-1 a -2 meses' : '+1 a +2 meses';
+  }
+
   shareWhatsApp(): void {
     if (!this.simulationResult) return;
 
@@ -1023,23 +1028,16 @@ ${this.whatIfEvents.length > 0 ? '\n🎯 *Eventos What-If incluidos:*\n' + this.
     }
 
     const tandaData = {
-      memberCount: this.configForm.value.memberCount,
-      unitPrice: this.configForm.value.unitPrice,
-      totalTarget: this.simulationResult.scenario.targetAmount,
-      monthlyContribution: this.simulationResult.scenario.monthlyContribution,
-      monthsToTarget: this.simulationResult.scenario.monthsToTarget,
-      firstAwardMonth: this.simulationResult.tandaResult?.firstAwardT || 0,
-      effectiveReturn: this.simulationResult.tandaResult?.effectiveReturn || 0,
-      accelerationFactor: this.simulationResult.snowballEffect?.accelerationFactor || 1,
-      compoundingBenefit: this.simulationResult.snowballEffect?.compoundingBenefit || 0,
-      overpricePerLiter: this.configForm.value.overpricePerLiter,
-      avgConsumption: this.configForm.value.avgConsumption,
-      voluntaryMonthly: this.configForm.value.voluntaryMonthly,
-      timeline: this.generateMonthlyTimeline().slice(0, 6),
-      whatIfEvents: this.whatIfEvents
+      memberCount: this.configForm.value.memberCount as number,
+      unitPrice: this.configForm.value.unitPrice as number,
+      monthlyContribution: this.simulationResult.scenario.monthlyContribution as number,
+      timeline: this.generateMonthlyTimeline().slice(0, 6).map(m => ({ month: m.t, event: 'Mes ' + m.t })),
+      totalSavings: (this.simulationResult.snowballEffect?.totalSavings || []) as number[],
+      firstDeliveryMonth: this.simulationResult.tandaResult?.firstAwardT || 0,
+      avgTimeToAward: this.simulationResult.tandaResult?.avgTimeToAward || 0
     };
 
-    this.pdfExportService.generateTandaPDF(tandaData)
+    this.pdfExportService.generateTandaPDF(tandaData as any)
       .then(() => {
         this.toast.success('PDF generado exitosamente');
       })

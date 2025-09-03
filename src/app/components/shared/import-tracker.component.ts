@@ -452,9 +452,9 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
     const importStatus = this.computedImportStatus();
     if (!importStatus) return 'pending';
     
-    const status = importStatus[milestone.key];
-    if (status?.status === 'completed') return 'completed';
-    if (status?.status === 'in_progress') return 'in-progress';
+    const entry = importStatus[milestone.key] as any;
+    if (entry?.status === 'completed') return 'completed';
+    if (entry?.status === 'in_progress') return 'in-progress';
     return 'pending';
   }
 
@@ -598,7 +598,7 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
   }
 
   getCompletionDate(key: keyof ImportStatus): string {
-    const status = this.client?.importStatus?.[key];
+    const status = this.client?.importStatus?.[key] as any;
     if (status?.completedAt) {
       return new Date(status.completedAt).toLocaleDateString('es-MX', {
         month: 'short',
@@ -609,7 +609,7 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
   }
 
   getStartDate(key: keyof ImportStatus): string {
-    const status = this.client?.importStatus?.[key];
+    const status = this.client?.importStatus?.[key] as any;
     if (status?.startedAt) {
       return new Date(status.startedAt).toLocaleDateString('es-MX', {
         month: 'short',
@@ -620,7 +620,7 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
   }
 
   getMilestoneDocuments(key: keyof ImportStatus): string[] {
-    const docs: Record<keyof ImportStatus, string[]> = {
+    const docs: Partial<Record<keyof ImportStatus, string[]>> = {
       pedidoPlanta: ['Orden de compra', 'Especificaciones técnicas', 'Contrato de fabricación'],
       unidadFabricada: ['Certificado de fabricación', 'Factura comercial', 'Packing list'],
       transitoMaritimo: ['Bill of lading', 'Manifiesto de carga', 'Seguro de transporte'],
@@ -631,7 +631,7 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
   }
 
   getMilestoneContacts(key: keyof ImportStatus): {role: string, name: string, phone: string}[] {
-    const contacts: Record<keyof ImportStatus, {role: string, name: string, phone: string}[]> = {
+    const contacts: Partial<Record<keyof ImportStatus, {role: string, name: string, phone: string}[]>> = {
       pedidoPlanta: [
         {role: 'Coordinador Planta', name: 'Carlos Méndez', phone: '+52 55 1234-5678'}
       ],

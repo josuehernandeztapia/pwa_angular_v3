@@ -92,15 +92,15 @@ export interface ActivityItem {
               <div class="activity-metadata" *ngIf="hasMetadata(activity)">
                 <div class="metadata-item" *ngIf="activity.metadata?.amount">
                   <span class="metadata-icon">💰</span>
-                  <span class="metadata-text">\${{ formatCurrency(activity.metadata.amount) }}</span>
+                  <span class="metadata-text">\${{ formatCurrency(activity.metadata?.amount || 0) }}</span>
                 </div>
                 <div class="metadata-item" *ngIf="activity.metadata?.documentType">
                   <span class="metadata-icon">📄</span>
-                  <span class="metadata-text">{{ activity.metadata.documentType }}</span>
+                  <span class="metadata-text">{{ activity.metadata?.documentType }}</span>
                 </div>
                 <div class="metadata-item" *ngIf="activity.metadata?.channel">
                   <span class="metadata-icon">📱</span>
-                  <span class="metadata-text">{{ activity.metadata.channel }}</span>
+                  <span class="metadata-text">{{ activity.metadata?.channel }}</span>
                 </div>
               </div>
 
@@ -491,6 +491,8 @@ export interface ActivityItem {
 })
 export class HumanActivityFeedComponent implements OnInit {
   @Input() activities: ActivityItem[] = [];
+  @Input() maxItems: number = 10;
+  @Input() showSuggestedActions: boolean = false;
   
   selectedFilter: 'all' | 'actions' | 'achievements' = 'all';
   filteredActivities: ActivityItem[] = [];
@@ -515,19 +517,23 @@ export class HumanActivityFeedComponent implements OnInit {
   }
 
   private updateFilteredActivities(): void {
+    let base = [...this.activities];
+    if (this.maxItems > 0) {
+      base = base.slice(0, this.maxItems);
+    }
     switch (this.selectedFilter) {
       case 'actions':
-        this.filteredActivities = this.activities.filter(a => 
-          a.suggestedAction || a.priority === 'high'
+        this.filteredActivities = base.filter(a => 
+          (this.showSuggestedActions && a.suggestedAction) || a.priority === 'high'
         );
         break;
       case 'achievements':
-        this.filteredActivities = this.activities.filter(a => 
+        this.filteredActivities = base.filter(a => 
           a.category === 'achievement' || a.category === 'payment'
         );
         break;
       default:
-        this.filteredActivities = [...this.activities];
+        this.filteredActivities = base;
     }
   }
 

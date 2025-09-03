@@ -144,7 +144,7 @@ export class AhorroService {
       id: `ahorro-${client.id}-${Date.now()}`,
       clientId: client.id,
       clientName: client.name,
-      market: client.market,
+      market: (client.market || 'aguascalientes') as Market,
       startDate: new Date(),
       targetAmount,
       monthlyGoal,

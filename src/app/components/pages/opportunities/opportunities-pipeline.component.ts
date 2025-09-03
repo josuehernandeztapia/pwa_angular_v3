@@ -730,8 +730,8 @@ export class OpportunitiesPipelineComponent implements OnInit {
         id: `opp-${client.id}`,
         clientId: client.id,
         clientName: client.name,
-        clientPhone: client.phone,
-        clientEmail: client.email,
+        clientPhone: client.phone || '',
+        clientEmail: client.email || '',
         market: client.market as Market,
         businessFlow: client.flow,
         stage,
@@ -739,11 +739,11 @@ export class OpportunitiesPipelineComponent implements OnInit {
         estimatedValue,
         probability,
         expectedCloseDate: this.calculateExpectedCloseDate(stage),
-        lastActivity: client.lastModified,
+        lastActivity: client.lastModified || new Date(),
         nextAction: this.getNextAction(stage, client),
         tags: this.generateTags(client),
         notes: `Oportunidad generada para ${client.name}`,
-        createdAt: client.createdAt
+        createdAt: client.createdAt || new Date()
       });
     });
 
@@ -795,11 +795,12 @@ export class OpportunitiesPipelineComponent implements OnInit {
 
   private calculateEstimatedValue(client: Client): number {
     // Base calculation on market and business flow
-    const baseValues = {
+    const baseValues: Record<BusinessFlow, number> = {
       [BusinessFlow.VentaPlazo]: client.market === 'aguascalientes' ? 853000 : 937000,
       [BusinessFlow.VentaDirecta]: client.market === 'aguascalientes' ? 853000 : 837000,
       [BusinessFlow.AhorroProgramado]: 600000,
-      [BusinessFlow.CreditoColectivo]: 937000 * 5 // Assume 5 units
+      [BusinessFlow.CreditoColectivo]: 937000 * 5,
+      [BusinessFlow.Individual]: 700000
     };
     
     return baseValues[client.flow] || 800000;
@@ -807,7 +808,7 @@ export class OpportunitiesPipelineComponent implements OnInit {
 
   private determineStage(client: Client): Opportunity['stage'] {
     // Determine stage based on client status and documents
-    const hasQuote = client.quotes && client.quotes.length > 0;
+    const hasQuote = (client as any).quotes && (client as any).quotes.length > 0;
     const hasApprovedDocs = client.documents.some(d => d.status === 'Aprobado');
     const docCompleteness = client.documents.filter(d => d.status === 'Aprobado').length / client.documents.length;
 
@@ -820,7 +821,8 @@ export class OpportunitiesPipelineComponent implements OnInit {
   }
 
   private determinePriority(client: Client, estimatedValue: number): Opportunity['priority'] {
-    const daysSinceCreated = (Date.now() - client.createdAt.getTime()) / (1000 * 60 * 60 * 24);
+    const createdAt = client.createdAt || new Date();
+    const daysSinceCreated = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60 * 24);
     
     if (estimatedValue > 2000000 || client.flow === BusinessFlow.CreditoColectivo) return 'alta';
     if (estimatedValue > 800000 && daysSinceCreated < 14) return 'alta';
@@ -881,7 +883,8 @@ export class OpportunitiesPipelineComponent implements OnInit {
     if (client.ecosystemId) tags.push('Ecosistema');
     if (client.status === 'Activo') tags.push('Cliente Activo');
     
-    const daysSinceCreated = (Date.now() - client.createdAt.getTime()) / (1000 * 60 * 60 * 24);
+    const createdAt = client.createdAt || new Date();
+    const daysSinceCreated = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60 * 24);
     if (daysSinceCreated < 7) tags.push('Nuevo');
     
     return tags;
@@ -975,11 +978,12 @@ export class OpportunitiesPipelineComponent implements OnInit {
   }
 
   getBusinessFlowLabel(flow: BusinessFlow): string {
-    const labels = {
+    const labels: Record<BusinessFlow, string> = {
       [BusinessFlow.VentaPlazo]: 'Venta a Plazo',
       [BusinessFlow.VentaDirecta]: 'Venta Directa',
       [BusinessFlow.AhorroProgramado]: 'Plan de Ahorro',
-      [BusinessFlow.CreditoColectivo]: 'Crédito Colectivo'
+      [BusinessFlow.CreditoColectivo]: 'Crédito Colectivo',
+      [BusinessFlow.Individual]: 'Individual'
     };
     return labels[flow] || flow;
   }

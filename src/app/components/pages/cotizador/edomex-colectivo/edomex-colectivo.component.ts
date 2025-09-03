@@ -455,7 +455,7 @@ export class EdomexColectivoComponent implements OnInit, OnDestroy {
     if (!this.quotation) return;
 
     // Store quotation data for client creation
-    const clientData: Partial<Client> = {
+    const clientData: any = {
       quotationData: {
         type: 'EDOMEX_COLECTIVO',
         quotation: this.quotation,

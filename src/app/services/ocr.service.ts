@@ -95,11 +95,12 @@ export class OCRService {
       this.progressSubject.next({ status: 'recognizing', progress: 0, message: 'Procesando imagen...' });
 
       const result = await this.worker!.recognize(imageFile);
+      const words: any[] = (result as any)?.data?.words || [];
       
       const ocrResult: OCRResult = {
         text: result.data.text,
         confidence: result.data.confidence,
-        words: result.data.words.map(word => ({
+        words: words.map((word: any) => ({
           text: word.text,
           confidence: word.confidence,
           bbox: word.bbox
@@ -135,11 +136,12 @@ export class OCRService {
 
     try {
       const result = await this.worker!.recognize(base64Image);
+      const words: any[] = (result as any)?.data?.words || [];
       
       const ocrResult: OCRResult = {
         text: result.data.text,
         confidence: result.data.confidence,
-        words: result.data.words.map(word => ({
+        words: words.map((word: any) => ({
           text: word.text,
           confidence: word.confidence,
           bbox: word.bbox

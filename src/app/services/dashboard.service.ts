@@ -54,6 +54,38 @@ export class DashboardService {
     this.activityFeedSubject.next(updatedFeed);
   }
 
+  getOpportunityStages(market?: Market): Observable<{ name: 'Nuevas Oportunidades' | 'Expediente en Proceso' | 'Aprobado' | 'Activo' | 'Completado'; clientIds: string[]; count: number }[]> {
+    const stages: { name: 'Nuevas Oportunidades' | 'Expediente en Proceso' | 'Aprobado' | 'Activo' | 'Completado'; clientIds: string[]; count: number }[] = [
+      { name: 'Nuevas Oportunidades', clientIds: ['c1','c2','c3','c4','c5','c6','c7','c8','c9','c10'], count: 10 },
+      { name: 'Expediente en Proceso', clientIds: ['c11','c12','c13','c14','c15','c16'], count: 6 },
+      { name: 'Aprobado', clientIds: ['c17','c18','c19','c20'], count: 4 }
+    ];
+    return of(stages);
+  }
+
+  getActionableGroups(market?: Market): Observable<{ title: string; description: string; clients: { id: string; name: string; avatarUrl: string; status: string }[] }[]> {
+    const groups = [
+      {
+        title: 'Clientes con documentos faltantes',
+        description: 'Priorizar recolección de documentos',
+        clients: [
+          { id: 'c1', name: 'Juan Pérez', avatarUrl: '', status: 'Pendiente' },
+          { id: 'c2', name: 'María López', avatarUrl: '', status: 'Pendiente' }
+        ]
+      }
+    ];
+    return of(groups);
+  }
+
+  getAllClients(market?: Market): Observable<Array<{ id: string; name: string; avatarUrl: string; status: string; healthScore?: number }>> {
+    const clients = [
+      { id: 'c1', name: 'Juan Pérez', avatarUrl: '', status: 'Activo', healthScore: 82 },
+      { id: 'c2', name: 'María López', avatarUrl: '', status: 'Expediente', healthScore: 68 },
+      { id: 'c3', name: 'Carlos Ruiz', avatarUrl: '', status: 'Pendiente', healthScore: 45 }
+    ];
+    return of(clients);
+  }
+
   /**
    * Mock data for development
    */

@@ -481,7 +481,7 @@ export interface ActionButton {
   `]
 })
 export class NextBestActionHeroComponent implements OnInit {
-  @Input() actionData?: NextBestActionData;
+  @Input('data') actionData?: NextBestActionData;
   @Output() actionExecuted = new EventEmitter<{action: ActionButton, context: NextBestActionData}>();
 
   constructor() { }

@@ -69,7 +69,7 @@ export interface RiskRadarClient {
         <div class="client-info-panel" *ngIf="selectedClient">
           <div class="client-info-header">
             <h4 class="client-info-name">{{ selectedClient.name }}</h4>
-            <button class="close-info" (click)="selectedClient = null">×</button>
+            <button class="close-info" (click)="selectedClient = undefined">×</button>
           </div>
           
           <div class="client-info-content">
@@ -559,26 +559,26 @@ export class RiskRadarComponent implements OnInit {
     const stats = this.clients.reduce((acc, client) => {
       acc[client.riskLevel] = (acc[client.riskLevel] || 0) + 1;
       return acc;
-    }, {} as Record<string, number>);
+    }, {} as Record<'low' | 'medium' | 'high' | 'critical', number>);
 
     return [
       {
-        value: stats.critical || 0,
+        value: stats['critical'] || 0,
         label: 'Críticos',
         color: 'var(--error-500)'
       },
       {
-        value: stats.high || 0,
+        value: stats['high'] || 0,
         label: 'Alto Riesgo',
         color: 'var(--warning-500)'
       },
       {
-        value: stats.medium || 0,
+        value: stats['medium'] || 0,
         label: 'Atención',
         color: 'var(--accent-amber-500)'
       },
       {
-        value: stats.low || 0,
+        value: stats['low'] || 0,
         label: 'Estables',
         color: 'var(--success-500)'
       }

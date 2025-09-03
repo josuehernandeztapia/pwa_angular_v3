@@ -24,9 +24,9 @@ import { Client, EventLog, ImportStatus } from '../../../models/types';
             </span>
           </div>
         </div>
-        <div class="client-score" *ngIf="client?.healthScore">
+        <div class="client-score" *ngIf="client?.healthScore != null">
           <span class="score-label">Score de Salud</span>
-          <span class="score-value" [class]="client?.healthScore !== undefined ? getScoreClass(client.healthScore) : ''">{{ client?.healthScore || 'N/A' }}%</span>
+          <span class="score-value" [class]="getHealthScoreClass()">{{ client?.healthScore != null ? client?.healthScore : 'N/A' }}%</span>
         </div>
         
         <!-- Protection Status Indicator (Financial Products Only) -->
@@ -764,6 +764,7 @@ export class ClienteDetailComponent implements OnInit {
     this.client = {
       id: 'client-001',
       name: 'Juan Pérez García',
+      avatarUrl: '',
       email: 'juan.perez@email.com',
       phone: '+52 449 123 4567',
       rfc: 'PEGJ850315ABC',
@@ -771,6 +772,7 @@ export class ClienteDetailComponent implements OnInit {
       market: 'aguascalientes',
       flow: 'VentaPlazo' as any,
       healthScore: 85,
+      events: [],
       documents: [
         { id: 'doc1', name: 'INE Vigente', status: 'Aprobado' as any },
         { id: 'doc2', name: 'Comprobante de domicilio', status: 'Pendiente' as any },
@@ -925,6 +927,14 @@ export class ClienteDetailComponent implements OnInit {
     return 'score-poor';
   }
   
+  getHealthScoreClass(): string {
+    const score = this.client?.healthScore;
+    if (score == null) {
+      return '';
+    }
+    return this.getScoreClass(score);
+  }
+  
   // Progress Methods
   getSavingsProgress(): number {
     return this.client?.currentSavings || 0;
@@ -1032,15 +1042,21 @@ export class ClienteDetailComponent implements OnInit {
     if (!this.client?.importStatus) return;
     
     const milestone = this.client.importStatus[milestoneKey];
-    if (!milestone.completed) {
+    if (!milestone || Array.isArray(milestone)) {
+      return;
+    }
+    if ((milestone as any).completed === false || (milestone as any).inProgress === true || (milestone as any).status !== 'completed') {
       // Mark as in progress or completed
-      if (milestone.inProgress) {
-        milestone.completed = true;
-        milestone.completedAt = new Date();
-        milestone.inProgress = false;
+      const m = milestone as any;
+      if (m.inProgress) {
+        m.completed = true;
+        m.status = 'completed';
+        m.completedAt = new Date();
+        m.inProgress = false;
       } else {
-        milestone.inProgress = true;
-        milestone.startedAt = new Date();
+        m.inProgress = true;
+        m.status = 'in_progress';
+        m.startedAt = new Date();
       }
       
       console.log(`Updated milestone ${milestoneKey}:`, milestone);

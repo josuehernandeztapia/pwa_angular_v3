@@ -44,6 +44,14 @@ export class ApiService {
   }
 
   /**
+   * Search clients by free-text query (name, email, phone)
+   */
+  searchClients(query: string): Observable<Client[]> {
+    // Reuse filtering capabilities of getClients
+    return this.getClients({ search: query });
+  }
+
+  /**
    * Get client by ID
    */
   getClientById(id: string): Observable<Client | null> {

@@ -442,7 +442,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.dashboardService.getActionableGroups(this.selectedMarket).toPromise(),
       this.dashboardService.getAllClients(this.selectedMarket).toPromise()
     ]).then(([stats, funnel, groups, clients]) => {
-      this.stats = stats;
+      this.stats = stats || null;
       this.funnelData = funnel || [];
       this.actionableGroups = groups || [];
       this.allClients = clients || [];

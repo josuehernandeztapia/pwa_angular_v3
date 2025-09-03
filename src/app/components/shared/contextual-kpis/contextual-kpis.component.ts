@@ -33,7 +33,7 @@ export interface KPIData {
         >
           <div class="kpi-header">
             <div class="kpi-icon">{{ kpi.icon }}</div>
-            <div class="kpi-trend" [class]="'trend-' + kpi.trend">
+            <div class="kpi-trend" *ngIf="showTrends" [class]="'trend-' + kpi.trend">
               <span class="trend-icon">{{ getTrendIcon(kpi.trend) }}</span>
               <span class="trend-percentage">{{ kpi.trendPercentage }}%</span>
             </div>
@@ -258,6 +258,7 @@ export interface KPIData {
 })
 export class ContextualKPIsComponent implements OnInit {
   @Input() kpis: KPIData[] = [];
+  @Input() showTrends: boolean = false;
 
   // Expose Math to template
   Math = Math;

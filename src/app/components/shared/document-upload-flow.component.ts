@@ -64,12 +64,12 @@ interface FlowContext {
             <div class="space-y-4">
               <div *ngFor="let doc of requiredDocuments; let i = index" 
                    class="border rounded-lg p-4 transition-all duration-200"
-                   [class.border-green-300]="doc.status === 'APROBADO'"
-                   [class.bg-green-50]="doc.status === 'APROBADO'"
-                   [class.border-yellow-300]="doc.status === 'PENDIENTE'"
-                   [class.bg-yellow-50]="doc.status === 'PENDIENTE'"
-                   [class.border-red-300]="doc.status === 'RECHAZADO'"
-                   [class.bg-red-50]="doc.status === 'RECHAZADO'">
+                   [class.border-green-300]="doc.status === DocumentStatus.Aprobado"
+                   [class.bg-green-50]="doc.status === DocumentStatus.Aprobado"
+                   [class.border-yellow-300]="doc.status === DocumentStatus.Pendiente"
+                   [class.bg-yellow-50]="doc.status === DocumentStatus.Pendiente"
+                   [class.border-red-300]="doc.status === DocumentStatus.Rechazado"
+                   [class.bg-red-50]="doc.status === DocumentStatus.Rechazado">
                 
                 <div class="flex items-center justify-between">
                   <div class="flex-1">
@@ -87,7 +87,7 @@ interface FlowContext {
                   <div class="flex items-center space-x-2">
                     <!-- Upload Button -->
                     <button
-                      *ngIf="doc.status === 'PENDIENTE'"
+                      *ngIf="doc.status === DocumentStatus.Pendiente"
                       (click)="uploadDocument(doc)"
                       class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                     >
@@ -96,10 +96,10 @@ interface FlowContext {
                     
                     <!-- Status Icon -->
                     <div class="flex items-center">
-                      <span *ngIf="doc.status === 'APROBADO'" class="text-green-500 text-xl">✅</span>
-                      <span *ngIf="doc.status === 'PENDIENTE'" class="text-yellow-500 text-xl">⏳</span>
-                      <span *ngIf="doc.status === 'RECHAZADO'" class="text-red-500 text-xl">❌</span>
-                      <div *ngIf="doc.status === 'PROCESANDO'" 
+                      <span *ngIf="doc.status === DocumentStatus.Aprobado" class="text-green-500 text-xl">✅</span>
+                      <span *ngIf="doc.status === DocumentStatus.Pendiente" class="text-yellow-500 text-xl">⏳</span>
+                      <span *ngIf="doc.status === DocumentStatus.Rechazado" class="text-red-500 text-xl">❌</span>
+                      <div *ngIf="doc.status === DocumentStatus.EnRevision" 
                            class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
                     </div>
                   </div>
@@ -645,6 +645,9 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
     private ocrService: OCRService
   ) {}
 
+  // Expose enums to template
+  protected readonly DocumentStatus = DocumentStatus;
+
   ngOnInit() {
     this.initializeFlow();
   }
@@ -718,7 +721,7 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
   }
 
   private showFileUploadDialog(document: Document) {
-    const input = document.createElement('input');
+    const input = window.document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*,application/pdf';
     input.multiple = false;
@@ -735,7 +738,7 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
 
   private async processUploadedFile(file: File, document: Document) {
     try {
-      document.status = DocumentStatus.Procesando;
+      document.status = DocumentStatus.EnRevision;
       this.updateCompletionStatus();
 
       // Check if it's an image for OCR processing
@@ -961,7 +964,7 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
   getStatusText(status: DocumentStatus): string {
     switch (status) {
       case DocumentStatus.Pendiente: return 'Pendiente de subir';
-      case DocumentStatus.Procesando: return 'Procesando...';
+      case DocumentStatus.EnRevision: return 'Procesando...';
       case DocumentStatus.Aprobado: return 'Aprobado';
       case DocumentStatus.Rechazado: return 'Rechazado - Revisar';
       default: return status;

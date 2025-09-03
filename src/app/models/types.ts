@@ -64,6 +64,10 @@ export interface EventLog {
     amount?: number;
     currency?: 'MXN';
     plate?: string;
+    paymentMethod?: string;
+    reference?: string;
+    documentName?: string;
+    status?: string;
   }
 }
 
@@ -123,11 +127,14 @@ export interface CollectiveCreditGroup {
 }
 
 export type ImportMilestoneStatus = {
-  status: 'completed' | 'in_progress' | 'pending';
+  status?: 'completed' | 'in_progress' | 'pending';
   startedAt?: Date;
   completedAt?: Date;
   estimatedDays?: number;
   notes?: string;
+  // Backwards-compatibility flags used in legacy UI code
+  completed?: boolean;
+  inProgress?: boolean;
 };
 
 // POST-SALES SYSTEM TYPES
@@ -416,6 +423,18 @@ export interface Client {
   updatedAt?: Date;
   lastPayment?: Date;
   lastModified?: Date;
+  // Convenience fields for UI components
+  currentSavings?: number;
+  savingsGoal?: number;
+  totalPayments?: number;
+  completedPayments?: number;
+  lastPaymentDate?: Date;
+  nextPaymentDue?: Date;
+  // Optional vehicle info summary for UI
+  vehicleInfo?: {
+    model: string;
+    vin: string;
+  };
 }
 
 // Dashboard data interfaces
@@ -583,6 +602,15 @@ export type TandaMilestone = {
     unitNumber?: number;
     duration: number; // in months
     label: string;
+    month?: number;
+    completed?: boolean;
+    current?: boolean;
+    emoji?: string;
+    title?: string;
+    description?: string;
+    amount?: number;
+    details?: string[];
+    memberName?: string;
 };
 
 export interface NavigationContext {
@@ -675,7 +703,7 @@ export interface TandaSimDraft {
 }
 
 // Additional types for cotizador
-export type ClientType = 'Individual' | 'Colectivo';
+export type ClientType = 'individual' | 'colectivo';
 export type SimulatorMode = 'acquisition' | 'savings';
 
 export interface ProductPackage {

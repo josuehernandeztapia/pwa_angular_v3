@@ -212,37 +212,37 @@ import {
                   <!-- Container Number -->
                   <div class="meta-item" *ngIf="event.meta?.containerNumber">
                     <span class="meta-label">Contenedor:</span>
-                    <span class="meta-value">{{ event.meta.containerNumber }}</span>
+                    <span class="meta-value">{{ event.meta?.containerNumber }}</span>
                   </div>
                   
                   <!-- Port Name -->
                   <div class="meta-item" *ngIf="event.meta?.portName">
                     <span class="meta-label">Puerto:</span>
-                    <span class="meta-value">{{ event.meta.portName }}</span>
+                    <span class="meta-value">{{ event.meta?.portName }}</span>
                   </div>
                   
                   <!-- Vessel Name -->
                   <div class="meta-item" *ngIf="event.meta?.vesselName">
                     <span class="meta-label">Embarcación:</span>
-                    <span class="meta-value">{{ event.meta.vesselName }}</span>
+                    <span class="meta-value">{{ event.meta?.vesselName }}</span>
                   </div>
                   
                   <!-- Customs Reference -->
                   <div class="meta-item" *ngIf="event.meta?.customsReference">
                     <span class="meta-label">Ref. Aduanal:</span>
-                    <span class="meta-value">{{ event.meta.customsReference }}</span>
+                    <span class="meta-value">{{ event.meta?.customsReference }}</span>
                   </div>
                   
                   <!-- Warehouse Location -->
                   <div class="meta-item" *ngIf="event.meta?.warehouseLocation">
                     <span class="meta-label">Bodega:</span>
-                    <span class="meta-value">{{ event.meta.warehouseLocation }}</span>
+                    <span class="meta-value">{{ event.meta?.warehouseLocation }}</span>
                   </div>
                   
                   <!-- Notes -->
                   <div class="meta-item full-width" *ngIf="event.meta?.notes">
                     <span class="meta-label">Notas:</span>
-                    <span class="meta-value">{{ event.meta.notes }}</span>
+                    <span class="meta-value">{{ event.meta?.notes }}</span>
                   </div>
                 </div>
               </div>
@@ -1212,7 +1212,7 @@ export class DeliveryDetailComponent implements OnInit {
   }
 
   getStatusTitle(status: string): string {
-    return DELIVERY_STATUS_DESCRIPTIONS[status as any]?.title || status;
+    return DELIVERY_STATUS_DESCRIPTIONS[status as keyof typeof DELIVERY_STATUS_DESCRIPTIONS]?.title || status;
   }
 
   getStatusColor(status: string): string {

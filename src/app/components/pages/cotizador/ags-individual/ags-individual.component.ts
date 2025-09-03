@@ -704,21 +704,27 @@ export class AgsIndividualComponent implements OnInit {
     }
 
     const quoteData = {
-      totalPrice: this.currentQuote.totalPrice,
-      downPayment: this.currentQuote.downPayment,
-      amountToFinance: this.currentQuote.amountToFinance || 0,
-      monthlyPayment: this.currentQuote.monthlyPayment || 0,
-      term: this.currentQuote.term || 0,
-      interestRate: 25.5,
-      vehicleModel: '🚐 Vagoneta H6C (19 Pasajeros)',
-      saleType: this.isPlazoSale() ? 'Venta a Plazo' : 'Compra de Contado',
-      components: this.packageData.components
-        .filter(c => !c.isOptional || this.selectedOptionals.includes(c.id))
-        .map(c => ({ name: c.name, price: c.price })),
-      market: 'Aguascalientes'
+      clientInfo: {
+        name: 'Cliente AGS',
+        contact: 'N/A'
+      },
+      ecosystemInfo: {
+        name: 'Aguascalientes',
+        route: 'AGS-Ruta',
+        market: 'AGS' as const
+      },
+      quoteDetails: {
+        vehicleValue: this.currentQuote.totalPrice,
+        downPaymentOptions: [this.currentQuote.downPayment],
+        monthlyPaymentOptions: [this.currentQuote.monthlyPayment || 0],
+        termOptions: [this.currentQuote.term || 0],
+        interestRate: 25.5
+      },
+      validUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      quoteNumber: `AGS-${Date.now()}`
     };
 
-    this.pdfExportService.generateQuotePDF(quoteData)
+    this.pdfExportService.generateQuotePDF(quoteData as any)
       .then(() => {
         this.toast.success('PDF generado exitosamente');
       })

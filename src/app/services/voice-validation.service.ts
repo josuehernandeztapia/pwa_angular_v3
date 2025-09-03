@@ -26,7 +26,7 @@ interface RequiredQuestion {
   go_no_go_impact?: boolean;
 }
 
-interface VoiceValidationResult {
+export interface VoiceValidationResult {
   session_id: string;
   transcript: string;
   compliance_score: number; // 0-100
@@ -1213,6 +1213,17 @@ export class VoiceValidationService {
   clearVoiceEvaluations(): void {
     console.log(`🧹 Clearing ${this.voiceEvaluations.length} voice evaluations`);
     this.voiceEvaluations = [];
+  }
+
+  // Helper: Generate a simple voice pattern phrase for verification
+  generateVoicePattern(): string {
+    const phrases = [
+      'Mi voz confirma mi identidad para Conductores',
+      'Autorizo verificación de identidad por voz',
+      'Hoy confirmo mi identidad con mi voz',
+      'Verificación de identidad por voz completada'
+    ];
+    return phrases[Math.floor(Math.random() * phrases.length)];
   }
 
   // ✅ NUEVO: Get Voice Evaluation by Question ID

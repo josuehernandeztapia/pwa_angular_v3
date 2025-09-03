@@ -31,6 +31,7 @@ export interface FlowConnection {
   targetPortId: string;
   isValid?: boolean;
   validationMessage?: string;
+  condition?: 'always' | 'success' | 'failure' | 'custom';
 }
 
 export enum NodeType {
@@ -383,7 +384,7 @@ export interface MarketProductCompatibility {
               <h4>📋 Código Generado:</h4>
               <div class="code-tabs">
                 <button 
-                  *ngFor="let file of Object.keys(generatedCode)"
+                  *ngFor="let file of getGeneratedFiles()"
                   class="code-tab"
                   [class.active]="activeCodeTab === file"
                   (click)="activeCodeTab = file"
@@ -392,7 +393,7 @@ export interface MarketProductCompatibility {
                 </button>
               </div>
               <div class="code-content">
-                <pre><code>{{ generatedCode[activeCodeTab] }}</code></pre>
+                <pre><code>{{ getGeneratedCode(activeCodeTab) }}</code></pre>
               </div>
             </div>
           </div>
@@ -1338,6 +1339,14 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     this.loadSampleFlow();
   }
 
+  getGeneratedFiles(): string[] {
+    return Object.keys(this.generatedCode || {});
+  }
+
+  getGeneratedCode(file: string): string {
+    return (this.generatedCode && this.generatedCode[file]) || '';
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -1725,7 +1734,7 @@ ${documents}
   template: \`
     <div class="product-container">
       <h2>${productNode.name}</h2>
-      <p>Generated component for ${productNode.description || productNode.name}</p>
+      <p>Generated component for ${productNode.name}</p>
     </div>
   \`
 })

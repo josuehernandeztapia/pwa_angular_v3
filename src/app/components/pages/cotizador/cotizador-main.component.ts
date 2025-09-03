@@ -192,7 +192,7 @@ interface AmortizationRow {
               <!-- Default Savings -->
               <div *ngIf="!(market === 'aguascalientes' && clientType === 'individual') && !(market === 'edomex' && clientType === 'colectivo')" class="savings-controls">
                 <div class="form-group">
-                  <label for="voluntary">Aportación Voluntaria Mensual ({{ formatCurrency(parseFloat(voluntaryContribution) || 0) }})</label>
+                  <label for="voluntary">Aportación Voluntaria Mensual ({{ formatCurrency(toNumber(voluntaryContribution) || 0) }})</label>
                   <input 
                     type="range"
                     min="0"
@@ -348,7 +348,7 @@ interface AmortizationRow {
                   <div 
                     class="bar-segment bar-down" 
                     [style.width.%]="getDownPaymentPercentage()"
-                    [title]="'Enganche: ' + formatCurrency(parseFloat(initialDownPayment) || 0)"
+                    [title]="'Enganche: ' + formatCurrency(toNumber(initialDownPayment) || 0)"
                   ></div>
                   <div 
                     class="bar-segment bar-saved" 
@@ -358,7 +358,7 @@ interface AmortizationRow {
                 </div>
                 <div class="remainder-footer">
                   <span>Remanente a Liquidar:</span>
-                  <span class="remainder-amount">{{ formatCurrency(totalPrice - (parseFloat(initialDownPayment) || 0) - projectedCollectionSavings) }}</span>
+                  <span class="remainder-amount">{{ formatCurrency(totalPrice - (toNumber(initialDownPayment) || 0) - projectedCollectionSavings) }}</span>
                 </div>
               </div>
 
@@ -1040,10 +1040,14 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
   @Output() onFormalize = new EventEmitter<Quote | Event>();
 
   private destroy$ = new Subject<void>();
+  toNumber(value: any): number {
+    const n = typeof value === 'number' ? value : parseFloat(value || '0');
+    return isNaN(n) ? 0 : n;
+  }
 
   // Port exacto de state desde React Cotizador
-  market: Market = '';
-  clientType: ClientType = '';
+  market: Market | '' = '';
+  clientType: ClientType | '' = '';
   pkg: ProductPackage | null = null;
   isLoading = false;
 

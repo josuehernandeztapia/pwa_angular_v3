@@ -383,7 +383,7 @@ export class EdomexIndividualComponent implements OnInit, OnDestroy {
     if (!this.scenario) return;
 
     // Store scenario data for client creation
-    const clientData: Partial<Client> = {
+    const clientData: any = {
       simulatorData: {
         type: 'EDOMEX_INDIVIDUAL',
         scenario: this.scenario,
@@ -411,19 +411,16 @@ export class EdomexIndividualComponent implements OnInit, OnDestroy {
     }
 
     const planningData = {
-      targetAmount: this.scenario.targetAmount,
+      targetDownPayment: this.scenario.targetAmount,
       monthsToTarget: this.scenario.monthsToTarget,
-      monthlyContribution: this.scenario.monthlyContribution,
-      projectedBalance: this.scenario.projectedBalance,
-      timeline: this.scenario.timeline,
-      collectionContribution: this.scenario.collectionContribution,
-      voluntaryContribution: this.scenario.voluntaryContribution,
+      monthlyCollection: this.scenario.collectionContribution,
+      voluntaryMonthly: this.scenario.voluntaryContribution,
+      plateConsumption: this.configForm.value.currentPlateConsumption,
       overpricePerLiter: this.configForm.value.overpricePerLiter,
-      currentPlateConsumption: this.configForm.value.currentPlateConsumption,
-      market: 'Estado de México'
+      projectedBalance: this.scenario.projectedBalance
     };
 
-    this.pdfExportService.generateIndividualPlanningPDF(planningData)
+    this.pdfExportService.generateIndividualPlanningPDF(planningData as any)
       .then(() => {
         this.toast.success('PDF generado exitosamente');
       })

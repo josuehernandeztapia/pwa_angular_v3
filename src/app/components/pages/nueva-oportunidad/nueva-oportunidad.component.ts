@@ -16,6 +16,7 @@ interface WizardStep {
   visible: boolean;
   completed: boolean;
   validationFields?: string[];
+  icon?: string;
 }
 
 @Component({
@@ -40,10 +41,9 @@ interface WizardStep {
           </div>
         </div>
         <p class="subtitle">
-          {{ smartContext.market ? 
-            `Creando oportunidad para ${getMarketName(smartContext.market)} con contexto inteligente del Dashboard` : 
-            'El primer paso para ayudar a un transportista a obtener su unidad' 
-          }}
+          {{ smartContext.market 
+            ? ('Creando oportunidad para ' + getMarketName(smartContext.market) + ' con contexto inteligente del Dashboard')
+            : 'El primer paso para ayudar a un transportista a obtener su unidad' }}
         </p>
         
         <!-- Progress Indicator -->
@@ -61,8 +61,8 @@ interface WizardStep {
             >
               <span class="step-icon">{{ getStepIcon(i) }}</span>
               <span class="step-label">{{ step.label }}</span>
-              <span class="step-progress" *ngIf="getStepStatus(i) === 'current' && getCurrentStepProgress() > 0">
-                ({{ (getCurrentStepProgress() * 100) | number:'1.0-0' }}%)
+              <span class="step-progress" *ngIf="getStepStatus(i) === 'current' && currentStepProgress > 0">
+                ({{ (currentStepProgress * 100) | number:'1.0-0' }}%)
               </span>
             </span>
           </div>
@@ -1576,7 +1576,7 @@ export class NuevaOportunidadComponent implements OnInit {
     return !!(field && field.invalid && (field.dirty || field.touched));
   }
 
-  selectOpportunityType(type: 'COTIZACION' | 'SIMULACION' | 'VENTA_DIRECTA') {
+  selectOpportunityType(type: 'COTIZACION' | 'SIMULACION') {
     this.opportunityType = type;
     this.opportunityTypeError = false;
   }
@@ -1586,9 +1586,7 @@ export class NuevaOportunidadComponent implements OnInit {
     const clientType = this.clientTypeValue;
     const opType = this.opportunityType;
 
-    if (opType === 'VENTA_DIRECTA') {
-      return 'Venta Directa';
-    } else if (opType === 'COTIZACION') {
+    if (opType === 'COTIZACION') {
       return 'Venta a Plazo';
     } else {
       if (clientType === 'Individual') {
@@ -1604,9 +1602,7 @@ export class NuevaOportunidadComponent implements OnInit {
     const clientType = this.clientTypeValue;
     const opType = this.opportunityType;
 
-    if (opType === 'VENTA_DIRECTA') {
-      return `Venta directa de contado en ${market === 'aguascalientes' ? 'Aguascalientes' : 'Estado de México'} - proceso simplificado`;
-    } else if (opType === 'COTIZACION') {
+    if (opType === 'COTIZACION') {
       return `Cotización para financiamiento en ${market === 'aguascalientes' ? 'Aguascalientes' : 'Estado de México'}`;
     } else {
       if (clientType === 'Individual') {
@@ -1767,6 +1763,10 @@ export class NuevaOportunidadComponent implements OnInit {
     const partialProgress = currentStepProgress * (100 / totalVisibleSteps);
     
     return Math.min(baseProgress + partialProgress, 100);
+  }
+
+  get currentStepProgress(): number {
+    return this.getCurrentStepProgress();
   }
 
   private getCurrentStepProgress(): number {
@@ -2077,7 +2077,7 @@ export class NuevaOportunidadComponent implements OnInit {
     if (currentName.length >= 2) {
       this.clientSuggestions = this.clientSuggestions.filter(suggestion =>
         suggestion.name.toLowerCase().includes(currentName) ||
-        suggestion.name.toLowerCase().split(' ').some(part => part.startsWith(currentName))
+        suggestion.name.toLowerCase().split(' ').some((part: string) => part.startsWith(currentName))
       );
     }
 
