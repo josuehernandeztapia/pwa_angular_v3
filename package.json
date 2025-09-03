@@ -101,6 +101,7 @@
     "@stryker-mutator/karma-runner": "^9.1.1",
     "@stryker-mutator/typescript-checker": "^9.1.1",
     "@testing-library/angular": "^17.4.0",
+    "@testing-library/dom": "^9.3.4",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/jasmine": "~5.1.0",
@@ -126,6 +127,7 @@
     "lint-staged": "^16.1.6",
     "nyc": "^17.1.0",
     "playwright": "^1.55.0",
+    "puppeteer": "^24.18.0",
     "typescript": "~5.4.2",
     "wait-on": "^8.0.1",
     "webpack-bundle-analyzer": "^4.10.2"

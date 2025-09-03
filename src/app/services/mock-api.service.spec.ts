@@ -50,12 +50,18 @@ describe('MockApiService', () => {
   const mockCollectiveGroup: CollectiveCreditGroup = {
     id: 'cc1',
     name: 'CC-2405 MAYO',
-    ecosystemId: 'eco1',
+    capacity: 10,
     members: [],
+    totalUnits: 5,
+    unitsDelivered: 2,
+    savingsGoalPerUnit: 153075,
+    currentSavingsProgress: 0,
+    monthlyPaymentPerUnit: 25720.52,
+    currentMonthPaymentProgress: 0,
+    ecosystemId: 'eco1',
     status: 'active',
     createdAt: new Date(),
-    totalMembers: 10,
-    unitsDelivered: 2
+    totalMembers: 10
   };
 
   beforeEach(() => {
@@ -150,8 +156,8 @@ describe('MockApiService', () => {
     });
 
     it('should create client with slow network delay', (done) => {
-      const newClient = { ...mockClient };
-      delete newClient.id;
+      const newClient: Partial<Client> = { ...mockClient };
+      delete (newClient as any).id;
       clientDataSpy.createClient.and.returnValue(of(mockClient));
 
       const startTime = Date.now();
@@ -177,7 +183,7 @@ describe('MockApiService', () => {
     });
 
     it('should add client event with fast network delay', (done) => {
-      const eventData = { message: 'Test event', type: 'system' };
+      const eventData = { message: 'Test event', type: 'System' as any, actor: 'Sistema' as any };
       const updatedClient = { ...mockClient };
       clientDataSpy.addClientEvent.and.returnValue(of(updatedClient));
 
@@ -192,9 +198,9 @@ describe('MockApiService', () => {
       const updatedClient = { ...mockClient };
       clientDataSpy.updateDocumentStatus.and.returnValue(of(updatedClient));
 
-      service.updateDocumentStatus('1', 'doc1', 'approved').subscribe(client => {
+      service.updateDocumentStatus('1', 'doc1', 'Aprobado' as any).subscribe(client => {
         expect(client).toEqual(updatedClient);
-        expect(clientDataSpy.updateDocumentStatus).toHaveBeenCalledWith('1', 'doc1', 'approved');
+        expect(clientDataSpy.updateDocumentStatus).toHaveBeenCalledWith('1', 'doc1', 'Aprobado' as any);
         done();
       });
     });
@@ -231,8 +237,8 @@ describe('MockApiService', () => {
     });
 
     it('should create ecosystem with slow network delay', (done) => {
-      const newEcosystem = { ...mockEcosystem };
-      delete newEcosystem.id;
+      const newEcosystem: Partial<Ecosystem> = { ...mockEcosystem };
+      delete (newEcosystem as any).id;
       ecosystemDataSpy.createEcosystem.and.returnValue(of(mockEcosystem));
 
       const startTime = Date.now();
@@ -249,9 +255,9 @@ describe('MockApiService', () => {
       const updatedEcosystem = { ...mockEcosystem };
       ecosystemDataSpy.updateEcosystemDocumentStatus.and.returnValue(of(updatedEcosystem));
 
-      service.updateEcosystemDocument('eco1', 'doc1', 'approved').subscribe(ecosystem => {
+      service.updateEcosystemDocument('eco1', 'doc1', 'Aprobado' as any).subscribe(ecosystem => {
         expect(ecosystem).toEqual(updatedEcosystem);
-        expect(ecosystemDataSpy.updateEcosystemDocumentStatus).toHaveBeenCalledWith('eco1', 'doc1', 'approved');
+        expect(ecosystemDataSpy.updateEcosystemDocumentStatus).toHaveBeenCalledWith('eco1', 'doc1', 'Aprobado' as any);
         done();
       });
     });
@@ -279,7 +285,7 @@ describe('MockApiService', () => {
     });
 
     it('should add member to group with normal network delay', (done) => {
-      const member = { clientId: '1', name: 'Test Member' };
+      const member = { clientId: '1', name: 'Test Member', avatarUrl: '', status: 'active' as const, individualContribution: 0 };
       const updatedGroup = { ...mockCollectiveGroup };
       collectiveGroupDataSpy.addMemberToGroup.and.returnValue(of(updatedGroup));
 

@@ -389,8 +389,9 @@ export class BackendApiService {
   private async syncPendingData(): Promise<void> {
     try {
       const pendingActions = await this.storage.getPendingActions();
+      const actionsArray = Array.isArray(pendingActions) ? pendingActions : [];
       
-      for (const action of pendingActions) {
+      for (const action of actionsArray) {
         try {
           await this.executeAction(action);
           await this.storage.removeCompletedAction(action.id);

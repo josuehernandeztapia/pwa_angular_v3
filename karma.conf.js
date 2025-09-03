@@ -1,6 +1,14 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
 
+// Ensure Chrome binary is available in CI/containerized environments
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  process.env.CHROME_BIN = require('puppeteer').executablePath();
+} catch (e) {
+  // Puppeteer not installed; fallback to system Chrome if available
+}
+
 module.exports = function (config) {
   config.set({
     basePath: '',

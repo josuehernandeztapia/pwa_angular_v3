@@ -38,9 +38,12 @@ export class OCRService {
   private isInitialized = false;
   private progressSubject = new BehaviorSubject<OCRProgress>({ status: 'idle', progress: 0, message: '' });
   
+  // Allow injecting createWorker for easier testing/mocking
+  constructor(private createWorkerFn: typeof createWorker = createWorker) {}
+  
   public progress$ = this.progressSubject.asObservable();
 
-  constructor() {}
+  
 
   /**
    * Initialize Tesseract worker with Spanish and English support
@@ -53,7 +56,7 @@ export class OCRService {
     try {
       this.progressSubject.next({ status: 'initializing', progress: 0, message: 'Inicializando OCR...' });
       
-      this.worker = await createWorker('spa+eng', 1, {
+      this.worker = await this.createWorkerFn('spa+eng', 1, {
         logger: (m: any) => {
           console.log('OCR Logger:', m);
           this.progressSubject.next({

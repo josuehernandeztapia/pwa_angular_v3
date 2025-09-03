@@ -110,7 +110,7 @@ export class MetaMapService {
    * Port exacto de completeKyc desde React simulationService.ts líneas 515-522
    */
   completeKyc(clientId: string, verificationData?: any): Observable<Client> {
-    return new Observable(observer => {
+    return new Observable<Client>(observer => {
       this.clientData.getClientById(clientId).subscribe(client => {
         if (!client) {
           observer.error('Client not found');
@@ -260,7 +260,7 @@ export class MetaMapService {
    * Simulate KYC failure for testing
    */
   simulateKycFailure(clientId: string, reason: string = 'Identity verification failed'): Observable<Client> {
-    return new Observable(observer => {
+    return new Observable<Client>(observer => {
       this.clientData.getClientById(clientId).subscribe(client => {
         if (!client) {
           observer.error('Client not found');
@@ -306,7 +306,7 @@ export class MetaMapService {
    * Check MetaMap SDK availability
    */
   checkSDKAvailability(): Observable<boolean> {
-    return new Observable(observer => {
+    return new Observable<boolean>(observer => {
       if (typeof window === 'undefined') {
         observer.next(false);
         observer.complete();

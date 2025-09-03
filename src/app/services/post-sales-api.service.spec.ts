@@ -27,15 +27,41 @@ describe('PostSalesApiService', () => {
   describe('sendVehicleDeliveredEvent', () => {
     it('should send vehicle delivered event successfully', () => {
       const mockEvent: VehicleDeliveredEvent = {
-        vin: '3N1CN7AP8KL123456',
-        deliveryDate: new Date('2024-02-01'),
-        clientName: 'José Hernández Pérez',
-        market: 'aguascalientes',
-        vehicleModel: 'Nissan Urvan',
-        clientContact: {
-          phone: '+5244000000',
-          email: 'jose.hernandez@email.com',
-          preferredChannel: 'whatsapp'
+        event: 'vehicle.delivered',
+        timestamp: new Date('2024-02-01'),
+        payload: {
+          clientId: 'client-1',
+          vehicle: {
+            vin: '3N1CN7AP8KL123456',
+            modelo: 'Nissan Urvan',
+            numeroMotor: 'NM123',
+            odometer_km_delivery: 10,
+            placas: 'XYZ-123',
+            estado: 'AGS'
+          },
+          contract: {
+            id: 'contract-1',
+            servicePackage: 'premium',
+            warranty_start: new Date('2024-02-01'),
+            warranty_end: new Date('2025-02-01')
+          },
+          contacts: {
+            primary: { name: 'José Hernández Pérez', phone: '+5244000000', email: 'jose.hernandez@email.com' },
+            whatsapp_optin: true
+          },
+          delivery: {
+            odometroEntrega: 10,
+            fechaEntrega: new Date('2024-02-01'),
+            horaEntrega: '10:00',
+            domicilioEntrega: 'Calle 1',
+            fotosVehiculo: [],
+            firmaDigitalCliente: 'url',
+            checklistEntrega: [],
+            incidencias: [],
+            entregadoPor: 'advisor-1'
+          },
+          legalDocuments: { factura: { filename: 'f.pdf', url: '', uploadedAt: new Date(), size: 1, type: 'pdf' }, polizaSeguro: { filename: 'p.pdf', url: '', uploadedAt: new Date(), size: 1, type: 'pdf' }, contratos: [], fechaTransferencia: new Date(), proveedorSeguro: 'X', duracionPoliza: 12, titular: 'Client' },
+          plates: { numeroPlacas: 'XYZ-123', estado: 'AGS', fechaAlta: new Date(), tarjetaCirculacion: { filename: 't.pdf', url: '', uploadedAt: new Date(), size: 1, type: 'pdf' }, fotografiasPlacas: [], hologramas: true }
         }
       };
 
@@ -59,15 +85,23 @@ describe('PostSalesApiService', () => {
 
     it('should handle error when sending vehicle delivered event', () => {
       const mockEvent: VehicleDeliveredEvent = {
-        vin: 'invalid-vin',
-        deliveryDate: new Date(),
-        clientName: 'Test Client',
-        market: 'aguascalientes',
-        vehicleModel: 'Test Model',
-        clientContact: {
-          phone: '+5244000000',
-          email: 'test@email.com',
-          preferredChannel: 'sms'
+        event: 'vehicle.delivered',
+        timestamp: new Date(),
+        payload: {
+          clientId: 'client-1',
+          vehicle: {
+            vin: 'invalid-vin',
+            modelo: 'Test Model',
+            numeroMotor: 'NM',
+            odometer_km_delivery: 0,
+            placas: 'AAA-000',
+            estado: 'AGS'
+          },
+          contract: { id: 'c', servicePackage: 'basic', warranty_start: new Date(), warranty_end: new Date() },
+          contacts: { primary: { name: 'Test Client', phone: '+52', email: 'test@email.com' }, whatsapp_optin: false },
+          delivery: { odometroEntrega: 0, fechaEntrega: new Date(), horaEntrega: '10:00', domicilioEntrega: 'X', fotosVehiculo: [], firmaDigitalCliente: 'X', checklistEntrega: [], incidencias: [], entregadoPor: 'a' },
+          legalDocuments: { factura: { filename: 'f', url: '', uploadedAt: new Date(), size: 1, type: 'pdf' }, polizaSeguro: { filename: 'p', url: '', uploadedAt: new Date(), size: 1, type: 'pdf' }, contratos: [], fechaTransferencia: new Date(), proveedorSeguro: 'X', duracionPoliza: 12, titular: 'X' },
+          plates: { numeroPlacas: 'AAA-000', estado: 'AGS', fechaAlta: new Date(), tarjetaCirculacion: { filename: 't', url: '', uploadedAt: new Date(), size: 1, type: 'pdf' }, fotografiasPlacas: [], hologramas: false }
         }
       };
 
@@ -87,20 +121,19 @@ describe('PostSalesApiService', () => {
   describe('getPostSalesRecord', () => {
     it('should retrieve post-sales record by VIN', () => {
       const mockVin = '3N1CN7AP8KL123456';
-      const mockRecord: PostSalesRecord = {
+      const mockRecord: any = {
         id: 'ps-001',
         vin: mockVin,
-        clientName: 'José Hernández Pérez',
-        deliveryDate: new Date('2024-02-01'),
-        vehicleModel: 'Nissan Urvan',
-        status: 'active',
-        nextServiceDate: new Date('2024-08-01'),
-        totalRevenue: 0,
-        servicesCompleted: 0,
-        clientSatisfactionScore: null,
-        preferredContactChannel: 'whatsapp',
-        contactFrequency: 'monthly',
-        specialNotes: null
+        clientId: 'client-1',
+        postSalesAgent: 'agent-1',
+        warrantyStatus: 'active',
+        servicePackage: 'premium',
+        nextMaintenanceDate: new Date('2024-08-01'),
+        nextMaintenanceKm: 10000,
+        odometroEntrega: 10,
+        createdAt: new Date('2024-02-01'),
+        warrantyStart: new Date('2024-02-01'),
+        warrantyEnd: new Date('2025-02-01')
       };
 
       const mockResponse = {
@@ -145,14 +178,14 @@ describe('PostSalesApiService', () => {
         scheduledDate: new Date('2024-08-01'),
         servicePackage: 'premium' as const,
         notes: 'Regular maintenance'
-      };
+      } as any;
 
       const mockResponse = {
         success: true,
         serviceId: 'svc-001'
       };
 
-      service.scheduleMaintenanceService(mockRequest).subscribe(response => {
+      (service as any).scheduleMaintenanceService(mockRequest).subscribe((response: any) => {
         expect(response.success).toBe(true);
         expect(response.serviceId).toBe('svc-001');
       });
@@ -166,7 +199,7 @@ describe('PostSalesApiService', () => {
 
   describe('recordClientContact', () => {
     it('should record client contact successfully', () => {
-      const mockContact = {
+      const mockContact: any = {
         vin: '3N1CN7AP8KL123456',
         contactDate: new Date('2024-02-01'),
         channel: 'whatsapp' as const,
@@ -182,7 +215,7 @@ describe('PostSalesApiService', () => {
         contactId: 'contact-001'
       };
 
-      service.recordClientContact(mockContact).subscribe(response => {
+      (service as any).recordClientContact(mockContact).subscribe((response: any) => {
         expect(response.success).toBe(true);
         expect(response.contactId).toBe('contact-001');
       });

@@ -34,20 +34,16 @@ const mockTesseractWorker = {
 
 const mockCreateWorker = jasmine.createSpy('createWorker').and.returnValue(Promise.resolve(mockTesseractWorker));
 
-// Mock the Tesseract module
-jest.mock('tesseract.js', () => ({
-  createWorker: mockCreateWorker,
-  PSM: {
-    SINGLE_BLOCK: 6
-  }
-}));
+// Provide a mock for createWorker via Angular DI
 
 describe('OCRService', () => {
   let service: OCRService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [OCRService]
+      providers: [
+        { provide: OCRService, useFactory: () => new OCRService(mockCreateWorker as any) }
+      ]
     });
     service = TestBed.inject(OCRService);
     
@@ -67,9 +63,9 @@ describe('OCRService', () => {
       expect(service.progress$).toBeDefined();
       
       service.progress$.subscribe(progress => {
-        expect(progress).toHaveProperty('status');
-        expect(progress).toHaveProperty('progress');
-        expect(progress).toHaveProperty('message');
+        expect((progress as any)['status']).toBeDefined();
+        expect((progress as any)['progress']).toBeDefined();
+        expect((progress as any)['message']).toBeDefined();
       });
     });
   });

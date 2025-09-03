@@ -47,11 +47,11 @@ describe('StorageService', () => {
     });
     
     // Mock window events
-    spyOn(window, 'addEventListener').and.callFake((event: string, callback: () => void) => {
+    spyOn(window, 'addEventListener').and.callFake(((event: any, listener: any) => {
       if (event === 'online' || event === 'offline') {
         // Store callbacks for testing
       }
-    });
+    }) as any);
 
     TestBed.configureTestingModule({
       providers: [StorageService]
@@ -61,7 +61,7 @@ describe('StorageService', () => {
     
     // Simulate successful DB initialization
     if (mockIDBRequest.onsuccess) {
-      mockIDBRequest.onsuccess();
+      (mockIDBRequest.onsuccess as any)();
     }
   });
 
@@ -94,7 +94,7 @@ describe('StorageService', () => {
       };
       
       if (mockIDBRequest.onupgradeneeded) {
-        mockIDBRequest.onupgradeneeded(mockEvent as any);
+        (mockIDBRequest.onupgradeneeded as any)(mockEvent as any);
       }
       
       expect(mockIDBDatabase.createObjectStore).toHaveBeenCalledWith('clients', { keyPath: 'id' });
@@ -108,8 +108,8 @@ describe('StorageService', () => {
       spyOn(console, 'error');
       
       if (mockIDBRequest.onerror) {
-        mockIDBRequest.error = new Error('DB init failed');
-        mockIDBRequest.onerror();
+        (mockIDBRequest as any).error = new Error('DB init failed');
+        (mockIDBRequest.onerror as any)();
       }
       
       expect(console.error).toHaveBeenCalledWith('Failed to open IndexedDB:', jasmine.any(Error));
@@ -142,7 +142,7 @@ describe('StorageService', () => {
       
       // Simulate successful save
       if (putRequest.onsuccess) {
-        putRequest.onsuccess();
+        (putRequest.onsuccess as any)();
       }
       
       await expectAsync(savePromise).toBeResolved();
@@ -167,7 +167,7 @@ describe('StorageService', () => {
       
       // Simulate successful retrieval
       if (getRequest.onsuccess) {
-        getRequest.onsuccess();
+        (getRequest.onsuccess as any)();
       }
       
       const result = await getPromise;
@@ -189,7 +189,7 @@ describe('StorageService', () => {
       const getPromise = service.getClient('non-existent');
       
       if (getRequest.onsuccess) {
-        getRequest.onsuccess();
+        (getRequest.onsuccess as any)();
       }
       
       const result = await getPromise;
@@ -214,7 +214,7 @@ describe('StorageService', () => {
       const getPromise = service.getClientsByEcosystem('ags-001');
       
       if (getAllRequest.onsuccess) {
-        getAllRequest.onsuccess();
+        (getAllRequest.onsuccess as any)();
       }
       
       const result = await getPromise;
@@ -237,7 +237,7 @@ describe('StorageService', () => {
       const savePromise = service.saveClient(mockClientData);
       
       if (putRequest.onerror) {
-        putRequest.onerror();
+        (putRequest.onerror as any)();
       }
       
       await expectAsync(savePromise).toBeRejectedWith(jasmine.any(Error));
@@ -268,7 +268,7 @@ describe('StorageService', () => {
       const savePromise = service.saveQuote(mockQuoteData);
       
       if (putRequest.onsuccess) {
-        putRequest.onsuccess();
+        (putRequest.onsuccess as any)();
       }
       
       await expectAsync(savePromise).toBeResolved();
@@ -289,7 +289,7 @@ describe('StorageService', () => {
       const getPromise = service.getQuote('quote-123');
       
       if (getRequest.onsuccess) {
-        getRequest.onsuccess();
+        (getRequest.onsuccess as any)();
       }
       
       const result = await getPromise;
@@ -314,7 +314,7 @@ describe('StorageService', () => {
       const getPromise = service.getQuotesByClient('client-123');
       
       if (getAllRequest.onsuccess) {
-        getAllRequest.onsuccess();
+        (getAllRequest.onsuccess as any)();
       }
       
       const result = await getPromise;
@@ -344,7 +344,7 @@ describe('StorageService', () => {
       const cachePromise = service.cacheFormData('form-123', mockFormData, 1800000); // 30 minutes
       
       if (putRequest.onsuccess) {
-        putRequest.onsuccess();
+        (putRequest.onsuccess as any)();
       }
       
       await expectAsync(cachePromise).toBeResolved();
@@ -376,7 +376,7 @@ describe('StorageService', () => {
       const getPromise = service.getCachedFormData('form-123');
       
       if (getRequest.onsuccess) {
-        getRequest.onsuccess();
+        (getRequest.onsuccess as any)();
       }
       
       const result = await getPromise;
@@ -406,7 +406,7 @@ describe('StorageService', () => {
       const getPromise = service.getCachedFormData('form-123');
       
       if (getRequest.onsuccess) {
-        getRequest.onsuccess();
+        (getRequest.onsuccess as any)();
       }
       
       const result = await getPromise;
@@ -427,7 +427,7 @@ describe('StorageService', () => {
       const deletePromise = service.deleteCachedFormData('form-123');
       
       if (deleteRequest.onsuccess) {
-        deleteRequest.onsuccess();
+        (deleteRequest.onsuccess as any)();
       }
       
       await expectAsync(deletePromise).toBeResolved();
@@ -456,7 +456,7 @@ describe('StorageService', () => {
       const queuePromise = service.queueOfflineAction(mockAction);
       
       if (putRequest.onsuccess) {
-        putRequest.onsuccess();
+        (putRequest.onsuccess as any)();
       }
       
       await expectAsync(queuePromise).toBeResolved();
@@ -487,7 +487,7 @@ describe('StorageService', () => {
       const getPromise = service.getPendingActions();
       
       if (getAllRequest.onsuccess) {
-        getAllRequest.onsuccess();
+        (getAllRequest.onsuccess as any)();
       }
       
       const result = await getPromise;
@@ -508,7 +508,7 @@ describe('StorageService', () => {
       const removePromise = service.removeCompletedAction('action-123');
       
       if (deleteRequest.onsuccess) {
-        deleteRequest.onsuccess();
+        (deleteRequest.onsuccess as any)();
       }
       
       await expectAsync(removePromise).toBeResolved();
@@ -532,7 +532,7 @@ describe('StorageService', () => {
       
       // Simulate successful clear for both stores
       if (clearRequest.onsuccess) {
-        clearRequest.onsuccess();
+        (clearRequest.onsuccess as any)();
       }
       
       await expectAsync(clearPromise).toBeResolved();
@@ -555,7 +555,7 @@ describe('StorageService', () => {
       
       // Simulate count responses for all stores
       if (countRequest.onsuccess) {
-        countRequest.onsuccess();
+        (countRequest.onsuccess as any)();
       }
       
       const stats = await statsPromise;
@@ -594,7 +594,7 @@ describe('StorageService', () => {
       const savePromise = service.saveClient({} as any);
       
       if (errorRequest.onerror) {
-        errorRequest.onerror();
+        (errorRequest.onerror as any)();
       }
       
       await expectAsync(savePromise).toBeRejectedWith(jasmine.any(Error));

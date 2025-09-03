@@ -39,13 +39,14 @@ describe('SimuladorEngineService', () => {
 
     mockTandaEngine.getSnowballEffect.and.returnValue({
       totalSavings: [10000, 20000, 30000, 40000, 50000],
-      compoundGrowth: 1.2,
-      accelerationPoints: []
-    });
+      totalDebt: [],
+      unitsDelivered: [],
+      months: []
+    } as any);
 
     mockTandaEngine.getProjectedTimeline.and.returnValue([
-      { month: 1, event: 'First Member Award', amount: 100000 },
-      { month: 12, event: 'Second Member Award', amount: 100000 }
+      { month: 1, event: 'First Member Award', details: 'Award granted' },
+      { month: 12, event: 'Second Member Award', details: 'Award granted' }
     ]);
 
     mockFinancialCalc.formatCurrency.and.callFake((amount: number) => {
