@@ -24,7 +24,7 @@ interface ImportMilestone {
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
             <div class="icon-container">
-              =�
+              🚢
             </div>
             <div>
               <h3 class="text-xl font-bold text-white">Seguimiento de Importación</h3>
@@ -72,9 +72,9 @@ interface ImportMilestone {
                 <span class="text-xl">{{ milestone.icon }}</span>
                 <div *ngIf="getMilestoneStatus(milestone) === 'in-progress'" 
                      class="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 rounded-full animate-ping"></div>
-                <div *ngIf="getMilestoneStatus(milestone) === 'completed'"
+                <div *ngIf="getMilestoneStatus(milestone) === 'completed'" 
                      class="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full">
-                  <span class="text-xs"></span>
+                  <span class="text-xs">✔️</span>
                 </div>
               </div>
 
@@ -105,19 +105,19 @@ interface ImportMilestone {
                 <!-- Estimated Timeline -->
                 <div class="timeline-estimate flex items-center gap-4">
                   <div class="estimated-time flex items-center gap-2 text-sm">
-                    <span class="time-icon">�</span>
-                    <span class="text-gray-300">{{ milestone.estimatedDays }} d�as estimados</span>
+                    <span class="time-icon">⏱️</span>
+                    <span class="text-gray-300">{{ milestone.estimatedDays }} días estimados</span>
                   </div>
                   
                   <div *ngIf="getMilestoneStatus(milestone) === 'completed'" 
                        class="completed-date flex items-center gap-2 text-sm text-emerald-400">
-                    <span></span>
+                    <span>📅</span>
                     <span>Completado {{ getCompletionDate(milestone.key) }}</span>
                   </div>
                   
                   <div *ngIf="getMilestoneStatus(milestone) === 'in-progress'"
                        class="in-progress-indicator flex items-center gap-2 text-sm text-amber-400">
-                    <span class="animate-spin">�</span>
+                    <span class="animate-spin">⏳</span>
                     <span>En progreso desde {{ getStartDate(milestone.key) }}</span>
                   </div>
                 </div>
@@ -138,7 +138,7 @@ interface ImportMilestone {
                 <div class="detail-card p-3 bg-gray-800/50 rounded-lg">
                   <h5 class="font-medium text-white text-sm mb-2">Documentos Requeridos</h5>
                   <ul class="text-sm text-gray-400 space-y-1">
-                    <li *ngFor="let doc of getMilestoneDocuments(milestone.key)">" {{ doc }}</li>
+                    <li *ngFor="let doc of getMilestoneDocuments(milestone.key)">{{ doc }}</li>
                   </ul>
                 </div>
                 
@@ -175,7 +175,7 @@ interface ImportMilestone {
       <div class="summary-stats mt-6 grid grid-cols-3 gap-4">
         <div class="stat-card p-4 bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-lg border border-blue-500/20">
           <div class="flex items-center gap-3">
-            <div class="stat-icon text-2xl">=�</div>
+            <div class="stat-icon text-2xl">✅</div>
             <div>
               <div class="stat-value text-xl font-bold text-blue-400">{{ getCompletedMilestones() }}</div>
               <div class="stat-label text-sm text-gray-400">Etapas Completadas</div>
@@ -185,17 +185,17 @@ interface ImportMilestone {
         
         <div class="stat-card p-4 bg-gradient-to-br from-amber-500/10 to-amber-600/10 rounded-lg border border-amber-500/20">
           <div class="flex items-center gap-3">
-            <div class="stat-icon text-2xl">�</div>
+            <div class="stat-icon text-2xl">⏳</div>
             <div>
               <div class="stat-value text-xl font-bold text-amber-400">{{ getEstimatedDaysRemaining() }}</div>
-              <div class="stat-label text-sm text-gray-400">D�as Restantes</div>
+              <div class="stat-label text-sm text-gray-400">Días Restantes</div>
             </div>
           </div>
         </div>
         
         <div class="stat-card p-4 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 rounded-lg border border-emerald-500/20">
           <div class="flex items-center gap-3">
-            <div class="stat-icon text-2xl"><�</div>
+            <div class="stat-icon text-2xl">📅</div>
             <div>
               <div class="stat-value text-xl font-bold text-emerald-400">{{ getExpectedDeliveryDate() }}</div>
               <div class="stat-label text-sm text-gray-400">Entrega Estimada</div>
@@ -210,7 +210,7 @@ interface ImportMilestone {
           (click)="generateTrackingReport()"
           class="generate-report-btn flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
         >
-          <span>=�</span>
+          <span>📄</span>
           Generar Reporte
         </button>
         
@@ -218,7 +218,7 @@ interface ImportMilestone {
           (click)="notifyClient()"
           class="notify-btn px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
         >
-          <span>=�</span>
+          <span>🔔</span>
           Notificar Cliente
         </button>
       </div>
@@ -380,32 +380,32 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
     {
       key: 'pedidoPlanta',
       label: 'Pedido a Planta',
-      description: 'Solicitud de fabricaci�n enviada a la planta manufacturera',
-      icon: '<�',
+      description: 'Solicitud de fabricación enviada a la planta manufacturera',
+      icon: '📝',
       estimatedDays: 3,
       color: 'blue'
     },
     {
       key: 'unidadFabricada',
       label: 'Unidad Fabricada',
-      description: 'La unidad ha sido completamente fabricada y est� lista para env�o',
+      description: 'La unidad ha sido completamente fabricada y está lista para envío',
       icon: '🏭',
       estimatedDays: 30,
       color: 'purple'
     },
     {
       key: 'transitoMaritimo',
-      label: 'Tr�nsito Mar�timo',
-      description: 'La unidad est� en tr�nsito mar�timo hacia el puerto de destino',
-      icon: '=�',
+      label: 'Tránsito Marítimo',
+      description: 'La unidad está en tránsito marítimo hacia el puerto de destino',
+      icon: '🚢',
       estimatedDays: 21,
       color: 'blue'
     },
     {
       key: 'enAduana',
       label: 'En Aduana',
-      description: 'Procesando documentos aduaneros y tr�mites de importaci�n',
-      icon: '<�',
+      description: 'Procesando documentos aduaneros y trámites de importación',
+      icon: '🛃',
       estimatedDays: 7,
       color: 'amber'
     },
@@ -413,7 +413,7 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
       key: 'liberada',
       label: 'Liberada',
       description: 'Unidad liberada de aduana y lista para entrega final',
-      icon: '<�',
+      icon: '✅',
       estimatedDays: 2,
       color: 'emerald'
     }
@@ -493,8 +493,8 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
   getOverallStatus(): string {
     const progress = this.getOverallProgress();
     if (progress === 100) return 'Entregada';
-    if (progress > 0) return 'En Tr�nsito';
-    return 'Pendiente Fabricaci�n';
+    if (progress > 0) return 'En Tránsito';
+    return 'Pendiente Fabricación';
   }
 
   getOverallStatusClass(): string {
@@ -621,11 +621,11 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
 
   getMilestoneDocuments(key: keyof ImportStatus): string[] {
     const docs: Record<keyof ImportStatus, string[]> = {
-      pedidoPlanta: ['Orden de compra', 'Especificaciones t�cnicas', 'Contrato de fabricaci�n'],
-      unidadFabricada: ['Certificado de fabricaci�n', 'Factura comercial', 'Packing list'],
+      pedidoPlanta: ['Orden de compra', 'Especificaciones técnicas', 'Contrato de fabricación'],
+      unidadFabricada: ['Certificado de fabricación', 'Factura comercial', 'Packing list'],
       transitoMaritimo: ['Bill of lading', 'Manifiesto de carga', 'Seguro de transporte'],
-      enAduana: ['Factura comercial', 'Certificado de origen', 'Pedimento de importaci�n'],
-      liberada: ['Pedimento liberado', 'Certificado de inspecci�n', 'Documentos de entrega']
+      enAduana: ['Factura comercial', 'Certificado de origen', 'Pedimento de importación'],
+      liberada: ['Pedimento liberado', 'Certificado de inspección', 'Documentos de entrega']
     };
     return docs[key] || [];
   }
@@ -633,19 +633,19 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
   getMilestoneContacts(key: keyof ImportStatus): {role: string, name: string, phone: string}[] {
     const contacts: Record<keyof ImportStatus, {role: string, name: string, phone: string}[]> = {
       pedidoPlanta: [
-        {role: 'Coordinador Planta', name: 'Carlos M�ndez', phone: '+52 55 1234-5678'}
+        {role: 'Coordinador Planta', name: 'Carlos Méndez', phone: '+52 55 1234-5678'}
       ],
       unidadFabricada: [
-        {role: 'QC Manager', name: 'Ana Garc�a', phone: '+52 55 2345-6789'}
+        {role: 'QC Manager', name: 'Ana García', phone: '+52 55 2345-6789'}
       ],
       transitoMaritimo: [
-        {role: 'Agente Naviero', name: 'Roberto S�nchez', phone: '+52 55 3456-7890'}
+        {role: 'Agente Naviero', name: 'Roberto Sánchez', phone: '+52 55 3456-7890'}
       ],
       enAduana: [
-        {role: 'Agente Aduanal', name: 'Mar�a L�pez', phone: '+52 55 4567-8901'}
+        {role: 'Agente Aduanal', name: 'María López', phone: '+52 55 4567-8901'}
       ],
       liberada: [
-        {role: 'Coordinador Entrega', name: 'Juan Hern�ndez', phone: '+52 55 5678-9012'}
+        {role: 'Coordinador Entrega', name: 'Juan Hernández', phone: '+52 55 5678-9012'}
       ]
     };
     return contacts[key] || [];
