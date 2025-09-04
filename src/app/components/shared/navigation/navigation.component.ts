@@ -608,7 +608,7 @@ export class NavigationComponent implements OnInit {
   }
 
   createNewOpportunity() {
-    this.router.navigate(['/onboarding']);
+    this.router.navigate(['/nueva-oportunidad']);
     if (this.isMobileView) {
       this.closeMobileMenu();
     }

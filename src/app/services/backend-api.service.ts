@@ -77,7 +77,8 @@ export class BackendApiService {
 
   constructor(
     private http: HttpClient,
-    private storage: StorageService
+    private storage: StorageService,
+    private authService: import('./auth.service').AuthService
   ) {
     this.setupOnlineListener();
   }
@@ -98,10 +99,12 @@ export class BackendApiService {
   }
 
   private getAuthHeaders() {
-    return {
-      'Authorization': `Bearer ${this.apiKey}`,
-      'Content-Type': 'application/json'
-    };
+    const token = this.authService.getToken();
+    const headers: any = { 'Content-Type': 'application/json' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
   }
 
   // Client Management
@@ -370,7 +373,12 @@ export class BackendApiService {
     formData.append('client_id', clientId);
     formData.append('document_type', documentType);
     
-    return this.http.post(url, formData, { headers: { 'Authorization': `Bearer ${this.apiKey}` } }).pipe(
+    const token = this.authService.getToken();
+    const headers: any = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    return this.http.post(url, formData, { headers }).pipe(
       catchError(async (error) => {
         // Queue for offline sync
         await this.storage.queueOfflineAction({

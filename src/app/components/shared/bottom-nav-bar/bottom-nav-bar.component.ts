@@ -243,7 +243,7 @@ export class BottomNavBarComponent implements OnInit {
     },
     {
       label: 'Más',
-      route: '/menu',
+      route: '/configuracion',
       icon: '⚡',
       activeIcon: '⚡',
       badge: 2
