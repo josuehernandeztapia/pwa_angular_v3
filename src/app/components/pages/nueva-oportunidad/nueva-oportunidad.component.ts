@@ -24,13 +24,13 @@ interface WizardStep {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   template: `
-    <div class="nueva-oportunidad-container">
+    <div class="nueva-oportunidad-container command-container">
       <div class="header-section">
         <div class="breadcrumb">
-          <button class="back-btn" (click)="goBack()">
+          <button class="back-btn premium-button outline" (click)="goBack()">
             ⬅️ Regresar
           </button>
-          <h1>➕ Nueva Oportunidad</h1>
+          <h1 class="command-title">💎 Generador de Oportunidades Inteligente</h1>
           <div class="smart-context" *ngIf="smartContext.market || smartContext.suggestedFlow">
             <span class="context-tag" *ngIf="smartContext.market">
               📍 {{ getMarketName(smartContext.market) }}
@@ -40,7 +40,7 @@ interface WizardStep {
             </span>
           </div>
         </div>
-        <p class="subtitle">
+        <p class="intelligence-subtitle">
           {{ smartContext.market 
             ? ('Creando oportunidad para ' + getMarketName(smartContext.market) + ' con contexto inteligente del Dashboard')
             : 'El primer paso para ayudar a un transportista a obtener su unidad' }}
@@ -48,7 +48,7 @@ interface WizardStep {
         
         <!-- Progress Indicator -->
         <div class="progress-indicator">
-          <div class="progress-bar">
+          <div class="progress-bar intelligent-progress">
             <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
           </div>
           <div class="progress-steps">
@@ -69,7 +69,7 @@ interface WizardStep {
         </div>
         
         <!-- Draft Recovery Banner -->
-        <div class="draft-banner" *ngIf="hasDraftAvailable && !draftRecovered">
+        <div class="draft-banner premium-card" *ngIf="hasDraftAvailable && !draftRecovered">
           <div class="banner-content">
             <span class="banner-icon">💾</span>
             <div class="banner-text">
@@ -77,19 +77,19 @@ interface WizardStep {
               <p>Tienes una oportunidad sin terminar del {{ formatDraftDate(draftData.timestamp) }}</p>
             </div>
             <div class="banner-actions">
-              <button class="btn-link" (click)="recoverDraft()">Continuar</button>
-              <button class="btn-link secondary" (click)="discardDraft()">Descartar</button>
+              <button class="premium-button" (click)="recoverDraft()">Continuar</button>
+              <button class="premium-button secondary" (click)="discardDraft()">Descartar</button>
             </div>
           </div>
         </div>
       </div>
 
       <div class="form-container">
-        <form [formGroup]="opportunityForm" (ngSubmit)="onSubmit()" class="opportunity-form">
+        <form [formGroup]="opportunityForm" (ngSubmit)="onSubmit()" class="opportunity-form premium-card">
           
           <!-- Step 1: Client Information -->
           <div class="form-section">
-            <h2>👤 Información del Cliente</h2>
+            <h2 class="section-title">👤 Información del Cliente</h2>
             
             <div class="form-group">
               <label for="clientName">Nombre Completo *</label>
@@ -98,7 +98,7 @@ interface WizardStep {
                   id="clientName"
                   type="text"
                   formControlName="clientName"
-                  class="form-input"
+                  class="premium-input"
                   [class.error]="isFieldInvalid('clientName')"
                   [class.checking]="isCheckingDuplicates"
                   [class.has-suggestions]="clientSuggestions.length > 0"
@@ -164,7 +164,7 @@ interface WizardStep {
                   </div>
                 </div>
                 <div class="continue-anyway">
-                  <button type="button" class="btn-link" (click)="clearSimilarClients()">
+                  <button type="button" class="premium-button outline" (click)="clearSimilarClients()">
                     Continuar con cliente nuevo
                   </button>
                 </div>
@@ -444,7 +444,7 @@ interface WizardStep {
           <div class="form-actions" *ngIf="opportunityType">
             <button 
               type="button" 
-              class="btn-secondary"
+              class="premium-button secondary"
               (click)="saveDraft()"
               [disabled]="isLoading"
             >
@@ -453,7 +453,7 @@ interface WizardStep {
             
             <button 
               type="submit" 
-              class="btn-primary"
+              class="premium-button"
               [disabled]="opportunityForm.invalid || isLoading"
             >
               <span *ngIf="!isLoading">

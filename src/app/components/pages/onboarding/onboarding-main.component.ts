@@ -40,7 +40,7 @@ interface OnboardingForm {
   standalone: true,
   imports: [CommonModule, FormsModule, InterviewCheckpointModalComponent],
   template: `
-    <div class="onboarding-container">
+    <div class="onboarding-container command-container">
       <!-- Progress Header -->
       <div class="progress-header">
         <div class="progress-steps">
@@ -52,7 +52,7 @@ interface OnboardingForm {
             <span class="step-label">{{ step.label }}</span>
           </div>
         </div>
-        <div class="progress-bar">
+        <div class="progress-bar intelligent-progress">
           <div class="progress-fill" [style.width.%]="progressPercentage"></div>
         </div>
       </div>
@@ -60,8 +60,8 @@ interface OnboardingForm {
       <!-- Step: Selection -->
       <div *ngIf="currentStep === 'selection'" class="step-content">
         <div class="step-header">
-          <h2>Configuración Inicial</h2>
-          <p>Selecciona el tipo de oportunidad que deseas crear</p>
+          <h2 class="section-title">🎯 Onboarding Inteligente de Conductores</h2>
+          <p class="intelligence-subtitle">Selecciona el tipo de oportunidad que deseas crear</p>
         </div>
         
         <div class="form-grid">

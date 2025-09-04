@@ -423,3 +423,356 @@ button.tool-card:hover {
     --shadow-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   }
 }
+
+/* === FERRARI-LEVEL PREMIUM DESIGN SYSTEM EXTENSIONS === */
+:root {
+  /* Premium brand + semantic tokens */
+  --info-intelligence: #3b82f6;
+  --success-emerald: #10b981;
+  --warning-orange: #f59e0b;
+  --error-crimson: #ef4444;
+
+  /* Command Center backgrounds (override to gradient) */
+  --bg-command-center: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  --bg-glass-effect: rgba(255, 255, 255, 0.08);
+  --bg-glass-hover: rgba(255, 255, 255, 0.12);
+  --bg-glass-active: rgba(255, 255, 255, 0.16);
+  --bg-modal-overlay: rgba(15, 23, 42, 0.95);
+
+  /* Glassmorphism */
+  --glass-blur: blur(20px);
+  --glass-border-hover: 1px solid rgba(6, 214, 160, 0.3);
+
+  /* Premium shadows */
+  --premium-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --interaction-shadow: 0 10px 25px -5px rgba(6, 214, 160, 0.3);
+  --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --elevated-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.3);
+
+  /* Typography gradients */
+  --text-gradient-primary: linear-gradient(135deg, var(--primary-cyan), var(--accent-amber));
+  --text-gradient-secondary: linear-gradient(135deg, var(--info-intelligence), var(--primary-cyan));
+  --text-gradient-success: linear-gradient(135deg, var(--success-emerald), var(--primary-cyan));
+
+  /* Interactive gradients */
+  --btn-gradient-primary: linear-gradient(135deg, var(--primary-cyan), var(--info-intelligence));
+  --btn-gradient-secondary: linear-gradient(135deg, var(--accent-amber), var(--warning-orange));
+  --btn-gradient-success: linear-gradient(135deg, var(--success-emerald), var(--primary-cyan));
+  --btn-gradient-danger: linear-gradient(135deg, var(--error-crimson), #dc2626);
+
+  /* Progress & loading */
+  --progress-gradient: linear-gradient(135deg, var(--primary-cyan), var(--accent-amber));
+  --loading-gradient: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+
+  /* Text colors */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --text-tertiary: rgba(255, 255, 255, 0.6);
+  --text-accent: var(--primary-cyan);
+  --text-warning: var(--accent-amber);
+  --text-error: var(--error-crimson);
+  --text-success: var(--success-emerald);
+}
+
+/* === Premium Containers === */
+.command-container {
+  background: var(--bg-command-center);
+  min-height: 100vh;
+  color: var(--text-primary);
+  padding: 24px;
+}
+
+/* === Premium Cards === */
+.premium-card {
+  background: var(--bg-glass-effect);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--premium-shadow);
+  padding: 32px;
+  transition: all 0.3s ease;
+}
+
+.premium-card:hover {
+  background: var(--bg-glass-hover);
+  border: var(--glass-border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--elevated-shadow);
+}
+
+.mega-card {
+  background: var(--bg-glass-effect);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--elevated-shadow);
+  padding: 40px;
+}
+
+/* === Premium Typography === */
+.command-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: var(--text-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.intelligence-subtitle {
+  color: var(--accent-amber);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin: 0 0 24px 0;
+  opacity: 0.9;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+/* === Premium Form Elements === */
+.premium-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 16px 24px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  width: 100%;
+}
+
+.premium-input:focus {
+  outline: none;
+  border-color: var(--primary-cyan);
+  box-shadow: 0 0 0 6px rgba(6, 214, 160, 0.2);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.premium-input::placeholder { color: var(--text-tertiary); }
+
+.premium-select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 16px 24px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.premium-textarea {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 16px 24px;
+  color: var(--text-primary);
+  resize: vertical;
+  min-height: 120px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+/* === Premium Buttons === */
+.premium-button {
+  background: var(--btn-gradient-primary);
+  border: none;
+  border-radius: 16px;
+  padding: 16px 32px;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--interaction-shadow);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.premium-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 50px -12px rgba(6, 214, 160, 0.4);
+}
+
+.premium-button:active { transform: translateY(-1px); }
+.premium-button.secondary { background: var(--btn-gradient-secondary); }
+.premium-button.success { background: var(--btn-gradient-success); }
+.premium-button.danger { background: var(--btn-gradient-danger); }
+
+.premium-button.outline {
+  background: transparent;
+  border: 2px solid var(--primary-cyan);
+  color: var(--primary-cyan);
+  box-shadow: none;
+}
+
+.premium-button.outline:hover { background: var(--primary-cyan); color: white; }
+
+/* === Premium Progress === */
+.intelligent-progress {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  height: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.intelligent-progress .progress-fill {
+  background: var(--progress-gradient);
+  height: 100%;
+  border-radius: 50px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.intelligent-progress .progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--loading-gradient);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+/* === Premium Tables === */
+.premium-table {
+  width: 100%;
+  background: var(--bg-glass-effect);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.premium-table thead { background: rgba(6, 214, 160, 0.1); }
+
+.premium-table th {
+  padding: 16px 24px;
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.premium-table td {
+  padding: 16px 24px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.premium-table tr:hover td { background: rgba(255, 255, 255, 0.05); color: var(--text-primary); }
+
+/* === Premium Modals === */
+.premium-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg-modal-overlay);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.premium-modal {
+  background: var(--bg-glass-effect);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--elevated-shadow);
+  padding: 32px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* === Premium Alerts === */
+.premium-alert {
+  background: var(--bg-glass-effect);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 16px;
+  padding: 16px 24px;
+  border-left: 4px solid var(--primary-cyan);
+  margin: 16px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.premium-alert.success { border-left-color: var(--success-emerald); }
+.premium-alert.warning { border-left-color: var(--accent-amber); }
+.premium-alert.error { border-left-color: var(--error-crimson); }
+
+/* === Premium Badges === */
+.premium-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(6, 214, 160, 0.2);
+  color: var(--primary-cyan);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid rgba(6, 214, 160, 0.3);
+}
+
+.premium-badge.success { background: rgba(16, 185, 129, 0.2); color: var(--success-emerald); border-color: rgba(16, 185, 129, 0.3); }
+.premium-badge.warning { background: rgba(251, 191, 36, 0.2); color: var(--accent-amber); border-color: rgba(251, 191, 36, 0.3); }
+.premium-badge.error { background: rgba(239, 68, 68, 0.2); color: var(--error-crimson); border-color: rgba(239, 68, 68, 0.3); }
+
+/* === Premium Loading === */
+.premium-loading {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(6, 214, 160, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--primary-cyan);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+  .command-container { padding: 16px; }
+  .premium-card { padding: 24px; border-radius: 16px; }
+  .mega-card { padding: 32px; border-radius: 20px; }
+  .command-title { font-size: 2rem; }
+}
+
+@media (max-width: 480px) {
+  .premium-card { padding: 20px; }
+  .command-title { font-size: 1.75rem; }
+  .premium-button { padding: 14px 24px; font-size: 0.95rem; }
+}

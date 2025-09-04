@@ -29,10 +29,10 @@ interface AmortizationRow {
   standalone: true,
   imports: [CommonModule, FormsModule, SavingsProjectionChartComponent, TandaTimelineComponent],
   template: `
-    <div class="cotizador-container">
+    <div class="cotizador-container command-container">
       <!-- Header Section -->
       <div class="cotizador-header">
-        <h2 class="cotizador-title">
+        <h2 class="cotizador-title command-title">
           🧮 {{ client ? 'Simulador para ' + client.name : 'Simulador de Soluciones' }}
         </h2>
       </div>
@@ -48,7 +48,7 @@ interface AmortizationRow {
             <div class="context-grid">
               <div class="form-group">
                 <label for="market">Mercado</label>
-                <select id="market" [(ngModel)]="market" (change)="onMarketChange()" class="form-select">
+                <select id="market" [(ngModel)]="market" (change)="onMarketChange()" class="premium-select">
                   <option value="">-- Elige --</option>
                   <option value="aguascalientes">Aguascalientes</option>
                   <option value="edomex">Estado de México</option>
@@ -56,7 +56,7 @@ interface AmortizationRow {
               </div>
               <div class="form-group">
                 <label for="clientType">Tipo de Cliente</label>
-                <select id="clientType" [(ngModel)]="clientType" (change)="onClientTypeChange()" [disabled]="!market" class="form-select">
+                <select id="clientType" [(ngModel)]="clientType" (change)="onClientTypeChange()" [disabled]="!market" class="premium-select">
                   <option value="">-- Elige --</option>
                   <option value="individual">Individual</option>
                   <option value="colectivo" *ngIf="market === 'edomex'">Crédito Colectivo</option>
@@ -66,13 +66,13 @@ interface AmortizationRow {
           </div>
 
           <!-- Loading State -->
-          <div *ngIf="isLoading" class="loading-state">
+          <div *ngIf="isLoading" class="loading-state premium-card">
             <div class="loading-spinner"></div>
             <p>Cargando paquete...</p>
           </div>
 
           <!-- Package Components -->
-          <div *ngIf="pkg" class="package-section">
+          <div *ngIf="pkg" class="package-section premium-card">
             <h4 class="section-title primary">2. Paquete de Producto</h4>
             <div class="components-list">
               <div *ngFor="let comp of pkg.components" class="component-item">
@@ -107,7 +107,7 @@ interface AmortizationRow {
                     id="downPaymentAmount" 
                     [(ngModel)]="downPaymentAmountDirect"
                     (input)="onDownPaymentDirectChange()"
-                    class="form-input"
+                    class="premium-input"
                     placeholder="Ej: 400000"
                   />
                 </div>
@@ -115,7 +115,7 @@ interface AmortizationRow {
               
               <div *ngIf="!isVentaDirecta">
                 <h4 class="section-title primary">3. Estructura Financiera</h4>
-                <div class="financial-controls">
+                <div class="financial-controls premium-card">
                   <div class="form-group">
                     <label for="downPayment">Enganche ({{ downPaymentPercentage }}%)</label>
                     <input 
@@ -125,7 +125,7 @@ interface AmortizationRow {
                       max="90"
                       [(ngModel)]="downPaymentPercentage"
                       (input)="onDownPaymentSliderChange()"
-                      class="form-range"
+                      class="form-range premium-input"
                     />
                     <div class="range-note">
                       Mínimo: {{ pkg.minDownPaymentPercentage * 100 }}% ({{ formatCurrency(minDownPaymentRequired) }})
@@ -134,7 +134,7 @@ interface AmortizationRow {
                   
                   <div class="form-group">
                     <label for="term">Plazo (meses)</label>
-                    <select id="term" [(ngModel)]="term" (change)="onTermChange()" class="form-select">
+                    <select id="term" [(ngModel)]="term" (change)="onTermChange()" class="premium-select">
                       <option *ngFor="let t of pkg.terms" [value]="t">{{ t }} meses</option>
                     </select>
                   </div>
@@ -155,7 +155,7 @@ interface AmortizationRow {
                     id="initialDown"
                     [(ngModel)]="initialDownPayment"
                     (input)="onSavingsConfigChange()"
-                    class="form-input"
+                    class="premium-input"
                     placeholder="Ej: 400000"
                   />
                 </div>
@@ -168,7 +168,7 @@ interface AmortizationRow {
                     max="6"
                     [(ngModel)]="deliveryTerm"
                     (input)="onSavingsConfigChange()"
-                    class="form-range"
+                    class="form-range premium-input"
                   />
                 </div>
               </div>
@@ -184,7 +184,7 @@ interface AmortizationRow {
                     max="20"
                     [(ngModel)]="tandaMembers"
                     (input)="onTandaMembersChange()"
-                    class="form-range"
+                    class="form-range premium-input"
                   />
                 </div>
               </div>
@@ -200,14 +200,14 @@ interface AmortizationRow {
                     step="500"
                     [(ngModel)]="voluntaryContribution"
                     (input)="onSavingsConfigChange()"
-                    class="form-range"
+                    class="form-range premium-input"
                   />
                   <input 
                     type="number" 
                     id="voluntary"
                     [(ngModel)]="voluntaryContribution"
                     (input)="onSavingsConfigChange()"
-                    class="form-input"
+                    class="premium-input"
                   />
                 </div>
               </div>
