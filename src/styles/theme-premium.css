@@ -66,6 +66,42 @@
   --info-500: #3b82f6;
   --info-600: #2563eb;
 
+  /* === SPEC BRAND PALETTE (VALIDATION) === */
+  /* Primary Brand Colors */
+  --brand-primary: #06d6a0; /* Primary theme color */
+  --auth-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* Blue Action Palette */
+  --blue-500: #4299e1; /* Primary blue */
+  --blue-600: #3182ce; /* Hover blue state */
+  --blue-700: #2563eb; /* Active/pressed blue */
+  --blue-800: #2c5282; /* Dark blue variant */
+  --button-primary-gradient: linear-gradient(135deg, #4299e1, #3182ce);
+  --button-hover-gradient: linear-gradient(135deg, #3182ce, #2c5282);
+
+  /* Background & Surface Colors */
+  --bg-main: #1f2937; /* Main background */
+  --surface-light: #f7fafc; /* Light surface/card */
+  --pure-white: #ffffff;
+  --glass-white-95: rgba(255, 255, 255, 0.95); /* Semi-transparent white cards */
+
+  /* Neutral Gray Scale */
+  --text-dark: #2d3748; /* Dark text/headings */
+  --text-medium: #4a5568; /* Medium text */
+  --text-light: #718096; /* Light text/secondary */
+  --border-light: #e2e8f0; /* Light borders */
+  --border-medium: #cbd5e0; /* Medium borders */
+  --hover-light: #edf2f7; /* Light hover */
+
+  /* Status & Semantic Colors */
+  --error-red: #e53e3e;
+  --success-green: #48bb78;
+  --success-green-alt: #38a169;
+  --warning-orange: #dd6b20;
+
+  /* Special Effects */
+  --glass-backdrop-white: blur(10px); /* Glass morphism effect */
+
   /* === COMPONENT SPECIFIC === */
   /* Glass morphism effects */
   --glass-bg: rgba(255, 255, 255, 0.08);
