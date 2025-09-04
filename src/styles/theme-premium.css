@@ -70,6 +70,31 @@
   /* Primary Brand Colors */
   --brand-primary: #06d6a0; /* Primary theme color */
   --auth-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* Executive audit aliases (for coherence scripts) */
+  --primary-cyan: #06d6a0;           /* Technology & Trust */
+  --primary-gradient-start: #667eea;  /* Professional gradient start */
+  --primary-gradient-end: #764ba2;    /* Professional gradient end */
+
+  /* Human Touch Accent */
+  --accent-amber: #f59e0b;           /* Opportunity & Attention */
+  --accent-amber-light: #fbbf24;     /* Light opportunity states */
+  --accent-amber-dark: #d97706;      /* Active opportunity states */
+
+  /* Premium Backgrounds */
+  --bg-command-center: #1f2937;      /* Premium dark background */
+  --bg-surface-premium: #f7fafc;     /* Light premium surfaces */
+  --bg-glass-effect: rgba(255, 255, 255, 0.95); /* Glassmorphism */
+
+  /* Intelligence Colors */
+  --success-intelligence: #48bb78;   /* Intelligent success */
+  --warning-intelligence: #dd6b20;   /* Intelligent warnings */
+  --error-intelligence: #e53e3e;     /* Critical attention */
+  --info-intelligence: #4299e1;      /* Information guidance */
+
+  /* Typography Hierarchy */
+  --text-command: #2d3748;           /* Command-level headings */
+  --text-intelligence: #4a5568;      /* Intelligence-level content */
+  --text-guidance: #718096;          /* Guidance-level text */
 
   /* Blue Action Palette */
   --blue-500: #4299e1; /* Primary blue */
@@ -147,6 +172,65 @@
   border: 1px solid var(--glass-border);
   backdrop-filter: var(--glass-backdrop);
   -webkit-backdrop-filter: var(--glass-backdrop);
+}
+
+/* === PREMIUM COMPONENT STYLING FRAMEWORK (aliases used in audit) === */
+.premium-container {
+  background: var(--bg-command-center);
+  min-height: 100vh;
+  color: white;
+}
+
+.premium-card {
+  background: var(--bg-glass-effect);
+  backdrop-filter: var(--glass-backdrop-white);
+  -webkit-backdrop-filter: var(--glass-backdrop-white);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.premium-button {
+  background: linear-gradient(135deg, var(--primary-cyan), var(--info-500));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-card);
+}
+
+.premium-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-premium);
+}
+
+.premium-input {
+  background: var(--bg-glass-effect);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 18px;
+  transition: all 0.3s ease;
+}
+
+.premium-input:focus {
+  border-color: var(--primary-cyan);
+  box-shadow: 0 0 0 4px rgba(6, 214, 160, 0.1);
+}
+
+.intelligence-accent {
+  color: var(--accent-amber);
+  font-weight: 600;
+}
+
+.command-title {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary-cyan), var(--accent-amber));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Health Score color system */

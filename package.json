@@ -71,7 +71,58 @@
     "mock:api": "json-server --watch db.json --port 3000",
     "test:all": "npm run test:unit && npm run test:integration && npm run test:accessibility && npm run test:visual && npm run test:e2e:chrome && npm run test:mutation:quick && npm run coverage:generate",
     "prepare": "husky",
-    "typecheck": "tsc -p tsconfig.app.json --noEmit"
+    "typecheck": "tsc -p tsconfig.app.json --noEmit",
+    
+    "test:visual:coherence:all:components": "node scripts/ux-coherence-runner.js coherence:all",
+    "test:visual:color:palette:consistency": "node scripts/ux-coherence-runner.js visual:palette",
+    "test:visual:typography:hierarchy": "node scripts/ux-coherence-runner.js visual:typography",
+    "test:visual:spacing:consistency": "node scripts/ux-coherence-runner.js visual:spacing",
+    
+    "test:brand:premium:fintech:identity": "node scripts/ux-coherence-runner.js brand:identity",
+    "test:brand:human:touch:elements": "node scripts/ux-coherence-runner.js brand:identity",
+    "test:brand:ferrari:level:quality": "node scripts/ux-coherence-runner.js brand:identity",
+    
+    "test:ux:component:transitions": "node scripts/ux-coherence-runner.js ux:transitions",
+    "test:ux:modal:overlay:consistency": "node scripts/ux-coherence-runner.js ux:modals",
+    "test:ux:form:interaction:flow": "node scripts/ux-coherence-runner.js ux:forms",
+    "test:ux:navigation:flow:coherence": "node scripts/ux-coherence-runner.js ux:navigation",
+    
+    "test:responsive:premium:mobile": "node scripts/ux-coherence-runner.js responsive:mobile",
+    "test:responsive:premium:tablet": "node scripts/ux-coherence-runner.js responsive:tablet",
+    "test:responsive:premium:desktop": "node scripts/ux-coherence-runner.js responsive:desktop",
+    "test:responsive:breakpoint:coherence": "node scripts/ux-coherence-runner.js responsive:breakpoints",
+
+    "test:ux:coherence:master:validation": "node scripts/ux-coherence-runner.js master:validation",
+    "test:ux:premium:consistency:all": "node scripts/ux-coherence-runner.js coherence:all",
+    "test:ux:ferrari:level:experience": "node scripts/ux-coherence-runner.js master:validation",
+    
+    "monitor:ux:coherence:real:time": "node scripts/ux-coherence-runner.js coherence:all",
+    "monitor:ux:premium:perception:tracking": "node scripts/ux-coherence-runner.js brand:identity",
+    "monitor:ux:competitive:advantage:metrics": "node scripts/ux-coherence-runner.js brand:identity",
+
+    "upgrade:component:nueva-oportunidad": "node scripts/upgrade-component.js nueva-oportunidad",
+    "upgrade:component:flow-builder": "node scripts/upgrade-component.js flow-builder",
+    "upgrade:component:simulador-main": "node scripts/upgrade-component.js simulador-main",
+    "upgrade:component:delivery-phase": "node scripts/upgrade-component.js delivery-phase",
+    "upgrade:component:documents-phase": "node scripts/upgrade-component.js documents-phase",
+    "upgrade:component:plates-phase": "node scripts/upgrade-component.js plates-phase",
+
+    "upgrade:component:cotizador-main": "node scripts/upgrade-component.js cotizador-main",
+    "upgrade:component:opportunities-pipeline": "node scripts/upgrade-component.js opportunities-pipeline",
+    "upgrade:component:cliente-form": "node scripts/upgrade-component.js cliente-form",
+    "upgrade:component:avi-verification-modal": "node scripts/upgrade-component.js avi-verification-modal",
+    "upgrade:component:document-upload-flow": "node scripts/upgrade-component.js document-upload-flow",
+
+    "upgrade:shared:savings-projection-chart": "node scripts/upgrade-component.js savings-projection-chart",
+    "upgrade:shared:tanda-timeline": "node scripts/upgrade-component.js tanda-timeline",
+    "upgrade:shared:scenario-card": "node scripts/upgrade-component.js scenario-card",
+    "upgrade:shared:progress-bar": "node scripts/upgrade-component.js progress-bar",
+    "upgrade:shared:guarantee-panel": "node scripts/upgrade-component.js guarantee-panel",
+
+    "upgrade:ops:deliveries": "node scripts/upgrade-component.js ops-deliveries",
+    "upgrade:ops:delivery-detail": "node scripts/upgrade-component.js delivery-detail",
+    "upgrade:ops:triggers-monitor": "node scripts/upgrade-component.js triggers-monitor",
+    "upgrade:post-sales:client-tracking": "node scripts/upgrade-component.js client-tracking"
   },
   "lint-staged": {
     "*.{ts,js}": [
