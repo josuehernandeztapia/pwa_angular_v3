@@ -88,9 +88,9 @@ export interface ActivityItem {
             <div class="activity-body">
               <h4 class="activity-title">{{ activity.title }}</h4>
               <p class="activity-description">
-                <ng-container *ngIf="activity.client?.name; else plainDesc">
-                  {{ activity.description.replace(activity.client.name, '') }}
-                  <span class="client-name">{{ activity.client.name }}</span>
+                <ng-container *ngIf="activity.client?.name as clientName; else plainDesc">
+                  {{ activity.description?.replace(clientName, '') || activity.description }}
+                  <span class="client-name">{{ clientName }}</span>
                 </ng-container>
                 <ng-template #plainDesc>{{ activity.description }}</ng-template>
               </p>

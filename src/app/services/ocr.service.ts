@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import Tesseract, { Worker, createWorker } from 'tesseract.js';
+import { CreateWorkerType, TESSERACT_CREATE_WORKER } from '../tokens/ocr.tokens';
 
 export interface OCRResult {
   text: string;
@@ -37,9 +38,14 @@ export class OCRService {
   private worker: Worker | null = null;
   private isInitialized = false;
   private progressSubject = new BehaviorSubject<OCRProgress>({ status: 'idle', progress: 0, message: '' });
-  
+  private createWorkerFn: CreateWorkerType;
+
   // Allow injecting createWorker for easier testing/mocking
-  constructor(private createWorkerFn: typeof createWorker = createWorker) {}
+  constructor(
+    @Optional() @Inject(TESSERACT_CREATE_WORKER) createWorkerFn: CreateWorkerType | null
+  ) {
+    this.createWorkerFn = createWorkerFn ?? createWorker;
+  }
   
   public progress$ = this.progressSubject.asObservable();
 

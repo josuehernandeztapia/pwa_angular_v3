@@ -10,6 +10,8 @@ import { ErrorHandlerService } from './services/error-handler.service';
 import { ApiService } from './services/api.service';
 import { HttpClientService } from './services/http-client.service';
 import { environment } from '../environments/environment';
+import { TESSERACT_CREATE_WORKER } from './tokens/ocr.tokens';
+import { createWorker } from 'tesseract.js';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -35,5 +37,10 @@ export const appConfig: ApplicationConfig = {
     },
     ApiService,
     HttpClientService
+    ,
+    {
+      provide: TESSERACT_CREATE_WORKER,
+      useValue: createWorker
+    }
   ]
 };
