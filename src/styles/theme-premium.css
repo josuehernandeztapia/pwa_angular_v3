@@ -243,7 +243,7 @@
 
 .premium-input:focus {
   border-color: var(--primary-cyan);
-  box-shadow: 0 0 0 4px rgba(6, 214, 160, 0.1);
+  box-shadow: 0 0 0 6px rgba(34, 211, 238, 0.15);
 }
 
 .intelligence-accent {
@@ -259,6 +259,111 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* === GLOBAL PREMIUM ALIASES FOR EXISTING MODULE CLASSES === */
+/* Containers */
+.nueva-oportunidad-container,
+.clientes-container,
+.cotizador-container,
+.onboarding-container,
+.opportunities-container,
+.expedientes-container,
+.ops-deliveries-container,
+.delivery-detail-container,
+.protection-container,
+.proteccion-container,
+.productos-container,
+.reportes-container,
+.perfil-container,
+.cliente-detail-container,
+.cliente-form-container,
+.client-tracking-container,
+.protection-real-container,
+.opportunities-pipeline-container {
+  background: var(--bg-command-center);
+  min-height: 100vh;
+}
+
+/* Common headers and titles */
+.page-header h1,
+.page-title,
+h1.command-title {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary-cyan-400), var(--accent-amber-400));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-subtitle,
+.page-description,
+.intelligence-subtitle {
+  color: var(--accent-amber-400);
+  font-weight: 600;
+}
+
+/* Cards */
+.card,
+.expediente-card,
+.analysis-card,
+.tools-grid .tool-card,
+.premium-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+}
+
+/* Progress bars */
+.progress-bar {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: linear-gradient(135deg, var(--primary-cyan-400), var(--accent-amber-400));
+  height: 8px;
+}
+
+/* Buttons harmonization */
+.btn-primary,
+.btn-secondary,
+.btn-tertiary,
+.clear-filters-btn,
+button[routerLink],
+button.tool-card {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-tertiary:hover,
+.clear-filters-btn:hover,
+button.tool-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevated);
+}
+
+/* Loading/empty states */
+.loading-container {
+  color: var(--bg-gray-100);
+}
+.empty-state {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+/* Health score tags */
+.status-critical { background: linear-gradient(135deg, var(--error-500), var(--error-600)); color: #fff; }
+.status-warning { background: linear-gradient(135deg, var(--warning-500), var(--warning-600)); color: #111; }
+.status-good { background: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600)); color: #fff; }
+.status-excellent { background: linear-gradient(135deg, var(--success-500), var(--success-600)); color: #fff; }
 
 /* Health Score color system */
 .health-score-excellent { color: var(--success-500); }

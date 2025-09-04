@@ -21,6 +21,9 @@
     "test:integration": "ng test --ts-config=tsconfig.spec.integration.json --include='**/integration/**/*.spec.ts' --watch=false --browsers=ChromeHeadless",
     "test:coverage": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
     "test:visual": "playwright test --config=playwright.config.ts",
+    "test:visual:modules": "playwright test --config=playwright.config.ts --grep @",
+    "test:visual:modules:cross:browser": "npm run test:visual",
+    "test:visual:modules:responsive": "npm run test:visual",
     "test:visual:chromium": "playwright test --config=playwright.config.ts --project=chromium",
     "test:visual:firefox": "playwright test --config=playwright.config.ts --project=firefox",
     "test:visual:webkit": "playwright test --config=playwright.config.ts --project=webkit",
@@ -116,6 +119,8 @@
     "monitor:ux:competitive:advantage:metrics": "node scripts/ux-coherence-runner.js brand:identity",
 
     "upgrade:component:nueva-oportunidad": "node scripts/upgrade-component.js nueva-oportunidad",
+    "upgrade:component:clientes-list": "node scripts/upgrade-component.js clientes",
+    "upgrade:component:onboarding-main": "node scripts/upgrade-component.js onboarding",
     "upgrade:component:flow-builder": "node scripts/upgrade-component.js flow-builder",
     "upgrade:component:simulador-main": "node scripts/upgrade-component.js simulador-main",
     "upgrade:component:delivery-phase": "node scripts/upgrade-component.js delivery-phase",
