@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, of, interval } from 'rxjs';
 import { catchError, map, retry, switchMap } from 'rxjs/operators';
 import { ConektaPaymentService } from './conekta-payment.service';
+import { environment } from '../../environments/environment';
 
 interface GNVStation {
   id: string;
@@ -123,8 +124,7 @@ interface MonthlyBilling {
   providedIn: 'root'
 })
 export class GnvStationService {
-  private readonly baseUrl = 'https://api.gnv.com.mx/v1';
-  private readonly apiKey = process.env['GNV_API_KEY'] || 'gnv_api_key_here';
+  private readonly baseUrl = `${environment.apiUrl}/gnv`;
   
   constructor(
     private http: HttpClient,
@@ -136,7 +136,6 @@ export class GnvStationService {
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'Authorization': `Bearer ${this.apiKey}`,
       'Content-Type': 'application/json'
     });
   }

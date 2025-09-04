@@ -29,15 +29,15 @@
   ],
   "dataGroups": [
     {
-      "name": "api-performance",
+      "name": "api-fresh",
       "urls": [
-        "https://api.conductores-pwa.com/**",
-        "http://localhost:3000/api/**"
+        "https://api.conductores-pwa.com/public/**",
+        "http://localhost:3000/api/public/**"
       ],
       "cacheConfig": {
-        "strategy": "performance",
-        "maxSize": 100,
-        "maxAge": "3d"
+        "strategy": "freshness",
+        "maxSize": 50,
+        "maxAge": "1h"
       }
     },
     {

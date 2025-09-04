@@ -73,13 +73,12 @@ interface DriverGNVHistory {
 })
 export class GnvDataService {
   private readonly baseUrl = environment.apiUrl;
-  private readonly apiKey = '0f06041281c1be1e31b8610ef33da294dda8e64e';
+  // Use backend auth/session; no client API key
 
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'Authorization': `Bearer ${this.apiKey}`,
       'Content-Type': 'application/json'
     });
   }

@@ -1,4 +1,5 @@
 import { Injectable, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { Observable, of, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Client, DocumentStatus } from '../models/types';
@@ -18,8 +19,8 @@ export class MetaMapService {
 
   // Port exacto de production MetaMap credentials desde React
   private readonly METAMAP_CONFIG = {
-    clientId: '689833b7d4e7dd0ca48216fb',
-    flowId: '689833b7d4e7dd00d08216fa',
+    clientId: environment.services?.metamap?.clientId || '',
+    flowId: environment.services?.metamap?.flowId || '',
     sdkUrl: 'https://sdk.getmati.com'
   };
 

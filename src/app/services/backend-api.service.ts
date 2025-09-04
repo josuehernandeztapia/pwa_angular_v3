@@ -73,7 +73,6 @@ interface DashboardData {
 })
 export class BackendApiService {
   private readonly baseUrl = environment.apiUrl;
-  private readonly apiKey = '0f06041281c1be1e31b8610ef33da294dda8e64e';
   private isOnline$ = new BehaviorSubject<boolean>(navigator.onLine);
 
   constructor(

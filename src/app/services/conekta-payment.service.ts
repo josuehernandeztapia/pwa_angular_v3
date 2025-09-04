@@ -94,9 +94,9 @@ interface Subscription {
   providedIn: 'root'
 })
 export class ConektaPaymentService {
-  private readonly baseUrl = environment.services.conekta.baseUrl;
+  // Use backend proxy for payment operations
+  private readonly baseUrl = `${environment.apiUrl}/payments`;
   private readonly publicKey = environment.services.conekta.publicKey;
-  private readonly privateKey = process.env['CONEKTA_PRIVATE_KEY'] || 'key_your-conekta-private-key';
   
   private isLoaded = false;
 
@@ -121,14 +121,7 @@ export class ConektaPaymentService {
     });
   }
 
-  private getAuthHeaders(): HttpHeaders {
-    const auth = btoa(`${this.privateKey}:`);
-    return new HttpHeaders({
-      'Authorization': `Basic ${auth}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/vnd.conekta-v2.1.0+json'
-    });
-  }
+  // All sensitive authentication is handled by the backend proxy
 
   // Tokenize card for secure processing
   async tokenizeCard(cardData: {
@@ -173,7 +166,7 @@ export class ConektaPaymentService {
       metadata: paymentData.metadata || {}
     };
 
-    return this.http.post<PaymentResponse>(url, orderData, { headers: this.getAuthHeaders() })
+    return this.http.post<PaymentResponse>(url, orderData)
       .pipe(
         catchError(this.handleError)
       );
@@ -206,7 +199,7 @@ export class ConektaPaymentService {
       allowed_payment_methods: ['cash', 'card', 'bank_transfer']
     };
 
-    return this.http.post<PaymentResponse>(url, checkoutData, { headers: this.getAuthHeaders() })
+    return this.http.post<PaymentResponse>(url, checkoutData)
       .pipe(
         catchError(this.handleError)
       );
@@ -216,7 +209,7 @@ export class ConektaPaymentService {
   createCustomer(customerData: Omit<ConektaCustomer, 'id'>): Observable<ConektaCustomer> {
     const url = `${this.baseUrl}/customers`;
     
-    return this.http.post<ConektaCustomer>(url, customerData, { headers: this.getAuthHeaders() })
+    return this.http.post<ConektaCustomer>(url, customerData)
       .pipe(
         catchError(this.handleError)
       );
@@ -225,7 +218,7 @@ export class ConektaPaymentService {
   updateCustomer(customerId: string, customerData: Partial<ConektaCustomer>): Observable<ConektaCustomer> {
     const url = `${this.baseUrl}/customers/${customerId}`;
     
-    return this.http.put<ConektaCustomer>(url, customerData, { headers: this.getAuthHeaders() })
+    return this.http.put<ConektaCustomer>(url, customerData)
       .pipe(
         catchError(this.handleError)
       );
@@ -234,7 +227,7 @@ export class ConektaPaymentService {
   getCustomer(customerId: string): Observable<ConektaCustomer> {
     const url = `${this.baseUrl}/customers/${customerId}`;
     
-    return this.http.get<ConektaCustomer>(url, { headers: this.getAuthHeaders() })
+    return this.http.get<ConektaCustomer>(url)
       .pipe(
         catchError(this.handleError)
       );
@@ -244,7 +237,7 @@ export class ConektaPaymentService {
   createSubscriptionPlan(planData: Omit<SubscriptionPlan, 'id'>): Observable<SubscriptionPlan> {
     const url = `${this.baseUrl}/plans`;
     
-    return this.http.post<SubscriptionPlan>(url, planData, { headers: this.getAuthHeaders() })
+    return this.http.post<SubscriptionPlan>(url, planData)
       .pipe(
         catchError(this.handleError)
       );
@@ -259,7 +252,7 @@ export class ConektaPaymentService {
       subscription_start: subscriptionData.subscription_start
     };
 
-    return this.http.post<Subscription>(url, subData, { headers: this.getAuthHeaders() })
+    return this.http.post<Subscription>(url, subData)
       .pipe(
         catchError(this.handleError)
       );
@@ -268,7 +261,7 @@ export class ConektaPaymentService {
   getSubscription(customerId: string, subscriptionId: string): Observable<Subscription> {
     const url = `${this.baseUrl}/customers/${customerId}/subscriptions/${subscriptionId}`;
     
-    return this.http.get<Subscription>(url, { headers: this.getAuthHeaders() })
+    return this.http.get<Subscription>(url)
       .pipe(
         catchError(this.handleError)
       );
@@ -277,7 +270,7 @@ export class ConektaPaymentService {
   updateSubscription(customerId: string, subscriptionId: string, updates: Partial<Subscription>): Observable<Subscription> {
     const url = `${this.baseUrl}/customers/${customerId}/subscriptions/${subscriptionId}`;
     
-    return this.http.put<Subscription>(url, updates, { headers: this.getAuthHeaders() })
+    return this.http.put<Subscription>(url, updates)
       .pipe(
         catchError(this.handleError)
       );
@@ -298,7 +291,7 @@ export class ConektaPaymentService {
       url += `&customer_info.customer_id=${customerId}`;
     }
     
-    return this.http.get<{ data: PaymentResponse[] }>(url, { headers: this.getAuthHeaders() })
+    return this.http.get<{ data: PaymentResponse[] }>(url)
       .pipe(
         map(response => response.data),
         catchError(this.handleError)
@@ -308,29 +301,10 @@ export class ConektaPaymentService {
   getPaymentStatus(orderId: string): Observable<PaymentResponse> {
     const url = `${this.baseUrl}/orders/${orderId}`;
     
-    return this.http.get<PaymentResponse>(url, { headers: this.getAuthHeaders() })
+    return this.http.get<PaymentResponse>(url)
       .pipe(
         catchError(this.handleError)
       );
-  }
-
-  // Webhooks validation
-  validateWebhook(payload: string, signature: string): boolean {
-    // Implement webhook signature validation
-    // This would typically use HMAC validation with your webhook secret
-    try {
-      const crypto = require('crypto');
-      const webhookSecret = process.env['CONEKTA_WEBHOOK_SECRET'] || '';
-      const expectedSignature = crypto
-        .createHmac('sha256', webhookSecret)
-        .update(payload)
-        .digest('hex');
-      
-      return signature === expectedSignature;
-    } catch (error) {
-      console.error('Webhook validation error:', error);
-      return false;
-    }
   }
 
   // Business Logic Helpers

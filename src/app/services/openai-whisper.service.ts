@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class OpenAIWhisperService {
   
-  private readonly API_URL = 'https://api.openai.com/v1/audio/transcriptions';
+  private readonly API_URL = `${environment.apiUrl}/ai/transcriptions`;
   private isRecording$ = new BehaviorSubject<boolean>(false);
   private mediaRecorder: MediaRecorder | null = null;
   private audioChunks: Blob[] = [];
@@ -62,11 +62,7 @@ export class OpenAIWhisperService {
       formData.append('chunking_strategy', 'auto');
     }
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${environment.services.openai.apiKey}`
-    });
-
-    return this.http.post<WhisperResponse>(this.API_URL, formData, { headers })
+    return this.http.post<WhisperResponse>(this.API_URL, formData)
       .pipe(
         map(response => {
           // Procesar respuesta para extraer métricas de voz

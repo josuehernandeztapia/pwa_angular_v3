@@ -31,21 +31,15 @@ export class AuthInterceptor implements HttpInterceptor {
       authRequest = this.addToken(request, token);
     }
 
-    // Add request logging in development
-    if (!request.url.includes('assets/')) {
-      console.log(`🌐 HTTP ${request.method} ${request.url}`, {
-        headers: authRequest.headers.keys().reduce((acc, key) => {
-          acc[key] = authRequest.headers.get(key);
-          return acc;
-        }, {} as any),
-        body: request.body
-      });
+    // Add request logging in development (no sensitive data)
+    if (!request.url.includes('assets/') && typeof window !== 'undefined' && (window as any).ng && (window as any).ng.probe) {
+      console.log(`🌐 HTTP ${request.method} ${request.url}`);
     }
 
     return next.handle(authRequest).pipe(
       tap((event: HttpEvent<unknown>) => {
-        if (event instanceof HttpResponse && !request.url.includes('assets/')) {
-          console.log(`✅ HTTP ${request.method} ${request.url} - ${event.status}`, event.body);
+        if (event instanceof HttpResponse && !request.url.includes('assets/') && typeof window !== 'undefined' && (window as any).ng && (window as any).ng.probe) {
+          console.log(`✅ HTTP ${request.method} ${request.url} - ${event.status}`);
         }
       }),
       catchError((error: HttpErrorResponse) => {

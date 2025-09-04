@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 interface VehicleModel {
   id: string;
@@ -87,14 +88,12 @@ interface VehicleAvailability {
   providedIn: 'root'
 })
 export class GnvVehicleService {
-  private readonly baseUrl = 'https://api.gnv.com.mx/v1';
-  private readonly apiKey = process.env['GNV_API_KEY'] || 'gnv_api_key_here';
+  private readonly baseUrl = `${environment.apiUrl}/gnv`;
   
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'Authorization': `Bearer ${this.apiKey}`,
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     });

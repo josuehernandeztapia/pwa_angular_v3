@@ -87,7 +87,13 @@ export interface ActivityItem {
 
             <div class="activity-body">
               <h4 class="activity-title">{{ activity.title }}</h4>
-              <p class="activity-description" [innerHTML]="formatDescription(activity)"></p>
+              <p class="activity-description">
+                <ng-container *ngIf="activity.client?.name; else plainDesc">
+                  {{ activity.description.replace(activity.client.name, '') }}
+                  <span class="client-name">{{ activity.client.name }}</span>
+                </ng-container>
+                <ng-template #plainDesc>{{ activity.description }}</ng-template>
+              </p>
               
               <div class="activity-metadata" *ngIf="hasMetadata(activity)">
                 <div class="metadata-item" *ngIf="activity.metadata?.amount">

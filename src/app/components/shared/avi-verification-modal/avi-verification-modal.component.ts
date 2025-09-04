@@ -114,8 +114,8 @@ interface AviSessionData {
                    [class]="'result-' + result.decision.toLowerCase().replace('-', '')">
                 
                 <!-- Semáforo Icon -->
-                <div class="semaforo-indicator">
-                  <span class="decision-icon" [innerHTML]="result.icon"></span>
+                <div class="semaforo-indicator" [attr.aria-label]="result.decision">
+                  <span class="decision-icon">{{ result.icon }}</span>
                 </div>
                 
                 <!-- Question Info -->

@@ -26,7 +26,7 @@ export interface ApiError {
   providedIn: 'root'
 })
 export class HttpClientService {
-  private readonly baseUrl = localEnvironment.apiUrl || 'http://localhost:3000/api';
+  private readonly baseUrl = environment.apiUrl || 'http://localhost:3000/api';
   private readonly maxRetries = 3;
   
   // Connection status
@@ -370,11 +370,3 @@ export class HttpClientService {
     return this.connectionSubject.value && navigator.onLine;
   }
 }
-
-// Local environment configuration for HTTP client
-const localEnvironment = {
-  production: false,
-  apiUrl: 'http://localhost:3000/api', // Change this to your actual API URL
-  appName: 'Conductores PWA',
-  version: '1.0.0'
-};

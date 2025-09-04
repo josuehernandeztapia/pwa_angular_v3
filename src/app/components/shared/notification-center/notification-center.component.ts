@@ -78,8 +78,8 @@ interface NotificationHistory {
           [class.unread]="!notification.clicked"
           (click)="handleNotificationClick(notification)"
         >
-          <div class="notification-icon">
-            <span [innerHTML]="getNotificationIcon(notification.type)"></span>
+          <div class="notification-icon" [attr.aria-label]="getTypeLabel(notification.type)">
+            {{ getNotificationIcon(notification.type) }}
           </div>
           
           <div class="notification-content">
