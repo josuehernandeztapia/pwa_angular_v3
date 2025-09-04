@@ -212,3 +212,70 @@ body {
     box-shadow: none;
   }
 }
+
+/* ===== UX STANDARDIZATION ALIASES ===== */
+/* Unified secondary button style */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--bg-gray-100);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevated);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Map common ad-hoc buttons to primary style */
+.btn-edit,
+.btn-enable,
+.btn-test,
+.simulate-button,
+.copy-button,
+.copy-all-button,
+.quick-action-btn,
+.btn-mark-all,
+.mark-all-read-btn,
+.btn-action.primary {
+  @extend .btn-primary;
+}
+
+/* Map filter/close/secondary-like to secondary style */
+.filter-btn,
+.btn-dismiss,
+.close-btn,
+.btn-close,
+.clear-filters-btn,
+.btn-clear {
+  @extend .btn-secondary;
+}
+
+/* Standardize inputs */
+.form-input,
+.readonly-input {
+  @extend .premium-input;
+}
+
+/* Standardize cards */
+.profile-card,
+.card {
+  @extend .premium-card;
+}
+
+/* Status badge style */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  border-radius: 9999px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--bg-gray-100);
+}

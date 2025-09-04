@@ -84,6 +84,9 @@
   --bg-command-center: #1f2937;      /* Premium dark background */
   --bg-surface-premium: #f7fafc;     /* Light premium surfaces */
   --bg-glass-effect: rgba(255, 255, 255, 0.95); /* Glassmorphism */
+  /* Aliases for existing global usage */
+  --command-center-bg: var(--bg-command-center);
+  --gradient-primary: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600));
 
   /* Intelligence Colors */
   --success-intelligence: #48bb78;   /* Intelligent success */
