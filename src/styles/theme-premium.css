@@ -147,6 +147,33 @@
   color-scheme: dark;
 }
 
+/* === LIGHT THEME OVERRIDES === */
+:root[data-theme='light'] {
+  /* Switch background and text scale for light theme */
+  --bg-gray-950: #f9fafb; /* Light background */
+  --bg-gray-900: #f3f4f6;
+  --bg-gray-800: #e5e7eb;
+  --bg-gray-100: #111827; /* Dark text */
+  --text-dark: #111827;
+  --text-medium: #374151;
+  --text-light: #4b5563;
+
+  /* Light surfaces */
+  --bg-command-center: #ffffff;
+  --bg-surface-premium: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-backdrop: blur(10px);
+
+  /* Shadows tuned for light */
+  --shadow-premium: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  --shadow-elevated: 0 12px 20px -6px rgba(0, 0, 0, 0.12), 0 6px 8px -4px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 6px 10px -3px rgba(0, 0, 0, 0.12), 0 3px 5px -2px rgba(0, 0, 0, 0.06);
+
+  /* Prefer light color scheme */
+  color-scheme: light;
+}
+
 /* === UTILITY CLASSES === */
 .text-primary-cyan { color: var(--primary-cyan-400); }
 .text-accent-amber { color: var(--accent-amber-500); }

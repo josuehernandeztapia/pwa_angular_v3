@@ -70,6 +70,21 @@
     "quality:badge": "node scripts/quality-badge.js",
     "mock:api": "json-server --watch db.json --port 3000",
     "test:all": "npm run test:unit && npm run test:integration && npm run test:accessibility && npm run test:visual && npm run test:e2e:chrome && npm run test:mutation:quick && npm run coverage:generate",
+
+    "test:config:settings:persistence": "ng test --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.spec.configuracion.json",
+    "test:config:theme:switching": "ng test --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.spec.configuracion.json",
+    "test:config:security:validation": "ng test --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.spec.configuracion.json",
+    "test:config:data:retention:policies": "ng test --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.spec.configuracion.json",
+
+    "test:flow:builder:visual:editor": "playwright test --config=playwright.config.ts --grep @flow-editor",
+    "test:flow:builder:node:connections": "playwright test --config=playwright.config.ts --grep @flow-connections",
+    "test:flow:builder:market:compatibility": "playwright test --config=playwright.config.ts --grep @flow-market",
+    "test:flow:builder:deployment:pipeline": "playwright test --config=playwright.config.ts --grep @flow-deploy",
+
+    "test:config:premium:styling:consistency": "node scripts/ux-coherence-runner.js coherence:all",
+    "test:config:glassmorphism:effects": "node scripts/ux-coherence-runner.js ux:modals",
+    "test:config:responsive:mobile:tablet": "node scripts/ux-coherence-runner.js responsive:mobile",
+    "test:config:flow:builder:premium:ui": "node scripts/ux-coherence-runner.js coherence:all",
     "prepare": "husky",
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
     

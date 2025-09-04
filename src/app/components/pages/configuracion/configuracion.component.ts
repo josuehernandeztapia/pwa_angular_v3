@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -26,7 +26,7 @@ interface ConfigSetting {
   standalone: true,
   imports: [CommonModule, FormsModule, FlowBuilderComponent],
   template: `
-    <div class="configuracion-container">
+    <div class="configuracion-container premium-container command-center-bg">
       <header class="page-header">
         <h1>⚙️ Configuración</h1>
         <p class="page-description">Personaliza tu experiencia en la aplicación</p>
@@ -131,7 +131,7 @@ interface ConfigSetting {
   styles: [`
     .configuracion-container {
       padding: 24px;
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
@@ -139,19 +139,19 @@ interface ConfigSetting {
       text-align: center;
       margin-bottom: 32px;
       padding-bottom: 24px;
-      border-bottom: 2px solid #e2e8f0;
+      border-bottom: 2px solid var(--glass-border);
     }
 
     .page-header h1 {
       margin: 0 0 8px 0;
-      color: #2d3748;
+      color: var(--bg-gray-100);
       font-size: 2rem;
       font-weight: 700;
     }
 
     .page-description {
       margin: 0;
-      color: #718096;
+      color: var(--text-light);
       font-size: 1.1rem;
     }
 
@@ -163,16 +163,19 @@ interface ConfigSetting {
     }
 
     .config-section {
-      background: white;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
+      background: var(--glass-bg);
+      border-radius: 16px;
+      border: 1px solid var(--glass-border);
       overflow: hidden;
+      backdrop-filter: var(--glass-backdrop);
+      -webkit-backdrop-filter: var(--glass-backdrop);
+      box-shadow: var(--shadow-card);
     }
 
     .section-header {
       padding: 20px;
-      background: #f7fafc;
-      border-bottom: 1px solid #e2e8f0;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid var(--glass-border);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -191,21 +194,22 @@ interface ConfigSetting {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: white;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
+      background: var(--bg-surface-premium);
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-card);
     }
 
     .section-details h2 {
       margin: 0 0 4px 0;
-      color: #2d3748;
+      color: var(--bg-gray-100);
       font-size: 1.3rem;
       font-weight: 600;
     }
 
     .section-details p {
       margin: 0;
-      color: #718096;
+      color: var(--text-light);
       font-size: 0.9rem;
     }
 
@@ -218,7 +222,7 @@ interface ConfigSetting {
       justify-content: space-between;
       align-items: center;
       padding: 20px;
-      border-bottom: 1px solid #f1f5f9;
+      border-bottom: 1px solid var(--glass-border);
     }
 
     .setting-item:last-child {
@@ -232,14 +236,14 @@ interface ConfigSetting {
     .setting-label label {
       display: block;
       font-weight: 600;
-      color: #2d3748;
+      color: var(--bg-gray-100);
       margin-bottom: 4px;
     }
 
     .setting-description {
       margin: 0;
       font-size: 0.8rem;
-      color: #718096;
+      color: var(--text-light);
       line-height: 1.4;
     }
 
@@ -269,7 +273,7 @@ interface ConfigSetting {
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: #cbd5e0;
+      background-color: var(--border-medium);
       transition: .4s;
       border-radius: 26px;
     }
@@ -281,13 +285,13 @@ interface ConfigSetting {
       width: 20px;
       left: 3px;
       bottom: 3px;
-      background-color: white;
+      background-color: var(--pure-white);
       transition: .4s;
       border-radius: 50%;
     }
 
     input:checked + .toggle-slider {
-      background-color: #4299e1;
+      background-color: var(--primary-cyan-500);
     }
 
     input:checked + .toggle-slider:before {
@@ -296,18 +300,20 @@ interface ConfigSetting {
 
     /* Select and Input */
     .setting-select, .setting-input {
-      padding: 8px 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      background: white;
-      font-size: 0.9rem;
-      min-width: 150px;
+      padding: 10px 12px;
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--bg-gray-100);
+      font-size: 0.95rem;
+      min-width: 180px;
+      box-shadow: var(--shadow-card);
     }
 
     .setting-select:focus, .setting-input:focus {
       outline: none;
-      border-color: #4299e1;
-      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+      border-color: var(--primary-cyan-400);
+      box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
     }
 
     .actions-section {
@@ -315,55 +321,58 @@ interface ConfigSetting {
       justify-content: space-between;
       gap: 16px;
       padding: 24px 0;
-      border-top: 1px solid #e2e8f0;
+      border-top: 1px solid var(--glass-border);
     }
 
     .btn-primary, .btn-secondary {
       padding: 12px 24px;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #4299e1, #3182ce);
+      background: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600));
       color: white;
+      box-shadow: var(--shadow-card);
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #3182ce, #2c5282);
+      background: linear-gradient(135deg, var(--primary-cyan-300), var(--primary-cyan-500));
       transform: translateY(-1px);
     }
 
     .btn-secondary {
-      background: #f7fafc;
-      color: #4a5568;
-      border: 1px solid #e2e8f0;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--bg-gray-100);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-card);
     }
 
     .btn-secondary:hover {
-      background: #edf2f7;
+      background: rgba(255, 255, 255, 0.1);
     }
 
     .flow-builder-btn {
-      padding: 8px 16px;
-      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-      color: white;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
+      color: var(--bg-gray-950);
       border: none;
-      border-radius: 6px;
-      font-weight: 500;
+      border-radius: 10px;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      box-shadow: var(--shadow-card);
     }
 
     .flow-builder-btn:hover:not(:disabled) {
-      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      background: linear-gradient(135deg, var(--accent-amber-300), var(--accent-amber-500));
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      box-shadow: var(--shadow-elevated);
     }
 
     .flow-builder-btn:disabled {
@@ -378,29 +387,30 @@ interface ConfigSetting {
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      backdrop-filter: blur(4px);
     }
 
     .modal-content-wrapper {
       position: relative;
       width: 95%;
       height: 95%;
-      background: white;
-      border-radius: 12px;
+      background: var(--bg-surface-premium);
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      box-shadow: var(--shadow-premium);
     }
 
     .modal-close-btn {
       position: absolute;
       top: 16px;
       right: 16px;
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       background: rgba(255, 255, 255, 0.9);
       border: none;
       border-radius: 50%;
@@ -408,10 +418,11 @@ interface ConfigSetting {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 16px;
       color: #374151;
       z-index: 10;
       transition: all 0.2s;
+      box-shadow: var(--shadow-card);
     }
 
     .modal-close-btn:hover {
@@ -600,10 +611,14 @@ export class ConfiguracionComponent implements OnInit {
     }
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private renderer: Renderer2) {}
 
   ngOnInit(): void {
     this.loadConfiguration();
+    // Apply theme on init
+    const savedConfig = localStorage.getItem('app-configuration');
+    const theme = savedConfig ? (JSON.parse(savedConfig).theme || 'dark') : 'dark';
+    this.applyTheme(theme);
   }
 
   openFlowBuilder(): void {
@@ -620,6 +635,9 @@ export class ConfiguracionComponent implements OnInit {
     console.log('Configuración cambiada:', key, value);
     // Here you would typically save to a service or localStorage
     this.saveToLocalStorage(key, value);
+    if (key === 'theme') {
+      this.applyTheme(value);
+    }
   }
 
   saveConfiguration(): void {
@@ -696,5 +714,16 @@ export class ConfiguracionComponent implements OnInit {
     
     config[key] = value;
     localStorage.setItem('app-configuration', JSON.stringify(config));
+  }
+
+  private applyTheme(theme: 'light' | 'dark' | 'auto'): void {
+    const root = document.documentElement;
+    if (theme === 'auto') {
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const computedTheme = prefersDark ? 'dark' : 'light';
+      this.renderer.setAttribute(root, 'data-theme', computedTheme);
+    } else {
+      this.renderer.setAttribute(root, 'data-theme', theme);
+    }
   }
 }
