@@ -796,7 +796,10 @@ export class ClienteDetailComponent implements OnInit {
         unidadFabricada: { completed: true, completedAt: new Date('2024-02-05') },
         transitoMaritimo: { inProgress: true, startedAt: new Date('2024-02-10') },
         enAduana: { completed: false },
-        liberada: { completed: false }
+        liberada: { completed: false },
+        entregada: { completed: false },
+        documentosTransferidos: { completed: false },
+        placasEntregadas: { completed: false }
       }
     };
     
@@ -920,7 +923,8 @@ export class ClienteDetailComponent implements OnInit {
     return municipalities[market] || market || 'No definido';
   }
   
-  getScoreClass(score: number): string {
+  getScoreClass(score: number | undefined): string {
+    if (score == null) return 'text-gray-400';
     if (score >= 80) return 'score-excellent';
     if (score >= 60) return 'score-good';
     if (score >= 40) return 'score-fair';
