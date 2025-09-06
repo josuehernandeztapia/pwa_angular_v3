@@ -1,0 +1,65 @@
+{
+  "products": [
+    {
+      "id": "h6c_19p",
+      "brand": "MarcaX",
+      "model": "H6C 19 Pasajeros",
+      "basePrice": 799000,
+      "components": [
+        { "id": "bancas_herradura", "name": "Bancas tipo herradura", "price": 22000, "isOptional": false },
+        { "id": "paquete_tec", "name": "GPS + Cámaras", "price": 12000, "isOptional": false }
+      ],
+      "conversionPackages": [
+        { "id": "gnv_iny_54", "name": "Conversión GNV (Inyectores)", "price": 54000, "vendor": "Taller A" },
+        { "id": "gnv_elec_42", "name": "Conversión GNV (Electroválvula)", "price": 42000, "vendor": "Taller B" }
+      ],
+      "applicability": { "markets": ["*"], "flows": ["VentaPlazo", "VentaDirecta"] }
+    },
+    {
+      "id": "h6c_ventanas",
+      "brand": "MarcaX",
+      "model": "H6C Ventanas",
+      "basePrice": 749000,
+      "components": [
+        { "id": "bancas_herradura", "name": "Bancas tipo herradura", "price": 22000, "isOptional": false },
+        { "id": "paquete_tec", "name": "GPS + Cámaras", "price": 12000, "isOptional": false }
+      ],
+      "conversionPackages": [
+        { "id": "gnv_iny_54", "name": "Conversión GNV (Inyectores)", "price": 54000, "vendor": "Taller A" },
+        { "id": "gnv_elec_42", "name": "Conversión GNV (Electroválvula)", "price": 42000, "vendor": "Taller B" }
+      ],
+      "applicability": { "markets": ["*"], "flows": ["VentaPlazo", "VentaDirecta"] }
+    },
+    {
+      "id": "m6_lhd_ventanas",
+      "brand": "M6 Serie (LHD)",
+      "model": "3TZ HKL6600AM Ventanas",
+      "basePrice": 749000,
+      "components": [
+        { "id": "bancas_herradura", "name": "Bancas tipo herradura", "price": 22000, "isOptional": false },
+        { "id": "paquete_tec", "name": "GPS + Cámaras", "price": 12000, "isOptional": false }
+      ],
+      "conversionPackages": [
+        { "id": "gnv_iny_54", "name": "Conversión GNV (Inyectores)", "price": 54000, "vendor": "Taller A" },
+        { "id": "gnv_elec_42", "name": "Conversión GNV (Electroválvula)", "price": 42000, "vendor": "Taller B" }
+      ],
+      "applicability": { "markets": ["*"], "flows": ["VentaPlazo", "VentaDirecta"] }
+    },
+    {
+      "id": "m6_lhd_19p",
+      "brand": "M6 Serie (LHD)",
+      "model": "3TZ HKL6600AM 19 Pasajeros",
+      "basePrice": 799000,
+      "components": [
+        { "id": "bancas_herradura", "name": "Bancas tipo herradura", "price": 22000, "isOptional": false },
+        { "id": "paquete_tec", "name": "GPS + Cámaras", "price": 12000, "isOptional": false }
+      ],
+      "conversionPackages": [
+        { "id": "gnv_iny_54", "name": "Conversión GNV (Inyectores)", "price": 54000, "vendor": "Taller A" },
+        { "id": "gnv_elec_42", "name": "Conversión GNV (Electroválvula)", "price": 42000, "vendor": "Taller B" }
+      ],
+      "applicability": { "markets": ["*"], "flows": ["VentaPlazo", "VentaDirecta"] }
+    }
+  ]
+}
+

@@ -1,0 +1,34 @@
+{
+  "features": {
+    "supportsCreditCollective": false,
+    "supportsTanda": false,
+    "requiresEcosystem": false,
+    "requiresSocialCollateral": { "VentaPlazo": false, "VentaDirecta": false }
+  },
+  "policies": {
+    "minDownPaymentPct": { "VentaPlazo": 0.60 },
+    "allowedTerms": { "VentaPlazo": [12, 24] }
+  },
+  "rates": {
+    "defaultAnnual": 0.255,
+    "byProduct": {
+      "h6c_19p": 0.255,
+      "h6c_ventanas": 0.255,
+      "m6_lhd_ventanas": 0.255,
+      "m6_lhd_19p": 0.255
+    }
+  },
+  "insurance": {
+    "cityRisk": {
+      "aguascalientes": { "annual": 32000 },
+      "ciudad_b": { "annual": 32000 },
+      "ciudad_c": { "annual": 32000 },
+      "*": { "annual": 32000 }
+    }
+  },
+  "contracts": {
+    "VentaPlazo": ["contrato_venta_plazo"],
+    "VentaDirecta": ["promesa_compraventa"]
+  }
+}
+

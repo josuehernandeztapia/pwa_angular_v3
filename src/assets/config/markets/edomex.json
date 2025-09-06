@@ -1,0 +1,36 @@
+{
+  "features": {
+    "supportsCreditCollective": true,
+    "supportsTanda": true,
+    "requiresEcosystem": true,
+    "requiresSocialCollateral": { "VentaPlazo": true, "VentaDirecta": false }
+  },
+  "policies": {
+    "minDownPaymentPct": { "VentaPlazo": 0.25, "CreditoColectivo": 0.15 },
+    "allowedTerms": { "VentaPlazo": [48, 60], "CreditoColectivo": [60] },
+    "group": { "minMembers": 5, "maxMembers": 20 }
+  },
+  "rates": {
+    "defaultAnnual": 0.299,
+    "byProduct": {
+      "h6c_19p": 0.299,
+      "h6c_ventanas": 0.299,
+      "m6_lhd_ventanas": 0.299,
+      "m6_lhd_19p": 0.299
+    }
+  },
+  "insurance": {
+    "cityRisk": {
+      "toluca": { "annual": 36700 },
+      "ecatepec": { "annual": 36700 },
+      "ciudad_b": { "annual": 36700 },
+      "ciudad_c": { "annual": 36700 },
+      "*": { "annual": 36700 }
+    }
+  },
+  "contracts": {
+    "VentaPlazo": ["contrato_venta_plazo", "convenio_dacion_pago?requiresSocialCollateral"],
+    "VentaDirecta": ["promesa_compraventa"]
+  }
+}
+
