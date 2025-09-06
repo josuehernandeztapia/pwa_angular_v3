@@ -12,7 +12,24 @@ export const environment = {
     enableOfflineMode: true,
     enableAVISystem: true,
     enableVoiceRecording: true,
-    enableStressDetection: true
+    enableStressDetection: true,
+    // Dynamic configuration flags
+    enableRemoteConfig: false,
+    enableConfigShadowMode: false,
+    enablePerfConfig: false,
+    enableUiMessages: false,
+    enableValidationConfig: false,
+    enableFinancialRates: false,
+    enableCatalogConfig: false,
+    enableLocalizationConfig: false,
+    enableIntegrationsConfig: false,
+    enableSecurityConfig: false
+  },
+
+  // Dynamic configuration base paths
+  config: {
+    assetsBasePath: '/assets/config',
+    remoteBaseUrl: '' // e.g. 'https://config.conductores.mx/config'
   },
 
   // AVI System Configuration

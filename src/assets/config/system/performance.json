@@ -1,0 +1,43 @@
+{
+  "delays": {
+    "document_load": 100,
+    "contract_generation": 200,
+    "status_update": 300,
+    "validation": 500,
+    "ecosystem_check": 800
+  },
+  "timeouts": {
+    "api_call": 30000,
+    "file_upload": 60000,
+    "pdf_generation": 45000,
+    "kyc_verification": 120000
+  },
+  "retries": {
+    "max_attempts": 3,
+    "backoff_ms": 1000,
+    "exponential": true
+  },
+  "profiles": {
+    "test": {
+      "delays": {
+        "document_load": 5,
+        "contract_generation": 5,
+        "status_update": 5,
+        "validation": 5,
+        "ecosystem_check": 5
+      },
+      "timeouts": {
+        "api_call": 2000,
+        "file_upload": 5000,
+        "pdf_generation": 5000,
+        "kyc_verification": 5000
+      },
+      "retries": {
+        "max_attempts": 1,
+        "backoff_ms": 10,
+        "exponential": false
+      }
+    }
+  }
+}
+

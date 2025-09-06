@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of, BehaviorSubject, throwError } from 'rxjs';
+import { catchError, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { 
   ApplicationConfiguration, 
   MarketConfiguration, 
@@ -30,7 +31,11 @@ export class ConfigurationService {
   private configurationSubject = new BehaviorSubject<ApplicationConfiguration>(this.getDefaultConfiguration());
   public configuration$ = this.configurationSubject.asObservable();
 
-  constructor() {
+  // Namespace config cache (for dynamic JSON loads)
+  private namespaceCache = new Map<string, { etag?: string; value: any }>();
+  private namespaceObsCache = new Map<string, Observable<any>>();
+
+  constructor(private http: HttpClient) {
     this.loadConfiguration();
   }
 
@@ -62,20 +67,77 @@ export class ConfigurationService {
    * Load configuration from external API
    */
   private loadConfigurationFromAPI(): Observable<ApplicationConfiguration> {
-    // In production, this would call external configuration API
-    // Example: return this.http.get<ApplicationConfiguration>('/api/configuration')
-    
-    // For now, simulate API call with defaults
-    return of(this.getDefaultConfiguration()).pipe(delay(500));
+    // Backward-compatible: keep existing default config as fallback
+    return of(this.getDefaultConfiguration());
   }
 
   /**
    * Refresh configuration from webhook/API
    */
   refreshConfiguration(): Observable<ApplicationConfiguration> {
-    return this.loadConfigurationFromAPI().pipe(
-      delay(200) // Brief delay to prevent rapid refreshes
+    return this.loadConfigurationFromAPI();
+  }
+
+  /**
+   * Load a configuration namespace with precedence:
+   * environment.remoteBaseUrl (if enabled) -> assets -> default
+   * Caches responses and honors ETag if provided by remote.
+   */
+  loadNamespace<T = any>(namespace: string, defaultValue: T): Observable<T> {
+    const cached = this.namespaceObsCache.get(namespace);
+    if (cached) return cached as Observable<T>;
+
+    const obs = this.loadFromRemote<T>(namespace).pipe(
+      catchError(() => this.loadFromAssets<T>(namespace)),
+      catchError(() => of(defaultValue)),
+      shareReplay(1)
     );
+
+    this.namespaceObsCache.set(namespace, obs);
+    return obs;
+  }
+
+  private loadFromRemote<T>(namespace: string): Observable<T> {
+    const { environment } = (window as any);
+    // Prefer Angular's environment if bundled
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const env = require('../../environments/environment');
+      const features = env.environment?.features || {};
+      const remoteBaseUrl = env.environment?.config?.remoteBaseUrl || '';
+      if (!features.enableRemoteConfig || !remoteBaseUrl) {
+        return throwError(() => new Error('Remote config disabled'));
+      }
+
+      const cache = this.namespaceCache.get(namespace);
+      const headers: Record<string, string> = {};
+      if (cache?.etag) headers['If-None-Match'] = cache.etag;
+
+      return this.http.get(`${remoteBaseUrl}/${namespace}.json`, { observe: 'response', headers }).pipe(
+        map(resp => {
+          if (resp.status === 304 && cache) return cache.value as T;
+          const etag = resp.headers.get('ETag') || undefined;
+          const body = resp.body as T;
+          this.namespaceCache.set(namespace, { etag, value: body });
+          return body;
+        })
+      );
+    } catch {
+      return throwError(() => new Error('Environment not available for remote config'));
+    }
+  }
+
+  private loadFromAssets<T>(namespace: string): Observable<T> {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const env = require('../../environments/environment');
+      const assetsBasePath = env.environment?.config?.assetsBasePath || '/assets/config';
+      return this.http.get<T>(`${assetsBasePath}/${namespace}.json`).pipe(
+        tap(value => this.namespaceCache.set(namespace, { value }))
+      );
+    } catch {
+      return throwError(() => new Error('Assets base path not available'));
+    }
   }
 
   /**

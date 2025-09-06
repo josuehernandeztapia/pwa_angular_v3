@@ -9,7 +9,24 @@ export const environment = {
     enableMockData: false,
     enableAnalytics: true,
     enablePushNotifications: true,
-    enableOfflineMode: true
+    enableOfflineMode: true,
+    // Dynamic configuration flags
+    enableRemoteConfig: true,
+    enableConfigShadowMode: false,
+    enablePerfConfig: true,
+    enableUiMessages: true,
+    enableValidationConfig: true,
+    enableFinancialRates: true,
+    enableCatalogConfig: true,
+    enableLocalizationConfig: true,
+    enableIntegrationsConfig: true,
+    enableSecurityConfig: true
+  },
+
+  // Dynamic configuration base paths
+  config: {
+    assetsBasePath: '/assets/config',
+    remoteBaseUrl: process.env['CONFIG_REMOTE_BASE_URL'] || ''
   },
 
   // API endpoints configuration
