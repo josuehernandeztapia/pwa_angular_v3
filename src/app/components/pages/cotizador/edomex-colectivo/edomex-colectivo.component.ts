@@ -7,6 +7,7 @@ import { SimuladorEngineService, CollectiveScenarioConfig } from '../../../../se
 import { LoadingService } from '../../../../services/loading.service';
 import { FinancialCalculatorService } from '../../../../services/financial-calculator.service';
 import { Client } from '../../../../models/types';
+import { PdfExportService } from '../../../../services/pdf-export.service';
 
 @Component({
   selector: 'app-edomex-colectivo',
@@ -354,6 +355,7 @@ export class EdomexColectivoComponent implements OnInit, OnDestroy {
     private simuladorEngine: SimuladorEngineService,
     private loadingService: LoadingService,
     private financialCalc: FinancialCalculatorService,
+    private pdfExportService: PdfExportService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -492,13 +494,39 @@ export class EdomexColectivoComponent implements OnInit, OnDestroy {
   generatePDF() {
     if (!this.quotation) return;
 
-    console.log('Generating PDF for collective quotation...');
-    // Mock PDF generation
-    const pdfUrl = `https://documents.conductores.mx/quotations/edomex-colectivo-${Date.now()}.pdf`;
-    const link = document.createElement('a');
-    link.href = pdfUrl;
-    link.download = `cotizacion-edomex-colectivo-${this.quotation.memberCount}-miembros.pdf`;
-    link.click();
+    const downPayment = this.quotation.downPaymentPerMember;
+    const monthlyPayment = this.quotation.monthlyPaymentPerMember;
+    const term = 60;
+
+    const quoteData = {
+      clientInfo: {
+        name: `Grupo de ${this.quotation.memberCount} miembros`,
+        contact: 'contacto@conductores.com'
+      },
+      ecosystemInfo: {
+        name: 'EdoMex Colectivo',
+        route: 'Rutas Autorizadas',
+        market: 'EDOMEX' as const
+      },
+      quoteDetails: {
+        vehicleValue: this.quotation.unitPrice,
+        downPaymentOptions: [downPayment],
+        monthlyPaymentOptions: [monthlyPayment],
+        termOptions: [term],
+        interestRate: 29.9
+      },
+      validUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      quoteNumber: `EDO-COLECT-${Date.now()}`
+    };
+
+    this.pdfExportService.generateProposalPDF(quoteData as any, 0)
+      .then((blob: Blob) => {
+        const filename = `cotizacion-edomex-colectivo-${this.quotation.memberCount}-miembros.pdf`;
+        this.pdfExportService.downloadPDF(blob, filename);
+      })
+      .catch((err: any) => {
+        console.error('Error generating PDF:', err);
+      });
   }
 
   formatCurrency(value: number): string {
