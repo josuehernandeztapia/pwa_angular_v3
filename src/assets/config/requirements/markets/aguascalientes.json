@@ -1,0 +1,15 @@
+{
+  "$schema": "../requirements.schema.json",
+  "docTypes": {
+    "COMPROBANTE_INGRESOS": {
+      "label": "Comprobante de Ingresos (3 meses)",
+      "group": "ingresos",
+      "criticalLevel": "contract_gate",
+      "appliesTo": { "markets": ["aguascalientes"], "flows": ["VentaPlazo"], "clientTypes": ["*"] }
+    }
+  },
+  "requirements": {
+    "ingresos": ["COMPROBANTE_INGRESOS"]
+  }
+}
+

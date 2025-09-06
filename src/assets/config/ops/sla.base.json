@@ -1,0 +1,15 @@
+{
+  "milestones": {
+    "transitoMaritimo": { "maxDays": 21 },
+    "enAduana": { "maxDays": 7 },
+    "liberada": { "maxDays": 2 }
+  },
+  "notifications": {
+    "whatsappTemplates": {
+      "order_created": "delivery_update_notification",
+      "in_customs": "import_milestone_in_customs",
+      "released": "import_milestone_customs_released"
+    }
+  }
+}
+

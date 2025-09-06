@@ -157,6 +157,11 @@ export const routes: Routes = [
         title: 'Centro de Operaciones - Entregas'
       },
       {
+        path: 'import-tracker',
+        loadComponent: () => import('./components/pages/ops/ops-import-tracker.component').then(c => c.OpsImportTrackerComponent),
+        title: 'Import Tracker - Operaciones'
+      },
+      {
         path: 'deliveries/:id',
         loadComponent: () => import('./components/pages/ops/delivery-detail.component').then(c => c.DeliveryDetailComponent),
         title: 'Detalle de Entrega - Operaciones'

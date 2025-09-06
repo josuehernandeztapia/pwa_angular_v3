@@ -1,0 +1,47 @@
+{
+  "$id": "https://conductores-pwa/schemas/requirements.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "docTypes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string" },
+          "group": { "type": "string" },
+          "criticalLevel": { "type": "string", "enum": ["none", "kyc_gate", "ecosystem_gate", "contract_gate", "group_gate", "scoring_gate"] },
+          "gates": { "type": "array", "items": { "type": "string", "enum": ["kyc", "scoring", "contract"] } },
+          "expiry": {
+            "type": "object",
+            "properties": {
+              "source": { "type": "string", "enum": ["expirationDate", "uploadedAt"] },
+              "windowDays": { "type": "number" },
+              "warnDays": { "type": "number" }
+            },
+            "additionalProperties": false
+          },
+          "appliesTo": {
+            "type": "object",
+            "properties": {
+              "markets": { "type": "array", "items": { "type": "string" } },
+              "flows": { "type": "array", "items": { "type": "string" } },
+              "clientTypes": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": true
+}
+

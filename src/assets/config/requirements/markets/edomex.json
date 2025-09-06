@@ -1,0 +1,55 @@
+{
+  "$schema": "../requirements.schema.json",
+  "docTypes": {
+    "ACTA_RUTA": {
+      "label": "Acta Constitutiva de la Ruta",
+      "group": "ecosystem",
+      "criticalLevel": "ecosystem_gate",
+      "appliesTo": { "markets": ["edomex"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "PODERES_RUTA": {
+      "label": "Poderes",
+      "group": "ecosystem",
+      "criticalLevel": "ecosystem_gate",
+      "appliesTo": { "markets": ["edomex"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "INE_REP_LEGAL": {
+      "label": "INE Representante Legal",
+      "group": "ecosystem",
+      "criticalLevel": "ecosystem_gate",
+      "appliesTo": { "markets": ["edomex"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "RFC_RUTA": {
+      "label": "Constancia Situación Fiscal Ruta",
+      "group": "ecosystem",
+      "criticalLevel": "ecosystem_gate",
+      "appliesTo": { "markets": ["edomex"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "CARTA_AVAL": {
+      "label": "Carta Aval de Ruta",
+      "group": "ecosystem",
+      "criticalLevel": "ecosystem_gate",
+      "expiry": { "source": "uploadedAt", "windowDays": 180, "warnDays": 14 },
+      "appliesTo": { "markets": ["edomex"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "CARTA_ANTIGUEDAD": {
+      "label": "Carta de Antigüedad de la Ruta",
+      "group": "ecosystem",
+      "criticalLevel": "ecosystem_gate",
+      "expiry": { "source": "uploadedAt", "windowDays": 90, "warnDays": 14 },
+      "appliesTo": { "markets": ["edomex"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "PADRON_SOCIOS": {
+      "label": "Padrón de Socios Actualizado",
+      "group": "grupo",
+      "criticalLevel": "group_gate",
+      "appliesTo": { "markets": ["edomex"], "flows": ["CreditoColectivo"], "clientTypes": ["*"] }
+    }
+  },
+  "requirements": {
+    "ecosystem": ["ACTA_RUTA", "PODERES_RUTA", "INE_REP_LEGAL", "RFC_RUTA"],
+    "agremiado": ["CARTA_AVAL", "CARTA_ANTIGUEDAD"],
+    "grupo": ["PADRON_SOCIOS"]
+  }
+}
+

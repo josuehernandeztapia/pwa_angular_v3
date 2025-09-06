@@ -1,0 +1,55 @@
+{
+  "$schema": "./requirements.schema.json",
+  "docTypes": {
+    "INE": {
+      "label": "INE vigente",
+      "group": "personal",
+      "criticalLevel": "kyc_gate",
+      "expiry": { "source": "expirationDate", "windowDays": 3650, "warnDays": 30 },
+      "appliesTo": { "markets": ["*"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "COMPROBANTE_DOMICILIO": {
+      "label": "Comprobante de domicilio",
+      "group": "personal",
+      "criticalLevel": "kyc_gate",
+      "expiry": { "source": "uploadedAt", "windowDays": 180, "warnDays": 14 },
+      "appliesTo": { "markets": ["*"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "RFC": {
+      "label": "Constancia de situación fiscal",
+      "group": "personal",
+      "criticalLevel": "none",
+      "appliesTo": { "markets": ["*"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "CURP": {
+      "label": "CURP",
+      "group": "personal",
+      "criticalLevel": "none",
+      "appliesTo": { "markets": ["*"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "COPIA_CONCESION": {
+      "label": "Copia de Concesión",
+      "group": "vehiculo",
+      "criticalLevel": "none",
+      "appliesTo": { "markets": ["*"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "TARJETA_CIRCULACION": {
+      "label": "Tarjeta de Circulación",
+      "group": "vehiculo",
+      "criticalLevel": "none",
+      "appliesTo": { "markets": ["*"], "flows": ["*"], "clientTypes": ["*"] }
+    },
+    "KYC_BIOMETRICO": {
+      "label": "Verificación biométrica (KYC)",
+      "group": "kyc",
+      "criticalLevel": "scoring_gate",
+      "gates": ["scoring", "contract"],
+      "appliesTo": { "markets": ["*"], "flows": ["VentaPlazo", "CreditoColectivo", "AhorroProgramado"], "clientTypes": ["*"] }
+    }
+  },
+  "requirements": {
+    "base": ["INE", "COMPROBANTE_DOMICILIO", "RFC"],
+    "vehiculo": ["COPIA_CONCESION", "TARJETA_CIRCULACION"]
+  }
+}
+
