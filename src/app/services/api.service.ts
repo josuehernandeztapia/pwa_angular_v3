@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { HttpClientService, ApiResponse } from './http-client.service';
-import { Client, BusinessFlow, Quote, Document, EventLog } from '../models/types';
+import { Client, BusinessFlow, Quote, Document, EventLog, DocumentStatus } from '../models/types';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -225,7 +225,7 @@ export class ApiService {
           const mockDocument: Document = {
             id: documentId,
             name: 'INE Vigente' as any,
-            status: 'En Revisión' as any,
+            status: DocumentStatus.EnRevision,
             uploadedAt: new Date(),
             fileUrl: URL.createObjectURL(file),
             fileName: file.name,
