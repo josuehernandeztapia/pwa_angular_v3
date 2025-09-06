@@ -48,13 +48,13 @@ describe('ConektaPaymentService', () => {
     service = TestBed.inject(ConektaPaymentService);
     httpMock = TestBed.inject(HttpTestingController);
     
-    // Mock environment
-    spyOnProperty(environment, 'services', 'get').and.returnValue({
+    // Mock environment by direct assignment for simplicity in tests
+    (environment as any).services = {
       metamap: { clientId: 'test', flowId: 'test', baseUrl: 'test' },
       conekta: { publicKey: 'key_test_123', baseUrl: 'https://api.conekta.io' },
       mifiel: { appId: 'test', baseUrl: 'test' },
       openai: { apiKey: 'test', baseUrl: 'https://api.openai.com/v1', models: { transcription: 'gpt-4o-transcribe', fallback: 'whisper-1' } }
-    } as any);
+    } as any;
     
     // Mock process.env for Node.js environment
     if (typeof process !== 'undefined') {

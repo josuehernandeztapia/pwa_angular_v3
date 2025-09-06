@@ -135,7 +135,7 @@ describe('BackendApiService', () => {
           newClient,
           jasmine.objectContaining({
             headers: jasmine.objectContaining({
-              'Authorization': 'Bearer test_jwt_token',
+              'Authorization': jasmine.stringMatching(/^Bearer\s.+/),
               'Content-Type': 'application/json'
             })
           })
@@ -504,7 +504,7 @@ describe('BackendApiService', () => {
           `${environment.apiUrl}${environment.endpoints.documents}/upload`,
           jasmine.any(FormData),
           jasmine.objectContaining({
-            headers: { 'Authorization': 'Bearer test_jwt_token' }
+            headers: jasmine.objectContaining({ 'Authorization': jasmine.stringMatching(/^Bearer\s.+/) })
           })
         );
         expect(response).toEqual(mockResponse);

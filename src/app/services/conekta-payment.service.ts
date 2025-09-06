@@ -35,6 +35,7 @@ interface PaymentRequest {
     client_id?: string;
     contract_id?: string;
     payment_type?: 'down_payment' | 'monthly_payment' | 'penalty';
+    test?: string;
   };
 }
 
@@ -411,7 +412,8 @@ export class ConektaPaymentService {
       payment_method: {
         type: 'card',
         token: 'tok_test_visa_4242' // Test token
-      }
+      },
+      metadata: { test: 'true' }
     });
   }
 }
