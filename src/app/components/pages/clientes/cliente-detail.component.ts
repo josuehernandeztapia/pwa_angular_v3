@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Client, EventLog, ImportStatus } from '../../../models/types';
 import { AviVerificationModalComponent } from '../../shared/avi-verification-modal/avi-verification-modal.component';
-import { ProgressBarComponent } from '../../shared/progress-bar.component';
 import { EventLogComponent } from '../../shared/event-log.component';
 import { ImportTrackerComponent } from '../../shared/import-tracker.component';
+import { ProgressBarComponent } from '../../shared/progress-bar.component';
 import { ProtectionRealComponent } from '../protection-real/protection-real.component';
-import { Client, EventLog, ImportStatus } from '../../../models/types';
 
 @Component({
   selector: 'app-cliente-detail',
@@ -26,7 +26,7 @@ import { Client, EventLog, ImportStatus } from '../../../models/types';
         </div>
         <div class="client-score" *ngIf="client?.healthScore != null">
           <span class="score-label">Score de Salud</span>
-          <span class="score-value" [class]="getHealthScoreClass()">{{ client?.healthScore != null ? client?.healthScore : 'N/A' }}%</span>
+          <span class="score-value" [class]="getScoreClass(client?.healthScore || 0)">{{ client?.healthScore != null ? client?.healthScore : 'N/A' }}%</span>
         </div>
         
         <!-- Protection Status Indicator (Financial Products Only) -->
@@ -815,7 +815,7 @@ export class ClienteDetailComponent implements OnInit {
         actor: 'Cliente' as any,
         message: 'Aportación mensual realizada',
         timestamp: new Date('2024-01-18'),
-        details: { amount: 8500, paymentMethod: 'Transferencia SPEI', reference: 'REF123456' }
+        details: { amount: 8500, paymentMethod: 'Transferencia SPEI', currency: 'MXN' as const }
       },
       {
         id: '2',
@@ -924,11 +924,10 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   getScoreClass(score: number | undefined): string {
-    if (score == null) return 'text-gray-400';
-    if (score >= 80) return 'score-excellent';
-    if (score >= 60) return 'score-good';
-    if (score >= 40) return 'score-fair';
-    return 'score-poor';
+    if (!score) return 'text-gray-400';
+    if (score >= 80) return 'text-green-600';
+    if (score >= 60) return 'text-yellow-600';
+    return 'text-red-600';
   }
   
   getHealthScoreClass(): string {
@@ -1077,5 +1076,22 @@ export class ClienteDetailComponent implements OnInit {
   
   getContractId(): string {
     return `contract-${this.client?.id || 'unknown'}`;
+  }
+  
+  // Added getter methods
+  get currentSavings(): number {
+    return this.client?.currentSavings || 0;
+  }
+
+  get savingsGoal(): number {
+    return this.client?.savingsGoal || 100000;
+  }
+
+  get completedPayments(): number {
+    return this.client?.completedPayments || 0;
+  }
+
+  get totalPayments(): number {
+    return this.client?.totalPayments || 24;
   }
 }

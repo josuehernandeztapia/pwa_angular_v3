@@ -1,5 +1,5 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import Tesseract, { Worker, createWorker } from 'tesseract.js';
 import { CreateWorkerType, TESSERACT_CREATE_WORKER } from '../tokens/ocr.tokens';
 
@@ -109,10 +109,10 @@ export class OCRService {
       const ocrResult: OCRResult = {
         text: result.data.text,
         confidence: result.data.confidence,
-        words: words.map((word: any) => ({
-          text: word.text,
-          confidence: word.confidence,
-          bbox: word.bbox
+        words: (result.data.words || []).map((word: any) => ({
+          text: word.text || '',
+          bbox: word.bbox || { x: 0, y: 0, w: 0, h: 0 },
+          confidence: word.confidence || 0
         }))
       };
 
@@ -150,10 +150,10 @@ export class OCRService {
       const ocrResult: OCRResult = {
         text: result.data.text,
         confidence: result.data.confidence,
-        words: words.map((word: any) => ({
-          text: word.text,
-          confidence: word.confidence,
-          bbox: word.bbox
+        words: (result.data.words || []).map((word: any) => ({
+          text: word.text || '',
+          bbox: word.bbox || { x: 0, y: 0, w: 0, h: 0 },
+          confidence: word.confidence || 0
         }))
       };
 

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -113,9 +113,9 @@ interface GNVOverageTemplate {
 })
 export class WhatsappService {
   private readonly baseUrl = 'https://graph.facebook.com/v18.0';
-  private readonly phoneNumberId = (environment as any).whatsappPhoneNumberId || 'your-phone-number-id';
-  private readonly accessToken = (environment as any).whatsappAccessToken || 'your-access-token';
-  private readonly webhookVerifyToken = (environment as any).whatsappWebhookVerifyToken || 'your-verify-token';
+  private readonly phoneNumberId = this.getEnvVar('WHATSAPP_PHONE_NUMBER_ID');
+  private readonly accessToken = this.getEnvVar('WHATSAPP_ACCESS_TOKEN');
+  private readonly webhookVerifyToken = this.getEnvVar('WHATSAPP_WEBHOOK_VERIFY_TOKEN');
 
   constructor(private http: HttpClient) {}
 
@@ -428,6 +428,13 @@ export class WhatsappService {
 
   private getBackendToken(): string {
     return localStorage.getItem('auth_token') || '';
+  }
+
+  private getEnvVar(key: string): string {
+    if (typeof process !== 'undefined' && (process as any).env) {
+      return ((process as any).env[key] as string) || '';
+    }
+    return '';
   }
 
   private handleError(error: any) {
