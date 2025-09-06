@@ -39,9 +39,10 @@ export class ProtectionEngineService {
     }
 
     const P = client.remainderAmount;
-    const M = client.paymentPlan.monthlyGoal;
-    const r = 0.255 / 12; // Port exacto de tasa desde React
-    const originalTerm = 48; // Assume 48 months for simulation
+    const M = client.paymentPlan.monthlyPayment || client.paymentPlan.monthlyGoal || 0;
+    const market = client.market || 'aguascalientes';
+    const r = this.financialCalc.getTIRMin(market) / 12;
+    const originalTerm = client.paymentPlan.term || 48;
     const paymentEvents = client.events.filter(e => e.type === EventType.Contribution || e.type === EventType.Collection).length;
     const monthsPaid = Math.floor(paymentEvents / 2); // very rough estimate
     const remainingTerm = originalTerm - monthsPaid;
@@ -86,19 +87,23 @@ export class ProtectionEngineService {
       ]
     });
 
-    // Scenario C: Extensión de Plazo - Port exacto líneas 714-803
+    // Scenario C: Extensión de Plazo - capitalizar interés durante los meses de diferimiento
+    const capitalizedBalance_C = this.financialCalc.capitalizeInterest(B_k, r, months);
     const newTerm_C = originalTerm + months;
-    const newMonthlyPayment_C = M; // Keep same payment, extend term
+    // Mantener el pago original; calcular término efectivo por consistencia analítica
+    const impliedTermAfterResume = this.financialCalc.getTermFromPayment(capitalizedBalance_C, r, M);
+    const finalNewTerm_C = Number.isFinite(impliedTermAfterResume) ? months + impliedTermAfterResume : newTerm_C;
     scenarios.push({
       type: 'recalendar',
       title: 'Extensión de Plazo',
       description: 'Mantener el pago actual y extender el plazo para compensar.',
-      newMonthlyPayment: newMonthlyPayment_C,
-      newTerm: newTerm_C,
-      termChange: months,
+      newMonthlyPayment: M,
+      newTerm: Math.max(newTerm_C, finalNewTerm_C),
+      termChange: Math.max(newTerm_C, finalNewTerm_C) - originalTerm,
       details: [
         `Pagos de $0 por ${months} meses`, 
-        `El plazo se extiende en ${months} meses.`
+        `Interés capitalizado durante diferimiento`,
+        `El plazo se extiende en ${Math.max(newTerm_C, finalNewTerm_C) - originalTerm} meses.`
       ]
     });
 
@@ -160,13 +165,16 @@ export class ProtectionEngineService {
       cashFlows = this.financialCalc.generateCashFlows(currentBalance, payments, remainingTerm);
       
     } else if (type === 'recalendar') {
+      // Capitalize interest during deferral as in 'defer'
+      const adjusted = this.financialCalc.capitalizeInterest(currentBalance, monthlyRate, affectedMonths);
       newTerm = remainingTerm + affectedMonths;
       newPayment = originalPayment;
       
-      // Cash flows: 0 for deferral months, then original payments for extended term
+      // Cash flows: 0 for deferral months, then original payments; use adjusted principal in cash flow engine
       const payments = new Array(affectedMonths).fill(0)
           .concat(new Array(remainingTerm).fill(originalPayment));
-      cashFlows = this.financialCalc.generateCashFlows(currentBalance, payments, newTerm);
+      cashFlows = this.financialCalc.generateCashFlows(adjusted, payments, newTerm);
+      adjustedBalance = adjusted;
     }
 
     // Calculate TIR for this scenario

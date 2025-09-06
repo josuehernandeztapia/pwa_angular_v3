@@ -12,6 +12,10 @@ export interface SavingsScenario {
   voluntaryContribution: number;
   projectedBalance: number[];
   timeline: Array<{ month: number; event: string; amount: number }>;
+  // Extended, for collective clarity
+  monthsToFirstAward?: number;
+  monthsToFullDelivery?: number;
+  targetPerMember?: number;
 }
 
 export interface CollectiveScenarioConfig {
@@ -43,7 +47,9 @@ export class SimuladorEngineService {
   ): SavingsScenario {
     
     const monthlyCollection = unitPlates.reduce((sum, plate, index) => {
-      return sum + (consumptionPerPlate[index] * overpricePerLiter);
+      const cons = Math.max(0, consumptionPerPlate[index] || 0);
+      const opl = Math.max(0, overpricePerLiter);
+      return sum + (cons * opl);
     }, 0);
 
     const projectedSavings = initialDownPayment + (monthlyCollection * deliveryMonths);
@@ -52,7 +58,7 @@ export class SimuladorEngineService {
     const projectedBalance: number[] = [];
     let currentBalance = initialDownPayment;
     
-    for (let month = 1; month <= deliveryMonths; month++) {
+    for (let month = 1; month <= Math.max(0, deliveryMonths); month++) {
       currentBalance += monthlyCollection;
       projectedBalance.push(currentBalance);
     }
@@ -88,16 +94,18 @@ export class SimuladorEngineService {
     voluntaryMonthly: number = 0
   ): SavingsScenario {
     
-    const monthlyCollection = currentPlateConsumption * overpricePerLiter;
-    const totalMonthlyContribution = monthlyCollection + voluntaryMonthly;
-    const monthsToTarget = Math.ceil(targetDownPayment / totalMonthlyContribution);
+    const monthlyCollection = Math.max(0, currentPlateConsumption) * Math.max(0, overpricePerLiter);
+    const totalMonthlyContribution = monthlyCollection + Math.max(0, voluntaryMonthly);
+    const monthsToTarget = totalMonthlyContribution > 0 ? Math.ceil(targetDownPayment / totalMonthlyContribution) : 0;
 
     const projectedBalance: number[] = [];
     let currentBalance = 0;
     
-    for (let month = 1; month <= monthsToTarget; month++) {
-      currentBalance += totalMonthlyContribution;
-      projectedBalance.push(currentBalance);
+    if (monthsToTarget > 0) {
+      for (let month = 1; month <= monthsToTarget; month++) {
+        currentBalance += totalMonthlyContribution;
+        projectedBalance.push(currentBalance);
+      }
     }
 
     const timeline = Array.from({ length: monthsToTarget }, (_, i) => ({
@@ -105,11 +113,13 @@ export class SimuladorEngineService {
       event: 'Aportación Mensual',
       amount: totalMonthlyContribution
     }));
-    timeline.push({
-      month: monthsToTarget + 1,
-      event: 'Meta de Enganche Alcanzada',
-      amount: targetDownPayment
-    });
+    if (monthsToTarget > 0) {
+      timeline.push({
+        month: monthsToTarget + 1,
+        event: 'Meta de Enganche Alcanzada',
+        amount: targetDownPayment
+      });
+    }
 
     return {
       type: 'EDOMEX_INDIVIDUAL',
@@ -158,10 +168,23 @@ export class SimuladorEngineService {
     const downPaymentPerUnit = config.unitPrice * 0.15; // 15%
     const totalSavingsTarget = downPaymentPerUnit * totalUnitsToDeliver;
 
+    // Compute extended timing metrics
+    const monthsToFirstAward = tandaResult.firstAwardT || 12;
+    const monthsToFullDelivery = tandaResult.lastAwardT || monthsToFirstAward;
+
+    // monthsToTarget: first month where total savings reach the group target; fallback to lastAwardT
+    let monthsToTarget = monthsToFullDelivery;
+    if (Array.isArray(snowballEffect.totalSavings) && snowballEffect.totalSavings.length > 0) {
+      const idx = snowballEffect.totalSavings.findIndex((s: number) => s >= totalSavingsTarget);
+      if (idx >= 0) {
+        monthsToTarget = idx + 1; // months are 1-indexed in UX
+      }
+    }
+
     const scenario: SavingsScenario = {
       type: 'EDOMEX_COLLECTIVE',
       targetAmount: totalSavingsTarget,
-      monthsToTarget: tandaResult.firstAwardT || 12, // First award or fallback
+      monthsToTarget,
       monthlyContribution: totalContributionPerMember * config.memberCount, // Total group contribution
       collectionContribution: collectionPerMember * config.memberCount,
       voluntaryContribution: config.voluntaryMonthly * config.memberCount,
@@ -170,7 +193,10 @@ export class SimuladorEngineService {
         month: t.month,
         event: t.event,
         amount: 0 // Amounts are complex in tanda scenarios
-      }))
+      })),
+      monthsToFirstAward,
+      monthsToFullDelivery,
+      targetPerMember: downPaymentPerUnit
     };
 
     return {

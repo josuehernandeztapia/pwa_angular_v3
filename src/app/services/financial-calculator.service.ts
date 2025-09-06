@@ -98,6 +98,22 @@ export class FinancialCalculatorService {
     return originalPrincipal * Math.pow(1 + monthlyRate, monthsPaid) - originalPayment * (Math.pow(1 + monthlyRate, monthsPaid) - 1) / monthlyRate;
   }
 
+  // Solve for number of periods given principal, rate and fixed payment
+  // Returns the number of payments required to amortize the principal at the given payment
+  getTermFromPayment(principal: number, monthlyRate: number, payment: number): number {
+    if (payment <= 0) return 0;
+    if (monthlyRate <= 0) {
+      return Math.ceil(principal / payment);
+    }
+    const ratio = 1 - (monthlyRate * principal) / payment;
+    // If payment is too small to cover interest, return a large number to indicate non-amortizing
+    if (ratio <= 0) {
+      return Number.POSITIVE_INFINITY as unknown as number;
+    }
+    const n = -Math.log(ratio) / Math.log(1 + monthlyRate);
+    return Math.ceil(n);
+  }
+
   // Format currency for Mexican Pesos
   formatCurrency(amount: number): string {
     return new Intl.NumberFormat('es-MX', { 

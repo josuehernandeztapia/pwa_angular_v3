@@ -188,6 +188,18 @@ import { Client } from '../../../../models/types';
               <div class="text-blue-600 text-sm font-medium">Inversión Total</div>
               <div class="text-2xl font-bold text-blue-800">{{ formatCurrency(quotation.totalInvestment) }}</div>
             </div>
+            <div class="bg-gradient-to-br from-amber-50 to-amber-100 p-4 rounded-lg border border-amber-200">
+              <div class="text-amber-600 text-sm font-medium">Tiempo a Primera Entrega</div>
+              <div class="text-2xl font-bold text-amber-800">{{ quotation.scenario.monthsToFirstAward || 'N/A' }} meses</div>
+            </div>
+            <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
+              <div class="text-purple-600 text-sm font-medium">Tiempo a Entrega Total</div>
+              <div class="text-2xl font-bold text-purple-800">{{ quotation.scenario.monthsToFullDelivery || 'N/A' }} meses</div>
+            </div>
+            <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 p-4 rounded-lg border border-emerald-200">
+              <div class="text-emerald-600 text-sm font-medium">Tiempo a Meta de Ahorro del Grupo</div>
+              <div class="text-2xl font-bold text-emerald-800">{{ quotation.scenario.monthsToTarget || 'N/A' }} meses</div>
+            </div>
           </div>
 
           <!-- Individual Member Info -->
@@ -201,6 +213,10 @@ import { Client } from '../../../../models/types';
               <div class="flex justify-between">
                 <span class="text-gray-600">Enganche requerido:</span>
                 <span class="font-medium">{{ formatCurrency(quotation.downPaymentPerMember) }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Meta por miembro:</span>
+                <span class="font-medium">{{ formatCurrency(quotation.scenario.targetPerMember || quotation.downPaymentPerMember) }}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">Financiamiento:</span>

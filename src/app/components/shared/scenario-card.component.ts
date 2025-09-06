@@ -28,13 +28,36 @@ import { ProtectionScenario } from '../../models/types';
         <div *ngFor="let detail of scenario.details" class="detail-item">
           {{ detail }}
         </div>
-        
+
         <div class="scenario-summary">
           <span class="summary-label">Nuevo Plazo:</span>
           <span class="summary-value">
             {{ scenario.newTerm }} meses 
             <span class="term-change">({{ getTermChange() }}{{ scenario.termChange }})</span>
           </span>
+        </div>
+
+        <div class="kpi-grid" *ngIf="hasKpis()">
+          <div class="kpi-item" *ngIf="scenario['paymentChange'] !== undefined">
+            <span class="kpi-label">Δ Pago</span>
+            <span class="kpi-value">{{ formatCurrency(scenario['paymentChange']) }}</span>
+          </div>
+          <div class="kpi-item" *ngIf="scenario['paymentChangePercent'] !== undefined">
+            <span class="kpi-label">Δ Pago %</span>
+            <span class="kpi-value">{{ (scenario['paymentChangePercent']).toFixed(1) }}%</span>
+          </div>
+          <div class="kpi-item" *ngIf="scenario['totalCostChange'] !== undefined">
+            <span class="kpi-label">Δ Costo Total</span>
+            <span class="kpi-value">{{ formatCurrency(scenario['totalCostChange']) }}</span>
+          </div>
+          <div class="kpi-item" *ngIf="scenario['irr'] !== undefined">
+            <span class="kpi-label">TIR</span>
+            <span class="kpi-value">{{ (scenario['irr'] * 100).toFixed(2) }}%</span>
+          </div>
+          <div class="kpi-item" *ngIf="scenario['tirOK'] !== undefined">
+            <span class="kpi-label">Política</span>
+            <span class="kpi-value">{{ scenario['tirOK'] ? '✓ Cumple' : '✗ No cumple' }}</span>
+          </div>
         </div>
       </div>
     </button>
@@ -134,6 +157,35 @@ import { ProtectionScenario } from '../../models/types';
     .term-change {
       color: #9ca3af;
       font-weight: 400;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .kpi-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 8px;
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 6px;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .kpi-value {
+      font-size: 13px;
+      color: #e2e8f0;
+      font-family: monospace;
+      font-weight: 600;
     }
 
     @media (max-width: 768px) {
