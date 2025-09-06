@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
-import { Document, Client, BusinessFlow, Market, EventType } from '../models/types';
+import { delay } from 'rxjs/operators';
+import { BusinessFlow, Client, Document, Market } from '../models/types';
 
 export interface DocumentRequirement {
   id: string;
@@ -242,12 +242,13 @@ export class DocumentValidationService {
     const boardResolutionValid = boardResolution ? this.validatePoderes(boardResolution) : false;
     const bankStatementsValid = bankStatements ? this.validateDocumentSync(bankStatements).valid : false;
 
-    const overallValid = constitutiveActValid && rfcValid && bankStatementsValid && 
+    // Make bank statements optional for ecosystem validation
+    const overallValid = constitutiveActValid && rfcValid && 
                         memberRegistryValid && boardResolutionValid;
 
     // Assess ecosystem risk level
     let ecosystemRiskLevel: 'low' | 'medium' | 'high' = 'high';
-    const validDocCount = [constitutiveActValid, rfcValid, bankStatementsValid, 
+    const validDocCount = [constitutiveActValid, rfcValid, 
                           memberRegistryValid, boardResolutionValid]
                           .filter(Boolean).length;
     

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
-import { Client, BusinessFlow, Market, Document, EventType } from '../models/types';
+import { delay } from 'rxjs/operators';
+import { BusinessFlow, Client, Market } from '../models/types';
 
 export interface ValidationRule {
   id: string;
@@ -511,7 +511,6 @@ export class BusinessRulesService {
     return [
       'Acta Constitutiva del Ecosistema',
       'RFC del Ecosistema',
-      'Estado de Cuenta Bancario del Ecosistema',
       'Padrón de Socios Actualizado',
       'Acta de Asamblea de Aprobación'
     ];
