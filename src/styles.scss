@@ -6,6 +6,48 @@
 /* Import Premium FinTech Theme */
 @import 'styles/theme-premium.css';
 
+/* ===== CSS VARIABLES (Common tokens) ===== */
+:root {
+  /* Palette */
+  --bg-gray-950: #0b0f14;
+  --bg-gray-100: #e5e7eb;
+
+  --primary-cyan-300: #67e8f9;
+  --primary-cyan-400: #22d3ee;
+  --primary-cyan-500: #06b6d4;
+  --primary-cyan-600: #0891b2;
+
+  --accent-amber-300: #fcd34d;
+  --accent-amber-400: #fbbf24;
+  --accent-amber-500: #f59e0b;
+  --accent-amber-600: #d97706;
+
+  --success-500: #22c55e;
+  --success-600: #16a34a;
+
+  --error-500: #ef4444;
+  --error-600: #dc2626;
+
+  /* Surfaces */
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-backdrop: blur(10px) saturate(140%);
+  --command-center-bg: radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,0.07), transparent), radial-gradient(1000px 480px at 100% 0%, rgba(255,193,7,0.06), transparent), linear-gradient(180deg, #0b0f14 0%, #0b0f14 100%);
+
+  /* Shadows */
+  --shadow-card: 0 10px 24px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 14px 32px rgba(0, 0, 0, 0.5);
+
+  /* Focus */
+  --focus-ring-color: #22d3ee;
+
+  /* Spacing, radii, motion */
+  --space-button-padding: 12px 24px;
+  --radius-md: 12px;
+  --transition-fast: all 0.3s ease;
+  --transition-quick: all 0.2s ease;
+}
+
 /* ===== GLOBAL RESET & BASE STYLES ===== */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -35,11 +77,11 @@ body {
   background: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600));
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 12px;
+  padding: var(--space-button-padding);
+  border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-fast);
   box-shadow: var(--shadow-card);
 }
 
@@ -53,11 +95,11 @@ body {
   background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
   color: var(--bg-gray-950);
   border: none;
-  padding: 12px 24px;
-  border-radius: 12px;
+  padding: var(--space-button-padding);
+  border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-fast);
   box-shadow: var(--shadow-card);
 }
 
@@ -76,7 +118,7 @@ body {
   border-radius: 16px;
   padding: 24px;
   box-shadow: var(--shadow-card);
-  transition: all 0.3s ease;
+  transition: var(--transition-fast);
 }
 
 .premium-card:hover {
@@ -97,8 +139,8 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--bg-gray-100);
   padding: 14px 16px;
-  border-radius: 12px;
-  transition: all 0.3s ease;
+  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
   font-size: 1rem;
 }
 
@@ -219,11 +261,11 @@ body {
   background: rgba(255, 255, 255, 0.06);
   color: var(--bg-gray-100);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 12px 24px;
-  border-radius: 12px;
+  padding: var(--space-button-padding);
+  border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-quick);
 }
 
 .btn-secondary:hover {

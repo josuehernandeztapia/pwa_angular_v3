@@ -40,7 +40,11 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "jspdf",
-              "tesseract.js"
+              "tesseract.js",
+              "html2canvas",
+              "canvg",
+              "rgbcolor",
+              "raf"
             ]
           },
           "configurations": {
@@ -57,7 +61,8 @@
                   "maximumError": "12kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": true
             },
             "development": {
               "optimization": false,
