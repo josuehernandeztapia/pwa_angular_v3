@@ -1180,6 +1180,20 @@ export class IntegratedImportTrackerService {
         return;
       }
 
+      // Recuperar datos críticos desde cache (garantizados por fases previas)
+      const deliveryDataFromCache = this.getDeliveryDataFromCache(clientId);
+      const legalDocsFromCache = this.getLegalDocumentsFromCache(clientId);
+
+      if (!deliveryDataFromCache) {
+        console.error('❌ Cannot trigger handover: Missing delivery data in cache');
+        return;
+      }
+
+      if (!legalDocsFromCache) {
+        console.error('❌ Cannot trigger handover: Missing legal documents in cache');
+        return;
+      }
+
       // Construir el evento vehicle.delivered completo
       const vehicleDeliveredEvent: VehicleDeliveredEvent = {
         event: 'vehicle.delivered',
@@ -1190,7 +1204,7 @@ export class IntegratedImportTrackerService {
             vin: importStatus.assignedUnit.vin,
             modelo: importStatus.assignedUnit.modelo,
             numeroMotor: importStatus.assignedUnit.numeroMotor,
-            odometer_km_delivery: importStatus.deliveryData?.odometroEntrega || 0,
+            odometer_km_delivery: deliveryDataFromCache.odometroEntrega,
             placas: platesData.numeroPlacas,
             estado: platesData.estado
           },
@@ -1208,8 +1222,8 @@ export class IntegratedImportTrackerService {
             },
             whatsapp_optin: true
           },
-          delivery: importStatus.deliveryData!,
-          legalDocuments: this.getLegalDocumentsFromCache(clientId),
+          delivery: deliveryDataFromCache,
+          legalDocuments: legalDocsFromCache,
           plates: platesData
         }
       };
@@ -1291,8 +1305,17 @@ export class IntegratedImportTrackerService {
   /**
    * Obtener documentos legales del cache
    */
-  private getLegalDocumentsFromCache(clientId: string): LegalDocuments {
+  private getLegalDocumentsFromCache(clientId: string): LegalDocuments | null {
     const cacheKey = `legal_${clientId}`;
+    const stored = localStorage.getItem(cacheKey);
+    return stored ? JSON.parse(stored) : null;
+  }
+
+  /**
+   * Obtener datos de entrega del cache
+   */
+  private getDeliveryDataFromCache(clientId: string): DeliveryData | null {
+    const cacheKey = `delivery_${clientId}`;
     const stored = localStorage.getItem(cacheKey);
     return stored ? JSON.parse(stored) : null;
   }

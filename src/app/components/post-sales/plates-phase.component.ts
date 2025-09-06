@@ -6,9 +6,7 @@ import { IntegratedImportTrackerService } from '../../services/integrated-import
 import { PostSalesApiService } from '../../services/post-sales-api.service';
 import { 
   PlatesData, 
-  DocumentFile, 
-  IntegratedImportStatus,
-  PostSalesRecord
+  DocumentFile
 } from '../../models/types';
 
 /**
