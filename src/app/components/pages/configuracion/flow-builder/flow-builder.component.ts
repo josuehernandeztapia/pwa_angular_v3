@@ -1061,6 +1061,11 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
   panY = 0;
   canvasWidth = 2000;
   canvasHeight = 2000;
+  private isPanning = false;
+  private panStartClientX = 0;
+  private panStartClientY = 0;
+  private panStartX = 0;
+  private panStartY = 0;
 
   // Selection state
   selectedNode: FlowNode | null = null;
@@ -1070,6 +1075,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
   isDragging = false;
   dragStartPos = { x: 0, y: 0 };
   draggedTemplate: NodeTemplate | null = null;
+  private draggingNode: FlowNode | null = null;
+  private dragOffsetX = 0;
+  private dragOffsetY = 0;
 
   // Connection state
   tempConnection: { path: string } | null = null;
@@ -1084,6 +1092,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
   generationStatus = '';
   generatedCode: { [filename: string]: string } = {};
   activeCodeTab = '';
+  private categoryExpanded: { [category: string]: boolean } = {};
 
   // Flow data
   nodes: FlowNode[] = [];
@@ -1328,6 +1337,45 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       outputs: [{ name: 'Contrato', type: 'output', dataType: 'flow' }],
       compatibleWith: ['edomex'] // ❌ Solo EdoMex
     }
+    ,
+    // Business rule nodes
+    {
+      type: NodeType.BusinessRule,
+      name: 'Regla de Negocio',
+      icon: '🧠',
+      color: '#ef4444',
+      category: '⚙️ Reglas',
+      description: 'Evalúa una condición para bifurcar el flujo',
+      defaultConfig: {
+        ruleName: 'eligibilidad_basica',
+        expression: 'ingresos >= 2 * pago_mensual',
+        parameters: []
+      },
+      inputs: [{ name: 'Entrada', type: 'input', dataType: 'flow' }],
+      outputs: [
+        { name: 'Verdadero', type: 'output', dataType: 'flow' },
+        { name: 'Falso', type: 'output', dataType: 'flow' }
+      ]
+    },
+    // Route/switch nodes
+    {
+      type: NodeType.Route,
+      name: 'Ruta Condicional',
+      icon: '🛣️',
+      color: '#0ea5e9',
+      category: '🧭 Rutas',
+      description: 'Redirige según una condición del contexto',
+      defaultConfig: {
+        condition: 'resultado_documentos == "ok"',
+        trueLabel: 'Sí',
+        falseLabel: 'No'
+      },
+      inputs: [{ name: 'Entrada', type: 'input', dataType: 'flow' }],
+      outputs: [
+        { name: 'Sí', type: 'output', dataType: 'flow' },
+        { name: 'No', type: 'output', dataType: 'flow' }
+      ]
+    }
   ];
 
   @ViewChild('flowCanvas') flowCanvas!: ElementRef<HTMLDivElement>;
@@ -1335,8 +1383,20 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
-    // Initialize with some sample nodes
-    this.loadSampleFlow();
+    // Load saved flow if present; otherwise use sample
+    const saved = localStorage.getItem('flow_builder_data');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        this.nodes = parsed.nodes || [];
+        this.connections = parsed.connections || [];
+        this.validateAllConnections();
+      } catch {
+        this.loadSampleFlow();
+      }
+    } else {
+      this.loadSampleFlow();
+    }
   }
 
   getGeneratedFiles(): string[] {
@@ -1366,7 +1426,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       if (!categories[template.category]) {
         categories[template.category] = {
           name: template.category,
-          expanded: true,
+          expanded: this.categoryExpanded[template.category] ?? true,
           templates: []
         };
       }
@@ -1377,11 +1437,8 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
   }
 
   toggleCategory(categoryName: string) {
-    const categories = this.getFilteredCategories();
-    const category = categories.find(c => c.name === categoryName);
-    if (category) {
-      category.expanded = !category.expanded;
-    }
+    const current = this.categoryExpanded[categoryName] ?? true;
+    this.categoryExpanded[categoryName] = !current;
   }
 
   // Drag & Drop
@@ -1477,6 +1534,15 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     newNode.position.x += 50;
     newNode.position.y += 50;
     newNode.isSelected = false;
+    // Regenerate unique port IDs to avoid collisions
+    newNode.inputs = (node.inputs || []).map((input: NodePort, index: number) => ({
+      ...input,
+      id: `input_${newNode.id}_${index}`
+    }));
+    newNode.outputs = (node.outputs || []).map((output: NodePort, index: number) => ({
+      ...output,
+      id: `output_${newNode.id}_${index}`
+    }));
     this.nodes.push(newNode);
   }
 
@@ -1548,25 +1614,92 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     if (event.target === this.flowCanvas.nativeElement) {
       this.selectedNode = null;
       this.selectedConnection = null;
+      // Start panning
+      this.isPanning = true;
+      this.panStartClientX = event.clientX;
+      this.panStartClientY = event.clientY;
+      this.panStartX = this.panX;
+      this.panStartY = this.panY;
     }
   }
 
   onCanvasMouseMove(event: MouseEvent) {
-    // Handle canvas panning if implemented
+    // Update temporary connection rubber band
+    if (this.connectionStart) {
+      const rect = this.flowCanvas.nativeElement.getBoundingClientRect();
+      const endX = (event.clientX - rect.left - this.panX) / this.zoomLevel;
+      const endY = (event.clientY - rect.top - this.panY) / this.zoomLevel;
+      this.tempConnection = {
+        path: this.buildBezierPath(this.connectionStart.x, this.connectionStart.y, endX, endY)
+      };
+    }
+
+    // Dragging node
+    if (this.draggingNode) {
+      const rect = this.flowCanvas.nativeElement.getBoundingClientRect();
+      const cursorX = (event.clientX - rect.left - this.panX) / this.zoomLevel;
+      const cursorY = (event.clientY - rect.top - this.panY) / this.zoomLevel;
+      this.draggingNode.position.x = cursorX - this.dragOffsetX;
+      this.draggingNode.position.y = cursorY - this.dragOffsetY;
+    }
+
+    // Canvas panning
+    if (this.isPanning) {
+      this.panX = this.panStartX + (event.clientX - this.panStartClientX);
+      this.panY = this.panStartY + (event.clientY - this.panStartClientY);
+    }
   }
 
   onCanvasMouseUp(event: MouseEvent) {
-    // Handle mouse up events
+    // Finish connection if any
+    if (this.connectionStart) {
+      const el = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement | null;
+      const targetPortEl = el ? (el.closest('.node-port') as HTMLElement | null) : null;
+      if (targetPortEl) {
+        const targetPortId = targetPortEl.getAttribute('data-port-id') || '';
+        const targetNodeId = targetPortEl.getAttribute('data-node-id') || '';
+        const start = this.connectionStart;
+
+        // Determine direction
+        const isOppositeType = targetPortEl.classList.contains('input-port') ? start.portType === 'output' : start.portType === 'input';
+        if (isOppositeType) {
+          const sourceNodeId = start.portType === 'output' ? start.nodeId : targetNodeId;
+          const sourcePortId = start.portType === 'output' ? start.portId : targetPortId;
+          const targetNodeFinalId = start.portType === 'output' ? targetNodeId : start.nodeId;
+          const targetPortFinalId = start.portType === 'output' ? targetPortId : start.portId;
+          this.addConnection(sourceNodeId, sourcePortId, targetNodeFinalId, targetPortFinalId);
+        }
+      }
+      this.connectionStart = null;
+      this.tempConnection = null;
+    }
+
+    // Stop dragging node
+    this.draggingNode = null;
+
+    // Stop panning
+    this.isPanning = false;
   }
 
   onNodeMouseDown(event: MouseEvent, node: FlowNode) {
     event.stopPropagation();
     this.selectNode(node);
+    // Prepare dragging
+    const rect = this.flowCanvas.nativeElement.getBoundingClientRect();
+    const cursorX = (event.clientX - rect.left - this.panX) / this.zoomLevel;
+    const cursorY = (event.clientY - rect.top - this.panY) / this.zoomLevel;
+    this.draggingNode = node;
+    this.dragOffsetX = cursorX - node.position.x;
+    this.dragOffsetY = cursorY - node.position.y;
   }
 
   onPortMouseDown(event: MouseEvent, node: FlowNode, port: NodePort, portType: 'input' | 'output') {
     event.stopPropagation();
-    // Handle port connection logic
+    // Start a new connection from this port
+    const portEl = event.currentTarget as HTMLElement;
+    const { x, y } = this.getPortCenterPosition(portEl);
+    this.connectionStart = { nodeId: node.id, portId: port.id, portType, x, y };
+    this.tempConnection = { path: this.buildBezierPath(x, y, x, y) };
   }
 
   // Properties panel
@@ -1592,7 +1725,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
 
   // Flow operations
   get canDeploy(): boolean {
-    return this.nodes.length > 0;
+    return this.isGraphValid();
   }
 
   clearFlow() {
@@ -1693,6 +1826,54 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     return code;
   }
 
+  private addConnection(sourceNodeId: string, sourcePortId: string, targetNodeId: string, targetPortId: string): void {
+    // Prevent self-connections
+    if (sourceNodeId === targetNodeId) {
+      return;
+    }
+
+    // Prevent duplicates
+    const duplicate = this.connections.some(c =>
+      c.sourceNodeId === sourceNodeId &&
+      c.sourcePortId === sourcePortId &&
+      c.targetNodeId === targetNodeId &&
+      c.targetPortId === targetPortId
+    );
+    if (duplicate) return;
+
+    const sourceNode = this.nodes.find(n => n.id === sourceNodeId);
+    const targetNode = this.nodes.find(n => n.id === targetNodeId);
+    if (!sourceNode || !targetNode) return;
+
+    const sourcePort = [...sourceNode.outputs, ...sourceNode.inputs].find(p => p.id === sourcePortId);
+    const targetPort = [...targetNode.outputs, ...targetNode.inputs].find(p => p.id === targetPortId);
+    if (!sourcePort || !targetPort) return;
+
+    // Enforce data type compatibility
+    if (sourcePort.dataType !== targetPort.dataType) {
+      return;
+    }
+
+    // Enforce single incoming per input port
+    const hasIncoming = this.connections.some(c => c.targetNodeId === targetNodeId && c.targetPortId === targetPortId);
+    if (hasIncoming) return;
+
+    const connection: FlowConnection = {
+      id: `connection_${this.connectionIdCounter++}`,
+      sourceNodeId,
+      sourcePortId,
+      targetNodeId,
+      targetPortId
+    };
+
+    // Validate business rules
+    const validation = this.validateConnection(sourceNode, targetNode);
+    connection.isValid = validation.isValid;
+    connection.validationMessage = validation.message;
+
+    this.connections.push(connection);
+  }
+
   private generateRouteCode(cityCode: string, productNodes: FlowNode[]): string {
     const routes = productNodes.map(product => {
       const routeName = product.config.productType.replace('_', '-');
@@ -1751,6 +1932,25 @@ export class ${className}Component {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  // Helpers for canvas/ports
+  private getPortCenterPosition(portEl: HTMLElement): { x: number; y: number } {
+    const portRect = portEl.getBoundingClientRect();
+    const canvasRect = this.flowCanvas.nativeElement.getBoundingClientRect();
+    const centerClientX = portRect.left + portRect.width / 2;
+    const centerClientY = portRect.top + portRect.height / 2;
+    const x = (centerClientX - canvasRect.left - this.panX) / this.zoomLevel;
+    const y = (centerClientY - canvasRect.top - this.panY) / this.zoomLevel;
+    return { x, y };
+  }
+
+  private buildBezierPath(startX: number, startY: number, endX: number, endY: number): string {
+    const controlX1 = startX + (endX - startX) * 0.5;
+    const controlY1 = startY;
+    const controlX2 = endX - (endX - startX) * 0.5;
+    const controlY2 = endY;
+    return `M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY}`;
+  }
+
   // Market-Product Compatibility Validation
   validateConnection(sourceNode: FlowNode, targetNode: FlowNode): { isValid: boolean; message?: string } {
     // If connecting a Market to a Product, validate compatibility
@@ -1781,6 +1981,53 @@ export class ${className}Component {
     }
     
     return { isValid: true };
+  }
+
+  private isGraphValid(): boolean {
+    if (this.nodes.length === 0) return false;
+
+    // Must have a market with configured cityCode
+    const marketNodes = this.nodes.filter(n => n.type === NodeType.Market && !!n.config.cityCode);
+    if (marketNodes.length === 0) return false;
+
+    // No invalid connections
+    const anyInvalid = this.connections.some(c => c.isValid === false);
+    if (anyInvalid) return false;
+
+    // Each connection must reference existing nodes and ports
+    const portsExist = this.connections.every(c => {
+      const s = this.nodes.find(n => n.id === c.sourceNodeId);
+      const t = this.nodes.find(n => n.id === c.targetNodeId);
+      if (!s || !t) return false;
+      const hasS = [...s.outputs, ...s.inputs].some(p => p.id === c.sourcePortId);
+      const hasT = [...t.outputs, ...t.inputs].some(p => p.id === c.targetPortId);
+      return hasS && hasT;
+    });
+    if (!portsExist) return false;
+
+    // Reachability: products should be reachable from a market
+    const productNodes = this.nodes.filter(n => n.type === NodeType.Product);
+    if (productNodes.length === 0) return true; // allow drafts
+
+    const adj = new Map<string, string[]>();
+    this.connections.forEach(c => {
+      const list = adj.get(c.sourceNodeId) || [];
+      list.push(c.targetNodeId);
+      adj.set(c.sourceNodeId, list);
+    });
+
+    const visited = new Set<string>();
+    const stack = [...marketNodes.map(n => n.id)];
+    while (stack.length) {
+      const id = stack.pop()!;
+      if (visited.has(id)) continue;
+      visited.add(id);
+      (adj.get(id) || []).forEach(nid => {
+        if (!visited.has(nid)) stack.push(nid);
+      });
+    }
+
+    return productNodes.every(p => visited.has(p.id));
   }
 
   getFilteredProductTemplates(selectedMarketCode?: string): NodeTemplate[] {
