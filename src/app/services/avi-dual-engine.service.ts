@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, forkJoin, of } from 'rxjs';
+import { Observable, forkJoin, of, from } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { AVIResponse, AVIScore, RedFlag } from '../models/types';
 import { AVIScientificEngineService } from './avi-scientific-engine.service';
 import { AVIHeuristicEngineService } from './avi-heuristic-engine.service';
+import { ALL_AVI_QUESTIONS } from '../data/avi-questions.data';
 
 @Injectable({
   providedIn: 'root'
@@ -22,19 +23,17 @@ export class AVIDualEngineService {
     const startTime = Date.now();
 
     // Ejecutar ambos engines en paralelo
-    const scientific$ = this.scientificEngine.calculateScore(responses).pipe(
+    const scientific$ = of(this.scientificEngine.calculate(responses, ALL_AVI_QUESTIONS)).pipe(
       catchError(error => {
         console.error('Scientific engine error:', error);
         return of(this.getDefaultScore('SCIENTIFIC_ENGINE_ERROR'));
       })
     );
 
-    const heuristic$ = of(null).pipe(
-      map(() => this.heuristicEngine.calculateHeuristicScore(responses)),
-      map(promise => promise), // Convert Promise to Observable
+    const heuristic$ = from(this.heuristicEngine.calculateHeuristicScore(responses)).pipe(
       catchError(error => {
         console.error('Heuristic engine error:', error);
-        return of(Promise.resolve(this.getDefaultScore('HEURISTIC_ENGINE_ERROR')));
+        return of(this.getDefaultScore('HEURISTIC_ENGINE_ERROR'));
       })
     );
 
@@ -42,10 +41,10 @@ export class AVIDualEngineService {
       scientific: scientific$,
       heuristic: heuristic$
     }).pipe(
-      map(async (engines) => {
+      map((engines) => {
         const scientificResult = engines.scientific;
-        const heuristicResult = await engines.heuristic;
-        
+        const heuristicResult = engines.heuristic;
+
         // Consolidar ambos resultados
         const consolidatedScore = this.consolidateScores(scientificResult, heuristicResult);
         const totalProcessingTime = Date.now() - startTime;
@@ -58,8 +57,8 @@ export class AVIDualEngineService {
           processingTime: totalProcessingTime,
           engineReliability: this.calculateReliability(scientificResult, heuristicResult),
           recommendations: this.generateDualEngineRecommendations(
-            scientificResult, 
-            heuristicResult, 
+            scientificResult,
+            heuristicResult,
             consolidatedScore
           )
         };

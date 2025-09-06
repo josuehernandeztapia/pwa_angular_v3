@@ -1003,7 +1003,7 @@ export class VoiceValidationService {
     console.log(`🔄 Applying heuristic fallback for question: ${questionId}`);
     
     // Basic heuristics based on audio properties
-    const duration = audioBlob.size / 16000; // Rough estimate (16kHz)
+    const duration = Math.max(0.001, audioBlob.size / 16000); // Rough estimate (16kHz) with floor to avoid 0
     const sizeToTimeRatio = audioBlob.size / duration;
     
     let heuristicScore = 0.5; // Start neutral
@@ -1021,7 +1021,7 @@ export class VoiceValidationService {
     }
     
     // Heuristic 2: Audio quality estimate
-    if (sizeToTimeRatio < 1000) {
+    if (sizeToTimeRatio < 800) {
       heuristicScore -= 0.2; // Low quality = might be problematic
       flags.push('low_audio_quality');
     }
@@ -1047,7 +1047,7 @@ export class VoiceValidationService {
   private storeVoiceEvaluation(evaluation: VoiceEvaluationResult): void {
     // Remove any existing evaluation for this question (allow re-evaluation)
     this.voiceEvaluations = this.voiceEvaluations.filter(
-      evaluation => evaluation.questionId !== evaluation.questionId
+      existing => existing.questionId !== evaluation.questionId
     );
     
     // Add new evaluation
