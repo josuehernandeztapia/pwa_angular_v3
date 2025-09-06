@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec-postsales",
+    "types": [
+      "jasmine",
+      "node"
+    ]
+  },
+  "include": [
+    "src/app/services/post-sales-api.service.ts",
+    "src/app/services/post-sales-api.service.spec.ts",
+    "src/**/*.d.ts"
+  ]
+}
+
