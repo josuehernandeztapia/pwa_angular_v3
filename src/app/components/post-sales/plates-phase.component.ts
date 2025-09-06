@@ -239,7 +239,7 @@ import {
             <input 
               #photoInput
               type="file" 
-              accept="image/*" 
+              accept="image/*" capture="environment"
               multiple 
               (change)="onPhotoSelected($event)"
               style="display: none;"

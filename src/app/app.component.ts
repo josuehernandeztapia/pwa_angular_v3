@@ -17,14 +17,6 @@ export class AppComponent implements OnInit {
   constructor(private mediaPermissions: MediaPermissionsService) {}
 
   async ngOnInit() {
-    // Request camera and microphone permissions on PWA startup
-    if (this.mediaPermissions.isSupported()) {
-      try {
-        const permissions = await this.mediaPermissions.requestCameraAndMicrophonePermissions();
-        console.log('Media permissions:', permissions);
-      } catch (error) {
-        console.warn('Error requesting media permissions:', error);
-      }
-    }
+    // Media permissions will be requested just-in-time when needed (voice/camera flows)
   }
 }
