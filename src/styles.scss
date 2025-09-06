@@ -242,7 +242,10 @@ body {
 .quick-action-btn,
 .btn-mark-all,
 .mark-all-read-btn,
-.btn-action.primary {
+.btn-action.primary,
+.start-btn,
+.submit-btn,
+.restart-btn {
   @extend .btn-primary;
 }
 
@@ -252,19 +255,33 @@ body {
 .close-btn,
 .btn-close,
 .clear-filters-btn,
-.btn-clear {
+.btn-clear,
+.export-btn,
+.skip-btn,
+.voice-btn {
   @extend .btn-secondary;
 }
 
 /* Standardize inputs */
 .form-input,
-.readonly-input {
+.readonly-input,
+.response-input {
   @extend .premium-input;
 }
 
 /* Standardize cards */
 .profile-card,
-.card {
+.card,
+.start-card,
+.question-card,
+.analyzing-card,
+.main-score-card,
+.engine-result,
+.consensus-analysis,
+.red-flags-section,
+.category-scores,
+.recommendations-section,
+.technical-metrics {
   @extend .premium-card;
 }
 
