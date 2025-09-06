@@ -1,9 +1,9 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { BackendApiService } from './backend-api.service';
 import { StorageService } from './storage.service';
-import { environment } from '../../environments/environment';
 
 describe('BackendApiService', () => {
   let service: BackendApiService;
@@ -82,6 +82,10 @@ describe('BackendApiService', () => {
       'removeCompletedAction'
     ]);
 
+    // Seed auth token for header assertions
+    localStorage.setItem('auth_token', 'test_jwt_token');
+    localStorage.setItem('current_user', JSON.stringify({ id: 'u1', name: 'Tester', email: 'tester@example.com', role: 'asesor', permissions: [] }));
+
     TestBed.configureTestingModule({
       providers: [
         BackendApiService,
@@ -115,7 +119,6 @@ describe('BackendApiService', () => {
 
     it('should have correct API configuration', () => {
       expect(service['baseUrl']).toBe(environment.apiUrl);
-      expect(service['apiKey']).toBeTruthy();
     });
   });
 
@@ -132,7 +135,7 @@ describe('BackendApiService', () => {
           newClient,
           jasmine.objectContaining({
             headers: jasmine.objectContaining({
-              'Authorization': `Bearer ${service['apiKey']}`,
+              'Authorization': 'Bearer test_jwt_token',
               'Content-Type': 'application/json'
             })
           })
@@ -501,7 +504,7 @@ describe('BackendApiService', () => {
           `${environment.apiUrl}${environment.endpoints.documents}/upload`,
           jasmine.any(FormData),
           jasmine.objectContaining({
-            headers: { 'Authorization': `Bearer ${service['apiKey']}` }
+            headers: { 'Authorization': 'Bearer test_jwt_token' }
           })
         );
         expect(response).toEqual(mockResponse);

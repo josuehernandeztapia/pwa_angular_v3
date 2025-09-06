@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { ProtectionEngineService } from './protection-engine.service';
-import { FinancialCalculatorService } from './financial-calculator.service';
 import { Client, EventType } from '../models/types';
+import { FinancialCalculatorService } from './financial-calculator.service';
+import { ProtectionEngineService } from './protection-engine.service';
 
 describe('ProtectionEngineService', () => {
   let service: ProtectionEngineService;
@@ -62,8 +62,8 @@ describe('ProtectionEngineService', () => {
       market: 'edomex' as any,
       documents: [],
       events: [
-        { id: 'e1', type: EventType.Contribution, date: new Date(), amount: 1000 },
-        { id: 'e2', type: EventType.Collection, date: new Date(), amount: 1000 }
+        { id: 'e1', type: EventType.Contribution, timestamp: new Date(), amount: 1000 } as any,
+        { id: 'e2', type: EventType.Collection, timestamp: new Date(), amount: 1000 } as any
       ],
       paymentPlan: { monthlyPayment: 7000, term: 60 },
       remainderAmount: 300000

@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 
 // Helper to bootstrap auth via localStorage before navigation
-async function mockAuth(page) {
+async function mockAuth(page: Page) {
   await page.addInitScript(() => {
     localStorage.setItem('auth_token', 'demo_jwt_token_' + Date.now());
     localStorage.setItem('refresh_token', 'demo_refresh_token_' + Date.now());
@@ -12,7 +12,7 @@ async function mockAuth(page) {
 }
 
 test.describe('Flow Builder Visual', () => {
-  test('@flow-editor should open from configuración modal and render palettes', async ({ page }) => {
+  test('@flow-editor should open from configuración modal and render palettes', async ({ page }: { page: Page }) => {
     await mockAuth(page);
     await page.goto('/configuracion');
 
@@ -35,7 +35,7 @@ test.describe('Flow Builder Visual', () => {
     await expect(page).toHaveScreenshot();
   });
 
-  test('@flow-connections should show disabled Deploy until nodes exist', async ({ page }) => {
+  test('@flow-connections should show disabled Deploy until nodes exist', async ({ page }: { page: Page }) => {
     await mockAuth(page);
     await page.goto('/configuracion');
     await page.getByRole('button', { name: '🎨 Abrir Constructor' }).click();

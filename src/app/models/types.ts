@@ -410,6 +410,12 @@ export interface ProtectionScenario {
   newTerm: number;
   termChange: number;
   details: string[];
+  // Optional analytics used internally/tests
+  irr?: number;
+  tirOK?: boolean;
+  cashFlows?: number[];
+  capitalizedInterest?: number;
+  principalBalance?: number;
 }
 
 export interface Client {

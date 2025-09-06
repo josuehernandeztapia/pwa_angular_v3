@@ -1,6 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 
-async function mockAuth(page) {
+async function mockAuth(page: Page) {
   await page.addInitScript(() => {
     localStorage.setItem('auth_token', 'demo_jwt_token_' + Date.now());
     localStorage.setItem('refresh_token', 'demo_refresh_token_' + Date.now());
@@ -34,7 +34,7 @@ const routes = [
 
 test.describe('Premium visual across modules', () => {
   for (const r of routes) {
-    test(`${r.tag} should render premium container and take snapshot`, async ({ page }) => {
+    test(`${r.tag} should render premium container and take snapshot`, async ({ page }: { page: Page }) => {
       await mockAuth(page);
       await page.goto(r.path);
       // Check that a container exists and has background applied
