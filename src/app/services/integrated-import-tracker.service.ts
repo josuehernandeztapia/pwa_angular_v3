@@ -1005,15 +1005,12 @@ export class IntegratedImportTrackerService {
       map(([importStatus, contractsWithVehicles]) => ({
         importStatus,
         contractsWithVehicles: contractsWithVehicles || [],
-        assignmentConsistency: this.validateAssignmentConsistency(clientId)
+        assignmentConsistency: this.validateAssignmentConsistency(importStatus as any, contractsWithVehicles || [])
       }))
     );
   }
 
-  // ADD this missing method:
-  private validateAssignmentConsistency(clientId: string): { consistent: boolean; issues: string[] } {
-    return { consistent: true, issues: [] };
-  }
+  
 
   /**
    * Validar consistencia entre import status y contratos

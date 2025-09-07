@@ -54,11 +54,10 @@ describe('ProtectionEngineService', () => {
       id: 'c1',
       name: 'Juan',
       rfc: 'JUAX010101',
-      curp: 'JUAX010101HDF',
+      flow: 0 as any,
+      status: 'Activo',
       phone: '5555',
       email: 'a@b.com',
-      address: 'CDMX',
-      route: 'R1',
       market: 'edomex' as any,
       documents: [],
       events: [

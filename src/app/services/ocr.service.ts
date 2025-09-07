@@ -107,9 +107,9 @@ export class OCRService {
       const words: any[] = (result as any)?.data?.words || [];
       
       const ocrResult: OCRResult = {
-        text: result.data.text,
-        confidence: result.data.confidence,
-        words: (result.data.words || []).map((word: any) => ({
+        text: (result as any).data.text,
+        confidence: (result as any).data.confidence,
+        words: words.map((word: any) => ({
           text: word.text || '',
           bbox: word.bbox || { x: 0, y: 0, w: 0, h: 0 },
           confidence: word.confidence || 0
@@ -148,9 +148,9 @@ export class OCRService {
       const words: any[] = (result as any)?.data?.words || [];
       
       const ocrResult: OCRResult = {
-        text: result.data.text,
-        confidence: result.data.confidence,
-        words: (result.data.words || []).map((word: any) => ({
+        text: (result as any).data.text,
+        confidence: (result as any).data.confidence,
+        words: words.map((word: any) => ({
           text: word.text || '',
           bbox: word.bbox || { x: 0, y: 0, w: 0, h: 0 },
           confidence: word.confidence || 0
