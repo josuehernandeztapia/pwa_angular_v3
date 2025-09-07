@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BusinessFlow, Client, Quote, SimulatorMode } from '../../models/types';
 import { CotizadorEngineService, ProductPackage } from '../../services/cotizador-engine.service';
-import { SimuladorEngineService, SavingsScenario } from '../../services/simulador-engine.service';
 import { FinancialCalculatorService } from '../../services/financial-calculator.service';
+import { SavingsScenario, SimuladorEngineService } from '../../services/simulador-engine.service';
+import { SpeechService } from '../../services/speech.service';
 import { ToastService } from '../../services/toast.service';
-import { Client, Quote, SimulatorMode } from '../../models/types';
 
 type Market = 'aguascalientes' | 'edomex';
 type ClientType = 'individual' | 'colectivo';
@@ -1169,8 +1170,8 @@ export class DualModeCotizadorComponent implements OnInit {
 
   // State
   currentMode: SimulatorMode = 'acquisition';
-  selectedMarket: Market = '';
-  selectedClientType: ClientType = '';
+  selectedMarket: Market | '' = '';
+  selectedClientType: ClientType | '' = '';
   packageData?: ProductPackage;
   isLoading = false;
   
@@ -1197,7 +1198,8 @@ export class DualModeCotizadorComponent implements OnInit {
     private cotizadorEngine: CotizadorEngineService,
     private simuladorEngine: SimuladorEngineService,
     private financialCalc: FinancialCalculatorService,
-    private toast: ToastService
+    private toast: ToastService,
+    private speech: SpeechService
   ) {}
 
   ngOnInit() {
@@ -1240,7 +1242,11 @@ export class DualModeCotizadorComponent implements OnInit {
       }
       
       this.packageData = await this.cotizadorEngine.getProductPackage(packageKey);
-      
+
+      if (!this.packageData) {
+        return;
+      }
+
       // Initialize selected components
       this.selectedComponents = {};
       this.packageData.components.forEach(comp => {
@@ -1367,15 +1373,7 @@ export class DualModeCotizadorComponent implements OnInit {
 
   speakSummary() {
     const text = this.generateSpeechText();
-    
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-MX';
-      utterance.rate = 0.8;
-      speechSynthesis.speak(utterance);
-    } else {
-      this.toast.info('Tu navegador no soporta síntesis de voz');
-    }
+    this.speech.speak(text);
   }
 
   formalizeQuote() {
@@ -1388,7 +1386,7 @@ export class DualModeCotizadorComponent implements OnInit {
         term: this.selectedTerm,
         market: this.selectedMarket,
         clientType: this.selectedClientType,
-        flow: 'CreditoIndividual' // Adjust based on selection
+        flow: BusinessFlow.VentaPlazo
       };
       this.onFormalize.emit(quote);
     } else {

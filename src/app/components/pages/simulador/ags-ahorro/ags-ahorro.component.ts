@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SimuladorEngineService, SavingsScenario } from '../../../../services/simulador-engine.service';
-import { ToastService } from '../../../../services/toast.service';
 import { CotizadorEngineService } from '../../../../services/cotizador-engine.service';
 import { PdfExportService } from '../../../../services/pdf-export.service';
+import { SavingsScenario, SimuladorEngineService } from '../../../../services/simulador-engine.service';
+import { SpeechService } from '../../../../services/speech.service';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-ags-ahorro',
@@ -254,7 +255,7 @@ import { PdfExportService } from '../../../../services/pdf-export.service';
               </div>
 
               <div class="table-container">
-                <table class="amortization-table">
+                <table class="amortization-table table-lg">
                   <thead>
                     <tr>
                       <th># Pago</th>
@@ -267,11 +268,11 @@ import { PdfExportService } from '../../../../services/pdf-export.service';
                   <tbody>
                     <tr *ngFor="let row of amortizationTable.slice(0, 12)" 
                         [class.highlight]="row.paymentNumber === 1">
-                      <td>{{ row.paymentNumber }}</td>
-                      <td>{{ row.monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</td>
-                      <td class="principal">{{ row.principal | currency:'MXN':'symbol':'1.0-0' }}</td>
-                      <td class="interest">{{ row.interest | currency:'MXN':'symbol':'1.0-0' }}</td>
-                      <td>{{ row.balance | currency:'MXN':'symbol':'1.0-0' }}</td>
+                      <td class="num">{{ row.paymentNumber }}</td>
+                      <td class="num">{{ row.monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</td>
+                      <td class="principal num">{{ row.principal | currency:'MXN':'symbol':'1.0-0' }}</td>
+                      <td class="interest num">{{ row.interest | currency:'MXN':'symbol':'1.0-0' }}</td>
+                      <td class="num">{{ row.balance | currency:'MXN':'symbol':'1.0-0' }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1072,7 +1073,8 @@ export class AgsAhorroComponent implements OnInit {
     private simuladorEngine: SimuladorEngineService,
     private toast: ToastService,
     private cotizadorEngine: CotizadorEngineService,
-    private pdfExport: PdfExportService
+    private pdfExport: PdfExportService,
+    private speech: SpeechService
   ) {
     this.createForm();
   }
@@ -1301,14 +1303,7 @@ export class AgsAhorroComponent implements OnInit {
     lograrás tu objetivo en ${this.currentScenario.monthsToTarget} meses. 
     Quedaría un remanente de ${formatter.format(this.remainderAmount)} pesos para liquidar.`;
 
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-MX';
-      utterance.rate = 0.8;
-      speechSynthesis.speak(utterance);
-    } else {
-      this.toast.info('Tu navegador no soporta síntesis de voz');
-    }
+    this.speech.speak(text);
   }
 
   formatCurrency(value: number): string {

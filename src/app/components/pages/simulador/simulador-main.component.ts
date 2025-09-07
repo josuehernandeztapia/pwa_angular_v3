@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface SimulatorScenario {
   id: string;
@@ -216,7 +216,7 @@ interface SavedSimulation {
         </div>
 
         <div class="comparison-table-container">
-          <table class="comparison-table">
+          <table class="comparison-table table-lg">
             <thead>
               <tr>
                 <th class="metric-column">Métrica</th>
@@ -232,19 +232,19 @@ interface SavedSimulation {
             <tbody>
               <tr class="metric-row">
                 <td class="metric-label">🎯 Meta Total</td>
-                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value">
+                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value num">
                   {{ sim.summary.targetAmount ? (sim.summary.targetAmount | currency:'MXN':'symbol':'1.0-0') : 'N/D' }}
                 </td>
               </tr>
               <tr class="metric-row">
                 <td class="metric-label">💰 Aportación Mensual</td>
-                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value">
+                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value num">
                   {{ sim.summary.monthlyContribution ? (sim.summary.monthlyContribution | currency:'MXN':'symbol':'1.0-0') : 'N/D' }}
                 </td>
               </tr>
               <tr class="metric-row">
                 <td class="metric-label">⏱️ Tiempo a la Meta</td>
-                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value">
+                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value num">
                   {{ sim.summary.timeToTarget ? (sim.summary.timeToTarget + ' meses') : 'N/D' }}
                 </td>
               </tr>
@@ -1304,7 +1304,7 @@ export class SimuladorMainComponent implements OnInit {
 
   private analyzeContext(): void {
     // Check for smart context from Nueva Oportunidad or other sources
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params: any) => {
       const market = params['market'];
       const clientType = params['clientType'];
       const clientName = params['clientName'];

@@ -6,6 +6,9 @@ export interface Toast {
   type: 'success' | 'error' | 'warning' | 'info';
   message: string;
   duration?: number;
+  // Optional action support for interactive toasts
+  actionLabel?: string;
+  action?: () => void;
 }
 
 @Injectable({
@@ -35,6 +38,17 @@ export class ToastService {
     this.show('info', message, duration);
   }
 
+  // New: show a toast with an action button (if UI supports it)
+  action(
+    type: Toast['type'],
+    message: string,
+    actionLabel: string,
+    action: () => void,
+    duration: number = 5000
+  ): void {
+    this.show(type, message, duration, actionLabel, action);
+  }
+
   // Aliases for backwards-compat with specs
   showSuccess(message: string, duration: number = 3000): void {
     this.success(message, duration);
@@ -44,12 +58,20 @@ export class ToastService {
     this.error(message, duration);
   }
 
-  private show(type: Toast['type'], message: string, duration: number): void {
+  private show(
+    type: Toast['type'],
+    message: string,
+    duration: number,
+    actionLabel?: string,
+    action?: () => void
+  ): void {
     const toast: Toast = {
       id: Date.now().toString(),
       type,
       message,
-      duration
+      duration,
+      actionLabel,
+      action
     };
 
     this.toasts.push(toast);
