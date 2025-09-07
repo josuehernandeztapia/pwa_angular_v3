@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
   DocumentFile,
@@ -92,10 +92,12 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
                 placeholder="ABC-123-DEF"
                 class="form-input placa-input"
                 [class.error]="platesForm.get('numeroPlacas')?.invalid && platesForm.get('numeroPlacas')?.touched"
+                [attr.aria-invalid]="platesForm.get('numeroPlacas')?.invalid ? 'true' : null"
+                [attr.aria-describedby]="platesForm.get('numeroPlacas')?.invalid ? 'numeroPlacas-error' : null"
                 (input)="onPlacaInput($event)"
               >
               @if (platesForm.get('numeroPlacas')?.invalid && platesForm.get('numeroPlacas')?.touched) {
-                <div class="error-message">Formato de placa inválido (ej: ABC-123-DEF)</div>
+                <div class="error-message" id="numeroPlacas-error">Formato de placa inválido (ej: ABC-123-DEF)</div>
               }
               @if (placaValidation().isValid && placaValidation().estado) {
                 <div class="validation-success">
@@ -131,6 +133,7 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
                 formControlName="estado"
                 class="form-input"
                 [class.error]="platesForm.get('estado')?.invalid && platesForm.get('estado')?.touched"
+                (change)="onEstadoChange()"
               >
                 <option value="">Seleccionar estado...</option>
                 <option value="AGUASCALIENTES">Aguascalientes</option>
@@ -340,6 +343,7 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
                 <li>{{ error }}</li>
               }
             </ul>
+            <button type="button" class="btn btn-secondary" (click)="goToNextError()">Ir al siguiente error</button>
           </div>
         }
       </form>
@@ -358,7 +362,7 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
     <!-- Critical Success Modal -->
     @if (showSuccessModal()) {
       <div class="modal-overlay" role="dialog" aria-modal="true" tabindex="-1" (keydown)="onModalKeydown($event)">
-        <div class="modal critical-success" (keydown)="onModalKeydown($event)">
+        <div class="modal critical-success" tabindex="-1">
           <div class="modal-header">
             <div class="success-animation">🎉</div>
             <h3>¡Sistema Post-Venta Activado!</h3>
@@ -446,6 +450,8 @@ export class PlatesPhaseComponent {
   showSuccessModal = signal(false);
   postSalesRecordId = signal<string>('');
   nextMaintenanceDate = signal<string>('');
+  private lastFocusedElement: HTMLElement | null = null;
+  private lastErrorIndex = -1;
 
   // Form
   platesForm: FormGroup;
@@ -521,9 +527,10 @@ export class PlatesPhaseComponent {
     this.loadPlatesData();
   }
 
-  private placaValidator(control: any) {
+  private placaValidator = (control: AbstractControl) => {
     if (!control.value) return null;
-    const isValid = this.platesService.validatePlacaFormat(control.value);
+    const estado = this.platesForm?.get('estado')?.value;
+    const isValid = this.platesService.validatePlacaFormat(control.value, estado);
     return isValid ? null : { invalidPlaca: true };
   }
 
@@ -566,15 +573,26 @@ export class PlatesPhaseComponent {
     input.value = value;
     this.platesForm.get('numeroPlacas')?.setValue(value, { emitEvent: false });
     
-    // Validate placa format
+    // Validate placa format with estado hint
     this.validatePlaca(value);
   }
 
   private async validatePlaca(placa: string): Promise<void> {
-    const result = await this.platesService.verifyPlacaAsync(placa);
+    const estadoHint = this.platesForm.get('estado')?.value;
+    const result = await this.platesService.verifyPlacaAsync(placa, estadoHint);
     this.placaValidation.set({ isValid: result.isValid, estado: result.estado });
     if (result.isValid && result.estado) {
       this.platesForm.get('estado')?.setValue(result.estado);
+    }
+  }
+
+  onEstadoChange(): void {
+    // Re-run placa validation when estado changes to ensure pattern alignment
+    const placa = this.platesForm.get('numeroPlacas')?.value;
+    if (placa) {
+      this.validatePlaca(placa);
+      // Also trigger sync validator
+      this.platesForm.get('numeroPlacas')?.updateValueAndValidity({ emitEvent: false });
     }
   }
 
@@ -698,6 +716,7 @@ export class PlatesPhaseComponent {
     console.log('🚀 INICIANDO HANDOVER CRÍTICO - VIN + Placa:', this.getUniqueIdentifier());
 
     // 🎯 CRITICAL: Complete plates phase - triggers vehicle.delivered event
+    // Save last focused element and open modal on success with focus trap
     this.importTracker.completePlatesPhase(this.clientId(), platesData).subscribe({
       next: (result: { success: boolean; postSalesRecord?: any }) => {
         console.log('✅ HANDOVER COMPLETADO - Sistema Post-Venta Activado:', result);
@@ -707,7 +726,9 @@ export class PlatesPhaseComponent {
         this.nextMaintenanceDate.set(new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toLocaleDateString('es-ES'));
         
         this.isSubmitting.set(false);
+        this.lastFocusedElement = document.activeElement as HTMLElement;
         this.showSuccessModal.set(true);
+        setTimeout(() => this.focusFirstElementInModal(), 0);
       },
       error: (error: unknown) => {
         console.error('❌ HANDOVER FALLIDO:', error);
@@ -729,11 +750,17 @@ export class PlatesPhaseComponent {
   completeProcess(): void {
     this.showSuccessModal.set(false);
     this.router.navigate(['/dashboard']);
+    this.restoreFocusAfterModal();
   }
 
   onModalKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
       this.showSuccessModal.set(false);
+      this.restoreFocusAfterModal();
+      return;
+    }
+    if (event.key === 'Tab') {
+      this.trapFocusInModal(event);
     }
   }
 
@@ -747,6 +774,56 @@ export class PlatesPhaseComponent {
         if (el) { el.focus(); }
         break;
       }
+    }
+  }
+
+  goToNextError(): void {
+    const controls = Object.keys(this.platesForm.controls);
+    const invalidNames = controls.filter(name => this.platesForm.get(name)?.invalid);
+    if (invalidNames.length === 0) return;
+    this.lastErrorIndex = (this.lastErrorIndex + 1) % invalidNames.length;
+    const nextName = invalidNames[this.lastErrorIndex];
+    const el = document.getElementById(nextName) as HTMLElement | null;
+    if (el) { el.focus(); }
+  }
+
+  private focusFirstElementInModal(): void {
+    const modal = document.querySelector('.modal.critical-success') as HTMLElement | null;
+    if (!modal) return;
+    const focusable = modal.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable[0] || modal;
+    first.focus();
+  }
+
+  private trapFocusInModal(event: KeyboardEvent): void {
+    const modal = document.querySelector('.modal.critical-success') as HTMLElement | null;
+    if (!modal) return;
+    const focusable = Array.from(modal.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )).filter(el => !el.hasAttribute('disabled'));
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement as HTMLElement;
+    if (event.shiftKey) {
+      if (active === first) {
+        last.focus();
+        event.preventDefault();
+      }
+    } else {
+      if (active === last) {
+        first.focus();
+        event.preventDefault();
+      }
+    }
+  }
+
+  private restoreFocusAfterModal(): void {
+    if (this.lastFocusedElement) {
+      this.lastFocusedElement.focus();
+      this.lastFocusedElement = null;
     }
   }
 }
