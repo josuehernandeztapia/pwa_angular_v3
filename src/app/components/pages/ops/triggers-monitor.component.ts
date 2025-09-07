@@ -12,7 +12,7 @@ import { BusinessFlow, Market } from '../../../models/types';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="min-h-screen bg-gray-50 p-6">
+    <div class="premium-container min-h-screen bg-gray-50 p-6">
       <!-- Header -->
       <div class="mb-8">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
