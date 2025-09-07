@@ -172,7 +172,7 @@ export class OnboardingEngineService {
             }],
             ecosystemId: config.ecosystemId,
             // Group metadata
-            collectiveGroupId: `group-${baseTimestamp}`,
+            collectiveCreditGroupId: `group-${baseTimestamp}`,
             collectiveGroupName: config.groupName
           };
 
@@ -233,7 +233,7 @@ export class OnboardingEngineService {
     file?: File,
     notes?: string
   ): Observable<Client> {
-    return new Observable<Client>(observer => {
+    return new Observable<Client>((observer: any) => {
       this.clientData.getClientById(clientId).subscribe((client: Client | null) => {
         if (!client) {
           observer.error('Client not found');
