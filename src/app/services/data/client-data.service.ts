@@ -311,6 +311,15 @@ export class ClientDataService {
   }
 
   /**
+   * Add a fully constructed client (used by onboarding engine)
+   */
+  addClient(client: Client): Observable<Client> {
+    this.clientsDB.set(client.id, client);
+    this.clientsSubject.next(Array.from(this.clientsDB.values()));
+    return of(client).pipe(delay(200));
+  }
+
+  /**
    * Update client
    */
   updateClient(id: string, updates: Partial<Client>): Observable<Client | null> {

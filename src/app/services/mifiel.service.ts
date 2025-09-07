@@ -57,10 +57,10 @@ export class MifielService {
   // Port exacto de Mifiel API configuration desde React
   private readonly MIFIEL_CONFIG = {
     apiUrl: 'https://api.mifiel.com',
-    appId: process.env['MIFIEL_APP_ID'] || 'demo_app_id',
-    secret: process.env['MIFIEL_SECRET'] || 'demo_secret',
-    webhook_url: process.env['MIFIEL_WEBHOOK_URL'] || 'https://api.conductores.com/webhooks/mifiel'
-  };
+    appId: 'demo_app_id',
+    secret: 'demo_secret',
+    webhook_url: 'https://api.conductores.com/webhooks/mifiel'
+  } as const;
 
   // Simulated document storage
   private documentsDB = new Map<string, MifieldDocument>();
@@ -219,9 +219,7 @@ export class MifielService {
       metadata: {
         client_id: groupMembers.map(m => m.clientId).join(','),
         contract_type: 'credito_colectivo',
-        created_at: new Date().toISOString(),
-        group_name: groupName,
-        member_count: groupMembers.length
+        created_at: new Date().toISOString()
       }
     };
 
@@ -240,7 +238,7 @@ export class MifielService {
    * Send signature request to client
    */
   sendSignatureRequest(documentId: string, signerEmail: string): Observable<{ success: boolean; message: string }> {
-    return new Observable(observer => {
+    return new Observable<{ success: boolean; message: string }>(observer => {
       const document = this.documentsDB.get(documentId);
       if (!document) {
         observer.error('Document not found');
@@ -264,7 +262,7 @@ export class MifielService {
    * Simulate signature completion (for testing)
    */
   simulateSignature(documentId: string, signerEmail: string): Observable<SignatureResponse> {
-    return new Observable(observer => {
+    return new Observable<SignatureResponse>(observer => {
       const document = this.documentsDB.get(documentId);
       if (!document) {
         observer.error('Document not found');
@@ -312,7 +310,7 @@ export class MifielService {
    * Cancel document signature process
    */
   cancelDocument(documentId: string, reason: string): Observable<{ success: boolean; message: string }> {
-    return new Observable(observer => {
+    return new Observable<{ success: boolean; message: string }>(observer => {
       const document = this.documentsDB.get(documentId);
       if (!document) {
         observer.error('Document not found');
@@ -343,7 +341,7 @@ export class MifielService {
    * Get signature URL for client
    */
   getSignatureUrl(documentId: string, signerEmail: string): Observable<string | null> {
-    return new Observable(observer => {
+    return new Observable<string | null>(observer => {
       const document = this.documentsDB.get(documentId);
       if (!document) {
         observer.next(null);
@@ -420,7 +418,7 @@ export class MifielService {
     // Port exacto de webhook handling logic desde React
     const { document_id, event_type, signature_data } = webhookData;
     
-    return new Observable(observer => {
+    return new Observable<{ processed: boolean; documentId?: string }>(observer => {
       const document = this.documentsDB.get(document_id);
       if (!document) {
         observer.next({ processed: false });

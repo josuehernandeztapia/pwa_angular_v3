@@ -521,7 +521,10 @@ export class EventLogComponent implements OnInit {
       [EventType.AdvisorAction]: '👤',
       [EventType.ClientAction]: '🚗',
       [EventType.System]: '⚙️',
-      [EventType.GoalAchieved]: '🎯'
+      [EventType.GoalAchieved]: '🎯',
+      [EventType.StatusChange]: '🔄',
+      [EventType.DocumentSubmission]: '📤',
+      [EventType.DocumentReview]: '📝'
     };
     return icons[event.type] || '📝';
   }
@@ -570,7 +573,10 @@ export class EventLogComponent implements OnInit {
       [EventType.AdvisorAction]: 'Transacción',
       [EventType.ClientAction]: 'Transacción',
       [EventType.System]: 'Ajuste',
-      [EventType.GoalAchieved]: 'Meta'
+      [EventType.GoalAchieved]: 'Meta',
+      [EventType.StatusChange]: 'Cambio de Estado',
+      [EventType.DocumentSubmission]: 'Envío de Documento',
+      [EventType.DocumentReview]: 'Revisión de Documento'
     };
     return labels[eventType];
   }
@@ -582,7 +588,10 @@ export class EventLogComponent implements OnInit {
       [EventType.AdvisorAction]: 'Acción del Asesor',
       [EventType.ClientAction]: 'Acción del Cliente',
       [EventType.System]: 'Sistema',
-      [EventType.GoalAchieved]: 'Meta Alcanzada'
+      [EventType.GoalAchieved]: 'Meta Alcanzada',
+      [EventType.StatusChange]: 'Cambio de Estado',
+      [EventType.DocumentSubmission]: 'Envío de Documento',
+      [EventType.DocumentReview]: 'Revisión de Documento'
     };
     return labels[eventType];
   }

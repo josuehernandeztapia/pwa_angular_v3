@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Document, DocumentStatus, BusinessFlow } from '../models/types';
+import { BusinessFlow, Document, DocumentStatus } from '../models/types';
 
 // Port exacto de document requirement checklists desde React simulationService.ts líneas 10-33
 const VENTA_DIRECTA_CONTADO_DOCS: Document[] = [
@@ -152,6 +152,7 @@ export class DocumentRequirementsService {
     canStartKyc: boolean;
     missingDocs: string[];
     isKycComplete: boolean;
+    tooltipMessage: string;
   } {
     const ine = documents.find(d => d.name === 'INE Vigente');
     const comprobante = documents.find(d => d.name === 'Comprobante de domicilio');
@@ -165,10 +166,20 @@ export class DocumentRequirementsService {
     if (ine?.status !== DocumentStatus.Aprobado) missingDocs.push('INE Vigente');
     if (comprobante?.status !== DocumentStatus.Aprobado) missingDocs.push('Comprobante de domicilio');
 
+    let tooltipMessage = '';
+    if (isKycComplete) {
+      tooltipMessage = 'El KYC ya ha sido aprobado.';
+    } else if (!coreDocsApproved) {
+      tooltipMessage = 'Se requiere aprobar INE y Comprobante de Domicilio para iniciar KYC.';
+    } else {
+      tooltipMessage = 'Listo para iniciar verificación biométrica.';
+    }
+
     return {
       canStartKyc: coreDocsApproved && !isKycComplete,
       missingDocs,
-      isKycComplete
+      isKycComplete,
+      tooltipMessage
     };
   }
 

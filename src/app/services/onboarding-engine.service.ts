@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Client, Document, BusinessFlow, Actor, EventType, Event } from '../models/types';
+import { Actor, Document as AppDocument, BusinessFlow, Client, EventType } from '../models/types';
+import { ClientDataService } from './data/client-data.service';
 import { DocumentRequirementsService } from './document-requirements.service';
-import { ClientDataService } from './client-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,14 +36,14 @@ export class OnboardingEngineService {
     }
 
     // Get documents using our DocumentRequirementsService
-    return new Observable(observer => {
+    return new Observable<Client>((observer: any) => {
       this.documentReqs.getDocumentRequirements({
         market: config.market,
         saleType: config.saleType,
         ecosystemId: config.ecosystemId
-      }).subscribe(documents => {
+      }).subscribe((documents: AppDocument[]) => {
         // Apply unique client ID to each document
-        const clientDocs = documents.map(d => ({ 
+        const clientDocs = documents.map((d: AppDocument) => ({ 
           ...d, 
           id: `${newId}-${d.id}` 
         }));
@@ -90,13 +90,13 @@ export class OnboardingEngineService {
       ? BusinessFlow.CreditoColectivo 
       : BusinessFlow.AhorroProgramado;
 
-    return new Observable(observer => {
+    return new Observable<Client>((observer: any) => {
       this.documentReqs.getDocumentRequirements({
         market: config.market,
         saleType: 'financiero', // Savings use financiero docs but simplified
         businessFlow: flow
-      }).subscribe(documents => {
-        const clientDocs = documents.map(d => ({ 
+      }).subscribe((documents: AppDocument[]) => {
+        const clientDocs = documents.map((d: AppDocument) => ({ 
           ...d, 
           id: `${newId}-${d.id}` 
         }));
@@ -139,7 +139,7 @@ export class OnboardingEngineService {
     const members: Client[] = [];
     const baseTimestamp = Date.now();
 
-    return new Observable(observer => {
+    return new Observable<Client[]>((observer: any) => {
       let processedCount = 0;
 
       config.memberNames.forEach((memberName, index) => {
@@ -149,8 +149,8 @@ export class OnboardingEngineService {
           market: config.market,
           saleType: 'financiero',
           businessFlow: BusinessFlow.CreditoColectivo
-        }).subscribe(documents => {
-          const memberDocs = documents.map(d => ({ 
+        }).subscribe((documents: AppDocument[]) => {
+          const memberDocs = documents.map((d: AppDocument) => ({ 
             ...d, 
             id: `${memberId}-${d.id}` 
           }));
@@ -194,8 +194,8 @@ export class OnboardingEngineService {
    * Port exacto de client status progression from React
    */
   advanceClientStatus(clientId: string, newStatus: string, reason?: string): Observable<Client> {
-    return new Observable(observer => {
-      this.clientData.getClientById(clientId).subscribe(client => {
+    return new Observable<Client>((observer: any) => {
+      this.clientData.getClientById(clientId).subscribe((client: Client | null) => {
         if (!client) {
           observer.error('Client not found');
           return;
@@ -216,7 +216,7 @@ export class OnboardingEngineService {
           ]
         };
 
-        this.clientData.updateClient(updatedClient).subscribe(() => {
+        this.clientData.updateClient(updatedClient.id, updatedClient).subscribe(() => {
           observer.next(updatedClient);
           observer.complete();
         });
@@ -233,14 +233,14 @@ export class OnboardingEngineService {
     file?: File,
     notes?: string
   ): Observable<Client> {
-    return new Observable(observer => {
-      this.clientData.getClientById(clientId).subscribe(client => {
+    return new Observable<Client>(observer => {
+      this.clientData.getClientById(clientId).subscribe((client: Client | null) => {
         if (!client) {
           observer.error('Client not found');
           return;
         }
 
-        const updatedDocs = client.documents.map(doc => {
+        const updatedDocs = client.documents.map((doc: AppDocument) => {
           if (doc.id === documentId) {
             return {
               ...doc,
@@ -268,7 +268,7 @@ export class OnboardingEngineService {
           ]
         };
 
-        this.clientData.updateClient(updatedClient).subscribe(() => {
+        this.clientData.updateClient(updatedClient.id, updatedClient).subscribe(() => {
           observer.next(updatedClient);
           observer.complete();
         });
@@ -285,14 +285,14 @@ export class OnboardingEngineService {
     approved: boolean,
     reviewNotes?: string
   ): Observable<Client> {
-    return new Observable(observer => {
-      this.clientData.getClientById(clientId).subscribe(client => {
+    return new Observable<Client>((observer: any) => {
+      this.clientData.getClientById(clientId).subscribe((client: Client | null) => {
         if (!client) {
           observer.error('Client not found');
           return;
         }
 
-        const updatedDocs = client.documents.map(doc => {
+        const updatedDocs = client.documents.map((doc: AppDocument) => {
           if (doc.id === documentId) {
             return {
               ...doc,
@@ -320,7 +320,7 @@ export class OnboardingEngineService {
           ]
         };
 
-        this.clientData.updateClient(updatedClient).subscribe(() => {
+        this.clientData.updateClient(updatedClient.id, updatedClient).subscribe(() => {
           observer.next(updatedClient);
           observer.complete();
         });
@@ -357,7 +357,7 @@ export class OnboardingEngineService {
     let currentStep = 'Registro inicial';
     let nextAction = 'Subir documentos requeridos';
     let stepsCompleted = 1;
-    const totalSteps = client.flow === 'VentaDirecta' ? 4 : 6; // Cash: Docs->Contract, Credit: Docs->KYC->Scoring->Contract
+    const totalSteps = client.flow === BusinessFlow.VentaDirecta ? 4 : 6; // Cash: Docs->Contract, Credit: Docs->KYC->Scoring->Contract
     
     // Step 2: Document submission
     if (docStatus.completedDocs > 0) {
@@ -367,7 +367,7 @@ export class OnboardingEngineService {
     }
     
     // For Venta de Contado (cash sales) - skip KYC and Scoring
-    if (client.flow === 'VentaDirecta') {
+    if (client.flow === BusinessFlow.VentaDirecta) {
       if (allDocsComplete) {
         currentStep = 'Documentos completos';
         nextAction = 'Firmar contrato de promesa';
@@ -437,7 +437,7 @@ export class OnboardingEngineService {
     ecosystemId: string
   ): Observable<{ isValid: boolean; reason?: string; }> {
     // Simulate ecosystem validation (exact port from React logic)
-    return new Observable(observer => {
+    return new Observable<{ isValid: boolean; reason?: string }>((observer: any) => {
       if (!ecosystemId) {
         observer.next({ isValid: false, reason: 'ID de ecosistema requerido' });
       } else if (ecosystemId.includes('invalid')) {

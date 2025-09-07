@@ -28,7 +28,10 @@ export enum EventType {
   System = 'System',
   AdvisorAction = 'AdvisorAction',
   ClientAction = 'ClientAction',
-  GoalAchieved = 'GoalAchieved'
+  GoalAchieved = 'GoalAchieved',
+  StatusChange = 'StatusChange',
+  DocumentSubmission = 'DocumentSubmission',
+  DocumentReview = 'DocumentReview'
 }
 
 export type Market = 'all' | 'aguascalientes' | 'edomex';
@@ -429,6 +432,8 @@ export interface Client {
   documents: Document[];
   events: EventLog[];
   collectiveCreditGroupId?: string;
+  collectiveGroupId?: string;
+  collectiveGroupName?: string;
   importStatus?: ImportStatus;
   remainderAmount?: number;
   downPayment?: number;

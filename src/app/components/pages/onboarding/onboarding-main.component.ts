@@ -1,17 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Client, DocumentStatus, BusinessFlow } from '../../../models/types';
-import { OnboardingEngineService } from '../../../services/onboarding-engine.service';
+import { BusinessFlow, Client, Ecosystem } from '../../../models/types';
+import { ContractGenerationService } from '../../../services/contract-generation.service';
+import { EcosystemDataService } from '../../../services/data/ecosystem-data.service';
 import { DocumentRequirementsService } from '../../../services/document-requirements.service';
 import { InterviewCheckpointService } from '../../../services/interview-checkpoint.service';
 import { MetaMapService } from '../../../services/metamap.service';
-import { ContractGenerationService } from '../../../services/contract-generation.service';
-import { MifieldService } from '../../../services/mifield.service';
-import { EcosystemDataService } from '../../../services/data/ecosystem-data.service';
+import { MifielService } from '../../../services/mifiel.service';
+import { OnboardingEngineService } from '../../../services/onboarding-engine.service';
 import { InterviewCheckpointModalComponent } from '../../shared/interview-checkpoint-modal/interview-checkpoint-modal.component';
 
 type OnboardingStep = 'selection' | 'client_info' | 'documents' | 'kyc' | 'contracts' | 'completed';
@@ -435,12 +435,21 @@ interface OnboardingForm {
       <!-- Interview Checkpoint Modal -->
       <app-interview-checkpoint-modal
         *ngIf="showInterviewModal"
-        [clientId]="currentClient?.id || ''"
-        [municipality]="form.market"
-        [productType]="getProductType()"
-        (completed)="onInterviewCompleted()"
-        (closed)="onInterviewModalClosed()">
-      </app-interview-checkpoint-modal>
+        [isVisible]="showInterviewModal"
+        [modalData]="{
+          clientId: currentClient?.id || '',
+          clientName: currentClient?.name || '',
+          documentType: 'Documento',
+          checkpoint: null,
+          clientData: {
+            municipality: form.market,
+            productType: getProductType()
+          }
+        }"
+        (interviewCompleted)="onInterviewCompleted()"
+        (modalClosed)="onInterviewModalClosed()"
+        (continueUpload)="onInterviewCompleted()"
+      ></app-interview-checkpoint-modal>
     </div>
   `,
   styles: [`
@@ -1168,7 +1177,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
 
   // New route handling
   newRouteName = '';
-  availableEcosystems: any[] = [];
+  availableEcosystems: Ecosystem[] = [];
   showRoutesPreview = false;
 
   // State
@@ -1176,9 +1185,9 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   showInterviewModal = false;
   pendingDocumentUpload: { fileInput: HTMLInputElement, documentId: string } | null = null;
   documentProgress = { totalDocs: 0, completedDocs: 0, pendingDocs: 0, completionPercentage: 0, allComplete: false };
-  kycValidation = { canStartKyc: false, isKycComplete: false, missingDocs: [], tooltipMessage: '' };
-  kycStatus = { status: 'not_started' as any, statusMessage: '', canRetry: false, completedAt: undefined };
-  contractValidation = { canGenerate: false, missingRequirements: [], warningMessages: [] };
+  kycValidation: { canStartKyc: boolean; isKycComplete: boolean; missingDocs: string[]; tooltipMessage: string } = { canStartKyc: false, isKycComplete: false, missingDocs: [], tooltipMessage: '' };
+  kycStatus: { status: 'not_started' | 'prerequisites_missing' | 'ready' | 'in_progress' | 'completed' | 'failed'; statusMessage: string; canRetry: boolean; completedAt?: Date } = { status: 'not_started', statusMessage: '', canRetry: false };
+  contractValidation: { canGenerate: boolean; missingRequirements: string[]; warningMessages: string[] } = { canGenerate: false, missingRequirements: [], warningMessages: [] };
   contractMessage = '';
   isGeneratingContract = false;
 
@@ -1187,7 +1196,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     private documentReqs: DocumentRequirementsService,
     private metamap: MetaMapService,
     private contractGen: ContractGenerationService,
-    private mifiel: MifieldService,
+    private mifiel: MifielService,
     private ecosystemData: EcosystemDataService,
     private interviewCheckpoint: InterviewCheckpointService
   ) { }
@@ -1198,7 +1207,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
 
     // Subscribe to MetaMap events
     this.metamap.kycSuccess$.pipe(takeUntil(this.destroy$)).subscribe(
-      ({ clientId, verificationData }) => {
+      ({ clientId, verificationData }: { clientId: string; verificationData: any }) => {
         if (clientId === this.currentClient?.id) {
           this.onKycSuccess(verificationData);
         }
@@ -1206,7 +1215,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     );
 
     this.metamap.kycExit$.pipe(takeUntil(this.destroy$)).subscribe(
-      ({ clientId, reason }) => {
+      ({ clientId, reason }: { clientId: string; reason: string }) => {
         if (clientId === this.currentClient?.id) {
           this.onKycExit(reason);
         }
@@ -1310,11 +1319,11 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   }
 
   loadAvailableEcosystems(): void {
-    this.ecosystemData.getAllEcosystems().subscribe({
-      next: (ecosystems) => {
+    this.ecosystemData.getEcosystems().subscribe({
+      next: (ecosystems: Ecosystem[]) => {
         this.availableEcosystems = ecosystems;
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error loading ecosystems:', error);
         this.availableEcosystems = [];
       }
@@ -1361,11 +1370,11 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       saleType: this.form.saleType as any,
       ecosystemId
     }).subscribe({
-      next: (client) => {
+      next: (client: Client) => {
         this.currentClient = client;
         this.nextStep();
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error creating client:', error);
       }
     });
@@ -1387,12 +1396,12 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       market: this.form.market as any,
       ecosystemId: ecosystemId || 'default-ecosystem'
     }).subscribe({
-      next: (members) => {
+      next: (members: Client[]) => {
         // Use first member as representative for UI
         this.currentClient = members[0];
         this.nextStep();
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error creating collective group:', error);
       }
     });
@@ -1450,7 +1459,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     if (!file || !this.currentClient) return;
 
     this.onboardingEngine.submitDocument(this.currentClient.id, documentId, file).subscribe({
-      next: (updatedClient) => {
+      next: (updatedClient: Client) => {
         this.currentClient = updatedClient;
         this.updateDocumentProgress();
         
@@ -1459,7 +1468,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
           this.approveDocument(documentId);
         }, 2000);
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error submitting document:', error);
       }
     });
@@ -1489,11 +1498,11 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     if (!this.currentClient) return;
 
     this.onboardingEngine.reviewDocument(this.currentClient.id, documentId, true).subscribe({
-      next: (updatedClient) => {
+      next: (updatedClient: Client) => {
         this.currentClient = updatedClient;
         this.updateDocumentProgress();
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error approving document:', error);
       }
     });
@@ -1535,10 +1544,10 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       (data) => this.onKycSuccess(data),
       (reason) => this.onKycExit(reason)
     ).subscribe({
-      next: (button) => {
+      next: (button: HTMLElement | null) => {
         console.log('MetaMap button created successfully');
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error creating MetaMap button:', error);
       }
     });
@@ -1548,11 +1557,11 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     if (!this.currentClient) return;
 
     this.metamap.completeKyc(this.currentClient.id, verificationData).subscribe({
-      next: (updatedClient) => {
+      next: (updatedClient: Client) => {
         this.currentClient = updatedClient;
         this.updateKycStatus();
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error completing KYC:', error);
       }
     });
@@ -1573,11 +1582,11 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
 
     this.isGeneratingContract = true;
     this.contractGen.sendContract(this.currentClient.id).subscribe({
-      next: (result) => {
+      next: (result: { message: string; documents: any[] }) => {
         this.contractMessage = result.message;
         this.isGeneratingContract = false;
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error generating contract:', error);
         this.isGeneratingContract = false;
       }
@@ -1586,13 +1595,18 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
 
   // Utility methods
   getFlowDisplayName(flow: BusinessFlow): string {
-    const flowNames = {
-      [BusinessFlow.VentaDirecta]: 'Venta Directa',
-      [BusinessFlow.VentaPlazo]: 'Venta a Plazo',
-      [BusinessFlow.AhorroProgramado]: 'Ahorro Programado',
-      [BusinessFlow.CreditoColectivo]: 'Crédito Colectivo'
-    };
-    return flowNames[flow] || flow;
+    switch (flow) {
+      case BusinessFlow.VentaDirecta:
+        return 'Venta Directa';
+      case BusinessFlow.VentaPlazo:
+        return 'Venta a Plazo';
+      case BusinessFlow.AhorroProgramado:
+        return 'Ahorro Programado';
+      case BusinessFlow.CreditoColectivo:
+        return 'Crédito Colectivo';
+      default:
+        return String(flow);
+    }
   }
 
   // Completion actions

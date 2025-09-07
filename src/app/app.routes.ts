@@ -35,6 +35,13 @@ export const routes: Routes = [
   },
 
   {
+    path: 'onboarding',
+    loadComponent: () => import('./components/pages/onboarding/onboarding-main.component').then(c => c.OnboardingMainComponent),
+    canActivate: [AuthGuard],
+    title: 'Onboarding - Conductores PWA'
+  },
+
+  {
     path: 'nueva-oportunidad',
     loadComponent: () => import('./components/pages/nueva-oportunidad/nueva-oportunidad.component').then(c => c.NuevaOportunidadComponent),
     canActivate: [AuthGuard],

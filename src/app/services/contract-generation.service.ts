@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Client, BusinessFlow, Document } from '../models/types';
-import { ClientDataService } from './client-data.service';
+import { BusinessFlow, Client, Document } from '../models/types';
+import { ClientDataService } from './data/client-data.service';
 
 interface ContractTemplate {
   id: string;
@@ -130,8 +130,8 @@ Fecha: {{CONTRACT_DATE}}`,
    * ENHANCED: Includes protection addendum for financial products
    */
   sendContract(clientId: string): Observable<{ message: string; documents: Document[] }> {
-    return new Observable(observer => {
-      this.clientData.getClientById(clientId).subscribe(client => {
+    return new Observable<{ message: string; documents: Document[] }>(observer => {
+      this.clientData.getClientById(clientId).subscribe((client: Client | null) => {
         if (!client) {
           observer.error('Client not found');
           return;
@@ -239,7 +239,7 @@ Fecha: {{CONTRACT_DATE}}`,
           };
           
           // Update client with protection plan
-          this.clientData.updateClient(updatedClient).subscribe(() => {
+          this.clientData.updateClient(updatedClient.id, updatedClient).subscribe(() => {
             observer.next({ message, documents: contractDocs });
             observer.complete();
           });
@@ -426,14 +426,14 @@ Esta protección es parte integral del presente contrato.
     status: 'signed' | 'rejected' | 'expired',
     signatureData?: any
   ): Observable<Client> {
-    return new Observable(observer => {
-      this.clientData.getClientById(clientId).subscribe(client => {
+    return new Observable<Client>(observer => {
+      this.clientData.getClientById(clientId).subscribe((client: Client | null) => {
         if (!client) {
           observer.error('Client not found');
           return;
         }
 
-        const updatedDocs = client.documents.map(doc => {
+        const updatedDocs = client.documents.map((doc: Document) => {
           if (doc.id === contractId) {
             return {
               ...doc,
@@ -466,7 +466,7 @@ Esta protección es parte integral del presente contrato.
           ]
         };
 
-        this.clientData.updateClient(updatedClient).subscribe(() => {
+        this.clientData.updateClient(updatedClient.id, updatedClient).subscribe(() => {
           observer.next(updatedClient);
           observer.complete();
         });

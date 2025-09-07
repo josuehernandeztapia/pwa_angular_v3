@@ -4,7 +4,7 @@ import { delay, switchMap, map } from 'rxjs/operators';
 import { Client, BusinessFlow } from '../models/types';
 import { MifielService } from './mifiel.service';
 import { CreditScoringService } from './credit-scoring.service';
-import { ClientDataService } from './client-data.service';
+import { ClientDataService } from './data/client-data.service';
 
 // Contract Flow Types by Product
 type ContractFlow = 
