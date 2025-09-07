@@ -42,10 +42,10 @@ interface NavigationItem {
           
           <!-- Accessibility Controls: Font scale A A A & High Contrast -->
           <div class="a11y-controls">
-            <button class="a11y-btn" [class.active]="fontScale==='base'" (click)="setFontScale('base')">A</button>
-            <button class="a11y-btn" [class.active]="fontScale==='sm'" (click)="setFontScale('sm')">A</button>
-            <button class="a11y-btn" [class.active]="fontScale==='lg'" (click)="setFontScale('lg')">A</button>
-            <button class="hc-toggle" [class.active]="highContrast" (click)="toggleHighContrast()" title="Alto contraste">⬛⬜</button>
+            <button class="a11y-btn" [class.active]="fontScale==='base'" (click)="setFontScale('base')" aria-label="Tamaño de fuente base">A</button>
+            <button class="a11y-btn" [class.active]="fontScale==='sm'" (click)="setFontScale('sm')" aria-label="Tamaño de fuente pequeño">A</button>
+            <button class="a11y-btn" [class.active]="fontScale==='lg'" (click)="setFontScale('lg')" aria-label="Tamaño de fuente grande">A</button>
+            <button class="hc-toggle" [class.active]="highContrast" (click)="toggleHighContrast()" title="Alto contraste" aria-label="Alternar alto contraste">⬛⬜</button>
           </div>
           
           <button 
@@ -76,6 +76,7 @@ interface NavigationItem {
           class="btn-nueva-oportunidad"
           [class.collapsed]="isCollapsed" 
           (click)="createNewOpportunity()"
+          aria-label="Nueva Oportunidad"
         >
           <span class="btn-icon">➕</span>
           <span class="btn-text" *ngIf="!isCollapsed">Nueva Oportunidad</span>
@@ -89,6 +90,7 @@ interface NavigationItem {
           class="nav-item"
           [class.active]="isActive(item.route)"
           (click)="navigate(item)"
+          [attr.aria-label]="isCollapsed ? item.label : null"
         >
           <div class="nav-link">
             <span class="nav-icon">{{ item.icon }}</span>
