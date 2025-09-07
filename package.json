@@ -66,6 +66,7 @@
     "security:check": "npm audit --audit-level moderate",
     "test:security:owasp-top-10": "npm run security:check",
     "test:perf:lighthouse": "lhci autorun --config=.lighthouserc.js | cat",
+    "test:perf:pwa:checklist": "node scripts/pwa-checklist.js",
     "test:perf:bundle-size": "npm run bundle:size-check",
     "test:perf:core-web-vitals": "lhci autorun --config=.lighthouserc.js | cat",
     "bundle:size-check": "bundlesize",

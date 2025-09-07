@@ -432,7 +432,6 @@ export interface Client {
   documents: Document[];
   events: EventLog[];
   collectiveCreditGroupId?: string;
-  collectiveGroupId?: string;
   collectiveGroupName?: string;
   importStatus?: ImportStatus;
   remainderAmount?: number;
