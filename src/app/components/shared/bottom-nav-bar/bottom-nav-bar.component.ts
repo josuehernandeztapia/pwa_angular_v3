@@ -275,15 +275,7 @@ export class BottomNavBarComponent implements OnInit {
     const currentUrl = this.router.url;
     
     this.navItems.forEach(item => {
-      if (item.route === '/menu') {
-        // Special case for "More" menu - active if not on main routes
-        const mainRoutes = ['/dashboard', '/oportunidades', '/cotizador', '/clientes'];
-        item.isActive = !mainRoutes.some(route => 
-          currentUrl === route || currentUrl.startsWith(route + '/')
-        );
-      } else {
-        item.isActive = currentUrl === item.route || currentUrl.startsWith(item.route + '/');
-      }
+      item.isActive = currentUrl === item.route || currentUrl.startsWith(item.route + '/');
     });
   }
 
