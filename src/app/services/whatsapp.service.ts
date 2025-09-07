@@ -431,8 +431,9 @@ export class WhatsappService {
   }
 
   private getEnvVar(key: string): string {
-    if (typeof process !== 'undefined' && (process as any).env) {
-      return ((process as any).env[key] as string) || '';
+    const maybeProcess = (globalThis as any)?.process;
+    if (maybeProcess?.env) {
+      return (maybeProcess.env[key] as string) || '';
     }
     return '';
   }
