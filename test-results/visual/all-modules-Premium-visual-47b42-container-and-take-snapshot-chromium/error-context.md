@@ -1,0 +1,153 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44] [cursor=pointer]: 🎯
+            - generic [ref=e45] [cursor=pointer]: Simulador
+          - generic [ref=e47] [cursor=pointer]:
+            - generic [ref=e48] [cursor=pointer]: 👥
+            - generic [ref=e49] [cursor=pointer]: Clientes
+            - generic [ref=e50] [cursor=pointer]: "12"
+          - generic [ref=e52] [cursor=pointer]:
+            - generic [ref=e53] [cursor=pointer]: 📋
+            - generic [ref=e54] [cursor=pointer]: Expedientes
+          - generic [ref=e56] [cursor=pointer]:
+            - generic [ref=e57] [cursor=pointer]: 🛡️
+            - generic [ref=e58] [cursor=pointer]: Protección
+            - generic [ref=e59] [cursor=pointer]: "3"
+          - generic [ref=e61] [cursor=pointer]:
+            - generic [ref=e62] [cursor=pointer]: 📊
+            - generic [ref=e63] [cursor=pointer]: Reportes
+        - generic [ref=e64]:
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: ❓
+            - generic [ref=e68] [cursor=pointer]: Ayuda
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]: ⚙️
+            - generic [ref=e72] [cursor=pointer]: Configuración
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75] [cursor=pointer]: 🚪
+            - generic [ref=e76] [cursor=pointer]: Salir
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - generic [ref=e80]: 🔔 Notificaciones
+          - button "✕" [ref=e82] [cursor=pointer]
+        - generic [ref=e84]:
+          - generic [ref=e85]: 🔔
+          - generic [ref=e86]:
+            - generic [ref=e87]: Activar Notificaciones
+            - generic [ref=e88]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e89]:
+            - button "Activar" [ref=e90] [cursor=pointer]
+            - button "Después" [ref=e91] [cursor=pointer]
+        - generic [ref=e93]:
+          - generic [ref=e94]: 📭
+          - generic [ref=e95]: No hay notificaciones
+          - generic [ref=e96]: Las notificaciones aparecerán aquí
+    - main [ref=e97]:
+      - generic [ref=e99]:
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - heading "🎯 Monitor de Triggers Automáticos" [level=1] [ref=e103]
+            - paragraph [ref=e104]: Sistema de monitoreo en tiempo real para triggers de órdenes de entrega
+          - generic [ref=e105]:
+            - generic [ref=e108]: Monitoreo Activo
+            - generic [ref=e109]: "Última actualización: 12:00:00"
+            - button "Actualizar" [ref=e110]:
+              - img [ref=e111]
+              - text: Actualizar
+        - generic [ref=e113]:
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - paragraph [ref=e117]: Total Triggers
+              - paragraph [ref=e118]: "0"
+            - img [ref=e120]
+          - generic [ref=e123]:
+            - generic [ref=e124]:
+              - paragraph [ref=e125]: Exitosos
+              - paragraph [ref=e126]: "0"
+            - img [ref=e128]
+          - generic [ref=e131]:
+            - generic [ref=e132]:
+              - paragraph [ref=e133]: Fallidos
+              - paragraph [ref=e134]: "0"
+            - img [ref=e136]
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - paragraph [ref=e141]: Pendientes
+              - paragraph [ref=e142]: "0"
+            - img [ref=e144]
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - generic [ref=e149]: "Mercado:"
+            - combobox [ref=e150]:
+              - option "Todos" [selected]
+              - option "Aguascalientes"
+              - option "Estado de México"
+          - generic [ref=e151]:
+            - generic [ref=e152]: "Flujo:"
+            - combobox [ref=e153]:
+              - option "Todos" [selected]
+              - option "Venta Directa"
+              - option "Venta a Plazo"
+              - option "Plan de Ahorro"
+              - option "Crédito Colectivo"
+          - generic [ref=e154]:
+            - generic [ref=e155]: "Estado:"
+            - combobox [ref=e156]:
+              - option "Todos" [selected]
+              - option "Exitoso"
+              - option "Error"
+              - option "Pendiente"
+        - navigation [ref=e159]:
+          - button "Triggers Recientes 0" [ref=e160]:
+            - text: Triggers Recientes
+            - generic [ref=e161]: "0"
+          - button "Análisis Pendientes 0" [ref=e162]:
+            - text: Análisis Pendientes
+            - generic [ref=e163]: "0"
+          - button "Reglas de Trigger 7" [ref=e164]:
+            - text: Reglas de Trigger
+            - generic [ref=e165]: "7"
+        - generic [ref=e168]:
+          - img [ref=e169]
+          - paragraph [ref=e171]: No hay triggers recientes con los filtros seleccionados
+    - navigation "Navegación inferior"
+```
