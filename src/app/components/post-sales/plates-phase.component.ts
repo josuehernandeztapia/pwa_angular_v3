@@ -7,6 +7,7 @@ import {
   PlatesData
 } from '../../models/types';
 import { IntegratedImportTrackerService } from '../../services/integrated-import-tracker.service';
+import { PlatesValidationService } from '../../services/plates-validation.service';
 import { PostSalesApiService } from '../../services/post-sales-api.service';
 
 /**
@@ -356,8 +357,8 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
 
     <!-- Critical Success Modal -->
     @if (showSuccessModal()) {
-      <div class="modal-overlay">
-        <div class="modal critical-success">
+      <div class="modal-overlay" role="dialog" aria-modal="true" tabindex="-1" (keydown)="onModalKeydown($event)">
+        <div class="modal critical-success" (keydown)="onModalKeydown($event)">
           <div class="modal-header">
             <div class="success-animation">🎉</div>
             <h3>¡Sistema Post-Venta Activado!</h3>
@@ -413,7 +414,7 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
             </div>
           </div>
           <div class="modal-actions">
-            <button class="btn btn-secondary" (click)="viewPostSalesDashboard()">
+            <button class="btn btn-secondary" (click)="viewPostSalesDashboard()" autofocus>
               📊 Ver Dashboard Post-Venta
             </button>
             <button class="btn btn-primary" (click)="completeProcess()">
@@ -431,6 +432,7 @@ export class PlatesPhaseComponent {
   private router = inject(Router);
   private importTracker = inject(IntegratedImportTrackerService);
   private postSalesApi = inject(PostSalesApiService);
+  private platesService = inject(PlatesValidationService);
 
   // Signals
   clientId = signal<string>('client_001');
@@ -521,16 +523,7 @@ export class PlatesPhaseComponent {
 
   private placaValidator(control: any) {
     if (!control.value) return null;
-    
-    // Mexican license plate patterns (flexible)
-    const patterns = [
-      /^[A-Z]{3}-\d{3}-[A-Z]$/, // ABC-123-D (old format)
-      /^[A-Z]{3}-\d{2}-\d{2}$/, // ABC-12-34 (some states)
-      /^[A-Z]{2}-\d{3}-[A-Z]{2}$/, // AB-123-CD (some formats)
-      /^[A-Z]{3}-\d{4}$/, // ABC-1234 (simplified)
-    ];
-
-    const isValid = patterns.some(pattern => pattern.test(control.value.toUpperCase()));
+    const isValid = this.platesService.validatePlacaFormat(control.value);
     return isValid ? null : { invalidPlaca: true };
   }
 
@@ -552,7 +545,8 @@ export class PlatesPhaseComponent {
   getUniqueIdentifier(): string {
     const vin = this.vehicleInfo()?.vin || '';
     const placa = this.platesForm?.get('numeroPlacas')?.value || '';
-    return vin && placa ? `${vin}+${placa}` : 'Pendiente...';
+    const id = this.platesService.buildUniqueId(vin, placa);
+    return id || 'Pendiente...';
   }
 
   onPlacaInput(event: Event): void {
@@ -576,27 +570,11 @@ export class PlatesPhaseComponent {
     this.validatePlaca(value);
   }
 
-  private validatePlaca(placa: string): void {
-    // Simulate API validation
-    if (placa.length >= 8) {
-      setTimeout(() => {
-        const stateMapping: { [key: string]: string } = {
-          'ABC': 'CDMX', 'DEF': 'JALISCO', 'GHI': 'NUEVO_LEON',
-          'JKL': 'QUERETARO', 'MNO': 'GUANAJUATO'
-        };
-        
-        const prefix = placa.substring(0, 3);
-        const estado = stateMapping[prefix] || 'MEXICO';
-        
-        this.placaValidation.set({ isValid: true, estado });
-        
-        // Auto-set estado if detected
-        if (stateMapping[prefix]) {
-          this.platesForm.get('estado')?.setValue(estado);
-        }
-      }, 500);
-    } else {
-      this.placaValidation.set({ isValid: false });
+  private async validatePlaca(placa: string): Promise<void> {
+    const result = await this.platesService.verifyPlacaAsync(placa);
+    this.placaValidation.set({ isValid: result.isValid, estado: result.estado });
+    if (result.isValid && result.estado) {
+      this.platesForm.get('estado')?.setValue(result.estado);
     }
   }
 
@@ -665,7 +643,7 @@ export class PlatesPhaseComponent {
 
   removePhoto(photo: string): void {
     const current = this.fotografiasPlacas();
-    this.fotografiasPlacas.set(current.filter(p => p !== photo));
+    this.fotografiasPlacas.set(current.filter((p: string) => p !== photo));
   }
 
   getPhotoLabel(index: number): string {
@@ -702,6 +680,7 @@ export class PlatesPhaseComponent {
   onSubmit(): void {
     if (!this.canCompleteHandover()) {
       console.log('❌ Cannot complete handover - validation failed');
+      this.focusFirstInvalidControl();
       return;
     }
 
@@ -720,7 +699,7 @@ export class PlatesPhaseComponent {
 
     // 🎯 CRITICAL: Complete plates phase - triggers vehicle.delivered event
     this.importTracker.completePlatesPhase(this.clientId(), platesData).subscribe({
-      next: (result) => {
+      next: (result: { success: boolean; postSalesRecord?: any }) => {
         console.log('✅ HANDOVER COMPLETADO - Sistema Post-Venta Activado:', result);
         
         // Simulate post-sales record creation
@@ -730,7 +709,7 @@ export class PlatesPhaseComponent {
         this.isSubmitting.set(false);
         this.showSuccessModal.set(true);
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('❌ HANDOVER FALLIDO:', error);
         this.isSubmitting.set(false);
         alert('Error crítico en el handover. El sistema post-venta NO se activó. Contacta soporte técnico.');
@@ -750,5 +729,24 @@ export class PlatesPhaseComponent {
   completeProcess(): void {
     this.showSuccessModal.set(false);
     this.router.navigate(['/dashboard']);
+  }
+
+  onModalKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.showSuccessModal.set(false);
+    }
+  }
+
+  private focusFirstInvalidControl(): void {
+    const form = this.platesForm;
+    const controls = Object.keys(form.controls);
+    for (const name of controls) {
+      const control = form.get(name);
+      if (control && control.invalid) {
+        const el = document.getElementById(name) as HTMLElement | null;
+        if (el) { el.focus(); }
+        break;
+      }
+    }
   }
 }

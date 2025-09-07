@@ -233,6 +233,14 @@ export const routes: Routes = [
     title: 'Configuración - Conductores PWA'
   },
 
+  // Flow Builder direct route (optional entry point)
+  {
+    path: 'flow-builder',
+    loadComponent: () => import('./components/pages/configuracion/flow-builder/flow-builder.component').then(c => c.FlowBuilderComponent),
+    canActivate: [AuthGuard],
+    title: 'Flow Builder - Conductores PWA'
+  },
+
   {
     path: 'perfil',
     loadComponent: () => import('./components/pages/perfil/perfil.component').then(c => c.PerfilComponent),

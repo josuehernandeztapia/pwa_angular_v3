@@ -362,8 +362,8 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
 
     <!-- Success Modal -->
     @if (showSuccessModal()) {
-      <div class="modal-overlay" (click)="closeSuccessModal()">
-        <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-overlay" role="dialog" aria-modal="true" tabindex="-1" (click)="closeSuccessModal()" (keydown)="onModalKeydown($event)">
+        <div class="modal" (click)="$event.stopPropagation()" (keydown)="onModalKeydown($event)">
           <div class="modal-header">
             <h3>✅ Documentos Transferidos</h3>
           </div>
@@ -386,7 +386,7 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
             </div>
           </div>
           <div class="modal-actions">
-            <button class="btn btn-primary" (click)="goToPlatesPhase()">
+            <button class="btn btn-primary" (click)="goToPlatesPhase()" autofocus>
               Continuar a Placas →
             </button>
           </div>
@@ -568,13 +568,13 @@ export class DocumentsPhaseComponent {
 
   removeContractDocument(contract: DocumentFile): void {
     const currentDocs = this.uploadedDocuments();
-    const updatedContracts = currentDocs.contratos.filter(c => c.filename !== contract.filename);
+    const updatedContracts = currentDocs.contratos.filter((c: any) => c.filename !== contract.filename);
     this.uploadedDocuments.set({ ...currentDocs, contratos: updatedContracts });
   }
 
   removeEndorsementDocument(endoso: DocumentFile): void {
     const currentDocs = this.uploadedDocuments();
-    const updatedEndosos = currentDocs.endosos.filter(e => e.filename !== endoso.filename);
+    const updatedEndosos = currentDocs.endosos.filter((e: any) => e.filename !== endoso.filename);
     this.uploadedDocuments.set({ ...currentDocs, endosos: updatedEndosos });
   }
 
@@ -666,5 +666,11 @@ export class DocumentsPhaseComponent {
   goToPlatesPhase(): void {
     this.router.navigate(['/post-sales/plates', this.clientId()]);
     this.closeSuccessModal();
+  }
+
+  onModalKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.closeSuccessModal();
+    }
   }
 }

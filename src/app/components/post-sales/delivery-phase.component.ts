@@ -292,8 +292,8 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
 
     <!-- Success Modal -->
     @if (showSuccessModal()) {
-      <div class="modal-overlay" (click)="closeSuccessModal()">
-        <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-overlay" role="dialog" aria-modal="true" tabindex="-1" (click)="closeSuccessModal()" (keydown)="onModalKeydown($event)">
+        <div class="modal" (click)="$event.stopPropagation()" (keydown)="onModalKeydown($event)">
           <div class="modal-header">
             <h3>✅ Entrega Completada</h3>
           </div>
@@ -309,7 +309,7 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
             </div>
           </div>
           <div class="modal-actions">
-            <button class="btn btn-primary" (click)="goToDocumentsPhase()">
+            <button class="btn btn-primary" (click)="goToDocumentsPhase()" autofocus>
               Continuar a Documentos →
             </button>
           </div>
@@ -439,7 +439,7 @@ export class DeliveryPhaseComponent {
 
   updateChecklistItem(itemName: string, status: 'approved' | 'with_issues' | 'rejected'): void {
     const currentItems = this.checklistItems();
-    const updatedItems = currentItems.map(item => 
+    const updatedItems = currentItems.map((item: any) => 
       item.item === itemName ? { ...item, status, notes: status === 'approved' ? '' : item.notes } : item
     );
     this.checklistItems.set(updatedItems);
@@ -467,7 +467,7 @@ export class DeliveryPhaseComponent {
 
   removePhoto(photo: string): void {
     const current = this.uploadedPhotos();
-    this.uploadedPhotos.set(current.filter(p => p !== photo));
+    this.uploadedPhotos.set(current.filter((p: string) => p !== photo));
   }
 
   openSignatureModal(): void {
@@ -529,5 +529,11 @@ export class DeliveryPhaseComponent {
   goToDocumentsPhase(): void {
     this.router.navigate(['/post-sales/documents', this.clientId()]);
     this.closeSuccessModal();
+  }
+
+  onModalKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.closeSuccessModal();
+    }
   }
 }
