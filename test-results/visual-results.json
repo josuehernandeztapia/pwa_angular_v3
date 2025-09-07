@@ -13,7 +13,7 @@
     "metadata": {
       "project": "Conductores PWA",
       "description": "Visual regression tests for UI components and pages",
-      "actualWorkers": 2
+      "actualWorkers": 1
     },
     "preserveOutput": "always",
     "reporter": [
@@ -41,7 +41,7 @@
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 2
+          "actualWorkers": 1
         },
         "id": "chromium",
         "name": "chromium",
@@ -59,7 +59,7 @@
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 2
+          "actualWorkers": 1
         },
         "id": "firefox",
         "name": "firefox",
@@ -77,7 +77,7 @@
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 2
+          "actualWorkers": 1
         },
         "id": "webkit",
         "name": "webkit",
@@ -95,7 +95,7 @@
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 2
+          "actualWorkers": 1
         },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
@@ -113,7 +113,7 @@
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 2
+          "actualWorkers": 1
         },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
@@ -131,7 +131,7 @@
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 2
+          "actualWorkers": 1
         },
         "id": "iPad",
         "name": "iPad",
@@ -149,7 +149,7 @@
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 2
+          "actualWorkers": 1
         },
         "id": "High DPI",
         "name": "High DPI",
@@ -188,154 +188,10 @@
           "column": 6,
           "specs": [
             {
-              "title": "@dashboard should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "dashboard"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1356,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:29.103Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-e8eac6f6cd80855ff1d4",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@nueva-oportunidad should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "nueva-oportunidad"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 928,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:29.111Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-56284e2eb16932e823d3",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@clientes-list should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "clientes-list"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 753,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:30.109Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-c78f7d9eebbe36e5e8b4",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@cliente-form should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "cliente-form"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 564,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:30.548Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-9d073377b5f23c00896b",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@cotizador-main should render premium container and take snapshot",
+              "title": "@onboarding should render premium container and take snapshot",
               "ok": false,
               "tags": [
-                "cotizador-main"
+                "onboarding"
               ],
               "tests": [
                 {
@@ -346,10 +202,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 5518,
+                      "duration": 6070,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\n    at /workspace/tests/visual/all-modules.spec.ts:70:42",
@@ -373,23 +229,23 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-09-07T16:38:30.875Z",
+                      "startTime": "2025-09-07T18:35:59.180Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
                           "contentType": "image/png",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-68ce4-container-and-take-snapshot-chromium/test-failed-1.png"
+                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-fa9db-container-and-take-snapshot-chromium/test-failed-1.png"
                         },
                         {
                           "name": "video",
                           "contentType": "video/webm",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-68ce4-container-and-take-snapshot-chromium/video.webm"
+                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-fa9db-container-and-take-snapshot-chromium/video.webm"
                         },
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-68ce4-container-and-take-snapshot-chromium/error-context.md"
+                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-fa9db-container-and-take-snapshot-chromium/error-context.md"
                         }
                       ],
                       "errorLocation": {
@@ -402,890 +258,10 @@
                   "status": "unexpected"
                 }
               ],
-              "id": "51290be374324717b45f-79dd0707d2ddfd304288",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@ags-individual should render premium container and take snapshot",
-              "ok": false,
-              "tags": [
-                "ags-individual"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 15719,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n\n    at /workspace/tests/visual/all-modules.spec.ts:67:39",
-                        "location": {
-                          "file": "/workspace/tests/visual/all-modules.spec.ts",
-                          "column": 39,
-                          "line": 67
-                        },
-                        "snippet": "  65 |       // Check that a container exists and has background applied\n  66 |       const container = page.locator('div[class*=\"container\"], .premium-container');\n> 67 |       await expect(container.first()).toBeVisible({ timeout: 15000 });\n     |                                       ^\n  68 |       // Basic header presence if known\n  69 |       if (r.heading) {\n  70 |         await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/workspace/tests/visual/all-modules.spec.ts",
-                            "column": 39,
-                            "line": 67
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n\n\n  65 |       // Check that a container exists and has background applied\n  66 |       const container = page.locator('div[class*=\"container\"], .premium-container');\n> 67 |       await expect(container.first()).toBeVisible({ timeout: 15000 });\n     |                                       ^\n  68 |       // Basic header presence if known\n  69 |       if (r.heading) {\n  70 |         await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });\n    at /workspace/tests/visual/all-modules.spec.ts:67:39"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:31.122Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-2939b-container-and-take-snapshot-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-2939b-container-and-take-snapshot-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-2939b-container-and-take-snapshot-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/workspace/tests/visual/all-modules.spec.ts",
-                        "column": 39,
-                        "line": 67
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "51290be374324717b45f-d074569009ecac8fec97",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@edomex-colectivo should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "edomex-colectivo"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 495,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:36.830Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-4746636329ac86e260b7",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@simulador-main should render premium container and take snapshot",
-              "ok": false,
-              "tags": [
-                "simulador-main"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 1,
-                      "status": "failed",
-                      "duration": 15669,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n\n    at /workspace/tests/visual/all-modules.spec.ts:67:39",
-                        "location": {
-                          "file": "/workspace/tests/visual/all-modules.spec.ts",
-                          "column": 39,
-                          "line": 67
-                        },
-                        "snippet": "  65 |       // Check that a container exists and has background applied\n  66 |       const container = page.locator('div[class*=\"container\"], .premium-container');\n> 67 |       await expect(container.first()).toBeVisible({ timeout: 15000 });\n     |                                       ^\n  68 |       // Basic header presence if known\n  69 |       if (r.heading) {\n  70 |         await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/workspace/tests/visual/all-modules.spec.ts",
-                            "column": 39,
-                            "line": 67
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n\n\n  65 |       // Check that a container exists and has background applied\n  66 |       const container = page.locator('div[class*=\"container\"], .premium-container');\n> 67 |       await expect(container.first()).toBeVisible({ timeout: 15000 });\n     |                                       ^\n  68 |       // Basic header presence if known\n  69 |       if (r.heading) {\n  70 |         await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });\n    at /workspace/tests/visual/all-modules.spec.ts:67:39"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:37.384Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-ad549-container-and-take-snapshot-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-ad549-container-and-take-snapshot-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-ad549-container-and-take-snapshot-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/workspace/tests/visual/all-modules.spec.ts",
-                        "column": 39,
-                        "line": 67
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "51290be374324717b45f-c7afdb446017a16af279",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@ags-ahorro should render premium container and take snapshot",
-              "ok": false,
-              "tags": [
-                "ags-ahorro"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 15709,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n\n    at /workspace/tests/visual/all-modules.spec.ts:67:39",
-                        "location": {
-                          "file": "/workspace/tests/visual/all-modules.spec.ts",
-                          "column": 39,
-                          "line": 67
-                        },
-                        "snippet": "  65 |       // Check that a container exists and has background applied\n  66 |       const container = page.locator('div[class*=\"container\"], .premium-container');\n> 67 |       await expect(container.first()).toBeVisible({ timeout: 15000 });\n     |                                       ^\n  68 |       // Basic header presence if known\n  69 |       if (r.heading) {\n  70 |         await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/workspace/tests/visual/all-modules.spec.ts",
-                            "column": 39,
-                            "line": 67
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n\n\n  65 |       // Check that a container exists and has background applied\n  66 |       const container = page.locator('div[class*=\"container\"], .premium-container');\n> 67 |       await expect(container.first()).toBeVisible({ timeout: 15000 });\n     |                                       ^\n  68 |       // Basic header presence if known\n  69 |       if (r.heading) {\n  70 |         await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });\n    at /workspace/tests/visual/all-modules.spec.ts:67:39"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:47.273Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-324c1-container-and-take-snapshot-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-324c1-container-and-take-snapshot-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-324c1-container-and-take-snapshot-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/workspace/tests/visual/all-modules.spec.ts",
-                        "column": 39,
-                        "line": 67
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "51290be374324717b45f-f78875ad7e82644b5e8b",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@edomex-individual should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "edomex-individual"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 507,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:53.481Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-bcd7288ce13bffb0ed78",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@tanda-colectiva should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "tanda-colectiva"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 473,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:54.047Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-37c0ffa8df713f07e519",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@onboarding should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "onboarding"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 622,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:54.528Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
               "id": "51290be374324717b45f-293b5d7debe31f7d5acd",
               "file": "all-modules.spec.ts",
               "line": 56,
               "column": 9
-            },
-            {
-              "title": "@document-upload should render premium container and take snapshot",
-              "ok": false,
-              "tags": [
-                "document-upload"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 1,
-                      "status": "failed",
-                      "duration": 15728,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n\n    at /workspace/tests/visual/all-modules.spec.ts:67:39",
-                        "location": {
-                          "file": "/workspace/tests/visual/all-modules.spec.ts",
-                          "column": 39,
-                          "line": 67
-                        },
-                        "snippet": "  65 |       // Check that a container exists and has background applied\n  66 |       const container = page.locator('div[class*=\"container\"], .premium-container');\n> 67 |       await expect(container.first()).toBeVisible({ timeout: 15000 });\n     |                                       ^\n  68 |       // Basic header presence if known\n  69 |       if (r.heading) {\n  70 |         await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/workspace/tests/visual/all-modules.spec.ts",
-                            "column": 39,
-                            "line": 67
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('div[class*=\"container\"], .premium-container').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[class*=\"container\"], .premium-container').first()\u001b[22m\n\n\n  65 |       // Check that a container exists and has background applied\n  66 |       const container = page.locator('div[class*=\"container\"], .premium-container');\n> 67 |       await expect(container.first()).toBeVisible({ timeout: 15000 });\n     |                                       ^\n  68 |       // Basic header presence if known\n  69 |       if (r.heading) {\n  70 |         await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });\n    at /workspace/tests/visual/all-modules.spec.ts:67:39"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:38:55.159Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-6f5b2-container-and-take-snapshot-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-6f5b2-container-and-take-snapshot-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-6f5b2-container-and-take-snapshot-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/workspace/tests/visual/all-modules.spec.ts",
-                        "column": 39,
-                        "line": 67
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "51290be374324717b45f-f6c9618fbac2bbbcb65a",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@opportunities should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "opportunities"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 588,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:39:03.465Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-22a9d5c7a40ee5bec62c",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@expedientes should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "expedientes"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 557,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:39:04.111Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-23aef64356063315265f",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@ops-deliveries should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "ops-deliveries"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 420,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:39:04.676Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-25b40413c4b8a86144f2",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@triggers should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "triggers"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 535,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:39:05.104Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-3a9aa92d1925e7f42834",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@reportes should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "reportes"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 546,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:39:05.645Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-41e4ea232806fb6699fc",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@productos should render premium container and take snapshot",
-              "ok": false,
-              "tags": [
-                "productos"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 1069,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\n  314369 pixels (ratio 0.35 of all image pixels) are different.\n\nCall log:\n\u001b[2m  - Expect \"toHaveScreenshot\" with timeout 5000ms\u001b[22m\n\u001b[2m    - verifying given screenshot expectation\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - 314369 pixels (ratio 0.35 of all image pixels) are different.\u001b[22m\n\u001b[2m  - waiting 100ms before taking screenshot\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - captured a stable screenshot\u001b[22m\n\u001b[2m  - 314369 pixels (ratio 0.35 of all image pixels) are different.\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\n  314369 pixels (ratio 0.35 of all image pixels) are different.\n\nCall log:\n\u001b[2m  - Expect \"toHaveScreenshot\" with timeout 5000ms\u001b[22m\n\u001b[2m    - verifying given screenshot expectation\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - 314369 pixels (ratio 0.35 of all image pixels) are different.\u001b[22m\n\u001b[2m  - waiting 100ms before taking screenshot\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - captured a stable screenshot\u001b[22m\n\u001b[2m  - 314369 pixels (ratio 0.35 of all image pixels) are different.\u001b[22m\n\n    at /workspace/tests/visual/all-modules.spec.ts:72:26",
-                        "location": {
-                          "file": "/workspace/tests/visual/all-modules.spec.ts",
-                          "column": 26,
-                          "line": 72
-                        },
-                        "snippet": "  70 |         await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });\n  71 |       }\n> 72 |       await expect(page).toHaveScreenshot();\n     |                          ^\n  73 |     });\n  74 |   }\n  75 | });"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/workspace/tests/visual/all-modules.spec.ts",
-                            "column": 26,
-                            "line": 72
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\n  314369 pixels (ratio 0.35 of all image pixels) are different.\n\nCall log:\n\u001b[2m  - Expect \"toHaveScreenshot\" with timeout 5000ms\u001b[22m\n\u001b[2m    - verifying given screenshot expectation\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - 314369 pixels (ratio 0.35 of all image pixels) are different.\u001b[22m\n\u001b[2m  - waiting 100ms before taking screenshot\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - captured a stable screenshot\u001b[22m\n\u001b[2m  - 314369 pixels (ratio 0.35 of all image pixels) are different.\u001b[22m\n\n\n  70 |         await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });\n  71 |       }\n> 72 |       await expect(page).toHaveScreenshot();\n     |                          ^\n  73 |     });\n  74 |   }\n  75 | });\n    at /workspace/tests/visual/all-modules.spec.ts:72:26"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:39:06.199Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "Premium-visual-across-modu-72328-ntainer-and-take-snapshot-1-expected.png",
-                          "contentType": "image/png",
-                          "path": "/workspace/tests/visual/all-modules.spec.ts-snapshots/Premium-visual-across-modules-productos-should-render-premium-container-and-take-snapshot-1-chromium-linux.png"
-                        },
-                        {
-                          "name": "Premium-visual-across-modu-72328-ntainer-and-take-snapshot-1-actual.png",
-                          "contentType": "image/png",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-00e88-container-and-take-snapshot-chromium/Premium-visual-across-modu-72328-ntainer-and-take-snapshot-1-actual.png"
-                        },
-                        {
-                          "name": "Premium-visual-across-modu-72328-ntainer-and-take-snapshot-1-diff.png",
-                          "contentType": "image/png",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-00e88-container-and-take-snapshot-chromium/Premium-visual-across-modu-72328-ntainer-and-take-snapshot-1-diff.png"
-                        },
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-00e88-container-and-take-snapshot-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-00e88-container-and-take-snapshot-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-00e88-container-and-take-snapshot-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/workspace/tests/visual/all-modules.spec.ts",
-                        "column": 26,
-                        "line": 72
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "51290be374324717b45f-a45ef2449f32394c3a57",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@proteccion should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "proteccion"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 6,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 603,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:39:07.701Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-58e6ca21f9846578821b",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            },
-            {
-              "title": "@perfil should render premium container and take snapshot",
-              "ok": true,
-              "tags": [
-                "perfil"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 6,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 459,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:39:08.360Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "51290be374324717b45f-f299b8aa7e02bf1eb6e6",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "flow-builder.spec.ts",
-      "file": "flow-builder.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Flow Builder Visual",
-          "file": "flow-builder.spec.ts",
-          "line": 14,
-          "column": 6,
-          "specs": [
-            {
-              "title": "@flow-editor should open from configuración modal and render palettes",
-              "ok": true,
-              "tags": [
-                "flow-editor"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 6,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 809,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:39:08.829Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "7e4553764ed91a341dd9-ff3c66b0f274be57b32c",
-              "file": "flow-builder.spec.ts",
-              "line": 15,
-              "column": 7
-            },
-            {
-              "title": "@flow-connections should show disabled Deploy until nodes exist",
-              "ok": true,
-              "tags": [
-                "flow-connections"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 6,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 677,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T16:39:09.646Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "7e4553764ed91a341dd9-6bcfd203c32de0357ebd",
-              "file": "flow-builder.spec.ts",
-              "line": 38,
-              "column": 7
             }
           ]
         }
@@ -1294,11 +270,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-09-07T16:38:21.329Z",
-    "duration": 49634.515,
-    "expected": 17,
+    "startTime": "2025-09-07T18:35:48.595Z",
+    "duration": 16937.591,
+    "expected": 0,
     "skipped": 0,
-    "unexpected": 6,
+    "unexpected": 1,
     "flaky": 0
   }
 }

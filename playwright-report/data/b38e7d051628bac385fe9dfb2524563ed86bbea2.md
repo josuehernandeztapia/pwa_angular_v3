@@ -81,6 +81,37 @@
           - generic [ref=e94]: 📭
           - generic [ref=e95]: No hay notificaciones
           - generic [ref=e96]: Las notificaciones aparecerán aquí
-    - main [ref=e97]
+    - main [ref=e97]:
+      - generic [ref=e99]:
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - generic [ref=e103]: "1"
+            - generic [ref=e104]: Configuración
+          - generic [ref=e105]:
+            - generic [ref=e106]: "2"
+            - generic [ref=e107]: Información
+          - generic [ref=e108]:
+            - generic [ref=e109]: "3"
+            - generic [ref=e110]: Documentos
+          - generic [ref=e111]:
+            - generic [ref=e112]: "4"
+            - generic [ref=e113]: KYC
+          - generic [ref=e114]:
+            - generic [ref=e115]: "5"
+            - generic [ref=e116]: Contratos
+          - generic [ref=e117]:
+            - generic [ref=e118]: "6"
+            - generic [ref=e119]: Completado
+        - generic [ref=e121]:
+          - generic [ref=e122]:
+            - heading "🎯 Onboarding Inteligente de Conductores" [level=2] [ref=e123]
+            - paragraph [ref=e124]: Selecciona el tipo de oportunidad que deseas crear
+          - generic [ref=e126]:
+            - generic [ref=e127]: Mercado
+            - combobox "Mercado" [ref=e128]:
+              - option "Selecciona un mercado" [selected]
+              - option "Aguascalientes"
+              - option "Estado de México"
+          - button "Continuar" [disabled] [ref=e130]
     - navigation "Navegación inferior"
 ```
