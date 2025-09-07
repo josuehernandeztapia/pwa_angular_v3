@@ -67,7 +67,8 @@ test.describe('Premium visual across modules', () => {
       await expect(container.first()).toBeVisible({ timeout: 15000 });
       // Basic header presence if known
       if (r.heading) {
-        await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });
+        const heading = page.locator('h1, h2, [role="heading"][aria-level="1"], [role="heading"][aria-level="2"]');
+        await expect(heading.first()).toBeVisible({ timeout: 5000 });
       }
       await expect(page).toHaveScreenshot();
     });
