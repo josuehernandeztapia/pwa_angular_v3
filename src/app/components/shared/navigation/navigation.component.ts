@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PushNotificationService } from '../../../services/push-notification.service';
+import { UserPreferencesService } from '../../../services/user-preferences.service';
 import { NotificationCenterComponent } from '../notification-center/notification-center.component';
 
 interface NavigationItem {
@@ -36,6 +37,14 @@ interface NavigationItem {
               {{ count > 99 ? '99+' : count }}
             </span>
           </button>
+          
+          <!-- Accessibility Controls: Font scale A A A & High Contrast -->
+          <div class="a11y-controls">
+            <button class="a11y-btn" [class.active]="fontScale==='base'" (click)="setFontScale('base')">A</button>
+            <button class="a11y-btn" [class.active]="fontScale==='sm'" (click)="setFontScale('sm')">A</button>
+            <button class="a11y-btn" [class.active]="fontScale==='lg'" (click)="setFontScale('lg')">A</button>
+            <button class="hc-toggle" [class.active]="highContrast" (click)="toggleHighContrast()" title="Alto contraste">⬛⬜</button>
+          </div>
           
           <button 
             class="toggle-btn" 
@@ -179,6 +188,43 @@ interface NavigationItem {
       align-items: center;
       gap: 8px;
     }
+
+    .a11y-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0 8px;
+      background: rgba(255,255,255,0.08);
+      padding: 4px;
+      border-radius: 8px;
+    }
+    .a11y-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #e2e8f0;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      line-height: 1;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .a11y-btn:nth-child(1) { font-size: 12px; }
+    .a11y-btn:nth-child(2) { font-size: 14px; }
+    .a11y-btn:nth-child(3) { font-size: 16px; }
+    .a11y-btn.active { background: rgba(34, 211, 238, 0.2); border-color: rgba(34, 211, 238, 0.6); }
+    .hc-toggle {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #e2e8f0;
+      width: 36px;
+      height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .hc-toggle.active { background: rgba(255,255,255,0.15); border-color: #fff; }
 
     .notification-btn {
       position: relative;
@@ -563,7 +609,8 @@ export class NavigationComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private notificationService: PushNotificationService
+    private notificationService: PushNotificationService,
+    private userPrefs: UserPreferencesService
   ) {
     this.unreadCount$ = this.notificationService.getUnreadCount();
   }
@@ -574,6 +621,10 @@ export class NavigationComponent implements OnInit {
     
     // Initialize notifications
     this.initializeNotifications();
+
+    // Load user prefs
+    this.fontScale = this.userPrefs.getFontScale();
+    this.highContrast = this.userPrefs.getHighContrast();
   }
 
   async initializeNotifications() {
@@ -645,5 +696,19 @@ export class NavigationComponent implements OnInit {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('rememberMe');
     this.router.navigate(['/login']);
+  }
+
+  // Accessibility state & handlers
+  fontScale: 'base' | 'sm' | 'lg' = 'base';
+  highContrast = false;
+
+  setFontScale(scale: 'base' | 'sm' | 'lg') {
+    this.fontScale = scale;
+    this.userPrefs.setFontScale(scale);
+  }
+
+  toggleHighContrast() {
+    this.highContrast = !this.highContrast;
+    this.userPrefs.setHighContrast(this.highContrast);
   }
 }

@@ -100,7 +100,7 @@ interface CollectionUnit {
                   </div>
                   <label [for]="comp.id" class="component-label">
                     <span class="component-name">{{ comp.name }}</span>
-                    <span class="component-price">{{ comp.price | currency:'MXN':'symbol':'1.0-0' }}</span>
+                    <span class="component-price num">{{ comp.price | currency:'MXN':'symbol':'1.0-0' }}</span>
                   </label>
                 </div>
               </div>
@@ -134,7 +134,7 @@ interface CollectionUnit {
                            class="range-slider">
                     <div class="range-info">
                       <span>Mínimo: {{ packageData.minDownPaymentPercentage * 100 }}%</span>
-                      <span>{{ (totalPrice * (downPaymentPercentage / 100)) | currency:'MXN':'symbol':'1.0-0' }}</span>
+                      <span class="num">{{ (totalPrice * (downPaymentPercentage / 100)) | currency:'MXN':'symbol':'1.0-0' }}</span>
                     </div>
                   </div>
 
@@ -254,32 +254,32 @@ interface CollectionUnit {
               <div class="results-summary">
                 <div class="summary-row">
                   <span>Precio Total:</span>
-                  <strong>{{ totalPrice | currency:'MXN':'symbol':'1.0-0' }}</strong>
+                  <strong class="num">{{ totalPrice | currency:'MXN':'symbol':'1.0-0' }}</strong>
                 </div>
                 
                 <div *ngIf="isVentaDirecta">
                   <div class="summary-row">
                     <span>Pago Inicial:</span>
-                    <strong>{{ downPayment | currency:'MXN':'symbol':'1.0-0' }}</strong>
+                    <strong class="num">{{ downPayment | currency:'MXN':'symbol':'1.0-0' }}</strong>
                   </div>
                   <div class="summary-row highlight">
                     <span>Remanente a Liquidar:</span>
-                    <strong>{{ amountToFinance | currency:'MXN':'symbol':'1.0-0' }}</strong>
+                    <strong class="num">{{ amountToFinance | currency:'MXN':'symbol':'1.0-0' }}</strong>
                   </div>
                 </div>
                 
                 <div *ngIf="!isVentaDirecta">
                   <div class="summary-row">
                     <span>Enganche:</span>
-                    <strong>{{ downPayment | currency:'MXN':'symbol':'1.0-0' }}</strong>
+                    <strong class="num">{{ downPayment | currency:'MXN':'symbol':'1.0-0' }}</strong>
                   </div>
                   <div class="summary-row">
                     <span>Monto a Financiar:</span>
-                    <strong>{{ amountToFinance | currency:'MXN':'symbol':'1.0-0' }}</strong>
+                    <strong class="num">{{ amountToFinance | currency:'MXN':'symbol':'1.0-0' }}</strong>
                   </div>
                   <div class="summary-row highlight">
                     <span>Pago Mensual (Est.):</span>
-                    <strong>{{ monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</strong>
+                    <strong class="num">{{ monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</strong>
                   </div>
                 </div>
               </div>
@@ -424,7 +424,7 @@ interface CollectionUnit {
           </div>
 
           <div class="table-container">
-            <table class="amortization-table">
+            <table class="amortization-table table-lg">
               <thead>
                 <tr>
                   <th># Pago</th>
@@ -436,11 +436,11 @@ interface CollectionUnit {
               </thead>
               <tbody>
                 <tr *ngFor="let row of amortizationTable.slice(0, 12)">
-                  <td>{{ row.paymentNumber }}</td>
-                  <td>{{ row.monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</td>
-                  <td class="principal">{{ row.principal | currency:'MXN':'symbol':'1.0-0' }}</td>
-                  <td class="interest">{{ row.interest | currency:'MXN':'symbol':'1.0-0' }}</td>
-                  <td>{{ row.balance | currency:'MXN':'symbol':'1.0-0' }}</td>
+                  <td class="num">{{ row.paymentNumber }}</td>
+                  <td class="num">{{ row.monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</td>
+                  <td class="principal num">{{ row.principal | currency:'MXN':'symbol':'1.0-0' }}</td>
+                  <td class="interest num">{{ row.interest | currency:'MXN':'symbol':'1.0-0' }}</td>
+                  <td class="num">{{ row.balance | currency:'MXN':'symbol':'1.0-0' }}</td>
                 </tr>
               </tbody>
             </table>

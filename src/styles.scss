@@ -8,6 +8,7 @@
 
 /* ===== CSS VARIABLES (Common tokens) ===== */
 :root {
+  --font-scale: 1;
   /* Palette */
   --bg-gray-950: #0b0f14;
   --bg-gray-100: #e5e7eb;
@@ -65,9 +66,18 @@ body {
   background: var(--bg-gray-950);
   color: var(--bg-gray-100);
   line-height: 1.6;
+  font-size: calc(16px * var(--font-scale));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Senior-First font scale classes */
+html.senior-sm { --font-scale: 1.2; }
+html.senior-lg { --font-scale: 1.45; }
+
+/* High contrast toggle */
+html.hc { --bg:#fff; --text:#000; --muted:#222; --border:#000; }
+html.hc body { background: var(--bg); color: var(--text); }
 
 /* ===== PREMIUM COMPONENT STYLES ===== */
 
@@ -228,6 +238,26 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Tap targets minimum size */
+:where(button, a, [role="button"], .btn) {
+  min-height: 44px;
+  min-width: 44px;
+  padding: .75rem 1rem;
+}
+
+/* Table legibility and tabular numbers */
+.table-lg tr { height: 56px; }
+.table-lg td, .table-lg th { font-size: 18px; }
+.table-lg tr:nth-child(even){ background:#f6f6f6; }
+.num { font-variant-numeric: tabular-nums; text-align: right; }
+
+/* Print large text and hide nav */
+@media print {
+  body { font-size:16pt; }
+  .sidebar, .navigation, .bottom-nav-bar { display:none !important; }
+  .summary-xl { page-break-inside: avoid; }
 }
 
 /* Reduced motion preferences */

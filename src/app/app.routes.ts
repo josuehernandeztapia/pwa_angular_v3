@@ -242,6 +242,11 @@ export const routes: Routes = [
 
   // Error routes
   {
+    path: 'offline',
+    loadComponent: () => import('./components/shared/offline/offline.component').then(c => c.OfflineComponent),
+    title: 'Sin conexión'
+  },
+  {
     path: '404',
     loadComponent: () => import('./components/shared/not-found/not-found.component').then(c => c.NotFoundComponent),
     title: 'Página no encontrada - Conductores PWA'

@@ -280,12 +280,7 @@ export class BottomNavBarComponent implements OnInit {
   }
 
   navigateTo(route: string): void {
-    if (route === '/menu') {
-      // Handle special "More" menu - could open modal or navigate to menu page
-      this.showMoreMenu();
-    } else {
-      this.router.navigate([route]);
-    }
+    this.router.navigate([route]);
     
     // Haptic feedback on mobile devices
     if ('vibrate' in navigator) {
@@ -293,12 +288,7 @@ export class BottomNavBarComponent implements OnInit {
     }
   }
 
-  private showMoreMenu(): void {
-    // Implementation for more menu - could be modal, slide-up menu, etc.
-    console.log('Show more menu');
-    // For now, navigate to a menu route or show options
-    // This could open a modal with additional navigation options
-  }
+  private showMoreMenu(): void {}
 
   trackByRoute(index: number, item: BottomNavItem): string {
     return item.route;

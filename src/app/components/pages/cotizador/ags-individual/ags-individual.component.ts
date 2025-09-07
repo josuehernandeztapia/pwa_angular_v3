@@ -6,6 +6,7 @@ import { CotizadorEngineService, ProductPackage } from '../../../../services/cot
 import { ToastService } from '../../../../services/toast.service';
 import { Quote } from '../../../../models/types';
 import { PdfExportService } from '../../../../services/pdf-export.service';
+import { SpeechService } from '../../../../services/speech.service';
 
 @Component({
   selector: 'app-ags-individual',
@@ -109,25 +110,41 @@ import { PdfExportService } from '../../../../services/pdf-export.service';
         <div class="quote-panel" *ngIf="currentQuote">
           <h3>📋 Cotización AGS</h3>
           
+          <!-- Resumen XL -->
+          <div class="summary-xl">
+            <div class="card">
+              <div class="sub">Pago mensual</div>
+              <div class="num">{{ (currentQuote.monthlyPayment || 0) | currency:'MXN':'symbol':'1.0-0' }}</div>
+            </div>
+            <div class="card">
+              <div class="sub">Plazo</div>
+              <div class="num">{{ isPlazoSale() ? (currentQuote.term + ' meses') : '—' }}</div>
+            </div>
+            <div class="card">
+              <div class="sub">Total</div>
+              <div class="num">{{ currentQuote.totalPrice | currency:'MXN':'symbol':'1.0-0' }}</div>
+            </div>
+          </div>
+          
           <div class="quote-summary">
             <div class="summary-item total">
               <span>Precio Total</span>
-              <strong>{{ currentQuote.totalPrice | currency:'MXN':'symbol':'1.0-0' }}</strong>
+              <strong class="num">{{ currentQuote.totalPrice | currency:'MXN':'symbol':'1.0-0' }}</strong>
             </div>
             
             <div class="summary-item">
               <span>Enganche</span>
-              <span>{{ currentQuote.downPayment | currency:'MXN':'symbol':'1.0-0' }}</span>
+              <span class="num">{{ currentQuote.downPayment | currency:'MXN':'symbol':'1.0-0' }}</span>
             </div>
             
             <div *ngIf="isPlazoSale()" class="summary-item">
               <span>A Financiar</span>
-              <span>{{ currentQuote.amountToFinance | currency:'MXN':'symbol':'1.0-0' }}</span>
+              <span class="num">{{ currentQuote.amountToFinance | currency:'MXN':'symbol':'1.0-0' }}</span>
             </div>
             
             <div *ngIf="isPlazoSale()" class="summary-item highlight">
               <span>Pago Mensual</span>
-              <strong class="monthly">{{ currentQuote.monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</strong>
+              <strong class="monthly num">{{ currentQuote.monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</strong>
             </div>
             
             <div *ngIf="isPlazoSale()" class="summary-item">
@@ -142,6 +159,7 @@ import { PdfExportService } from '../../../../services/pdf-export.service';
           </div>
 
           <div class="quote-actions">
+            <button (click)="speakQuote()" class="voice-btn">🔊 Escuchar</button>
             <button (click)="generatePDF()" class="pdf-btn">📄 Descargar PDF</button>
             <button (click)="proceedWithQuote()" class="proceed-btn">✅ Continuar</button>
             <button (click)="resetQuote()" class="reset-btn">🔄 Nueva Cotización</button>
@@ -406,6 +424,10 @@ import { PdfExportService } from '../../../../services/pdf-export.service';
       margin-bottom: 24px;
     }
 
+    .summary-xl { display:grid; gap:12px; grid-template-columns: repeat(3,1fr); margin-bottom:16px; }
+    .summary-xl .card { font-size: clamp(24px, 4vw, 32px); line-height:1.2; padding:16px; border:1px solid var(--border, #e5e5e5); border-radius:12px; background:#fff; }
+    .summary-xl .sub { font-size:.75em; opacity:.75; }
+
     .summary-item {
       display: flex;
       justify-content: space-between;
@@ -441,6 +463,19 @@ import { PdfExportService } from '../../../../services/pdf-export.service';
       flex-direction: column;
       gap: 12px;
     }
+
+    .voice-btn {
+      width: 100%;
+      padding: 12px;
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .voice-btn:hover { background:#0284c7; }
 
     .proceed-btn, .reset-btn {
       width: 100%;
@@ -523,7 +558,8 @@ export class AgsIndividualComponent implements OnInit {
     private router: Router,
     private cotizadorEngine: CotizadorEngineService,
     private toast: ToastService,
-    private pdfExportService: PdfExportService
+    private pdfExportService: PdfExportService,
+    private speech: SpeechService
   ) {
     this.createForm();
   }
@@ -731,5 +767,32 @@ export class AgsIndividualComponent implements OnInit {
       .catch(() => {
         this.toast.error('Error al generar PDF');
       });
+  }
+
+  speakQuote(): void {
+    if (!this.currentQuote) return;
+    const parts: string[] = [];
+    parts.push(`Precio total ${this.formatCurrency(this.currentQuote.totalPrice)} pesos.`);
+    if (typeof this.currentQuote.downPayment === 'number') {
+      parts.push(`Enganche ${this.formatCurrency(this.currentQuote.downPayment)}.`);
+    }
+    if (this.isPlazoSale()) {
+      if (typeof this.currentQuote.monthlyPayment === 'number') {
+        parts.push(`Pago mensual ${this.formatCurrency(this.currentQuote.monthlyPayment)}.`);
+      }
+      if (typeof this.currentQuote.term === 'number') {
+        parts.push(`Plazo ${this.currentQuote.term} meses.`);
+      }
+    }
+    this.speech.cancel();
+    this.speech.speak(parts.join(' '));
+  }
+
+  private formatCurrency(value: number): string {
+    try {
+      return new Intl.NumberFormat('es-MX').format(Math.round(value));
+    } catch {
+      return `${Math.round(value)}`;
+    }
   }
 }
