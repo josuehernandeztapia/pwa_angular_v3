@@ -1,14 +1,14 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, takeUntil, forkJoin } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
+import { BusinessFlow, Document, DocumentStatus } from '../../models/types';
+import { AviSimpleConfigService } from '../../services/avi-simple-config.service';
 import { DocumentRequirementsService } from '../../services/document-requirements.service';
 import { DocumentValidationService } from '../../services/document-validation.service';
+import { OCRProgress, OCRResult, OCRService } from '../../services/ocr.service';
 import { VoiceValidationService } from '../../services/voice-validation.service';
-import { AviSimpleConfigService } from '../../services/avi-simple-config.service';
-import { OCRService, OCRResult, OCRProgress } from '../../services/ocr.service';
-import { Document, DocumentStatus, BusinessFlow, Client } from '../../models/types';
 
 interface FlowContext {
   clientId?: string;
@@ -64,6 +64,9 @@ interface FlowContext {
             <div class="space-y-4">
               <div *ngFor="let doc of requiredDocuments; let i = index" 
                    class="border rounded-lg p-4 transition-all duration-200"
+                   (dragover)="onDragOver($event)"
+                   (drop)="onDrop($event, doc)"
+                   [attr.aria-dropeffect]="'copy'"
                    [class.border-green-300]="doc.status === DocumentStatus.Aprobado"
                    [class.bg-green-50]="doc.status === DocumentStatus.Aprobado"
                    [class.border-yellow-300]="doc.status === DocumentStatus.Pendiente"
@@ -93,6 +96,9 @@ interface FlowContext {
                     >
                       📤 Subir
                     </button>
+                    <div *ngIf="uploadProgress[doc.name] !== undefined" class="w-40 h-2 bg-gray-200 rounded overflow-hidden" aria-label="Progreso de carga">
+                      <div class="h-2 bg-blue-600" [style.width.%]="uploadProgress[doc.name]"></div>
+                    </div>
                     
                     <!-- Status Icon -->
                     <div class="flex items-center">
@@ -103,6 +109,11 @@ interface FlowContext {
                            class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
                     </div>
                   </div>
+                </div>
+
+                <!-- Drag & Drop Helper -->
+                <div class="mt-2 text-xs text-gray-500" aria-hidden="true">
+                  Arrastra y suelta aquí el archivo o usa el botón "Subir".
                 </div>
               </div>
             </div>
@@ -634,6 +645,10 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
   ocrResult: OCRResult | null = null;
   showOCRPreview = false;
   currentUploadingDoc: Document | null = null;
+  uploadProgress: Record<string, number> = {};
+  retryCounts: Record<string, number> = {};
+  hashIndex: Map<string, { name: string; size: number; timestamp: number }> = new Map();
+  auditLog: Array<{ timestamp: Date; docName: string; action: string; meta?: any }> = [];
 
   constructor(
     private fb: FormBuilder,
@@ -669,7 +684,7 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
       saleType: 'financiero', // Default for most flows
       businessFlow: this.flowContext.businessFlow,
       clientType: this.flowContext.clientType
-    }).pipe(takeUntil(this.destroy$)).subscribe(docs => {
+    }).pipe(takeUntil(this.destroy$)).subscribe((docs: Document[]) => {
       this.requiredDocuments = docs;
       this.updateCompletionStatus();
     });
@@ -738,6 +753,19 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
 
   private async processUploadedFile(file: File, document: Document) {
     try {
+      // Compute quick hash to detect duplicates
+      const hash = await this.computeFileHash(file);
+      if (this.hashIndex.has(hash)) {
+        console.log('Archivo duplicado detectado por hash, omitiendo carga:', document.name);
+        this.addAudit('duplicate_detected', document.name, { hash, size: file.size });
+        document.status = DocumentStatus.Aprobado;
+        this.updateCompletionStatus();
+        return;
+      }
+
+      this.hashIndex.set(hash, { name: file.name, size: file.size, timestamp: Date.now() });
+      this.addAudit('hash_indexed', document.name, { hash, size: file.size });
+
       document.status = DocumentStatus.EnRevision;
       this.updateCompletionStatus();
 
@@ -754,6 +782,7 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
       console.error('Error processing file:', error);
       document.status = DocumentStatus.Rechazado;
       this.updateCompletionStatus();
+      this.addAudit('upload_error', document.name, { error: String(error) });
     }
   }
 
@@ -764,7 +793,7 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
 
       // Subscribe to OCR progress
       this.ocrService.progress$.pipe(takeUntil(this.destroy$)).subscribe(
-        progress => this.ocrProgress = progress
+        (progress: OCRProgress) => this.ocrProgress = progress
       );
 
       // Extract text with OCR
@@ -811,8 +840,7 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
   }
 
   private async finalizeDocumentUpload(document: Document, file: File | null, ocrData?: OCRResult) {
-    // Simulate upload process
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await this.simulateUploadWithProgress(document.name);
 
     // Validate document based on OCR results if available
     if (ocrData && ocrData.extractedData) {
@@ -832,6 +860,7 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
     }
 
     this.updateCompletionStatus();
+    this.addAudit('finalized', document.name, { status: document.status });
     
     // Check if all core documents are complete to enable voice verification
     if (this.completionStatus.allComplete && this.showVoicePattern && !this.voiceVerified) {
@@ -940,6 +969,56 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
       case 'nueva-oportunidad': return 'Nueva Oportunidad';
       default: return 'Proceso de Documentos';
     }
+  }
+
+  // ===== Drag & Drop =====
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+  }
+
+  onDrop(event: DragEvent, document: Document): void {
+    event.preventDefault();
+    const file = event.dataTransfer?.files?.[0];
+    if (file) {
+      this.processUploadedFile(file, document);
+    }
+  }
+
+  // ===== Hashing & Audit =====
+  private async computeFileHash(file: File): Promise<string> {
+    const arrayBuffer = await file.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  private addAudit(action: string, docName: string, meta?: any): void {
+    this.auditLog.push({ timestamp: new Date(), docName, action, meta });
+    // Optionally persist minimal audit to sessionStorage
+    try {
+      sessionStorage.setItem('doc_audit_log', JSON.stringify(this.auditLog.slice(-200)));
+    } catch {}
+  }
+
+  // ===== Progress + Retry (simulated uploader) =====
+  private async simulateUploadWithProgress(key: string, attempt: number = 1): Promise<void> {
+    this.uploadProgress[key] = 0;
+    const totalSteps = 10;
+    for (let i = 1; i <= totalSteps; i++) {
+      await new Promise(r => setTimeout(r, 120));
+      this.uploadProgress[key] = Math.round((i / totalSteps) * 100);
+    }
+    // Simulate transient failure on first attempt 10% of time
+    const fail = Math.random() < 0.1 && attempt === 1;
+    if (fail) {
+      this.addAudit('upload_failed', key, { attempt });
+      if (attempt < 3) {
+        await new Promise(r => setTimeout(r, 500));
+        this.addAudit('retrying', key, { nextAttempt: attempt + 1 });
+        return this.simulateUploadWithProgress(key, attempt + 1);
+      }
+    }
+    this.addAudit('upload_success', key, { attempt });
   }
 
   getSourceText(source: string): string {

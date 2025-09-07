@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { InterviewCheckpointService } from '../../../services/interview-checkpoint.service';
 import { VoiceRecorderComponent } from '../voice-recorder/voice-recorder.component';
@@ -17,15 +17,15 @@ interface CheckpointModalData {
   standalone: true,
   imports: [CommonModule, VoiceRecorderComponent],
   template: `
-    <div class="checkpoint-modal-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)">
-      <div class="checkpoint-modal" (click)="$event.stopPropagation()">
+    <div class="checkpoint-modal-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)" role="dialog" aria-modal="true" [attr.aria-labelledby]="modalTitleId" [attr.aria-describedby]="modalDescId">
+      <div class="checkpoint-modal" (click)="$event.stopPropagation()" tabindex="-1" (keydown)="onKeydown($event)">
         
         <!-- Header -->
         <div class="modal-header">
           <div class="header-icon">🚫</div>
           <div class="header-content">
-            <div class="header-title">Entrevista Obligatoria</div>
-            <div class="header-subtitle">{{ modalData.clientName }}</div>
+            <div class="header-title" [attr.id]="modalTitleId">Entrevista Obligatoria</div>
+            <div class="header-subtitle" [attr.id]="modalDescId">{{ modalData.clientName }}</div>
           </div>
           <button class="btn-close" (click)="closeModal()" [disabled]="isInterviewInProgress">
             ✕
@@ -567,7 +567,7 @@ interface CheckpointModalData {
     }
   `]
 })
-export class InterviewCheckpointModalComponent implements OnInit, OnDestroy {
+export class InterviewCheckpointModalComponent implements OnInit, OnDestroy, OnChanges {
   @Input() isVisible: boolean = false;
   @Input() modalData!: CheckpointModalData;
   @Input() advisorId: string = '';
@@ -582,6 +582,9 @@ export class InterviewCheckpointModalComponent implements OnInit, OnDestroy {
   errorMessage: string = '';
   showHelp: boolean = true;
   helpExpanded: boolean = false;
+  modalTitleId: string = `modal_title_${Math.random().toString(36).slice(2)}`;
+  modalDescId: string = `modal_desc_${Math.random().toString(36).slice(2)}`;
+  private previouslyFocusedElement: HTMLElement | null = null;
 
   private destroy$ = new Subject<void>();
 
@@ -598,10 +601,21 @@ export class InterviewCheckpointModalComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['isVisible']) {
+      if (this.isVisible) {
+        this.previouslyFocusedElement = document.activeElement as HTMLElement;
+        setTimeout(() => this.focusFirstElementInModal(), 0);
+      } else {
+        this.restoreFocusAfterModal();
+      }
+    }
+  }
+
   private subscribeToCheckpointUpdates(): void {
     this.checkpointService.getCheckpoints()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(checkpoints => {
+      .subscribe((checkpoints: Record<string, any>) => {
         const updated = checkpoints[this.modalData.clientId];
         if (updated) {
           this.modalData.checkpoint = updated;
@@ -662,6 +676,16 @@ export class InterviewCheckpointModalComponent implements OnInit, OnDestroy {
   continueToUpload(): void {
     this.continueUpload.emit();
     this.closeModal();
+  }
+
+  onKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.closeModal();
+      return;
+    }
+    if (event.key === 'Tab') {
+      this.trapFocusInModal(event);
+    }
   }
 
   contactSupervisor(): void {
@@ -827,5 +851,45 @@ export class InterviewCheckpointModalComponent implements OnInit, OnDestroy {
     const remaining = Math.max(0, maxAttempts - attempts);
     
     return `${remaining} de ${maxAttempts}`;
+  }
+
+  private focusFirstElementInModal(): void {
+    const modal = document.querySelector('.checkpoint-modal') as HTMLElement | null;
+    if (!modal) return;
+    const focusable = modal.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable[0] || modal;
+    first.focus();
+  }
+
+  private trapFocusInModal(event: KeyboardEvent): void {
+    const modal = document.querySelector('.checkpoint-modal') as HTMLElement | null;
+    if (!modal) return;
+    const focusable = Array.from(modal.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )).filter(el => !el.hasAttribute('disabled'));
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement as HTMLElement;
+    if (event.shiftKey) {
+      if (active === first) {
+        last.focus();
+        event.preventDefault();
+      }
+    } else {
+      if (active === last) {
+        first.focus();
+        event.preventDefault();
+      }
+    }
+  }
+
+  private restoreFocusAfterModal(): void {
+    if (this.previouslyFocusedElement) {
+      this.previouslyFocusedElement.focus();
+      this.previouslyFocusedElement = null;
+    }
   }
 }

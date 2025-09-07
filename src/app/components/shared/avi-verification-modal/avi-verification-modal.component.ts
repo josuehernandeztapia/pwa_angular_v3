@@ -1,12 +1,12 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { VoiceValidationService } from '../../../services/voice-validation.service';
 import { AviQuestionGeneratorService, MicroLocalQuestion } from '../../../services/avi-question-generator.service';
 import { AviSimpleConfigService, SimpleAviQuestion } from '../../../services/avi-simple-config.service';
-import { VoiceFraudDetectionService, VoiceFraudAnalysis, VoiceMetrics } from '../../../services/voice-fraud-detection.service';
+import { VoiceFraudAnalysis, VoiceFraudDetectionService, VoiceMetrics } from '../../../services/voice-fraud-detection.service';
+import { VoiceValidationService } from '../../../services/voice-validation.service';
 
 // ✅ NUEVO: Voice Evaluation UI Types
 interface QuestionResult {
@@ -43,14 +43,14 @@ interface AviSessionData {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="avi-modal-overlay" (click)="onOverlayClick($event)">
-      <div class="avi-modal-container" (click)="$event.stopPropagation()">
+    <div class="avi-modal-overlay" (click)="onOverlayClick($event)" role="dialog" aria-modal="true" [attr.aria-labelledby]="titleId" [attr.aria-describedby]="descId">
+      <div class="avi-modal-container" (click)="$event.stopPropagation()" tabindex="-1" (keydown)="onKeydown($event)">
         
         <!-- Header -->
         <div class="avi-header">
           <div class="avi-title">
             <span class="avi-icon">🎤</span>
-            <h2>Verificación Inteligente AVI</h2>
+            <h2 [attr.id]="titleId">Verificación Inteligente AVI</h2>
           </div>
           <button class="avi-close-btn" (click)="closeModal()">✕</button>
         </div>
@@ -69,7 +69,7 @@ interface AviSessionData {
           </div>
 
           <!-- Microphone Button -->
-          <div class="mic-section">
+          <div class="mic-section" [attr.id]="descId">
             <button 
               #micButton
               class="mic-button" 
@@ -1003,6 +1003,9 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
   @ViewChild('micButton') micButtonRef!: ElementRef;
 
   private destroy$ = new Subject<void>();
+  titleId: string = `avi_title_${Math.random().toString(36).slice(2)}`;
+  descId: string = `avi_desc_${Math.random().toString(36).slice(2)}`;
+  private lastFocusedElement: HTMLElement | null = null;
   
   isRecording = false;
   currentTranscript = '';
@@ -1035,7 +1038,9 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.lastFocusedElement = document.activeElement as HTMLElement;
     this.initializeAviSession();
+    setTimeout(() => this.focusFirstElementInModal(), 0);
   }
 
   ngOnDestroy(): void {
@@ -1045,6 +1050,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     if (this.isRecording) {
       this.stopRecording();
     }
+    this.restoreFocusAfterModal();
   }
 
   private async initializeAviSession(): Promise<void> {
@@ -1062,7 +1068,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     const microLocalCount = config.microLocalQuestions || 2;
     this.questionGenerator.getRandomMicroLocalQuestions(this.municipality, microLocalCount)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(questions => {
+      .subscribe((questions: MicroLocalQuestion[]) => {
         this.sessionData.microLocalQuestions = questions;
         if (this.sessionData.transportQuestions.length > 0) {
           this.sessionData.status = 'asking_questions';
@@ -1342,11 +1348,62 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
       this.stopRecording();
     }
     this.closed.emit();
+    this.restoreFocusAfterModal();
   }
 
   onOverlayClick(event: Event): void {
     if (event.target === event.currentTarget) {
       this.closeModal();
+    }
+  }
+
+  onKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.closeModal();
+      return;
+    }
+    if (event.key === 'Tab') {
+      this.trapFocusInModal(event);
+    }
+  }
+
+  private focusFirstElementInModal(): void {
+    const modal = document.querySelector('.avi-modal-container') as HTMLElement | null;
+    if (!modal) return;
+    const focusable = modal.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable[0] || modal;
+    first.focus();
+  }
+
+  private trapFocusInModal(event: KeyboardEvent): void {
+    const modal = document.querySelector('.avi-modal-container') as HTMLElement | null;
+    if (!modal) return;
+    const focusable = Array.from(modal.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )).filter(el => !el.hasAttribute('disabled'));
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement as HTMLElement;
+    if (event.shiftKey) {
+      if (active === first) {
+        last.focus();
+        event.preventDefault();
+      }
+    } else {
+      if (active === last) {
+        first.focus();
+        event.preventDefault();
+      }
+    }
+  }
+
+  private restoreFocusAfterModal(): void {
+    if (this.lastFocusedElement) {
+      this.lastFocusedElement.focus();
+      this.lastFocusedElement = null;
     }
   }
 
