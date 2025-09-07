@@ -24,6 +24,8 @@
     
     "test:coverage": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
     "test:visual": "playwright test --config=playwright.config.ts",
+    "test:visual:all": "playwright test --config=playwright.config.ts",
+    "test:visual:report": "playwright show-report",
     "test:visual:all:premium": "npm run test:ux:premium:consistency:all",
     "test:visual:responsive:premium": "npm run test:responsive:premium:mobile && npm run test:responsive:premium:tablet && npm run test:responsive:premium:desktop",
     "test:performance:premium": "npm run test:perf:lighthouse",
