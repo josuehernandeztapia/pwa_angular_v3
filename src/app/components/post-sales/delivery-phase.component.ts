@@ -1,14 +1,13 @@
-import { Component, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import {
+  DeliveryChecklistItem,
+  DeliveryData
+} from '../../models/types';
 import { IntegratedImportTrackerService } from '../../services/integrated-import-tracker.service';
 import { PostSalesApiService } from '../../services/post-sales-api.service';
-import { 
-  DeliveryData, 
-  DeliveryChecklistItem, 
-  IntegratedImportStatus 
-} from '../../models/types';
 
 /**
  * FASE 6: ENTREGA DEL VEHÍCULO
@@ -191,6 +190,7 @@ import {
             </div>
             <input 
               #photoInput
+              id="photoInput"
               type="file" 
               accept="image/*" 
               multiple 

@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PushNotificationService } from '../../../services/push-notification.service';
 import { UserPreferencesService } from '../../../services/user-preferences.service';
@@ -31,6 +31,8 @@ interface NavigationItem {
             class="notification-btn" 
             (click)="toggleNotifications()"
             [class.has-notifications]="(unreadCount$ | async)! > 0"
+            aria-label="Abrir notificaciones"
+            title="Notificaciones"
           >
             🔔
             <span class="notification-badge" *ngIf="(unreadCount$ | async) as count">
@@ -49,6 +51,8 @@ interface NavigationItem {
           <button 
             class="toggle-btn" 
             (click)="toggleCollapse()"
+            aria-label="Alternar navegación"
+            title="Alternar navegación"
           >
             {{ isCollapsed ? '➡️' : '⬅️' }}
           </button>
@@ -148,6 +152,8 @@ interface NavigationItem {
       class="mobile-menu-btn" 
       (click)="toggleMobileMenu()"
       *ngIf="isMobileView"
+      aria-label="Abrir menú"
+      title="Menú"
     >
       ☰
     </button>
@@ -667,7 +673,8 @@ export class NavigationComponent implements OnInit {
 
   navigate(item: NavigationItem) {
     if (item.children) {
-      // Toggle submenu or navigate to parent route
+      // Navigate to parent route to activate and reveal submenu
+      this.router.navigate([item.route]);
       return;
     }
     

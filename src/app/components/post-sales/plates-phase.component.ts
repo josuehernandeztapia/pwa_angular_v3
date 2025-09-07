@@ -1,13 +1,13 @@
-import { Component, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import {
+  DocumentFile,
+  PlatesData
+} from '../../models/types';
 import { IntegratedImportTrackerService } from '../../services/integrated-import-tracker.service';
 import { PostSalesApiService } from '../../services/post-sales-api.service';
-import { 
-  PlatesData, 
-  DocumentFile
-} from '../../models/types';
 
 /**
  * FASE 8: PLACAS ENTREGADAS - HANDOVER CRÍTICO
@@ -238,6 +238,7 @@ import {
             </div>
             <input 
               #photoInput
+              id="photoInput"
               type="file" 
               accept="image/*" capture="environment"
               multiple 
@@ -345,6 +346,7 @@ import {
       <!-- Document Input (Hidden) -->
       <input 
         #documentInput
+        id="documentInput"
         type="file" 
         accept=".pdf"
         (change)="onDocumentSelected($event)"

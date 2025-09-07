@@ -1,16 +1,17 @@
-import { Injectable } from '@angular/core';
 import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
   HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
   HttpResponse
 } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, filter, take, switchMap, tap } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -31,14 +32,14 @@ export class AuthInterceptor implements HttpInterceptor {
       authRequest = this.addToken(request, token);
     }
 
-    // Add request logging in development (no sensitive data)
-    if (!request.url.includes('assets/') && typeof window !== 'undefined' && (window as any).ng && (window as any).ng.probe) {
+    // Add request logging only in development (no sensitive data)
+    if (!environment.production && !request.url.includes('assets/') && typeof window !== 'undefined' && (window as any).ng && (window as any).ng.probe) {
       console.log(`🌐 HTTP ${request.method} ${request.url}`);
     }
 
     return next.handle(authRequest).pipe(
       tap((event: HttpEvent<unknown>) => {
-        if (event instanceof HttpResponse && !request.url.includes('assets/') && typeof window !== 'undefined' && (window as any).ng && (window as any).ng.probe) {
+        if (!environment.production && event instanceof HttpResponse && !request.url.includes('assets/') && typeof window !== 'undefined' && (window as any).ng && (window as any).ng.probe) {
           console.log(`✅ HTTP ${request.method} ${request.url} - ${event.status}`);
         }
       }),

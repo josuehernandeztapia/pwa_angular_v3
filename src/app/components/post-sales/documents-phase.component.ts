@@ -1,13 +1,13 @@
-import { Component, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import {
+  DocumentFile,
+  LegalDocuments
+} from '../../models/types';
 import { IntegratedImportTrackerService } from '../../services/integrated-import-tracker.service';
 import { PostSalesApiService } from '../../services/post-sales-api.service';
-import { 
-  LegalDocuments, 
-  DocumentFile
-} from '../../models/types';
 
 /**
  * FASE 7: DOCUMENTOS TRANSFERIDOS
@@ -351,8 +351,9 @@ import {
       <!-- File Input (Hidden) -->
       <input 
         #fileInput
+        id="fileInput"
         type="file" 
-        [accept]="currentUploadType() === 'contratos' || currentUploadType() === 'endosos' ? '.pdf' : '.pdf'"
+        accept=".pdf"
         [multiple]="currentUploadType() === 'contratos' || currentUploadType() === 'endosos'"
         (change)="onFileSelected($event)"
         style="display: none;"

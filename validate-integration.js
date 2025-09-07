@@ -56,7 +56,7 @@ function validateFile(filePath) {
       size: stats.size,
       lines: content.split('\n').length,
       lastModified: stats.mtime.toISOString(),
-      content: content.slice(0, 200) + '...' // First 200 chars for preview
+      content // Use full content to avoid false negatives in checks
     };
   }
   
