@@ -204,7 +204,7 @@ interface OnboardingForm {
 
           <div class="form-group">
             <label for="rfc">RFC</label>
-            <input id="rfc" type="text" [(ngModel)]="form.rfc" (ngModelChange)="onFormChange()" (input)="form.rfc = form.rfc?.toUpperCase()" [attr.aria-describedby]="'rfc-error'" placeholder="XAXX010101000">
+            <input id="rfc" type="text" [(ngModel)]="form.rfc" (ngModelChange)="onFormChange()" (input)="form.rfc = (form.rfc || '').toUpperCase()" [attr.aria-describedby]="'rfc-error'" placeholder="XAXX010101000">
             <div *ngIf="form.rfc && !isValidRFC(form.rfc)" id="rfc-error" class="error-message" aria-live="polite">
               RFC inválido.
             </div>
