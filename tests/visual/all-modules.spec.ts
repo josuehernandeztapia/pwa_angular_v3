@@ -24,7 +24,30 @@ async function freezeTime(page: Page, isoTimestamp = '2025-01-15T12:00:00.000Z')
     }
     // @ts-ignore
     window.Date = MockDate;
+    const originalPerfNow = performance.now.bind(performance);
+    const start = now;
+    // Freeze performance.now within a small jitterless window
+    performance.now = () => originalPerfNow() - originalPerfNow() + 0;
   }, fixedNow);
+}
+
+async function freezeRandom(page: Page) {
+  await page.addInitScript(() => {
+    let seed = 42;
+    function mulberry32(a: number) {
+      return function() {
+        let t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      }
+    }
+    const rand = mulberry32(seed);
+    Math.random = () => rand();
+    // Stabilize requestAnimationFrame
+    // @ts-ignore
+    window.requestAnimationFrame = (cb: Function) => setTimeout(() => cb(0), 16);
+  });
 }
 
 const routes = [
@@ -56,8 +79,10 @@ test.describe('Premium visual across modules', () => {
     test(`${r.tag} should render premium container and take snapshot`, async ({ page }: { page: Page }) => {
       await mockAuth(page);
       await freezeTime(page);
-      await page.goto(r.path);
+      await freezeRandom(page);
+      await page.goto(r.path, { waitUntil: 'networkidle' });
       await page.waitForLoadState('domcontentloaded');
+      await page.waitForLoadState('networkidle');
       // Extra wait for heavy lazy modules
       if (r.tag === '@triggers') {
         await page.waitForSelector('h1', { timeout: 15000 });
