@@ -1,16 +1,18 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, interval, takeUntil, switchMap, catchError, of, startWith } from 'rxjs';
+import { Subject, catchError, interval, of, switchMap, takeUntil } from 'rxjs';
 
-import { ContractTriggersService, TriggerEvent, ContractPaymentSummary, TandaPredictiveAnalysis, TriggerRule } from '../../../services/contract-triggers.service';
-import { BusinessFlow, Market } from '../../../models/types';
+import { BusinessFlow } from '../../../models/types';
+import { ContractPaymentSummary, ContractTriggersService, TandaPredictiveAnalysis, TriggerEvent, TriggerRule } from '../../../services/contract-triggers.service';
+import { EmptyStateCardComponent } from '../../shared/empty-state-card.component';
+import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
 
 @Component({
   selector: 'app-triggers-monitor',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SkeletonCardComponent, EmptyStateCardComponent],
   template: `
     <div class="premium-container min-h-screen bg-gray-50 p-6">
       <!-- Header -->
@@ -201,6 +203,9 @@ import { BusinessFlow, Market } from '../../../models/types';
       <div class="space-y-6">
         <!-- Tab: Triggers Recientes -->
         <div *ngIf="activeTab === 'recent'" class="space-y-4">
+          <div *ngIf="loading()">
+            <app-skeleton-card [titleWidth]="50" [subtitleWidth]="80" [buttonWidth]="30"></app-skeleton-card>
+          </div>
           <div *ngFor="let event of filteredEvents()" class="bg-white p-6 rounded-xl shadow-sm border">
             <div class="flex items-start justify-between">
               <div class="flex-1">
@@ -261,12 +266,14 @@ import { BusinessFlow, Market } from '../../../models/types';
             </div>
           </div>
           
-          <div *ngIf="filteredEvents().length === 0" class="text-center py-12">
-            <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-            </svg>
-            <p class="text-gray-500">No hay triggers recientes con los filtros seleccionados</p>
-          </div>
+          <app-empty-state-card
+            *ngIf="filteredEvents().length === 0 && !loading()"
+            icon="🧪"
+            title="Sin triggers recientes"
+            subtitle="Prueba simulaciones demo para ver actividad aquí"
+            [primaryCtaLabel]="'Simular triggers demo'"
+            (primary)="simulateDemoTriggers()"
+          ></app-empty-state-card>
         </div>
 
         <!-- Tab: Análisis Pendientes -->
@@ -359,12 +366,12 @@ import { BusinessFlow, Market } from '../../../models/types';
             </div>
           </div>
           
-          <div *ngIf="pendingContracts().length === 0 && pendingTandas().length === 0" class="text-center py-12">
-            <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <p class="text-gray-500">No hay análisis pendientes</p>
-          </div>
+          <app-empty-state-card
+            *ngIf="pendingContracts().length === 0 && pendingTandas().length === 0 && !loading()"
+            icon="⏳"
+            title="Sin pendientes"
+            subtitle="Cuando haya contratos o tandas a analizar, aparecerán aquí"
+          ></app-empty-state-card>
         </div>
 
         <!-- Tab: Reglas de Trigger -->
@@ -566,6 +573,14 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
 
   applyFilters() {
     // Los filtros se aplicarán automáticamente via computed signal
+  }
+
+  simulateDemoTriggers() {
+    // In a real app, this would call a demo endpoint
+    this.loading.set(true);
+    setTimeout(() => {
+      this.loading.set(false);
+    }, 800);
   }
 
   viewDeliveryOrder(orderId: string) {

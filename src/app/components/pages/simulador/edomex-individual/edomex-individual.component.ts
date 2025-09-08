@@ -1,28 +1,29 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-import { SimuladorEngineService, SavingsScenario } from '../../../../services/simulador-engine.service';
-import { LoadingService } from '../../../../services/loading.service';
+import { Subject } from 'rxjs';
 import { FinancialCalculatorService } from '../../../../services/financial-calculator.service';
+import { LoadingService } from '../../../../services/loading.service';
 import { PdfExportService } from '../../../../services/pdf-export.service';
+import { SavingsScenario, SimuladorEngineService } from '../../../../services/simulador-engine.service';
 import { ToastService } from '../../../../services/toast.service';
-import { Client } from '../../../../models/types';
+import { SkeletonCardComponent } from '../../../shared/skeleton-card.component';
+import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-panel.component';
 
 @Component({
   selector: 'app-edomex-individual',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SummaryPanelComponent, SkeletonCardComponent],
   template: `
-    <div class="container mx-auto p-6 space-y-6">
+    <div class="premium-container p-6 space-y-6">
       <!-- Header -->
       <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl p-6 shadow-lg">
         <h1 class="text-3xl font-bold mb-2">Planificador de Enganche Individual</h1>
         <p class="text-blue-100 text-lg">Calcula cuánto tiempo necesitas para ahorrar tu enganche</p>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="grid-aside">
         <!-- Configuration Panel -->
         <div class="bg-white rounded-xl shadow-lg p-6">
           <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
@@ -301,6 +302,19 @@ import { Client } from '../../../../models/types';
             </div>
           </div>
         </div>
+
+        <!-- Aside Summary -->
+        <app-summary-panel class="aside" *ngIf="scenario"
+          [metrics]="[
+            { label: 'Mensualidad', value: formatCurrency(scenario?.monthlyContribution || 0), badge: 'success' },
+            { label: 'Meses a Meta', value: (scenario?.monthsToTarget || 0) + ' meses' },
+            { label: 'Meta de Enganche', value: formatCurrency(scenario?.targetAmount || 0) }
+          ]"
+          [actions]="[
+            { label: '📄 PDF', click: () => generatePDF() },
+            { label: '✅ Crear Cliente', click: () => proceedToClientCreation() }
+          ]"
+        ></app-summary-panel>
       </div>
     </div>
   `

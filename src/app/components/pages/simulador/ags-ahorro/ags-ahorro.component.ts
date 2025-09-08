@@ -7,13 +7,16 @@ import { PdfExportService } from '../../../../services/pdf-export.service';
 import { SavingsScenario, SimuladorEngineService } from '../../../../services/simulador-engine.service';
 import { SpeechService } from '../../../../services/speech.service';
 import { ToastService } from '../../../../services/toast.service';
+import { FormFieldComponent } from '../../../shared/form-field.component';
+import { SkeletonCardComponent } from '../../../shared/skeleton-card.component';
+import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-panel.component';
 
 @Component({
   selector: 'app-ags-ahorro',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SummaryPanelComponent, SkeletonCardComponent, FormFieldComponent],
   template: `
-    <div class="ags-ahorro-simulator">
+    <div class="ags-ahorro-simulator premium-container">
       <!-- Header -->
       <div class="simulator-header">
         <button (click)="goBack()" class="back-btn">← Volver</button>
@@ -21,43 +24,40 @@ import { ToastService } from '../../../../services/toast.service';
         <p>Proyecta tu ahorro, calcula liquidación en entrega</p>
       </div>
 
-      <div class="simulator-content" *ngIf="!isLoading">
-        <!-- Configuration Panel -->
+      <div class="simulator-content grid-aside" *ngIf="!isLoading" data-loading="false">
+        <!-- Left: Configuration Panel -->
         <div class="config-panel">
           <form [formGroup]="simuladorForm">
             
             <!-- Unidad y Valor -->
             <div class="section">
               <h3>🚐 Configuración de Unidad</h3>
-              
-              <div class="form-group">
-                <label>Valor Total de la Unidad</label>
+              <app-form-field size="sm" [label]="'Valor Total de la Unidad'" [id]="'unitValue'" [helper]="'Precio típico AGS: $799,000 (vagoneta + GNV)'">
                 <div class="currency-input">
                   <span>$</span>
-                  <input type="number" formControlName="unitValue" min="700000" max="1000000" (input)="onConfigChange()" placeholder="799000">
+                  <input class="input-sm" id="unitValue" type="number" formControlName="unitValue" min="700000" max="1000000" (input)="onConfigChange()" placeholder="799000" aria-describedby="unitValue-helper">
                 </div>
-                <small>Precio típico AGS: $799,000 (vagoneta + GNV)</small>
-              </div>
+                <input class="input-sm" type="range" formControlName="unitValue" min="700000" max="1000000" step="10000" (input)="onConfigChange()" aria-label="Ajustar valor de unidad" />
+              </app-form-field>
 
-              <div class="form-group">
-                <label>Enganche Inicial Disponible</label>
+              <app-form-field size="sm" [label]="'Enganche Inicial Disponible'" [id]="'initialDown'" [helper]="'Monto que tienes disponible ahora'">
                 <div class="currency-input">
                   <span>$</span>
-                  <input type="number" formControlName="initialDownPayment" min="0" (input)="onConfigChange()" placeholder="400000">
+                  <input class="input-sm" id="initialDown" type="number" formControlName="initialDownPayment" min="0" (input)="onConfigChange()" placeholder="400000" aria-describedby="initialDown-helper">
                 </div>
-                <small>Monto que tienes disponible ahora</small>
-              </div>
+                <input class="input-sm" type="range" formControlName="initialDownPayment" min="0" [max]="simuladorForm.value.unitValue || 1000000" step="10000" (input)="onConfigChange()" aria-label="Ajustar enganche" />
+              </app-form-field>
 
-              <div class="form-group">
-                <label>Meses Estimados para Entrega</label>
-                <select formControlName="deliveryMonths" (change)="onConfigChange()">
+              <app-form-field size="sm" [label]="'Meses Estimados para Entrega'" [id]="'deliveryMonths'">
+                <select class="input-sm" id="deliveryMonths" formControlName="deliveryMonths" (change)="onConfigChange()">
                   <option value="">Seleccionar</option>
                   <option value="3">3 meses (entrega rápida)</option>
                   <option value="6">6 meses (estándar)</option>
                   <option value="9">9 meses (planificado)</option>
                   <option value="12">12 meses (extendido)</option>
                 </select>
-              </div>
+                <input class="input-sm" type="range" formControlName="deliveryMonths" min="3" max="12" step="3" (input)="onConfigChange()" aria-label="Ajustar meses de entrega" />
+              </app-form-field>
             </div>
 
             <!-- Placas y Consumo -->
@@ -81,12 +81,13 @@ import { ToastService } from '../../../../services/toast.service';
               </div>
 
               <div class="form-group">
-                <label>Sobreprecio por Litro</label>
-                <div class="currency-input">
-                  <span>$</span>
-                  <input type="number" formControlName="overpricePerLiter" min="1" max="20" step="0.5" (input)="onConfigChange()" placeholder="5.00">
-                </div>
-                <small>Cantidad extra por litro que vas a ahorrar</small>
+                <app-form-field size="sm" [label]="'Sobreprecio por Litro'" [id]="'overprice'" [helper]="'Cantidad extra por litro que vas a ahorrar'">
+                  <div class="currency-input">
+                    <span>$</span>
+                    <input class="input-sm" id="overprice" type="number" formControlName="overpricePerLiter" min="1" max="20" step="0.5" (input)="onConfigChange()" placeholder="5.00" aria-describedby="overprice-helper">
+                  </div>
+                  <input class="input-sm" type="range" formControlName="overpricePerLiter" min="1" max="20" step="0.5" (input)="onConfigChange()" aria-label="Ajustar sobreprecio por litro" />
+                </app-form-field>
               </div>
             </div>
 
@@ -99,7 +100,21 @@ import { ToastService } from '../../../../services/toast.service';
           </form>
         </div>
 
-        <!-- Results Panel -->
+        <!-- Right: Summary Aside -->
+        <app-summary-panel class="aside" *ngIf="currentScenario"
+          [metrics]="[
+            { label: 'Mensualidad', value: (currentScenario?.monthlyContribution | currency:'MXN':'symbol':'1.0-0')!, badge: 'success' },
+            { label: 'Meses a Meta', value: (currentScenario?.monthsToTarget + ' meses')! },
+            { label: 'Ahorro Total', value: (currentScenario?.targetAmount | currency:'MXN':'symbol':'1.0-0')! },
+            { label: (remainderAmount <= 0 ? 'Validez' : 'Remanente'), value: (remainderAmount | currency:'MXN':'symbol':'1.0-0')!, badge: (remainderAmount <= 0 ? 'success' : 'warning') }
+          ]"
+          [actions]="[
+            { label: '📄 PDF', click: () => generatePDF() },
+            { label: '✅ Continuar', click: () => proceedWithScenario() }
+          ]"
+        ></app-summary-panel>
+
+        <!-- Results Panel (left column visual details) -->
         <div class="results-panel" *ngIf="currentScenario">
           <h3>📈 Proyección de Ahorro AGS</h3>
           
@@ -282,13 +297,16 @@ import { ToastService } from '../../../../services/toast.service';
               </div>
             </div>
           </div>
+
+          <div class="helper-text" style="margin-top: var(--space-16);">
+            ¿Qué sigue? Puedes pasar al Cotizador o generar un PDF con tu plan.
+          </div>
         </div>
       </div>
 
       <!-- Loading -->
-      <div *ngIf="isLoading" class="loading">
-        <div class="spinner"></div>
-        <p>Calculando escenario de ahorro AGS...</p>
+      <div *ngIf="isLoading" class="loading" data-loading="true">
+        <app-skeleton-card ariaLabel="Calculando escenario de ahorro AGS" [titleWidth]="70" [subtitleWidth]="60" [buttonWidth]="30"></app-skeleton-card>
       </div>
     </div>
   `,

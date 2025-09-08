@@ -9,6 +9,8 @@ import { PdfExportService } from '../../../../services/pdf-export.service';
 import { CollectiveScenarioConfig, SavingsScenario, SimuladorEngineService } from '../../../../services/simulador-engine.service';
 import { SpeechService } from '../../../../services/speech.service';
 import { ToastService } from '../../../../services/toast.service';
+import { SkeletonCardComponent } from '../../../shared/skeleton-card.component';
+import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-panel.component';
 
 interface WhatIfEvent {
   id: string;
@@ -30,9 +32,9 @@ interface KpiData {
 @Component({
   selector: 'app-tanda-colectiva',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, SummaryPanelComponent, SkeletonCardComponent],
   template: `
-    <div class="container mx-auto p-6 space-y-6">
+    <div class="premium-container p-6 space-y-6">
       <!-- Header -->
       <div class="bg-gradient-to-r from-purple-600 to-purple-800 text-white rounded-xl p-6 shadow-lg">
         <div class="flex justify-between items-start">
@@ -53,7 +55,7 @@ interface KpiData {
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="grid-aside">
         <!-- Configuration Panel -->
         <div class="bg-white rounded-xl shadow-lg p-6">
           <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
@@ -633,6 +635,19 @@ interface KpiData {
             </div>
           </div>
         </div>
+
+        <!-- Aside Summary -->
+        <app-summary-panel class="aside" *ngIf="simulationResult"
+          [metrics]="[
+            { label: 'Mensualidad Grupo', value: formatCurrency(simulationResult?.scenario.monthlyContribution || 0), badge: 'success' },
+            { label: 'Meses a Meta', value: (simulationResult?.scenario.monthsToTarget || 0) + ' meses' },
+            { label: 'Meta Total', value: formatCurrency(simulationResult?.scenario.targetAmount || 0) }
+          ]"
+          [actions]="[
+            { label: '📄 PDF', click: () => generatePDF() },
+            { label: '✅ Formalizar Grupo', click: () => proceedToClientCreation() }
+          ]"
+        ></app-summary-panel>
       </div>
     </div>
   `
