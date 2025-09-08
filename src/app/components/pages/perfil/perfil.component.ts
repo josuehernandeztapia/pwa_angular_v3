@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface UserProfile {
@@ -20,16 +20,21 @@ interface UserProfile {
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="perfil-container">
+    <div class="perfil-container premium-container">
       <header class="page-header">
-        <h1>👤 Mi Perfil</h1>
-        <p class="page-description">Gestiona tu información personal y configuración de cuenta</p>
+        <div class="header-content">
+          <h1>👤 Mi Perfil</h1>
+          <p class="page-description">Gestiona tu información personal y configuración de cuenta</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn-primary" (click)="saveProfile()" [disabled]="!isEditing">💾 Guardar</button>
+        </div>
       </header>
 
       <main class="page-main">
         <div class="profile-content">
           <!-- Profile Summary Card -->
-          <div class="profile-summary">
+          <div class="profile-summary premium-card">
             <div class="profile-avatar">
               <div class="avatar-circle" [class.has-image]="userProfile.avatar">
                 <img *ngIf="userProfile.avatar" [src]="userProfile.avatar" [alt]="userProfile.firstName">
@@ -61,7 +66,7 @@ interface UserProfile {
           </div>
 
           <!-- Profile Form -->
-          <div class="profile-form-section">
+          <div class="profile-form-section premium-card">
             <div class="section-header">
               <h3>✏️ Información Personal</h3>
               <button 
@@ -155,7 +160,7 @@ interface UserProfile {
           </div>
 
           <!-- Security Section -->
-          <div class="security-section">
+          <div class="security-section premium-card">
             <h3>🔒 Seguridad de la Cuenta</h3>
             <div class="security-options">
               <div class="security-item">
@@ -191,7 +196,7 @@ interface UserProfile {
           </div>
 
           <!-- Account Actions -->
-          <div class="account-actions">
+          <div class="account-actions premium-card">
             <h3>⚙️ Acciones de Cuenta</h3>
             <div class="action-buttons">
               <button class="btn-export" (click)="exportData()">
@@ -212,6 +217,7 @@ interface UserProfile {
       max-width: 900px;
       margin: 0 auto;
     }
+    .header-actions { display:flex; gap:12px; }
 
     .page-header {
       text-align: center;

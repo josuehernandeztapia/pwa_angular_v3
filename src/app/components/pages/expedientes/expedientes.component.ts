@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-expedientes',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   template: `
-    <div class="expedientes-container">
+    <div class="expedientes-container premium-container">
       <header class="page-header">
         <div class="header-content">
           <h1>📂 Expedientes</h1>
@@ -49,7 +49,7 @@ import { FormsModule } from '@angular/forms';
 
         <!-- Expedientes Grid -->
         <section class="expedientes-grid">
-          <div *ngFor="let expediente of filteredExpedientes" class="expediente-card">
+          <div *ngFor="let expediente of filteredExpedientes" class="expediente-card premium-card">
             <div class="expediente-header">
               <div class="expediente-info">
                 <h3>{{ expediente.clientName }}</h3>
@@ -99,7 +99,7 @@ import { FormsModule } from '@angular/forms';
         </section>
 
         <!-- Empty State -->
-        <div *ngIf="filteredExpedientes.length === 0" class="empty-state">
+        <div *ngIf="filteredExpedientes.length === 0" class="empty-state premium-card" role="status" aria-live="polite">
           <div class="empty-icon">📂</div>
           <h3>No hay expedientes</h3>
           <p>{{ searchTerm ? 'No se encontraron expedientes con ese criterio' : 'Aún no hay expedientes creados' }}</p>
