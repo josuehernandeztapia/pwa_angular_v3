@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import jsPDF from 'jspdf';
+import type { jsPDF } from 'jspdf';
 
 interface ContractData {
   clientInfo: {
@@ -57,8 +57,9 @@ export class PdfExportService {
 
   constructor() {}
 
-  // Generate contract PDF
-  generateContractPDF(contractData: ContractData): Promise<Blob> {
+  // Generate contract PDF with dynamic import
+  async generateContractPDF(contractData: ContractData): Promise<Blob> {
+    const { default: jsPDF } = await import('jspdf');
     return new Promise((resolve) => {
       const doc = new jsPDF();
       
@@ -197,8 +198,9 @@ export class PdfExportService {
     });
   }
 
-  // Generate quote PDF
-  generateQuotePDF(quoteData: QuoteData): Promise<Blob> {
+  // Generate quote PDF with dynamic import
+  async generateQuotePDF(quoteData: QuoteData): Promise<Blob> {
+    const { default: jsPDF } = await import('jspdf');
     return new Promise((resolve) => {
       const doc = new jsPDF();
       
@@ -409,7 +411,7 @@ export class PdfExportService {
 
   // Generate combined proposal PDF (quote + contract preview)
   // Generate simulation PDF for AGS Savings
-  generateAGSSavingsPDF(scenarioData: {
+  async generateAGSSavingsPDF(scenarioData: {
     targetAmount: number;
     monthsToTarget: number;
     monthlyContribution: number;
@@ -420,6 +422,7 @@ export class PdfExportService {
     overpricePerLiter: number;
     remainderAmount: number;
   }): Promise<Blob> {
+    const { default: jsPDF } = await import('jspdf');
     return new Promise((resolve) => {
       const doc = new jsPDF();
       
@@ -518,7 +521,7 @@ export class PdfExportService {
   }
 
   // Generate simulation PDF for Individual Down Payment Planning
-  generateIndividualPlanningPDF(planData: {
+  async generateIndividualPlanningPDF(planData: {
     targetDownPayment: number;
     monthsToTarget: number;
     monthlyCollection: number;
@@ -527,6 +530,7 @@ export class PdfExportService {
     overpricePerLiter: number;
     projectedBalance: number[];
   }): Promise<Blob> {
+    const { default: jsPDF } = await import('jspdf');
     return new Promise((resolve) => {
       const doc = new jsPDF();
       
@@ -590,7 +594,7 @@ export class PdfExportService {
   }
 
   // Generate collective tanda simulation PDF
-  generateTandaPDF(tandaData: {
+  async generateTandaPDF(tandaData: {
     memberCount: number;
     unitPrice: number;
     monthlyContribution: number;
@@ -599,6 +603,7 @@ export class PdfExportService {
     firstDeliveryMonth: number;
     avgTimeToAward: number;
   }): Promise<Blob> {
+    const { default: jsPDF } = await import('jspdf');
     return new Promise((resolve) => {
       const doc = new jsPDF();
       
@@ -683,7 +688,8 @@ export class PdfExportService {
     });
   }
 
-  generateProposalPDF(quoteData: QuoteData, selectedOption: number): Promise<Blob> {
+  async generateProposalPDF(quoteData: QuoteData, selectedOption: number): Promise<Blob> {
+    const { default: jsPDF } = await import('jspdf');
     return new Promise((resolve) => {
       const doc = new jsPDF();
       
@@ -793,6 +799,7 @@ export class PdfExportService {
   }
   
   async generateReportPDF(reportType: string, reportData: any): Promise<Blob> {
+    const { default: jsPDF } = await import('jspdf');
     return new Promise((resolve, reject) => {
       try {
         const doc = new jsPDF();
