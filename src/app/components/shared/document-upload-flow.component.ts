@@ -664,6 +664,19 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
   protected readonly DocumentStatus = DocumentStatus;
 
   ngOnInit() {
+    // If no explicit input provided, attempt to derive from query params for deep-linking
+    if (!this.flowContext) {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const market = (params.get('market') as any) || 'aguascalientes';
+        const clientTypeParam = (params.get('clientType') || '').toLowerCase();
+        const clientType = (clientTypeParam === 'colectivo' ? 'colectivo' : 'individual') as any;
+        const source = (params.get('source') as any) || 'nueva-oportunidad';
+        const businessFlow = (params.get('businessFlow') as any) || BusinessFlow.VentaPlazo;
+        const clientId = params.get('clientId') || undefined;
+        this.flowContext = { market, clientType, source, businessFlow, clientId } as any;
+      } catch {}
+    }
     this.initializeFlow();
   }
 
