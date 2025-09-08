@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { of } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ApiService } from '../../../services/api.service';
-import { CustomValidators } from '../../../validators/custom-validators';
+import { EcosystemUiService } from '../../../services/ecosystem-ui.service';
+import { CustomValidators, normalizePhoneMX } from '../../../validators/custom-validators';
 
 // Dynamic Wizard Step Interface
 interface WizardStep {
@@ -26,7 +27,7 @@ interface WizardStep {
     <div class="nueva-oportunidad-container command-container">
       <div class="header-section">
         <div class="breadcrumb">
-          <button class="back-btn premium-button outline" (click)="goBack()">
+          <button class="back-btn premium-button outline" (click)="goBack()" [attr.aria-label]="'Volver'">
             ⬅️ Regresar
           </button>
           <h1 class="command-title">💎 Generador de Oportunidades Inteligente</h1>
@@ -57,6 +58,7 @@ interface WizardStep {
               [class.active]="getStepStatus(i) === 'current'"
               [class.completed]="getStepStatus(i) === 'completed'"
               [class.pending]="getStepStatus(i) === 'pending'"
+              [attr.aria-current]="getStepStatus(i) === 'current' ? 'step' : null"
             >
               <span class="step-icon">{{ getStepIcon(i) }}</span>
               <span class="step-label">{{ step.label }}</span>
@@ -88,7 +90,7 @@ interface WizardStep {
           
           <!-- Step 1: Client Information -->
           <div class="form-section">
-            <h2 class="section-title">👤 Información del Cliente</h2>
+            <h2 class="section-title" id="step-title-client-info" tabindex="-1">👤 Información del Cliente</h2>
             
             <div class="form-group">
               <label for="clientName">Nombre Completo *</label>
@@ -99,6 +101,8 @@ interface WizardStep {
                   formControlName="clientName"
                   class="premium-input"
                   [class.error]="isFieldInvalid('clientName')"
+                  [attr.aria-invalid]="isFieldInvalid('clientName')"
+                  [attr.aria-describedby]="getErrorId('clientName')"
                   [class.checking]="isCheckingDuplicates"
                   [class.has-suggestions]="clientSuggestions.length > 0"
                   placeholder="Ej: Juan Pérez García"
@@ -109,6 +113,9 @@ interface WizardStep {
                 >
                 <div class="input-status" *ngIf="isCheckingDuplicates">
                   <span class="checking-icon">🔍</span>
+                </div>
+                <div class="suggestions-skeletons" *ngIf="isCheckingDuplicates && clientSuggestions.length === 0">
+                  <div class="skeleton-row" *ngFor="let s of [1,2,3]"></div>
                 </div>
                 
                 <!-- Intelligent Autocomplete Dropdown -->
@@ -169,7 +176,7 @@ interface WizardStep {
                 </div>
               </div>
               
-              <div *ngIf="isFieldInvalid('clientName')" class="error-message">
+              <div *ngIf="isFieldInvalid('clientName')" class="error-message" [id]="getErrorId('clientName')">
                 <span *ngIf="opportunityForm.get('clientName')?.errors?.['required']">
                   El nombre del cliente es requerido
                 </span>
@@ -193,12 +200,15 @@ interface WizardStep {
                     formControlName="phone"
                     class="form-input whatsapp-field"
                     [class.error]="isFieldInvalid('phone')"
+                    [attr.aria-invalid]="isFieldInvalid('phone')"
+                    [attr.aria-describedby]="getErrorId('phone')"
                     placeholder="55 1234 5678"
                     maxlength="16"
+                    (blur)="onPhoneBlur()"
                   >
                   <span class="whatsapp-icon">💬</span>
                 </div>
-                <div *ngIf="isFieldInvalid('phone')" class="error-message">
+                <div *ngIf="isFieldInvalid('phone')" class="error-message" [id]="getErrorId('phone')">
                   <span *ngIf="opportunityForm.get('phone')?.errors?.['required']">
                     El número de WhatsApp es requerido para contacto
                   </span>
@@ -217,9 +227,11 @@ interface WizardStep {
                   formControlName="email"
                   class="form-input email-field"
                   [class.error]="isFieldInvalid('email')"
+                  [attr.aria-invalid]="isFieldInvalid('email')"
+                  [attr.aria-describedby]="getErrorId('email')"
                   placeholder="cliente@correo.com"
                 >
-                <div *ngIf="isFieldInvalid('email')" class="error-message">
+                <div *ngIf="isFieldInvalid('email')" class="error-message" [id]="getErrorId('email')">
                   <span *ngIf="opportunityForm.get('email')?.errors?.['required']">
                     El email es requerido
                   </span>
@@ -242,10 +254,12 @@ interface WizardStep {
                   formControlName="rfc"
                   class="form-input"
                   [class.error]="isFieldInvalid('rfc')"
+                  [attr.aria-invalid]="isFieldInvalid('rfc')"
+                  [attr.aria-describedby]="getErrorId('rfc')"
                   placeholder="GODE561231GR8"
                   (input)="opportunityForm.get('rfc')?.setValue(opportunityForm.get('rfc')?.value?.toUpperCase(), { emitEvent: false })"
                 >
-                <div *ngIf="isFieldInvalid('rfc')" class="error-message">
+                <div *ngIf="isFieldInvalid('rfc')" class="error-message" [id]="getErrorId('rfc')">
                   <span *ngIf="opportunityForm.get('rfc')?.errors?.['required']">El RFC es requerido</span>
                   <span *ngIf="opportunityForm.get('rfc')?.errors?.['rfc']">RFC inválido</span>
                 </div>
@@ -255,7 +269,7 @@ interface WizardStep {
 
           <!-- Step 2: Opportunity Type Selection -->
           <div class="form-section">
-            <h2>🎯 ¿Qué quieres modelar para {{ clientNameValue || 'este cliente' }}?</h2>
+            <h2 id="step-title-opportunity-type" tabindex="-1">🎯 ¿Qué quieres modelar para {{ clientNameValue || 'este cliente' }}?</h2>
             <p class="section-description">
               Selecciona el tipo de oportunidad que mejor se adapte a las necesidades del cliente
             </p>
@@ -297,7 +311,7 @@ interface WizardStep {
 
           <!-- Step 3: Dynamic Market Configuration -->
           <div class="form-section" *ngIf="opportunityType && shouldShowStep('market')">
-            <h2>{{ getMarketStepTitle() }}</h2>
+            <h2 id="step-title-market" tabindex="-1">{{ getMarketStepTitle() }}</h2>
             <p class="section-description">{{ getMarketStepDescription() }}</p>
 
             <div class="form-row">
@@ -439,28 +453,39 @@ interface WizardStep {
 
           <!-- Step 4: Ecosystem Selection (EdoMex Only) -->
           <div class="form-section" *ngIf="shouldShowStep('ecosystem')">
-            <h2>🏪 Selección de Ecosistema</h2>
+            <h2 id="step-title-ecosystem" tabindex="-1">🏪 Selección de Ecosistema</h2>
             <p class="section-description">
               En Estado de México, los clientes se organizan por ecosistemas territoriales
             </p>
 
             <div class="ecosystem-cards">
-              <div 
-                *ngFor="let ecosystem of getAvailableEcosystems()" 
-                class="ecosystem-card"
-                [class.selected]="selectedEcosystem === ecosystem.id"
-                (click)="selectEcosystem(ecosystem.id)"
-              >
-                <div class="ecosystem-icon">{{ ecosystem.icon }}</div>
-                <div class="ecosystem-content">
-                  <h3>{{ ecosystem.name }}</h3>
-                  <p>{{ ecosystem.description }}</p>
-                  <div class="ecosystem-stats">
-                    <span class="stat">{{ ecosystem.activeClients }} activos</span>
-                    <span class="stat">{{ ecosystem.avgSavings }}% ahorro promedio</span>
+              <ng-container *ngIf="!loadingEcosystems && !errorEcosystems; else ecoState">
+                <div 
+                  *ngFor="let ecosystem of availableEcosystems" 
+                  class="ecosystem-card"
+                  [class.selected]="selectedEcosystem === ecosystem.id"
+                  (click)="selectEcosystem(ecosystem.id)"
+                >
+                  <div class="ecosystem-icon">{{ ecosystem.icon }}</div>
+                  <div class="ecosystem-content">
+                    <h3>{{ ecosystem.name }}</h3>
+                    <p>{{ ecosystem.description }}</p>
+                    <div class="ecosystem-stats">
+                      <span class="stat">{{ ecosystem.activeClients }} activos</span>
+                      <span class="stat">{{ ecosystem.avgSavings }}% ahorro promedio</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ng-container>
+              <ng-template #ecoState>
+                <div *ngIf="loadingEcosystems" class="ecoskeletons">
+                  <div class="ecoskeleton-card" *ngFor="let s of [1,2,3]"></div>
+                </div>
+                <div *ngIf="errorEcosystems" class="ecosystem-error">
+                  <p>Ocurrió un error al cargar ecosistemas.</p>
+                  <button class="premium-button secondary" type="button" (click)="reloadEcosystems()">Reintentar</button>
+                </div>
+              </ng-template>
             </div>
           </div>
 
@@ -504,6 +529,8 @@ interface WizardStep {
                 ⏳ Procesando...
               </span>
             </button>
+            <span class="next-step-pill">Siguiente: {{ nextStepLabel() }}</span>
+            <span class="disabled-hint" *ngIf="opportunityForm.invalid && !isLoading">Completa los campos requeridos para continuar</span>
           </div>
         </form>
 
@@ -969,6 +996,22 @@ interface WizardStep {
       font-weight: 600;
     }
 
+    .next-step-pill {
+      align-self: center;
+      background: #edf2f7;
+      color: #2d3748;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .disabled-hint {
+      align-self: center;
+      color: #a0aec0;
+      font-size: 0.85rem;
+    }
+
     /* Draft Banner Styles */
     .draft-banner {
       background: linear-gradient(135deg, #fef5e7, #fed7aa);
@@ -1047,6 +1090,30 @@ interface WizardStep {
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
+    }
+
+    /* Suggestions skeletons */
+    .suggestions-skeletons { margin-top: 8px; }
+    .skeleton-row {
+      height: 16px;
+      background: linear-gradient(90deg, #e2e8f0 25%, #f7fafc 37%, #e2e8f0 63%);
+      background-size: 400% 100%;
+      animation: shimmer 1.4s ease infinite;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    @keyframes shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: 0 0; }
+    }
+
+    /* Ecosystem skeletons */
+    .ecoskeletons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .ecoskeleton-card { height: 120px; border-radius: 12px; background: linear-gradient(90deg, #e2e8f0 25%, #f7fafc 37%, #e2e8f0 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
+    .ecosystem-error { color: #c05621; }
+    @keyframes shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: 0 0; }
     }
 
     /* Similar Clients Warning Styles */
@@ -1238,6 +1305,7 @@ export class NuevaOportunidadComponent implements OnInit {
   opportunityType: 'COTIZACION' | 'SIMULACION' | null = null;
   opportunityTypeError = false;
   isLoading = false;
+  private autoSaveSub?: Subscription;
   
   // Smart Context Integration
   smartContext: any = {
@@ -1257,7 +1325,6 @@ export class NuevaOportunidadComponent implements OnInit {
   draftRecovered = false;
   draftData: any = null;
   private draftKey = 'nueva-oportunidad-draft';
-  private autoSaveInterval: any;
   
   // Anti-duplicate System
   isCheckingDuplicates = false;
@@ -1272,12 +1339,15 @@ export class NuevaOportunidadComponent implements OnInit {
   // Dynamic Fields State
   selectedEcosystem = '';
   availableEcosystems: any[] = [];
+  loadingEcosystems = false;
+  errorEcosystems = false;
   
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private ecosystemUiService: EcosystemUiService
   ) {}
 
   ngOnInit() {
@@ -1287,12 +1357,11 @@ export class NuevaOportunidadComponent implements OnInit {
     this.setupDuplicateDetection();
     this.initializeDynamicSteps();
     this.startAutoSave();
+    this.loadEcosystems();
   }
 
   ngOnDestroy() {
-    if (this.autoSaveInterval) {
-      clearInterval(this.autoSaveInterval);
-    }
+    if (this.autoSaveSub) this.autoSaveSub.unsubscribe();
   }
 
   /**
@@ -1359,6 +1428,9 @@ export class NuevaOportunidadComponent implements OnInit {
       this.recalculateSteps();
       this.updateCurrentStep();
     });
+
+    // Apply dynamic contact requirements initially
+    this.updateContactRequirements();
   }
 
   /**
@@ -1569,7 +1641,7 @@ export class NuevaOportunidadComponent implements OnInit {
     }
 
     // Business rule: Validate ecosystem availability
-    const validEcosystems = this.getAvailableEcosystems().map(e => e.id);
+    const validEcosystems = this.availableEcosystems.map(e => e.id);
     return validEcosystems.includes(ecosystem);
   }
 
@@ -1608,11 +1680,13 @@ export class NuevaOportunidadComponent implements OnInit {
    * Save draft every 10 seconds when form has data
    */
   private startAutoSave(): void {
-    this.autoSaveInterval = setInterval(() => {
-      if (this.opportunityForm.dirty && !this.draftRecovered) {
-        this.saveDraftToStorage();
-      }
-    }, 10000); // Every 10 seconds
+    this.autoSaveSub = this.opportunityForm.valueChanges
+      .pipe(debounceTime(800))
+      .subscribe(() => {
+        if (this.opportunityForm.dirty && !this.draftRecovered) {
+          this.saveDraftToStorage();
+        }
+      });
   }
 
   private saveDraftToStorage(): void {
@@ -1715,10 +1789,14 @@ export class NuevaOportunidadComponent implements OnInit {
 
     // Client type is required only for EdoMex + Financiero
     this.updateClientTypeRequirement();
+
+    // Reload ecosystems if applicable
+    this.loadEcosystems();
   }
 
   onSaleTypeChange(): void {
     this.updateClientTypeRequirement();
+    this.updateContactRequirements();
   }
 
   requiresClientType(): boolean {
@@ -1882,6 +1960,7 @@ export class NuevaOportunidadComponent implements OnInit {
     
     // Update totalSteps based on visible steps
     this.totalSteps = this.visibleSteps.length;
+    this.focusCurrentStepTitle();
   }
 
   getStepStatus(stepIndex: number): string {
@@ -1906,6 +1985,99 @@ export class NuevaOportunidadComponent implements OnInit {
       default:
         return step?.icon || '⭕';
     }
+  }
+
+  // === A11y helpers & field helpers ===
+  getErrorId(fieldName: string): string {
+    return `${fieldName}-error`;
+  }
+
+  onPhoneBlur(): void {
+    const control = this.opportunityForm.get('phone');
+    const normalized = normalizePhoneMX(control?.value || '');
+    control?.setValue(normalized, { emitEvent: false });
+    control?.updateValueAndValidity({ emitEvent: false });
+  }
+
+  requiresClientContactData(): boolean {
+    return this.saleTypeValue === 'financiero';
+  }
+
+  private updateContactRequirements(): void {
+    const emailControl = this.opportunityForm.get('email');
+    const rfcControl = this.opportunityForm.get('rfc');
+    if (!emailControl || !rfcControl) return;
+    if (this.requiresClientContactData()) {
+      emailControl.setValidators([Validators.required, Validators.email]);
+      rfcControl.setValidators([Validators.required, CustomValidators.rfc]);
+    } else {
+      emailControl.setValidators([Validators.email]);
+      rfcControl.clearValidators();
+    }
+    emailControl.updateValueAndValidity({ emitEvent: false });
+    rfcControl.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private focusCurrentStepTitle(): void {
+    const currentVisibleStep = this.visibleSteps[this.currentStep - 1];
+    if (!currentVisibleStep) return;
+    let titleId = '';
+    switch (currentVisibleStep.id) {
+      case 'client-info':
+        titleId = 'step-title-client-info';
+        break;
+      case 'opportunity-type':
+        titleId = 'step-title-opportunity-type';
+        break;
+      case 'market-simple':
+      case 'market-full':
+      case 'market-default':
+        titleId = 'step-title-market';
+        break;
+      case 'ecosystem':
+        titleId = 'step-title-ecosystem';
+        break;
+    }
+    if (titleId) {
+      setTimeout(() => {
+        const el = document.getElementById(titleId);
+        el?.focus();
+      });
+    }
+  }
+
+  // === Ecosystem loading ===
+  private loadEcosystems(): void {
+    if (this.marketValue !== 'edomex') return;
+    this.loadingEcosystems = true;
+    this.errorEcosystems = false;
+    this.ecosystemUiService.getEcosystemsForMarket(this.marketValue).subscribe({
+      next: (ecos) => {
+        this.availableEcosystems = ecos;
+        this.loadingEcosystems = false;
+      },
+      error: () => {
+        this.loadingEcosystems = false;
+        this.errorEcosystems = true;
+      }
+    });
+  }
+
+  reloadEcosystems(): void {
+    this.loadEcosystems();
+  }
+
+  // === Gating helpers and CTA label ===
+  isEdomex(): boolean { return this.marketValue === 'edomex'; }
+  isAguascalientes(): boolean { return this.marketValue === 'aguascalientes'; }
+  isCotizacion(): boolean { return this.opportunityType === 'COTIZACION'; }
+  isSimulacion(): boolean { return this.opportunityType === 'SIMULACION'; }
+  isFinanciero(): boolean { return this.saleTypeValue === 'financiero'; }
+
+  nextStepLabel(): string {
+    if (this.isCotizacion()) return 'Cotizador';
+    if (this.isSimulacion()) return 'Simulador';
+    return 'Carga de Documentos';
   }
 
   // === DRAFT RECOVERY METHODS ===
