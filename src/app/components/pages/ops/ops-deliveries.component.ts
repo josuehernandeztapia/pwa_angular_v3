@@ -21,7 +21,7 @@ import {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
-    <div class="ops-deliveries-container">
+    <div class="ops-deliveries-container command-container">
       <!-- Header (compact) -->
       <div class="ops-header">
         <div class="header-content">
@@ -39,10 +39,10 @@ import {
       </div>
 
       <!-- Filtros Jerárquicos: Mercado > Ruta > Cliente > Pedido -->
-      <div class="hierarchical-filters">
+      <div class="hierarchical-filters" role="region" aria-label="Filtros de entregas">
         <div class="filter-level">
           <label class="filter-label">📍 Mercado</label>
-          <select [(ngModel)]="selectedMarket" (change)="onMarketChange()" class="filter-select">
+          <select [(ngModel)]="selectedMarket" (change)="onMarketChange()" class="filter-select" aria-label="Seleccionar mercado">
             <option value="">Todos los mercados</option>
             <option value="AGS">Aguascalientes (CON asientos)</option>
             <option value="EdoMex">Estado de México (SIN asientos)</option>
@@ -51,7 +51,7 @@ import {
 
         <div class="filter-level" *ngIf="selectedMarket() === 'EdoMex'">
           <label class="filter-label">🛣️ Ruta</label>
-          <select [(ngModel)]="selectedRoute" (change)="onRouteChange()" class="filter-select">
+          <select [(ngModel)]="selectedRoute" (change)="onRouteChange()" class="filter-select" aria-label="Seleccionar ruta">
             <option value="">Todas las rutas</option>
             <option *ngFor="let route of availableRoutes()" [value]="route.id">
               {{ route.name }}
@@ -66,12 +66,13 @@ import {
             [(ngModel)]="clientSearch" 
             (input)="onClientSearch()"
             placeholder="Buscar por nombre de cliente..."
-            class="filter-input">
+            class="filter-input"
+            aria-label="Buscar cliente">
         </div>
 
         <div class="filter-level">
           <label class="filter-label">📦 Estado</label>
-          <select [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="filter-select">
+          <select [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="filter-select" aria-label="Seleccionar estado">
             <option value="">Todos los estados</option>
             <option *ngFor="let status of deliveryStatuses" [value]="status">
               {{ getStatusTitle(status) }}
@@ -83,7 +84,7 @@ import {
           <span class="results-count">
             {{ filteredDeliveries().length }} pedido{{ filteredDeliveries().length !== 1 ? 's' : '' }} encontrado{{ filteredDeliveries().length !== 1 ? 's' : '' }}
           </span>
-          <button *ngIf="hasActiveFilters()" class="btn-clear-filters" (click)="clearFilters()">
+          <button *ngIf="hasActiveFilters()" class="btn-clear-filters" (click)="clearFilters()" aria-label="Limpiar filtros activos">
             🗑️ Limpiar filtros
           </button>
         </div>
@@ -320,11 +321,15 @@ import {
         </div>
       </div>
 
-      <!-- Loading State -->
-      <div *ngIf="loading()" class="loading-overlay" role="status" aria-live="polite">
-        <div class="loading-spinner"></div>
-        <p>Cargando entregas...</p>
-      </div>
+      <!-- Loading State (placeholder estable) -->
+      <section *ngIf="loading()" class="premium-card loading-placeholder" role="status" aria-live="polite" aria-busy="true">
+        Cargando entregas...
+      </section>
+
+      <!-- Empty State -->
+      <section *ngIf="!loading() && filteredDeliveries().length === 0" class="premium-card empty-placeholder" role="status" aria-live="polite">
+        0 pedidos — ajusta los filtros para ver resultados.
+      </section>
 
       <!-- Modal para Avanzar Estado -->
       <div *ngIf="showAdvanceStateModal()" class="modal-overlay" (click)="hideAdvanceModal()">
@@ -408,17 +413,21 @@ import {
 
     .hierarchical-filters {
       background: #1a1f2e;
-      padding: 24px;
+      padding: 16px 24px;
       border-radius: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       border: 1px solid #2d3748;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
     }
 
     .filter-level {
       display: flex;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 16px;
+      gap: 8px;
+      margin: 0;
     }
 
     .filter-label {
@@ -438,10 +447,9 @@ import {
 
     .filter-summary {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding-top: 16px;
-      border-top: 1px solid #2d3748;
+      gap: 12px;
+      margin-left: auto;
     }
 
     .results-count {
@@ -694,32 +702,21 @@ import {
       text-align: center;
     }
 
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.8);
+    .loading-placeholder {
+      min-height: 160px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
-    }
-
-    .loading-spinner {
-      width: 48px;
-      height: 48px;
-      border: 4px solid #2d3748;
-      border-left-color: #06d6a0;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
+      margin-top: 16px;
       margin-bottom: 16px;
+      color: #a0aec0;
+      font-weight: 600;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .empty-placeholder {
+      padding: 16px;
+      text-align: center;
+      color: #a0aec0;
     }
 
     .modal-overlay {
@@ -775,14 +772,8 @@ import {
         padding: 16px;
       }
 
-      .hierarchical-filters {
-        padding: 16px;
-      }
-
-      .filter-level {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      .hierarchical-filters { padding: 12px 16px; }
+      .filter-level { flex-direction: column; align-items: flex-start; gap: 6px; }
 
       .delivery-grid {
         grid-template-columns: 1fr;
