@@ -15,19 +15,15 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
   imports: [CommonModule, FormsModule, SkeletonCardComponent, EmptyStateCardComponent],
   template: `
     <div class="premium-container min-h-screen bg-gray-50 p-6">
-      <!-- Header -->
-      <div class="mb-8">
+      <!-- Header (compact) -->
+      <div class="mb-4">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">
-              🎯 Monitor de Triggers Automáticos
-            </h1>
-            <p class="text-gray-600">
-              Sistema de monitoreo en tiempo real para triggers de órdenes de entrega
-            </p>
+            <h1 class="text-2xl font-semibold text-gray-900 mb-1">Monitor de Triggers</h1>
+            <p class="text-gray-600 text-sm">Actividad reciente y pendientes según filtros</p>
           </div>
-          
-          <div class="flex items-center gap-4 mt-4 lg:mt-0">
+
+          <div class="flex items-center gap-3 mt-3 lg:mt-0">
             <!-- Estado del monitoreo -->
             <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-sm border">
               <div class="flex items-center gap-2">
@@ -47,7 +43,8 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
             <button
               (click)="forceRefresh()"
               [disabled]="loading()"
-              class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              aria-label="Actualizar"
             >
               <svg class="w-4 h-4" [class.animate-spin]="loading()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
@@ -250,6 +247,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
                       *ngIf="event.deliveryOrderId"
                       (click)="viewDeliveryOrder(event.deliveryOrderId!)"
                       class="px-3 py-1 text-sm bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg"
+                      aria-label="Ver orden de entrega"
                     >
                       Ver Orden
                     </button>
@@ -257,6 +255,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
                       *ngIf="event.errorMessage"
                       (click)="viewError(event)"
                       class="px-3 py-1 text-sm bg-red-100 text-red-700 hover:bg-red-200 rounded-lg"
+                      aria-label="Ver error"
                     >
                       Ver Error
                     </button>
@@ -266,14 +265,11 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
             </div>
           </div>
           
-          <app-empty-state-card
-            *ngIf="filteredEvents().length === 0 && !loading()"
-            icon="🧪"
-            title="Sin triggers recientes"
-            subtitle="Prueba simulaciones demo para ver actividad aquí"
-            [primaryCtaLabel]="'Simular triggers demo'"
-            (primary)="simulateDemoTriggers()"
-          ></app-empty-state-card>
+          <div *ngIf="filteredEvents().length === 0 && !loading()" class="bg-white p-8 rounded-xl border text-center" style="min-height:160px;display:flex;align-items:center;justify-content:center;">
+            <div>
+              <p class="text-gray-600">No hay registros con los filtros seleccionados.</p>
+            </div>
+          </div>
         </div>
 
         <!-- Tab: Análisis Pendientes -->
@@ -366,12 +362,11 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
             </div>
           </div>
           
-          <app-empty-state-card
-            *ngIf="pendingContracts().length === 0 && pendingTandas().length === 0 && !loading()"
-            icon="⏳"
-            title="Sin pendientes"
-            subtitle="Cuando haya contratos o tandas a analizar, aparecerán aquí"
-          ></app-empty-state-card>
+          <div *ngIf="pendingContracts().length === 0 && pendingTandas().length === 0 && !loading()" class="bg-white p-8 rounded-xl border text-center" style="min-height:160px;display:flex;align-items:center;justify-content:center;">
+            <div>
+              <p class="text-gray-600">No hay registros con los filtros seleccionados.</p>
+            </div>
+          </div>
         </div>
 
         <!-- Tab: Reglas de Trigger -->
@@ -413,15 +408,16 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
       </div>
     </div>
 
-    <!-- Modal de error (si es necesario) -->
+    <!-- Modal de error (accesible) -->
     <div *ngIf="showErrorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white p-6 rounded-xl max-w-md w-full mx-4">
+      <div class="bg-white p-6 rounded-xl max-w-md w-full mx-4" role="dialog" aria-modal="true" aria-labelledby="trigger-error-title">
         <h3 class="text-lg font-semibold text-red-900 mb-4">Error en Trigger</h3>
         <p class="text-gray-700 mb-4">{{ selectedErrorMessage }}</p>
         <div class="flex justify-end">
           <button
             (click)="showErrorModal = false"
             class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+            aria-label="Cerrar"
           >
             Cerrar
           </button>

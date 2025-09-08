@@ -55,12 +55,31 @@ interface KpiData {
         </div>
       </div>
 
+      <!-- Resumen KPIs -->
+      <div class="bg-white rounded-xl shadow-lg p-4">
+        <h2 class="text-lg font-semibold text-gray-800 mb-3">Resumen</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="bg-purple-50 p-3 rounded border border-purple-100">
+            <div class="text-purple-600 text-xs">Mensualidad Grupo</div>
+            <div class="text-xl font-bold text-purple-800">{{ formatCurrency(simulationResult?.scenario.monthlyContribution || 0) }}</div>
+          </div>
+          <div class="bg-green-50 p-3 rounded border border-green-100">
+            <div class="text-green-600 text-xs">Meses a Meta</div>
+            <div class="text-xl font-bold text-green-800">{{ simulationResult?.scenario.monthsToTarget || 0 }} meses</div>
+          </div>
+          <div class="bg-blue-50 p-3 rounded border border-blue-100">
+            <div class="text-blue-600 text-xs">Meta Total</div>
+            <div class="text-xl font-bold text-blue-800">{{ formatCurrency(simulationResult?.scenario.targetAmount || 0) }}</div>
+          </div>
+        </div>
+      </div>
+
       <div class="grid-aside">
         <!-- Configuration Panel -->
         <div class="bg-white rounded-xl shadow-lg p-6">
           <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
             <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
-            Configuración de la Tanda
+            Unidad
           </h2>
 
           <form [formGroup]="configForm" class="space-y-6">
@@ -313,7 +332,7 @@ interface KpiData {
         <div class="bg-white rounded-xl shadow-lg p-6" *ngIf="simulationResult">
           <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
             <span class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
-            Resultados de la Simulación
+            Finanzas
           </h2>
 
           <!-- KPI Dashboard (Advanced Mode) -->

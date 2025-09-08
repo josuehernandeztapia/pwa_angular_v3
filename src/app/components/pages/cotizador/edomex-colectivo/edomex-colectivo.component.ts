@@ -21,12 +21,31 @@ import { PdfExportService } from '../../../../services/pdf-export.service';
         <p class="text-emerald-100 text-lg">Genera cotizaciones para grupos de transportistas</p>
       </div>
 
+      <!-- Resumen KPIs -->
+      <div class="bg-white rounded-xl shadow-lg p-4">
+        <h2 class="text-lg font-semibold text-gray-800 mb-3">Resumen</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="bg-emerald-50 p-3 rounded border border-emerald-100">
+            <div class="text-emerald-600 text-xs">Pago mensual por miembro</div>
+            <div class="text-xl font-bold text-emerald-800">{{ formatCurrency(quotation?.monthlyPaymentPerMember || 0) }}</div>
+          </div>
+          <div class="bg-blue-50 p-3 rounded border border-blue-100">
+            <div class="text-blue-600 text-xs">Plazo típico</div>
+            <div class="text-xl font-bold text-blue-800">60 meses</div>
+          </div>
+          <div class="bg-purple-50 p-3 rounded border border-purple-100">
+            <div class="text-purple-600 text-xs">Meta del grupo</div>
+            <div class="text-xl font-bold text-purple-800">{{ formatCurrency(quotation?.scenario?.targetAmount || 0) }}</div>
+          </div>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Configuration Panel -->
         <div class="bg-white rounded-xl shadow-lg p-6">
           <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
             <span class="bg-emerald-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
-            Configuración del Grupo
+            Unidad
           </h2>
 
           <form [formGroup]="configForm" class="space-y-6">
@@ -176,7 +195,7 @@ import { PdfExportService } from '../../../../services/pdf-export.service';
         <div class="bg-white rounded-xl shadow-lg p-6" *ngIf="quotation">
           <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
             <span class="bg-emerald-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
-            Cotización del Grupo
+            Finanzas
           </h2>
 
           <!-- Group Summary -->
