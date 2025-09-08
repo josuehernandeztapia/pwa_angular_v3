@@ -24,6 +24,25 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
         <p>Proyecta tu ahorro, calcula liquidación en entrega</p>
       </div>
 
+      <!-- Resumen KPIs -->
+      <div class="premium-card kpi-summary" *ngIf="!isLoading">
+        <h2 class="section-title">Resumen</h2>
+        <div class="kpi-grid">
+          <div class="kpi-item">
+            <span class="kpi-label">Mensualidad</span>
+            <strong class="kpi-value">{{ (currentScenario?.monthlyContribution || 0) | currency:'MXN':'symbol':'1.0-0' }}</strong>
+          </div>
+          <div class="kpi-item">
+            <span class="kpi-label">Tiempo</span>
+            <strong class="kpi-value">{{ (currentScenario?.monthsToTarget || simuladorForm.value.deliveryMonths) }} meses</strong>
+          </div>
+          <div class="kpi-item">
+            <span class="kpi-label">Meta Total</span>
+            <strong class="kpi-value">{{ (currentScenario?.targetAmount || simuladorForm.value.unitValue) | currency:'MXN':'symbol':'1.0-0' }}</strong>
+          </div>
+        </div>
+      </div>
+
       <div class="simulator-content grid-aside" *ngIf="!isLoading" data-loading="false">
         <!-- Left: Configuration Panel -->
         <div class="config-panel">
@@ -31,7 +50,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
             
             <!-- Unidad y Valor -->
             <div class="section">
-              <h3>🚐 Configuración de Unidad</h3>
+              <h2>🚐 Unidad</h2>
               <app-form-field size="sm" [label]="'Valor Total de la Unidad'" [id]="'unitValue'" [helper]="'Precio típico AGS: $799,000 (vagoneta + GNV)'">
                 <div class="currency-input">
                   <span>$</span>
@@ -62,7 +81,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
 
             <!-- Placas y Consumo -->
             <div class="section">
-              <h3>⛽ Configuración de Recaudación</h3>
+              <h2>⛽ Consumo</h2>
               
               <div class="plates-section">
                 <label>Placas de Unidades Actuales</label>
@@ -79,7 +98,11 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
                   </div>
                 </div>
               </div>
+            </div>
 
+            <!-- Finanzas -->
+            <div class="section">
+              <h2>💳 Finanzas</h2>
               <div class="form-group">
                 <app-form-field size="sm" [label]="'Sobreprecio por Litro'" [id]="'overprice'" [helper]="'Cantidad extra por litro que vas a ahorrar'">
                   <div class="currency-input">
@@ -375,7 +398,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
       margin-bottom: 24px;
     }
 
-    .section h3 {
+    .section h2 {
       font-size: 18px;
       font-weight: 600;
       color: #374151;
@@ -1066,6 +1089,49 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+
+    /* KPI Summary */
+    .premium-card.kpi-summary {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-summary .section-title {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .kpi-item {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .kpi-label {
+      display: block;
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .kpi-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
     }
   `]
 })

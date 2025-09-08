@@ -21,6 +21,25 @@ import { SpeechService } from '../../../../services/speech.service';
         <p>Aguascalientes • Venta a Plazo & Compra de Contado</p>
       </div>
 
+      <!-- Resumen KPIs -->
+      <div class="summary-card premium-card" *ngIf="!isLoading">
+        <h2 class="section-title">Resumen</h2>
+        <div class="summary-grid">
+          <div class="summary-chip">
+            <span class="label">Pago mensual</span>
+            <strong class="value">{{ (currentQuote?.monthlyPayment || 0) | currency:'MXN':'symbol':'1.0-0' }}</strong>
+          </div>
+          <div class="summary-chip">
+            <span class="label">Plazo</span>
+            <strong class="value">{{ isPlazoSale() ? (currentQuote?.term || cotizadorForm.value.term) + ' meses' : '—' }}</strong>
+          </div>
+          <div class="summary-chip">
+            <span class="label">Total</span>
+            <strong class="value">{{ (currentQuote?.totalPrice || totalPrice) | currency:'MXN':'symbol':'1.0-0' }}</strong>
+          </div>
+        </div>
+      </div>
+
       <div class="content" *ngIf="!isLoading">
         <!-- Left Panel: Configuración -->
         <div class="config-panel">
@@ -28,7 +47,7 @@ import { SpeechService } from '../../../../services/speech.service';
             
             <!-- Tipo de Venta -->
             <div class="section">
-              <h3>💰 Tipo de Venta</h3>
+              <h2>💰 Unidad</h2>
               <div class="radio-group">
                 <label class="radio-option">
                   <input type="radio" formControlName="saleType" value="aguascalientes-plazo" (change)="onSaleTypeChange()">
@@ -50,7 +69,7 @@ import { SpeechService } from '../../../../services/speech.service';
 
             <!-- Paquete AGS -->
             <div class="section" *ngIf="packageData">
-              <h3>📦 Paquete Aguascalientes</h3>
+              <h2>📦 Consumo</h2>
               <div class="package-info">
                 <div class="vehicle-card">
                   <h4>🚐 Vagoneta H6C (19 Pasajeros)</h4>
@@ -80,7 +99,7 @@ import { SpeechService } from '../../../../services/speech.service';
 
             <!-- Configuración Financiera -->
             <div class="section" *ngIf="packageData">
-              <h3>💳 Configuración</h3>
+              <h2>💳 Finanzas</h2>
               
               <div class="form-group" *ngIf="isPlazoSale()">
                 <label>Plazo</label>
@@ -239,12 +258,18 @@ import { SpeechService } from '../../../../services/speech.service';
       margin-bottom: 24px;
     }
 
-    .section h3 {
+    .section h2 {
       font-size: 18px;
       font-weight: 600;
       color: #374151;
       margin-bottom: 16px;
     }
+    .summary-card.premium-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); padding: 16px; margin-bottom: 16px; }
+    .summary-card .section-title { margin: 0 0 8px; font-size: 18px; font-weight: 600; color: #374151; }
+    .summary-grid { display: grid; gap: 12px; grid-template-columns: repeat(3, 1fr); }
+    .summary-chip { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; text-align: center; }
+    .summary-chip .label { display:block; font-size:12px; color:#6b7280; margin-bottom:4px; }
+    .summary-chip .value { font-size:16px; color:#111827; }
 
     .radio-group {
       display: flex;

@@ -23,12 +23,31 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
         <p class="text-blue-100 text-lg">Calcula cuánto tiempo necesitas para ahorrar tu enganche</p>
       </div>
 
+      <!-- Resumen KPIs -->
+      <div class="bg-white rounded-xl shadow-lg p-4">
+        <h2 class="text-lg font-semibold text-gray-800 mb-3">Resumen</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="bg-blue-50 p-3 rounded border border-blue-100">
+            <div class="text-blue-600 text-xs">Mensualidad</div>
+            <div class="text-xl font-bold text-blue-800">{{ formatCurrency(scenario?.monthlyContribution || 0) }}</div>
+          </div>
+          <div class="bg-green-50 p-3 rounded border border-green-100">
+            <div class="text-green-600 text-xs">Tiempo</div>
+            <div class="text-xl font-bold text-green-800">{{ (scenario?.monthsToTarget || 0) }} meses</div>
+          </div>
+          <div class="bg-purple-50 p-3 rounded border border-purple-100">
+            <div class="text-purple-600 text-xs">Meta</div>
+            <div class="text-xl font-bold text-purple-800">{{ formatCurrency(scenario?.targetAmount || 0) }}</div>
+          </div>
+        </div>
+      </div>
+
       <div class="grid-aside">
         <!-- Configuration Panel -->
         <div class="bg-white rounded-xl shadow-lg p-6">
           <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
             <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
-            Configuración de tu Enganche
+            Unidad
           </h2>
 
           <form [formGroup]="configForm" class="space-y-6">
@@ -155,7 +174,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
         <div class="bg-white rounded-xl shadow-lg p-6" *ngIf="scenario">
           <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
             <span class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
-            Tu Plan de Enganche
+            Finanzas
           </h2>
 
           <!-- Summary Cards -->

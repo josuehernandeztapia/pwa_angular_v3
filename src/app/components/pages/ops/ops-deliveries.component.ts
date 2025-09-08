@@ -22,17 +22,17 @@ import {
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
     <div class="ops-deliveries-container">
-      <!-- Header -->
+      <!-- Header (compact) -->
       <div class="ops-header">
         <div class="header-content">
-          <h1 class="page-title">🚚 Centro de Operaciones - Entregas</h1>
-          <p class="page-subtitle">Gestión completa del ciclo de entregas (77 días)</p>
+          <h1 class="page-title">Entregas</h1>
+          <p class="page-subtitle">Órdenes y stock por mercado</p>
         </div>
         <div class="header-actions">
-          <button class="btn-refresh" (click)="refreshData()" [disabled]="loading()">
+          <button class="btn-refresh" (click)="refreshData()" [disabled]="loading()" aria-label="Actualizar">
             {{ loading() ? '⏳' : '🔄' }} Actualizar
           </button>
-          <button class="btn-recompute" (click)="recomputeStock()" [disabled]="stockLoading()">
+          <button class="btn-recompute" (click)="recomputeStock()" [disabled]="stockLoading()" aria-label="Recalcular stock">
             📊 Recalcular Stock
           </button>
         </div>
@@ -197,14 +197,14 @@ import {
                       <button 
                         class="btn-action btn-view"
                         [routerLink]="['/ops/deliveries', delivery.id]"
-                        title="Ver detalles">
+                        title="Ver detalles" aria-label="Ver detalles">
                         👁️
                       </button>
                       <button 
                         *ngIf="canAdvanceStatus(delivery)"
                         class="btn-action btn-advance"
                         (click)="showAdvanceModal(delivery)"
-                        title="Avanzar estado">
+                        title="Avanzar estado" aria-label="Avanzar estado">
                         ⏭️
                       </button>
                     </div>
@@ -233,7 +233,7 @@ import {
                     {{ getStatusIcon(delivery.status) }} {{ getStatusTitle(delivery.status) }}
                   </span>
                   <span class="eta">{{ formatETA(delivery.eta) }}</span>
-                  <button class="btn-view" [routerLink]="['/ops/deliveries', delivery.id]">Ver</button>
+                  <button class="btn-view" [routerLink]="['/ops/deliveries', delivery.id]" aria-label="Ver detalles">Ver</button>
                 </div>
               </div>
             </div>
@@ -321,14 +321,14 @@ import {
       </div>
 
       <!-- Loading State -->
-      <div *ngIf="loading()" class="loading-overlay">
+      <div *ngIf="loading()" class="loading-overlay" role="status" aria-live="polite">
         <div class="loading-spinner"></div>
         <p>Cargando entregas...</p>
       </div>
 
       <!-- Modal para Avanzar Estado -->
       <div *ngIf="showAdvanceStateModal()" class="modal-overlay" (click)="hideAdvanceModal()">
-        <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-content" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="advance-title">
           <h3>Avanzar Estado de Entrega</h3>
           <div *ngIf="selectedDelivery()">
             <p><strong>Pedido:</strong> {{ selectedDelivery()!.id }}</p>
@@ -347,7 +347,7 @@ import {
             </div>
             
             <div class="modal-actions">
-              <button class="btn-cancel" (click)="hideAdvanceModal()">Cancelar</button>
+              <button class="btn-cancel" (click)="hideAdvanceModal()" aria-label="Cerrar">Cancelar</button>
             </div>
           </div>
         </div>
