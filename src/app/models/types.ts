@@ -31,8 +31,15 @@ export enum EventType {
   GoalAchieved = 'GoalAchieved',
   StatusChange = 'StatusChange',
   DocumentSubmission = 'DocumentSubmission',
-  DocumentReview = 'DocumentReview'
+  DocumentReview = 'DocumentReview',
+  KYCCompleted = 'KYCCompleted'
 }
+
+// Shared document name constants used across services/components
+export const DOC_NAME_INE = 'INE Vigente';
+export const DOC_NAME_COMPROBANTE = 'Comprobante de domicilio';
+// KYC doc occurrences may include provider suffix, so services use string includes()
+export const DOC_NAME_KYC_CONTAINS = 'Verificación Biométrica';
 
 export type Market = 'all' | 'aguascalientes' | 'edomex';
 

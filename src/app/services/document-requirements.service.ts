@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { BusinessFlow, Document, DocumentStatus } from '../models/types';
+import { BusinessFlow, DOC_NAME_COMPROBANTE, DOC_NAME_INE, DOC_NAME_KYC_CONTAINS, Document, DocumentStatus } from '../models/types';
 
 // Port exacto de document requirement checklists desde React simulationService.ts líneas 10-33
 const VENTA_DIRECTA_CONTADO_DOCS: Document[] = [
-  { id: '1', name: 'INE Vigente', status: DocumentStatus.Pendiente },
-  { id: '2', name: 'Comprobante de domicilio', status: DocumentStatus.Pendiente },
+  { id: '1', name: DOC_NAME_INE, status: DocumentStatus.Pendiente },
+  { id: '2', name: DOC_NAME_COMPROBANTE, status: DocumentStatus.Pendiente },
   { id: '3', name: 'Constancia de situación fiscal', status: DocumentStatus.Pendiente },
 ];
 
 const AGUASCALIENTES_FINANCIERO_DOCS: Document[] = [
-  { id: '1', name: 'INE Vigente', status: DocumentStatus.Pendiente },
-  { id: '2', name: 'Comprobante de domicilio', status: DocumentStatus.Pendiente },
+  { id: '1', name: DOC_NAME_INE, status: DocumentStatus.Pendiente },
+  { id: '2', name: DOC_NAME_COMPROBANTE, status: DocumentStatus.Pendiente },
   { id: '3', name: 'Tarjeta de circulación', status: DocumentStatus.Pendiente },
   { id: '4', name: 'Copia de la concesión', status: DocumentStatus.Pendiente },
   { id: '5', name: 'Constancia de situación fiscal', status: DocumentStatus.Pendiente },
-  { id: '6', name: 'Verificación Biométrica (Metamap)', status: DocumentStatus.Pendiente },
+  { id: '6', name: `${DOC_NAME_KYC_CONTAINS} (Metamap)`, status: DocumentStatus.Pendiente },
 ];
 
 const EDOMEX_MIEMBRO_DOCS: Document[] = [
@@ -36,8 +36,8 @@ const EDOMEX_MIEMBRO_DOCS: Document[] = [
 ];
 
 const AHORRO_PROGRAMADO_DOCS: Document[] = [
-  { id: '1', name: 'INE Vigente', status: DocumentStatus.Pendiente },
-  { id: '2', name: 'Comprobante de domicilio', status: DocumentStatus.Pendiente },
+  { id: '1', name: DOC_NAME_INE, status: DocumentStatus.Pendiente },
+  { id: '2', name: DOC_NAME_COMPROBANTE, status: DocumentStatus.Pendiente },
   { 
     id: '3', 
     name: 'Tarjeta de circulación', 
@@ -154,17 +154,17 @@ export class DocumentRequirementsService {
     isKycComplete: boolean;
     tooltipMessage: string;
   } {
-    const ine = documents.find(d => d.name === 'INE Vigente');
-    const comprobante = documents.find(d => d.name === 'Comprobante de domicilio');
-    const kyc = documents.find(d => d.name.includes('Verificación Biométrica'));
+    const ine = documents.find(d => d.name === DOC_NAME_INE);
+    const comprobante = documents.find(d => d.name === DOC_NAME_COMPROBANTE);
+    const kyc = documents.find(d => d.name.includes(DOC_NAME_KYC_CONTAINS));
     
     const coreDocsApproved = ine?.status === DocumentStatus.Aprobado && 
                             comprobante?.status === DocumentStatus.Aprobado;
     const isKycComplete = kyc?.status === DocumentStatus.Aprobado;
     
     const missingDocs: string[] = [];
-    if (ine?.status !== DocumentStatus.Aprobado) missingDocs.push('INE Vigente');
-    if (comprobante?.status !== DocumentStatus.Aprobado) missingDocs.push('Comprobante de domicilio');
+    if (ine?.status !== DocumentStatus.Aprobado) missingDocs.push(DOC_NAME_INE);
+    if (comprobante?.status !== DocumentStatus.Aprobado) missingDocs.push(DOC_NAME_COMPROBANTE);
 
     let tooltipMessage = '';
     if (isKycComplete) {
