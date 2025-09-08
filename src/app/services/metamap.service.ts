@@ -1,8 +1,8 @@
-import { Injectable, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { Observable, of, Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Client, DocumentStatus } from '../models/types';
+import { environment } from '../../environments/environment';
+import { Client, DOC_NAME_COMPROBANTE, DOC_NAME_INE, DOC_NAME_KYC_CONTAINS, DocumentStatus, EventType } from '../models/types';
 import { DataService } from './data.service';
 
 // Port exacto de TypeScript declarations desde React types.ts líneas 3-14
@@ -142,7 +142,7 @@ export class MetaMapService {
               timestamp: new Date(),
               message: 'Verificación biométrica completada exitosamente.',
               actor: 'Cliente' as any,
-              type: 'KYC_COMPLETED' as any
+              type: EventType.KYCCompleted as any
             }
           ],
           // Update health score on KYC completion
@@ -166,17 +166,17 @@ export class MetaMapService {
     missingDocs: string[];
     tooltipMessage: string;
   } {
-    const ine = client.documents.find(d => d.name === 'INE Vigente');
-    const comprobante = client.documents.find(d => d.name === 'Comprobante de domicilio');
-    const kyc = client.documents.find(d => d.name.includes('Verificación Biométrica'));
+    const ine = client.documents.find(d => d.name === DOC_NAME_INE);
+    const comprobante = client.documents.find(d => d.name === DOC_NAME_COMPROBANTE);
+    const kyc = client.documents.find(d => d.name.includes(DOC_NAME_KYC_CONTAINS));
     
     const coreDocsApproved = ine?.status === DocumentStatus.Aprobado && 
                             comprobante?.status === DocumentStatus.Aprobado;
     const isKycComplete = kyc?.status === DocumentStatus.Aprobado;
     
     const missingDocs: string[] = [];
-    if (ine?.status !== DocumentStatus.Aprobado) missingDocs.push('INE Vigente');
-    if (comprobante?.status !== DocumentStatus.Aprobado) missingDocs.push('Comprobante de domicilio');
+    if (ine?.status !== DocumentStatus.Aprobado) missingDocs.push(DOC_NAME_INE);
+    if (comprobante?.status !== DocumentStatus.Aprobado) missingDocs.push(DOC_NAME_COMPROBANTE);
 
     let tooltipMessage = '';
     if (isKycComplete) {
@@ -206,7 +206,7 @@ export class MetaMapService {
     completedAt?: Date;
   } {
     const validation = this.validateKycPrerequisites(client);
-    const kycDoc = client.documents.find(d => d.name.includes('Verificación Biométrica'));
+    const kycDoc = client.documents.find(d => d.name.includes(DOC_NAME_KYC_CONTAINS));
     
     if (!kycDoc) {
       return {

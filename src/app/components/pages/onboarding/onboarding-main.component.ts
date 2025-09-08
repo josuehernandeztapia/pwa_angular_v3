@@ -41,13 +41,24 @@ interface OnboardingForm {
   imports: [CommonModule, FormsModule, InterviewCheckpointModalComponent],
   template: `
     <div class="onboarding-container command-container">
+      <!-- Draft Recovery Banner -->
+      <div *ngIf="draftFound" class="draft-banner" role="status" aria-live="polite">
+        <div class="draft-banner-content">
+          <span>📝 Borrador encontrado de un onboarding anterior.</span>
+          <div class="draft-banner-actions">
+            <button type="button" class="btn-secondary" (click)="continueDraft()">Continuar</button>
+            <button type="button" class="btn-secondary" (click)="discardDraft()">Descartar</button>
+          </div>
+        </div>
+      </div>
       <!-- Progress Header -->
       <div class="progress-header">
         <div class="progress-steps">
           <div *ngFor="let step of steps; let i = index" 
                class="step" 
                [class.step-active]="currentStepIndex === i"
-               [class.step-completed]="currentStepIndex > i">
+               [class.step-completed]="currentStepIndex > i"
+               [attr.aria-current]="currentStepIndex === i ? 'step' : null">
             <div class="step-circle">{{ i + 1 }}</div>
             <span class="step-label">{{ step.label }}</span>
           </div>
@@ -60,14 +71,14 @@ interface OnboardingForm {
       <!-- Step: Selection -->
       <div *ngIf="currentStep === 'selection'" class="step-content">
         <div class="step-header">
-          <h2 class="section-title">🎯 Onboarding Inteligente de Conductores</h2>
+          <h2 class="section-title" tabindex="-1">🎯 Onboarding Inteligente de Conductores</h2>
           <p class="intelligence-subtitle">Selecciona el tipo de oportunidad que deseas crear</p>
         </div>
         
         <div class="form-grid">
           <div class="form-group">
             <label for="market">Mercado</label>
-            <select id="market" [(ngModel)]="form.market" (change)="onMarketChange()">
+            <select id="market" [(ngModel)]="form.market" (change)="onMarketChange()" (ngModelChange)="onFormChange()">
               <option value="">Selecciona un mercado</option>
               <option value="aguascalientes">Aguascalientes</option>
               <option value="edomex">Estado de México</option>
@@ -76,7 +87,7 @@ interface OnboardingForm {
 
           <div class="form-group" *ngIf="form.market">
             <label for="saleType">Tipo de Venta</label>
-            <select id="saleType" [(ngModel)]="form.saleType" (change)="onSaleTypeChange()">
+            <select id="saleType" [(ngModel)]="form.saleType" (change)="onSaleTypeChange()" (ngModelChange)="onFormChange()">
               <option value="">Selecciona tipo de venta</option>
               <option value="contado">Venta de Contado</option>
               <option value="financiero">Venta a Plazo</option>
@@ -85,7 +96,7 @@ interface OnboardingForm {
 
           <div class="form-group" *ngIf="form.market === 'edomex' && form.saleType === 'financiero'">
             <label for="clientType">Modalidad</label>
-            <select id="clientType" [(ngModel)]="form.clientType">
+            <select id="clientType" [(ngModel)]="form.clientType" (ngModelChange)="onFormChange()">
               <option value="">Selecciona modalidad</option>
               <option value="individual">Individual</option>
               <option value="colectivo">Crédito Colectivo</option>
@@ -94,7 +105,7 @@ interface OnboardingForm {
 
           <div class="form-group" *ngIf="form.market === 'edomex'">
             <label for="ecosystemId">Ruta/Ecosistema *</label>
-            <select id="ecosystemId" [(ngModel)]="form.ecosystemId" (change)="onEcosystemChange()">
+            <select id="ecosystemId" [(ngModel)]="form.ecosystemId" (change)="onEcosystemChange()" (ngModelChange)="onFormChange()">
               <option value="">Selecciona una ruta</option>
               <option *ngFor="let ecosystem of availableEcosystems" [value]="ecosystem.id">
                 {{ ecosystem.name }} - {{ ecosystem.status }}
@@ -106,6 +117,7 @@ interface OnboardingForm {
             <div *ngIf="form.ecosystemId === '__NEW_ROUTE__'" class="new-route-input">
               <input type="text" 
                      [(ngModel)]="newRouteName" 
+                     (ngModelChange)="onFormChange()"
                      placeholder="Nombre de la nueva ruta (ej: Ruta Valle Dorado)"
                      class="new-route-field">
               <small class="new-route-help">
@@ -155,14 +167,14 @@ interface OnboardingForm {
       <!-- Step: Client Info -->
       <div *ngIf="currentStep === 'client_info'" class="step-content">
         <div class="step-header">
-          <h2>Información del Cliente</h2>
+          <h2 tabindex="-1">Información del Cliente</h2>
           <p>Proporciona los datos básicos del cliente</p>
         </div>
         
         <div class="form-grid" *ngIf="form.clientType !== 'colectivo'">
           <div class="form-group">
             <label for="name">Nombre Completo *</label>
-            <input id="name" type="text" [(ngModel)]="form.name" required aria-required="true" [attr.aria-describedby]="'name-error'">
+            <input id="name" type="text" [(ngModel)]="form.name" (ngModelChange)="onFormChange()" required aria-required="true" [attr.aria-describedby]="'name-error'">
             <div *ngIf="!form.name" id="name-error" class="error-message" aria-live="polite">
               El nombre es requerido.
             </div>
@@ -170,7 +182,7 @@ interface OnboardingForm {
 
           <div class="form-group">
             <label for="email">Email *</label>
-            <input id="email" type="email" [(ngModel)]="form.email" required aria-required="true" [attr.aria-describedby]="'email-error'">
+            <input id="email" type="email" [(ngModel)]="form.email" (ngModelChange)="onFormChange()" required aria-required="true" [attr.aria-describedby]="'email-error'">
             <div *ngIf="form.email && !isValidEmail(form.email)" id="email-error" class="error-message" aria-live="polite">
               Formato de email inválido.
             </div>
@@ -181,7 +193,7 @@ interface OnboardingForm {
 
           <div class="form-group">
             <label for="phone">Teléfono *</label>
-            <input id="phone" type="tel" [(ngModel)]="form.phone" required aria-required="true" [attr.aria-describedby]="'phone-error'" pattern="^(\\+52\\s?)?(\\d{2}\\s?\\d{4}\\s?\\d{4}|\\d{3}\\s?\\d{3}\\s?\\d{4})$" placeholder="55 1234 5678">
+            <input id="phone" type="tel" [(ngModel)]="form.phone" (ngModelChange)="onFormChange()" required aria-required="true" [attr.aria-describedby]="'phone-error'" pattern="^(\\+52\\s?)?(\\d{2}\\s?\\d{4}\\s?\\d{4}|\\d{3}\\s?\\d{3}\\s?\\d{4})$" placeholder="55 1234 5678">
             <div *ngIf="form.phone && !isValidMexicanPhone(form.phone)" id="phone-error" class="error-message" aria-live="polite">
               Formato inválido. Ej: 55 1234 5678
             </div>
@@ -192,7 +204,7 @@ interface OnboardingForm {
 
           <div class="form-group">
             <label for="rfc">RFC</label>
-            <input id="rfc" type="text" [(ngModel)]="form.rfc" (input)="form.rfc = form.rfc?.toUpperCase()" [attr.aria-describedby]="'rfc-error'" placeholder="XAXX010101000">
+            <input id="rfc" type="text" [(ngModel)]="form.rfc" (ngModelChange)="onFormChange()" (input)="form.rfc = form.rfc?.toUpperCase()" [attr.aria-describedby]="'rfc-error'" placeholder="XAXX010101000">
             <div *ngIf="form.rfc && !isValidRFC(form.rfc)" id="rfc-error" class="error-message" aria-live="polite">
               RFC inválido.
             </div>
@@ -200,7 +212,7 @@ interface OnboardingForm {
 
           <div class="form-group full-width">
             <label for="address">Dirección</label>
-            <textarea id="address" [(ngModel)]="form.address" rows="3"></textarea>
+            <textarea id="address" [(ngModel)]="form.address" (ngModelChange)="onFormChange()" rows="3"></textarea>
           </div>
         </div>
 
@@ -208,7 +220,7 @@ interface OnboardingForm {
         <div class="form-grid" *ngIf="form.clientType === 'colectivo'">
           <div class="form-group full-width">
             <label for="groupName">Nombre del Grupo *</label>
-            <input id="groupName" type="text" [(ngModel)]="form.groupName" required>
+            <input id="groupName" type="text" [(ngModel)]="form.groupName" (ngModelChange)="onFormChange()" required>
           </div>
 
           <div class="form-group full-width">
@@ -217,6 +229,7 @@ interface OnboardingForm {
               <div *ngFor="let member of form.memberNames; let i = index" class="member-input">
                 <input type="text" 
                        [(ngModel)]="form.memberNames[i]" 
+                       (ngModelChange)="onFormChange()"
                        [placeholder]="'Nombre del miembro ' + (i + 1)"
                        required>
                 <button type="button" 
@@ -233,19 +246,25 @@ interface OnboardingForm {
         </div>
 
         <div class="step-actions">
-          <button class="btn-secondary" (click)="previousStep()">Atrás</button>
-          <button class="btn-primary" 
-                  [disabled]="!canProceedFromClientInfo()"
-                  (click)="createClient()">
-            Crear Oportunidad
-          </button>
+          <button class="btn-secondary" aria-label="Volver" (click)="previousStep()">Atrás</button>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="cta-pill" *ngIf="true">Siguiente: Carga de Documentos</span>
+            <div style="display:flex; flex-direction:column; align-items:flex-end;">
+              <button class="btn-primary" 
+                      [disabled]="!canProceedFromClientInfo()"
+                      (click)="createClient()">
+                Crear Oportunidad
+              </button>
+              <small class="cta-hint" *ngIf="!canProceedFromClientInfo()" aria-live="polite">Completa los campos requeridos para continuar.</small>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Step: Documents -->
       <div *ngIf="currentStep === 'documents'" class="step-content">
         <div class="step-header">
-          <h2>Documentos Requeridos</h2>
+          <h2 tabindex="-1">Documentos Requeridos</h2>
           <p>{{ getDocumentRequirementsMessage() }}</p>
         </div>
 
@@ -294,19 +313,22 @@ interface OnboardingForm {
         </div>
 
         <div class="step-actions">
-          <button class="btn-secondary" (click)="previousStep()">Atrás</button>
-          <button class="btn-primary" 
-                  [disabled]="!canProceedToKyc()"
-                  (click)="nextStep()">
-            Continuar a KYC
-          </button>
+          <button class="btn-secondary" aria-label="Volver" (click)="previousStep()">Atrás</button>
+          <div style="display:flex; flex-direction:column; align-items:flex-end;">
+            <button class="btn-primary" 
+                    [disabled]="!canProceedToKyc()"
+                    (click)="nextStep()">
+              Continuar a KYC
+            </button>
+            <small class="cta-hint" *ngIf="!canProceedToKyc()" aria-live="polite">Aprueba INE y Comprobante para habilitar KYC.</small>
+          </div>
         </div>
       </div>
 
       <!-- Step: KYC -->
       <div *ngIf="currentStep === 'kyc'" class="step-content">
         <div class="step-header">
-          <h2>Verificación Biométrica</h2>
+          <h2 tabindex="-1">Verificación Biométrica</h2>
           <p>{{ kycValidation.tooltipMessage }}</p>
         </div>
 
@@ -349,19 +371,25 @@ interface OnboardingForm {
         </div>
 
         <div class="step-actions">
-          <button class="btn-secondary" (click)="previousStep()">Atrás</button>
-          <button class="btn-primary" 
-                  [disabled]="!canProceedToContracts()"
-                  (click)="nextStep()">
-            Continuar a Contratos
-          </button>
+          <button class="btn-secondary" aria-label="Volver" (click)="previousStep()">Atrás</button>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="cta-pill" *ngIf="true">Siguiente: Generar Contrato</span>
+            <div style="display:flex; flex-direction:column; align-items:flex-end;">
+              <button class="btn-primary" 
+                      [disabled]="!canProceedToContracts()"
+                      (click)="nextStep()">
+                Continuar a Contratos
+              </button>
+              <small class="cta-hint" *ngIf="!canProceedToContracts()" aria-live="polite">Completa la verificación biométrica para continuar.</small>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Step: Contracts -->
       <div *ngIf="currentStep === 'contracts'" class="step-content">
         <div class="step-header">
-          <h2>Generación de Contratos</h2>
+          <h2 tabindex="-1">Generación de Contratos</h2>
           <p>Genera y envía los contratos correspondientes</p>
         </div>
 
@@ -408,7 +436,7 @@ interface OnboardingForm {
         </div>
 
         <div class="step-actions">
-          <button class="btn-secondary" (click)="previousStep()">Atrás</button>
+          <button class="btn-secondary" aria-label="Volver" (click)="previousStep()">Atrás</button>
           <button class="btn-primary" 
                   [disabled]="!contractMessage"
                   (click)="nextStep()">
@@ -421,7 +449,7 @@ interface OnboardingForm {
       <div *ngIf="currentStep === 'completed'" class="step-content">
         <div class="completion-container">
           <div class="completion-icon">🎉</div>
-          <h2>¡Onboarding Completado!</h2>
+          <h2 tabindex="-1">¡Onboarding Completado!</h2>
           <p>La oportunidad ha sido creada exitosamente</p>
           
           <div class="completion-summary" *ngIf="currentClient">
@@ -471,6 +499,37 @@ interface OnboardingForm {
     </div>
   `,
   styles: [`
+    .draft-banner {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      color: #92400e;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+    .draft-banner-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .draft-banner-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .cta-pill {
+      background: #e5e7eb;
+      color: #374151;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .cta-hint {
+      color: #6b7280;
+      margin-top: 6px;
+      font-size: 12px;
+    }
     .onboarding-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -1208,6 +1267,10 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   contractValidation: { canGenerate: boolean; missingRequirements: string[]; warningMessages: string[] } = { canGenerate: false, missingRequirements: [], warningMessages: [] };
   contractMessage = '';
   isGeneratingContract = false;
+  // Draft recovery
+  private draftSave$ = new Subject<void>();
+  draftFound = false;
+  private readonly draftKey = 'onboardingDraft';
 
   constructor(
     private onboardingEngine: OnboardingEngineService,
@@ -1220,6 +1283,18 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    // Restore draft if present
+    const saved = localStorage.getItem(this.draftKey);
+    if (saved) {
+      this.draftFound = true;
+    }
+
+    // Debounced draft save
+    this.draftSave$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      // Debounce manually via setTimeout pattern replaced by Subject usage in handlers
+    });
+
+    // Use a debounced save with setTimeout logic encapsulated in scheduleDraftSave
     // Load available ecosystems
     this.loadAvailableEcosystems();
 
@@ -1280,6 +1355,16 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.updateContractValidation();
         break;
     }
+    // Focus active step title for A11y
+    setTimeout(() => {
+      const heading = document.querySelector('.step-content .step-header h2') as HTMLElement | null;
+      if (heading) {
+        heading.setAttribute('tabindex', '-1');
+        heading.focus();
+      }
+    }, 0);
+    // Schedule draft save on step change
+    this.scheduleDraftSave();
   }
 
   // Step validation
@@ -1330,12 +1415,14 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
 
   onSaleTypeChange(): void {
     this.form.clientType = '';
+    this.onFormChange();
   }
 
   onEcosystemChange(): void {
     if (this.form.ecosystemId !== '__NEW_ROUTE__') {
       this.newRouteName = '';
     }
+    this.onFormChange();
   }
 
   loadAvailableEcosystems(): void {
@@ -1358,16 +1445,22 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     if (this.form.memberNames.length < 10) {
       this.form.memberNames.push('');
     }
+    this.onFormChange();
   }
 
   removeMember(index: number): void {
     if (this.form.memberNames.length > 5) {
       this.form.memberNames.splice(index, 1);
     }
+    this.onFormChange();
   }
 
   // Client creation
   createClient(): void {
+    if (!this.canProceedFromClientInfo()) {
+      this.focusFirstInvalidClientInfoField();
+      return;
+    }
     if (this.form.clientType === 'colectivo') {
       this.createCollectiveGroup();
     } else {
@@ -1450,7 +1543,13 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   updateDocumentProgress(): void {
     if (!this.currentClient) return;
     this.documentProgress = this.documentReqs.getDocumentCompletionStatus(this.currentClient.documents);
-    this.kycValidation = this.documentReqs.validateKycPrerequisites(this.currentClient.documents);
+    const kyc = this.metamap.validateKycPrerequisites(this.currentClient);
+    this.kycValidation = { 
+      canStartKyc: kyc.canStartKyc, 
+      isKycComplete: kyc.isKycComplete, 
+      missingDocs: kyc.missingDocs, 
+      tooltipMessage: kyc.tooltipMessage 
+    };
   }
 
   attemptDocumentUpload(fileInput: HTMLInputElement, documentId: string): void {
@@ -1544,7 +1643,13 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   updateKycStatus(): void {
     if (!this.currentClient) return;
     
-    this.kycValidation = this.documentReqs.validateKycPrerequisites(this.currentClient.documents);
+    const kyc = this.metamap.validateKycPrerequisites(this.currentClient);
+    this.kycValidation = { 
+      canStartKyc: kyc.canStartKyc, 
+      isKycComplete: kyc.isKycComplete, 
+      missingDocs: kyc.missingDocs, 
+      tooltipMessage: kyc.tooltipMessage 
+    };
     this.kycStatus = this.metamap.getKycStatus(this.currentClient);
     
     // Initialize MetaMap if ready
@@ -1656,6 +1761,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     this.currentStepIndex = 0;
     this.contractMessage = '';
     this.isGeneratingContract = false;
+    this.clearDraft();
   }
 
   // Inline validators for template-driven client_info step
@@ -1676,5 +1782,83 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     if (!value) return true;
     const rfcRegex = /^[A-ZÑ&]{3,4}[0-9]{6}[A-V1-9][A-Z1-9][0-9A]$/;
     return rfcRegex.test(value.toUpperCase().replace(/\s/g, ''));
+  }
+  private focusFirstInvalidClientInfoField(): void {
+    if (this.form.clientType === 'colectivo') {
+      if (!this.form.groupName?.trim()) {
+        document.getElementById('groupName')?.focus();
+        return;
+      }
+      const firstEmptyIndex = this.form.memberNames.findIndex(name => !name?.trim());
+      if (firstEmptyIndex >= 0) {
+        const inputs = document.querySelectorAll('.member-inputs input');
+        const target = inputs.item(firstEmptyIndex) as HTMLElement | null;
+        target?.focus();
+        return;
+      }
+    } else {
+      if (!this.form.name?.trim()) {
+        document.getElementById('name')?.focus();
+        return;
+      }
+      if (!this.form.email?.trim() || !this.isValidEmail(this.form.email)) {
+        document.getElementById('email')?.focus();
+        return;
+      }
+      if (!this.form.phone?.trim() || !this.isValidMexicanPhone(this.form.phone)) {
+        document.getElementById('phone')?.focus();
+        return;
+      }
+      if (this.form.rfc && !this.isValidRFC(this.form.rfc)) {
+        document.getElementById('rfc')?.focus();
+        return;
+      }
+    }
+  }
+
+  // Draft handling helpers
+  onFormChange(): void {
+    this.scheduleDraftSave();
+  }
+
+  private scheduleDraftSave(): void {
+    // Debounce via timeout per requirement (500ms)
+    clearTimeout((this as any)._draftTimer);
+    (this as any)._draftTimer = setTimeout(() => this.performDraftSave(), 500);
+  }
+
+  private performDraftSave(): void {
+    const draft = {
+      form: this.form,
+      currentStep: this.currentStep,
+      currentStepIndex: this.currentStepIndex
+    };
+    try {
+      localStorage.setItem(this.draftKey, JSON.stringify(draft));
+    } catch { /* ignore quota errors */ }
+  }
+
+  continueDraft(): void {
+    const saved = localStorage.getItem(this.draftKey);
+    if (!saved) return;
+    try {
+      const draft = JSON.parse(saved);
+      if (draft.form) this.form = draft.form;
+      if (typeof draft.currentStepIndex === 'number') {
+        this.currentStepIndex = draft.currentStepIndex;
+        this.currentStep = this.steps[this.currentStepIndex].id as OnboardingStep;
+      }
+      this.draftFound = false;
+      this.onStepChange();
+    } catch { /* ignore parse errors */ }
+  }
+
+  private clearDraft(): void {
+    try { localStorage.removeItem(this.draftKey); } catch { /* ignore */ }
+    this.draftFound = false;
+  }
+
+  discardDraft(): void {
+    this.clearDraft();
   }
 }

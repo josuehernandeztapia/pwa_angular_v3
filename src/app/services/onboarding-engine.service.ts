@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Actor, Document as AppDocument, BusinessFlow, Client, EventType } from '../models/types';
+import { Actor, Document as AppDocument, BusinessFlow, Client, EventType, DOC_NAME_INE, DOC_NAME_COMPROBANTE, DOC_NAME_KYC_CONTAINS } from '../models/types';
 import { ClientDataService } from './data/client-data.service';
 import { DocumentRequirementsService } from './document-requirements.service';
 
@@ -346,9 +346,9 @@ export class OnboardingEngineService {
     const kycValidation = this.documentReqs.validateKycPrerequisites(client.documents);
     
     // Check if core documents are approved (prerequisite for KYC)
-    const ine = client.documents.find(d => d.name === 'INE Vigente');
-    const comprobante = client.documents.find(d => d.name === 'Comprobante de domicilio');
-    const kyc = client.documents.find(d => d.name.includes('Verificación Biométrica'));
+    const ine = client.documents.find(d => d.name === DOC_NAME_INE);
+    const comprobante = client.documents.find(d => d.name === DOC_NAME_COMPROBANTE);
+    const kyc = client.documents.find(d => d.name.includes(DOC_NAME_KYC_CONTAINS));
     
     const coreDocsApproved = ine?.status === 'Aprobado' && comprobante?.status === 'Aprobado';
     const isKycComplete = kyc?.status === 'Aprobado';
