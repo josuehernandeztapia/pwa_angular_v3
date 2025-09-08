@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RouterModule, Router, ActivatedRoute } from '@angular/router';
-import { CustomValidators } from '../../../validators/custom-validators';
-import { BusinessFlow, Market } from '../../../models/types';
-import { ApiService } from '../../../services/api.service';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { ApiService } from '../../../services/api.service';
+import { CustomValidators } from '../../../validators/custom-validators';
 
 // Dynamic Wizard Step Interface
 interface WizardStep {
@@ -195,7 +194,7 @@ interface WizardStep {
                     class="form-input whatsapp-field"
                     [class.error]="isFieldInvalid('phone')"
                     placeholder="55 1234 5678"
-                    maxlength="12"
+                    maxlength="16"
                   >
                   <span class="whatsapp-icon">💬</span>
                 </div>
@@ -203,16 +202,14 @@ interface WizardStep {
                   <span *ngIf="opportunityForm.get('phone')?.errors?.['required']">
                     El número de WhatsApp es requerido para contacto
                   </span>
-                  <span *ngIf="opportunityForm.get('phone')?.errors?.['mexicanPhone']">
-                    Formato inválido. Ej: 55 1234 5678
-                  </span>
+                  <span *ngIf="opportunityForm.get('phone')?.errors?.['mexicanPhone']">Debe contener 10 dígitos</span>
                 </div>
               </div>
 
               <div class="form-group secondary-contact">
                 <label for="email" class="secondary-label">
                   📧 Email
-                  <span class="contact-optional">Opcional</span>
+                  <span class="contact-optional" *ngIf="!requiresClientContactData()">Opcional</span>
                 </label>
                 <input
                   id="email"
@@ -223,9 +220,34 @@ interface WizardStep {
                   placeholder="cliente@correo.com"
                 >
                 <div *ngIf="isFieldInvalid('email')" class="error-message">
+                  <span *ngIf="opportunityForm.get('email')?.errors?.['required']">
+                    El email es requerido
+                  </span>
                   <span *ngIf="opportunityForm.get('email')?.errors?.['email']">
                     Formato de email inválido
                   </span>
+                  <span *ngIf="opportunityForm.get('email')?.errors?.['duplicateEmail']">
+                    Este email ya existe en el sistema
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="rfc">RFC <span *ngIf="requiresClientContactData()">*</span></label>
+                <input
+                  id="rfc"
+                  type="text"
+                  formControlName="rfc"
+                  class="form-input"
+                  [class.error]="isFieldInvalid('rfc')"
+                  placeholder="GODE561231GR8"
+                  (input)="opportunityForm.get('rfc')?.setValue(opportunityForm.get('rfc')?.value?.toUpperCase(), { emitEvent: false })"
+                >
+                <div *ngIf="isFieldInvalid('rfc')" class="error-message">
+                  <span *ngIf="opportunityForm.get('rfc')?.errors?.['required']">El RFC es requerido</span>
+                  <span *ngIf="opportunityForm.get('rfc')?.errors?.['rfc']">RFC inválido</span>
                 </div>
               </div>
             </div>
@@ -299,6 +321,27 @@ interface WizardStep {
                 </div>
               </div>
 
+              <!-- Sale Type selector (required to gate continue) -->
+              <div class="form-group">
+                <label for="saleType">Tipo de venta *</label>
+                <select
+                  id="saleType"
+                  formControlName="saleType"
+                  class="form-select"
+                  [class.error]="isFieldInvalid('saleType')"
+                  (change)="onSaleTypeChange()"
+                >
+                  <option value="">Seleccionar tipo...</option>
+                  <option value="contado">💵 Contado</option>
+                  <option value="financiero">🏦 Financiero</option>
+                </select>
+                <div *ngIf="isFieldInvalid('saleType')" class="error-message">
+                  <span *ngIf="opportunityForm.get('saleType')?.errors?.['required']">
+                    El tipo de venta es requerido
+                  </span>
+                </div>
+              </div>
+
               <!-- Municipality selector (only for EdoMex) -->
               <div class="form-group" *ngIf="marketValue === 'edomex'">
                 <label for="municipality">Municipio *</label>
@@ -364,7 +407,7 @@ interface WizardStep {
               </div>
 
               <div class="form-group">
-                <label for="clientType">Tipo de Cliente *</label>
+                <label for="clientType">Tipo de Cliente <span *ngIf="requiresClientType()">*</span></label>
                 <select
                   id="clientType"
                   formControlName="clientType"
@@ -376,9 +419,7 @@ interface WizardStep {
                   <option value="Colectivo">👥 Colectivo (Tanda)</option>
                 </select>
                 <div *ngIf="isFieldInvalid('clientType')" class="error-message">
-                  <span *ngIf="opportunityForm.get('clientType')?.errors?.['required']">
-                    El tipo de cliente es requerido
-                  </span>
+                  <span *ngIf="opportunityForm.get('clientType')?.errors?.['required']">El tipo de cliente es requerido para Financiero en EdoMex</span>
                 </div>
               </div>
             </div>
@@ -1304,9 +1345,11 @@ export class NuevaOportunidadComponent implements OnInit {
       clientName: ['', [Validators.required, CustomValidators.clientName]],
       phone: ['', [Validators.required, CustomValidators.mexicanPhone]],
       email: ['', [Validators.email]],
+      rfc: ['', []],
       market: [this.smartContext.market || '', [Validators.required]], // Smart pre-population
       municipality: [''], // Required only for EdoMex
-      clientType: ['', [Validators.required]],
+      saleType: ['', [Validators.required]],
+      clientType: [''],
       ecosystem: [''], // Dynamic field for EdoMex
       notes: ['']
     });
@@ -1449,6 +1492,8 @@ export class NuevaOportunidadComponent implements OnInit {
   private validateClientInfo(): boolean {
     const clientName = this.opportunityForm.get('clientName');
     const phone = this.opportunityForm.get('phone');
+    const email = this.opportunityForm.get('email');
+    const rfc = this.opportunityForm.get('rfc');
 
     // Basic validation: name is required
     if (!clientName?.value || !clientName.valid) {
@@ -1458,6 +1503,15 @@ export class NuevaOportunidadComponent implements OnInit {
     // Business rule: WhatsApp is now mandatory for all clients
     if (!phone?.value || !phone.valid) {
       return false;
+    }
+
+    // If saleType is 'financiero' and market is AGS, require full contact (email + RFC valid)
+    if (this.saleTypeValue === 'financiero') {
+      if (!email?.value || email.invalid) return false;
+      // RFC optional unless financiero: then required and valid
+      if (!rfc?.value) return false;
+      const rfcError = CustomValidators.rfc(rfc as any);
+      if (rfcError) return false;
     }
 
     return true;
@@ -1484,18 +1538,20 @@ export class NuevaOportunidadComponent implements OnInit {
   private validateMarketConfiguration(): boolean {
     const market = this.marketValue;
     const clientType = this.clientTypeValue;
+    const saleType = this.saleTypeValue;
 
-    if (!market || !clientType) {
+    if (!market || !saleType) {
       return false;
     }
 
-    // Business rule: Validate market-clientType combinations
-    if (market === 'aguascalientes') {
+    // If EdoMex + Financiero, clientType is required and must be valid
+    if (market === 'edomex' && saleType === 'financiero') {
       return ['Individual', 'Colectivo'].includes(clientType);
     }
 
-    if (market === 'edomex') {
-      return ['Individual', 'Colectivo'].includes(clientType);
+    // Otherwise, clientType may be empty (validated later in onboarding)
+    if (market === 'aguascalientes' || market === 'edomex') {
+      return true;
     }
 
     return false;
@@ -1513,7 +1569,7 @@ export class NuevaOportunidadComponent implements OnInit {
     }
 
     // Business rule: Validate ecosystem availability
-    const validEcosystems = ['comercial', 'industrial', 'residencial'];
+    const validEcosystems = this.getAvailableEcosystems().map(e => e.id);
     return validEcosystems.includes(ecosystem);
   }
 
@@ -1625,6 +1681,10 @@ export class NuevaOportunidadComponent implements OnInit {
     return this.opportunityForm.get('clientType')?.value || '';
   }
 
+  get saleTypeValue(): string {
+    return this.opportunityForm.get('saleType')?.value || '';
+  }
+
   get municipalityValue(): string {
     return this.opportunityForm.get('municipality')?.value || '';
   }
@@ -1652,6 +1712,28 @@ export class NuevaOportunidadComponent implements OnInit {
       this.opportunityForm.get('municipality')?.clearValidators();
     }
     this.opportunityForm.get('municipality')?.updateValueAndValidity();
+
+    // Client type is required only for EdoMex + Financiero
+    this.updateClientTypeRequirement();
+  }
+
+  onSaleTypeChange(): void {
+    this.updateClientTypeRequirement();
+  }
+
+  requiresClientType(): boolean {
+    return this.marketValue === 'edomex' && this.saleTypeValue === 'financiero';
+  }
+
+  private updateClientTypeRequirement(): void {
+    const clientTypeControl = this.opportunityForm.get('clientType');
+    if (!clientTypeControl) return;
+    if (this.requiresClientType()) {
+      clientTypeControl.setValidators([Validators.required]);
+    } else {
+      clientTypeControl.clearValidators();
+    }
+    clientTypeControl.updateValueAndValidity({ emitEvent: false });
   }
 
   // === DYNAMIC WIZARD HELPER METHODS ===
@@ -1663,13 +1745,14 @@ export class NuevaOportunidadComponent implements OnInit {
     const market = this.marketValue;
     const clientType = this.clientTypeValue;
     const opportunityType = this.opportunityType;
+    const saleType = this.saleTypeValue;
 
     switch (stepType) {
       case 'market':
         return !!opportunityType;
       
       case 'ecosystem':
-        return market === 'edomex' && !!clientType;
+        return market === 'edomex' && (!!clientType || saleType !== 'financiero');
       
       
       default:
@@ -1923,6 +2006,8 @@ export class NuevaOportunidadComponent implements OnInit {
         }
       };
 
+      // Normalize phone to digits for persistence and downstream flows
+      enhancedClientData.phone = String(this.opportunityForm.get('phone')?.value || '').replace(/\D/g, '');
       // Real API Integration
       this.apiService.createClient(enhancedClientData).subscribe({
         next: (createdClient) => {
@@ -1967,7 +2052,10 @@ export class NuevaOportunidadComponent implements OnInit {
       clientId: createdClient?.id,
       clientName: this.clientNameValue,
       source: 'nueva-oportunidad',
-      smartContext: this.smartContext
+      smartContext: this.smartContext,
+      market: this.marketValue,
+      clientType: this.clientTypeValue ? this.clientTypeValue.toLowerCase() : (this.marketValue === 'edomex' ? 'individual' : 'individual'),
+      businessFlow: this.getBusinessFlowLabel()
     };
 
     if (this.opportunityType === 'COTIZACION') {
@@ -1987,7 +2075,7 @@ export class NuevaOportunidadComponent implements OnInit {
         });
       }
     } else {
-      // Simulador routing with business rules
+      // Simulador or Onboarding/Document Upload based on context
       if (this.marketValue === 'aguascalientes') {
         this.router.navigate(['/simulador/ags-ahorro'], {
           queryParams: navigationContext

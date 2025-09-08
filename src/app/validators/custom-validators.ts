@@ -1,4 +1,4 @@
-import { AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class CustomValidators {
   
@@ -86,13 +86,14 @@ export class CustomValidators {
    */
   static mexicanPhone(control: AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
-    
-    const phoneRegex = /^(\+52\s?)?(\d{2}\s?\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/;
-    
-    if (!phoneRegex.test(control.value)) {
-      return { mexicanPhone: { value: control.value } };
+
+    // Normalize to digits only and require exactly 10 digits (MX standard)
+    const digitsOnly = String(control.value).replace(/\D/g, '');
+
+    if (digitsOnly.length !== 10) {
+      return { mexicanPhone: { value: control.value, reason: 'length', requiredLength: 10, actualLength: digitsOnly.length } };
     }
-    
+
     return null;
   }
 
@@ -101,15 +102,17 @@ export class CustomValidators {
    */
   static rfc(control: AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
-    
-    // Simplified RFC validation (real validation is more complex)
-    const rfcRegex = /^[A-ZÑ&]{3,4}[0-9]{6}[A-V1-9][A-Z1-9][0-9A]$/;
+
     const value = control.value.toUpperCase().replace(/\s/g, '');
-    
-    if (!rfcRegex.test(value)) {
+    // RFC for Personas Físicas (PF): 4 letters + 6 digits (YYMMDD) + 3 alphanumeric
+    const rfcPFRegex = /^[A-ZÑ&]{4}\d{6}[A-Z0-9]{3}$/;
+    // RFC for Personas Morales (PM): 3 letters + 6 digits (YYMMDD) + 3 alphanumeric
+    const rfcPMRegex = /^[A-ZÑ&]{3}\d{6}[A-Z0-9]{3}$/;
+
+    if (!rfcPFRegex.test(value) && !rfcPMRegex.test(value)) {
       return { rfc: { value: control.value } };
     }
-    
+
     return null;
   }
 
