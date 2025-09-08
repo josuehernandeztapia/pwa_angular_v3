@@ -1,14 +1,14 @@
 <!-- AVI Interview Component -->
-<div class="avi-interview-container">
+<div class="avi-interview-container" [class.is-recording]="isRecording" [class.is-processing]="isProcessingResponse">
   
   <!-- Header con progreso -->
   <div class="interview-header" *ngIf="isInterviewActive || showResults">
     <div class="progress-section">
-      <div class="progress-bar">
+      <div class="progress-bar" aria-label="Progreso de la entrevista" role="progressbar" [attr.aria-valuenow]="progressPercentage | number:'1.0-0'" aria-valuemin="0" [attr.aria-valuemax]="100">
         <div class="progress-fill" [style.width.%]="progressPercentage"></div>
       </div>
       <div class="progress-info">
-        <span class="question-count">{{ answeredQuestions.length }} / {{ totalQuestions }}</span>
+        <span class="question-count">Pregunta {{ currentIndex }} de {{ totalQuestions }}</span>
         <span class="time-remaining" *ngIf="estimatedTimeRemaining > 0">
           ~{{ estimatedTimeRemaining.toFixed(1) }}min restantes
         </span>
@@ -68,14 +68,22 @@
 
       <!-- La pregunta -->
       <div class="question-text">
-        <h2>{{ currentQuestion.question }}</h2>
+        <h2 tabindex="-1" #questionTitle id="question-title">{{ currentQuestion.question }}</h2>
         <div class="question-time">
           Tiempo estimado: {{ currentQuestion.estimatedTime }}s
         </div>
+        <div class="question-hint">Responde con normalidad. No hay respuestas correctas o incorrectas.</div>
       </div>
 
       <!-- Área de respuesta -->
-      <div class="response-area">
+      <div class="response-area" [attr.aria-busy]="isProcessingResponse">
+        <!-- Estados accesibles -->
+        <div class="state-announcer" aria-live="polite">
+          <span class="badge idle" *ngIf="!isRecording && !isProcessingResponse && !lastSavedAt">Listo para grabar</span>
+          <span class="badge recording" *ngIf="isRecording">Grabando… ({{ formatTimeMMSS(recordingSeconds) }})</span>
+          <span class="badge processing" *ngIf="isProcessingResponse">Procesando respuesta…</span>
+          <span class="badge saved" *ngIf="!isRecording && !isProcessingResponse && lastSavedAt">Guardado ✓</span>
+        </div>
         <div class="input-container">
           <textarea 
             [(ngModel)]="currentResponse"
@@ -88,12 +96,27 @@
           <!-- Controles de voz -->
           <div class="voice-controls">
             <button 
-              class="voice-btn" 
+              class="voice-btn"
               [class.recording]="isRecording"
               (click)="toggleRecording()"
-              [disabled]="isProcessingResponse">
-              <span class="voice-icon">{{ isRecording ? '🔴' : '🎤' }}</span>
-              {{ isRecording ? 'Detener' : 'Grabar' }}
+              [disabled]="isRecording || isProcessingResponse"
+              aria-label="Grabar"
+              title="Grabar"
+              (keydown.enter)="$event.preventDefault(); toggleRecording()"
+              (keydown.space)="$event.preventDefault(); toggleRecording()">
+              <span class="voice-icon">🎤</span>
+              Grabar
+            </button>
+            <button 
+              class="voice-btn stop"
+              *ngIf="isRecording"
+              (click)="toggleRecording()"
+              aria-label="Detener"
+              title="Detener"
+              (keydown.enter)="$event.preventDefault(); toggleRecording()"
+              (keydown.space)="$event.preventDefault(); toggleRecording()">
+              <span class="voice-icon">🔴</span>
+              Detener
             </button>
           </div>
         </div>
@@ -118,11 +141,18 @@
           
           <button 
             class="submit-btn"
+            *ngIf="hasResultReady"
             (click)="submitResponse()"
-            [disabled]="!currentResponse.trim() || isProcessingResponse"
-            [class.processing]="isProcessingResponse">
-            {{ isProcessingResponse ? 'Procesando...' : 'Siguiente' }}
+            [disabled]="isProcessingResponse"
+            aria-label="Siguiente"
+            title="Siguiente">
+            Siguiente
           </button>
+        </div>
+
+        <!-- Overlay de procesamiento -->
+        <div class="processing-overlay" *ngIf="isProcessingResponse">
+          <div class="processing-content">Procesando respuesta…</div>
         </div>
 
         <!-- Preguntas de seguimiento (si las hay) -->

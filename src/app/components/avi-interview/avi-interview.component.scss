@@ -4,6 +4,18 @@
   margin: 0 auto;
   padding: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+  &.is-recording {
+    .voice-controls .voice-btn.recording {
+      animation: pulse 1s infinite;
+    }
+  }
+  
+  &.is-processing {
+    .response-area {
+      position: relative;
+    }
+  }
 }
 
 // Header y progreso
@@ -181,9 +193,16 @@
         font-size: 14px;
         color: #666;
       }
+      
+      .question-hint {
+        margin-top: 6px;
+        font-size: 13px;
+        color: #6c757d;
+      }
     }
     
     .response-area {
+      position: relative;
       .input-container {
         margin-bottom: 20px;
         
@@ -213,6 +232,7 @@
           margin-top: 15px;
           display: flex;
           justify-content: center;
+          gap: 10px;
           
           .voice-btn {
             display: flex;
@@ -238,6 +258,12 @@
               border-color: #f44336;
               color: #d32f2f;
               animation: pulse 1s infinite;
+            }
+
+            &.stop {
+              background: #ffebee;
+              border-color: #f44336;
+              color: #d32f2f;
             }
           }
         }
@@ -314,6 +340,44 @@
           &.processing {
             animation: processing 1s infinite;
           }
+        }
+      }
+
+      .state-announcer {
+        margin-bottom: 12px;
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 10px;
+          border-radius: 14px;
+          font-size: 12px;
+          font-weight: 600;
+          &.idle { background: #e8f5e8; color: #2e7d32; }
+          &.recording { background: #ffebee; color: #d32f2f; }
+          &.processing { background: #fff3e0; color: #f57c00; }
+          &.saved { background: #e3f2fd; color: #1976d2; }
+        }
+      }
+
+      .processing-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(255,255,255,0.6);
+        backdrop-filter: blur(1px);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        
+        .processing-content {
+          padding: 8px 12px;
+          border-radius: 14px;
+          background: #fff3e0;
+          color: #f57c00;
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
       }
       

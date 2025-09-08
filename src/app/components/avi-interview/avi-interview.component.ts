@@ -1,19 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Observable, Subject, BehaviorSubject, timer } from 'rxjs';
-import { takeUntil, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Subject, timer } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 
-import { AVIService } from '../../services/avi.service';
-import { AVIDualEngineService, DualEngineResult } from '../../services/avi-dual-engine.service';
-import { OpenAIWhisperService, AVIVoiceResponse } from '../../services/openai-whisper.service';
-import { 
-  AVIQuestionEnhanced, 
-  AVIResponse, 
-  AVIScore, 
-  VoiceAnalysis,
-  AVICategory 
+import {
+  AVIQuestionEnhanced,
+  AVIResponse,
+  AVIScore,
+  VoiceAnalysis
 } from '../../models/types';
+import { AVIDualEngineService, DualEngineResult } from '../../services/avi-dual-engine.service';
+import { AVIService } from '../../services/avi.service';
+import { AVIVoiceResponse, OpenAIWhisperService } from '../../services/openai-whisper.service';
 
 @Component({
   selector: 'app-avi-interview',
@@ -31,6 +30,14 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   currentResponse = '';
   questionStartTime = 0;
   isRecording = false;
+  @ViewChild('questionTitle') questionTitleEl?: ElementRef<HTMLElement>;
+  
+  // UI timer de grabación
+  recordingSeconds = 0;
+  private recordingTimerId: any = null;
+  
+  // UI saved feedback
+  lastSavedAt: number | null = null;
   
   // Progress tracking
   answeredQuestions: AVIResponse[] = [];
@@ -65,16 +72,31 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.stopRecordingTimer();
   }
 
   private initializeComponent() {
     // Suscribirse a cambios en respuestas para actualizar progreso
     this.aviService.getCurrentResponses()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(responses => {
+      .subscribe((responses: AVIResponse[]) => {
         this.answeredQuestions = responses;
         this.updateProgress();
       });
+  }
+
+  /**
+   * Índice actual (Pregunta X de Y)
+   */
+  get currentIndex(): number {
+    return this.answeredQuestions.length + (this.currentQuestion ? 1 : 0);
+  }
+
+  /**
+   * Resultado listo para avanzar
+   */
+  get hasResultReady(): boolean {
+    return !!this.currentResponse && this.currentResponse.trim().length > 0 && !this.isProcessingResponse;
   }
 
   /**
@@ -83,7 +105,7 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   startInterview() {
     this.aviService.startSession()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(sessionId => {
+      .subscribe((sessionId: string) => {
         this.currentSession = sessionId;
         this.isInterviewActive = true;
         this.showResults = false;
@@ -98,12 +120,16 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   private loadNextQuestion() {
     this.aviService.getNextQuestion()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(question => {
+      .subscribe((question: AVIQuestionEnhanced | null) => {
         if (question) {
           this.currentQuestion = question;
           this.currentResponse = '';
           this.questionStartTime = Date.now();
           this.resetStressIndicators();
+          // Enfocar el enunciado de la nueva pregunta para accesibilidad
+          setTimeout(() => {
+            this.questionTitleEl?.nativeElement?.focus?.();
+          }, 0);
         } else {
           // Entrevista completada
           this.completeInterview();
@@ -133,10 +159,14 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
 
     this.aviService.submitResponse(aviResponse)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(success => {
+      .subscribe((success: boolean) => {
         if (success) {
           this.isProcessingResponse = false;
-          this.loadNextQuestion();
+          this.lastSavedAt = Date.now();
+          // Pequeño retraso para estabilidad visual antes de avanzar
+          setTimeout(() => {
+            this.loadNextQuestion();
+          }, 300);
         }
       });
   }
@@ -151,10 +181,10 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
     // Ejecutar análisis con dual engine
     this.dualEngine.calculateDualEngineScore(this.answeredQuestions)
       .pipe(
-        switchMap(result => result), // Unwrap Promise
+        switchMap((result: Promise<DualEngineResult>) => result), // Unwrap Promise
         takeUntil(this.destroy$)
       )
-      .subscribe(result => {
+      .subscribe((result: DualEngineResult) => {
         this.dualEngineResult = result;
         this.currentScore = result.consolidatedScore;
         this.isAnalyzing = false;
@@ -178,6 +208,7 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
     
     console.log('🎤 Iniciando grabación real con Whisper');
     this.isRecording = true;
+    this.startRecordingTimer();
     
     this.whisperService.recordAndTranscribeQuestion(
       this.currentQuestion.id,
@@ -204,7 +235,7 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
           }
         }
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error en grabación:', error);
         this.isRecording = false;
         // Fallback a método simulado
@@ -215,6 +246,7 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
 
   private async stopRealVoiceRecording() {
     this.isRecording = false;
+    this.stopRecordingTimer();
     console.log('🛑 Deteniendo grabación');
     // La transcripción se maneja automáticamente en el observable
   }
@@ -241,6 +273,7 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
     }
     
     this.isRecording = false;
+    this.stopRecordingTimer();
   }
 
   /**
@@ -417,5 +450,50 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
       return `${minutes}m ${remainingSeconds}s`;
     }
     return `${remainingSeconds}s`;
+  }
+
+  /**
+   * Formatear mm:ss
+   */
+  formatTimeMMSS(totalSeconds: number): string {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const mm = minutes.toString().padStart(2, '0');
+    const ss = seconds.toString().padStart(2, '0');
+    return `${mm}:${ss}`;
+  }
+
+  /**
+   * Iniciar temporizador de grabación (UI)
+   */
+  private startRecordingTimer() {
+    this.recordingSeconds = 0;
+    this.stopRecordingTimer();
+    this.recordingTimerId = setInterval(() => {
+      if (this.isRecording) {
+        this.recordingSeconds++;
+      }
+    }, 1000);
+  }
+
+  /**
+   * Detener temporizador de grabación (UI)
+   */
+  private stopRecordingTimer() {
+    if (this.recordingTimerId) {
+      clearInterval(this.recordingTimerId);
+      this.recordingTimerId = null;
+    }
+  }
+
+  /**
+   * Atajos de teclado: flecha derecha para "Siguiente" cuando corresponde
+   */
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent) {
+    if (event.key === 'ArrowRight' && this.hasResultReady && this.isInterviewActive) {
+      event.preventDefault();
+      this.submitResponse();
+    }
   }
 }
