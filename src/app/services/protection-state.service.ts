@@ -1,20 +1,18 @@
-import { Injectable, signal, computed, inject, effect } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { EMPTY, Subject, switchMap, tap, finalize, startWith, catchError } from 'rxjs';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { catchError, EMPTY, finalize, Subject, switchMap, tap } from 'rxjs';
 
+import {
+  getValidTransitions,
+  HealthTriggerEvent,
+  PROTECTION_STATE_DESCRIPTIONS,
+  ProtectionPlan,
+  ProtectionScenario,
+  ProtectionSelectRequest,
+  ProtectionSimulateRequest,
+  ProtectionState as ProtectionStateEnum
+} from '../models/protection';
 import { ProtectionService } from './protection.service';
 import { ToastService } from './toast.service';
-import { 
-  ProtectionPlan, 
-  ProtectionScenario, 
-  ProtectionState as ProtectionStateEnum,
-  ProtectionSimulateRequest,
-  ProtectionSelectRequest,
-  HealthTriggerEvent,
-  canTransition,
-  getValidTransitions,
-  PROTECTION_STATE_DESCRIPTIONS
-} from '../models/protection';
 
 @Injectable({
   providedIn: 'root'

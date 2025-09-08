@@ -1,11 +1,10 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, BehaviorSubject, timer, switchMap, takeUntil, Subject } from 'rxjs';
-import { map, filter, catchError, tap } from 'rxjs/operators';
-import { Client, BusinessFlow, Market } from '../models/types';
-import { Contract } from './contract.service';
-import { AhorroIndividual, AhorroColectivo } from './ahorro-service';
-import { DeliveryOrder, Market as DeliveryMarket } from '../models/deliveries';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, Observable, Subject, of, switchMap, takeUntil, timer } from 'rxjs';
+import { catchError, filter, map, tap } from 'rxjs/operators';
+import { Market as DeliveryMarket, DeliveryOrder } from '../models/deliveries';
+import { BusinessFlow, Market } from '../models/types';
+import { round2 } from '../utils/math.util';
 import { DeliveriesService } from './deliveries.service';
 
 declare global {
@@ -269,18 +268,18 @@ export class ContractTriggersService {
       tandaAnalyses: TandaPredictiveAnalysis[];
     }>(`${this.baseUrl}/v1/triggers/pending-analysis`)
       .pipe(
-        switchMap(({ contractSummaries, tandaAnalyses }) => {
+        switchMap(({ contractSummaries, tandaAnalyses }: { contractSummaries: ContractPaymentSummary[]; tandaAnalyses: TandaPredictiveAnalysis[]; }) => {
           const triggerPromises: Promise<TriggerEvent | null>[] = [];
           
           // Procesar triggers de contratos individuales
-          contractSummaries.forEach(summary => {
+          contractSummaries.forEach((summary: ContractPaymentSummary) => {
             if (!summary.deliveryOrderTriggered && summary.thresholdReached) {
               triggerPromises.push(this.processTriggerForContract(summary).toPromise().then(v => v ?? null));
             }
           });
           
           // Procesar triggers de tandas
-          tandaAnalyses.forEach(analysis => {
+          tandaAnalyses.forEach((analysis: TandaPredictiveAnalysis) => {
             if (!analysis.deliveryOrderTriggered && analysis.triggerReady) {
               triggerPromises.push(this.processTriggerForTanda(analysis).toPromise().then(v => v ?? null));
             }
@@ -288,7 +287,7 @@ export class ContractTriggersService {
           
           return Promise.all(triggerPromises);
         }),
-        map(events => events.filter(e => e !== null) as TriggerEvent[]),
+        map((events: Array<TriggerEvent | null>) => events.filter((e: TriggerEvent | null) => e !== null) as TriggerEvent[]),
         tap(events => {
           if (events.length > 0) {
             console.log(`✅ ContractTriggers: Procesados ${events.length} triggers`);
@@ -318,7 +317,7 @@ export class ContractTriggersService {
       triggerAmount: summary.currentPaidAmount,
       thresholdAmount: summary.thresholdAmount
     }).pipe(
-      map(deliveryOrder => {
+      map((deliveryOrder: DeliveryOrder) => {
         const triggerEvent: TriggerEvent = {
           id: `trigger-${Date.now()}-${summary.contractId}`,
           clientId: summary.clientId,
@@ -328,7 +327,7 @@ export class ContractTriggersService {
           triggerDate: new Date(),
           thresholdAmount: summary.thresholdAmount,
           actualAmount: summary.currentPaidAmount,
-          triggerPercentage: summary.thresholdPercentage,
+          triggerPercentage: summary.thresholdAmount > 0 ? round2((summary.currentPaidAmount / summary.thresholdAmount) * 100) : 0,
           deliveryOrderCreated: true,
           deliveryOrderId: deliveryOrder.id,
           processedBy: 'system',
@@ -344,7 +343,7 @@ export class ContractTriggersService {
 
         return triggerEvent;
       }),
-      catchError(error => {
+      catchError((error: any) => {
         const triggerEvent: TriggerEvent = {
           id: `trigger-error-${Date.now()}-${summary.contractId}`,
           clientId: summary.clientId,
@@ -384,7 +383,7 @@ export class ContractTriggersService {
 
     // Para tandas, creamos la orden para el grupo completo
     return this.createDeliveryOrderForTanda(analysis).pipe(
-      map(deliveryOrder => {
+      map((deliveryOrder: DeliveryOrder) => {
         const triggerEvent: TriggerEvent = {
           id: `trigger-tanda-${Date.now()}-${analysis.tandaId}`,
           clientId: 'group', // Grupo colectivo
@@ -394,7 +393,7 @@ export class ContractTriggersService {
           triggerDate: new Date(),
           thresholdAmount: analysis.projectedFirstEnganche,
           actualAmount: analysis.totalCollected,
-          triggerPercentage: analysis.confidenceLevel * 100,
+          triggerPercentage: round2(analysis.confidenceLevel * 100),
           deliveryOrderCreated: true,
           deliveryOrderId: deliveryOrder.id,
           processedBy: 'system',
@@ -410,7 +409,7 @@ export class ContractTriggersService {
 
         return triggerEvent;
       }),
-      catchError(error => {
+      catchError((error: any) => {
         const triggerEvent: TriggerEvent = {
           id: `trigger-tanda-error-${Date.now()}-${analysis.tandaId}`,
           clientId: 'group',

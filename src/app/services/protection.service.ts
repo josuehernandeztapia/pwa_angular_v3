@@ -1,18 +1,18 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, throwError, map } from 'rxjs';
-import { 
-  ProtectionPlan, 
-  ProtectionScenario,
-  ProtectionSimulateRequest,
-  ProtectionSimulateResponse,
-  ProtectionSelectRequest,
-  ProtectionApprovalRequest,
-  ProtectionDenialRequest,
-  ProtectionSignRequest,
+import { Injectable, inject } from '@angular/core';
+import { Observable, catchError, map, throwError } from 'rxjs';
+import {
+  HealthTriggerEvent,
   ProtectionApplicationRequest,
   ProtectionApplicationResponse,
-  HealthTriggerEvent,
+  ProtectionApprovalRequest,
+  ProtectionDenialRequest,
+  ProtectionPlan,
+  ProtectionScenario,
+  ProtectionSelectRequest,
+  ProtectionSignRequest,
+  ProtectionSimulateRequest,
+  ProtectionSimulateResponse,
   ProtectionState,
   canTransition
 } from '../models/protection';
