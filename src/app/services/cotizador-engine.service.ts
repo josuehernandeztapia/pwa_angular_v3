@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { BusinessFlow, Market, Quote } from '../models/types';
-import { round2, toAnnualFromMonthly } from '../utils/math.util';
+import { monthsToYearsCeil, round2, toAnnualFromMonthly } from '../utils/math.util';
 import { FinancialCalculatorService } from './financial-calculator.service';
 
 // Port exacto de React getProductPackage types
@@ -139,10 +139,10 @@ export class CotizadorEngineService {
       }
 
       let price = component.price;
-      
-      // Multiply by term if specified (like annual insurance)
+
+      // Multiply by term if specified (like annual insurance). Use safe years calculation
       if (component.isMultipliedByTerm) {
-        const years = Math.ceil(term / 12);
+        const years = monthsToYearsCeil(term);
         price = price * years;
       }
 
@@ -173,21 +173,41 @@ export class CotizadorEngineService {
   generateQuoteWithPackage(market: string, selectedOptionals: string[] = [], downPayment: number = 0, term: number = 12): Observable<Quote & { packageData: ProductPackage }> {
     return this.getProductPackage(market).pipe(
       delay(100),
-      map(packageData => {
-        const totalPrice = this.calculatePackagePrice(packageData, term, selectedOptionals);
-        const finalDownPayment = round2(downPayment || (totalPrice * packageData.minDownPaymentPercentage));
-        const amountToFinance = round2(totalPrice - finalDownPayment);
-        
-        const monthlyRate = packageData.rate / 12;
-        const monthlyPayment = monthlyRate > 0 
-          ? round2(this.financialCalc.annuity(amountToFinance, monthlyRate, term))
+      map((packageData: ProductPackage) => {
+        // Validate term against package allowed terms (if any)
+        const validatedTerm = (packageData.terms && packageData.terms.length > 0)
+          ? (packageData.terms.includes(term) ? term : packageData.terms[0])
+          : term;
+
+        const totalPrice = this.calculatePackagePrice(packageData, validatedTerm, selectedOptionals);
+
+        // Determine default down payment if not provided
+        let computedDownPayment = downPayment && Number.isFinite(downPayment)
+          ? downPayment
+          : totalPrice * packageData.minDownPaymentPercentage;
+
+        // Clamp down payment within [min, max] if max provided; never >= total price
+        const minDP = round2(totalPrice * packageData.minDownPaymentPercentage);
+        const maxDP = round2(
+          packageData.maxDownPaymentPercentage != null
+            ? totalPrice * packageData.maxDownPaymentPercentage
+            : Math.max(0, totalPrice - 0.01)
+        );
+        const finalDownPayment = round2(Math.min(Math.max(computedDownPayment, minDP), maxDP));
+
+        const amountToFinance = round2(Math.max(0, totalPrice - finalDownPayment));
+
+        // Use nominal monthly rate from annual package rate for consistency with tests and legacy
+        const monthlyRate = packageData.rate > 0 ? packageData.rate / 12 : 0;
+        const monthlyPayment = monthlyRate > 0
+          ? round2(this.financialCalc.annuity(amountToFinance, monthlyRate, validatedTerm))
           : 0; // For direct sales
 
         return {
           totalPrice: round2(totalPrice),
           downPayment: finalDownPayment,
           amountToFinance,
-          term,
+          term: validatedTerm,
           monthlyPayment,
           market: market as Market,
           clientType: packageData.defaultMembers ? 'Colectivo' : 'Individual',

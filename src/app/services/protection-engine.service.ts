@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
-import { ProtectionScenario, Market, Client, EventType } from '../models/types';
+import { delay } from 'rxjs/operators';
+import { Client, EventType, Market, ProtectionScenario } from '../models/types';
+import { round2 } from '../utils/math.util';
 import { FinancialCalculatorService } from './financial-calculator.service';
 
 // Port exacto de getBalance desde React simulationService.ts
@@ -38,8 +39,8 @@ export class ProtectionEngineService {
       return of([]).pipe(delay(100)); // Return empty scenarios for invalid clients
     }
 
-    const P = client.remainderAmount;
-    const M = client.paymentPlan.monthlyPayment || client.paymentPlan.monthlyGoal || 0;
+    const P = Math.max(0, client.remainderAmount);
+    const M = Math.max(0, client.paymentPlan.monthlyPayment || client.paymentPlan.monthlyGoal || 0);
     const market = client.market || 'aguascalientes';
     const r = this.financialCalc.getTIRMin(market) / 12;
     const originalTerm = client.paymentPlan.term || 48;
@@ -51,12 +52,12 @@ export class ProtectionEngineService {
       return of([]).pipe(delay(100));
     }
     
-    const B_k = getBalance(P, M, r, monthsPaid);
+    const B_k = Math.max(0, getBalance(P, M, r, monthsPaid));
     const scenarios: ProtectionScenario[] = [];
 
     // Scenario A: Pausa y Prorrateo (Deferral) - Port exacto líneas 686-697
     const newRemainingTerm_A = remainingTerm - months;
-    const newPayment_A = annuity(B_k, r, newRemainingTerm_A);
+    const newPayment_A = round2(Math.max(0, annuity(B_k, r, newRemainingTerm_A)));
     scenarios.push({
       type: 'defer',
       title: 'Pausa y Prorrateo',
@@ -71,9 +72,9 @@ export class ProtectionEngineService {
     });
 
     // Scenario B: Reducción y Compensación (Step-down) - Port exacto líneas 699-711
-    const reducedPayment = M * 0.5;
-    const principalAfterStepDown = getBalance(B_k, reducedPayment, r, months);
-    const compensationPayment = annuity(principalAfterStepDown, r, remainingTerm - months);
+    const reducedPayment = round2(Math.max(0, M * 0.5));
+    const principalAfterStepDown = Math.max(0, getBalance(B_k, reducedPayment, r, months));
+    const compensationPayment = round2(Math.max(0, annuity(principalAfterStepDown, r, remainingTerm - months)));
     scenarios.push({
       type: 'step-down',
       title: 'Reducción y Compensación',
@@ -97,7 +98,7 @@ export class ProtectionEngineService {
       type: 'recalendar',
       title: 'Extensión de Plazo',
       description: 'Mantener el pago actual y extender el plazo para compensar.',
-      newMonthlyPayment: M,
+      newMonthlyPayment: round2(M),
       newTerm: Math.max(newTerm_C, finalNewTerm_C),
       termChange: Math.max(newTerm_C, finalNewTerm_C) - originalTerm,
       details: [
