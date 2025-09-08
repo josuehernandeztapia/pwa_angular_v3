@@ -1,5 +1,13 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
+// Helper: normalize Mexican phone to last 10 digits, removing non-digits
+export function normalizePhoneMX(input: string | number | null | undefined): string {
+  if (input === null || input === undefined) return '';
+  const digitsOnly = String(input).replace(/\D/g, '');
+  // Keep the last 10 digits in case country code 52 or 521 is present
+  return digitsOnly.length <= 10 ? digitsOnly : digitsOnly.slice(-10);
+}
+
 export class CustomValidators {
   
   /**
@@ -88,7 +96,7 @@ export class CustomValidators {
     if (!control.value) return null;
 
     // Normalize to digits only and require exactly 10 digits (MX standard)
-    const digitsOnly = String(control.value).replace(/\D/g, '');
+    const digitsOnly = normalizePhoneMX(control.value);
 
     if (digitsOnly.length !== 10) {
       return { mexicanPhone: { value: control.value, reason: 'length', requiredLength: 10, actualLength: digitsOnly.length } };
