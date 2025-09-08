@@ -131,10 +131,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
             { label: 'Ahorro Total', value: (currentScenario?.targetAmount | currency:'MXN':'symbol':'1.0-0')! },
             { label: (remainderAmount <= 0 ? 'Validez' : 'Remanente'), value: (remainderAmount | currency:'MXN':'symbol':'1.0-0')!, badge: (remainderAmount <= 0 ? 'success' : 'warning') }
           ]"
-          [actions]="[
-            { label: '📄 PDF', click: () => generatePDF() },
-            { label: '✅ Continuar', click: () => proceedWithScenario() }
-          ]"
+          [actions]="asideActions"
         ></app-summary-panel>
 
         <!-- Results Panel (left column visual details) -->
@@ -1143,6 +1140,10 @@ export class AgsAhorroComponent implements OnInit {
   newPlate = '';
   isLoading = false;
   isSimulating = false;
+  asideActions = [
+    { label: '📄 PDF', click: () => this.generatePDF() },
+    { label: '✅ Continuar', click: () => this.proceedWithScenario() }
+  ];
   
   // Enhanced features
   amortizationTable: any[] = [];
