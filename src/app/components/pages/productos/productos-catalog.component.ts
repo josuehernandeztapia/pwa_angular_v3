@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { CotizadorEngineService, ProductPackage, ProductComponent } from '../../../services/cotizador-engine.service';
+import { CotizadorEngineService, ProductComponent, ProductPackage } from '../../../services/cotizador-engine.service';
 import { ToastService } from '../../../services/toast.service';
+import { EmptyStateCardComponent } from '../../shared/empty-state-card.component';
+import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
 
 interface ProductCatalogItem {
   id: string;
@@ -23,7 +25,7 @@ interface ProductCatalogItem {
 @Component({
   selector: 'app-productos-catalog',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, SkeletonCardComponent, EmptyStateCardComponent],
   template: `
     <div class="productos-container">
       <header class="page-header">
@@ -60,8 +62,9 @@ interface ProductCatalogItem {
 
       <!-- Loading State -->
       <div *ngIf="isLoading" class="loading-container">
-        <div class="loading-spinner"></div>
-        <p>Cargando catálogo de productos...</p>
+        <app-skeleton-card [titleWidth]="50" [subtitleWidth]="70" [buttonWidth]="40"></app-skeleton-card>
+        <app-skeleton-card [titleWidth]="60" [subtitleWidth]="60" [buttonWidth]="35"></app-skeleton-card>
+        <app-skeleton-card [titleWidth]="55" [subtitleWidth]="65" [buttonWidth]="45"></app-skeleton-card>
       </div>
 
       <!-- Catálogo de productos -->
@@ -155,14 +158,16 @@ interface ProductCatalogItem {
       </div>
 
       <!-- Empty State -->
-      <div *ngIf="!isLoading && filteredProducts.length === 0" class="empty-state">
-        <div class="empty-icon">🔍</div>
-        <h3>No hay productos disponibles</h3>
-        <p>No se encontraron productos para los filtros seleccionados</p>
-        <button class="btn-primary" (click)="resetFilters()">
-          Mostrar Todos los Productos
-        </button>
-      </div>
+      <app-empty-state-card
+        *ngIf="!isLoading && filteredProducts.length === 0"
+        icon="🔍"
+        title="Sin resultados"
+        subtitle="No se encontraron productos para los filtros seleccionados"
+        [primaryCtaLabel]="'Mostrar todos'"
+        (primary)="resetFilters()"
+        [secondaryCtaLabel]="'Simular paquetes demo'"
+        (secondary)="simulateDemo()"
+      ></app-empty-state-card>
     </div>
   `,
   styles: [`
@@ -590,6 +595,7 @@ export class ProductosCatalogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.restoreFilters();
     this.loadProducts();
   }
 
@@ -693,11 +699,13 @@ export class ProductosCatalogComponent implements OnInit {
   selectMarket(market: typeof this.selectedMarket): void {
     this.selectedMarket = market;
     this.applyFilters();
+    this.persistFilters();
   }
 
   selectType(type: typeof this.selectedType): void {
     this.selectedType = type;
     this.applyFilters();
+    this.persistFilters();
   }
 
   private applyFilters(): void {
@@ -712,6 +720,7 @@ export class ProductosCatalogComponent implements OnInit {
     this.selectedMarket = 'all';
     this.selectedType = 'all';
     this.filteredProducts = [...this.products];
+    this.persistFilters();
   }
 
   getMarketLabel(market: string): string {
@@ -732,6 +741,29 @@ export class ProductosCatalogComponent implements OnInit {
 
   trackByProductId(index: number, product: ProductCatalogItem): string {
     return product.id;
+  }
+
+  private persistFilters(): void {
+    try {
+      localStorage.setItem('catalog.filters', JSON.stringify({
+        market: this.selectedMarket,
+        type: this.selectedType
+      }));
+    } catch {}
+  }
+
+  private restoreFilters(): void {
+    try {
+      const raw = localStorage.getItem('catalog.filters');
+      if (!raw) return;
+      const { market, type } = JSON.parse(raw);
+      if (market) this.selectedMarket = market;
+      if (type) this.selectedType = type;
+    } catch {}
+  }
+
+  simulateDemo(): void {
+    this.toast.info('Iniciando simulación de paquetes demo...');
   }
 
   viewDetails(productId: string): void {

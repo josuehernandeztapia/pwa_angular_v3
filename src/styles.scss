@@ -47,6 +47,37 @@
   --radius-md: 12px;
   --transition-fast: all 0.3s ease;
   --transition-quick: all 0.2s ease;
+
+  /* UX Tokens - Spacing scale */
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  /* UX Tokens - Radius */
+  --radius-sm: 8px;
+  --radius-lg: 12px;
+
+  /* UX Tokens - Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.25), 0 1px 1px rgba(0,0,0,0.12);
+  --shadow-md: 0 6px 16px rgba(0,0,0,0.35);
+  --shadow-lg: 0 12px 28px rgba(0,0,0,0.45);
+
+  /* UX Tokens - Typography scale */
+  --font-h1-size: 1.75rem;
+  --font-h2-size: 1.5rem;
+  --font-h3-size: 1.25rem;
+  --font-body-size: 1rem;
+  --font-small-size: 0.875rem;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* UX Tokens - Status colors */
+  --state-success: var(--success-500);
+  --state-warning: var(--accent-amber-500);
+  --state-error: var(--error-500);
+  --state-info: var(--primary-cyan-400);
 }
 
 /* ===== GLOBAL RESET & BASE STYLES ===== */
@@ -238,6 +269,70 @@ html.hc body { background: var(--bg); color: var(--text); }
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* ===== Helpers / Utility classes (global) ===== */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  margin-bottom: var(--space-16);
+}
+
+.section-title {
+  font-size: var(--font-h2-size);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.3;
+}
+
+.helper-text {
+  font-size: var(--font-small-size);
+  color: rgba(255,255,255,0.7);
+}
+
+.error-text {
+  font-size: var(--font-small-size);
+  color: var(--state-error);
+}
+
+.btn-sm {
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  border-radius: var(--radius-sm);
+}
+
+.input-sm {
+  padding: 8px 10px;
+  font-size: 0.875rem;
+  border-radius: var(--radius-sm);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-24);
+}
+
+.grid-aside {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--space-24);
+  align-items: start;
+}
+
+.grid-aside > .aside {
+  position: sticky;
+  top: var(--space-24);
+}
+
+/* Premium container helper */
+.premium-container {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-24);
+  padding-right: var(--space-24);
 }
 
 /* Tap targets minimum size */
