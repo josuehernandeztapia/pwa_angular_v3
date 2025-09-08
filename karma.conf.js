@@ -56,9 +56,21 @@ module.exports = function (config) {
     customLaunchers: {
       ChromeHeadlessCI: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox', '--disable-web-security', '--disable-gpu', '--remote-debugging-port=9222']
+        flags: [
+          '--no-sandbox', 
+          '--disable-web-security', 
+          '--disable-gpu', 
+          '--remote-debugging-port=9222',
+          // Memory leak prevention flags
+          '--max-old-space-size=4096',
+          '--gc-interval=100'
+        ]
       }
     },
+    // Memory leak prevention - import test setup
+    files: [
+      { pattern: 'src/test-setup.ts', watched: false }
+    ],
     restartOnFileChange: true,
     singleRun: false,
     logLevel: config.LOG_INFO
