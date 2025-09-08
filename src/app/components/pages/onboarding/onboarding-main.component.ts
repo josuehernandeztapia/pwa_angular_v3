@@ -162,22 +162,40 @@ interface OnboardingForm {
         <div class="form-grid" *ngIf="form.clientType !== 'colectivo'">
           <div class="form-group">
             <label for="name">Nombre Completo *</label>
-            <input id="name" type="text" [(ngModel)]="form.name" required>
+            <input id="name" type="text" [(ngModel)]="form.name" required aria-required="true" [attr.aria-describedby]="'name-error'">
+            <div *ngIf="!form.name" id="name-error" class="error-message" aria-live="polite">
+              El nombre es requerido.
+            </div>
           </div>
 
           <div class="form-group">
             <label for="email">Email *</label>
-            <input id="email" type="email" [(ngModel)]="form.email" required>
+            <input id="email" type="email" [(ngModel)]="form.email" required aria-required="true" [attr.aria-describedby]="'email-error'">
+            <div *ngIf="form.email && !isValidEmail(form.email)" id="email-error" class="error-message" aria-live="polite">
+              Formato de email inválido.
+            </div>
+            <div *ngIf="!form.email" id="email-error" class="error-message" aria-live="polite">
+              El email es requerido.
+            </div>
           </div>
 
           <div class="form-group">
             <label for="phone">Teléfono *</label>
-            <input id="phone" type="tel" [(ngModel)]="form.phone" required>
+            <input id="phone" type="tel" [(ngModel)]="form.phone" required aria-required="true" [attr.aria-describedby]="'phone-error'" pattern="^(\\+52\\s?)?(\\d{2}\\s?\\d{4}\\s?\\d{4}|\\d{3}\\s?\\d{3}\\s?\\d{4})$" placeholder="55 1234 5678">
+            <div *ngIf="form.phone && !isValidMexicanPhone(form.phone)" id="phone-error" class="error-message" aria-live="polite">
+              Formato inválido. Ej: 55 1234 5678
+            </div>
+            <div *ngIf="!form.phone" id="phone-error" class="error-message" aria-live="polite">
+              El teléfono es requerido.
+            </div>
           </div>
 
           <div class="form-group">
             <label for="rfc">RFC</label>
-            <input id="rfc" type="text" [(ngModel)]="form.rfc">
+            <input id="rfc" type="text" [(ngModel)]="form.rfc" (input)="form.rfc = form.rfc?.toUpperCase()" [attr.aria-describedby]="'rfc-error'" placeholder="XAXX010101000">
+            <div *ngIf="form.rfc && !isValidRFC(form.rfc)" id="rfc-error" class="error-message" aria-live="polite">
+              RFC inválido.
+            </div>
           </div>
 
           <div class="form-group full-width">
@@ -1282,7 +1300,9 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     if (this.form.clientType === 'colectivo') {
       return !!this.form.groupName && this.form.memberNames.filter(name => name.trim()).length >= 5;
     }
-    return !!this.form.name && !!this.form.email && !!this.form.phone;
+    const hasBasics = !!this.form.name && !!this.form.email && !!this.form.phone;
+    if (!hasBasics) return false;
+    return this.isValidEmail(this.form.email) && this.isValidMexicanPhone(this.form.phone) && (!this.form.rfc || this.isValidRFC(this.form.rfc));
   }
 
   canProceedToKyc(): boolean {
@@ -1636,5 +1656,25 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     this.currentStepIndex = 0;
     this.contractMessage = '';
     this.isGeneratingContract = false;
+  }
+
+  // Inline validators for template-driven client_info step
+  isValidEmail(value: string): boolean {
+    if (!value) return false;
+    // Basic email pattern
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(value);
+  }
+
+  isValidMexicanPhone(value: string): boolean {
+    if (!value) return false;
+    const phoneRegex = /^(\+52\s?)?(\d{2}\s?\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/;
+    return phoneRegex.test(value);
+  }
+
+  isValidRFC(value: string): boolean {
+    if (!value) return true;
+    const rfcRegex = /^[A-ZÑ&]{3,4}[0-9]{6}[A-V1-9][A-Z1-9][0-9A]$/;
+    return rfcRegex.test(value.toUpperCase().replace(/\s/g, ''));
   }
 }
