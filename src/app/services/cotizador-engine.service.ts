@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
+import { BusinessFlow, Market, Quote } from '../models/types';
+import { round2, toAnnualFromMonthly } from '../utils/math.util';
 import { FinancialCalculatorService } from './financial-calculator.service';
-import { Quote, BusinessFlow, Market } from '../models/types';
 
 // Port exacto de React getProductPackage types
 export interface ProductComponent {
@@ -120,7 +121,7 @@ export class CotizadorEngineService {
 
     const selectedPackage = packages[market];
     if (!selectedPackage) {
-      throw new Error(`Paquete no encontrado para mercado: ${market}`);
+      return throwError(() => new Error(`Paquete no encontrado para mercado: ${market}`));
     }
 
     // Port exacto de mockApi delay desde React
@@ -131,7 +132,7 @@ export class CotizadorEngineService {
    * Calculate total package price including optional components
    */
   calculatePackagePrice(packageData: ProductPackage, term: number = 1, selectedOptionals: string[] = []): number {
-    return packageData.components.reduce((total, component) => {
+    return round2(packageData.components.reduce((total, component) => {
       // Skip optional components not selected
       if (component.isOptional && !selectedOptionals.includes(component.id)) {
         return total;
@@ -146,7 +147,7 @@ export class CotizadorEngineService {
       }
 
       return total + price;
-    }, 0);
+    }, 0));
   }
 
   /**
@@ -174,16 +175,16 @@ export class CotizadorEngineService {
       delay(100),
       map(packageData => {
         const totalPrice = this.calculatePackagePrice(packageData, term, selectedOptionals);
-        const finalDownPayment = downPayment || (totalPrice * packageData.minDownPaymentPercentage);
-        const amountToFinance = totalPrice - finalDownPayment;
+        const finalDownPayment = round2(downPayment || (totalPrice * packageData.minDownPaymentPercentage));
+        const amountToFinance = round2(totalPrice - finalDownPayment);
         
         const monthlyRate = packageData.rate / 12;
         const monthlyPayment = monthlyRate > 0 
-          ? this.financialCalc.annuity(amountToFinance, monthlyRate, term)
+          ? round2(this.financialCalc.annuity(amountToFinance, monthlyRate, term))
           : 0; // For direct sales
 
         return {
-          totalPrice,
+          totalPrice: round2(totalPrice),
           downPayment: finalDownPayment,
           amountToFinance,
           term,
@@ -310,8 +311,8 @@ export class CotizadorEngineService {
 
   // Calculate total interest paid over the loan term
   getTotalInterest(quote: Quote): number {
-    const totalPayments = quote.monthlyPayment * quote.term;
-    return totalPayments - quote.amountToFinance;
+    const totalPayments = round2(quote.monthlyPayment * quote.term);
+    return round2(totalPayments - quote.amountToFinance);
   }
 
   // Get financial summary for display
@@ -322,7 +323,7 @@ export class CotizadorEngineService {
     paymentToIncomeRatio?: number;
   } {
     const totalInterest = this.getTotalInterest(quote);
-    const totalCost = quote.totalPrice + totalInterest;
+    const totalCost = round2(quote.totalPrice + totalInterest);
     const effectiveRate = this.financialCalc.getTIRMin(quote.market as Market);
 
     return {
@@ -330,5 +331,36 @@ export class CotizadorEngineService {
       totalInterest,
       effectiveRate: effectiveRate * 100 // Convert to percentage
     };
+  }
+
+  // New: total cost of financing helper (price + interest)
+  getTotalCost(quote: Quote): number {
+    return round2(quote.totalPrice + this.getTotalInterest(quote));
+  }
+
+  // New: approximate CAT (Costo Anual Total) using effective annual rate from monthly rate
+  getCAT(quote: Quote): number {
+    const monthlyRate = this.getMonthlyRate(quote.market as Market);
+    const annualEffective = toAnnualFromMonthly(monthlyRate) * 100;
+    return round2(annualEffective);
+  }
+
+  // New: explicit down payment validation including max, returning semantic errors
+  validateDownPaymentRange(pkg: ProductPackage, totalPrice: number, downPayment: number): { valid: boolean; errors: string[] } {
+    const errors: string[] = [];
+    const pct = totalPrice > 0 ? downPayment / totalPrice : 0;
+    if (pct < pkg.minDownPaymentPercentage) {
+      errors.push(`El enganche mínimo es ${(pkg.minDownPaymentPercentage * 100).toFixed(0)}%`);
+    }
+    if (pkg.maxDownPaymentPercentage != null && pct > pkg.maxDownPaymentPercentage) {
+      errors.push(`El enganche máximo sugerido es ${(pkg.maxDownPaymentPercentage * 100).toFixed(0)}%`);
+    }
+    if (downPayment <= 0) {
+      errors.push('El enganche debe ser mayor a $0');
+    }
+    if (downPayment >= totalPrice) {
+      errors.push('El enganche no puede ser igual o mayor al precio total');
+    }
+    return { valid: errors.length === 0, errors };
   }
 }
