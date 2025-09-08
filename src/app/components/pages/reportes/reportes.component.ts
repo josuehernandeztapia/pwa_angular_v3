@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { PdfExportService } from '../../../services/pdf-export.service';
 import { ToastService } from '../../../services/toast.service';
 
@@ -8,29 +8,36 @@ import { ToastService } from '../../../services/toast.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="reportes-container">
-      <h1>📊 Reportes</h1>
+    <div class="reportes-container command-container">
+      <header class="page-header">
+        <div class="header-content">
+          <h1>📊 Reportes</h1>
+        </div>
+        <div class="header-actions">
+          <button class="report-btn btn-primary" (click)="generateAllReports()">Generar todos</button>
+        </div>
+      </header>
       
       <div class="reports-grid">
-        <div class="report-card">
+        <div class="report-card premium-card">
           <h3>📈 Reporte de Simulaciones</h3>
           <p>Resumen de todas las simulaciones realizadas</p>
           <button (click)="generateSimulationsReport()" class="report-btn">📄 Generar PDF</button>
         </div>
         
-        <div class="report-card">
+        <div class="report-card premium-card">
           <h3>💼 Reporte de Cotizaciones</h3>
           <p>Historial de cotizaciones y ventas</p>
           <button (click)="generateQuotesReport()" class="report-btn">📄 Generar PDF</button>
         </div>
         
-        <div class="report-card">
+        <div class="report-card premium-card">
           <h3>👥 Reporte de Clientes</h3>
           <p>Base de datos de clientes activos</p>
           <button (click)="generateClientsReport()" class="report-btn">📄 Generar PDF</button>
         </div>
         
-        <div class="report-card">
+        <div class="report-card premium-card">
           <h3>📊 Análisis Financiero</h3>
           <p>Métricas y análisis de rendimiento</p>
           <button (click)="generateFinancialReport()" class="report-btn">📄 Generar PDF</button>
@@ -43,6 +50,18 @@ import { ToastService } from '../../../services/toast.service';
       padding: 24px;
       max-width: 1200px;
       margin: 0 auto;
+    }
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .header-actions {
+      display: flex;
+      gap: 12px;
     }
     
     .reports-grid {
@@ -101,6 +120,13 @@ export class ReportesComponent {
     private pdfExportService: PdfExportService,
     private toast: ToastService
   ) {}
+  
+  generateAllReports(): void {
+    this.generateSimulationsReport();
+    this.generateQuotesReport();
+    this.generateClientsReport();
+    this.generateFinancialReport();
+  }
   
   generateSimulationsReport(): void {
     const simulationsData = {
