@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Market } from '../models/types';
+import { formatCurrencyMXN } from '../utils/format.util';
+import { annuity as annuityUtil, round2 } from '../utils/math.util';
 
 @Injectable({
   providedIn: 'root'
@@ -88,9 +90,7 @@ export class FinancialCalculatorService {
 
   // Basic financial functions (re-exported for convenience)
   annuity(principal: number, monthlyRate: number, term: number): number {
-    if (term <= 0) return principal;
-    if (monthlyRate <= 0) return principal / term;
-    return (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -term));
+    return annuityUtil(principal, monthlyRate, term);
   }
 
   getBalance(originalPrincipal: number, originalPayment: number, monthlyRate: number, monthsPaid: number): number {
@@ -116,9 +116,6 @@ export class FinancialCalculatorService {
 
   // Format currency for Mexican Pesos
   formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('es-MX', { 
-      style: 'currency', 
-      currency: 'MXN' 
-    }).format(amount);
+    return formatCurrencyMXN(round2(amount));
   }
 }

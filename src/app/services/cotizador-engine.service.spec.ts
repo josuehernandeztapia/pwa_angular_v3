@@ -1,8 +1,75 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
-import { CotizadorEngineService, CotizadorConfig, ProductPackage } from './cotizador-engine.service';
+import { CotizadorEngineService, ProductPackage } from './cotizador-engine.service';
 import { FinancialCalculatorService } from './financial-calculator.service';
+
+describe('CotizadorEngineService', () => {
+	let service: CotizadorEngineService;
+	let financial: FinancialCalculatorService;
+
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			providers: [CotizadorEngineService, FinancialCalculatorService]
+		});
+		service = TestBed.inject(CotizadorEngineService);
+		financial = TestBed.inject(FinancialCalculatorService);
+	});
+
+	it('calculates insurance by years ceil(term/12)', (done) => {
+		service.getProductPackage('edomex-plazo').subscribe((pkg: ProductPackage) => {
+			const term = 48; // 4 years
+			const total = service.calculatePackagePrice(pkg, term, []);
+			const base = pkg.components
+				.filter(c => !c.isMultipliedByTerm)
+				.reduce((s, c) => s + c.price, 0);
+			const insurance = pkg.components.find(c => c.id === 'seguro')!;
+			const expected = base + insurance.price * 4; // ceil(48/12) = 4
+			expect(total).toBe(expected);
+			done();
+		});
+	});
+
+	it('validates down payment min/max range', (done) => {
+		service.getProductPackage('edomex-plazo').subscribe(pkg => {
+			const price = service.calculatePackagePrice(pkg, 48);
+			const tooLow = service.validateDownPaymentRange(pkg, price, price * 0.10);
+			expect(tooLow.valid).toBeFalse();
+			expect(tooLow.errors.join(' ')).toContain('mínimo');
+			const tooHigh = service.validateDownPaymentRange(pkg, price, price * 0.50);
+			expect(tooHigh.valid).toBeFalse();
+			expect(tooHigh.errors.join(' ')).toContain('máximo');
+			done();
+		});
+	});
+
+	it('computes monthly payment, total cost and CAT consistently', (done) => {
+		service.getProductPackage('edomex-plazo').subscribe(pkg => {
+			const term = 48;
+			const totalPrice = service.calculatePackagePrice(pkg, term);
+			const downPayment = totalPrice * pkg.minDownPaymentPercentage;
+			const amountToFinance = totalPrice - downPayment;
+			const monthlyRate = pkg.rate / 12;
+			const monthlyPayment = financial.annuity(amountToFinance, monthlyRate, term);
+			const quote = {
+				totalPrice,
+				downPayment,
+				amountToFinance,
+				term,
+				monthlyPayment,
+				market: 'edomex',
+				clientType: 'Individual',
+				flow: 0
+			} as any;
+			const totalCost = service.getTotalCost(quote);
+			expect(totalCost).toBeGreaterThan(totalPrice);
+			const cat = service.getCAT(quote);
+			expect(cat).toBeGreaterThan(0);
+			done();
+		});
+	});
+});
+
 import { BusinessFlow, Market } from '../models/types';
+import { CotizadorConfig } from './cotizador-engine.service';
 
 describe('CotizadorEngineService', () => {
   let service: CotizadorEngineService;
