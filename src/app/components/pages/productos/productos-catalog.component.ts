@@ -27,7 +27,7 @@ interface ProductCatalogItem {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, SkeletonCardComponent, EmptyStateCardComponent],
   template: `
-    <div class="productos-container">
+    <div class="productos-container command-container">
       <header class="page-header">
         <div class="header-content">
           <h1>🚐 Catálogo de Productos</h1>
@@ -42,6 +42,8 @@ interface ProductCatalogItem {
             *ngFor="let market of markets" 
             class="filter-btn"
             [class.active]="selectedMarket === market.value"
+            [attr.aria-pressed]="selectedMarket === market.value"
+            [attr.aria-label]="'Filtrar por mercado: ' + market.label"
             (click)="selectMarket(market.value)"
           >
             {{ market.emoji }} {{ market.label }}
@@ -53,19 +55,20 @@ interface ProductCatalogItem {
             *ngFor="let type of productTypes" 
             class="type-filter"
             [class.active]="selectedType === type.value"
+            [attr.aria-pressed]="selectedType === type.value"
+            [attr.aria-label]="'Filtrar por tipo: ' + type.label"
             (click)="selectType(type.value)"
           >
             {{ type.label }}
           </button>
         </div>
+        <div class="filters-actions" *ngIf="selectedMarket !== 'all' || selectedType !== 'all'">
+          <button class="clear-filters-btn btn-secondary" (click)="resetFilters()" aria-label="Limpiar filtros activos">Limpiar filtros</button>
+        </div>
       </div>
 
-      <!-- Loading State -->
-      <div *ngIf="isLoading" class="loading-container">
-        <app-skeleton-card [titleWidth]="50" [subtitleWidth]="70" [buttonWidth]="40"></app-skeleton-card>
-        <app-skeleton-card [titleWidth]="60" [subtitleWidth]="60" [buttonWidth]="35"></app-skeleton-card>
-        <app-skeleton-card [titleWidth]="55" [subtitleWidth]="65" [buttonWidth]="45"></app-skeleton-card>
-      </div>
+      <!-- Loading State (placeholder estable) -->
+      <section *ngIf="isLoading" class="premium-card loading-placeholder" role="status" aria-live="polite" aria-busy="true">Cargando catálogo…</section>
 
       <!-- Catálogo de productos -->
       <div *ngIf="!isLoading" class="productos-grid">
@@ -263,26 +266,24 @@ interface ProductCatalogItem {
       background: #f7fafc;
     }
 
-    .loading-container {
+    .filters-actions {
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+    }
+
+    .clear-filters-btn {
+      margin-top: 4px;
+      padding: 8px 16px;
+    }
+
+    .loading-placeholder {
+      min-height: 240px;
+      display: flex;
       align-items: center;
-      padding: 80px 20px;
+      justify-content: center;
+      margin-bottom: 24px;
       color: #718096;
-    }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid #e2e8f0;
-      border-left-color: #4299e1;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 20px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+      font-weight: 600;
     }
 
     .productos-grid {
@@ -613,10 +614,10 @@ export class ProductosCatalogComponent implements OnInit {
       ];
 
       const packages = await Promise.all(
-        packageKeys.map(key => this.cotizadorService.getProductPackage(key).toPromise())
+        packageKeys.map((key: string) => this.cotizadorService.getProductPackage(key).toPromise())
       );
 
-      this.products = packages.map((pkg, index) => this.transformPackageToProduct(pkg!, packageKeys[index]));
+      this.products = packages.map((pkg: ProductPackage | undefined, index: number) => this.transformPackageToProduct(pkg!, packageKeys[index]));
       this.filteredProducts = [...this.products];
       
     } catch (error) {

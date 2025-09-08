@@ -12,8 +12,7 @@
     "maxFailures": 0,
     "metadata": {
       "project": "Conductores PWA",
-      "description": "Visual regression tests for UI components and pages",
-      "actualWorkers": 1
+      "description": "Visual regression tests for UI components and pages"
     },
     "preserveOutput": "always",
     "reporter": [
@@ -40,8 +39,7 @@
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
-          "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 1
+          "description": "Visual regression tests for UI components and pages"
         },
         "id": "chromium",
         "name": "chromium",
@@ -58,8 +56,7 @@
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
-          "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 1
+          "description": "Visual regression tests for UI components and pages"
         },
         "id": "firefox",
         "name": "firefox",
@@ -76,8 +73,7 @@
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
-          "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 1
+          "description": "Visual regression tests for UI components and pages"
         },
         "id": "webkit",
         "name": "webkit",
@@ -94,8 +90,7 @@
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
-          "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 1
+          "description": "Visual regression tests for UI components and pages"
         },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
@@ -112,8 +107,7 @@
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
-          "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 1
+          "description": "Visual regression tests for UI components and pages"
         },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
@@ -130,8 +124,7 @@
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
-          "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 1
+          "description": "Visual regression tests for UI components and pages"
         },
         "id": "iPad",
         "name": "iPad",
@@ -148,8 +141,7 @@
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
-          "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 1
+          "description": "Visual regression tests for UI components and pages"
         },
         "id": "High DPI",
         "name": "High DPI",
@@ -162,7 +154,7 @@
       }
     ],
     "shard": null,
-    "updateSnapshots": "missing",
+    "updateSnapshots": "changed",
     "updateSourceMethod": "patch",
     "version": "1.55.0",
     "workers": 2,
@@ -173,118 +165,19 @@
       "timeout": 600000
     }
   },
-  "suites": [
+  "suites": [],
+  "errors": [
     {
-      "title": "all-modules.spec.ts",
-      "file": "all-modules.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Premium visual across modules",
-          "file": "all-modules.spec.ts",
-          "line": 54,
-          "column": 6,
-          "specs": [
-            {
-              "title": "@triggers should render premium container and take snapshot",
-              "ok": false,
-              "tags": [
-                "triggers"
-              ],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 2533,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\n  28913 pixels (ratio 0.04 of all image pixels) are different.\n\nCall log:\n\u001b[2m  - Expect \"toHaveScreenshot\" with timeout 5000ms\u001b[22m\n\u001b[2m    - verifying given screenshot expectation\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - 61135 pixels (ratio 0.07 of all image pixels) are different.\u001b[22m\n\u001b[2m  - waiting 100ms before taking screenshot\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - 35188 pixels (ratio 0.04 of all image pixels) are different.\u001b[22m\n\u001b[2m  - waiting 250ms before taking screenshot\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - captured a stable screenshot\u001b[22m\n\u001b[2m  - 28913 pixels (ratio 0.04 of all image pixels) are different.\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\n  28913 pixels (ratio 0.04 of all image pixels) are different.\n\nCall log:\n\u001b[2m  - Expect \"toHaveScreenshot\" with timeout 5000ms\u001b[22m\n\u001b[2m    - verifying given screenshot expectation\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - 61135 pixels (ratio 0.07 of all image pixels) are different.\u001b[22m\n\u001b[2m  - waiting 100ms before taking screenshot\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - 35188 pixels (ratio 0.04 of all image pixels) are different.\u001b[22m\n\u001b[2m  - waiting 250ms before taking screenshot\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - captured a stable screenshot\u001b[22m\n\u001b[2m  - 28913 pixels (ratio 0.04 of all image pixels) are different.\u001b[22m\n\n    at /workspace/tests/visual/all-modules.spec.ts:73:26",
-                        "location": {
-                          "file": "/workspace/tests/visual/all-modules.spec.ts",
-                          "column": 26,
-                          "line": 73
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 71 |\u001b[39m         \u001b[36mawait\u001b[39m expect(heading\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m5000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 72 |\u001b[39m       }\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 73 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveScreenshot()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 74 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 75 |\u001b[39m   }\n \u001b[90m 76 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/workspace/tests/visual/all-modules.spec.ts",
-                            "column": 26,
-                            "line": 73
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\n  28913 pixels (ratio 0.04 of all image pixels) are different.\n\nCall log:\n\u001b[2m  - Expect \"toHaveScreenshot\" with timeout 5000ms\u001b[22m\n\u001b[2m    - verifying given screenshot expectation\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - 61135 pixels (ratio 0.07 of all image pixels) are different.\u001b[22m\n\u001b[2m  - waiting 100ms before taking screenshot\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - 35188 pixels (ratio 0.04 of all image pixels) are different.\u001b[22m\n\u001b[2m  - waiting 250ms before taking screenshot\u001b[22m\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m    - disabled all CSS animations\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\u001b[2m  - captured a stable screenshot\u001b[22m\n\u001b[2m  - 28913 pixels (ratio 0.04 of all image pixels) are different.\u001b[22m\n\n\n\u001b[0m \u001b[90m 71 |\u001b[39m         \u001b[36mawait\u001b[39m expect(heading\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m5000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 72 |\u001b[39m       }\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 73 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveScreenshot()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 74 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 75 |\u001b[39m   }\n \u001b[90m 76 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /workspace/tests/visual/all-modules.spec.ts:73:26\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-09-07T20:27:57.346Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "Premium-visual-across-modu-cf26f-ntainer-and-take-snapshot-1-expected.png",
-                          "contentType": "image/png",
-                          "path": "/workspace/tests/visual/all-modules.spec.ts-snapshots/Premium-visual-across-modules-triggers-should-render-premium-container-and-take-snapshot-1-chromium-linux.png"
-                        },
-                        {
-                          "name": "Premium-visual-across-modu-cf26f-ntainer-and-take-snapshot-1-actual.png",
-                          "contentType": "image/png",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-47b42-container-and-take-snapshot-chromium/Premium-visual-across-modu-cf26f-ntainer-and-take-snapshot-1-actual.png"
-                        },
-                        {
-                          "name": "Premium-visual-across-modu-cf26f-ntainer-and-take-snapshot-1-diff.png",
-                          "contentType": "image/png",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-47b42-container-and-take-snapshot-chromium/Premium-visual-across-modu-cf26f-ntainer-and-take-snapshot-1-diff.png"
-                        },
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-47b42-container-and-take-snapshot-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/workspace/test-results/visual/all-modules-Premium-visual-47b42-container-and-take-snapshot-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/workspace/tests/visual/all-modules.spec.ts",
-                        "column": 26,
-                        "line": 73
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "51290be374324717b45f-3a9aa92d1925e7f42834",
-              "file": "all-modules.spec.ts",
-              "line": 56,
-              "column": 9
-            }
-          ]
-        }
-      ]
+      "message": "Error: Timed out waiting 600000ms from config.webServer.",
+      "stack": "Error: Timed out waiting 600000ms from config.webServer."
     }
   ],
-  "errors": [],
   "stats": {
-    "startTime": "2025-09-07T20:27:53.010Z",
-    "duration": 7139.0960000000005,
+    "startTime": "2025-09-08T05:28:57.408Z",
+    "duration": 600384.34,
     "expected": 0,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }
