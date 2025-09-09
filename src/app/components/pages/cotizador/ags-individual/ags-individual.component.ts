@@ -13,7 +13,7 @@ import { ToastService } from '../../../../services/toast.service';
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   template: `
-    <div class="ags-cotizador premium-container">
+    <div class="ags-cotizador command-container">
       <!-- Header -->
       <div class="header">
         <button (click)="goBack()" class="back-btn">← Volver</button>
@@ -42,7 +42,7 @@ import { ToastService } from '../../../../services/toast.service';
 
       <div class="content" *ngIf="!isLoading">
         <!-- Left Panel: Configuración -->
-        <div class="config-panel">
+        <div class="premium-card config-panel">
           <form [formGroup]="cotizadorForm">
             
             <!-- Tipo de Venta -->
@@ -126,7 +126,7 @@ import { ToastService } from '../../../../services/toast.service';
         </div>
 
         <!-- Right Panel: Resultado -->
-        <div class="quote-panel" *ngIf="currentQuote">
+        <div class="premium-card quote-panel" *ngIf="currentQuote">
           <h3>📋 Cotización AGS</h3>
           
           <!-- Resumen XL -->
@@ -187,10 +187,9 @@ import { ToastService } from '../../../../services/toast.service';
       </div>
 
       <!-- Loading -->
-      <div *ngIf="isLoading" class="loading">
-        <div class="spinner"></div>
-        <p>Cargando paquete AGS...</p>
-      </div>
+      <section *ngIf="isLoading" class="premium-card loading" role="status" aria-live="polite" aria-busy="true" style="min-height: 160px; display:flex; align-items:center; justify-content:center;">
+        Cargando paquete AGS...
+      </section>
     </div>
   `,
   styles: [`
@@ -248,9 +247,9 @@ import { ToastService } from '../../../../services/toast.service';
     }
 
     .config-panel, .quote-panel {
-      background: white;
+      background: transparent;
       border-radius: 12px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      box-shadow: none;
       padding: 24px;
     }
 
@@ -546,28 +545,7 @@ import { ToastService } from '../../../../services/toast.service';
       background: #b91c1c;
     }
 
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 64px;
-      color: #6b7280;
-    }
-
-    .spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid #f3f4f6;
-      border-top: 3px solid #3b82f6;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 16px;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    .loading { color: #a0aec0; }
   `]
 })
 export class AgsIndividualComponent implements OnInit {

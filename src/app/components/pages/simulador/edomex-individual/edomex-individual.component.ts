@@ -16,7 +16,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, SummaryPanelComponent, SkeletonCardComponent],
   template: `
-    <div class="premium-container p-6 space-y-6">
+    <div class="command-container p-6 space-y-6">
       <!-- Header -->
       <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl p-6 shadow-lg">
         <h1 class="text-3xl font-bold mb-2">Planificador de Enganche Individual</h1>
@@ -24,7 +24,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
       </div>
 
       <!-- Resumen KPIs -->
-      <div class="bg-white rounded-xl shadow-lg p-4">
+      <div class="premium-card p-4">
         <h2 class="text-lg font-semibold text-gray-800 mb-3">Resumen</h2>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div class="bg-blue-50 p-3 rounded border border-blue-100">
@@ -44,7 +44,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
 
       <div class="grid-aside">
         <!-- Configuration Panel -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="premium-card p-6">
           <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
             <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
             Unidad
@@ -171,7 +171,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
         </div>
 
         <!-- Results Panel -->
-        <div class="bg-white rounded-xl shadow-lg p-6" *ngIf="scenario">
+        <div class="premium-card p-6" *ngIf="scenario">
           <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
             <span class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
             Finanzas
@@ -285,7 +285,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
         </div>
 
         <!-- Initial Help Panel -->
-        <div class="bg-white rounded-xl shadow-lg p-6" *ngIf="!scenario">
+        <div class="premium-card p-6" *ngIf="!scenario">
           <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
             <span class="bg-amber-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">💡</span>
             ¿Cómo funciona?
