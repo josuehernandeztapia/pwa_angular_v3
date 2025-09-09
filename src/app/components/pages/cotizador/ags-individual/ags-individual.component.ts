@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CotizadorEngineService, ProductPackage } from '../../../../services/cotizador-engine.service';
-import { ToastService } from '../../../../services/toast.service';
 import { Quote } from '../../../../models/types';
+import { CotizadorEngineService, ProductPackage } from '../../../../services/cotizador-engine.service';
 import { PdfExportService } from '../../../../services/pdf-export.service';
 import { SpeechService } from '../../../../services/speech.service';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-ags-individual',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   template: `
-    <div class="ags-cotizador">
+    <div class="ags-cotizador premium-container">
       <!-- Header -->
       <div class="header">
         <button (click)="goBack()" class="back-btn">← Volver</button>
@@ -198,8 +198,8 @@ import { SpeechService } from '../../../../services/speech.service';
       max-width: 1200px;
       margin: 0 auto;
       padding: 24px;
-      background: #f8fafc;
-      min-height: 100vh;
+      background: transparent;
+      min-height: auto;
     }
 
     .header {
