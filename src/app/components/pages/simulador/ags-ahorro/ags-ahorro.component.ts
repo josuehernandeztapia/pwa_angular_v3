@@ -335,8 +335,8 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
       max-width: 1400px;
       margin: 0 auto;
       padding: 24px;
-      background: #f8fafc;
-      min-height: 100vh;
+      background: transparent;
+      min-height: auto;
     }
 
     .simulator-header {

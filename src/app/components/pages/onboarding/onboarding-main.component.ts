@@ -234,6 +234,7 @@ interface OnboardingForm {
                        required>
                 <button type="button" 
                         class="btn-remove" 
+                        title="Eliminar miembro" aria-label="Eliminar miembro"
                         *ngIf="form.memberNames.length > 5"
                         (click)="removeMember(i)">✕</button>
               </div>

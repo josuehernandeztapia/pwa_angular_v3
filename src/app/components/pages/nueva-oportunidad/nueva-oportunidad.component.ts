@@ -521,6 +521,7 @@ interface WizardStep {
               type="submit" 
               class="premium-button"
               [disabled]="opportunityForm.invalid || isLoading"
+              [attr.aria-disabled]="opportunityForm.invalid || isLoading ? true : null"
             >
               <span *ngIf="!isLoading">
                 {{ opportunityType === 'COTIZACION' ? '💰 Continuar a Cotizador' : '🎯 Continuar a Simulador' }}
@@ -2075,8 +2076,15 @@ export class NuevaOportunidadComponent implements OnInit {
   isFinanciero(): boolean { return this.saleTypeValue === 'financiero'; }
 
   nextStepLabel(): string {
-    if (this.isCotizacion()) return 'Cotizador';
-    if (this.isSimulacion()) return 'Simulador';
+    if (this.isCotizacion()) {
+      return 'Cotizador';
+    }
+    if (this.isSimulacion()) {
+      if (this.marketValue === 'edomex') {
+        return this.clientTypeValue === 'Individual' ? 'Simulador Individual' : 'Tanda Colectiva';
+      }
+      return 'AGS Ahorro';
+    }
     return 'Carga de Documentos';
   }
 

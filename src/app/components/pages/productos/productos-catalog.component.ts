@@ -68,7 +68,9 @@ interface ProductCatalogItem {
       </div>
 
       <!-- Loading State (placeholder estable) -->
-      <section *ngIf="isLoading" class="premium-card loading-placeholder" role="status" aria-live="polite" aria-busy="true">Cargando catálogo…</section>
+      <section *ngIf="isLoading" class="premium-card loading-placeholder" role="status" aria-live="polite" aria-busy="true" style="min-height: 280px">
+        <p>Cargando catálogo de productos…</p>
+      </section>
 
       <!-- Catálogo de productos -->
       <div *ngIf="!isLoading" class="productos-grid">
@@ -277,7 +279,7 @@ interface ProductCatalogItem {
     }
 
     .loading-placeholder {
-      min-height: 240px;
+      min-height: 280px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -291,6 +293,7 @@ interface ProductCatalogItem {
       grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
       gap: 24px;
       margin-bottom: 40px;
+      min-height: 280px;
     }
 
     .producto-card {
