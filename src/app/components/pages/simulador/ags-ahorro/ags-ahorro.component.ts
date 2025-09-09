@@ -94,7 +94,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
                   <div *ngFor="let plate of plates; let i = index" class="plate-item">
                     <span class="plate-number">{{ plate }}</span>
                     <input type="number" [(ngModel)]="consumptions[i]" min="0" max="10000" placeholder="Litros/mes">
-                    <button type="button" (click)="removePlate(i)" class="remove-btn">×</button>
+                    <button type="button" (click)="removePlate(i)" class="remove-btn" aria-label="Eliminar placa" title="Eliminar placa">×</button>
                   </div>
                 </div>
               </div>
@@ -264,10 +264,10 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
 
           <!-- Amortization Table Modal -->
           <div *ngIf="showAmortizationTable" class="amortization-modal">
-            <div class="modal-content">
+            <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="amortization-title">
               <div class="modal-header">
-                <h4>📊 Tabla de Amortización del Remanente</h4>
-                <button (click)="showAmortizationTable = false" class="close-btn">×</button>
+                <h4 id="amortization-title">📊 Tabla de Amortización del Remanente</h4>
+                <button (click)="showAmortizationTable = false" class="close-btn" aria-label="Cerrar" title="Cerrar">×</button>
               </div>
               
               <div class="amortization-summary">

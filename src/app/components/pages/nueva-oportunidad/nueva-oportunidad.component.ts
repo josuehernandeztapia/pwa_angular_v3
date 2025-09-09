@@ -6,7 +6,7 @@ import { of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ApiService } from '../../../services/api.service';
 import { EcosystemUiService } from '../../../services/ecosystem-ui.service';
-import { CustomValidators, normalizePhoneMX } from '../../../validators/custom-validators';
+import { CustomValidators } from '../../../validators/custom-validators';
 
 // Dynamic Wizard Step Interface
 interface WizardStep {
@@ -1994,10 +1994,11 @@ export class NuevaOportunidadComponent implements OnInit {
   }
 
   onPhoneBlur(): void {
-    const control = this.opportunityForm.get('phone');
-    const normalized = normalizePhoneMX(control?.value || '');
-    control?.setValue(normalized, { emitEvent: false });
-    control?.updateValueAndValidity({ emitEvent: false });
+    const ctrl = this.opportunityForm.get('phone');
+    const v = (ctrl?.value || '').toString();
+    const normalized = v.replace(/\D/g, '').slice(-10);
+    ctrl?.setValue(normalized, { emitEvent: false });
+    ctrl?.updateValueAndValidity({ onlySelf: true });
   }
 
   requiresClientContactData(): boolean {
