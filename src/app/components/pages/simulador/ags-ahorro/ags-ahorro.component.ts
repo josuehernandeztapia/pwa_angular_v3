@@ -16,7 +16,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, SummaryPanelComponent, SkeletonCardComponent, FormFieldComponent],
   template: `
-    <div class="ags-ahorro-simulator premium-container">
+    <div class="ags-ahorro-simulator command-container">
       <!-- Header -->
       <div class="simulator-header">
         <button (click)="goBack()" class="back-btn">← Volver</button>
@@ -45,7 +45,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
 
       <div class="simulator-content grid-aside" *ngIf="!isLoading" data-loading="false">
         <!-- Left: Configuration Panel -->
-        <div class="config-panel">
+        <div class="premium-card config-panel">
           <form [formGroup]="simuladorForm">
             
             <!-- Unidad y Valor -->
@@ -135,7 +135,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
         ></app-summary-panel>
 
         <!-- Results Panel (left column visual details) -->
-        <div class="results-panel" *ngIf="currentScenario">
+        <div class="premium-card results-panel" *ngIf="currentScenario">
           <h3>📈 Proyección de Ahorro AGS</h3>
           
           <!-- Key Metrics -->
@@ -385,9 +385,9 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
     }
 
     .config-panel, .results-panel {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      background: transparent;
+      box-shadow: none;
+      border: none;
       padding: 24px;
     }
 
@@ -1090,9 +1090,6 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
 
     /* KPI Summary */
     .premium-card.kpi-summary {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
       padding: 16px 20px;
       margin-bottom: 24px;
     }
