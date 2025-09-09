@@ -1,20 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { SimuladorEngineService, CollectiveScenarioConfig } from '../../../../services/simulador-engine.service';
-import { LoadingService } from '../../../../services/loading.service';
 import { FinancialCalculatorService } from '../../../../services/financial-calculator.service';
-import { Client } from '../../../../models/types';
+import { LoadingService } from '../../../../services/loading.service';
 import { PdfExportService } from '../../../../services/pdf-export.service';
+import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../services/simulador-engine.service';
 
 @Component({
   selector: 'app-edomex-colectivo',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="container mx-auto p-6 space-y-6">
+    <div class="command-container p-6 space-y-6">
       <!-- Header -->
       <div class="bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-xl p-6 shadow-lg">
         <h1 class="text-3xl font-bold mb-2">Cotizador EdoMex Colectivo</h1>
