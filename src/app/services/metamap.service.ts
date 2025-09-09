@@ -93,8 +93,11 @@ export class MetaMapService {
       // Add to container
       container.appendChild(metamapButton);
 
-      observer.next(metamapButton);
-      observer.complete();
+      // Emit asynchronously to allow subscribers to capture the subscription first
+      setTimeout(() => {
+        observer.next(metamapButton);
+        observer.complete();
+      }, 0);
 
       // Cleanup function
       return () => {
@@ -112,47 +115,53 @@ export class MetaMapService {
    */
   completeKyc(clientId: string, verificationData?: any): Observable<Client> {
     return new Observable<Client>(observer => {
-      this.clientData.getClientById(clientId).subscribe(client => {
-        if (!client) {
-          observer.error('Client not found');
-          return;
-        }
-
-        // Find and update KYC document status (exact port from React)
-        const updatedDocs = client.documents.map(doc => {
-          if (doc.name.includes('Verificación Biométrica')) {
-            return {
-              ...doc,
-              status: DocumentStatus.Aprobado,
-              completedAt: new Date(),
-              verificationId: verificationData?.verificationId,
-              verificationScore: verificationData?.score
-            };
+      this.clientData.getClientById(clientId).subscribe({
+        next: (client) => {
+          if (!client) {
+            observer.error('Client not found');
+            return;
           }
-          return doc;
-        });
 
-        const updatedClient: Client = {
-          ...client,
-          documents: updatedDocs,
-          events: [
-            ...client.events,
-            {
-              id: `${clientId}-evt-${Date.now()}`,
-              timestamp: new Date(),
-              message: 'Verificación biométrica completada exitosamente.',
-              actor: 'Cliente' as any,
-              type: EventType.KYCCompleted as any
+          // Find and update KYC document status (exact port from React)
+          const updatedDocs = client.documents.map(doc => {
+            if (doc.name.includes('Verificación Biométrica')) {
+              return {
+                ...doc,
+                status: DocumentStatus.Aprobado,
+                completedAt: new Date(),
+                verificationId: verificationData?.verificationId,
+                verificationScore: verificationData?.score
+              };
             }
-          ],
-          // Update health score on KYC completion
-          healthScore: Math.min((client.healthScore || 0) + 15, 100)
-        };
+            return doc;
+          });
 
-        this.clientData.updateClient(updatedClient.id, updatedClient).subscribe(() => {
-          observer.next(updatedClient);
-          observer.complete();
-        });
+          const updatedClient: Client = {
+            ...client,
+            documents: updatedDocs,
+            events: [
+              ...client.events,
+              {
+                id: `${clientId}-evt-${Date.now()}`,
+                timestamp: new Date(),
+                message: 'Verificación biométrica completada exitosamente.',
+                actor: 'Cliente' as any,
+                type: EventType.KYCCompleted as any
+              }
+            ],
+            // Update health score on KYC completion
+            healthScore: Math.min((client.healthScore || 0) + 15, 100)
+          };
+
+          this.clientData.updateClient(updatedClient.id, updatedClient).subscribe({
+            next: () => {
+              observer.next(updatedClient);
+              observer.complete();
+            },
+            error: (err) => observer.error(err)
+          });
+        },
+        error: (err) => observer.error(err)
       });
     }).pipe(delay(800));
   }
@@ -262,43 +271,49 @@ export class MetaMapService {
    */
   simulateKycFailure(clientId: string, reason: string = 'Identity verification failed'): Observable<Client> {
     return new Observable<Client>(observer => {
-      this.clientData.getClientById(clientId).subscribe(client => {
-        if (!client) {
-          observer.error('Client not found');
-          return;
-        }
-
-        const updatedDocs = client.documents.map(doc => {
-          if (doc.name.includes('Verificación Biométrica')) {
-            return {
-              ...doc,
-              status: DocumentStatus.Rechazado,
-              reviewNotes: reason,
-              reviewedAt: new Date()
-            };
+      this.clientData.getClientById(clientId).subscribe({
+        next: (client) => {
+          if (!client) {
+            observer.error('Client not found');
+            return;
           }
-          return doc;
-        });
 
-        const updatedClient: Client = {
-          ...client,
-          documents: updatedDocs,
-          events: [
-            ...client.events,
-            {
-              id: `${clientId}-evt-${Date.now()}`,
-              timestamp: new Date(),
-              message: `Verificación biométrica falló: ${reason}`,
-              actor: 'Sistema' as any,
-              type: 'KYC_FAILED' as any
+          const updatedDocs = client.documents.map(doc => {
+            if (doc.name.includes('Verificación Biométrica')) {
+              return {
+                ...doc,
+                status: DocumentStatus.Rechazado,
+                reviewNotes: reason,
+                reviewedAt: new Date()
+              };
             }
-          ]
-        };
+            return doc;
+          });
 
-        this.clientData.updateClient(updatedClient.id, updatedClient).subscribe(() => {
-          observer.next(updatedClient);
-          observer.complete();
-        });
+          const updatedClient: Client = {
+            ...client,
+            documents: updatedDocs,
+            events: [
+              ...client.events,
+              {
+                id: `${clientId}-evt-${Date.now()}`,
+                timestamp: new Date(),
+                message: `Verificación biométrica falló: ${reason}`,
+                actor: 'Sistema' as any,
+                type: 'KYC_FAILED' as any
+              }
+            ]
+          };
+
+          this.clientData.updateClient(updatedClient.id, updatedClient).subscribe({
+            next: () => {
+              observer.next(updatedClient);
+              observer.complete();
+            },
+            error: (err) => observer.error(err)
+          });
+        },
+        error: (err) => observer.error(err)
       });
     }).pipe(delay(500));
   }
@@ -315,7 +330,13 @@ export class MetaMapService {
       }
 
       const checkSDK = () => {
-        const sdkLoaded = !!(window as any).Mati || !!document.querySelector('metamap-button') || Array.from(document.querySelectorAll('div')).some(d => (d as any).dataset?.tag === 'METAMAP-BUTTON');
+        const sdkLoaded = !!(window as any).Mati 
+          || !!document.querySelector('metamap-button') 
+          || Array.from(document.querySelectorAll('div')).some(d => {
+            const datasetTag = (d as any).dataset?.tag;
+            const attrTag = (d as HTMLElement).getAttribute && (d as HTMLElement).getAttribute('data-tag');
+            return (datasetTag || attrTag) === 'METAMAP-BUTTON';
+          });
         observer.next(sdkLoaded);
         observer.complete();
       };

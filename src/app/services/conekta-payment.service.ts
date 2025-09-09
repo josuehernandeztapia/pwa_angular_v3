@@ -107,15 +107,35 @@ export class ConektaPaymentService {
 
   private async loadConektaSDK(): Promise<void> {
     if (this.isLoaded) return;
+    // If a mock or real SDK is already available, use it without injecting script
+    if (typeof Conekta !== 'undefined' && Conekta?.Token?.create) {
+      try {
+        Conekta.setPublicKey(this.publicKey);
+        Conekta.setLanguage('es');
+        this.isLoaded = true;
+        return;
+      } catch {
+        // fall through to script injection
+      }
+    }
+
+    // Guard against non-browser environments
+    if (typeof document === 'undefined') {
+      return Promise.reject(new Error('Document not available to load Conekta SDK'));
+    }
 
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = 'https://cdn.conekta.io/js/latest/conekta.js';
       script.onload = () => {
-        Conekta.setPublicKey(this.publicKey);
-        Conekta.setLanguage('es');
-        this.isLoaded = true;
-        resolve();
+        try {
+          Conekta.setPublicKey(this.publicKey);
+          Conekta.setLanguage('es');
+          this.isLoaded = true;
+          resolve();
+        } catch (e) {
+          reject(e as any);
+        }
       };
       script.onerror = () => reject(new Error('Failed to load Conekta SDK'));
       document.head.appendChild(script);
@@ -370,13 +390,18 @@ export class ConektaPaymentService {
   // Error handling
   private handleError(error: any) {
     let errorMessage = 'Payment processing failed';
-    
-    if (error.error && error.error.details) {
-      errorMessage = error.error.details.map((detail: any) => detail.message).join(', ');
-    } else if (error.error && error.error.message) {
-      errorMessage = error.error.message;
-    } else if (error.message) {
-      errorMessage = error.message;
+    try {
+      const details = error?.error?.details;
+      const errorMsg = error?.error?.message;
+      if (Array.isArray(details)) {
+        errorMessage = details.map((detail: any) => detail.message).join(', ');
+      } else if (typeof errorMsg === 'string' && errorMsg.trim().length > 0) {
+        errorMessage = errorMsg;
+      } else {
+        // keep default generic message for unstructured errors
+      }
+    } catch {
+      // keep default
     }
     
     console.error('Conekta Payment Error:', error);
