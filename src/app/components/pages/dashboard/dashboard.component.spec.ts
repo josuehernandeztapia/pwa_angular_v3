@@ -88,6 +88,7 @@ describe('DashboardComponent', () => {
       'getActivityFeed',
       'getOpportunityStages',
       'getActionableGroups',
+      'getAllClients',
       'updateMarket'
     ]);
 
@@ -111,6 +112,7 @@ describe('DashboardComponent', () => {
     mockDashboardService.getActivityFeed.and.returnValue(of(mockActivityFeed));
     mockDashboardService.getOpportunityStages.and.returnValue(of(mockOpportunityStages));
     mockDashboardService.getActionableGroups.and.returnValue(of(mockActionableGroups));
+    mockDashboardService.getAllClients.and.returnValue(of([]));
   });
 
   it('should create', () => {
@@ -247,6 +249,7 @@ describe('DashboardComponent Integration Tests', () => {
       getActivityFeed: () => of([]),
       getOpportunityStages: () => of([]),
       getActionableGroups: () => of([]),
+      getAllClients: () => of([]),
       updateMarket: jasmine.createSpy()
     };
 
@@ -274,6 +277,7 @@ describe('DashboardComponent Integration Tests', () => {
       getActivityFeed: () => of([]),
       getOpportunityStages: () => of([]),
       getActionableGroups: () => of([]),
+      getAllClients: () => of([]),
       updateMarket: jasmine.createSpy()
     };
 
@@ -300,6 +304,7 @@ describe('DashboardComponent Integration Tests', () => {
       getActivityFeed: () => of([]),
       getOpportunityStages: () => of([]),
       getActionableGroups: () => of([]),
+      getAllClients: () => of([]),
       updateMarket: jasmine.createSpy()
     };
 

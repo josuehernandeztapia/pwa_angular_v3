@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, firstValueFrom, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NextBestActionHeroComponent, NextBestActionData, ActionButton } from '../../shared/next-best-action-hero/next-best-action-hero.component';
 import { ContextualKPIsComponent, KPIData } from '../../shared/contextual-kpis/contextual-kpis.component';
@@ -453,10 +453,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     
     Promise.all([
-      this.dashboardService.getDashboardStats(this.selectedMarket).toPromise(),
-      this.dashboardService.getOpportunityStages(this.selectedMarket).toPromise(),
-      this.dashboardService.getActionableGroups(this.selectedMarket).toPromise(),
-      this.dashboardService.getAllClients(this.selectedMarket).toPromise()
+      firstValueFrom(this.dashboardService.getDashboardStats(this.selectedMarket)),
+      firstValueFrom(this.dashboardService.getOpportunityStages(this.selectedMarket)),
+      firstValueFrom(this.dashboardService.getActionableGroups(this.selectedMarket)),
+      firstValueFrom(this.dashboardService.getAllClients?.(this.selectedMarket) ?? of([]))
     ]).then(([stats, funnel, groups, clients]) => {
       this.stats = stats || null;
       if (stats) {
@@ -471,7 +471,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       
       this.isLoading = false;
     }).catch((error) => {
-      console.error('Error loading dashboard data:', error);
+      console.error('Error loading dashboard data:', error?.message || error);
       this.isLoading = false;
       
       // Fallback mock data for development
@@ -485,10 +485,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Subscribe to real-time activity feed
    */
   private subscribeToActivityFeed(): void {
-    this.dashboardService.activityFeed$
+    const source: any = (this.dashboardService as any).activityFeed$ || this.dashboardService.getActivityFeed?.();
+    if (!source || typeof source.pipe !== 'function') {
+      return;
+    }
+    source
       .pipe(takeUntil(this.destroy$))
-      .subscribe(activities => {
-        this.activityFeed = activities;
+      .subscribe((activities: ActivityItem[] | ActivityFeedItem[]) => {
+        this.activityFeed = activities as ActivityFeedItem[];
       });
   }
 
@@ -498,7 +502,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   formatCurrency(amount: number): string {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
-      currency: 'MXN'
+      currency: 'MXN',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(amount);
   }
 
