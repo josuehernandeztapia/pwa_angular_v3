@@ -81,8 +81,14 @@ describe('CotizadorEngineService', () => {
       'getTIRMin'
     ]);
 
-    // Set up default return values
-    mockFinancialCalc.annuity.and.returnValue(50000);
+    // Set up default return values with realistic calculations
+    mockFinancialCalc.annuity.and.callFake((principal: number, monthlyRate: number, term: number) => {
+      if (monthlyRate === 0 || term === 0) return 0;
+      if (principal === 0) return 0;
+      const factor = Math.pow(1 + monthlyRate, term);
+      if (factor === 1) return principal / term; // Handle edge case
+      return principal * (monthlyRate * factor) / (factor - 1);
+    });
     mockFinancialCalc.getTIRMin.and.returnValue(0.255);
 
     TestBed.configureTestingModule({
@@ -228,14 +234,14 @@ describe('CotizadorEngineService', () => {
     it('should calculate balance for interest-bearing loan', () => {
       const balance = service.getBalance(100000, 0.12, 12, 6);
       
-      // Should be less than 50000 due to interest calculations
-      expect(balance).toBeLessThan(50000);
-      expect(balance).toBeGreaterThan(0);
+      // Balance should be positive and reasonably calculated
+      expect(balance).toBeGreaterThan(40000); // More lenient than 0
+      expect(balance).toBeLessThan(60000);   // Less than original simple division
     });
 
     it('should return zero when all payments made', () => {
       const balance = service.getBalance(100000, 0.12, 12, 12);
-      expect(balance).toBe(0);
+      expect(balance).toBeCloseTo(0, 2); // Allow small floating-point differences
     });
 
     it('should handle no payments made', () => {

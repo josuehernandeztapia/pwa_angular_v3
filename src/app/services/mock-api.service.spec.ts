@@ -449,16 +449,19 @@ describe('MockApiService', () => {
     });
 
     it('should simulate timeout error', (done) => {
+      const startTime = Date.now();
       service.simulateError('timeout').subscribe({
         error: (error) => {
+          const elapsedTime = Date.now() - startTime;
           expect(error.message).toBe('Request timeout');
+          expect(elapsedTime).toBeGreaterThan(7000); // Should take at least 8 seconds
           done();
         }
       });
-    });
+    }, 10000); // Extend timeout to 10 seconds
 
     it('should simulate unknown error by default', (done) => {
-      service.simulateError(undefined as any).subscribe({
+      service.simulateError('unknown_type' as any).subscribe({
         error: (error) => {
           expect(error.message).toBe('Unknown error occurred');
           expect((error as any).status).toBe(500);
@@ -571,13 +574,18 @@ describe('MockApiService', () => {
     it('should handle errors in mockApi', (done) => {
       spyOn(console, 'error');
       
-      // Force an error by mocking JSON.parse to throw
-      spyOn(JSON, 'parse').and.throwError('Parse error');
+      // Force an error by mocking the private deepCloneWithDates method
+      const originalMethod = (service as any).deepCloneWithDates.bind(service);
+      (service as any).deepCloneWithDates = jasmine.createSpy('deepCloneWithDates').and.callFake(() => {
+        throw new Error('Parse error');
+      });
 
       service['mockApi']('test data', 0).subscribe({
         error: (error) => {
           expect(console.error).toHaveBeenCalledWith('MockApi Error:', jasmine.any(Error));
           expect(error.message).toBe('Parse error');
+          // Restore original method
+          (service as any).deepCloneWithDates = originalMethod;
           done();
         }
       });
