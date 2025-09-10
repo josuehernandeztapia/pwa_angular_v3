@@ -17,8 +17,18 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting(),
 );
 
-// Polyfill minimal Node-style process.env for browser tests
-const g: any = (typeof globalThis !== 'undefined' ? globalThis : window) as any;
+// Polyfill minimal Node-style process.env for browser tests and alias global
+const g: any = (typeof globalThis !== 'undefined' ? globalThis : (window as any));
+// Ensure Node-style global is available for specs that reference it
+;(function ensureGlobalAlias(root: any) {
+  try {
+    if (typeof (root as any).global === 'undefined') {
+      (root as any).global = root;
+    }
+  } catch {
+    // ignore
+  }
+})(g);
 g.process = g.process || {};
 g.process.env = {
   // Payment/Integrations
