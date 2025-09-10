@@ -97,12 +97,15 @@ interface Subscription {
 export class ConektaPaymentService {
   // Use backend proxy for payment operations
   private readonly baseUrl = `${environment.apiUrl}/payments`;
-  private readonly publicKey = environment.services.conekta.publicKey;
+  private get publicKey() {
+    return environment.services.conekta.publicKey;
+  }
   
   private isLoaded = false;
 
   constructor(private http: HttpClient) {
-    this.loadConektaSDK();
+    // Defer initialization to allow tests to set environment first
+    Promise.resolve().then(() => this.loadConektaSDK());
   }
 
   private async loadConektaSDK(): Promise<void> {
