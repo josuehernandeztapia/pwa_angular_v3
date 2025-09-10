@@ -57,20 +57,40 @@ interface ScoringStatus {
 })
 export class CreditScoringService {
 
-  // KINBAN/HASE API Configuration
-  private readonly SCORING_CONFIG = {
-    apiUrl: process.env['KINBAN_API_URL'] || 'https://api.kinban.com',
-    clientId: process.env['KINBAN_CLIENT_ID'] || 'demo_client_id',
-    secret: process.env['KINBAN_SECRET'] || 'demo_secret',
-    haseUrl: process.env['HASE_API_URL'] || 'https://api.hase.mx',
-    haseToken: process.env['HASE_TOKEN'] || 'demo_hase_token'
-  };
+  // KINBAN/HASE API Configuration - lazy loaded to avoid test environment issues
+  private _scoringConfig: {
+    apiUrl: string;
+    clientId: string;
+    secret: string;
+    haseUrl: string;
+    haseToken: string;
+  } | null = null;
 
   // Simulated scoring storage
   private scoringDB = new Map<string, ScoringResponse>();
   private statusDB = new Map<string, ScoringStatus>();
 
   constructor() { }
+
+  private get SCORING_CONFIG() {
+    if (!this._scoringConfig) {
+      this._scoringConfig = {
+        apiUrl: this.getEnvVar('KINBAN_API_URL', 'https://api.kinban.com'),
+        clientId: this.getEnvVar('KINBAN_CLIENT_ID', 'demo_client_id'),
+        secret: this.getEnvVar('KINBAN_SECRET', 'demo_secret'),
+        haseUrl: this.getEnvVar('HASE_API_URL', 'https://api.hase.mx'),
+        haseToken: this.getEnvVar('HASE_TOKEN', 'demo_hase_token')
+      };
+    }
+    return this._scoringConfig;
+  }
+
+  private getEnvVar(key: string, fallback: string): string {
+    if (typeof process !== 'undefined' && process.env) {
+      return process.env[key] || fallback;
+    }
+    return fallback;
+  }
 
   /**
    * Initiate credit scoring process with KINBAN/HASE
