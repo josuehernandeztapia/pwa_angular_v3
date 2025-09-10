@@ -11,6 +11,22 @@ import { ApiService } from '../../../services/api.service';
 import { CustomValidators } from '../../../validators/custom-validators';
 import { Client, BusinessFlow } from '../../../models/types';
 
+const mockClient: Client = {
+  id: '1',
+  name: 'Juan Pérez García',
+  email: 'juan@example.com',
+  phone: '5551234567',
+  rfc: 'PEGJ850315ABC',
+  market: 'aguascalientes',
+  flow: BusinessFlow.VentaPlazo,
+  status: 'Activo',
+  avatarUrl: '',
+  documents: [],
+  events: [],
+  createdAt: new Date(),
+  lastModified: new Date()
+};
+
 describe('ClienteFormComponent', () => {
   let component: ClienteFormComponent;
   let fixture: ComponentFixture<ClienteFormComponent>;
@@ -18,22 +34,6 @@ describe('ClienteFormComponent', () => {
   let mockActivatedRoute: any;
   let mockToastService: jasmine.SpyObj<ToastService>;
   let mockApiService: jasmine.SpyObj<ApiService>;
-
-  const mockClient: Client = {
-    id: '1',
-    name: 'Juan Pérez García',
-    email: 'juan@example.com',
-    phone: '5551234567',
-    rfc: 'PEGJ850315ABC',
-    market: 'aguascalientes',
-    flow: BusinessFlow.VentaPlazo,
-    status: 'Activo',
-    avatarUrl: '',
-    documents: [],
-    events: [],
-    createdAt: new Date(),
-    lastModified: new Date()
-  };
 
   beforeEach(async () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
