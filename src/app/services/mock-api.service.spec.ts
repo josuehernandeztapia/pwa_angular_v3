@@ -77,6 +77,25 @@ describe('MockApiService', () => {
       'deliverUnitToGroup', 'initializeCollectiveGroups'
     ]);
 
+    // Configure spy return values
+    clientDataSpyObj.getClients.and.returnValue(of([mockClient]));
+    clientDataSpyObj.getClientById.and.returnValue(of(mockClient));
+    clientDataSpyObj.createClient.and.returnValue(of(mockClient));
+    clientDataSpyObj.updateClient.and.returnValue(of(mockClient));
+    clientDataSpyObj.addClientEvent.and.returnValue(of(mockClient));
+    clientDataSpyObj.updateDocumentStatus.and.returnValue(of(mockClient));
+
+    ecosystemDataSpyObj.getEcosystems.and.returnValue(of([mockEcosystem]));
+    ecosystemDataSpyObj.getEcosystemById.and.returnValue(of(mockEcosystem));
+    ecosystemDataSpyObj.createEcosystem.and.returnValue(of(mockEcosystem));
+    ecosystemDataSpyObj.updateEcosystemDocumentStatus.and.returnValue(of(mockEcosystem));
+
+    collectiveGroupDataSpyObj.getCollectiveGroups.and.returnValue(of([mockCollectiveGroup]));
+    collectiveGroupDataSpyObj.getCollectiveGroupById.and.returnValue(of(mockCollectiveGroup));
+    collectiveGroupDataSpyObj.addMemberToGroup.and.returnValue(of(mockCollectiveGroup));
+    collectiveGroupDataSpyObj.deliverUnitToGroup.and.returnValue(of(mockCollectiveGroup));
+    collectiveGroupDataSpyObj.initializeCollectiveGroups.and.returnValue(of(undefined));
+
     TestBed.configureTestingModule({
       providers: [
         MockApiService,

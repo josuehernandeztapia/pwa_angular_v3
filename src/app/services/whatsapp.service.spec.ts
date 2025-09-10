@@ -40,16 +40,14 @@ describe('WhatsappService', () => {
     // Mock environment
     spyOnProperty(environment, 'apiUrl', 'get').and.returnValue(mockEnvironment.apiUrl);
     
-    // Mock process.env for Node.js environment
-    if (typeof process !== 'undefined') {
-      const originalEnv = process.env;
-      process.env = {
-        ...originalEnv,
+    // Mock globalThis.process.env for the service
+    (globalThis as any).process = {
+      env: {
         'WHATSAPP_PHONE_NUMBER_ID': mockPhoneNumberId,
         'WHATSAPP_ACCESS_TOKEN': mockAccessToken,
         'WHATSAPP_WEBHOOK_VERIFY_TOKEN': mockVerifyToken
-      };
-    }
+      }
+    };
     
     // Mock localStorage
     spyOn(localStorage, 'getItem').and.returnValue('test-auth-token');
@@ -57,6 +55,8 @@ describe('WhatsappService', () => {
 
   afterEach(() => {
     httpMock.verify();
+    // Clean up globalThis.process mock
+    delete (globalThis as any).process;
   });
 
   describe('Service Initialization', () => {

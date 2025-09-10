@@ -555,6 +555,61 @@ export class PostSalesApiService {
   }
 
   // ==========================================
+  // 📋 MAINTENANCE & CONTACT METHODS
+  // ==========================================
+
+  /**
+   * POST /post-sales/schedule-service
+   * Programar servicio de mantenimiento
+   */
+  scheduleMaintenanceService(request: {
+    vin: string;
+    serviceType: ServiceType;
+    scheduledDate: Date;
+    servicePackage: ServicePackage;
+    notes?: string;
+  }): Observable<{
+    success: boolean;
+    serviceId?: string;
+    error?: string;
+  }> {
+    return this.http.post<{
+      success: boolean;
+      serviceId?: string;
+      error?: string;
+    }>(`${this.baseUrl}/post-sales/schedule-service`, request).pipe(
+      catchError(() => of({ success: false, error: 'Error al programar servicio' }))
+    );
+  }
+
+  /**
+   * POST /post-sales/contact
+   * Registrar contacto con cliente
+   */
+  recordClientContact(contact: {
+    vin: string;
+    contactDate: Date;
+    channel: ContactChannel;
+    purpose: ContactPurpose;
+    notes?: string;
+    contactedBy: string;
+    clientResponse?: string;
+    nextContactDate?: Date;
+  }): Observable<{
+    success: boolean;
+    contactId?: string;
+    error?: string;
+  }> {
+    return this.http.post<{
+      success: boolean;
+      contactId?: string;
+      error?: string;
+    }>(`${this.baseUrl}/post-sales/contact`, contact).pipe(
+      catchError(() => of({ success: false, error: 'Error al registrar contacto' }))
+    );
+  }
+
+  // ==========================================
   // 🔄 UTILITY METHODS
   // ==========================================
 
