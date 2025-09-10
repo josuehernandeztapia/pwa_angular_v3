@@ -2,8 +2,8 @@ import { formatCurrencyMXN, formatPercent, parseCurrency, toYears } from './form
 
 describe('format.util', () => {
 	it('formatCurrencyMXN should format with symbol and two decimals', () => {
-		expect(formatCurrencyMXN(1234.5)).toBe('$1,234.50');
-		expect(formatCurrencyMXN('1000')).toBe('$1,000.00');
+		expect(formatCurrencyMXN(1234.5)).toBe('MX$1,234.50');
+		expect(formatCurrencyMXN('1000')).toBe('MX$1,000.00');
 	});
 
 	it('parseCurrency should parse strings with symbols and commas', () => {
