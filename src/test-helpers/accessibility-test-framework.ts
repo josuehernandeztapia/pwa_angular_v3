@@ -57,15 +57,7 @@ export class AccessibilityTester {
       
       // Configure axe for Angular applications
       this.axeCore.configure({
-        rules: {
-          // Enable all WCAG AA rules
-          'color-contrast': { enabled: true },
-          'keyboard-navigation': { enabled: true },
-          'focus-order': { enabled: true },
-          'aria-labels': { enabled: true },
-          'semantic-markup': { enabled: true }
-        },
-        tags: ['wcag2a', 'wcag2aa', 'best-practice']
+        rules: []
       });
 
       console.log('🔍 Accessibility testing framework initialized');

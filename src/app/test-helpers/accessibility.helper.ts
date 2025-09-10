@@ -1,6 +1,20 @@
 import { ComponentFixture } from '@angular/core/testing';
 import * as axeCore from 'axe-core';
 
+// Type definitions for axe-core results
+interface AxeViolation {
+  id: string;
+  description: string;
+  nodes: any[];
+}
+
+interface AxeResults {
+  violations: AxeViolation[];
+  passes: any[];
+  incomplete: any[];
+  inapplicable: any[];
+}
+
 // Configure axe for Angular applications
 const axeConfig = {
   rules: {
@@ -33,7 +47,7 @@ const axeConfig = {
     'valid-lang': { enabled: true },
     'video-caption': { enabled: true }
   }
-});
+};
 
 // Create configureAxe function for compatibility
 function configureAxe(config: any) {
@@ -45,7 +59,7 @@ function configureAxe(config: any) {
  */
 export async function testAccessibility(fixture: ComponentFixture<any>): Promise<void> {
   const element = fixture.nativeElement;
-  const results = await axeCore.run(element, axeConfig);
+  const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
   if (results.violations.length > 0) {
     const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
     throw new Error(`Accessibility violations found: ${violations}`);
@@ -57,7 +71,7 @@ export async function testAccessibility(fixture: ComponentFixture<any>): Promise
  * Test accessibility of a specific element
  */
 export async function testElementAccessibility(element: HTMLElement): Promise<void> {
-  const results = await axeCore.run(element, axeConfig);
+  const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
   if (results.violations.length > 0) {
     const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
     throw new Error(`Accessibility violations found: ${violations}`);
@@ -73,7 +87,7 @@ export async function testAccessibilityWithConfig(
   config: any
 ): Promise<void> {
   const element = fixture.nativeElement;
-  const results = await axeCore.run(element, config);
+  const results = await axeCore.run(element, config) as unknown as AxeResults;
   if (results.violations.length > 0) {
     const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
     throw new Error(`Accessibility violations found: ${violations}`);
@@ -84,9 +98,9 @@ export async function testAccessibilityWithConfig(
 /**
  * Get accessibility violations without throwing
  */
-export async function getAccessibilityViolations(fixture: ComponentFixture<any>): Promise<any> {
+export async function getAccessibilityViolations(fixture: ComponentFixture<any>): Promise<AxeViolation[]> {
   const element = fixture.nativeElement;
-  const results = await axeCore.run(element, axeConfig);
+  const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
   return results.violations;
 }
 
@@ -210,7 +224,7 @@ export class AccessibilityChecker {
         rules: {
           'color-contrast': { enabled: true }
         }
-      });
+      }) as unknown as AxeResults;
       return results.violations.length === 0;
     } catch {
       return true; // Assume pass if unable to test
@@ -229,7 +243,7 @@ export function createAccessibilityTestSuite(componentName: string) {
 
     [`${componentName} should have no accessibility violations`]: async (fixture: ComponentFixture<any>) => {
       const violations = await getAccessibilityViolations(fixture);
-      expect(violations).toHaveLength(0);
+      expect(violations.length).toBe(0);
     },
 
     [`${componentName} interactive elements should be keyboard accessible`]: (fixture: ComponentFixture<any>) => {

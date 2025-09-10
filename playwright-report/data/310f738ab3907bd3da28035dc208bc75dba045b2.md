@@ -1,0 +1,314 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44] [cursor=pointer]: 🎯
+            - generic [ref=e45] [cursor=pointer]: Simulador
+          - generic [ref=e47] [cursor=pointer]:
+            - generic [ref=e48] [cursor=pointer]: 👥
+            - generic [ref=e49] [cursor=pointer]: Clientes
+            - generic [ref=e50] [cursor=pointer]: "12"
+          - generic [ref=e52] [cursor=pointer]:
+            - generic [ref=e53] [cursor=pointer]: 📋
+            - generic [ref=e54] [cursor=pointer]: Expedientes
+          - generic [ref=e56] [cursor=pointer]:
+            - generic [ref=e57] [cursor=pointer]: 🛡️
+            - generic [ref=e58] [cursor=pointer]: Protección
+            - generic [ref=e59] [cursor=pointer]: "3"
+          - generic [ref=e61] [cursor=pointer]:
+            - generic [ref=e62] [cursor=pointer]: 📊
+            - generic [ref=e63] [cursor=pointer]: Reportes
+        - generic [ref=e64]:
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: ❓
+            - generic [ref=e68] [cursor=pointer]: Ayuda
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]: ⚙️
+            - generic [ref=e72] [cursor=pointer]: Configuración
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75] [cursor=pointer]: 🚪
+            - generic [ref=e76] [cursor=pointer]: Salir
+      - button "Abrir menú" [ref=e77] [cursor=pointer]: ☰
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e81]: 🔔 Notificaciones
+          - button "✕" [ref=e83] [cursor=pointer]
+        - generic [ref=e85]:
+          - generic [ref=e86]: 🔔
+          - generic [ref=e87]:
+            - generic [ref=e88]: Activar Notificaciones
+            - generic [ref=e89]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e90]:
+            - button "Activar" [ref=e91] [cursor=pointer]
+            - button "Después" [ref=e92] [cursor=pointer]
+        - generic [ref=e94]:
+          - generic [ref=e95]: 📭
+          - generic [ref=e96]: No hay notificaciones
+          - generic [ref=e97]: Las notificaciones aparecerán aquí
+    - main [ref=e98]:
+      - generic [ref=e100]:
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - heading "✨ Centro de Comando" [level=1] [ref=e103]:
+              - generic [ref=e104]: ✨
+              - text: Centro de Comando
+            - paragraph [ref=e105]: Tu plan de acción para hoy, Ricardo.
+          - generic [ref=e106]:
+            - generic [ref=e108]:
+              - generic [ref=e109]:
+                - generic [ref=e110]:
+                  - generic [ref=e111]:
+                    - generic [ref=e112]: 👤
+                    - generic [ref=e113]: Modo Asesor
+                  - button "Cambiar a Modo Cliente" [ref=e114] [cursor=pointer]:
+                    - generic [ref=e117] [cursor=pointer]: 👔
+                    - generic [ref=e118] [cursor=pointer]: Cambiar a Cliente
+                - paragraph [ref=e120]: Vista completa con herramientas de poder para análisis y gestión avanzada
+              - generic:
+                - generic:
+                  - heading [level=3]
+                  - paragraph
+            - generic [ref=e121]:
+              - generic [ref=e122]: 👤 Ricardo Montoya ⏷
+              - button "🚚 Modo Cliente" [ref=e123] [cursor=pointer]
+        - main [ref=e124]:
+          - generic [ref=e125]:
+            - heading "💡 TU PRÓXIMA MEJOR ACCIÓN" [level=2] [ref=e127]
+            - generic [ref=e129]:
+              - generic [ref=e130]:
+                - generic [ref=e133]: 📞
+                - generic [ref=e134]:
+                  - heading "Contactar a María García (Ruta 27)" [level=2] [ref=e135]
+                  - paragraph [ref=e136]: Tu próxima mejor acción para maximizar el impacto
+                - generic [ref=e137]:
+                  - generic [ref=e138]: ⏱️
+                  - generic [ref=e139]: 5 min
+              - generic [ref=e140]:
+                - generic [ref=e141]:
+                  - generic [ref=e142]:
+                    - generic [ref=e143]: MG
+                    - generic [ref=e144]: "78"
+                  - generic [ref=e145]:
+                    - heading "María García" [level=3] [ref=e146]
+                    - generic [ref=e148]: Ruta 27
+                    - paragraph [ref=e149]: Su expediente está incompleto (falta INE). Tiene un Health Score de 78.
+                - generic [ref=e150]:
+                  - generic [ref=e151]:
+                    - generic [ref=e152]: 🧠
+                    - generic [ref=e153]: Inteligencia de Negocio
+                  - paragraph [ref=e154]: Cliente con alto potencial que necesita completar documentación para avanzar en el proceso.
+                  - generic [ref=e155]:
+                    - generic [ref=e156]:
+                      - generic [ref=e157]: 📅
+                      - generic [ref=e158]: 5 días
+                      - generic [ref=e159]: esperando
+                    - generic [ref=e160]:
+                      - generic [ref=e161]: 💰
+                      - generic [ref=e162]: $15,000
+                      - generic [ref=e163]: en juego
+              - generic [ref=e164]:
+                - button "📄 Ver Expediente" [ref=e165] [cursor=pointer]:
+                  - generic [ref=e166] [cursor=pointer]: 📄
+                  - generic [ref=e167] [cursor=pointer]: Ver Expediente
+                - generic [ref=e168]:
+                  - button "📞 Llamar Ahora" [ref=e169] [cursor=pointer]:
+                    - generic [ref=e170] [cursor=pointer]: 📞
+                    - generic [ref=e171] [cursor=pointer]: Llamar Ahora
+                  - button "📱 Enviar Recordatorio por WhatsApp" [ref=e172] [cursor=pointer]:
+                    - generic [ref=e173] [cursor=pointer]: 📱
+                    - generic [ref=e174] [cursor=pointer]: Enviar Recordatorio por WhatsApp
+          - generic [ref=e175]:
+            - generic [ref=e176]:
+              - heading "📊 KPIs Clave (vs. Semana Pasada)" [level=3] [ref=e177]
+              - generic [ref=e179]:
+                - generic [ref=e180]:
+                  - heading "📊 KPIs Clave" [level=3] [ref=e181]
+                  - paragraph [ref=e182]: vs. Semana Pasada
+                - generic [ref=e183]:
+                  - generic [ref=e184]:
+                    - generic [ref=e185]:
+                      - generic [ref=e186]: 💡
+                      - generic [ref=e187]:
+                        - generic [ref=e188]: ▲
+                        - generic [ref=e189]: 25%
+                    - generic [ref=e190]:
+                      - generic [ref=e191]: "12"
+                      - generic [ref=e192]: Oportunidades
+                      - generic [ref=e193]: Nuevas esta semana
+                  - generic [ref=e196]:
+                    - generic [ref=e197]:
+                      - generic [ref=e198]: 🎯
+                      - generic [ref=e199]:
+                        - generic [ref=e200]: ▲
+                        - generic [ref=e201]: 15%
+                    - generic [ref=e202]:
+                      - generic [ref=e203]: 28.0%
+                      - generic [ref=e204]: Tasa de Cierre
+                  - generic [ref=e207]:
+                    - generic [ref=e208]:
+                      - generic [ref=e209]: 📋
+                      - generic [ref=e210]:
+                        - generic [ref=e211]: →
+                        - generic [ref=e212]: 0%
+                    - generic [ref=e213]:
+                      - generic [ref=e214]: "28"
+                      - generic [ref=e215]: Contratos Activos
+                  - generic [ref=e217]:
+                    - generic [ref=e218]:
+                      - generic [ref=e219]: 💰
+                      - generic [ref=e220]:
+                        - generic [ref=e221]: ▲
+                        - generic [ref=e222]: 12%
+                    - generic [ref=e223]:
+                      - generic [ref=e224]: $1,250,000
+                      - generic [ref=e225]: Revenue del Mes
+            - generic [ref=e228]:
+              - heading "🔥 Radar de Riesgo" [level=3] [ref=e229]
+              - paragraph [ref=e230]: (Visualización de clientes por Health Score)
+              - generic [ref=e232]:
+                - generic [ref=e233]:
+                  - generic [ref=e234]:
+                    - heading "🔥 Radar de Riesgo" [level=3] [ref=e235]
+                    - paragraph [ref=e236]: Visualización proactiva de la salud de tu cartera
+                  - generic [ref=e237]:
+                    - generic [ref=e240]: Bajo
+                    - generic [ref=e243]: Medio
+                    - generic [ref=e246]: Alto
+                    - generic [ref=e249]: Crítico
+                - generic [ref=e251]:
+                  - generic [ref=e258]: Zona Segura
+                  - generic [ref=e259]: Atención
+                  - generic [ref=e260]: Riesgo Alto
+                  - generic [ref=e261]: Crítico
+                  - generic [ref=e264] [cursor=pointer]: MG
+                  - generic [ref=e267] [cursor=pointer]: CM
+                  - generic [ref=e270] [cursor=pointer]: AR
+                  - generic [ref=e273] [cursor=pointer]: JH
+                - generic [ref=e274]:
+                  - generic [ref=e275]:
+                    - generic [ref=e276]: "2"
+                    - generic [ref=e277]: Críticos
+                  - generic [ref=e278]:
+                    - generic [ref=e279]: "0"
+                    - generic [ref=e280]: Alto Riesgo
+                  - generic [ref=e281]:
+                    - generic [ref=e282]: "1"
+                    - generic [ref=e283]: Atención
+                  - generic [ref=e284]:
+                    - generic [ref=e285]: "1"
+                    - generic [ref=e286]: Estables
+          - generic [ref=e287]:
+            - heading "🛰️ Feed de Actividad en Tiempo Real" [level=2] [ref=e288]
+            - generic [ref=e291]:
+              - generic [ref=e292]:
+                - heading "🛰️ Feed de Actividad en Tiempo Real" [level=3] [ref=e293]
+                - generic [ref=e294]:
+                  - button "Todos" [ref=e295] [cursor=pointer]
+                  - button "Acciones" [ref=e296] [cursor=pointer]
+                  - button "Logros" [ref=e297] [cursor=pointer]
+              - generic [ref=e298]:
+                - generic [ref=e299]:
+                  - generic [ref=e301]: 💰
+                  - generic [ref=e303]:
+                    - generic [ref=e305]:
+                      - generic [ref=e306]: Sistema
+                      - generic [ref=e307]: hace 2 min
+                    - generic [ref=e308]:
+                      - heading "Pago de $5,000 MXN recibido de Juan Pérez." [level=4] [ref=e309]
+                      - paragraph [ref=e310]:
+                        - text: Pago de $5,000 MXN recibido de . ¡Felicítalo!
+                        - generic [ref=e311]: Juan Pérez
+                      - generic [ref=e313]:
+                        - generic [ref=e314]: 💰
+                        - generic [ref=e315]: $5,000
+                      - button "👏 ¡Felicítalo!" [ref=e316] [cursor=pointer]:
+                        - generic [ref=e317] [cursor=pointer]: 👏
+                        - generic [ref=e318] [cursor=pointer]: ¡Felicítalo!
+                - generic [ref=e319]:
+                  - generic [ref=e321]: 📄
+                  - generic [ref=e323]:
+                    - generic [ref=e325]:
+                      - generic [ref=e326]: Asesor
+                      - generic [ref=e327]: hace 15 min
+                    - generic [ref=e328]:
+                      - heading "Documento 'INE' de Ana López marcado como 'En Revisión'." [level=4] [ref=e329]
+                      - paragraph [ref=e330]:
+                        - text: El documento ha sido recibido y está siendo procesado por el equipo de validación.
+                        - generic [ref=e331]: Ana López
+                - generic [ref=e332]:
+                  - generic [ref=e334]: 💡
+                  - generic [ref=e335]:
+                    - generic [ref=e336]:
+                      - generic [ref=e337]:
+                        - generic [ref=e338]: Sistema
+                        - generic [ref=e339]: hace 1h
+                      - generic [ref=e341]: 🔥
+                    - generic [ref=e342]:
+                      - heading "Nueva oportunidad 'Carlos Sánchez' asignada." [level=4] [ref=e343]
+                      - paragraph [ref=e344]:
+                        - text: Se ha creado una nueva oportunidad de negocio que requiere tu atención.
+                        - generic [ref=e345]: Carlos Sánchez
+              - button "⬇️ Cargar más actividades" [ref=e347] [cursor=pointer]:
+                - generic [ref=e348] [cursor=pointer]: ⬇️
+                - text: Cargar más actividades
+    - navigation "Navegación inferior":
+      - navigation [ref=e349]:
+        - generic [ref=e350] [cursor=pointer]:
+          - generic [ref=e352] [cursor=pointer]: 🏠
+          - generic [ref=e353] [cursor=pointer]: Dashboard
+        - generic [ref=e355] [cursor=pointer]:
+          - generic [ref=e356] [cursor=pointer]:
+            - generic [ref=e357] [cursor=pointer]: 🎯
+            - generic [ref=e358] [cursor=pointer]: "5"
+          - generic [ref=e359] [cursor=pointer]: Oportunidades
+        - generic [ref=e360] [cursor=pointer]:
+          - generic [ref=e362] [cursor=pointer]: 💰
+          - generic [ref=e363] [cursor=pointer]: Cotizar
+        - generic [ref=e364] [cursor=pointer]:
+          - generic [ref=e365] [cursor=pointer]:
+            - generic [ref=e366] [cursor=pointer]: 👥
+            - generic [ref=e367] [cursor=pointer]: "12"
+          - generic [ref=e368] [cursor=pointer]: Clientes
+        - generic [ref=e369] [cursor=pointer]:
+          - generic [ref=e370] [cursor=pointer]:
+            - generic [ref=e371] [cursor=pointer]: ⚡
+            - generic [ref=e372] [cursor=pointer]: "2"
+          - generic [ref=e373] [cursor=pointer]: Más
+```

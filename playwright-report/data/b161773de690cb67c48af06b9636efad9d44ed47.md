@@ -1,0 +1,144 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44] [cursor=pointer]: 🎯
+            - generic [ref=e45] [cursor=pointer]: Simulador
+          - generic [ref=e47] [cursor=pointer]:
+            - generic [ref=e48] [cursor=pointer]: 👥
+            - generic [ref=e49] [cursor=pointer]: Clientes
+            - generic [ref=e50] [cursor=pointer]: "12"
+          - generic [ref=e52] [cursor=pointer]:
+            - generic [ref=e53] [cursor=pointer]: 📋
+            - generic [ref=e54] [cursor=pointer]: Expedientes
+          - generic [ref=e56] [cursor=pointer]:
+            - generic [ref=e57] [cursor=pointer]: 🛡️
+            - generic [ref=e58] [cursor=pointer]: Protección
+            - generic [ref=e59] [cursor=pointer]: "3"
+          - generic [ref=e61] [cursor=pointer]:
+            - generic [ref=e62] [cursor=pointer]: 📊
+            - generic [ref=e63] [cursor=pointer]: Reportes
+        - generic [ref=e64]:
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: ❓
+            - generic [ref=e68] [cursor=pointer]: Ayuda
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]: ⚙️
+            - generic [ref=e72] [cursor=pointer]: Configuración
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75] [cursor=pointer]: 🚪
+            - generic [ref=e76] [cursor=pointer]: Salir
+      - button "Abrir menú" [ref=e77] [cursor=pointer]: ☰
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e81]: 🔔 Notificaciones
+          - button "✕" [ref=e83] [cursor=pointer]
+        - generic [ref=e85]:
+          - generic [ref=e86]: 🔔
+          - generic [ref=e87]:
+            - generic [ref=e88]: Activar Notificaciones
+            - generic [ref=e89]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e90]:
+            - button "Activar" [ref=e91] [cursor=pointer]
+            - button "Después" [ref=e92] [cursor=pointer]
+        - generic [ref=e94]:
+          - generic [ref=e95]: 📭
+          - generic [ref=e96]: No hay notificaciones
+          - generic [ref=e97]: Las notificaciones aparecerán aquí
+    - main [ref=e98]:
+      - generic [ref=e100]:
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - heading "Entregas" [level=1] [ref=e103]
+            - paragraph [ref=e104]: Órdenes y stock por mercado
+          - generic [ref=e105]:
+            - button "Actualizar" [ref=e106] [cursor=pointer]: 🔄 Actualizar
+            - button "Recalcular stock" [ref=e107] [cursor=pointer]: 📊 Recalcular Stock
+        - region "Filtros de entregas" [ref=e108]:
+          - generic [ref=e109]:
+            - generic [ref=e110]: 📍 Mercado
+            - combobox "Seleccionar mercado" [ref=e111]:
+              - option "Todos los mercados" [selected]
+              - option "Aguascalientes (CON asientos)"
+              - option "Estado de México (SIN asientos)"
+          - generic [ref=e112]:
+            - generic [ref=e113]: 👤 Cliente
+            - textbox "Buscar cliente" [ref=e114]
+          - generic [ref=e115]:
+            - generic [ref=e116]: 📦 Estado
+            - combobox "Seleccionar estado" [ref=e117]:
+              - option "Todos los estados" [selected]
+              - option "Orden Emitida"
+              - option "En Producción"
+              - option "Lista en Fábrica"
+              - option "En Puerto Origen"
+              - option "En Tránsito Marítimo"
+              - option "En Puerto Destino"
+              - option "En Aduanas"
+              - option "Liberado"
+              - option "En Bodega"
+              - option "Lista para Entrega"
+              - option "Entregada"
+          - generic [ref=e119]: 0 pedidos encontrados
+        - status [ref=e120]: 0 pedidos — ajusta los filtros para ver resultados.
+    - navigation "Navegación inferior":
+      - navigation [ref=e121]:
+        - generic [ref=e122] [cursor=pointer]:
+          - generic [ref=e124] [cursor=pointer]: 🏠
+          - generic [ref=e125] [cursor=pointer]: Dashboard
+        - generic [ref=e126] [cursor=pointer]:
+          - generic [ref=e127] [cursor=pointer]:
+            - generic [ref=e128] [cursor=pointer]: 🎯
+            - generic [ref=e129] [cursor=pointer]: "5"
+          - generic [ref=e130] [cursor=pointer]: Oportunidades
+        - generic [ref=e131] [cursor=pointer]:
+          - generic [ref=e133] [cursor=pointer]: 💰
+          - generic [ref=e134] [cursor=pointer]: Cotizar
+        - generic [ref=e135] [cursor=pointer]:
+          - generic [ref=e136] [cursor=pointer]:
+            - generic [ref=e137] [cursor=pointer]: 👥
+            - generic [ref=e138] [cursor=pointer]: "12"
+          - generic [ref=e139] [cursor=pointer]: Clientes
+        - generic [ref=e140] [cursor=pointer]:
+          - generic [ref=e141] [cursor=pointer]:
+            - generic [ref=e142] [cursor=pointer]: ⚡
+            - generic [ref=e143] [cursor=pointer]: "2"
+          - generic [ref=e144] [cursor=pointer]: Más
+```

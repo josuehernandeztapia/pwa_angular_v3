@@ -1,0 +1,156 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e38] [cursor=pointer]:
+            - generic [ref=e39] [cursor=pointer]:
+              - generic [ref=e40] [cursor=pointer]: 💰
+              - generic [ref=e41] [cursor=pointer]: Cotizador
+            - generic [ref=e42] [cursor=pointer]:
+              - generic [ref=e43] [cursor=pointer]:
+                - generic [ref=e44] [cursor=pointer]: 🚐
+                - generic [ref=e45] [cursor=pointer]: AGS Individual
+              - generic [ref=e46] [cursor=pointer]:
+                - generic [ref=e47] [cursor=pointer]: 🤝
+                - generic [ref=e48] [cursor=pointer]: EdoMex Colectivo
+          - generic [ref=e50] [cursor=pointer]:
+            - generic [ref=e51] [cursor=pointer]: 🎯
+            - generic [ref=e52] [cursor=pointer]: Simulador
+          - generic [ref=e54] [cursor=pointer]:
+            - generic [ref=e55] [cursor=pointer]: 👥
+            - generic [ref=e56] [cursor=pointer]: Clientes
+            - generic [ref=e57] [cursor=pointer]: "12"
+          - generic [ref=e59] [cursor=pointer]:
+            - generic [ref=e60] [cursor=pointer]: 📋
+            - generic [ref=e61] [cursor=pointer]: Expedientes
+          - generic [ref=e63] [cursor=pointer]:
+            - generic [ref=e64] [cursor=pointer]: 🛡️
+            - generic [ref=e65] [cursor=pointer]: Protección
+            - generic [ref=e66] [cursor=pointer]: "3"
+          - generic [ref=e68] [cursor=pointer]:
+            - generic [ref=e69] [cursor=pointer]: 📊
+            - generic [ref=e70] [cursor=pointer]: Reportes
+        - generic [ref=e71]:
+          - generic [ref=e73] [cursor=pointer]:
+            - generic [ref=e74] [cursor=pointer]: ❓
+            - generic [ref=e75] [cursor=pointer]: Ayuda
+          - generic [ref=e77] [cursor=pointer]:
+            - generic [ref=e78] [cursor=pointer]: ⚙️
+            - generic [ref=e79] [cursor=pointer]: Configuración
+          - generic [ref=e81] [cursor=pointer]:
+            - generic [ref=e82] [cursor=pointer]: 🚪
+            - generic [ref=e83] [cursor=pointer]: Salir
+      - generic [ref=e84]:
+        - generic [ref=e85]:
+          - generic [ref=e87]: 🔔 Notificaciones
+          - button "✕" [ref=e89] [cursor=pointer]
+        - generic [ref=e91]:
+          - generic [ref=e92]: 🔔
+          - generic [ref=e93]:
+            - generic [ref=e94]: Activar Notificaciones
+            - generic [ref=e95]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e96]:
+            - button "Activar" [ref=e97] [cursor=pointer]
+            - button "Después" [ref=e98] [cursor=pointer]
+        - generic [ref=e100]:
+          - generic [ref=e101]: 📭
+          - generic [ref=e102]: No hay notificaciones
+          - generic [ref=e103]: Las notificaciones aparecerán aquí
+    - main [ref=e104]:
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - button "← Volver" [ref=e108] [cursor=pointer]
+          - heading "🌵 Cotizador AGS Individual" [level=1] [ref=e109]
+          - paragraph [ref=e110]: Aguascalientes • Venta a Plazo & Compra de Contado
+        - generic [ref=e111]:
+          - heading "Resumen" [level=2] [ref=e112]
+          - generic [ref=e113]:
+            - generic [ref=e114]:
+              - generic [ref=e115]: Pago mensual
+              - strong [ref=e116]: MX$0
+            - generic [ref=e117]:
+              - generic [ref=e118]: Plazo
+              - strong [ref=e119]: 12 meses
+            - generic [ref=e120]:
+              - generic [ref=e121]: Total
+              - strong [ref=e122]: MX$853,000
+        - generic [ref=e125]:
+          - generic [ref=e126]:
+            - heading "💰 Unidad" [level=2] [ref=e127]
+            - generic [ref=e128]:
+              - generic [ref=e129] [cursor=pointer]:
+                - radio "Venta a Plazo 12-24 meses • Enganche 60% • Tasa 25.5%" [checked] [ref=e130]
+                - generic [ref=e131] [cursor=pointer]:
+                  - strong [ref=e132] [cursor=pointer]: Venta a Plazo
+                  - generic [ref=e133] [cursor=pointer]: 12-24 meses • Enganche 60% • Tasa 25.5%
+              - generic [ref=e134] [cursor=pointer]:
+                - radio "Compra de Contado Sin financiamiento • Enganche 50%" [ref=e135]
+                - generic [ref=e136] [cursor=pointer]:
+                  - strong [ref=e137] [cursor=pointer]: Compra de Contado
+                  - generic [ref=e138] [cursor=pointer]: Sin financiamiento • Enganche 50%
+          - generic [ref=e139]:
+            - heading "📦 Consumo" [level=2] [ref=e140]
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - heading "🚐 Vagoneta H6C (19 Pasajeros)" [level=4] [ref=e143]
+                - generic [ref=e144]: $799,000 MXN
+              - generic [ref=e145]:
+                - generic [ref=e147]:
+                  - generic [ref=e148]: ✅ Vagoneta H6C (19 Pasajeros)
+                  - strong [ref=e149]: MX$799,000
+                - generic [ref=e151]:
+                  - generic [ref=e152]: ✅ Conversión GNV
+                  - strong [ref=e153]: MX$54,000
+              - generic [ref=e154]:
+                - generic [ref=e155]: "Total del Paquete:"
+                - strong [ref=e156]: MX$853,000
+          - generic [ref=e157]:
+            - heading "💳 Finanzas" [level=2] [ref=e158]
+            - generic [ref=e159]:
+              - generic [ref=e160]: Plazo
+              - combobox [ref=e161]:
+                - option "Seleccionar"
+                - option "12 meses" [selected]
+                - option "24 meses"
+            - generic [ref=e162]:
+              - generic [ref=e163]: Enganche (Mínimo 60%)
+              - generic [ref=e164]:
+                - generic [ref=e165]: $
+                - spinbutton [ref=e166]: "511800"
+              - generic [ref=e167]: "Mínimo: MX$511,800"
+            - button "🧮 Calcular" [ref=e168] [cursor=pointer]
+    - navigation "Navegación inferior"
+```
