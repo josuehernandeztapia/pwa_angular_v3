@@ -267,6 +267,17 @@ export class ConfigurationService {
    * Get default configuration based on current business logic
    */
   private getDefaultConfiguration(): ApplicationConfiguration {
+    const getEnv = (key: string, fallback: string): string => {
+      try {
+        // Safe access to process.env in browser
+        const env = (typeof process !== 'undefined' && (process as any).env)
+          || ((typeof window !== 'undefined' && (window as any).process && (window as any).process.env) ? (window as any).process.env : undefined);
+        const value = env?.[key];
+        return (typeof value === 'string' && value.length > 0) ? value : fallback;
+      } catch {
+        return fallback;
+      }
+    };
     const markets: MarketConfiguration = {
       aguascalientes: {
         interestRate: 0.255,
@@ -455,14 +466,14 @@ export class ConfigurationService {
 
     const api: APIConfiguration = {
       kinban: {
-        apiUrl: process.env['KINBAN_API_URL'] || 'https://api.kinban.com',
-        clientId: process.env['KINBAN_CLIENT_ID'] || 'demo_client_id',
-        secret: process.env['KINBAN_SECRET'] || 'demo_secret',
+        apiUrl: getEnv('KINBAN_API_URL', 'https://api.kinban.com'),
+        clientId: getEnv('KINBAN_CLIENT_ID', 'demo_client_id'),
+        secret: getEnv('KINBAN_SECRET', 'demo_secret'),
         timeout: 30000
       },
       hase: {
-        apiUrl: process.env['HASE_API_URL'] || 'https://api.hase.mx',
-        token: process.env['HASE_TOKEN'] || 'demo_hase_token',
+        apiUrl: getEnv('HASE_API_URL', 'https://api.hase.mx'),
+        token: getEnv('HASE_TOKEN', 'demo_hase_token'),
         timeout: 30000
       },
       estimatedProcessingTime: 3
@@ -502,8 +513,8 @@ export class ConfigurationService {
 
     const avi: AVIConfiguration = {
       enabled: true,
-      apiUrl: process.env['AVI_API_URL'] || 'https://api.avi-service.com',
-      apiKey: process.env['AVI_API_KEY'] || 'demo_avi_key',
+      apiUrl: getEnv('AVI_API_URL', 'https://api.avi-service.com'),
+      apiKey: getEnv('AVI_API_KEY', 'demo_avi_key'),
       timeout: 30000,
       retryAttempts: 3,
       questions: {

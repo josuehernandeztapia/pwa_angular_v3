@@ -67,7 +67,7 @@ export class ProtectionEngineService {
       termChange: 0,
       details: [
         `Pagos de $0 por ${months} meses`, 
-        `El pago mensual sube a ${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(newPayment_A)} después.`
+        `El pago mensual sube a ${this.financialCalc.formatCurrency(newPayment_A)} después.`
       ]
     });
 
@@ -83,8 +83,8 @@ export class ProtectionEngineService {
       newTerm: originalTerm,
       termChange: 0,
       details: [
-        `Pagos de ${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(reducedPayment)} por ${months} meses`, 
-        `El pago sube a ${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(compensationPayment)} después.`
+        `Pagos de ${this.financialCalc.formatCurrency(reducedPayment)} por ${months} meses`, 
+        `El pago sube a ${this.financialCalc.formatCurrency(compensationPayment)} después.`
       ]
     });
 

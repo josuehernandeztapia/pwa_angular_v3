@@ -385,10 +385,11 @@ export class PdfExportService {
 
   // Utility methods
   private formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('es-MX', {
+    // Use consistent MXN prefix formatting
+    return `MX$${new Intl.NumberFormat('es-MX', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    }).format(amount);
+    }).format(amount)}`;
   }
 
   private formatDate(date: Date): string {
