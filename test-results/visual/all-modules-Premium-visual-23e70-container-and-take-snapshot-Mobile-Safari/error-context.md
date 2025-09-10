@@ -1,0 +1,170 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44] [cursor=pointer]: 🎯
+            - generic [ref=e45] [cursor=pointer]: Simulador
+          - generic [ref=e47] [cursor=pointer]:
+            - generic [ref=e48] [cursor=pointer]: 👥
+            - generic [ref=e49] [cursor=pointer]: Clientes
+            - generic [ref=e50] [cursor=pointer]: "12"
+          - generic [ref=e52] [cursor=pointer]:
+            - generic [ref=e53] [cursor=pointer]: 📋
+            - generic [ref=e54] [cursor=pointer]: Expedientes
+          - generic [ref=e56] [cursor=pointer]:
+            - generic [ref=e57] [cursor=pointer]: 🛡️
+            - generic [ref=e58] [cursor=pointer]: Protección
+            - generic [ref=e59] [cursor=pointer]: "3"
+          - generic [ref=e61] [cursor=pointer]:
+            - generic [ref=e62] [cursor=pointer]: 📊
+            - generic [ref=e63] [cursor=pointer]: Reportes
+        - generic [ref=e64]:
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: ❓
+            - generic [ref=e68] [cursor=pointer]: Ayuda
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]: ⚙️
+            - generic [ref=e72] [cursor=pointer]: Configuración
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75] [cursor=pointer]: 🚪
+            - generic [ref=e76] [cursor=pointer]: Salir
+      - button "Abrir menú" [ref=e77] [cursor=pointer]: ☰
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e81]: 🔔 Notificaciones
+          - button "✕" [ref=e83] [cursor=pointer]
+        - generic [ref=e85]:
+          - generic [ref=e86]: 🔔
+          - generic [ref=e87]:
+            - generic [ref=e88]: Activar Notificaciones
+            - generic [ref=e89]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e90]:
+            - button "Activar" [ref=e91] [cursor=pointer]
+            - button "Después" [ref=e92] [cursor=pointer]
+        - generic [ref=e94]:
+          - generic [ref=e95]: 📭
+          - generic [ref=e96]: No hay notificaciones
+          - generic [ref=e97]: Las notificaciones aparecerán aquí
+    - main [ref=e98]:
+      - generic [ref=e100]:
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - heading "📂 Expedientes" [level=1] [ref=e103]
+            - paragraph [ref=e104]: Gestión de documentos y expedientes de clientes
+          - button "📝 Nuevo Expediente" [ref=e106] [cursor=pointer]
+        - main [ref=e107]:
+          - generic [ref=e109]:
+            - generic [ref=e110]:
+              - generic [ref=e111]: 🔍 Buscar expediente
+              - textbox "Nombre, RFC, o número de expediente..." [ref=e112]
+            - generic [ref=e113]:
+              - generic [ref=e114]: 📊 Estado
+              - combobox [ref=e115]:
+                - option "Todos" [selected]
+                - option "Completo"
+                - option "Pendiente"
+                - option "En Revisión"
+          - generic [ref=e116]:
+            - generic [ref=e117]:
+              - generic [ref=e118]:
+                - generic [ref=e119]:
+                  - heading "Juan Pérez García" [level=3] [ref=e120]
+                  - paragraph [ref=e121]: "ID: EXP-001"
+                - generic [ref=e122]: Completo
+              - generic [ref=e123]:
+                - generic [ref=e124]:
+                  - generic [ref=e125]:
+                    - generic [ref=e126]: "8"
+                    - generic [ref=e127]: Documentos
+                  - generic [ref=e128]:
+                    - generic [ref=e129]: "8"
+                    - generic [ref=e130]: Completos
+                  - generic [ref=e131]:
+                    - generic [ref=e132]: "0"
+                    - generic [ref=e133]: Pendientes
+                - generic [ref=e137]: 100% completo
+              - generic [ref=e138]:
+                - button "👁️ Ver Detalles" [ref=e139] [cursor=pointer]
+                - button "📤 Subir Documento" [ref=e140] [cursor=pointer]
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - generic [ref=e143]:
+                  - heading "María González López" [level=3] [ref=e144]
+                  - paragraph [ref=e145]: "ID: EXP-002"
+                - generic [ref=e146]: Pendiente
+              - generic [ref=e147]:
+                - generic [ref=e148]:
+                  - generic [ref=e149]:
+                    - generic [ref=e150]: "6"
+                    - generic [ref=e151]: Documentos
+                  - generic [ref=e152]:
+                    - generic [ref=e153]: "4"
+                    - generic [ref=e154]: Completos
+                  - generic [ref=e155]:
+                    - generic [ref=e156]: "2"
+                    - generic [ref=e157]: Pendientes
+                - generic [ref=e161]: 67% completo
+              - generic [ref=e162]:
+                - button "👁️ Ver Detalles" [ref=e163] [cursor=pointer]
+                - button "📤 Subir Documento" [ref=e164] [cursor=pointer]
+    - navigation "Navegación inferior":
+      - navigation [ref=e165]:
+        - generic [ref=e166] [cursor=pointer]:
+          - generic [ref=e168] [cursor=pointer]: 🏠
+          - generic [ref=e169] [cursor=pointer]: Dashboard
+        - generic [ref=e170] [cursor=pointer]:
+          - generic [ref=e171] [cursor=pointer]:
+            - generic [ref=e172] [cursor=pointer]: 🎯
+            - generic [ref=e173] [cursor=pointer]: "5"
+          - generic [ref=e174] [cursor=pointer]: Oportunidades
+        - generic [ref=e175] [cursor=pointer]:
+          - generic [ref=e177] [cursor=pointer]: 💰
+          - generic [ref=e178] [cursor=pointer]: Cotizar
+        - generic [ref=e179] [cursor=pointer]:
+          - generic [ref=e180] [cursor=pointer]:
+            - generic [ref=e181] [cursor=pointer]: 👥
+            - generic [ref=e182] [cursor=pointer]: "12"
+          - generic [ref=e183] [cursor=pointer]: Clientes
+        - generic [ref=e184] [cursor=pointer]:
+          - generic [ref=e185] [cursor=pointer]:
+            - generic [ref=e186] [cursor=pointer]: ⚡
+            - generic [ref=e187] [cursor=pointer]: "2"
+          - generic [ref=e188] [cursor=pointer]: Más
+```

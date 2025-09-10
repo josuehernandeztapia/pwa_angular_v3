@@ -1,0 +1,197 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e42] [cursor=pointer]:
+            - generic [ref=e43] [cursor=pointer]:
+              - generic [ref=e44] [cursor=pointer]: 🎯
+              - generic [ref=e45] [cursor=pointer]: Simulador
+            - generic [ref=e46] [cursor=pointer]:
+              - generic [ref=e47] [cursor=pointer]:
+                - generic [ref=e48] [cursor=pointer]: 💡
+                - generic [ref=e49] [cursor=pointer]: Ahorro AGS
+              - generic [ref=e50] [cursor=pointer]:
+                - generic [ref=e51] [cursor=pointer]: 🏦
+                - generic [ref=e52] [cursor=pointer]: Enganche EdoMex
+              - generic [ref=e53] [cursor=pointer]:
+                - generic [ref=e54] [cursor=pointer]: 🌨️
+                - generic [ref=e55] [cursor=pointer]: Tanda Colectiva
+          - generic [ref=e57] [cursor=pointer]:
+            - generic [ref=e58] [cursor=pointer]: 👥
+            - generic [ref=e59] [cursor=pointer]: Clientes
+            - generic [ref=e60] [cursor=pointer]: "12"
+          - generic [ref=e62] [cursor=pointer]:
+            - generic [ref=e63] [cursor=pointer]: 📋
+            - generic [ref=e64] [cursor=pointer]: Expedientes
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: 🛡️
+            - generic [ref=e68] [cursor=pointer]: Protección
+            - generic [ref=e69] [cursor=pointer]: "3"
+          - generic [ref=e71] [cursor=pointer]:
+            - generic [ref=e72] [cursor=pointer]: 📊
+            - generic [ref=e73] [cursor=pointer]: Reportes
+        - generic [ref=e74]:
+          - generic [ref=e76] [cursor=pointer]:
+            - generic [ref=e77] [cursor=pointer]: ❓
+            - generic [ref=e78] [cursor=pointer]: Ayuda
+          - generic [ref=e80] [cursor=pointer]:
+            - generic [ref=e81] [cursor=pointer]: ⚙️
+            - generic [ref=e82] [cursor=pointer]: Configuración
+          - generic [ref=e84] [cursor=pointer]:
+            - generic [ref=e85] [cursor=pointer]: 🚪
+            - generic [ref=e86] [cursor=pointer]: Salir
+      - button "Abrir menú" [ref=e87] [cursor=pointer]: ☰
+      - generic [ref=e88]:
+        - generic [ref=e89]:
+          - generic [ref=e91]: 🔔 Notificaciones
+          - button "✕" [ref=e93] [cursor=pointer]
+        - generic [ref=e95]:
+          - generic [ref=e96]: 🔔
+          - generic [ref=e97]:
+            - generic [ref=e98]: Activar Notificaciones
+            - generic [ref=e99]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e100]:
+            - button "Activar" [ref=e101] [cursor=pointer]
+            - button "Después" [ref=e102] [cursor=pointer]
+        - generic [ref=e104]:
+          - generic [ref=e105]: 📭
+          - generic [ref=e106]: No hay notificaciones
+          - generic [ref=e107]: Las notificaciones aparecerán aquí
+    - main [ref=e108]:
+      - generic [ref=e110]:
+        - generic [ref=e111]:
+          - heading "Planificador de Enganche Individual" [level=1] [ref=e112]
+          - paragraph [ref=e113]: Calcula cuánto tiempo necesitas para ahorrar tu enganche
+        - generic [ref=e114]:
+          - heading "Resumen" [level=2] [ref=e115]
+          - generic [ref=e116]:
+            - generic [ref=e117]:
+              - generic [ref=e118]: Mensualidad
+              - generic [ref=e119]: MX$0.00
+            - generic [ref=e120]:
+              - generic [ref=e121]: Tiempo
+              - generic [ref=e122]: 0 meses
+            - generic [ref=e123]:
+              - generic [ref=e124]: Meta
+              - generic [ref=e125]: MX$0.00
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - heading "1 Unidad" [level=2] [ref=e128]:
+              - generic [ref=e129]: "1"
+              - text: Unidad
+            - generic [ref=e130]:
+              - generic [ref=e131]:
+                - generic [ref=e132]: Meta de Enganche *
+                - generic [ref=e133]:
+                  - generic [ref=e134]: $
+                  - spinbutton [ref=e135]: "149800"
+                - generic [ref=e136]:
+                  - generic [ref=e137]: "Mínimo: $50,000"
+                  - generic [ref=e138]: "Para unidad de $749K: $149,800 (20%)"
+              - generic [ref=e139]:
+                - generic [ref=e140]: Consumo Actual de Combustible *
+                - generic [ref=e141]:
+                  - spinbutton [ref=e142]: "500"
+                  - generic [ref=e143]: litros/mes
+                - paragraph [ref=e144]: Promedio de litros que consumes mensualmente
+              - generic [ref=e145]:
+                - generic [ref=e146]: Sobreprecio por Litro *
+                - generic [ref=e147]:
+                  - generic [ref=e148]: $
+                  - spinbutton [ref=e149]: "2.5"
+                - paragraph [ref=e150]: Cantidad extra por litro que destinarás al ahorro
+              - generic [ref=e151]:
+                - generic [ref=e152]: Aportación Voluntaria Mensual (Opcional)
+                - generic [ref=e153]:
+                  - generic [ref=e154]: $
+                  - spinbutton [ref=e155]: "0"
+                - paragraph [ref=e156]: Dinero adicional que puedes aportar mensualmente
+              - generic [ref=e157]:
+                - button "Calcular Plan de Ahorro" [ref=e158]:
+                  - generic [ref=e159]: Calcular Plan de Ahorro
+                - button "Limpiar" [ref=e160]
+          - generic [ref=e161]:
+            - heading "💡 ¿Cómo funciona?" [level=2] [ref=e162]:
+              - generic [ref=e163]: 💡
+              - text: ¿Cómo funciona?
+            - generic [ref=e164]:
+              - generic [ref=e165]:
+                - generic [ref=e166]: "1"
+                - generic [ref=e167]:
+                  - heading "Define tu meta" [level=3] [ref=e168]
+                  - paragraph [ref=e169]: ¿Cuánto necesitas para el enganche de tu unidad?
+              - generic [ref=e170]:
+                - generic [ref=e171]: "2"
+                - generic [ref=e172]:
+                  - heading "Tu consumo actual" [level=3] [ref=e173]
+                  - paragraph [ref=e174]: Basado en los litros que ya consumes mensualmente
+              - generic [ref=e175]:
+                - generic [ref=e176]: "3"
+                - generic [ref=e177]:
+                  - heading "Sobreprecio estratégico" [level=3] [ref=e178]
+                  - paragraph [ref=e179]: Cada litro extra que pagues se destina a tu ahorro
+              - generic [ref=e180]:
+                - generic [ref=e181]: ✓
+                - generic [ref=e182]:
+                  - heading "Plan personalizado" [level=3] [ref=e183]
+                  - paragraph [ref=e184]: Obtén tu cronograma detallado para alcanzar tu meta
+    - navigation "Navegación inferior":
+      - navigation [ref=e185]:
+        - generic [ref=e186] [cursor=pointer]:
+          - generic [ref=e188] [cursor=pointer]: 🏠
+          - generic [ref=e189] [cursor=pointer]: Dashboard
+        - generic [ref=e190] [cursor=pointer]:
+          - generic [ref=e191] [cursor=pointer]:
+            - generic [ref=e192] [cursor=pointer]: 🎯
+            - generic [ref=e193] [cursor=pointer]: "5"
+          - generic [ref=e194] [cursor=pointer]: Oportunidades
+        - generic [ref=e195] [cursor=pointer]:
+          - generic [ref=e197] [cursor=pointer]: 💰
+          - generic [ref=e198] [cursor=pointer]: Cotizar
+        - generic [ref=e199] [cursor=pointer]:
+          - generic [ref=e200] [cursor=pointer]:
+            - generic [ref=e201] [cursor=pointer]: 👥
+            - generic [ref=e202] [cursor=pointer]: "12"
+          - generic [ref=e203] [cursor=pointer]: Clientes
+        - generic [ref=e204] [cursor=pointer]:
+          - generic [ref=e205] [cursor=pointer]:
+            - generic [ref=e206] [cursor=pointer]: ⚡
+            - generic [ref=e207] [cursor=pointer]: "2"
+          - generic [ref=e208] [cursor=pointer]: Más
+```

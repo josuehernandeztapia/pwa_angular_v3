@@ -136,6 +136,7 @@ describe('VehicleAssignmentFormComponent', () => {
     };
 
     mockVehicleService.assignVehicleToClient.and.returnValue(of(mockError));
+    mockImportTracker.updateVehicleAssignment.and.returnValue(of({ success: true }));
 
     spyOn(component.assignmentCompleted, 'emit');
     spyOn(window, 'alert');
@@ -169,6 +170,7 @@ describe('VehicleAssignmentFormComponent', () => {
     mockVehicleService.assignVehicleToClient.and.returnValue(
       throwError(() => new Error('Network error'))
     );
+    mockImportTracker.updateVehicleAssignment.and.returnValue(of({ success: true }));
 
     spyOn(window, 'alert');
 

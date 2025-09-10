@@ -1,0 +1,216 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44] [cursor=pointer]: 🎯
+            - generic [ref=e45] [cursor=pointer]: Simulador
+          - generic [ref=e47] [cursor=pointer]:
+            - generic [ref=e48] [cursor=pointer]: 👥
+            - generic [ref=e49] [cursor=pointer]: Clientes
+            - generic [ref=e50] [cursor=pointer]: "12"
+          - generic [ref=e52] [cursor=pointer]:
+            - generic [ref=e53] [cursor=pointer]: 📋
+            - generic [ref=e54] [cursor=pointer]: Expedientes
+          - generic [ref=e56] [cursor=pointer]:
+            - generic [ref=e57] [cursor=pointer]: 🛡️
+            - generic [ref=e58] [cursor=pointer]: Protección
+            - generic [ref=e59] [cursor=pointer]: "3"
+          - generic [ref=e61] [cursor=pointer]:
+            - generic [ref=e62] [cursor=pointer]: 📊
+            - generic [ref=e63] [cursor=pointer]: Reportes
+        - generic [ref=e64]:
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: ❓
+            - generic [ref=e68] [cursor=pointer]: Ayuda
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]: ⚙️
+            - generic [ref=e72] [cursor=pointer]: Configuración
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75] [cursor=pointer]: 🚪
+            - generic [ref=e76] [cursor=pointer]: Salir
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - generic [ref=e80]: 🔔 Notificaciones
+          - button "✕" [ref=e82] [cursor=pointer]
+        - generic [ref=e84]:
+          - generic [ref=e85]: 🔔
+          - generic [ref=e86]:
+            - generic [ref=e87]: Activar Notificaciones
+            - generic [ref=e88]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e89]:
+            - button "Activar" [ref=e90] [cursor=pointer]
+            - button "Después" [ref=e91] [cursor=pointer]
+        - generic [ref=e93]:
+          - generic [ref=e94]: 📭
+          - generic [ref=e95]: No hay notificaciones
+          - generic [ref=e96]: Las notificaciones aparecerán aquí
+    - main [ref=e97]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - heading "👥 Portafolio de Clientes Inteligente" [level=1] [ref=e102]
+            - paragraph [ref=e103]: Administra todos tus clientes y sus expedientes
+          - button "➕ Nuevo Cliente" [ref=e105] [cursor=pointer]
+        - generic [ref=e106]:
+          - generic [ref=e108]:
+            - generic [ref=e109]: 🔍
+            - textbox "¿Dónde está el cliente...?" [ref=e110]
+          - generic [ref=e111]:
+            - generic [ref=e112]:
+              - generic [ref=e113]: 🚨 Estado Crítico
+              - combobox [ref=e114] [cursor=pointer]:
+                - option "Todos los estados" [selected]
+                - option "✅ Activo"
+                - option "⏳ Pendiente"
+                - option "📋 En Expediente"
+                - option "⚠️ Doc. Incompletos"
+                - option "🔴 En Riesgo"
+                - option "❌ Inactivo"
+            - generic [ref=e115]:
+              - generic [ref=e116]: 💹 Health Score
+              - combobox [ref=e117] [cursor=pointer]:
+                - option "Todos los scores" [selected]
+                - option "🔴 Crítico (< 40)"
+                - option "🟠 Regular (40-59)"
+                - option "🟡 Bueno (60-79)"
+                - option "🟢 Excelente (80+)"
+            - combobox [ref=e119] [cursor=pointer]:
+              - option "Todos los mercados" [selected]
+              - option "Aguascalientes"
+              - option "Estado de México"
+            - combobox [ref=e121] [cursor=pointer]:
+              - option "Todos los productos" [selected]
+              - option "Venta a Plazo"
+              - option "Plan de Ahorro"
+              - option "Crédito Colectivo"
+              - option "Venta Directa"
+        - generic [ref=e124] [cursor=pointer]:
+          - checkbox "Seleccionar todo" [ref=e125] [cursor=pointer]
+          - generic [ref=e126] [cursor=pointer]: Seleccionar todo
+        - generic [ref=e127]:
+          - generic [ref=e128]:
+            - checkbox [ref=e130] [cursor=pointer]
+            - generic [ref=e131] [cursor=pointer]:
+              - generic [ref=e132] [cursor=pointer]:
+                - generic [ref=e133] [cursor=pointer]: AG
+                - generic [ref=e134] [cursor=pointer]:
+                  - heading "Ana García López" [level=3] [ref=e135] [cursor=pointer]
+                  - paragraph [ref=e136] [cursor=pointer]: ana.garcia@email.com
+                - generic [ref=e139] [cursor=pointer]: Activo
+              - generic [ref=e140] [cursor=pointer]:
+                - generic [ref=e141] [cursor=pointer]:
+                  - generic [ref=e142] [cursor=pointer]: "📱 Teléfono:"
+                  - generic [ref=e143] [cursor=pointer]: "5551234567"
+                - generic [ref=e144] [cursor=pointer]:
+                  - generic [ref=e145] [cursor=pointer]: "🏢 Mercado:"
+                  - generic [ref=e146] [cursor=pointer]: Aguascalientes
+                - generic [ref=e147] [cursor=pointer]:
+                  - generic [ref=e148] [cursor=pointer]: "💼 Producto:"
+                  - generic [ref=e149] [cursor=pointer]: Venta a Plazo
+                - generic [ref=e150] [cursor=pointer]:
+                  - generic [ref=e151] [cursor=pointer]: "📅 Creado:"
+                  - generic [ref=e152] [cursor=pointer]: 14 ene 2024
+            - generic [ref=e153]:
+              - button "📞" [ref=e154] [cursor=pointer]
+              - button "✉️" [ref=e155] [cursor=pointer]
+              - button "👁️" [ref=e156] [cursor=pointer]
+          - generic [ref=e157]:
+            - checkbox [ref=e159] [cursor=pointer]
+            - generic [ref=e160] [cursor=pointer]:
+              - generic [ref=e161] [cursor=pointer]:
+                - generic [ref=e162] [cursor=pointer]: CR
+                - generic [ref=e163] [cursor=pointer]:
+                  - heading "Carlos Rodríguez Martín" [level=3] [ref=e164] [cursor=pointer]
+                  - paragraph [ref=e165] [cursor=pointer]: carlos.rodriguez@email.com
+                - generic [ref=e168] [cursor=pointer]: Pendiente
+              - generic [ref=e169] [cursor=pointer]:
+                - generic [ref=e170] [cursor=pointer]:
+                  - generic [ref=e171] [cursor=pointer]: "📱 Teléfono:"
+                  - generic [ref=e172] [cursor=pointer]: "5552345678"
+                - generic [ref=e173] [cursor=pointer]:
+                  - generic [ref=e174] [cursor=pointer]: "🏢 Mercado:"
+                  - generic [ref=e175] [cursor=pointer]: Estado de México
+                - generic [ref=e176] [cursor=pointer]:
+                  - generic [ref=e177] [cursor=pointer]: "💼 Producto:"
+                  - generic [ref=e178] [cursor=pointer]: Plan de Ahorro
+                - generic [ref=e179] [cursor=pointer]:
+                  - generic [ref=e180] [cursor=pointer]: "📅 Creado:"
+                  - generic [ref=e181] [cursor=pointer]: 9 feb 2024
+            - generic [ref=e182]:
+              - button "📞" [ref=e183] [cursor=pointer]
+              - button "✉️" [ref=e184] [cursor=pointer]
+              - button "👁️" [ref=e185] [cursor=pointer]
+          - generic [ref=e186]:
+            - checkbox [ref=e188] [cursor=pointer]
+            - generic [ref=e189] [cursor=pointer]:
+              - generic [ref=e190] [cursor=pointer]:
+                - generic [ref=e191] [cursor=pointer]: ME
+                - generic [ref=e192] [cursor=pointer]:
+                  - heading "María Elena Sánchez" [level=3] [ref=e193] [cursor=pointer]
+                  - paragraph [ref=e194] [cursor=pointer]: maria.sanchez@email.com
+                - generic [ref=e197] [cursor=pointer]: Activo
+              - generic [ref=e198] [cursor=pointer]:
+                - generic [ref=e199] [cursor=pointer]:
+                  - generic [ref=e200] [cursor=pointer]: "📱 Teléfono:"
+                  - generic [ref=e201] [cursor=pointer]: "5553456789"
+                - generic [ref=e202] [cursor=pointer]:
+                  - generic [ref=e203] [cursor=pointer]: "🏢 Mercado:"
+                  - generic [ref=e204] [cursor=pointer]: Aguascalientes
+                - generic [ref=e205] [cursor=pointer]:
+                  - generic [ref=e206] [cursor=pointer]: "💼 Producto:"
+                  - generic [ref=e207] [cursor=pointer]: Crédito Colectivo
+                - generic [ref=e208] [cursor=pointer]:
+                  - generic [ref=e209] [cursor=pointer]: "📅 Creado:"
+                  - generic [ref=e210] [cursor=pointer]: 27 ene 2024
+            - generic [ref=e211]:
+              - button "📞" [ref=e212] [cursor=pointer]
+              - button "✉️" [ref=e213] [cursor=pointer]
+              - button "👁️" [ref=e214] [cursor=pointer]
+        - generic [ref=e216]:
+          - generic [ref=e217]: Mostrando 1-3 de 3 clientes
+          - generic [ref=e218]:
+            - generic [ref=e219]: "Mostrar:"
+            - combobox [ref=e220] [cursor=pointer]:
+              - option "20" [selected]
+              - option "50"
+              - option "100"
+            - generic [ref=e221]: por página
+    - navigation "Navegación inferior"
+```

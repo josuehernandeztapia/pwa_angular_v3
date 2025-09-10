@@ -7,6 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class LoadingService {
   private loadingSubject = new BehaviorSubject<boolean>(false);
   private loadingQueue: string[] = [];
+  private globalLoading = false;
 
   public loading$: Observable<boolean> = this.loadingSubject.asObservable();
 
@@ -16,36 +17,31 @@ export class LoadingService {
    * Show global loading indicator
    */
   show(identifier?: string): void {
-    if (identifier) {
+    if (identifier !== undefined && identifier !== null) {
       if (!this.loadingQueue.includes(identifier)) {
         this.loadingQueue.push(identifier);
       }
+    } else {
+      this.globalLoading = true;
     }
     
-    if (!this.loadingSubject.value) {
-      this.loadingSubject.next(true);
-    }
+    this.updateLoadingState();
   }
 
   /**
    * Hide global loading indicator
    */
   hide(identifier?: string): void {
-    if (identifier) {
+    if (identifier !== undefined && identifier !== null) {
       const index = this.loadingQueue.indexOf(identifier);
       if (index > -1) {
         this.loadingQueue.splice(index, 1);
       }
-      
-      // Only hide if no more items in queue
-      if (this.loadingQueue.length > 0) {
-        return;
-      }
+    } else {
+      this.globalLoading = false;
     }
     
-    if (this.loadingSubject.value) {
-      this.loadingSubject.next(false);
-    }
+    this.updateLoadingState();
   }
 
   /**
@@ -60,7 +56,18 @@ export class LoadingService {
    */
   forceHide(): void {
     this.loadingQueue = [];
+    this.globalLoading = false;
     this.loadingSubject.next(false);
+  }
+
+  /**
+   * Update loading state based on global loading and queue
+   */
+  private updateLoadingState(): void {
+    const shouldBeLoading = this.globalLoading || this.loadingQueue.length > 0;
+    if (this.loadingSubject.value !== shouldBeLoading) {
+      this.loadingSubject.next(shouldBeLoading);
+    }
   }
 
   /**

@@ -64,7 +64,7 @@ describe('AuthService', () => {
       service.login(credentials).subscribe({
         next: () => fail('Login should fail with invalid credentials'),
         error: (error) => {
-          expect(error.message).toContain('Invalid credentials');
+          expect(error.message).toContain('Credenciales incorrectas');
           done();
         }
       });
@@ -79,7 +79,7 @@ describe('AuthService', () => {
       service.login(credentials).subscribe({
         next: () => fail('Login should fail with non-corporate email'),
         error: (error) => {
-          expect(error.message).toContain('Invalid credentials');
+          expect(error.message).toContain('Credenciales incorrectas');
           done();
         }
       });

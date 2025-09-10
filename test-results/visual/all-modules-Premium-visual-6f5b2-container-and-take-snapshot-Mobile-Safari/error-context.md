@@ -1,0 +1,231 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44] [cursor=pointer]: 🎯
+            - generic [ref=e45] [cursor=pointer]: Simulador
+          - generic [ref=e47] [cursor=pointer]:
+            - generic [ref=e48] [cursor=pointer]: 👥
+            - generic [ref=e49] [cursor=pointer]: Clientes
+            - generic [ref=e50] [cursor=pointer]: "12"
+          - generic [ref=e52] [cursor=pointer]:
+            - generic [ref=e53] [cursor=pointer]: 📋
+            - generic [ref=e54] [cursor=pointer]: Expedientes
+          - generic [ref=e56] [cursor=pointer]:
+            - generic [ref=e57] [cursor=pointer]: 🛡️
+            - generic [ref=e58] [cursor=pointer]: Protección
+            - generic [ref=e59] [cursor=pointer]: "3"
+          - generic [ref=e61] [cursor=pointer]:
+            - generic [ref=e62] [cursor=pointer]: 📊
+            - generic [ref=e63] [cursor=pointer]: Reportes
+        - generic [ref=e64]:
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: ❓
+            - generic [ref=e68] [cursor=pointer]: Ayuda
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]: ⚙️
+            - generic [ref=e72] [cursor=pointer]: Configuración
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75] [cursor=pointer]: 🚪
+            - generic [ref=e76] [cursor=pointer]: Salir
+      - button "Abrir menú" [ref=e77] [cursor=pointer]: ☰
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e81]: 🔔 Notificaciones
+          - button "✕" [ref=e83] [cursor=pointer]
+        - generic [ref=e85]:
+          - generic [ref=e86]: 🔔
+          - generic [ref=e87]:
+            - generic [ref=e88]: Activar Notificaciones
+            - generic [ref=e89]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e90]:
+            - button "Activar" [ref=e91] [cursor=pointer]
+            - button "Después" [ref=e92] [cursor=pointer]
+        - generic [ref=e94]:
+          - generic [ref=e95]: 📭
+          - generic [ref=e96]: No hay notificaciones
+          - generic [ref=e97]: Las notificaciones aparecerán aquí
+    - main [ref=e98]:
+      - generic [ref=e100]:
+        - generic [ref=e102]:
+          - generic [ref=e103]:
+            - heading "Carga de Documentos" [level=1] [ref=e104]
+            - paragraph [ref=e105]: Nueva Oportunidad - Aguascalientes
+          - generic [ref=e106]:
+            - generic [ref=e107]: 0%
+            - generic [ref=e108]: 0/6 completos
+        - generic [ref=e109]:
+          - generic [ref=e110]:
+            - generic [ref=e111]:
+              - heading "📄 Documentos Requeridos" [level=2] [ref=e112]:
+                - generic [ref=e113]: 📄
+                - text: Documentos Requeridos
+              - generic [ref=e114]:
+                - generic [ref=e115]:
+                  - generic [ref=e116]:
+                    - generic [ref=e117]:
+                      - generic [ref=e119]: INE Vigente
+                      - generic [ref=e120]: Pendiente de subir
+                    - generic [ref=e121]:
+                      - button "📤 Subir" [ref=e122]
+                      - generic [ref=e124]: ⏳
+                  - generic [ref=e125]: Arrastra y suelta aquí el archivo o usa el botón "Subir".
+                - generic [ref=e126]:
+                  - generic [ref=e127]:
+                    - generic [ref=e128]:
+                      - generic [ref=e130]: Comprobante de domicilio
+                      - generic [ref=e131]: Pendiente de subir
+                    - generic [ref=e132]:
+                      - button "📤 Subir" [ref=e133]
+                      - generic [ref=e135]: ⏳
+                  - generic [ref=e136]: Arrastra y suelta aquí el archivo o usa el botón "Subir".
+                - generic [ref=e137]:
+                  - generic [ref=e138]:
+                    - generic [ref=e139]:
+                      - generic [ref=e140]:
+                        - generic [ref=e141]: Tarjeta de circulación
+                        - generic "Requerida para identificar la unidad que se dará de alta en el programa de ahorro." [ref=e142]: ℹ️
+                      - generic [ref=e143]: Pendiente de subir
+                    - generic [ref=e144]:
+                      - button "📤 Subir" [ref=e145]
+                      - generic [ref=e147]: ⏳
+                  - generic [ref=e148]: Arrastra y suelta aquí el archivo o usa el botón "Subir".
+                - generic [ref=e149]:
+                  - generic [ref=e150]:
+                    - generic [ref=e151]:
+                      - generic [ref=e153]: Copia de la concesión
+                      - generic [ref=e154]: Pendiente de subir
+                    - generic [ref=e155]:
+                      - button "📤 Subir" [ref=e156]
+                      - generic [ref=e158]: ⏳
+                  - generic [ref=e159]: Arrastra y suelta aquí el archivo o usa el botón "Subir".
+                - generic [ref=e160]:
+                  - generic [ref=e161]:
+                    - generic [ref=e162]:
+                      - generic [ref=e164]: Constancia de situación fiscal
+                      - generic [ref=e165]: Pendiente de subir
+                    - generic [ref=e166]:
+                      - button "📤 Subir" [ref=e167]
+                      - generic [ref=e169]: ⏳
+                  - generic [ref=e170]: Arrastra y suelta aquí el archivo o usa el botón "Subir".
+                - generic [ref=e171]:
+                  - generic [ref=e172]:
+                    - generic [ref=e173]:
+                      - generic [ref=e174]:
+                        - generic [ref=e175]: Verificación Biométrica (Metamap)
+                        - generic "Verificación de identidad mediante biometría facial." [ref=e176]: ℹ️
+                      - generic [ref=e177]: Pendiente de subir
+                    - generic [ref=e178]:
+                      - button "📤 Subir" [ref=e179]
+                      - generic [ref=e181]: ⏳
+                  - generic [ref=e182]: Arrastra y suelta aquí el archivo o usa el botón "Subir".
+            - generic [ref=e183]:
+              - heading "🎤 Verificación de Identidad por Voz" [level=2] [ref=e184]:
+                - generic [ref=e185]: 🎤
+                - text: Verificación de Identidad por Voz
+              - generic [ref=e186]:
+                - paragraph [ref=e187]:
+                  - strong [ref=e188]: "Patrón de Voz:"
+                  - text: "\"Hoy confirmo mi identidad con mi voz\""
+                - paragraph [ref=e189]: Repite exactamente esta frase para verificar tu identidad
+              - button "🎤 Iniciar Grabación" [ref=e191]:
+                - generic [ref=e192]: 🎤 Iniciar Grabación
+            - generic [ref=e193]:
+              - heading "🤖 Análisis AVI (Automated Voice Intelligence)" [level=2] [ref=e194]:
+                - generic [ref=e195]: 🤖
+                - text: Análisis AVI (Automated Voice Intelligence)
+              - generic [ref=e198]:
+                - generic [ref=e199]: "Estado del Análisis:"
+                - generic [ref=e200]: Pendiente
+          - generic [ref=e201]:
+            - generic [ref=e202]:
+              - heading "Contexto del Flujo" [level=3] [ref=e203]
+              - generic [ref=e204]:
+                - generic [ref=e205]:
+                  - generic [ref=e206]: "Origen:"
+                  - generic [ref=e207]: Nueva Oportunidad
+                - generic [ref=e208]:
+                  - generic [ref=e209]: "Mercado:"
+                  - generic [ref=e210]: Aguascalientes
+                - generic [ref=e211]:
+                  - generic [ref=e212]: "Tipo:"
+                  - generic [ref=e213]: Individual
+                - generic [ref=e214]:
+                  - generic [ref=e215]: "Flujo:"
+                  - generic [ref=e216]: Venta a Plazo
+            - generic [ref=e217]:
+              - heading "Siguientes Pasos" [level=3] [ref=e218]
+              - generic [ref=e219]:
+                - generic [ref=e220]:
+                  - generic [ref=e222]: "1"
+                  - generic [ref=e223]: Documentos completos
+                - generic [ref=e224]:
+                  - generic [ref=e226]: "2"
+                  - generic [ref=e227]: Verificación de voz
+                - generic [ref=e228]:
+                  - generic [ref=e230]: "3"
+                  - generic [ref=e231]: Listo para contratos
+            - generic [ref=e232]:
+              - button "← Regresar" [ref=e233]
+              - button "💾 Guardar Progreso" [ref=e234]
+    - navigation "Navegación inferior":
+      - navigation [ref=e235]:
+        - generic [ref=e236] [cursor=pointer]:
+          - generic [ref=e238] [cursor=pointer]: 🏠
+          - generic [ref=e239] [cursor=pointer]: Dashboard
+        - generic [ref=e240] [cursor=pointer]:
+          - generic [ref=e241] [cursor=pointer]:
+            - generic [ref=e242] [cursor=pointer]: 🎯
+            - generic [ref=e243] [cursor=pointer]: "5"
+          - generic [ref=e244] [cursor=pointer]: Oportunidades
+        - generic [ref=e245] [cursor=pointer]:
+          - generic [ref=e247] [cursor=pointer]: 💰
+          - generic [ref=e248] [cursor=pointer]: Cotizar
+        - generic [ref=e249] [cursor=pointer]:
+          - generic [ref=e250] [cursor=pointer]:
+            - generic [ref=e251] [cursor=pointer]: 👥
+            - generic [ref=e252] [cursor=pointer]: "12"
+          - generic [ref=e253] [cursor=pointer]: Clientes
+        - generic [ref=e254] [cursor=pointer]:
+          - generic [ref=e255] [cursor=pointer]:
+            - generic [ref=e256] [cursor=pointer]: ⚡
+            - generic [ref=e257] [cursor=pointer]: "2"
+          - generic [ref=e258] [cursor=pointer]: Más
+```

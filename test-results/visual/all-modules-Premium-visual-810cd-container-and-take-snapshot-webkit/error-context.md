@@ -1,0 +1,180 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e42] [cursor=pointer]:
+            - generic [ref=e43] [cursor=pointer]:
+              - generic [ref=e44] [cursor=pointer]: 🎯
+              - generic [ref=e45] [cursor=pointer]: Simulador
+            - generic [ref=e46] [cursor=pointer]:
+              - generic [ref=e47] [cursor=pointer]:
+                - generic [ref=e48] [cursor=pointer]: 💡
+                - generic [ref=e49] [cursor=pointer]: Ahorro AGS
+              - generic [ref=e50] [cursor=pointer]:
+                - generic [ref=e51] [cursor=pointer]: 🏦
+                - generic [ref=e52] [cursor=pointer]: Enganche EdoMex
+              - generic [ref=e53] [cursor=pointer]:
+                - generic [ref=e54] [cursor=pointer]: 🌨️
+                - generic [ref=e55] [cursor=pointer]: Tanda Colectiva
+          - generic [ref=e57] [cursor=pointer]:
+            - generic [ref=e58] [cursor=pointer]: 👥
+            - generic [ref=e59] [cursor=pointer]: Clientes
+            - generic [ref=e60] [cursor=pointer]: "12"
+          - generic [ref=e62] [cursor=pointer]:
+            - generic [ref=e63] [cursor=pointer]: 📋
+            - generic [ref=e64] [cursor=pointer]: Expedientes
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: 🛡️
+            - generic [ref=e68] [cursor=pointer]: Protección
+            - generic [ref=e69] [cursor=pointer]: "3"
+          - generic [ref=e71] [cursor=pointer]:
+            - generic [ref=e72] [cursor=pointer]: 📊
+            - generic [ref=e73] [cursor=pointer]: Reportes
+        - generic [ref=e74]:
+          - generic [ref=e76] [cursor=pointer]:
+            - generic [ref=e77] [cursor=pointer]: ❓
+            - generic [ref=e78] [cursor=pointer]: Ayuda
+          - generic [ref=e80] [cursor=pointer]:
+            - generic [ref=e81] [cursor=pointer]: ⚙️
+            - generic [ref=e82] [cursor=pointer]: Configuración
+          - generic [ref=e84] [cursor=pointer]:
+            - generic [ref=e85] [cursor=pointer]: 🚪
+            - generic [ref=e86] [cursor=pointer]: Salir
+      - generic [ref=e87]:
+        - generic [ref=e88]:
+          - generic [ref=e90]: 🔔 Notificaciones
+          - button "✕" [ref=e92] [cursor=pointer]
+        - generic [ref=e94]:
+          - generic [ref=e95]: 🔔
+          - generic [ref=e96]:
+            - generic [ref=e97]: Activar Notificaciones
+            - generic [ref=e98]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e99]:
+            - button "Activar" [ref=e100] [cursor=pointer]
+            - button "Después" [ref=e101] [cursor=pointer]
+        - generic [ref=e103]:
+          - generic [ref=e104]: 📭
+          - generic [ref=e105]: No hay notificaciones
+          - generic [ref=e106]: Las notificaciones aparecerán aquí
+    - main [ref=e107]:
+      - generic [ref=e109]:
+        - generic [ref=e111]:
+          - generic [ref=e112]:
+            - heading "Simulador de Tanda Colectiva" [level=1] [ref=e113]
+            - paragraph [ref=e114]: Encuentra la mejor estrategia de ahorro grupal con efecto bola de nieve
+          - button "📱 Simple" [ref=e116]
+        - generic [ref=e117]:
+          - heading "Resumen" [level=2] [ref=e118]
+          - generic [ref=e119]:
+            - generic [ref=e120]:
+              - generic [ref=e121]: Mensualidad Grupo
+              - generic [ref=e122]: MX$0.00
+            - generic [ref=e123]:
+              - generic [ref=e124]: Meses a Meta
+              - generic [ref=e125]: 0 meses
+            - generic [ref=e126]:
+              - generic [ref=e127]: Meta Total
+              - generic [ref=e128]: MX$0.00
+        - generic [ref=e129]:
+          - generic [ref=e130]:
+            - heading "1 Unidad" [level=2] [ref=e131]:
+              - generic [ref=e132]: "1"
+              - text: Unidad
+            - generic [ref=e133]:
+              - generic [ref=e134]:
+                - generic [ref=e135]: Número de Miembros del Grupo *
+                - spinbutton [ref=e136]: "10"
+                - generic [ref=e137]:
+                  - generic [ref=e138]: "Mínimo: 5 miembros"
+                  - generic [ref=e139]: "Máximo: 50 miembros"
+              - generic [ref=e140]:
+                - generic [ref=e141]: Precio de la Unidad *
+                - generic [ref=e142]:
+                  - generic [ref=e143]: $
+                  - spinbutton [ref=e144]: "749000"
+                - paragraph [ref=e145]: Precio base de la vagoneta Estado de México
+              - generic [ref=e146]:
+                - generic [ref=e147]: Consumo Promedio por Miembro *
+                - generic [ref=e148]:
+                  - spinbutton [ref=e149]: "400"
+                  - generic [ref=e150]: litros/mes
+                - paragraph [ref=e151]: Consumo mensual promedio esperado por cada miembro
+              - generic [ref=e152]:
+                - generic [ref=e153]: Sobreprecio por Litro *
+                - generic [ref=e154]:
+                  - generic [ref=e155]: $
+                  - spinbutton [ref=e156]: "3"
+                - paragraph [ref=e157]: Sobreprecio que cada miembro pagará por litro
+              - generic [ref=e158]:
+                - generic [ref=e159]: Aportación Voluntaria por Miembro *
+                - generic [ref=e160]:
+                  - generic [ref=e161]: $
+                  - spinbutton [ref=e162]: "500"
+                - paragraph [ref=e163]: Aportación mensual adicional que cada miembro puede hacer
+              - generic [ref=e164]:
+                - button "Simular Tanda Colectiva" [ref=e165]:
+                  - generic [ref=e166]: Simular Tanda Colectiva
+                - button "Limpiar" [ref=e167]
+          - generic [ref=e168]:
+            - heading "💡 ¿Qué es una Tanda Colectiva?" [level=2] [ref=e169]:
+              - generic [ref=e170]: 💡
+              - text: ¿Qué es una Tanda Colectiva?
+            - generic [ref=e171]:
+              - generic [ref=e172]:
+                - generic [ref=e173]: "1"
+                - generic [ref=e174]:
+                  - heading "Grupo Colaborativo" [level=3] [ref=e175]
+                  - paragraph [ref=e176]: Un grupo de personas que ahorran juntas para adquirir varias unidades
+              - generic [ref=e177]:
+                - generic [ref=e178]: "2"
+                - generic [ref=e179]:
+                  - heading "Entrega Rotativa" [level=3] [ref=e180]
+                  - paragraph [ref=e181]: Cada mes se entrega una unidad a un miembro diferente del grupo
+              - generic [ref=e182]:
+                - generic [ref=e183]: "3"
+                - generic [ref=e184]:
+                  - heading "Efecto Bola de Nieve" [level=3] [ref=e185]
+                  - paragraph [ref=e186]: Los ahorros se aceleran conforme más miembros reciben su unidad
+              - generic [ref=e187]:
+                - generic [ref=e188]: ✓
+                - generic [ref=e189]:
+                  - heading "Beneficio Mutuo" [level=3] [ref=e190]
+                  - paragraph [ref=e191]: Todos obtienen su unidad más rápido y con mejores condiciones
+    - navigation "Navegación inferior"
+```

@@ -1,0 +1,231 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44] [cursor=pointer]: 🎯
+            - generic [ref=e45] [cursor=pointer]: Simulador
+          - generic [ref=e47] [cursor=pointer]:
+            - generic [ref=e48] [cursor=pointer]: 👥
+            - generic [ref=e49] [cursor=pointer]: Clientes
+            - generic [ref=e50] [cursor=pointer]: "12"
+          - generic [ref=e52] [cursor=pointer]:
+            - generic [ref=e53] [cursor=pointer]: 📋
+            - generic [ref=e54] [cursor=pointer]: Expedientes
+          - generic [ref=e56] [cursor=pointer]:
+            - generic [ref=e57] [cursor=pointer]: 🛡️
+            - generic [ref=e58] [cursor=pointer]: Protección
+            - generic [ref=e59] [cursor=pointer]: "3"
+          - generic [ref=e61] [cursor=pointer]:
+            - generic [ref=e62] [cursor=pointer]: 📊
+            - generic [ref=e63] [cursor=pointer]: Reportes
+        - generic [ref=e64]:
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: ❓
+            - generic [ref=e68] [cursor=pointer]: Ayuda
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]: ⚙️
+            - generic [ref=e72] [cursor=pointer]: Configuración
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75] [cursor=pointer]: 🚪
+            - generic [ref=e76] [cursor=pointer]: Salir
+      - button "Abrir menú" [ref=e77] [cursor=pointer]: ☰
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e81]: 🔔 Notificaciones
+          - button "✕" [ref=e83] [cursor=pointer]
+        - generic [ref=e85]:
+          - generic [ref=e86]: 🔔
+          - generic [ref=e87]:
+            - generic [ref=e88]: Activar Notificaciones
+            - generic [ref=e89]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e90]:
+            - button "Activar" [ref=e91] [cursor=pointer]
+            - button "Después" [ref=e92] [cursor=pointer]
+        - generic [ref=e94]:
+          - generic [ref=e95]: 📭
+          - generic [ref=e96]: No hay notificaciones
+          - generic [ref=e97]: Las notificaciones aparecerán aquí
+    - main [ref=e98]:
+      - generic [ref=e100]:
+        - generic [ref=e101]:
+          - heading "⚙️ Configuración" [level=1] [ref=e102]
+          - paragraph [ref=e103]: Personaliza tu experiencia en la aplicación
+        - main [ref=e104]:
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - generic [ref=e108]:
+                - generic [ref=e109]: 🔧
+                - generic [ref=e110]:
+                  - heading "Configuración General" [level=2] [ref=e111]
+                  - paragraph [ref=e112]: Ajustes básicos de la aplicación
+              - generic [ref=e113]:
+                - generic [ref=e114]:
+                  - generic [ref=e115]:
+                    - generic [ref=e116]: Tema de la aplicación
+                    - paragraph [ref=e117]: Selecciona el tema visual de la aplicación
+                  - combobox [ref=e119]:
+                    - option "Claro" [selected]
+                    - option "Oscuro"
+                    - option "Automático"
+                - generic [ref=e120]:
+                  - generic [ref=e122]: Idioma
+                  - combobox [ref=e124]:
+                    - option "Español" [selected]
+                    - option "English"
+                - generic [ref=e125]:
+                  - generic [ref=e126]:
+                    - generic [ref=e127]: Guardado automático
+                    - paragraph [ref=e128]: Guarda automáticamente los cambios sin confirmar
+                  - generic [ref=e130]:
+                    - checkbox [checked]
+            - generic [ref=e132]:
+              - generic [ref=e134]:
+                - generic [ref=e135]: 🔔
+                - generic [ref=e136]:
+                  - heading "Notificaciones" [level=2] [ref=e137]
+                  - paragraph [ref=e138]: Controla qué notificaciones recibir
+              - generic [ref=e139]:
+                - generic [ref=e140]:
+                  - generic [ref=e141]:
+                    - generic [ref=e142]: Notificaciones por email
+                    - paragraph [ref=e143]: Recibir notificaciones importantes por correo electrónico
+                  - generic [ref=e145]:
+                    - checkbox [checked]
+                - generic [ref=e147]:
+                  - generic [ref=e148]:
+                    - generic [ref=e149]: Notificaciones push
+                    - paragraph [ref=e150]: Mostrar notificaciones en el navegador
+                  - generic [ref=e152]:
+                    - checkbox
+                - generic [ref=e154]:
+                  - generic [ref=e156]: Frecuencia de recordatorios
+                  - combobox [ref=e158]:
+                    - option "Nunca"
+                    - option "Diario" [selected]
+                    - option "Semanal"
+            - generic [ref=e159]:
+              - generic [ref=e161]:
+                - generic [ref=e162]: 💾
+                - generic [ref=e163]:
+                  - heading "Gestión de Datos" [level=2] [ref=e164]
+                  - paragraph [ref=e165]: Configuración de almacenamiento y sincronización
+              - generic [ref=e166]:
+                - generic [ref=e167]:
+                  - generic [ref=e168]:
+                    - generic [ref=e169]: Retención de datos (días)
+                    - paragraph [ref=e170]: Número de días para mantener los datos históricos
+                  - spinbutton [ref=e172]: "365"
+                - generic [ref=e173]:
+                  - generic [ref=e175]: Frecuencia de sincronización
+                  - combobox [ref=e177]:
+                    - option "Tiempo real" [selected]
+                    - option "Cada hora"
+                    - option "Diario"
+                - generic [ref=e178]:
+                  - generic [ref=e179]:
+                    - generic [ref=e180]: Modo sin conexión
+                    - paragraph [ref=e181]: Permitir uso de la aplicación sin conexión a internet
+                  - generic [ref=e183]:
+                    - checkbox [checked]
+            - generic [ref=e185]:
+              - generic [ref=e187]:
+                - generic [ref=e188]: 🔒
+                - generic [ref=e189]:
+                  - heading "Seguridad" [level=2] [ref=e190]
+                  - paragraph [ref=e191]: Configuración de seguridad y privacidad
+              - generic [ref=e192]:
+                - generic [ref=e193]:
+                  - generic [ref=e194]:
+                    - generic [ref=e195]: Tiempo de sesión (minutos)
+                    - paragraph [ref=e196]: Tiempo antes de cerrar sesión automáticamente
+                  - spinbutton [ref=e198]: "30"
+                - generic [ref=e199]:
+                  - generic [ref=e200]:
+                    - generic [ref=e201]: Autenticación de dos factores
+                    - paragraph [ref=e202]: Activar verificación adicional al iniciar sesión
+                  - generic [ref=e204]:
+                    - checkbox
+                - generic [ref=e206]:
+                  - generic [ref=e207]:
+                    - generic [ref=e208]: Cifrado de datos
+                    - paragraph [ref=e209]: Cifrar datos sensibles almacenados localmente
+                  - generic [ref=e211]:
+                    - checkbox [checked]
+            - generic [ref=e213]:
+              - generic [ref=e214]:
+                - generic [ref=e215]:
+                  - generic [ref=e216]: 🎨
+                  - generic [ref=e217]:
+                    - heading "Constructor de Flujos" [level=2] [ref=e218]
+                    - paragraph [ref=e219]: Herramientas visuales para crear nuevos flujos y ciudades
+                - button "🎨 Abrir Constructor" [ref=e221] [cursor=pointer]
+              - generic [ref=e223]:
+                - generic [ref=e224]:
+                  - generic [ref=e225]: Habilitar Constructor Visual
+                  - paragraph [ref=e226]: Acceso al constructor visual de flujos estilo n8n/Zapier
+                - generic [ref=e228]:
+                  - checkbox [checked]
+          - generic [ref=e230]:
+            - button "🔄 Restaurar Valores por Defecto" [ref=e231] [cursor=pointer]
+            - button "💾 Guardar Configuración" [ref=e232] [cursor=pointer]
+    - navigation "Navegación inferior":
+      - navigation [ref=e233]:
+        - generic [ref=e234] [cursor=pointer]:
+          - generic [ref=e236] [cursor=pointer]: 🏠
+          - generic [ref=e237] [cursor=pointer]: Dashboard
+        - generic [ref=e238] [cursor=pointer]:
+          - generic [ref=e239] [cursor=pointer]:
+            - generic [ref=e240] [cursor=pointer]: 🎯
+            - generic [ref=e241] [cursor=pointer]: "5"
+          - generic [ref=e242] [cursor=pointer]: Oportunidades
+        - generic [ref=e243] [cursor=pointer]:
+          - generic [ref=e245] [cursor=pointer]: 💰
+          - generic [ref=e246] [cursor=pointer]: Cotizar
+        - generic [ref=e247] [cursor=pointer]:
+          - generic [ref=e248] [cursor=pointer]:
+            - generic [ref=e249] [cursor=pointer]: 👥
+            - generic [ref=e250] [cursor=pointer]: "12"
+          - generic [ref=e251] [cursor=pointer]: Clientes
+        - generic [ref=e252] [cursor=pointer]:
+          - generic [ref=e253] [cursor=pointer]:
+            - generic [ref=e254] [cursor=pointer]: ⚡
+            - generic [ref=e255] [cursor=pointer]: "2"
+          - generic [ref=e256] [cursor=pointer]: Más
+```
