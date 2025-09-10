@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { Subject, of } from 'rxjs';
+import { Subject, forkJoin, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActionableClient, ActionableGroup, ActivityFeedItem, DashboardStats, Market, OpportunityStage } from '../../../models/types';
 import { DashboardService } from '../../../services/dashboard.service';
@@ -458,8 +458,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const groups$ = this.dashboardService.getActionableGroups(this.selectedMarket);
     const clients$ = this.dashboardService.getAllClients?.(this.selectedMarket) ?? of([]);
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { forkJoin } = require('rxjs');
     forkJoin({ stats: stats$, funnel: funnel$, groups: groups$, clients: clients$ }).subscribe({
       next: ({ stats, funnel, groups, clients }: any) => {
         this.stats = stats || null;
