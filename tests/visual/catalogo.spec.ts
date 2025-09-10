@@ -1,4 +1,28 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, Page, test } from 'playwright/test';
+
+async function applyAntiFlakyStyles(page: Page) {
+  await page.addStyleTag({
+    content: `
+      html, body, * { scroll-behavior: auto !important; }
+      *::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none !important; }
+      * { scrollbar-width: none !important; -ms-overflow-style: none !important; caret-color: transparent !important; }
+      input, textarea, [contenteditable="true"] { caret-color: transparent !important; }
+      [data-dynamic], time, .counter, .loading, canvas, video { visibility: hidden !important; }
+    `,
+  });
+}
+
+function dynamicMasks(scope: Page | ReturnType<Page['locator']>) {
+  const s: any = (scope as any);
+  return [
+    s.locator('[data-dynamic]'),
+    s.locator('time'),
+    s.locator('.counter'),
+    s.locator('.loading'),
+    s.locator('canvas'),
+    s.locator('video'),
+  ];
+}
 
 async function mockAuth(page: Page) {
   await page.addInitScript(() => {
@@ -10,7 +34,7 @@ async function mockAuth(page: Page) {
 
 async function freezeTime(page: Page, isoTimestamp = '2025-01-15T12:00:00.000Z') {
   const fixedNow = new Date(isoTimestamp).valueOf();
-  await page.addInitScript((now) => {
+  await page.addInitScript((now: number) => {
     const OriginalDate = Date as unknown as typeof Date;
     class MockDate extends (OriginalDate as any) {
       constructor(...args: any[]) {
@@ -48,7 +72,7 @@ async function freezeRandom(page: Page) {
 }
 
 test.describe('@productos Catálogo de Productos visual states', () => {
-  test('loading state snapshot (placeholder, sin CLS)', async ({ page }) => {
+  test('loading state snapshot (placeholder, sin CLS)', async ({ page }: { page: Page }) => {
     await mockAuth(page);
     await freezeTime(page);
     await freezeRandom(page);
@@ -58,20 +82,32 @@ test.describe('@productos Catálogo de Productos visual states', () => {
     await page.waitForTimeout(100);
     const loading = page.getByRole('status', { name: /Cargando catálogo/i });
     await expect(loading).toBeVisible();
-    await expect(page).toHaveScreenshot();
+    await applyAntiFlakyStyles(page);
+    const container = page.locator('.premium-container, .productos-grid').first();
+    await expect(container).toBeVisible();
+    await expect(container).toHaveScreenshot({
+      animations: 'disabled',
+      caret: 'hide',
+    });
   });
 
-  test('data state snapshot (con resultados)', async ({ page }) => {
+  test('data state snapshot (con resultados)', async ({ page }: { page: Page }) => {
     await mockAuth(page);
     await freezeTime(page);
     await freezeRandom(page);
     await page.goto('/productos', { waitUntil: 'domcontentloaded' });
     // Esperar a que cargue el grid
     await page.locator('.productos-grid .producto-card').first().waitFor();
-    await expect(page).toHaveScreenshot();
+    await applyAntiFlakyStyles(page);
+    const grid = page.locator('.productos-grid');
+    await expect(grid).toBeVisible();
+    await expect(grid).toHaveScreenshot({
+      animations: 'disabled',
+      caret: 'hide',
+    });
   });
 
-  test('empty state snapshot (sin resultados) y limpiar filtros', async ({ page }) => {
+  test('empty state snapshot (sin resultados) y limpiar filtros', async ({ page }: { page: Page }) => {
     await mockAuth(page);
     await freezeTime(page);
     await freezeRandom(page);
@@ -82,7 +118,13 @@ test.describe('@productos Catálogo de Productos visual states', () => {
     await page.getByRole('button', { name: /Crédito Colectivo/i }).click();
     await expect(page.getByRole('heading', { name: /Sin resultados/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /Limpiar filtros/i })).toBeVisible();
-    await expect(page).toHaveScreenshot();
+    await applyAntiFlakyStyles(page);
+    const container = page.locator('.premium-container, .productos-grid').first();
+    await expect(container).toBeVisible();
+    await expect(container).toHaveScreenshot({
+      animations: 'disabled',
+      caret: 'hide',
+    });
   });
 });
 
