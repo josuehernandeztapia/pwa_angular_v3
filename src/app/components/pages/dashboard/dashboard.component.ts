@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
-import { Subject, firstValueFrom, of } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { Subject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { NextBestActionHeroComponent, NextBestActionData, ActionButton } from '../../shared/next-best-action-hero/next-best-action-hero.component';
-import { ContextualKPIsComponent, KPIData } from '../../shared/contextual-kpis/contextual-kpis.component';
-import { RiskRadarComponent, RiskRadarClient } from '../../shared/risk-radar/risk-radar.component';
-import { HumanActivityFeedComponent, ActivityItem } from '../../shared/human-activity-feed/human-activity-feed.component';
-import { ClientModeToggleComponent, ViewMode } from '../../shared/client-mode-toggle/client-mode-toggle.component';
+import { ActionableClient, ActionableGroup, ActivityFeedItem, DashboardStats, Market, OpportunityStage } from '../../../models/types';
 import { DashboardService } from '../../../services/dashboard.service';
-import { DashboardStats, ActivityFeedItem, Market, OpportunityStage, ActionableGroup, ActionableClient } from '../../../models/types';
+import { ClientModeToggleComponent, ViewMode } from '../../shared/client-mode-toggle/client-mode-toggle.component';
+import { ContextualKPIsComponent, KPIData } from '../../shared/contextual-kpis/contextual-kpis.component';
+import { ActivityItem, HumanActivityFeedComponent } from '../../shared/human-activity-feed/human-activity-feed.component';
+import { ActionButton, NextBestActionData, NextBestActionHeroComponent } from '../../shared/next-best-action-hero/next-best-action-hero.component';
+import { RiskRadarClient, RiskRadarComponent } from '../../shared/risk-radar/risk-radar.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -452,32 +452,38 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private loadDashboardData(): void {
     this.isLoading = true;
     
-    Promise.all([
-      firstValueFrom(this.dashboardService.getDashboardStats(this.selectedMarket)),
-      firstValueFrom(this.dashboardService.getOpportunityStages(this.selectedMarket)),
-      firstValueFrom(this.dashboardService.getActionableGroups(this.selectedMarket)),
-      firstValueFrom(this.dashboardService.getAllClients?.(this.selectedMarket) ?? of([]))
-    ]).then(([stats, funnel, groups, clients]) => {
-      this.stats = stats || null;
-      if (stats) {
-        this.dashboardStats = stats;
+    // Use forkJoin so synchronous Observables (of(...)) resolve within the same tick in tests
+    const stats$ = this.dashboardService.getDashboardStats(this.selectedMarket);
+    const funnel$ = this.dashboardService.getOpportunityStages(this.selectedMarket);
+    const groups$ = this.dashboardService.getActionableGroups(this.selectedMarket);
+    const clients$ = this.dashboardService.getAllClients?.(this.selectedMarket) ?? of([]);
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { forkJoin } = require('rxjs');
+    forkJoin({ stats: stats$, funnel: funnel$, groups: groups$, clients: clients$ }).subscribe({
+      next: ({ stats, funnel, groups, clients }: any) => {
+        this.stats = stats || null;
+        if (stats) {
+          this.dashboardStats = stats;
+        }
+        this.funnelData = funnel || [];
+        this.actionableGroups = groups || [];
+        this.allClients = clients || [];
+
+        // Initialize premium components with loaded data
+        this.initializePremiumComponents();
+
+        this.isLoading = false;
+      },
+      error: (error: any) => {
+        console.error('Error loading dashboard data:', error?.message || error);
+        this.isLoading = false;
+
+        // Fallback mock data for development
+        this.loadMockData();
+        // Initialize premium components with mock data
+        this.initializePremiumComponents();
       }
-      this.funnelData = funnel || [];
-      this.actionableGroups = groups || [];
-      this.allClients = clients || [];
-      
-      // Initialize premium components with loaded data
-      this.initializePremiumComponents();
-      
-      this.isLoading = false;
-    }).catch((error) => {
-      console.error('Error loading dashboard data:', error?.message || error);
-      this.isLoading = false;
-      
-      // Fallback mock data for development
-      this.loadMockData();
-      // Initialize premium components with mock data
-      this.initializePremiumComponents();
     });
   }
 

@@ -5,7 +5,9 @@ import { round2 } from './math.util';
 export function formatCurrencyMXN(value: number | string, withSymbol = true): string {
 	const num = round2(typeof value === 'string' ? Number(value) : value);
 	const formatted = num.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-	return withSymbol ? `$${formatted}` : formatted;
+	if (!withSymbol) return formatted;
+	// Explicit MXN prefix required by tests and to avoid '$' ambiguity
+	return `MX$${formatted}`;
 }
 
 export function parseCurrency(input: string | number | null | undefined): number {
