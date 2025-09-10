@@ -36,9 +36,9 @@ describe('StorageService', () => {
   let mockIndexedDB: jasmine.Spy;
 
   beforeEach(async () => {
-    // Mock IndexedDB
+    // Mock IndexedDB - use globalThis instead of global for browser compatibility
     mockIndexedDB = jasmine.createSpy('indexedDB.open').and.returnValue(mockIDBRequest);
-    (global as any).indexedDB = { open: mockIndexedDB };
+    (globalThis as any).indexedDB = { open: mockIndexedDB };
     
     // Mock navigator
     Object.defineProperty(navigator, 'onLine', {
