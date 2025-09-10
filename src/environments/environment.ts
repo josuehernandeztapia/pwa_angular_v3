@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
+  get apiUrl() { return 'http://localhost:3000/api'; },
   appName: 'Conductores PWA',
   version: '1.0.0',
   
