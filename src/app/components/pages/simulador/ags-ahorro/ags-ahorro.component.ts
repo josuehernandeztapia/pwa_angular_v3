@@ -126,9 +126,9 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
         <!-- Right: Summary Aside -->
         <app-summary-panel class="aside" *ngIf="currentScenario"
           [metrics]="[
-            { label: 'Mensualidad', value: (currentScenario?.monthlyContribution | currency:'MXN':'symbol':'1.0-0')!, badge: 'success' },
-            { label: 'Meses a Meta', value: (currentScenario?.monthsToTarget + ' meses')! },
-            { label: 'Ahorro Total', value: (currentScenario?.targetAmount | currency:'MXN':'symbol':'1.0-0')! },
+            { label: 'Mensualidad', value: (currentScenario.monthlyContribution | currency:'MXN':'symbol':'1.0-0')!, badge: 'success' },
+            { label: 'Meses a Meta', value: (currentScenario.monthsToTarget + ' meses')! },
+            { label: 'Ahorro Total', value: (currentScenario.targetAmount | currency:'MXN':'symbol':'1.0-0')! },
             { label: (remainderAmount <= 0 ? 'Validez' : 'Remanente'), value: (remainderAmount | currency:'MXN':'symbol':'1.0-0')!, badge: (remainderAmount <= 0 ? 'success' : 'warning') }
           ]"
           [actions]="asideActions"

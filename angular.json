@@ -33,8 +33,7 @@
               "src/assets",
               "src/manifest.webmanifest"
             ],
-            "serviceWorker": true,
-            "ngswConfigPath": "src/ngsw-config.json",
+            "serviceWorker": "src/ngsw-config.json",
             "styles": [
               "src/styles.scss"
             ],
@@ -45,7 +44,8 @@
               "html2canvas",
               "canvg",
               "rgbcolor",
-              "raf"
+              "raf",
+              "core-js"
             ]
           },
           "configurations": {
@@ -58,8 +58,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "8kb",
-                  "maximumError": "12kb"
+                  "maximumWarning": "12kb",
+                  "maximumError": "16kb"
                 }
               ],
               "outputHashing": "all",
