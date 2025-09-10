@@ -325,9 +325,9 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
         <!-- Aside Summary -->
         <app-summary-panel class="aside" *ngIf="scenario"
           [metrics]="[
-            { label: 'Mensualidad', value: formatCurrency(scenario?.monthlyContribution || 0), badge: 'success' },
-            { label: 'Meses a Meta', value: (scenario?.monthsToTarget || 0) + ' meses' },
-            { label: 'Meta de Enganche', value: formatCurrency(scenario?.targetAmount || 0) }
+            { label: 'Mensualidad', value: formatCurrency(scenario.monthlyContribution || 0), badge: 'success' },
+            { label: 'Meses a Meta', value: (scenario.monthsToTarget || 0) + ' meses' },
+            { label: 'Meta de Enganche', value: formatCurrency(scenario.targetAmount || 0) }
           ]"
           [actions]="asideActions"
         ></app-summary-panel>

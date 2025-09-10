@@ -658,9 +658,9 @@ interface KpiData {
         <!-- Aside Summary -->
         <app-summary-panel class="aside" *ngIf="simulationResult"
           [metrics]="[
-            { label: 'Mensualidad Grupo', value: formatCurrency(simulationResult?.scenario?.monthlyContribution || 0), badge: 'success' },
-            { label: 'Meses a Meta', value: (simulationResult?.scenario?.monthsToTarget || 0) + ' meses' },
-            { label: 'Meta Total', value: formatCurrency(simulationResult?.scenario?.targetAmount || 0) }
+            { label: 'Mensualidad Grupo', value: formatCurrency(simulationResult.scenario.monthlyContribution || 0), badge: 'success' },
+            { label: 'Meses a Meta', value: (simulationResult.scenario.monthsToTarget || 0) + ' meses' },
+            { label: 'Meta Total', value: formatCurrency(simulationResult.scenario.targetAmount || 0) }
           ]"
           [actions]="asideActions"
         ></app-summary-panel>
