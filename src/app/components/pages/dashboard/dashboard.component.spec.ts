@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { of, Subject } from 'rxjs';
-import { render, screen, fireEvent } from '@testing-library/angular';
-import { DashboardComponent } from './dashboard.component';
+import { render, screen } from '@testing-library/angular';
+import { of } from 'rxjs';
+import { ActionableGroup, ActivityFeedItem, DashboardStats, Market, OpportunityStage } from '../../../models/types';
 import { DashboardService } from '../../../services/dashboard.service';
-import { DashboardStats, ActivityFeedItem, Market, OpportunityStage, ActionableGroup } from '../../../models/types';
+import { DashboardComponent } from './dashboard.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -180,7 +180,9 @@ describe('DashboardComponent', () => {
   it('should handle error in dashboard data loading', () => {
     const errorMessage = 'Failed to load dashboard data';
     mockDashboardService.getDashboardStats.and.returnValue(
-      new Subject().asObservable().pipe(() => { throw new Error(errorMessage); })
+      // Emit error observable to simulate network failure
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      require('rxjs').throwError(() => new Error(errorMessage))
     );
 
     spyOn(console, 'error');

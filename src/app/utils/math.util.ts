@@ -56,7 +56,9 @@ export function annuity(principal: Numeric, monthlyRate: Numeric, months: number
 	const pv = toNumber(principal);
 	const r = toNumber(monthlyRate);
 	const n = Math.max(0, Math.floor(months));
-	if (pv <= 0 || r <= 0 || n === 0) return 0;
+	if (pv <= 0) return 0;
+	if (n === 0) return round2(pv);
+	if (r <= 0) return round2(pv / n);
 	const denom = 1 - Math.pow(1 + r, -n);
 	if (denom === 0) return 0;
 	return round2((r * pv) / denom);

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { take, skip } from 'rxjs/operators';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { HttpClientService, ApiResponse, ApiError } from './http-client.service';
@@ -46,7 +47,7 @@ describe('HttpClientService', () => {
     });
 
     it('should initialize with connection status', (done) => {
-      service.isConnected$.subscribe(connected => {
+      service.isConnected$.pipe(take(1)).subscribe(connected => {
         expect(connected).toBe(true);
         done();
       });
@@ -320,8 +321,14 @@ describe('HttpClientService', () => {
         }
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/invalid');
-      req.error(new ErrorEvent('Bad Request'));
+      const err1 = httpMock.expectOne('http://localhost:3000/api/invalid');
+      err1.flush({ message: 'Solicitud inválida' }, { status: 400, statusText: 'Bad Request' });
+      const err2 = httpMock.expectOne('http://localhost:3000/api/invalid');
+      err2.flush({ message: 'Solicitud inválida' }, { status: 400, statusText: 'Bad Request' });
+      const err3 = httpMock.expectOne('http://localhost:3000/api/invalid');
+      err3.flush({ message: 'Solicitud inválida' }, { status: 400, statusText: 'Bad Request' });
+      const err4 = httpMock.expectOne('http://localhost:3000/api/invalid');
+      err4.flush({ message: 'Solicitud inválida' }, { status: 400, statusText: 'Bad Request' });
 
       expect(mockToastService.error).toHaveBeenCalled();
     });
@@ -331,8 +338,14 @@ describe('HttpClientService', () => {
         error: () => {}
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/protected');
-      req.error(new ErrorEvent('Unauthorized'));
+      const r1 = httpMock.expectOne('http://localhost:3000/api/protected');
+      r1.flush({}, { status: 401, statusText: 'Unauthorized' });
+      const r2 = httpMock.expectOne('http://localhost:3000/api/protected');
+      r2.flush({}, { status: 401, statusText: 'Unauthorized' });
+      const r3 = httpMock.expectOne('http://localhost:3000/api/protected');
+      r3.flush({}, { status: 401, statusText: 'Unauthorized' });
+      const r4 = httpMock.expectOne('http://localhost:3000/api/protected');
+      r4.flush({}, { status: 401, statusText: 'Unauthorized' });
 
       expect(mockAuthService.logout).toHaveBeenCalled();
       expect(mockToastService.error).toHaveBeenCalledWith('No autorizado. Por favor, inicia sesión nuevamente');
@@ -346,8 +359,14 @@ describe('HttpClientService', () => {
         }
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/nonexistent');
-      req.error(new ErrorEvent('Not Found'));
+      const n1 = httpMock.expectOne('http://localhost:3000/api/nonexistent');
+      n1.flush({}, { status: 404, statusText: 'Not Found' });
+      const n2 = httpMock.expectOne('http://localhost:3000/api/nonexistent');
+      n2.flush({}, { status: 404, statusText: 'Not Found' });
+      const n3 = httpMock.expectOne('http://localhost:3000/api/nonexistent');
+      n3.flush({}, { status: 404, statusText: 'Not Found' });
+      const n4 = httpMock.expectOne('http://localhost:3000/api/nonexistent');
+      n4.flush({}, { status: 404, statusText: 'Not Found' });
     });
 
     it('should handle 422 Validation Error with detailed messages', () => {
@@ -366,8 +385,10 @@ describe('HttpClientService', () => {
         }
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/users');
-      req.error(new ErrorEvent('Validation Error'));
+      const v1 = httpMock.expectOne('http://localhost:3000/api/users');
+      v1.flush(errorResponse, { status: 422, statusText: 'Unprocessable Entity' });
+      const v2 = httpMock.expectOne('http://localhost:3000/api/users');
+      v2.flush(errorResponse, { status: 422, statusText: 'Unprocessable Entity' });
     });
 
     it('should handle 500 Internal Server Error', () => {
@@ -378,8 +399,14 @@ describe('HttpClientService', () => {
         }
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/server-error');
-      req.error(new ErrorEvent('Server Error'));
+      const s1 = httpMock.expectOne('http://localhost:3000/api/server-error');
+      s1.flush({}, { status: 500, statusText: 'Server Error' });
+      const s2 = httpMock.expectOne('http://localhost:3000/api/server-error');
+      s2.flush({}, { status: 500, statusText: 'Server Error' });
+      const s3 = httpMock.expectOne('http://localhost:3000/api/server-error');
+      s3.flush({}, { status: 500, statusText: 'Server Error' });
+      const s4 = httpMock.expectOne('http://localhost:3000/api/server-error');
+      s4.flush({}, { status: 500, statusText: 'Server Error' });
     });
 
     it('should handle network connectivity issues', () => {
@@ -390,11 +417,17 @@ describe('HttpClientService', () => {
         }
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/test');
-      req.error(new ErrorEvent('Network Error'));
+      const nerr1 = httpMock.expectOne('http://localhost:3000/api/test');
+      nerr1.error(new ErrorEvent('Network Error'), { status: 0, statusText: 'Unknown Error' });
+      const nerr2 = httpMock.expectOne('http://localhost:3000/api/test');
+      nerr2.error(new ErrorEvent('Network Error'), { status: 0, statusText: 'Unknown Error' });
+      const nerr3 = httpMock.expectOne('http://localhost:3000/api/test');
+      nerr3.error(new ErrorEvent('Network Error'), { status: 0, statusText: 'Unknown Error' });
+      const nerr4 = httpMock.expectOne('http://localhost:3000/api/test');
+      nerr4.error(new ErrorEvent('Network Error'), { status: 0, statusText: 'Unknown Error' });
 
       // Should update connection status
-      service.isConnected$.subscribe(connected => {
+      service.isConnected$.pipe(skip(1), take(1)).subscribe(connected => {
         expect(connected).toBe(false);
       });
     });
@@ -404,8 +437,14 @@ describe('HttpClientService', () => {
         error: () => {}
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/test');
-      req.error(new ErrorEvent('Error'), { status: 500, statusText: 'Server Error' });
+      const ne1 = httpMock.expectOne('http://localhost:3000/api/test');
+      ne1.error(new ErrorEvent('Error'), { status: 500, statusText: 'Server Error' });
+      const ne2 = httpMock.expectOne('http://localhost:3000/api/test');
+      ne2.error(new ErrorEvent('Error'), { status: 500, statusText: 'Server Error' });
+      const ne3 = httpMock.expectOne('http://localhost:3000/api/test');
+      ne3.error(new ErrorEvent('Error'), { status: 500, statusText: 'Server Error' });
+      const ne4 = httpMock.expectOne('http://localhost:3000/api/test');
+      ne4.error(new ErrorEvent('Error'), { status: 500, statusText: 'Server Error' });
 
       expect(mockToastService.error).not.toHaveBeenCalled();
     });
@@ -417,9 +456,15 @@ describe('HttpClientService', () => {
         }
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/test');
+      const c1 = httpMock.expectOne('http://localhost:3000/api/test');
       const clientError = new ErrorEvent('Client Error', { message: 'Client error message' });
-      req.error(clientError, { status: 0, statusText: '' });
+      c1.error(clientError, { status: 0, statusText: 'Client Error' });
+      const c2 = httpMock.expectOne('http://localhost:3000/api/test');
+      c2.error(clientError, { status: 0, statusText: 'Client Error' });
+      const c3 = httpMock.expectOne('http://localhost:3000/api/test');
+      c3.error(clientError, { status: 0, statusText: 'Client Error' });
+      const c4 = httpMock.expectOne('http://localhost:3000/api/test');
+      c4.error(clientError, { status: 0, statusText: 'Client Error' });
     });
   });
 
@@ -452,11 +497,17 @@ describe('HttpClientService', () => {
         expect(isHealthy).toBe(false);
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/health');
-      req.error(new ErrorEvent('Health check failed'));
+      const h1 = httpMock.expectOne('http://localhost:3000/api/health');
+      h1.error(new ErrorEvent('Health check failed'), { status: 0, statusText: 'Unknown Error' });
+      const h2 = httpMock.expectOne('http://localhost:3000/api/health');
+      h2.error(new ErrorEvent('Health check failed'), { status: 0, statusText: 'Unknown Error' });
+      const h3 = httpMock.expectOne('http://localhost:3000/api/health');
+      h3.error(new ErrorEvent('Health check failed'), { status: 0, statusText: 'Unknown Error' });
+      const h4 = httpMock.expectOne('http://localhost:3000/api/health');
+      h4.error(new ErrorEvent('Health check failed'), { status: 0, statusText: 'Unknown Error' });
 
       // Should update connection status
-      service.isConnected$.subscribe(connected => {
+      service.isConnected$.pipe(skip(1), take(1)).subscribe(connected => {
         expect(connected).toBe(false);
       });
     });
