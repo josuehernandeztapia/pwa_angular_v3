@@ -3,10 +3,20 @@
 
 // Ensure Chrome binary is available in CI/containerized environments
 try {
+  // Prefer Puppeteer if available (may fail on ESM-only versions when using require)
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   process.env.CHROME_BIN = require('puppeteer').executablePath();
 } catch (e) {
-  // Puppeteer not installed; fallback to system Chrome if available
+  try {
+    // Fallback to Playwright Chromium executable path (CommonJS-friendly)
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { chromium } = require('playwright');
+    if (chromium && typeof chromium.executablePath === 'function') {
+      process.env.CHROME_BIN = chromium.executablePath();
+    }
+  } catch (e2) {
+    // Final fallback: rely on system Chrome if available
+  }
 }
 
 module.exports = function (config) {
