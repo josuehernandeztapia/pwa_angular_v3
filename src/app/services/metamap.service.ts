@@ -56,7 +56,7 @@ export class MetaMapService {
     onSuccess?: (data: any) => void,
     onExit?: (reason: string) => void
   ): Observable<(HTMLElement & { clientid?: string; flowid?: string; metadata?: string }) | null> {
-    return new Observable(observer => {
+    return new Observable((observer: any) => {
       const container = document.getElementById(containerId);
       if (!container) {
         observer.error(`Container with ID ${containerId} not found`);
@@ -65,12 +65,20 @@ export class MetaMapService {
 
       // Create metamap-button element (exact port from React)
       const metamapButton = document.createElement('metamap-button') as HTMLElement & { clientid?: string; flowid?: string; metadata?: string };
-      (metamapButton as any).clientid = this.METAMAP_CONFIG.clientId;
-      (metamapButton as any).flowid = this.METAMAP_CONFIG.flowId;
-      (metamapButton as any).metadata = JSON.stringify({ 
-        clientId: client.id, 
-        clientName: client.name 
-      });
+      // Set both properties and attributes to maximize compatibility with SDK and tests
+      const clientId = this.METAMAP_CONFIG.clientId;
+      const flowId = this.METAMAP_CONFIG.flowId;
+      const metadata = JSON.stringify({ clientId: client.id, clientName: client.name });
+      (metamapButton as any).clientid = clientId;
+      (metamapButton as any).flowid = flowId;
+      (metamapButton as any).metadata = metadata;
+      try {
+        metamapButton.setAttribute('clientid', clientId);
+        metamapButton.setAttribute('flowid', flowId);
+        metamapButton.setAttribute('metadata', metadata);
+      } catch {
+        // Ignore attribute setting errors in non-DOM test environments
+      }
 
       // Port exacto de event listeners desde React useEffect
       const handleSuccess = (event: Event) => {
@@ -114,16 +122,16 @@ export class MetaMapService {
    * Port exacto de completeKyc desde React simulationService.ts líneas 515-522
    */
   completeKyc(clientId: string, verificationData?: any): Observable<Client> {
-    return new Observable<Client>(observer => {
+    return new Observable<Client>((observer: any) => {
       this.clientData.getClientById(clientId).subscribe({
-        next: (client) => {
+        next: (client: any) => {
           if (!client) {
             observer.error('Client not found');
             return;
           }
 
           // Find and update KYC document status (exact port from React)
-          const updatedDocs = client.documents.map(doc => {
+          const updatedDocs = client.documents.map((doc: any) => {
             if (doc.name.includes('Verificación Biométrica')) {
               return {
                 ...doc,
@@ -158,10 +166,10 @@ export class MetaMapService {
               observer.next(updatedClient);
               observer.complete();
             },
-            error: (err) => observer.error(err)
+            error: (err: any) => observer.error(err)
           });
         },
-        error: (err) => observer.error(err)
+        error: (err: any) => observer.error(err)
       });
     }).pipe(delay(800));
   }
@@ -270,15 +278,15 @@ export class MetaMapService {
    * Simulate KYC failure for testing
    */
   simulateKycFailure(clientId: string, reason: string = 'Identity verification failed'): Observable<Client> {
-    return new Observable<Client>(observer => {
+    return new Observable<Client>((observer: any) => {
       this.clientData.getClientById(clientId).subscribe({
-        next: (client) => {
+        next: (client: any) => {
           if (!client) {
             observer.error('Client not found');
             return;
           }
 
-          const updatedDocs = client.documents.map(doc => {
+          const updatedDocs = client.documents.map((doc: any) => {
             if (doc.name.includes('Verificación Biométrica')) {
               return {
                 ...doc,
@@ -310,10 +318,10 @@ export class MetaMapService {
               observer.next(updatedClient);
               observer.complete();
             },
-            error: (err) => observer.error(err)
+            error: (err: any) => observer.error(err)
           });
         },
-        error: (err) => observer.error(err)
+        error: (err: any) => observer.error(err)
       });
     }).pipe(delay(500));
   }
@@ -322,7 +330,7 @@ export class MetaMapService {
    * Check MetaMap SDK availability
    */
   checkSDKAvailability(): Observable<boolean> {
-    return new Observable<boolean>(observer => {
+    return new Observable<boolean>((observer: any) => {
       if (typeof window === 'undefined') {
         observer.next(false);
         observer.complete();

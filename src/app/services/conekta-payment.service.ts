@@ -4,7 +4,12 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
-declare var Conekta: any;
+declare global {
+  interface Window { Conekta?: any }
+}
+
+// Access SDK via window to play nice with tests that set window.Conekta
+const getConekta = (): any => (typeof window !== 'undefined' ? (window as any).Conekta : (globalThis as any).Conekta);
 
 interface PaymentMethod {
   type: 'card' | 'cash' | 'bank_transfer' | 'spei';
@@ -111,10 +116,11 @@ export class ConektaPaymentService {
   private async loadConektaSDK(): Promise<void> {
     if (this.isLoaded) return;
     // If a mock or real SDK is already available, use it without injecting script
-    if (typeof Conekta !== 'undefined' && Conekta?.Token?.create) {
+    const sdk = getConekta();
+    if (typeof sdk !== 'undefined' && sdk?.Token?.create) {
       try {
-        Conekta.setPublicKey(this.publicKey);
-        Conekta.setLanguage('es');
+        sdk.setPublicKey(this.publicKey);
+        sdk.setLanguage('es');
         this.isLoaded = true;
         return;
       } catch {
@@ -132,8 +138,9 @@ export class ConektaPaymentService {
       script.src = 'https://cdn.conekta.io/js/latest/conekta.js';
       script.onload = () => {
         try {
-          Conekta.setPublicKey(this.publicKey);
-          Conekta.setLanguage('es');
+          const loaded = getConekta();
+          loaded.setPublicKey(this.publicKey);
+          loaded.setLanguage('es');
           this.isLoaded = true;
           resolve();
         } catch (e) {
@@ -157,8 +164,9 @@ export class ConektaPaymentService {
   }): Promise<string> {
     await this.loadConektaSDK();
 
+    const sdk = getConekta();
     return new Promise((resolve, reject) => {
-      Conekta.Token.create({
+      sdk.Token.create({
         card: cardData
       }, (token: any) => {
         resolve(token.id);
