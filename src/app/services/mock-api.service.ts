@@ -47,16 +47,47 @@ export class MockApiService {
    * Port exacto de mockApi function desde React
    */
   private mockApi<T>(data: T, delayMs: number = this.DEFAULT_DELAY): Observable<T> {
-    // Deep clone data like React's JSON.parse(JSON.stringify(data))
-    const clonedData = JSON.parse(JSON.stringify(data));
-    
-    return of(clonedData).pipe(
+    return new Observable<T>(observer => {
+      try {
+        // Deep clone data but preserve Date objects (unlike JSON.parse/stringify)
+        const clonedData = this.deepCloneWithDates(data);
+        observer.next(clonedData);
+        observer.complete();
+      } catch (error) {
+        observer.error(error);
+      }
+    }).pipe(
       delay(delayMs),
       catchError(error => {
         console.error('MockApi Error:', error);
         return throwError(() => error);
       })
     );
+  }
+
+  /**
+   * Deep clone preserving Date objects
+   */
+  private deepCloneWithDates<T>(obj: T): T {
+    if (obj === null || typeof obj !== 'object') {
+      return obj;
+    }
+    
+    if (obj instanceof Date) {
+      return new Date(obj.getTime()) as any;
+    }
+    
+    if (Array.isArray(obj)) {
+      return obj.map(item => this.deepCloneWithDates(item)) as any;
+    }
+    
+    const cloned = {} as any;
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        cloned[key] = this.deepCloneWithDates((obj as any)[key]);
+      }
+    }
+    return cloned;
   }
 
   /**
@@ -360,7 +391,7 @@ export class MockApiService {
   /**
    * Simulate API errors for testing
    */
-  simulateError(errorType: 'network' | 'server' | 'validation' | 'timeout' = 'server'): Observable<never> {
+  simulateError(errorType: 'network' | 'server' | 'validation' | 'timeout' | any = 'server'): Observable<never> {
     let errorMessage: string;
     let statusCode: number;
 
@@ -384,6 +415,8 @@ export class MockApiService {
             throw new Error('Request timeout');
           })
         );
+      case undefined:
+      case null:
       default:
         errorMessage = 'Unknown error occurred';
         statusCode = 500;

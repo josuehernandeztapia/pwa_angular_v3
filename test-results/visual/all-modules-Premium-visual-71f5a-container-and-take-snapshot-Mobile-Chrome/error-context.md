@@ -1,0 +1,341 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44] [cursor=pointer]: 🎯
+            - generic [ref=e45] [cursor=pointer]: Simulador
+          - generic [ref=e47] [cursor=pointer]:
+            - generic [ref=e48] [cursor=pointer]: 👥
+            - generic [ref=e49] [cursor=pointer]: Clientes
+            - generic [ref=e50] [cursor=pointer]: "12"
+          - generic [ref=e52] [cursor=pointer]:
+            - generic [ref=e53] [cursor=pointer]: 📋
+            - generic [ref=e54] [cursor=pointer]: Expedientes
+          - generic [ref=e56] [cursor=pointer]:
+            - generic [ref=e57] [cursor=pointer]: 🛡️
+            - generic [ref=e58] [cursor=pointer]: Protección
+            - generic [ref=e59] [cursor=pointer]: "3"
+          - generic [ref=e61] [cursor=pointer]:
+            - generic [ref=e62] [cursor=pointer]: 📊
+            - generic [ref=e63] [cursor=pointer]: Reportes
+        - generic [ref=e64]:
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: ❓
+            - generic [ref=e68] [cursor=pointer]: Ayuda
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]: ⚙️
+            - generic [ref=e72] [cursor=pointer]: Configuración
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75] [cursor=pointer]: 🚪
+            - generic [ref=e76] [cursor=pointer]: Salir
+      - button "Abrir menú" [ref=e77] [cursor=pointer]: ☰
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e81]: 🔔 Notificaciones
+          - button "✕" [ref=e83] [cursor=pointer]
+        - generic [ref=e85]:
+          - generic [ref=e86]: 🔔
+          - generic [ref=e87]:
+            - generic [ref=e88]: Activar Notificaciones
+            - generic [ref=e89]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e90]:
+            - button "Activar" [ref=e91] [cursor=pointer]
+            - button "Después" [ref=e92] [cursor=pointer]
+        - generic [ref=e94]:
+          - generic [ref=e95]: 📭
+          - generic [ref=e96]: No hay notificaciones
+          - generic [ref=e97]: Las notificaciones aparecerán aquí
+    - main [ref=e98]:
+      - generic [ref=e100]:
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - heading "🎯 Pipeline de Oportunidades" [level=1] [ref=e103]
+            - paragraph [ref=e104]: Gestión de prospectos y seguimiento de ventas
+          - generic [ref=e105]:
+            - button "🔄 Actualizar" [ref=e106] [cursor=pointer]
+            - button "➕ Nueva Oportunidad" [ref=e107] [cursor=pointer]
+        - generic [ref=e108]:
+          - generic [ref=e109]:
+            - generic [ref=e110]: 🎯
+            - generic [ref=e111]:
+              - generic [ref=e112]: "5"
+              - generic [ref=e113]: Oportunidades Activas
+          - generic [ref=e114]:
+            - generic [ref=e115]: 💰
+            - generic [ref=e116]:
+              - generic [ref=e117]: $11,491,000
+              - generic [ref=e118]: Valor Total Pipeline
+          - generic [ref=e119]:
+            - generic [ref=e120]: 📊
+            - generic [ref=e121]:
+              - generic [ref=e122]: $2,298,200
+              - generic [ref=e123]: Ticket Promedio
+          - generic [ref=e124]:
+            - generic [ref=e125]: 📈
+            - generic [ref=e126]:
+              - generic [ref=e127]: 35.0%
+              - generic [ref=e128]: Tasa de Conversión
+        - generic [ref=e129]:
+          - generic [ref=e130]:
+            - generic [ref=e131]: 🏢 Mercado
+            - combobox [ref=e132] [cursor=pointer]:
+              - option "Todos los mercados" [selected]
+              - option "Aguascalientes"
+              - option "Estado de México"
+          - generic [ref=e133]:
+            - generic [ref=e134]: 📋 Tipo de Negocio
+            - combobox [ref=e135] [cursor=pointer]:
+              - option "Todos los tipos" [selected]
+              - option "Venta a Plazo"
+              - option "Venta Directa"
+              - option "Plan de Ahorro"
+              - option "Crédito Colectivo"
+          - generic [ref=e136]:
+            - generic [ref=e137]: 🎚️ Etapa
+            - combobox [ref=e138] [cursor=pointer]:
+              - option "Todas las etapas" [selected]
+              - option "Prospecto"
+              - option "Cotizando"
+              - option "Negociando"
+              - option "Documentando"
+              - option "Cerrando"
+          - generic [ref=e139]:
+            - generic [ref=e140]: ⚡ Prioridad
+            - combobox [ref=e141] [cursor=pointer]:
+              - option "Todas las prioridades" [selected]
+              - option "Alta"
+              - option "Media"
+              - option "Baja"
+        - generic [ref=e142]:
+          - generic [ref=e143]:
+            - generic [ref=e144]:
+              - heading "👤 Prospecto" [level=3] [ref=e145]
+              - generic [ref=e146]: "2"
+              - generic [ref=e147]: $5,100,000
+            - generic [ref=e148]:
+              - generic [ref=e149] [cursor=pointer]:
+                - generic [ref=e150] [cursor=pointer]:
+                  - heading "Carlos Rodríguez Martín" [level=4] [ref=e151] [cursor=pointer]
+                  - generic [ref=e152] [cursor=pointer]: 🟢
+                - generic [ref=e153] [cursor=pointer]:
+                  - generic [ref=e154] [cursor=pointer]:
+                    - generic [ref=e155] [cursor=pointer]: "📍 Mercado:"
+                    - generic [ref=e156] [cursor=pointer]: EdoMex
+                  - generic [ref=e157] [cursor=pointer]:
+                    - generic [ref=e158] [cursor=pointer]: "📊 Tipo:"
+                    - generic [ref=e159] [cursor=pointer]: Plan de Ahorro
+                  - generic [ref=e160] [cursor=pointer]:
+                    - generic [ref=e161] [cursor=pointer]: "💰 Valor:"
+                    - generic [ref=e162] [cursor=pointer]: $600,000
+                  - generic [ref=e163] [cursor=pointer]:
+                    - generic [ref=e164] [cursor=pointer]: "📈 Probabilidad:"
+                    - generic [ref=e165] [cursor=pointer]: 20%
+                - generic [ref=e169] [cursor=pointer]:
+                  - generic [ref=e170] [cursor=pointer]:
+                    - generic [ref=e171] [cursor=pointer]: 🎯
+                    - generic [ref=e172] [cursor=pointer]: Contactar y calificar prospecto
+                  - generic [ref=e174] [cursor=pointer]: 0h
+                - generic [ref=e175] [cursor=pointer]:
+                  - generic [ref=e176] [cursor=pointer]: EdoMex
+                  - generic [ref=e177] [cursor=pointer]: Plan de Ahorro
+                - generic [ref=e178] [cursor=pointer]:
+                  - button "➡️ Avanzar" [ref=e179] [cursor=pointer]
+                  - button "📅 Seguimiento" [ref=e180] [cursor=pointer]
+              - generic [ref=e181] [cursor=pointer]:
+                - generic [ref=e182] [cursor=pointer]:
+                  - heading "Transportes del Valle S.A." [level=4] [ref=e183] [cursor=pointer]
+                  - generic [ref=e184] [cursor=pointer]: 🔴
+                - generic [ref=e185] [cursor=pointer]:
+                  - generic [ref=e186] [cursor=pointer]:
+                    - generic [ref=e187] [cursor=pointer]: "📍 Mercado:"
+                    - generic [ref=e188] [cursor=pointer]: EdoMex
+                  - generic [ref=e189] [cursor=pointer]:
+                    - generic [ref=e190] [cursor=pointer]: "📊 Tipo:"
+                    - generic [ref=e191] [cursor=pointer]: Crédito Colectivo
+                  - generic [ref=e192] [cursor=pointer]:
+                    - generic [ref=e193] [cursor=pointer]: "💰 Valor:"
+                    - generic [ref=e194] [cursor=pointer]: $4,500,000
+                  - generic [ref=e195] [cursor=pointer]:
+                    - generic [ref=e196] [cursor=pointer]: "📈 Probabilidad:"
+                    - generic [ref=e197] [cursor=pointer]: 25%
+                - generic [ref=e201] [cursor=pointer]:
+                  - generic [ref=e202] [cursor=pointer]:
+                    - generic [ref=e203] [cursor=pointer]: 🎯
+                    - generic [ref=e204] [cursor=pointer]: Presentar propuesta de crédito colectivo
+                  - generic [ref=e206] [cursor=pointer]: 2d
+                - generic [ref=e207] [cursor=pointer]:
+                  - generic [ref=e208] [cursor=pointer]: Nuevo Prospecto
+                  - generic [ref=e209] [cursor=pointer]: EdoMex
+                  - generic [ref=e210] [cursor=pointer]: Colectivo
+                - generic [ref=e211] [cursor=pointer]:
+                  - button "➡️ Avanzar" [ref=e212] [cursor=pointer]
+                  - button "📅 Seguimiento" [ref=e213] [cursor=pointer]
+          - generic [ref=e214]:
+            - generic [ref=e215]:
+              - heading "💰 Cotizando" [level=3] [ref=e216]
+              - generic [ref=e217]: "3"
+              - generic [ref=e218]: $6,391,000
+            - generic [ref=e219]:
+              - generic [ref=e220] [cursor=pointer]:
+                - generic [ref=e221] [cursor=pointer]:
+                  - heading "Ana García López" [level=4] [ref=e222] [cursor=pointer]
+                  - generic [ref=e223] [cursor=pointer]: 🟢
+                - generic [ref=e224] [cursor=pointer]:
+                  - generic [ref=e225] [cursor=pointer]:
+                    - generic [ref=e226] [cursor=pointer]: "📍 Mercado:"
+                    - generic [ref=e227] [cursor=pointer]: AGS
+                  - generic [ref=e228] [cursor=pointer]:
+                    - generic [ref=e229] [cursor=pointer]: "📊 Tipo:"
+                    - generic [ref=e230] [cursor=pointer]: Venta a Plazo
+                  - generic [ref=e231] [cursor=pointer]:
+                    - generic [ref=e232] [cursor=pointer]: "💰 Valor:"
+                    - generic [ref=e233] [cursor=pointer]: $853,000
+                  - generic [ref=e234] [cursor=pointer]:
+                    - generic [ref=e235] [cursor=pointer]: "📈 Probabilidad:"
+                    - generic [ref=e236] [cursor=pointer]: 45%
+                - generic [ref=e240] [cursor=pointer]:
+                  - generic [ref=e241] [cursor=pointer]:
+                    - generic [ref=e242] [cursor=pointer]: 🎯
+                    - generic [ref=e243] [cursor=pointer]: Generar cotización personalizada
+                  - generic [ref=e245] [cursor=pointer]: 0h
+                - generic [ref=e246] [cursor=pointer]:
+                  - generic [ref=e247] [cursor=pointer]: AGS
+                  - generic [ref=e248] [cursor=pointer]: Venta a Plazo
+                  - generic [ref=e249] [cursor=pointer]: Cliente Activo
+                - generic [ref=e250] [cursor=pointer]:
+                  - button "➡️ Avanzar" [ref=e251] [cursor=pointer]
+                  - button "📋 Cotizar" [ref=e252] [cursor=pointer]
+                  - button "📅 Seguimiento" [ref=e253] [cursor=pointer]
+              - generic [ref=e254] [cursor=pointer]:
+                - generic [ref=e255] [cursor=pointer]:
+                  - heading "María Elena Sánchez" [level=4] [ref=e256] [cursor=pointer]
+                  - generic [ref=e257] [cursor=pointer]: 🔴
+                - generic [ref=e258] [cursor=pointer]:
+                  - generic [ref=e259] [cursor=pointer]:
+                    - generic [ref=e260] [cursor=pointer]: "📍 Mercado:"
+                    - generic [ref=e261] [cursor=pointer]: AGS
+                  - generic [ref=e262] [cursor=pointer]:
+                    - generic [ref=e263] [cursor=pointer]: "📊 Tipo:"
+                    - generic [ref=e264] [cursor=pointer]: Crédito Colectivo
+                  - generic [ref=e265] [cursor=pointer]:
+                    - generic [ref=e266] [cursor=pointer]: "💰 Valor:"
+                    - generic [ref=e267] [cursor=pointer]: $4,685,000
+                  - generic [ref=e268] [cursor=pointer]:
+                    - generic [ref=e269] [cursor=pointer]: "📈 Probabilidad:"
+                    - generic [ref=e270] [cursor=pointer]: 45%
+                - generic [ref=e274] [cursor=pointer]:
+                  - generic [ref=e275] [cursor=pointer]:
+                    - generic [ref=e276] [cursor=pointer]: 🎯
+                    - generic [ref=e277] [cursor=pointer]: Generar cotización personalizada
+                  - generic [ref=e279] [cursor=pointer]: 0h
+                - generic [ref=e280] [cursor=pointer]:
+                  - generic [ref=e281] [cursor=pointer]: AGS
+                  - generic [ref=e282] [cursor=pointer]: Crédito Colectivo
+                  - generic [ref=e283] [cursor=pointer]: Cliente Activo
+                - generic [ref=e284] [cursor=pointer]:
+                  - button "➡️ Avanzar" [ref=e285] [cursor=pointer]
+                  - button "📋 Cotizar" [ref=e286] [cursor=pointer]
+                  - button "📅 Seguimiento" [ref=e287] [cursor=pointer]
+              - generic [ref=e288] [cursor=pointer]:
+                - generic [ref=e289] [cursor=pointer]:
+                  - heading "José Luis Martínez" [level=4] [ref=e290] [cursor=pointer]
+                  - generic [ref=e291] [cursor=pointer]: 🟡
+                - generic [ref=e292] [cursor=pointer]:
+                  - generic [ref=e293] [cursor=pointer]:
+                    - generic [ref=e294] [cursor=pointer]: "📍 Mercado:"
+                    - generic [ref=e295] [cursor=pointer]: AGS
+                  - generic [ref=e296] [cursor=pointer]:
+                    - generic [ref=e297] [cursor=pointer]: "📊 Tipo:"
+                    - generic [ref=e298] [cursor=pointer]: Venta a Plazo
+                  - generic [ref=e299] [cursor=pointer]:
+                    - generic [ref=e300] [cursor=pointer]: "💰 Valor:"
+                    - generic [ref=e301] [cursor=pointer]: $853,000
+                  - generic [ref=e302] [cursor=pointer]:
+                    - generic [ref=e303] [cursor=pointer]: "📈 Probabilidad:"
+                    - generic [ref=e304] [cursor=pointer]: 60%
+                - generic [ref=e308] [cursor=pointer]:
+                  - generic [ref=e309] [cursor=pointer]:
+                    - generic [ref=e310] [cursor=pointer]: 🎯
+                    - generic [ref=e311] [cursor=pointer]: Enviar cotización final con descuento
+                  - generic [ref=e313] [cursor=pointer]: 1d
+                - generic [ref=e314] [cursor=pointer]:
+                  - generic [ref=e315] [cursor=pointer]: AGS
+                  - generic [ref=e316] [cursor=pointer]: Venta Plazo
+                  - generic [ref=e317] [cursor=pointer]: Hot Lead
+                - generic [ref=e318] [cursor=pointer]:
+                  - button "➡️ Avanzar" [ref=e319] [cursor=pointer]
+                  - button "📋 Cotizar" [ref=e320] [cursor=pointer]
+                  - button "📅 Seguimiento" [ref=e321] [cursor=pointer]
+          - generic [ref=e323]:
+            - heading "🤝 Negociando" [level=3] [ref=e324]
+            - generic [ref=e325]: "0"
+            - generic [ref=e326]: $0
+          - generic [ref=e328]:
+            - heading "📋 Documentando" [level=3] [ref=e329]
+            - generic [ref=e330]: "0"
+            - generic [ref=e331]: $0
+          - generic [ref=e333]:
+            - heading "🎯 Cerrando" [level=3] [ref=e334]
+            - generic [ref=e335]: "0"
+            - generic [ref=e336]: $0
+    - navigation "Navegación inferior":
+      - navigation [ref=e337]:
+        - generic [ref=e338] [cursor=pointer]:
+          - generic [ref=e340] [cursor=pointer]: 🏠
+          - generic [ref=e341] [cursor=pointer]: Dashboard
+        - generic [ref=e342] [cursor=pointer]:
+          - generic [ref=e343] [cursor=pointer]:
+            - generic [ref=e344] [cursor=pointer]: 🎯
+            - generic [ref=e345] [cursor=pointer]: "5"
+          - generic [ref=e346] [cursor=pointer]: Oportunidades
+        - generic [ref=e348] [cursor=pointer]:
+          - generic [ref=e350] [cursor=pointer]: 💰
+          - generic [ref=e351] [cursor=pointer]: Cotizar
+        - generic [ref=e352] [cursor=pointer]:
+          - generic [ref=e353] [cursor=pointer]:
+            - generic [ref=e354] [cursor=pointer]: 👥
+            - generic [ref=e355] [cursor=pointer]: "12"
+          - generic [ref=e356] [cursor=pointer]: Clientes
+        - generic [ref=e357] [cursor=pointer]:
+          - generic [ref=e358] [cursor=pointer]:
+            - generic [ref=e359] [cursor=pointer]: ⚡
+            - generic [ref=e360] [cursor=pointer]: "2"
+          - generic [ref=e361] [cursor=pointer]: Más
+```

@@ -1,0 +1,147 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44] [cursor=pointer]: 🎯
+            - generic [ref=e45] [cursor=pointer]: Simulador
+          - generic [ref=e47] [cursor=pointer]:
+            - generic [ref=e48] [cursor=pointer]: 👥
+            - generic [ref=e49] [cursor=pointer]: Clientes
+            - generic [ref=e50] [cursor=pointer]: "12"
+          - generic [ref=e52] [cursor=pointer]:
+            - generic [ref=e53] [cursor=pointer]: 📋
+            - generic [ref=e54] [cursor=pointer]: Expedientes
+          - generic [ref=e56] [cursor=pointer]:
+            - generic [ref=e57] [cursor=pointer]: 🛡️
+            - generic [ref=e58] [cursor=pointer]: Protección
+            - generic [ref=e59] [cursor=pointer]: "3"
+          - generic [ref=e61] [cursor=pointer]:
+            - generic [ref=e62] [cursor=pointer]: 📊
+            - generic [ref=e63] [cursor=pointer]: Reportes
+        - generic [ref=e64]:
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: ❓
+            - generic [ref=e68] [cursor=pointer]: Ayuda
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]: ⚙️
+            - generic [ref=e72] [cursor=pointer]: Configuración
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75] [cursor=pointer]: 🚪
+            - generic [ref=e76] [cursor=pointer]: Salir
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - generic [ref=e80]: 🔔 Notificaciones
+          - button "✕" [ref=e82] [cursor=pointer]
+        - generic [ref=e84]:
+          - generic [ref=e85]: 🔔
+          - generic [ref=e86]:
+            - generic [ref=e87]: Activar Notificaciones
+            - generic [ref=e88]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e89]:
+            - button "Activar" [ref=e90] [cursor=pointer]
+            - button "Después" [ref=e91] [cursor=pointer]
+        - generic [ref=e93]:
+          - generic [ref=e94]: 📭
+          - generic [ref=e95]: No hay notificaciones
+          - generic [ref=e96]: Las notificaciones aparecerán aquí
+    - main [ref=e97]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - heading "📂 Expedientes" [level=1] [ref=e102]
+            - paragraph [ref=e103]: Gestión de documentos y expedientes de clientes
+          - button "📝 Nuevo Expediente" [ref=e105] [cursor=pointer]
+        - main [ref=e106]:
+          - generic [ref=e108]:
+            - generic [ref=e109]:
+              - generic [ref=e110]: 🔍 Buscar expediente
+              - textbox "Nombre, RFC, o número de expediente..." [ref=e111]
+            - generic [ref=e112]:
+              - generic [ref=e113]: 📊 Estado
+              - combobox [ref=e114]:
+                - option "Todos" [selected]
+                - option "Completo"
+                - option "Pendiente"
+                - option "En Revisión"
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - generic [ref=e117]:
+                - generic [ref=e118]:
+                  - heading "Juan Pérez García" [level=3] [ref=e119]
+                  - paragraph [ref=e120]: "ID: EXP-001"
+                - generic [ref=e121]: Completo
+              - generic [ref=e122]:
+                - generic [ref=e123]:
+                  - generic [ref=e124]:
+                    - generic [ref=e125]: "8"
+                    - generic [ref=e126]: Documentos
+                  - generic [ref=e127]:
+                    - generic [ref=e128]: "8"
+                    - generic [ref=e129]: Completos
+                  - generic [ref=e130]:
+                    - generic [ref=e131]: "0"
+                    - generic [ref=e132]: Pendientes
+                - generic [ref=e136]: 100% completo
+              - generic [ref=e137]:
+                - button "👁️ Ver Detalles" [ref=e138] [cursor=pointer]
+                - button "📤 Subir Documento" [ref=e139] [cursor=pointer]
+            - generic [ref=e140]:
+              - generic [ref=e141]:
+                - generic [ref=e142]:
+                  - heading "María González López" [level=3] [ref=e143]
+                  - paragraph [ref=e144]: "ID: EXP-002"
+                - generic [ref=e145]: Pendiente
+              - generic [ref=e146]:
+                - generic [ref=e147]:
+                  - generic [ref=e148]:
+                    - generic [ref=e149]: "6"
+                    - generic [ref=e150]: Documentos
+                  - generic [ref=e151]:
+                    - generic [ref=e152]: "4"
+                    - generic [ref=e153]: Completos
+                  - generic [ref=e154]:
+                    - generic [ref=e155]: "2"
+                    - generic [ref=e156]: Pendientes
+                - generic [ref=e160]: 67% completo
+              - generic [ref=e161]:
+                - button "👁️ Ver Detalles" [ref=e162] [cursor=pointer]
+                - button "📤 Subir Documento" [ref=e163] [cursor=pointer]
+    - navigation "Navegación inferior"
+```

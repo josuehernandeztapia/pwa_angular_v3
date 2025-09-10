@@ -1,16 +1,22 @@
 import { ComponentFixture } from '@angular/core/testing';
-// Provide minimal type declarations to satisfy TS without installing @types/jest-axe
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const expect: any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare function configureAxe(config?: any): any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const toHaveNoViolations: any;
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { configureAxe: axeConfigure, toHaveNoViolations: axeNoViolations } = require('jest-axe');
+import * as axeCore from 'axe-core';
+
+// Type definitions for axe-core results
+interface AxeViolation {
+  id: string;
+  description: string;
+  nodes: any[];
+}
+
+interface AxeResults {
+  violations: AxeViolation[];
+  passes: any[];
+  incomplete: any[];
+  inapplicable: any[];
+}
 
 // Configure axe for Angular applications
-const axe = axeConfigure({
+const axeConfig = {
   rules: {
     // Disable color-contrast rule for development as it can be flaky
     'color-contrast': { enabled: false },
@@ -41,15 +47,11 @@ const axe = axeConfigure({
     'valid-lang': { enabled: true },
     'video-caption': { enabled: true }
   }
-});
+};
 
-// Extend Jest matchers if available; otherwise, provide fallback for Jasmine
-try {
-  if (typeof expect !== 'undefined' && typeof expect.extend === 'function') {
-    expect.extend(axeNoViolations);
-  }
-} catch {
-  // No-op in Jasmine; we'll implement a simple fallback assertion
+// Create configureAxe function for compatibility
+function configureAxe(config: any) {
+  return (element: HTMLElement) => axeCore.run(element, config);
 }
 
 /**
@@ -57,24 +59,24 @@ try {
  */
 export async function testAccessibility(fixture: ComponentFixture<any>): Promise<void> {
   const element = fixture.nativeElement;
-  const results = await axe(element);
-  if (typeof (expect as any).toHaveNoViolations === 'function') {
-    expect(results).toHaveNoViolations();
-  } else {
-    expect(results.violations.length).toBe(0);
+  const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
+  if (results.violations.length > 0) {
+    const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
+    throw new Error(`Accessibility violations found: ${violations}`);
   }
+  expect(results.violations.length).toBe(0);
 }
 
 /**
  * Test accessibility of a specific element
  */
 export async function testElementAccessibility(element: HTMLElement): Promise<void> {
-  const results = await axe(element);
-  if (typeof (expect as any).toHaveNoViolations === 'function') {
-    expect(results).toHaveNoViolations();
-  } else {
-    expect(results.violations.length).toBe(0);
+  const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
+  if (results.violations.length > 0) {
+    const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
+    throw new Error(`Accessibility violations found: ${violations}`);
   }
+  expect(results.violations.length).toBe(0);
 }
 
 /**
@@ -85,21 +87,20 @@ export async function testAccessibilityWithConfig(
   config: any
 ): Promise<void> {
   const element = fixture.nativeElement;
-  const customAxe = configureAxe(config);
-  const results = await customAxe(element);
-  if (typeof (expect as any).toHaveNoViolations === 'function') {
-    expect(results).toHaveNoViolations();
-  } else {
-    expect(results.violations.length).toBe(0);
+  const results = await axeCore.run(element, config) as unknown as AxeResults;
+  if (results.violations.length > 0) {
+    const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
+    throw new Error(`Accessibility violations found: ${violations}`);
   }
+  expect(results.violations.length).toBe(0);
 }
 
 /**
  * Get accessibility violations without throwing
  */
-export async function getAccessibilityViolations(fixture: ComponentFixture<any>): Promise<any> {
+export async function getAccessibilityViolations(fixture: ComponentFixture<any>): Promise<AxeViolation[]> {
   const element = fixture.nativeElement;
-  const results = await axe(element);
+  const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
   return results.violations;
 }
 
@@ -219,11 +220,11 @@ export class AccessibilityChecker {
    */
   static async checkColorContrast(element: HTMLElement): Promise<boolean> {
     try {
-      const results = await axe(element, {
+      const results = await axeCore.run(element, {
         rules: {
           'color-contrast': { enabled: true }
         }
-      });
+      }) as unknown as AxeResults;
       return results.violations.length === 0;
     } catch {
       return true; // Assume pass if unable to test
@@ -242,7 +243,7 @@ export function createAccessibilityTestSuite(componentName: string) {
 
     [`${componentName} should have no accessibility violations`]: async (fixture: ComponentFixture<any>) => {
       const violations = await getAccessibilityViolations(fixture);
-      expect(violations).toHaveLength(0);
+      expect(violations.length).toBe(0);
     },
 
     [`${componentName} interactive elements should be keyboard accessible`]: (fixture: ComponentFixture<any>) => {

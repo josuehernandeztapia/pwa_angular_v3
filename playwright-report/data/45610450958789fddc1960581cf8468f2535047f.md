@@ -1,0 +1,346 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44] [cursor=pointer]: 🎯
+            - generic [ref=e45] [cursor=pointer]: Simulador
+          - generic [ref=e47] [cursor=pointer]:
+            - generic [ref=e48] [cursor=pointer]: 👥
+            - generic [ref=e49] [cursor=pointer]: Clientes
+            - generic [ref=e50] [cursor=pointer]: "12"
+          - generic [ref=e52] [cursor=pointer]:
+            - generic [ref=e53] [cursor=pointer]: 📋
+            - generic [ref=e54] [cursor=pointer]: Expedientes
+          - generic [ref=e56] [cursor=pointer]:
+            - generic [ref=e57] [cursor=pointer]: 🛡️
+            - generic [ref=e58] [cursor=pointer]: Protección
+            - generic [ref=e59] [cursor=pointer]: "3"
+          - generic [ref=e61] [cursor=pointer]:
+            - generic [ref=e62] [cursor=pointer]: 📊
+            - generic [ref=e63] [cursor=pointer]: Reportes
+        - generic [ref=e64]:
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: ❓
+            - generic [ref=e68] [cursor=pointer]: Ayuda
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]: ⚙️
+            - generic [ref=e72] [cursor=pointer]: Configuración
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75] [cursor=pointer]: 🚪
+            - generic [ref=e76] [cursor=pointer]: Salir
+      - button "Abrir menú" [ref=e77] [cursor=pointer]: ☰
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e81]: 🔔 Notificaciones
+          - button "✕" [ref=e83] [cursor=pointer]
+        - generic [ref=e85]:
+          - generic [ref=e86]: 🔔
+          - generic [ref=e87]:
+            - generic [ref=e88]: Activar Notificaciones
+            - generic [ref=e89]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e90]:
+            - button "Activar" [ref=e91] [cursor=pointer]
+            - button "Después" [ref=e92] [cursor=pointer]
+        - generic [ref=e94]:
+          - generic [ref=e95]: 📭
+          - generic [ref=e96]: No hay notificaciones
+          - generic [ref=e97]: Las notificaciones aparecerán aquí
+    - main [ref=e98]:
+      - generic [ref=e100]:
+        - generic [ref=e102]:
+          - heading "🚐 Catálogo de Productos" [level=1] [ref=e103]
+          - paragraph [ref=e104]: Paquetes de unidades vehiculares por mercado
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - 'button "Filtrar por mercado: Todos los Mercados" [pressed] [ref=e107] [cursor=pointer]': 🌎 Todos los Mercados
+            - 'button "Filtrar por mercado: Aguascalientes" [ref=e108] [cursor=pointer]': 🏜️ Aguascalientes
+            - 'button "Filtrar por mercado: Estado de México" [ref=e109] [cursor=pointer]': 🏙️ Estado de México
+          - generic [ref=e110]:
+            - 'button "Filtrar por tipo: Todos los Tipos" [pressed] [ref=e111] [cursor=pointer]': Todos los Tipos
+            - 'button "Filtrar por tipo: Venta a Plazo" [ref=e112] [cursor=pointer]': Venta a Plazo
+            - 'button "Filtrar por tipo: Venta Directa" [ref=e113] [cursor=pointer]': Venta Directa
+            - 'button "Filtrar por tipo: Crédito Colectivo" [ref=e114] [cursor=pointer]': Crédito Colectivo
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - generic [ref=e117]: ⭐ Más Popular
+            - generic [ref=e118]:
+              - generic [ref=e119]:
+                - heading "Paquete Venta a Plazo - Aguascalientes" [level=3] [ref=e120]
+                - generic [ref=e121]: Aguascalientes
+              - generic [ref=e122]:
+                - generic [ref=e123]: $853,000
+                - generic [ref=e124]: Precio base
+            - generic [ref=e125]:
+              - generic [ref=e126]:
+                - heading "📦 Componentes del Paquete" [level=4] [ref=e127]
+                - generic [ref=e128]:
+                  - generic [ref=e129]:
+                    - generic [ref=e131]: Vagoneta H6C (19 Pasajeros)
+                    - generic [ref=e132]: $799,000
+                  - generic [ref=e133]:
+                    - generic [ref=e135]: Conversión GNV
+                    - generic [ref=e136]: $54,000
+              - generic [ref=e137]:
+                - heading "✨ Características" [level=4] [ref=e138]
+                - generic [ref=e139]:
+                  - generic [ref=e140]: Mercado Aguascalientes
+                  - generic [ref=e141]: Operación desde Día 1
+                  - generic [ref=e142]: Financiamiento Disponible
+                  - generic [ref=e143]: Pagos Mensuales
+                  - generic [ref=e144]: Conversión GNV Incluida
+              - generic [ref=e145]:
+                - heading "💳 Condiciones Financieras" [level=4] [ref=e146]
+                - generic [ref=e147]:
+                  - generic [ref=e148]:
+                    - generic [ref=e149]: Tasa Anual
+                    - generic [ref=e150]: 25.5%
+                  - generic [ref=e151]:
+                    - generic [ref=e152]: Enganche Mín.
+                    - generic [ref=e153]: 60%
+                  - generic [ref=e154]:
+                    - generic [ref=e155]: Plazos
+                    - generic [ref=e156]: 12, 24 meses
+            - generic [ref=e157]:
+              - button "👁️ Ver Detalles" [ref=e158] [cursor=pointer]
+              - button "💰 Cotizar Ahora" [ref=e159] [cursor=pointer]
+          - generic [ref=e160]:
+            - generic [ref=e161]:
+              - generic [ref=e162]:
+                - heading "Paquete Compra de Contado - Aguascalientes" [level=3] [ref=e163]
+                - generic [ref=e164]: Aguascalientes
+              - generic [ref=e165]:
+                - generic [ref=e166]: $799,000
+                - generic [ref=e167]: Precio base
+            - generic [ref=e168]:
+              - generic [ref=e169]:
+                - heading "📦 Componentes del Paquete" [level=4] [ref=e170]
+                - generic [ref=e171]:
+                  - generic [ref=e172]:
+                    - generic [ref=e174]: Vagoneta H6C (19 Pasajeros)
+                    - generic [ref=e175]: $799,000
+                  - generic [ref=e176]:
+                    - generic [ref=e177]:
+                      - generic [ref=e178]: Conversión GNV
+                      - generic [ref=e179]: Opcional
+                    - generic [ref=e180]: $54,000
+              - generic [ref=e181]:
+                - heading "✨ Características" [level=4] [ref=e182]
+                - generic [ref=e183]:
+                  - generic [ref=e184]: Mercado Aguascalientes
+                  - generic [ref=e185]: Operación desde Día 1
+                  - generic [ref=e186]: Pago de Contado
+                  - generic [ref=e187]: Entrega Inmediata
+                  - generic [ref=e188]: Conversión GNV Incluida
+              - generic [ref=e189]:
+                - heading "💳 Condiciones Financieras" [level=4] [ref=e190]
+                - generic [ref=e192]:
+                  - generic [ref=e193]: Enganche Mín.
+                  - generic [ref=e194]: 50%
+            - generic [ref=e195]:
+              - button "👁️ Ver Detalles" [ref=e196] [cursor=pointer]
+              - button "💰 Cotizar Ahora" [ref=e197] [cursor=pointer]
+          - generic [ref=e198]:
+            - generic [ref=e199]: ⭐ Más Popular
+            - generic [ref=e200]:
+              - generic [ref=e201]:
+                - heading "Paquete Venta a Plazo (Individual) - EdoMex" [level=3] [ref=e202]
+                - generic [ref=e203]: Estado de México
+              - generic [ref=e204]:
+                - generic [ref=e205]: $873,700
+                - generic [ref=e206]: Precio base
+            - generic [ref=e207]:
+              - generic [ref=e208]:
+                - heading "📦 Componentes del Paquete" [level=4] [ref=e209]
+                - generic [ref=e210]:
+                  - generic [ref=e211]:
+                    - generic [ref=e213]: Vagoneta H6C (Ventanas)
+                    - generic [ref=e214]: $749,000
+                  - generic [ref=e215]:
+                    - generic [ref=e217]: Conversión GNV
+                    - generic [ref=e218]: $54,000
+                  - generic [ref=e219]:
+                    - generic [ref=e221]: Paquete Tec (GPS, Cámaras)
+                    - generic [ref=e222]: $12,000
+                  - generic [ref=e223]:
+                    - generic [ref=e225]: Bancas
+                    - generic [ref=e226]: $22,000
+                  - generic [ref=e227]:
+                    - generic [ref=e228]:
+                      - generic [ref=e229]: Seguro Anual
+                      - generic [ref=e230]: Anual
+                    - generic [ref=e231]: $36,700
+              - generic [ref=e232]:
+                - heading "✨ Características" [level=4] [ref=e233]
+                - generic [ref=e234]:
+                  - generic [ref=e235]: Mercado EdoMex
+                  - generic [ref=e236]: Documentación de Ecosistema
+                  - generic [ref=e237]: Financiamiento Disponible
+                  - generic [ref=e238]: Pagos Mensuales
+                  - generic [ref=e239]: Conversión GNV Incluida
+                  - generic [ref=e240]: Paquete Tecnológico
+              - generic [ref=e241]:
+                - heading "💳 Condiciones Financieras" [level=4] [ref=e242]
+                - generic [ref=e243]:
+                  - generic [ref=e244]:
+                    - generic [ref=e245]: Tasa Anual
+                    - generic [ref=e246]: 29.9%
+                  - generic [ref=e247]:
+                    - generic [ref=e248]: Enganche Mín.
+                    - generic [ref=e249]: 20%
+                  - generic [ref=e250]:
+                    - generic [ref=e251]: Plazos
+                    - generic [ref=e252]: 48, 60 meses
+            - generic [ref=e253]:
+              - button "👁️ Ver Detalles" [ref=e254] [cursor=pointer]
+              - button "💰 Cotizar Ahora" [ref=e255] [cursor=pointer]
+          - generic [ref=e256]:
+            - generic [ref=e257]:
+              - generic [ref=e258]:
+                - heading "Paquete Compra de Contado - EdoMex" [level=3] [ref=e259]
+                - generic [ref=e260]: Estado de México
+              - generic [ref=e261]:
+                - generic [ref=e262]: $825,000
+                - generic [ref=e263]: Precio base
+            - generic [ref=e264]:
+              - generic [ref=e265]:
+                - heading "📦 Componentes del Paquete" [level=4] [ref=e266]
+                - generic [ref=e267]:
+                  - generic [ref=e268]:
+                    - generic [ref=e270]: Vagoneta H6C (Ventanas)
+                    - generic [ref=e271]: $749,000
+                  - generic [ref=e272]:
+                    - generic [ref=e274]: Conversión GNV
+                    - generic [ref=e275]: $54,000
+                  - generic [ref=e276]:
+                    - generic [ref=e278]: Bancas
+                    - generic [ref=e279]: $22,000
+              - generic [ref=e280]:
+                - heading "✨ Características" [level=4] [ref=e281]
+                - generic [ref=e282]:
+                  - generic [ref=e283]: Mercado EdoMex
+                  - generic [ref=e284]: Documentación de Ecosistema
+                  - generic [ref=e285]: Pago de Contado
+                  - generic [ref=e286]: Entrega Inmediata
+                  - generic [ref=e287]: Conversión GNV Incluida
+              - generic [ref=e288]:
+                - heading "💳 Condiciones Financieras" [level=4] [ref=e289]
+                - generic [ref=e291]:
+                  - generic [ref=e292]: Enganche Mín.
+                  - generic [ref=e293]: 50%
+            - generic [ref=e294]:
+              - button "👁️ Ver Detalles" [ref=e295] [cursor=pointer]
+              - button "💰 Cotizar Ahora" [ref=e296] [cursor=pointer]
+          - generic [ref=e297]:
+            - generic [ref=e298]:
+              - generic [ref=e299]:
+                - heading "Paquete Crédito Colectivo - EdoMex" [level=3] [ref=e300]
+                - generic [ref=e301]: Estado de México
+              - generic [ref=e302]:
+                - generic [ref=e303]: $873,700
+                - generic [ref=e304]: Precio base
+            - generic [ref=e305]:
+              - generic [ref=e306]:
+                - heading "📦 Componentes del Paquete" [level=4] [ref=e307]
+                - generic [ref=e308]:
+                  - generic [ref=e309]:
+                    - generic [ref=e311]: Vagoneta H6C (Ventanas)
+                    - generic [ref=e312]: $749,000
+                  - generic [ref=e313]:
+                    - generic [ref=e315]: Conversión GNV
+                    - generic [ref=e316]: $54,000
+                  - generic [ref=e317]:
+                    - generic [ref=e319]: Paquete Tec (GPS, Cámaras)
+                    - generic [ref=e320]: $12,000
+                  - generic [ref=e321]:
+                    - generic [ref=e323]: Bancas
+                    - generic [ref=e324]: $22,000
+                  - generic [ref=e325]:
+                    - generic [ref=e326]:
+                      - generic [ref=e327]: Seguro Anual
+                      - generic [ref=e328]: Anual
+                    - generic [ref=e329]: $36,700
+              - generic [ref=e330]:
+                - heading "✨ Características" [level=4] [ref=e331]
+                - generic [ref=e332]:
+                  - generic [ref=e333]: Mercado EdoMex
+                  - generic [ref=e334]: Documentación de Ecosistema
+                  - generic [ref=e335]: Grupo de 5 miembros
+                  - generic [ref=e336]: Entrega por Tandas
+                  - generic [ref=e337]: Conversión GNV Incluida
+                  - generic [ref=e338]: Paquete Tecnológico
+              - generic [ref=e339]:
+                - heading "💳 Condiciones Financieras" [level=4] [ref=e340]
+                - generic [ref=e341]:
+                  - generic [ref=e342]:
+                    - generic [ref=e343]: Tasa Anual
+                    - generic [ref=e344]: 29.9%
+                  - generic [ref=e345]:
+                    - generic [ref=e346]: Enganche Mín.
+                    - generic [ref=e347]: 15%
+                  - generic [ref=e348]:
+                    - generic [ref=e349]: Plazos
+                    - generic [ref=e350]: 60 meses
+            - generic [ref=e351]:
+              - button "👁️ Ver Detalles" [ref=e352] [cursor=pointer]
+              - button "💰 Cotizar Ahora" [ref=e353] [cursor=pointer]
+    - navigation "Navegación inferior":
+      - navigation [ref=e354]:
+        - generic [ref=e355] [cursor=pointer]:
+          - generic [ref=e357] [cursor=pointer]: 🏠
+          - generic [ref=e358] [cursor=pointer]: Dashboard
+        - generic [ref=e359] [cursor=pointer]:
+          - generic [ref=e360] [cursor=pointer]:
+            - generic [ref=e361] [cursor=pointer]: 🎯
+            - generic [ref=e362] [cursor=pointer]: "5"
+          - generic [ref=e363] [cursor=pointer]: Oportunidades
+        - generic [ref=e364] [cursor=pointer]:
+          - generic [ref=e366] [cursor=pointer]: 💰
+          - generic [ref=e367] [cursor=pointer]: Cotizar
+        - generic [ref=e368] [cursor=pointer]:
+          - generic [ref=e369] [cursor=pointer]:
+            - generic [ref=e370] [cursor=pointer]: 👥
+            - generic [ref=e371] [cursor=pointer]: "12"
+          - generic [ref=e372] [cursor=pointer]: Clientes
+        - generic [ref=e373] [cursor=pointer]:
+          - generic [ref=e374] [cursor=pointer]:
+            - generic [ref=e375] [cursor=pointer]: ⚡
+            - generic [ref=e376] [cursor=pointer]: "2"
+          - generic [ref=e377] [cursor=pointer]: Más
+```

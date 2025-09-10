@@ -262,6 +262,9 @@ export class PushNotificationService {
   }
 
   private handleNotificationClick(event: any): void {
+    if (!event || !event.notification || !event.notification.data) {
+      return;
+    }
     const data = event.notification.data;
     
     // Mark as clicked

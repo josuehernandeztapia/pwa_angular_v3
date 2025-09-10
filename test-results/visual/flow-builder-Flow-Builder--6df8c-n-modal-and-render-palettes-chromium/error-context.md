@@ -1,0 +1,382 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - navigation "Navegación principal":
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]: 🚐
+            - generic [ref=e9]: Conductores PWA
+          - generic [ref=e10]:
+            - button "Abrir notificaciones" [ref=e11] [cursor=pointer]: 🔔
+            - generic [ref=e12]:
+              - button "Tamaño de fuente base" [ref=e13] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e14] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e15] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e16] [cursor=pointer]: ⬛⬜
+            - button "Alternar navegación" [ref=e17] [cursor=pointer]: ⬅️
+        - generic [ref=e18]:
+          - generic [ref=e20]: AD
+          - generic [ref=e21]:
+            - generic [ref=e22]: Asesor Demo
+            - generic [ref=e23]: Asesor Financiero
+        - button "Nueva Oportunidad" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: ➕
+          - generic [ref=e27] [cursor=pointer]: Nueva Oportunidad
+        - generic [ref=e28]:
+          - generic [ref=e30] [cursor=pointer]:
+            - generic [ref=e31] [cursor=pointer]: 🏠
+            - generic [ref=e32] [cursor=pointer]: Dashboard
+          - generic [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: ➕
+            - generic [ref=e36] [cursor=pointer]: Nueva Oportunidad
+            - generic [ref=e37] [cursor=pointer]: "2"
+          - generic [ref=e39] [cursor=pointer]:
+            - generic [ref=e40] [cursor=pointer]: 💰
+            - generic [ref=e41] [cursor=pointer]: Cotizador
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44] [cursor=pointer]: 🎯
+            - generic [ref=e45] [cursor=pointer]: Simulador
+          - generic [ref=e47] [cursor=pointer]:
+            - generic [ref=e48] [cursor=pointer]: 👥
+            - generic [ref=e49] [cursor=pointer]: Clientes
+            - generic [ref=e50] [cursor=pointer]: "12"
+          - generic [ref=e52] [cursor=pointer]:
+            - generic [ref=e53] [cursor=pointer]: 📋
+            - generic [ref=e54] [cursor=pointer]: Expedientes
+          - generic [ref=e56] [cursor=pointer]:
+            - generic [ref=e57] [cursor=pointer]: 🛡️
+            - generic [ref=e58] [cursor=pointer]: Protección
+            - generic [ref=e59] [cursor=pointer]: "3"
+          - generic [ref=e61] [cursor=pointer]:
+            - generic [ref=e62] [cursor=pointer]: 📊
+            - generic [ref=e63] [cursor=pointer]: Reportes
+        - generic [ref=e64]:
+          - generic [ref=e66] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]: ❓
+            - generic [ref=e68] [cursor=pointer]: Ayuda
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]: ⚙️
+            - generic [ref=e72] [cursor=pointer]: Configuración
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75] [cursor=pointer]: 🚪
+            - generic [ref=e76] [cursor=pointer]: Salir
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - generic [ref=e80]: 🔔 Notificaciones
+          - button "✕" [ref=e82] [cursor=pointer]
+        - generic [ref=e84]:
+          - generic [ref=e85]: 🔔
+          - generic [ref=e86]:
+            - generic [ref=e87]: Activar Notificaciones
+            - generic [ref=e88]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e89]:
+            - button "Activar" [ref=e90] [cursor=pointer]
+            - button "Después" [ref=e91] [cursor=pointer]
+        - generic [ref=e93]:
+          - generic [ref=e94]: 📭
+          - generic [ref=e95]: No hay notificaciones
+          - generic [ref=e96]: Las notificaciones aparecerán aquí
+    - main [ref=e97]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - heading "⚙️ Configuración" [level=1] [ref=e101]
+          - paragraph [ref=e102]: Personaliza tu experiencia en la aplicación
+        - main [ref=e103]:
+          - generic [ref=e104]:
+            - generic [ref=e105]:
+              - generic [ref=e107]:
+                - generic [ref=e108]: 🔧
+                - generic [ref=e109]:
+                  - heading "Configuración General" [level=2] [ref=e110]
+                  - paragraph [ref=e111]: Ajustes básicos de la aplicación
+              - generic [ref=e112]:
+                - generic [ref=e113]:
+                  - generic [ref=e114]:
+                    - generic [ref=e115]: Tema de la aplicación
+                    - paragraph [ref=e116]: Selecciona el tema visual de la aplicación
+                  - combobox [ref=e118]:
+                    - option "Claro" [selected]
+                    - option "Oscuro"
+                    - option "Automático"
+                - generic [ref=e119]:
+                  - generic [ref=e121]: Idioma
+                  - combobox [ref=e123]:
+                    - option "Español" [selected]
+                    - option "English"
+                - generic [ref=e124]:
+                  - generic [ref=e125]:
+                    - generic [ref=e126]: Guardado automático
+                    - paragraph [ref=e127]: Guarda automáticamente los cambios sin confirmar
+                  - generic [ref=e129]:
+                    - checkbox [checked]
+            - generic [ref=e131]:
+              - generic [ref=e133]:
+                - generic [ref=e134]: 🔔
+                - generic [ref=e135]:
+                  - heading "Notificaciones" [level=2] [ref=e136]
+                  - paragraph [ref=e137]: Controla qué notificaciones recibir
+              - generic [ref=e138]:
+                - generic [ref=e139]:
+                  - generic [ref=e140]:
+                    - generic [ref=e141]: Notificaciones por email
+                    - paragraph [ref=e142]: Recibir notificaciones importantes por correo electrónico
+                  - generic [ref=e144]:
+                    - checkbox [checked]
+                - generic [ref=e146]:
+                  - generic [ref=e147]:
+                    - generic [ref=e148]: Notificaciones push
+                    - paragraph [ref=e149]: Mostrar notificaciones en el navegador
+                  - generic [ref=e151]:
+                    - checkbox
+                - generic [ref=e153]:
+                  - generic [ref=e155]: Frecuencia de recordatorios
+                  - combobox [ref=e157]:
+                    - option "Nunca"
+                    - option "Diario" [selected]
+                    - option "Semanal"
+            - generic [ref=e158]:
+              - generic [ref=e160]:
+                - generic [ref=e161]: 💾
+                - generic [ref=e162]:
+                  - heading "Gestión de Datos" [level=2] [ref=e163]
+                  - paragraph [ref=e164]: Configuración de almacenamiento y sincronización
+              - generic [ref=e165]:
+                - generic [ref=e166]:
+                  - generic [ref=e167]:
+                    - generic [ref=e168]: Retención de datos (días)
+                    - paragraph [ref=e169]: Número de días para mantener los datos históricos
+                  - spinbutton [ref=e171]: "365"
+                - generic [ref=e172]:
+                  - generic [ref=e174]: Frecuencia de sincronización
+                  - combobox [ref=e176]:
+                    - option "Tiempo real" [selected]
+                    - option "Cada hora"
+                    - option "Diario"
+                - generic [ref=e177]:
+                  - generic [ref=e178]:
+                    - generic [ref=e179]: Modo sin conexión
+                    - paragraph [ref=e180]: Permitir uso de la aplicación sin conexión a internet
+                  - generic [ref=e182]:
+                    - checkbox [checked]
+            - generic [ref=e184]:
+              - generic [ref=e186]:
+                - generic [ref=e187]: 🔒
+                - generic [ref=e188]:
+                  - heading "Seguridad" [level=2] [ref=e189]
+                  - paragraph [ref=e190]: Configuración de seguridad y privacidad
+              - generic [ref=e191]:
+                - generic [ref=e192]:
+                  - generic [ref=e193]:
+                    - generic [ref=e194]: Tiempo de sesión (minutos)
+                    - paragraph [ref=e195]: Tiempo antes de cerrar sesión automáticamente
+                  - spinbutton [ref=e197]: "30"
+                - generic [ref=e198]:
+                  - generic [ref=e199]:
+                    - generic [ref=e200]: Autenticación de dos factores
+                    - paragraph [ref=e201]: Activar verificación adicional al iniciar sesión
+                  - generic [ref=e203]:
+                    - checkbox
+                - generic [ref=e205]:
+                  - generic [ref=e206]:
+                    - generic [ref=e207]: Cifrado de datos
+                    - paragraph [ref=e208]: Cifrar datos sensibles almacenados localmente
+                  - generic [ref=e210]:
+                    - checkbox [checked]
+            - generic [ref=e212]:
+              - generic [ref=e213]:
+                - generic [ref=e214]:
+                  - generic [ref=e215]: 🎨
+                  - generic [ref=e216]:
+                    - heading "Constructor de Flujos" [level=2] [ref=e217]
+                    - paragraph [ref=e218]: Herramientas visuales para crear nuevos flujos y ciudades
+                - button "🎨 Abrir Constructor" [active] [ref=e220] [cursor=pointer]
+              - generic [ref=e222]:
+                - generic [ref=e223]:
+                  - generic [ref=e224]: Habilitar Constructor Visual
+                  - paragraph [ref=e225]: Acceso al constructor visual de flujos estilo n8n/Zapier
+                - generic [ref=e227]:
+                  - checkbox [checked]
+          - generic [ref=e229]:
+            - button "🔄 Restaurar Valores por Defecto" [ref=e230] [cursor=pointer]
+            - button "💾 Guardar Configuración" [ref=e231] [cursor=pointer]
+        - generic [ref=e233]:
+          - generic [ref=e235]:
+            - generic [ref=e236]:
+              - generic [ref=e237]:
+                - heading "🎨 Flow Builder" [level=1] [ref=e238]
+                - generic [ref=e239]: Crear ciudad/flujo visualmente
+              - generic [ref=e240]:
+                - button "🗑️ Limpiar" [ref=e241] [cursor=pointer]
+                - button "💾 Guardar" [ref=e242] [cursor=pointer]
+                - button "🚀 Deploy" [disabled] [ref=e243]
+            - generic [ref=e244]:
+              - generic [ref=e245]:
+                - generic [ref=e246]:
+                  - heading "📦 Componentes" [level=3] [ref=e247]
+                  - textbox "Buscar nodos..." [ref=e248]
+                - generic [ref=e249]:
+                  - generic [ref=e250]:
+                    - generic [ref=e251]:
+                      - generic [ref=e252]: 🏙️
+                      - generic [ref=e253]:
+                        - generic [ref=e254]: Guadalajara
+                        - generic [ref=e255]: 4 productos disponibles
+                    - generic [ref=e256]:
+                      - generic [ref=e257]: "⚠️ Restricciones:"
+                      - generic [ref=e258]: • No tanda colectiva
+                      - generic [ref=e259]: • Regulación SEMOV especial
+                      - generic [ref=e260]: • ⚠️ Hereda regulaciones EdoMex para Crédito Colectivo
+                  - generic [ref=e261]:
+                    - generic [ref=e262] [cursor=pointer]:
+                      - generic [ref=e263] [cursor=pointer]: ▼
+                      - generic [ref=e264] [cursor=pointer]: 🌍 Mercados
+                      - generic [ref=e265] [cursor=pointer]: (1)
+                    - generic "Define una nueva ciudad o mercado" [ref=e267]:
+                      - generic [ref=e268]: 🏙️
+                      - generic [ref=e269]:
+                        - generic [ref=e270]: Ciudad/Mercado
+                        - generic [ref=e271]: Define una nueva ciudad o mercado
+                  - generic [ref=e272]:
+                    - generic [ref=e273] [cursor=pointer]:
+                      - generic [ref=e274] [cursor=pointer]: ▼
+                      - generic [ref=e275] [cursor=pointer]: 📄 Documentos
+                      - generic [ref=e276] [cursor=pointer]: (3)
+                    - generic [ref=e277]:
+                      - generic "Documento de identificación oficial" [ref=e278]:
+                        - generic [ref=e279]: 🆔
+                        - generic [ref=e280]:
+                          - generic [ref=e281]: INE Vigente
+                          - generic [ref=e282]: Documento de identificación oficial
+                      - generic "Documento del vehículo" [ref=e283]:
+                        - generic [ref=e284]: 🚗
+                        - generic [ref=e285]:
+                          - generic [ref=e286]: Tarjeta de Circulación
+                          - generic [ref=e287]: Documento del vehículo
+                      - generic "Documento específico de la ciudad" [ref=e288]:
+                        - generic [ref=e289]: 📋
+                        - generic [ref=e290]:
+                          - generic [ref=e291]: Documento Personalizado
+                          - generic [ref=e292]: Documento específico de la ciudad
+                  - generic [ref=e293]:
+                    - generic [ref=e294] [cursor=pointer]:
+                      - generic [ref=e295] [cursor=pointer]: ▼
+                      - generic [ref=e296] [cursor=pointer]: 🔍 Verificaciones
+                      - generic [ref=e297] [cursor=pointer]: (2)
+                    - generic [ref=e298]:
+                      - generic "Verificación por patrón de voz" [ref=e299]:
+                        - generic [ref=e300]: 🎤
+                        - generic [ref=e301]:
+                          - generic [ref=e302]: Patrón de Voz
+                          - generic [ref=e303]: Verificación por patrón de voz
+                      - generic "Análisis automático de voz e inteligencia" [ref=e304]:
+                        - generic [ref=e305]: 🤖
+                        - generic [ref=e306]:
+                          - generic [ref=e307]: Análisis AVI
+                          - generic [ref=e308]: Análisis automático de voz e inteligencia
+                  - generic [ref=e309]:
+                    - generic [ref=e310] [cursor=pointer]:
+                      - generic [ref=e311] [cursor=pointer]: ▼
+                      - generic [ref=e312] [cursor=pointer]: 💼 Productos
+                      - generic [ref=e313] [cursor=pointer]: (5)
+                    - generic [ref=e314]:
+                      - generic "Producto de venta directa simplificado - Compatible con Guadalajara" [ref=e315]:
+                        - generic [ref=e316]: 💰
+                        - generic [ref=e317]:
+                          - generic [ref=e318]: Venta Directa
+                          - generic [ref=e319]: Producto de venta directa simplificado
+                      - generic "Producto de financiamiento completo - Compatible con Guadalajara" [ref=e320]:
+                        - generic [ref=e321]: 🏦
+                        - generic [ref=e322]:
+                          - generic [ref=e323]: Venta a Plazo
+                          - generic [ref=e324]: Producto de financiamiento completo
+                      - generic "Plan de ahorro para vehículo - Compatible con Guadalajara" [ref=e325]:
+                        - generic [ref=e326]: 🐷
+                        - generic [ref=e327]:
+                          - generic [ref=e328]: Ahorro Programado
+                          - generic [ref=e329]: Plan de ahorro para vehículo
+                      - generic "Crédito grupal para vehículos - Compatible con Guadalajara [Mercado Complejo - Requiere AVI + Voice Pattern] [Hereda regulaciones EdoMex]" [ref=e330]:
+                        - generic [ref=e331]: 👥
+                        - generic [ref=e332]:
+                          - generic [ref=e333]: Crédito Colectivo
+                          - generic [ref=e334]: Crédito grupal para vehículos
+                      - generic "Sistema de tanda para ahorro grupal - No disponible en Guadalajara" [ref=e335]:
+                        - generic [ref=e336]: 🔄
+                        - generic [ref=e337]:
+                          - generic [ref=e338]: Tanda Colectiva
+                          - generic [ref=e339]: Sistema de tanda para ahorro grupal
+                          - generic [ref=e340]: ❌ No compatible con Guadalajara
+                  - generic [ref=e341]:
+                    - generic [ref=e342] [cursor=pointer]:
+                      - generic [ref=e343] [cursor=pointer]: ▼
+                      - generic [ref=e344] [cursor=pointer]: ⚙️ Reglas
+                      - generic [ref=e345] [cursor=pointer]: (1)
+                    - generic "Evalúa una condición para bifurcar el flujo" [ref=e347]:
+                      - generic [ref=e348]: 🧠
+                      - generic [ref=e349]:
+                        - generic [ref=e350]: Regla de Negocio
+                        - generic [ref=e351]: Evalúa una condición para bifurcar el flujo
+                  - generic [ref=e352]:
+                    - generic [ref=e353] [cursor=pointer]:
+                      - generic [ref=e354] [cursor=pointer]: ▼
+                      - generic [ref=e355] [cursor=pointer]: 🧭 Rutas
+                      - generic [ref=e356] [cursor=pointer]: (1)
+                    - generic "Redirige según una condición del contexto" [ref=e358]:
+                      - generic [ref=e359]: 🛣️
+                      - generic [ref=e360]:
+                        - generic [ref=e361]: Ruta Condicional
+                        - generic [ref=e362]: Redirige según una condición del contexto
+              - generic [ref=e363]:
+                - generic [ref=e364]:
+                  - generic [ref=e365]:
+                    - button "➖" [ref=e366] [cursor=pointer]
+                    - generic [ref=e367]: 100%
+                    - button "➕" [ref=e368] [cursor=pointer]
+                  - generic [ref=e369]:
+                    - button "🎯 Ajustar" [ref=e370] [cursor=pointer]
+                    - button "📐 Centrar" [ref=e371] [cursor=pointer]
+                - generic [ref=e372]:
+                  - img
+                  - generic:
+                    - generic [ref=e373] [cursor=pointer]:
+                      - generic [ref=e374] [cursor=pointer]:
+                        - generic [ref=e375] [cursor=pointer]: 🏙️
+                        - generic [ref=e376] [cursor=pointer]: Guadalajara
+                        - generic [ref=e377] [cursor=pointer]:
+                          - button "📋" [ref=e378] [cursor=pointer]
+                          - button "🗑️" [ref=e379] [cursor=pointer]
+                      - generic [ref=e381] [cursor=pointer]: "Ciudad: guadalajara"
+                    - generic [ref=e385] [cursor=pointer]:
+                      - generic [ref=e386] [cursor=pointer]:
+                        - generic [ref=e387] [cursor=pointer]: 🆔
+                        - generic [ref=e388] [cursor=pointer]: INE Vigente
+                        - generic [ref=e389] [cursor=pointer]:
+                          - button "📋" [ref=e390] [cursor=pointer]
+                          - button "🗑️" [ref=e391] [cursor=pointer]
+                      - generic [ref=e392] [cursor=pointer]:
+                        - generic [ref=e393] [cursor=pointer]: Obligatorio | OCR
+                        - generic [ref=e394] [cursor=pointer]:
+                          - generic [ref=e395]:
+                            - checkbox "Obligatorio" [checked] [ref=e396]
+                            - generic [ref=e397]: Obligatorio
+                          - generic [ref=e398]:
+                            - checkbox "OCR" [checked] [ref=e399]
+                            - generic [ref=e400]: OCR
+                    - generic [ref=e409] [cursor=pointer]:
+                      - generic [ref=e410] [cursor=pointer]:
+                        - generic [ref=e411] [cursor=pointer]: 💰
+                        - generic [ref=e412] [cursor=pointer]: Venta Directa
+                        - generic [ref=e413] [cursor=pointer]:
+                          - button "📋" [ref=e414] [cursor=pointer]
+                          - button "🗑️" [ref=e415] [cursor=pointer]
+                      - generic [ref=e417] [cursor=pointer]: simple | Sin verificación
+              - generic [ref=e425]:
+                - heading "⚙️ Propiedades" [level=3] [ref=e426]
+                - button "→" [ref=e427] [cursor=pointer]
+          - button "✕" [ref=e428] [cursor=pointer]
+    - navigation "Navegación inferior"
+```

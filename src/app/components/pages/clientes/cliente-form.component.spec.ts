@@ -11,6 +11,22 @@ import { ApiService } from '../../../services/api.service';
 import { CustomValidators } from '../../../validators/custom-validators';
 import { Client, BusinessFlow } from '../../../models/types';
 
+const mockClient: Client = {
+  id: '1',
+  name: 'Juan Pérez García',
+  email: 'juan@example.com',
+  phone: '5551234567',
+  rfc: 'PEGJ850315ABC',
+  market: 'aguascalientes',
+  flow: BusinessFlow.VentaPlazo,
+  status: 'Activo',
+  avatarUrl: '',
+  documents: [],
+  events: [],
+  createdAt: new Date(),
+  lastModified: new Date()
+};
+
 describe('ClienteFormComponent', () => {
   let component: ClienteFormComponent;
   let fixture: ComponentFixture<ClienteFormComponent>;
@@ -19,22 +35,6 @@ describe('ClienteFormComponent', () => {
   let mockToastService: jasmine.SpyObj<ToastService>;
   let mockApiService: jasmine.SpyObj<ApiService>;
 
-  const mockClient: Client = {
-    id: '1',
-    name: 'Juan Pérez García',
-    email: 'juan@example.com',
-    phone: '5551234567',
-    rfc: 'PEGJ850315ABC',
-    market: 'aguascalientes',
-    flow: BusinessFlow.VentaPlazo,
-    status: 'Activo',
-    avatarUrl: '',
-    documents: [],
-    events: [],
-    createdAt: new Date(),
-    lastModified: new Date()
-  };
-
   beforeEach(async () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     const toastServiceSpy = jasmine.createSpyObj('ToastService', ['success', 'error']);
@@ -42,6 +42,9 @@ describe('ClienteFormComponent', () => {
 
     mockActivatedRoute = {
       params: of({ id: null }),
+      snapshot: { 
+        params: { id: null }
+      },
       data: of({})
     };
 
@@ -144,6 +147,7 @@ describe('ClienteFormComponent', () => {
 
   it('should load existing client data in edit mode', () => {
     mockActivatedRoute.params = of({ id: '1' });
+    mockActivatedRoute.snapshot.params = { id: '1' };
     mockApiService.getClientById.and.returnValue(of(mockClient));
 
     component.ngOnInit();
@@ -264,15 +268,21 @@ describe('ClienteFormComponent Integration Tests', () => {
   it('should render form with all required fields', async () => {
     const mockActivatedRoute = {
       params: of({ id: null }),
+      snapshot: { params: { id: null } },
       data: of({})
     };
+
+    const mockApiService = jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']);
+    mockApiService.createClient.and.returnValue(of(mockClient));
+    mockApiService.updateClient.and.returnValue(of(mockClient));
+    mockApiService.getClientById.and.returnValue(of(mockClient));
 
     await render(ClienteFormComponent, {
       providers: [
         { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
-        { provide: ApiService, useValue: jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']) }
+        { provide: ApiService, useValue: mockApiService }
       ]
     });
 
@@ -286,15 +296,21 @@ describe('ClienteFormComponent Integration Tests', () => {
   it('should show validation errors when submitting empty form', async () => {
     const mockActivatedRoute = {
       params: of({ id: null }),
+      snapshot: { params: { id: null } },
       data: of({})
     };
+
+    const mockApiService = jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']);
+    mockApiService.createClient.and.returnValue(of(mockClient));
+    mockApiService.updateClient.and.returnValue(of(mockClient));
+    mockApiService.getClientById.and.returnValue(of(mockClient));
 
     await render(ClienteFormComponent, {
       providers: [
         { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
-        { provide: ApiService, useValue: jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']) }
+        { provide: ApiService, useValue: mockApiService }
       ]
     });
 
@@ -310,6 +326,7 @@ describe('ClienteFormComponent Integration Tests', () => {
   it('should handle form input correctly', async () => {
     const mockActivatedRoute = {
       params: of({ id: null }),
+      snapshot: { params: { id: null } },
       data: of({})
     };
 
@@ -340,6 +357,7 @@ describe('ClienteFormComponent Integration Tests', () => {
   it('should submit form with valid data', async () => {
     const mockActivatedRoute = {
       params: of({ id: null }),
+      snapshot: { params: { id: null } },
       data: of({})
     };
 
@@ -382,6 +400,7 @@ describe('ClienteFormComponent Integration Tests', () => {
   it('should handle back button click', async () => {
     const mockActivatedRoute = {
       params: of({ id: null }),
+      snapshot: { params: { id: null } },
       data: of({})
     };
 

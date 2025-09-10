@@ -4,6 +4,7 @@ import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
 import { catchError, retry, tap, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { StorageService } from './storage.service';
+import { AuthService } from './auth.service';
 
 interface ClientRecord {
   id?: string;
@@ -78,7 +79,7 @@ export class BackendApiService {
   constructor(
     private http: HttpClient,
     private storage: StorageService,
-    private authService: import('./auth.service').AuthService
+    private authService: AuthService
   ) {
     this.setupOnlineListener();
   }
@@ -126,25 +127,31 @@ export class BackendApiService {
       }),
       catchError((error) => {
         // Queue for offline sync
-        (async () => {
-          const tempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-          const clientWithId = { ...clientData, id: tempId };
-          await this.storage.queueOfflineAction({
-            type: 'CREATE_CLIENT',
-            data: clientWithId,
-            retryCount: 0
-          });
-          await this.storage.saveClient({
-            id: tempId,
-            personalInfo: clientWithId,
-            ecosystemId: clientData.ecosystem_id || '',
-            formProgress: {},
-            documents: [],
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          });
-        })();
-        return throwError(() => error);
+        return new Observable<ClientRecord>(observer => {
+          (async () => {
+            try {
+              const tempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+              const clientWithId = { ...clientData, id: tempId };
+              await this.storage.queueOfflineAction({
+                type: 'CREATE_CLIENT',
+                data: clientWithId,
+                retryCount: 0
+              });
+              await this.storage.saveClient({
+                id: tempId,
+                personalInfo: clientWithId,
+                ecosystemId: clientData.ecosystem_id || '',
+                formProgress: {},
+                documents: [],
+                createdAt: Date.now(),
+                updatedAt: Date.now()
+              });
+            } catch (storageError) {
+              console.error('Storage error during client creation:', storageError);
+            }
+            observer.error(error);
+          })();
+        });
       })
     );
   }
@@ -166,14 +173,20 @@ export class BackendApiService {
       }),
       catchError((error) => {
         // Queue for offline sync
-        (async () => {
-          await this.storage.queueOfflineAction({
-            type: 'UPDATE_CLIENT',
-            data: { clientId, clientData },
-            retryCount: 0
-          });
-        })();
-        return throwError(() => error);
+        return new Observable<ClientRecord>(observer => {
+          (async () => {
+            try {
+              await this.storage.queueOfflineAction({
+                type: 'UPDATE_CLIENT',
+                data: { clientId, clientData },
+                retryCount: 0
+              });
+            } catch (storageError) {
+              console.error('Storage error during client update:', storageError);
+            }
+            observer.error(error);
+          })();
+        });
       })
     );
   }
@@ -233,24 +246,30 @@ export class BackendApiService {
       }),
       catchError((error) => {
         // Queue for offline sync
-        (async () => {
-          const tempId = `temp_contract_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-          const contractWithId = { ...contractData, id: tempId };
-          await this.storage.queueOfflineAction({
-            type: 'CREATE_CONTRACT',
-            data: contractWithId,
-            retryCount: 0
-          });
-          await this.storage.saveQuote({
-            id: tempId,
-            clientId: contractData.client_id,
-            ecosystemId: contractData.ecosystem_id,
-            quoteDetails: contractWithId,
-            createdAt: Date.now(),
-            status: 'draft'
-          });
-        })();
-        return throwError(() => error);
+        return new Observable<ContractRecord>(observer => {
+          (async () => {
+            try {
+              const tempId = `temp_contract_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+              const contractWithId = { ...contractData, id: tempId };
+              await this.storage.queueOfflineAction({
+                type: 'CREATE_CONTRACT',
+                data: contractWithId,
+                retryCount: 0
+              });
+              await this.storage.saveQuote({
+                id: tempId,
+                clientId: contractData.client_id,
+                ecosystemId: contractData.ecosystem_id,
+                quoteDetails: contractWithId,
+                createdAt: Date.now(),
+                status: 'draft'
+              });
+            } catch (storageError) {
+              console.error('Storage error during contract creation:', storageError);
+            }
+            observer.error(error);
+          })();
+        });
       })
     );
   }
@@ -379,15 +398,22 @@ export class BackendApiService {
       headers['Authorization'] = `Bearer ${token}`;
     }
     return this.http.post(url, formData, { headers }).pipe(
-      catchError(async (error) => {
+      catchError((error) => {
         // Queue for offline sync
-        await this.storage.queueOfflineAction({
-          type: 'UPLOAD_DOCUMENT',
-          data: { file: file.name, clientId, documentType },
-          retryCount: 0
+        return new Observable(observer => {
+          (async () => {
+            try {
+              await this.storage.queueOfflineAction({
+                type: 'UPLOAD_DOCUMENT',
+                data: { file: file.name, clientId, documentType },
+                retryCount: 0
+              });
+            } catch (storageError) {
+              console.error('Storage error during document upload:', storageError);
+            }
+            observer.error(error);
+          })();
         });
-
-        return throwError(() => error);
       })
     );
   }
