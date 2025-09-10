@@ -113,11 +113,32 @@ interface GNVOverageTemplate {
 })
 export class WhatsappService {
   private readonly baseUrl = 'https://graph.facebook.com/v18.0';
-  private readonly phoneNumberId = this.getEnvVar('WHATSAPP_PHONE_NUMBER_ID');
-  private readonly accessToken = this.getEnvVar('WHATSAPP_ACCESS_TOKEN');
-  private readonly webhookVerifyToken = this.getEnvVar('WHATSAPP_WEBHOOK_VERIFY_TOKEN');
+  private _phoneNumberId: string | null = null;
+  private _accessToken: string | null = null;
+  private _webhookVerifyToken: string | null = null;
 
   constructor(private http: HttpClient) {}
+
+  private get phoneNumberId(): string {
+    if (this._phoneNumberId === null) {
+      this._phoneNumberId = this.getEnvVar('WHATSAPP_PHONE_NUMBER_ID');
+    }
+    return this._phoneNumberId;
+  }
+
+  private get accessToken(): string {
+    if (this._accessToken === null) {
+      this._accessToken = this.getEnvVar('WHATSAPP_ACCESS_TOKEN');
+    }
+    return this._accessToken;
+  }
+
+  private get webhookVerifyToken(): string {
+    if (this._webhookVerifyToken === null) {
+      this._webhookVerifyToken = this.getEnvVar('WHATSAPP_WEBHOOK_VERIFY_TOKEN');
+    }
+    return this._webhookVerifyToken;
+  }
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
