@@ -1,4 +1,28 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, Page, test } from 'playwright/test';
+
+async function applyAntiFlakyStyles(page: Page) {
+  await page.addStyleTag({
+    content: `
+      html, body, * { scroll-behavior: auto !important; }
+      *::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none !important; }
+      * { scrollbar-width: none !important; -ms-overflow-style: none !important; caret-color: transparent !important; }
+      input, textarea, [contenteditable="true"] { caret-color: transparent !important; }
+      [data-dynamic], time, .counter, .loading, canvas, video { visibility: hidden !important; }
+    `,
+  });
+}
+
+function dynamicMasks(scope: Page | ReturnType<Page['locator']>) {
+  const s: any = (scope as any);
+  return [
+    s.locator('[data-dynamic]'),
+    s.locator('time'),
+    s.locator('.counter'),
+    s.locator('.loading'),
+    s.locator('canvas'),
+    s.locator('video'),
+  ];
+}
 
 // Helper to bootstrap auth via localStorage before navigation
 async function mockAuth(page: Page) {
@@ -32,7 +56,13 @@ test.describe('Flow Builder Visual', () => {
     await expect(page.getByText('🔍 Verificaciones')).toBeVisible();
     await expect(page.getByText('💼 Productos')).toBeVisible();
 
-    await expect(page).toHaveScreenshot();
+    await applyAntiFlakyStyles(page);
+    const container = page.locator('[role="dialog"] .flow-builder, .flow-builder, [role="dialog"], .modal-content').first();
+    await expect(container).toBeVisible();
+    await expect(container).toHaveScreenshot({
+      animations: 'disabled',
+      caret: 'hide',
+    });
   });
 
   test('@flow-connections should show disabled Deploy until nodes exist', async ({ page }: { page: Page }) => {

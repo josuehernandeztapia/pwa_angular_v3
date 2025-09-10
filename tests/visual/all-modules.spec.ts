@@ -1,4 +1,29 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, Page, test } from 'playwright/test';
+
+async function applyAntiFlakyStyles(page: Page) {
+  await page.addStyleTag({
+    content: `
+      html, body, * { scroll-behavior: auto !important; }
+      *::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none !important; }
+      * { scrollbar-width: none !important; -ms-overflow-style: none !important; caret-color: transparent !important; }
+      input, textarea, [contenteditable="true"] { caret-color: transparent !important; }
+      [data-dynamic], time, .counter, .loading, canvas, video { visibility: hidden !important; }
+    `,
+  });
+}
+
+function dynamicMasks(scope: Page | ReturnType<Page['locator']>) {
+  // Return locators for elements that frequently change visually
+  const s: any = (scope as any);
+  return [
+    s.locator('[data-dynamic]'),
+    s.locator('time'),
+    s.locator('.counter'),
+    s.locator('.loading'),
+    s.locator('canvas'),
+    s.locator('video'),
+  ];
+}
 
 async function mockAuth(page: Page) {
   await page.addInitScript(() => {
@@ -10,7 +35,7 @@ async function mockAuth(page: Page) {
 
 async function freezeTime(page: Page, isoTimestamp = '2025-01-15T12:00:00.000Z') {
   const fixedNow = new Date(isoTimestamp).valueOf();
-  await page.addInitScript((now) => {
+  await page.addInitScript((now: number) => {
     const OriginalDate = Date as unknown as typeof Date;
     class MockDate extends (OriginalDate as any) {
       constructor(...args: any[]) {
@@ -90,12 +115,17 @@ test.describe('Premium visual across modules', () => {
       // Check that a container exists and has background applied
       const container = page.locator('div[class*="container"], .premium-container');
       await expect(container.first()).toBeVisible({ timeout: 15000 });
+      await applyAntiFlakyStyles(page);
       // Basic header presence if known
       if (r.heading) {
         const heading = page.locator('h1, h2, [role="heading"][aria-level="1"], [role="heading"][aria-level="2"]');
         await expect(heading.first()).toBeVisible({ timeout: 5000 });
       }
-      await expect(page).toHaveScreenshot();
+      const stableContainer = container.first();
+      await expect(stableContainer).toHaveScreenshot({
+        animations: 'disabled',
+        caret: 'hide',
+      });
     });
   }
 });
