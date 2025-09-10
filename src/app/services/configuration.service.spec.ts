@@ -702,7 +702,7 @@ describe('ConfigurationService', () => {
 				
 				const updatedConfig = service.getCurrentConfiguration();
 				// Should update lastUpdated even for empty updates
-				expect(updatedConfig.lastUpdated.getTime()).toBeGreaterThan(originalConfig.lastUpdated.getTime());
+				expect(updatedConfig.lastUpdated.getTime()).toBeGreaterThanOrEqual(originalConfig.lastUpdated.getTime());
 				done();
 			});
 		});

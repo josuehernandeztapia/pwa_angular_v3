@@ -17,6 +17,27 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting(),
 );
 
+// Polyfill minimal Node-style process.env for browser tests
+const g: any = (typeof globalThis !== 'undefined' ? globalThis : window) as any;
+g.process = g.process || {};
+g.process.env = {
+  // Payment/Integrations
+  CONEKTA_PUBLIC_KEY: g.process?.env?.CONEKTA_PUBLIC_KEY || 'key_test_123',
+  CONEKTA_PRIVATE_KEY: g.process?.env?.CONEKTA_PRIVATE_KEY || 'key_private_test_123',
+  CONEKTA_WEBHOOK_SECRET: g.process?.env?.CONEKTA_WEBHOOK_SECRET || 'whsec_test_123',
+  METAMAP_PUBLIC_KEY: g.process?.env?.METAMAP_PUBLIC_KEY || 'pk_test_metamap',
+  METAMAP_WORKFLOW_ID: g.process?.env?.METAMAP_WORKFLOW_ID || 'wf_test',
+  
+  // External APIs used in configuration
+  KINBAN_API_URL: g.process?.env?.KINBAN_API_URL || 'https://api.kinban.test',
+  KINBAN_CLIENT_ID: g.process?.env?.KINBAN_CLIENT_ID || 'test_client',
+  KINBAN_SECRET: g.process?.env?.KINBAN_SECRET || 'test_secret',
+  HASE_API_URL: g.process?.env?.HASE_API_URL || 'https://api.hase.test',
+  HASE_TOKEN: g.process?.env?.HASE_TOKEN || 'test_token',
+  AVI_API_URL: g.process?.env?.AVI_API_URL || 'https://api.avi.test',
+  AVI_API_KEY: g.process?.env?.AVI_API_KEY || 'test_api_key'
+};
+
 /**
  * Global test configuration
  */
@@ -53,6 +74,14 @@ const initializeGlobalTestSetup = async () => {
 initializeGlobalTestSetup().catch(error => {
   console.error('Failed to initialize test setup:', error);
 });
+
+// Guard document.hidden redefinition in tests that stub visibility
+try {
+  const desc = Object.getOwnPropertyDescriptor(Document.prototype, 'hidden');
+  if (desc && desc.configurable === false) {
+    // no-op, tests should skip redefining
+  }
+} catch {}
 
 /**
  * Global error handler for unhandled promise rejections

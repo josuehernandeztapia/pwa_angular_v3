@@ -400,7 +400,7 @@ export class PaymentLinkModalContentComponent implements OnInit {
       
       const newEvent = await this.simulationService.addNewEvent(
         this.client.id, 
-        `Liga de pago generada por ${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(numericAmount)}.`, 
+        `Liga de pago generada por MX$${new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numericAmount)}.`, 
         Actor.Asesor, 
         EventType.AdvisorAction
       );

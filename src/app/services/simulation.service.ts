@@ -144,7 +144,7 @@ export class SimulationService {
       termChange: 0,
       details: [
         `Pagos de $0 por ${monthsToSimulate} meses`, 
-        `El pago mensual sube a ${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(newPayment_A)} después.`
+        `El pago mensual sube a ${new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(newPayment_A)} después.`
       ]
     });
 
@@ -160,8 +160,8 @@ export class SimulationService {
       newTerm: originalTerm,
       termChange: 0,
       details: [
-        `Pagos de ${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(reducedPayment)} por ${monthsToSimulate} meses`, 
-        `El pago sube a ${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(compensationPayment)} después.`
+        `Pagos de ${new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(reducedPayment)} por ${monthsToSimulate} meses`, 
+        `El pago sube a ${new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(compensationPayment)} después.`
       ]
     });
 
