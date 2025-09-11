@@ -1,0 +1,162 @@
+name: Monorepo CI/CD - PWA + BFF
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  detect-changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      pwa-changed: ${{ steps.changes.outputs.pwa }}
+      bff-changed: ${{ steps.changes.outputs.bff }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            pwa:
+              - 'src/**'
+              - 'package.json'
+              - 'angular.json'
+              - 'tsconfig.json'
+            bff:
+              - 'bff/**'
+
+  pwa-ci:
+    name: PWA CI
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.pwa-changed == 'true'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install PWA Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Lint PWA
+        run: npm run lint
+
+      - name: Test PWA
+        run: npm run test:unit
+
+      - name: Build PWA
+        run: npm run build:prod
+
+      - name: Upload PWA Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pwa-dist
+          path: dist/
+
+  bff-ci:
+    name: BFF CI
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.bff-changed == 'true'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'bff/package-lock.json'
+
+      - name: Install BFF Dependencies
+        run: cd bff && npm ci
+
+      - name: Lint BFF
+        run: cd bff && npm run lint
+
+      - name: Test BFF
+        run: cd bff && npm test
+
+      - name: Build BFF
+        run: cd bff && npm run build
+
+      - name: Upload BFF Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: bff-dist
+          path: bff/dist/
+
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: [pwa-ci, bff-ci]
+    if: always() && (needs.pwa-ci.result == 'success' || needs.bff-ci.result == 'success')
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install BFF Dependencies
+        run: cd bff && npm ci
+
+      - name: Start Services
+        run: |
+          npm run bff:dev &
+          npm start &
+          npx wait-on http://localhost:4200 http://localhost:3000
+
+      - name: Run E2E Tests
+        run: npm run test:e2e:chrome
+
+  quality-gates:
+    name: Quality Gates
+    runs-on: ubuntu-latest
+    needs: [pwa-ci, bff-ci, e2e-tests]
+    if: always()
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run Quality Gates
+        run: npm run quality:gates
+
+      - name: Generate Quality Report
+        run: npm run quality:report
+
+      - name: Upload Quality Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-reports
+          path: reports/

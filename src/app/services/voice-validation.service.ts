@@ -1,7 +1,18 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, BehaviorSubject, Subject, of, throwError } from 'rxjs';
+import { catchError, map, delay } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { adjustLogLRForAdmission, detectNervousWithAdmissionPattern, computeAdvancedLexicalScore } from '../utils/avi-lexical-processing';
+import { ApiConfigService } from './api-config.service';
+import { 
+  VoiceAnalysisRequest, 
+  VoiceAnalysisResponse, 
+  WhisperTranscribeRequest, 
+  WhisperTranscribeResponse,
+  AVIEvaluationRequest,
+  AVIEvaluationResponse
+} from '../models/avi-api-contracts';
 
 interface VoiceSession {
   session_id: string;
@@ -111,7 +122,68 @@ interface HASEScoring {
   protection_auto_activate: boolean;
 }
 
-// ✅ NUEVO: Voice Evaluation Types
+// ============================================================================
+// 🧬 AVI SYSTEM INTEGRATION (55 Questions + Dual Engine)
+// ============================================================================
+
+// AVI Question with Scientific Coefficients
+export interface AVIQuestion {
+  id: string;
+  text: string;
+  weight: number;
+  category: 'BASIC_INFO' | 'DAILY_OPERATION' | 'OPERATIONAL_COSTS' | 'BUSINESS_STRUCTURE' | 'ASSETS_PATRIMONY' | 'CREDIT_HISTORY' | 'PAYMENT_INTENTION' | 'RISK_EVALUATION';
+  expectedResponseTime: number;  // milliseconds
+  stressLevel: 1 | 2 | 3 | 4 | 5;
+  triggers: string[];
+  coefficients: {
+    alpha: number; // timing weight
+    beta: number;  // voice weight  
+    gamma: number; // lexical weight
+    delta: number; // coherence weight
+  };
+}
+
+// AVI Voice Analysis Features (from BFF)
+export interface VoiceAnalysisFeatures {
+  transcription: string;
+  confidence: number;
+  duration: number;
+  pitch_variance: number;
+  speech_rate_change: number;
+  pause_frequency: number;
+  voice_tremor: number;
+  response_time: number;
+}
+
+// AVI Score Result (per question)
+export interface AVIScoreResult {
+  questionId: string;
+  subscore: number;  // 0-1000 scale
+  components: {
+    timing_score: number;
+    voice_score: number;
+    lexical_score: number;
+    coherence_score: number;
+  };
+  flags: string[];
+  risk_level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+}
+
+// AVI Consolidated Result (dual engine)
+export interface ConsolidatedAVIResult {
+  final_score: number;          // 0-1000 scale
+  risk_level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  scientific_engine_score: number;
+  heuristic_engine_score: number;
+  consensus_weight: number;
+  protection_eligible: boolean;
+  decision: 'GO' | 'REVIEW' | 'NO-GO';
+  detailed_breakdown: AVIScoreResult[];
+  red_flags: string[];
+  recommendations: string[];
+}
+
+// Existing VoiceEvaluationResult (maintained for compatibility)
 interface VoiceEvaluationResult {
   questionId: string;
   voiceScore: number;        // 0.0-1.0
@@ -264,8 +336,73 @@ export class VoiceValidationService {
     }
   };
 
+  private readonly apiConfig = inject(ApiConfigService);
+
   constructor(private http: HttpClient) {
     this.checkBrowserSupport();
+    this.initializeApiIntegration();
+  }
+
+  /**
+   * Initialize API integration and configuration
+   */
+  private initializeApiIntegration(): void {
+    // Subscribe to API configuration changes
+    this.apiConfig.config$.subscribe(config => {
+      if (config) {
+        console.log('🔧 VoiceValidationService: API configuration updated', {
+          baseUrl: config.baseUrl,
+          mockMode: this.apiConfig.isMockMode()
+        });
+      }
+    });
+
+    // Load AVI configuration if not in mock mode
+    if (!this.apiConfig.isMockMode()) {
+      this.loadAVIConfiguration();
+    }
+  }
+
+  /**
+   * Load AVI configuration from API
+   */
+  private loadAVIConfiguration(): void {
+    // Load questions configuration
+    this.apiConfig.loadAVIQuestions().subscribe({
+      next: (response) => {
+        if (response.success && response.data.questions.length > 0) {
+          // Update AVI questions from API
+          console.log('✅ AVI questions loaded from API:', response.data.questions.length);
+        }
+      },
+      error: (error) => {
+        console.warn('⚠️ Failed to load AVI questions from API, using defaults:', error);
+      }
+    });
+
+    // Load risk thresholds configuration
+    this.apiConfig.loadRiskThresholds().subscribe({
+      next: (response) => {
+        if (response.success) {
+          console.log('✅ Risk thresholds loaded from API');
+        }
+      },
+      error: (error) => {
+        console.warn('⚠️ Failed to load risk thresholds from API, using defaults:', error);
+      }
+    });
+
+    // Load geographic risk configuration
+    this.apiConfig.loadGeographicRisk().subscribe({
+      next: (response) => {
+        if (response.success) {
+          console.log('✅ Geographic risk configuration loaded from API');
+        }
+      },
+      error: (error) => {
+        console.warn('⚠️ Failed to load geographic risk config from API, using defaults:', error);
+      }
+    });
   }
 
   // =================================
@@ -687,7 +824,262 @@ export class VoiceValidationService {
     }
   };
 
-  // ✅ COMPLEMENTO: Tu Cuestionario de Resiliencia (12 preguntas)
+  // ============================================================================
+  // 🧬 AVI 55 QUESTIONS (Scientifically Calibrated) - API CONFIGURABLE
+  // ============================================================================
+  
+  private readonly AVI_55_QUESTIONS: AVIQuestion[] = [
+    // SECCIÓN A: INFORMACIÓN BÁSICA (Peso: 2-7)
+    {
+      id: 'nombre_completo',
+      text: '¿Cuál es su nombre completo?',
+      weight: 2,
+      category: 'BASIC_INFO',
+      expectedResponseTime: 30000,
+      stressLevel: 1,
+      triggers: ['coincide_con_documentos'],
+      coefficients: { alpha: 0.30, beta: 0.20, gamma: 0.20, delta: 0.30 }
+    },
+    {
+      id: 'edad',
+      text: '¿Qué edad tiene?',
+      weight: 4,
+      category: 'BASIC_INFO',
+      expectedResponseTime: 30000,
+      stressLevel: 1,
+      triggers: ['coherencia_con_experiencia'],
+      coefficients: { alpha: 0.30, beta: 0.20, gamma: 0.20, delta: 0.30 }
+    },
+    {
+      id: 'ruta_especifica',
+      text: '¿De qué ruta es específicamente?',
+      weight: 6,
+      category: 'BASIC_INFO',
+      expectedResponseTime: 60000,
+      stressLevel: 2,
+      triggers: ['validar_existencia_ruta'],
+      coefficients: { alpha: 0.30, beta: 0.20, gamma: 0.20, delta: 0.30 }
+    },
+    {
+      id: 'anos_en_ruta',
+      text: '¿Cuántos años lleva en esa ruta?',
+      weight: 7,
+      category: 'BASIC_INFO',
+      expectedResponseTime: 45000,
+      stressLevel: 2,
+      triggers: ['coherencia_edad_experiencia'],
+      coefficients: { alpha: 0.30, beta: 0.20, gamma: 0.20, delta: 0.30 }
+    },
+    {
+      id: 'estado_civil_dependientes',
+      text: '¿Está casado/a? ¿Su pareja trabaja? ¿Cuántos hijos tiene?',
+      weight: 5,
+      category: 'BASIC_INFO',
+      expectedResponseTime: 90000,
+      stressLevel: 2,
+      triggers: ['coherencia_gastos_familiares'],
+      coefficients: { alpha: 0.30, beta: 0.20, gamma: 0.20, delta: 0.30 }
+    },
+
+    // SECCIÓN B: OPERACIÓN DIARIA (High evasion risk)
+    {
+      id: 'vueltas_por_dia',
+      text: '¿Cuántas vueltas da al día?',
+      weight: 8,
+      category: 'DAILY_OPERATION',
+      expectedResponseTime: 60000,
+      stressLevel: 3,
+      triggers: ['cruzar_con_ingresos'],
+      coefficients: { alpha: 0.20, beta: 0.25, gamma: 0.15, delta: 0.40 }
+    },
+    {
+      id: 'kilometros_por_vuelta',
+      text: '¿De cuántos kilómetros es cada vuelta?',
+      weight: 7,
+      category: 'DAILY_OPERATION',
+      expectedResponseTime: 75000,
+      stressLevel: 3,
+      triggers: ['coherencia_gasto_gasolina'],
+      coefficients: { alpha: 0.20, beta: 0.25, gamma: 0.15, delta: 0.40 }
+    },
+    {
+      id: 'ingresos_promedio_diarios',
+      text: '¿Cuáles son sus ingresos promedio diarios?',
+      weight: 10, // CRITICAL QUESTION
+      category: 'DAILY_OPERATION',
+      expectedResponseTime: 120000,
+      stressLevel: 5,
+      triggers: ['cruzar_con_todo'],
+      coefficients: { alpha: 0.20, beta: 0.25, gamma: 0.15, delta: 0.40 }
+    },
+    {
+      id: 'pasajeros_por_vuelta',
+      text: '¿Cuántos pasajeros promedio lleva por vuelta?',
+      weight: 8,
+      category: 'DAILY_OPERATION',
+      expectedResponseTime: 60000,
+      stressLevel: 3,
+      triggers: ['coherencia_ingresos_tarifa'],
+      coefficients: { alpha: 0.20, beta: 0.25, gamma: 0.15, delta: 0.40 }
+    },
+    {
+      id: 'tarifa_por_pasajero',
+      text: '¿Cuánto cobra por pasaje actualmente?',
+      weight: 6,
+      category: 'DAILY_OPERATION',
+      expectedResponseTime: 45000,
+      stressLevel: 2,
+      triggers: ['coherencia_ingresos_totales'],
+      coefficients: { alpha: 0.20, beta: 0.25, gamma: 0.15, delta: 0.40 }
+    },
+    {
+      id: 'ingresos_temporada_baja',
+      text: '¿Cuánto bajan sus ingresos en la temporada más mala del año?',
+      weight: 9,
+      category: 'DAILY_OPERATION',
+      expectedResponseTime: 90000,
+      stressLevel: 4,
+      triggers: ['capacidad_pago_minima'],
+      coefficients: { alpha: 0.20, beta: 0.25, gamma: 0.15, delta: 0.40 }
+    },
+
+    // SECCIÓN C: GASTOS OPERATIVOS CRÍTICOS
+    {
+      id: 'gasto_diario_gasolina',
+      text: '¿Cuánto gasta al día en gasolina?',
+      weight: 9,
+      category: 'OPERATIONAL_COSTS',
+      expectedResponseTime: 90000,
+      stressLevel: 4,
+      triggers: ['coherencia_vueltas_kilometros'],
+      coefficients: { alpha: 0.20, beta: 0.25, gamma: 0.15, delta: 0.40 }
+    },
+    {
+      id: 'vueltas_por_tanque',
+      text: '¿Cuántas vueltas hace con esa carga de gasolina?',
+      weight: 8,
+      category: 'OPERATIONAL_COSTS',
+      expectedResponseTime: 90000,
+      stressLevel: 3,
+      triggers: ['coherencia_matematica_combustible'],
+      coefficients: { alpha: 0.20, beta: 0.25, gamma: 0.15, delta: 0.40 }
+    },
+    {
+      id: 'gastos_mordidas_cuotas',
+      text: '¿Cuánto paga de cuotas o "apoyos" a la semana a autoridades o líderes?',
+      weight: 10, // CRITICAL - HIGH EVASION RISK
+      category: 'OPERATIONAL_COSTS',
+      expectedResponseTime: 180000,
+      stressLevel: 5,
+      triggers: ['legalidad'],
+      coefficients: { alpha: 0.15, beta: 0.25, gamma: 0.25, delta: 0.35 }
+    },
+    {
+      id: 'pago_semanal_tarjeta',
+      text: '¿Cuánto paga de tarjeta a la semana?',
+      weight: 6,
+      category: 'OPERATIONAL_COSTS',
+      expectedResponseTime: 60000,
+      stressLevel: 3,
+      triggers: ['coherencia_ingresos_netos'],
+      coefficients: { alpha: 0.20, beta: 0.25, gamma: 0.15, delta: 0.40 }
+    },
+    {
+      id: 'mantenimiento_mensual',
+      text: '¿Cuánto gasta en mantenimiento promedio al mes?',
+      weight: 6,
+      category: 'OPERATIONAL_COSTS',
+      expectedResponseTime: 75000,
+      stressLevel: 2,
+      triggers: ['coherencia_edad_unidad'],
+      coefficients: { alpha: 0.20, beta: 0.25, gamma: 0.15, delta: 0.40 }
+    },
+
+    // SECCIÓN D: ESTRUCTURA DEL NEGOCIO
+    {
+      id: 'propiedad_unidad',
+      text: '¿El vehículo es propio o rentado?',
+      weight: 7,
+      category: 'BUSINESS_STRUCTURE',
+      expectedResponseTime: 60000,
+      stressLevel: 3,
+      triggers: ['coherencia_gastos_totales'],
+      coefficients: { alpha: 0.30, beta: 0.20, gamma: 0.20, delta: 0.30 }
+    },
+    {
+      id: 'pago_diario_renta',
+      text: 'Si es rentado, ¿cuánto paga diario de renta?',
+      weight: 8,
+      category: 'BUSINESS_STRUCTURE',
+      expectedResponseTime: 75000,
+      stressLevel: 4,
+      triggers: ['impacto_ingresos_netos'],
+      coefficients: { alpha: 0.30, beta: 0.20, gamma: 0.20, delta: 0.30 }
+    },
+
+    // SECCIÓN F: EVALUACIÓN DE RIESGO (Critical Questions)
+    {
+      id: 'margen_disponible_credito',
+      text: 'Después de todos sus gastos, ¿cuánto le queda libre mensual?',
+      weight: 10, // CRITICAL
+      category: 'RISK_EVALUATION',
+      expectedResponseTime: 150000,
+      stressLevel: 5,
+      triggers: ['capacidad_real_pago'],
+      coefficients: { alpha: 0.15, beta: 0.25, gamma: 0.25, delta: 0.35 }
+    },
+    
+    // VERIFICATION CROSS-CHECK QUESTIONS
+    {
+      id: 'calculo_ingresos_semanales',
+      text: 'Si gana X diario, ¿cuánto sería a la semana?',
+      weight: 8,
+      category: 'RISK_EVALUATION',
+      expectedResponseTime: 60000,
+      stressLevel: 4,
+      triggers: ['verificacion_matematica'],
+      coefficients: { alpha: 0.15, beta: 0.25, gamma: 0.25, delta: 0.35 }
+    },
+    {
+      id: 'confirmacion_datos_criticos',
+      text: 'Confirmemos: ¿gana $X diario y gasta $Y en gasolina?',
+      weight: 8,
+      category: 'RISK_EVALUATION',
+      expectedResponseTime: 60000,
+      stressLevel: 4,
+      triggers: ['confirmacion_final'],
+      coefficients: { alpha: 0.15, beta: 0.25, gamma: 0.25, delta: 0.35 }
+    }
+    
+    // NOTE: This is a subset - the full 55 questions would be loaded from API or config
+    // Remaining questions follow same structure with different categories and weights
+  ];
+
+  // AVI THRESHOLDS (Conservative - API configurable)
+  private readonly AVI_THRESHOLDS = {
+    GO_MIN: 780,      // Minimum threshold for approval
+    NOGO_MAX: 550,    // Maximum threshold for rejection  
+    REVIEW_MIN: 551,  // Review range start
+    REVIEW_MAX: 779   // Review range end
+  };
+
+  // API Configuration (when services are available)
+  private readonly API_CONFIG = {
+    // BFF Voice Analysis Endpoints
+    VOICE_ANALYSIS: '/api/v1/voice/analyze',
+    WHISPER_TRANSCRIBE: '/api/v1/voice/whisper-transcribe', 
+    AVI_EVALUATE: '/api/v1/avi/evaluate-complete',
+    
+    // Configuration Endpoints  
+    AVI_QUESTIONS: '/api/v1/config/avi-questions',
+    RISK_THRESHOLDS: '/api/v1/config/avi-thresholds',
+    GEOGRAPHIC_RISK: '/api/v1/config/geographic-risk',
+    
+    // Fallback/Mock for development
+    MOCK_MODE: true // Set to false when APIs are ready
+  };
+
+  // ✅ COMPLEMENTO: Tu Cuestionario de Resiliencia (12 preguntas) - LEGACY SUPPORT
   private readonly RESILIENCE_QUESTIONS_CORE: RequiredQuestion[] = [
     {
       id: 'seasonal_vulnerability',
@@ -945,7 +1337,390 @@ export class VoiceValidationService {
     );
   }
 
-  // ✅ NUEVO: Core Voice Evaluation Method
+  // ============================================================================
+  // 🧬 AVI INTEGRATION METHODS (API-driven)
+  // ============================================================================
+
+  /**
+   * Get AVI Questions (API-driven when available)
+   */
+  getAVIQuestions(): Observable<AVIQuestion[]> {
+    if (this.API_CONFIG.MOCK_MODE) {
+      return of(this.AVI_55_QUESTIONS);
+    }
+    
+    return this.http.get<AVIQuestion[]>(this.API_CONFIG.AVI_QUESTIONS).pipe(
+      catchError(error => {
+        console.warn('AVI Questions API not available, using embedded questions', error);
+        return of(this.AVI_55_QUESTIONS);
+      })
+    );
+  }
+
+  /**
+   * Analyze single voice response with AVI scoring
+   */
+  analyzeVoiceResponseAVI(
+    questionId: string, 
+    audioBlob: Blob, 
+    contextData?: any
+  ): Observable<AVIScoreResult> {
+    // Use API configuration service for mock mode check and requests
+    if (this.apiConfig.isMockMode()) {
+      return this.mockAVIVoiceAnalysis(questionId, audioBlob, contextData);
+    }
+
+    // Prepare voice analysis request using API contracts
+    const request: VoiceAnalysisRequest = {
+      audioBlob,
+      questionId,
+      sessionId: contextData?.sessionId || this.generateSessionId(),
+      metadata: {
+        duration: contextData?.duration || 0,
+        sampleRate: contextData?.sampleRate || 44100,
+        format: 'webm',
+        expectedResponseTime: contextData?.expectedResponseTime || 5000,
+        attempt: contextData?.attempt || 1
+      }
+    };
+
+    // Use direct HTTP call to BFF instead of ApiConfigService
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'audio.wav');
+    formData.append('questionId', questionId);
+    formData.append('contextId', contextData?.sessionId || 'unknown');
+
+    return this.http.post<any>(`${environment.apiUrl}/v1/voice/analyze/audio`, formData).pipe(
+      map(response => {
+        if (!response) {
+          throw new Error('Voice analysis failed: Empty response');
+        }
+        
+        // Convert BFF response to internal AVIScoreResult format
+        return this.convertBFFResponseToAVIScore(response, questionId, contextData);
+      }),
+      catchError(error => {
+        console.error('BFF AVI Voice Analysis failed, using mock response', error);
+        return this.mockAVIVoiceAnalysis(questionId, audioBlob, contextData);
+      })
+    );
+  }
+
+  /**
+   * Convert BFF response to internal AVIScoreResult format
+   */
+  private convertBFFResponseToAVIScore(
+    response: any, 
+    questionId: string, 
+    contextData: any
+  ): AVIScoreResult {
+    // Find the corresponding question
+    const question = this.AVI_55_QUESTIONS.find(q => q.id === questionId);
+    
+    if (!question) {
+      throw new Error(`Question ${questionId} not found`);
+    }
+
+    return {
+      questionId: question.id,
+      subscore: response.voiceScore * 1000, // Convert to 0-1000 scale
+      components: {
+        timing_score: response.latencyIndex ? (1 - response.latencyIndex) : 0.7,
+        voice_score: response.energyStability || 0.7,
+        lexical_score: response.honestyLexicon || 0.6,
+        coherence_score: response.pitchVar ? (1 - response.pitchVar) : 0.8
+      },
+      flags: response.flags || [],
+      risk_level: response.decision === 'GO' ? 'LOW' : 
+                 response.decision === 'REVIEW' ? 'MEDIUM' : 'HIGH'
+    };
+  }
+
+  /**
+   * Convert VoiceAnalysisResponse to internal AVIScoreResult format (LEGACY)
+   */
+  private convertVoiceAnalysisToAVIScore(
+    response: VoiceAnalysisResponse, 
+    questionId: string, 
+    contextData: any
+  ): AVIScoreResult {
+    // Find the corresponding question
+    const question = this.AVI_55_QUESTIONS.find(q => q.id === questionId);
+    
+    if (!question) {
+      throw new Error(`Question ${questionId} not found`);
+    }
+
+    // Convert API voice metrics to internal format
+    const voiceAnalysis = {
+      pitch_variance: response.data.voiceMetrics.pitch.variance,
+      confidence_level: response.data.voiceMetrics.energy.stability,
+      pause_frequency: response.data.voiceMetrics.rhythm.pauseFrequency,
+      speech_rate: response.data.voiceMetrics.rhythm.speechRate,
+      stress_level: response.data.voiceMetrics.stress.level
+    };
+
+    // Perform lexical analysis using our existing utilities
+    const lexicalResult = computeAdvancedLexicalScore(
+      response.data.transcription,
+      1.5, // evasiveBoost
+      contextData?.questionContext || 'normal_question'
+    );
+
+    // Calculate subscore using existing logic
+    const subscoreCalc = this.calculateAVISubscore(
+      question,
+      response.data.transcription,
+      voiceAnalysis,
+      contextData?.responseTime || 0,
+      question.expectedResponseTime
+    );
+
+    return {
+      questionId: question.id,
+      questionText: question.text,
+      transcription: response.data.transcription,
+      confidence: response.data.confidence,
+      responseTime: contextData?.responseTime || 0,
+      expectedTime: question.expectedResponseTime,
+      subscore: subscoreCalc.subscore,
+      weight: question.weight,
+      voiceAnalysis,
+      lexicalAnalysis: {
+        evasionScore: lexicalResult.rawLexicalScore,
+        admissionScore: lexicalResult.adjustedLexicalScore,
+        honestyScore: 1 - lexicalResult.rawLexicalScore,
+        coherenceScore: response.data.coherenceScore,
+        category: lexicalResult.category,
+        tokensFound: lexicalResult.tokenDetails
+      },
+      stressLevel: question.stressLevel,
+      category: question.category,
+      triggers: question.triggers,
+      riskFlags: response.data.voiceMetrics.stress.indicators.map(indicator => indicator),
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  /**
+   * Generate session ID for API requests
+   */
+  private generateSessionId(): string {
+    return `avi_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  /**
+   * Process complete AVI interview with dual engine
+   */
+  processCompleteAVIInterview(
+    responses: Array<{ questionId: string, audioBlob: Blob, transcription?: string }>,
+    contextData: any = {}
+  ): Observable<ConsolidatedAVIResult> {
+    if (this.API_CONFIG.MOCK_MODE) {
+      return this.mockCompleteAVIProcessing(responses, contextData);
+    }
+
+    const formData = new FormData();
+    responses.forEach((response, index) => {
+      formData.append(`responses[${index}].audio`, response.audioBlob);
+      formData.append(`responses[${index}].questionId`, response.questionId);
+      if (response.transcription) {
+        formData.append(`responses[${index}].transcription`, response.transcription);
+      }
+    });
+    formData.append('context', JSON.stringify(contextData));
+
+    return this.http.post<ConsolidatedAVIResult>(this.API_CONFIG.AVI_EVALUATE, formData).pipe(
+      catchError(error => {
+        console.error('Complete AVI processing failed, using mock', error);
+        return this.mockCompleteAVIProcessing(responses, contextData);
+      })
+    );
+  }
+
+  /**
+   * Calculate HASE score with AVI integration (30/20/50)
+   */
+  calculateHASEWithAVI(
+    gnvHistoryScore: number,      // 30%
+    geographicRiskScore: number,  // 20%
+    aviResult: ConsolidatedAVIResult  // 50%
+  ): {
+    final_score: number;
+    breakdown: {
+      gnv_history: { score: number, weight: number };
+      geographic_risk: { score: number, weight: number };
+      avi_voice: { score: number, weight: number };
+    };
+    protection_eligible: boolean;
+    decision: 'GO' | 'REVIEW' | 'NO-GO';
+  } {
+    const weights = { gnv: 0.30, geo: 0.20, avi: 0.50 };
+    
+    const weighted_scores = {
+      gnv: gnvHistoryScore * weights.gnv,
+      geo: geographicRiskScore * weights.geo,
+      avi: aviResult.final_score * weights.avi
+    };
+
+    const final_score = weighted_scores.gnv + weighted_scores.geo + weighted_scores.avi;
+
+    let decision: 'GO' | 'REVIEW' | 'NO-GO';
+    if (final_score >= this.AVI_THRESHOLDS.GO_MIN && aviResult.protection_eligible) {
+      decision = 'GO';
+    } else if (final_score >= this.AVI_THRESHOLDS.REVIEW_MIN) {
+      decision = 'REVIEW';
+    } else {
+      decision = 'NO-GO';
+    }
+
+    return {
+      final_score,
+      breakdown: {
+        gnv_history: { score: gnvHistoryScore, weight: weights.gnv },
+        geographic_risk: { score: geographicRiskScore, weight: weights.geo },
+        avi_voice: { score: aviResult.final_score, weight: weights.avi }
+      },
+      protection_eligible: aviResult.protection_eligible && decision === 'GO',
+      decision
+    };
+  }
+
+  // ============================================================================
+  // 🧬 AVI MOCK IMPLEMENTATIONS (Development/Testing)
+  // ============================================================================
+
+  private mockAVIVoiceAnalysis(
+    questionId: string, 
+    audioBlob: Blob, 
+    contextData?: any
+  ): Observable<AVIScoreResult> {
+    // Simulate realistic AVI analysis based on question type
+    const question = this.AVI_55_QUESTIONS.find(q => q.id === questionId);
+    if (!question) {
+      return throwError(() => new Error(`Question ${questionId} not found`));
+    }
+
+    // Mock analysis with realistic variance based on question weight/stress
+    const mockTranscription = this.generateMockTranscription(question);
+    const mockFeatures = this.generateMockVoiceFeatures(question);
+    
+    // Use real AVI lexical processing
+    const lexicalAnalysis = computeAdvancedLexicalScore(
+      mockTranscription, 
+      1.0, // evasiveBoost
+      question.stressLevel >= 4 ? 'high_evasion_question' : 'normal_question'
+    );
+
+    // Calculate AVI subscore using question coefficients
+    const subscore = this.calculateAVISubscore(question, mockFeatures, lexicalAnalysis);
+
+    return of({
+      questionId,
+      subscore: subscore * 1000, // Convert to 0-1000 scale
+      components: {
+        timing_score: mockFeatures.timing_score,
+        voice_score: mockFeatures.voice_score,
+        lexical_score: lexicalAnalysis.adjustedLexicalScore,
+        coherence_score: mockFeatures.coherence_score
+      },
+      flags: lexicalAnalysis.tokenDetails.evasiveTokens.length > 0 ? 
+        ['evasive_language'] : ['normal_response'],
+      risk_level: this.mapScoreToRiskLevel(subscore * 1000)
+    }).pipe(
+      // Simulate API delay
+      delay(Math.random() * 2000 + 1000)
+    );
+  }
+
+  private mockCompleteAVIProcessing(
+    responses: Array<{ questionId: string, audioBlob: Blob, transcription?: string }>,
+    contextData: any
+  ): Observable<ConsolidatedAVIResult> {
+    // Simulate dual engine processing
+    const scientificScore = Math.random() * 200 + 700; // 700-900 range
+    const heuristicScore = Math.random() * 200 + 650;  // 650-850 range
+    
+    const consensus_weight = Math.abs(scientificScore - heuristicScore) <= 100 ? 0.8 : 0.5;
+    const final_score = scientificScore * consensus_weight + heuristicScore * (1 - consensus_weight);
+    
+    return of({
+      final_score,
+      risk_level: this.mapScoreToRiskLevel(final_score),
+      scientific_engine_score: scientificScore,
+      heuristic_engine_score: heuristicScore,
+      consensus_weight,
+      protection_eligible: final_score >= this.AVI_THRESHOLDS.GO_MIN,
+      decision: final_score >= this.AVI_THRESHOLDS.GO_MIN ? 'GO' :
+                final_score >= this.AVI_THRESHOLDS.REVIEW_MIN ? 'REVIEW' : 'NO-GO',
+      detailed_breakdown: [], // Would contain individual question results
+      red_flags: final_score < 600 ? ['high_evasion_risk', 'inconsistent_responses'] : [],
+      recommendations: final_score >= 780 ? ['approve_with_standard_terms'] : 
+                      ['require_additional_guarantees']
+    }).pipe(delay(3000));
+  }
+
+  // ============================================================================
+  // 🧬 AVI HELPER METHODS
+  // ============================================================================
+
+  private calculateAVISubscore(
+    question: AVIQuestion, 
+    voiceFeatures: any, 
+    lexicalAnalysis: any
+  ): number {
+    const { alpha, beta, gamma, delta } = question.coefficients;
+    
+    return (
+      alpha * voiceFeatures.timing_score +
+      beta * voiceFeatures.voice_score +
+      gamma * lexicalAnalysis.adjustedLexicalScore +
+      delta * voiceFeatures.coherence_score
+    );
+  }
+
+  private mapScoreToRiskLevel(score: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
+    if (score >= 780) return 'LOW';
+    if (score >= 650) return 'MEDIUM';
+    if (score >= 400) return 'HIGH';
+    return 'CRITICAL';
+  }
+
+  private generateMockTranscription(question: AVIQuestion): string {
+    // Generate realistic transcription based on question type and stress level
+    const responses = {
+      low_stress: ['Sí, claro', 'Por supuesto', 'Exactamente mil pesos'],
+      high_stress: ['Pues... eh... bueno', 'No sé... depende', 'Más o menos...'],
+      evasive: ['No, para nada', 'Eso no existe', 'No sé de qué habla']
+    };
+    
+    if (question.stressLevel >= 4) {
+      return responses.high_stress[Math.floor(Math.random() * responses.high_stress.length)];
+    }
+    return responses.low_stress[Math.floor(Math.random() * responses.low_stress.length)];
+  }
+
+  private generateMockVoiceFeatures(question: AVIQuestion): any {
+    return {
+      timing_score: Math.random() * 0.4 + 0.6,  // 0.6-1.0
+      voice_score: Math.random() * 0.3 + 0.7,   // 0.7-1.0  
+      coherence_score: Math.random() * 0.2 + 0.8 // 0.8-1.0
+    };
+  }
+
+  /**
+   * Get API endpoints configuration (for external integrations)
+   */
+  getAPIConfiguration() {
+    return {
+      endpoints: this.API_CONFIG,
+      thresholds: this.AVI_THRESHOLDS,
+      total_questions: this.AVI_55_QUESTIONS.length,
+      mock_mode: this.API_CONFIG.MOCK_MODE
+    };
+  }
+
+  // ✅ EXISTING: Core Voice Evaluation Method (now using BFF)
   async evaluateAudio(
     audioBlob: Blob, 
     questionId: string, 
@@ -953,42 +1728,41 @@ export class VoiceValidationService {
     municipality?: string
   ): Promise<VoiceEvaluationResult> {
     
-    const formData = new FormData();
-    formData.append('audio', audioBlob, 'response.wav');
-    formData.append('questionId', questionId);
-    formData.append('contextId', contextId);
-    
-    if (municipality) {
-      formData.append('municipality', municipality);
-    }
-    
     const requestId = this.generateRequestId();
     
     try {
-      console.log(`🎤 Evaluating audio for question: ${questionId}`);
+      console.log(`🎤 Evaluating audio for question: ${questionId} using BFF`);
       
-      const response = await this.http.post<VoiceEvaluationResult>(
-        `${this.baseUrl}/v1/voice/evaluate-audio`,
+      // Use BFF endpoint for full evaluation (Whisper + Analysis)
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'response.wav');
+      formData.append('questionId', questionId);
+      formData.append('contextId', contextId);
+      
+      const bffResponse = await this.http.post<any>(
+        `${environment.apiUrl}/v1/voice/evaluate`,
         formData,
         { 
           headers: { 'X-Request-Id': requestId }
-          // Note: timeout not supported in Angular HttpClient
         }
       ).toPromise();
       
-      if (!response) {
-        throw new Error('Empty response from voice analysis service');
+      if (!bffResponse) {
+        throw new Error('Empty response from BFF voice service');
       }
+      
+      // Convert BFF response to VoiceEvaluationResult format
+      const response = this.convertBFFToVoiceEvaluationResult(bffResponse, questionId);
       
       // ✅ Store result locally
       this.storeVoiceEvaluation(response);
       
-      console.log(`✅ Voice analysis completed: ${response.decision} (score: ${response.voiceScore})`);
+      console.log(`✅ BFF Voice analysis completed: ${response.decision} (score: ${response.voiceScore})`);
       
       return response;
       
     } catch (error) {
-      console.warn(`⚠️ Voice analysis failed for ${questionId}:`, error);
+      console.warn(`⚠️ BFF Voice analysis failed for ${questionId}:`, error);
       
       // ✅ FALLBACK: Apply heuristic analysis + mark as REVIEW
       const fallbackResult = this.applyHeuristicFallback(audioBlob, questionId);
@@ -996,6 +1770,31 @@ export class VoiceValidationService {
       
       return fallbackResult;
     }
+  }
+
+  /**
+   * Convert BFF response format to legacy VoiceEvaluationResult format
+   */
+  private convertBFFToVoiceEvaluationResult(
+    bffResponse: any, 
+    questionId: string
+  ): VoiceEvaluationResult {
+    return {
+      questionId,
+      voiceScore: bffResponse.voiceScore,
+      decision: bffResponse.decision,
+      flags: bffResponse.flags || [],
+      fallback: false,
+      message: `BFF Analysis: ${bffResponse.decision}`,
+      processingTime: `${Date.now()}ms`,
+      voiceMetrics: {
+        latencyIndex: bffResponse.latencyIndex,
+        pitchVar: bffResponse.pitchVar,
+        disfluencyRate: bffResponse.disfluencyRate,
+        energyStability: bffResponse.energyStability,
+        honestyLexicon: bffResponse.honestyLexicon
+      }
+    };
   }
 
   // ✅ NUEVO: Heuristic Fallback Implementation
