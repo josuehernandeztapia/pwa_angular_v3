@@ -18,6 +18,7 @@ jobs:
   visual:
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_visual == 'true' || github.event_name != 'workflow_dispatch' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     defaults:
       run:
         working-directory: pwa_angular
@@ -36,7 +37,14 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: |
+          npx playwright install chromium firefox webkit --with-deps
+
+      - name: Print Angular & Node info
+        run: |
+          npx ng version || true
+          node -v
+          npm -v
 
       - name: Run Playwright visual tests
         env:
@@ -62,6 +70,7 @@ jobs:
   e2e:
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_e2e == 'true' || github.event_name != 'workflow_dispatch' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: pwa_angular
@@ -79,18 +88,28 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build app (dev)
-        run: npx ng build --configuration=development
+      - name: Verify Cypress install
+        run: |
+          npx cypress verify || npx cypress install
+          npx cypress version
 
       - name: Start dev server
         run: |
-          npx ng serve --configuration=development --port=4200 &
-          npx wait-on http://localhost:4200
+          nohup npx ng serve --configuration=development --port=4200 --verbose > /tmp/ng-serve.log 2>&1 &
+          npx wait-on http://127.0.0.1:4200 -t 180000
 
       - name: Run Cypress E2E (Chrome headless)
         env:
           CI: true
         run: npx cypress run --browser chrome --headless
+
+      - name: Upload ng serve log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ng-serve-log
+          path: /tmp/ng-serve.log
+          if-no-files-found: warn
 
       - name: Upload Cypress HTML Report
         if: always()
@@ -115,4 +134,3 @@ jobs:
           name: cypress-screenshots
           path: pwa_angular/cypress/screenshots
           if-no-files-found: warn
-
