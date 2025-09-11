@@ -1,0 +1,118 @@
+name: UI Tests (Visual + E2E)
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      run_visual:
+        description: "Run Playwright visual suite"
+        required: false
+        default: "true"
+      run_e2e:
+        description: "Run Cypress E2E suite"
+        required: false
+        default: "true"
+
+jobs:
+  visual:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_visual == 'true' || github.event_name != 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pwa_angular
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: pwa_angular/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright visual tests
+        env:
+          CI: true
+        run: npm run test:visual
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: pwa_angular/playwright-report
+          if-no-files-found: warn
+
+      - name: Upload Visual Results (raw)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-results
+          path: pwa_angular/test-results/visual
+          if-no-files-found: warn
+
+  e2e:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_e2e == 'true' || github.event_name != 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pwa_angular
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: pwa_angular/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app (dev)
+        run: npx ng build --configuration=development
+
+      - name: Start dev server
+        run: |
+          npx ng serve --configuration=development --port=4200 &
+          npx wait-on http://localhost:4200
+
+      - name: Run Cypress E2E (Chrome headless)
+        env:
+          CI: true
+        run: npx cypress run --browser chrome --headless
+
+      - name: Upload Cypress HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-html-report
+          path: pwa_angular/cypress/reports/html
+          if-no-files-found: warn
+
+      - name: Upload Cypress Videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: pwa_angular/cypress/videos
+          if-no-files-found: warn
+
+      - name: Upload Cypress Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: pwa_angular/cypress/screenshots
+          if-no-files-found: warn
+
