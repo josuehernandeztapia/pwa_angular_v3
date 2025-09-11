@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 AVI_LAB - Voice Analysis Laboratory</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🧪 AVI_LAB</h1>
+            <p>Voice Analysis & Testing Laboratory</p>
+            <div class="status" id="status">Ready</div>
+        </header>
+
+        <!-- Voice Controls -->
+        <section class="voice-section">
+            <h2>🎤 Voice Testing</h2>
+            
+            <div class="controls">
+                <button id="recordBtn" class="btn primary">🎙️ Record</button>
+                <button id="stopBtn" class="btn secondary" disabled>⏹️ Stop</button>
+                <button id="playBtn" class="btn secondary" disabled>▶️ Play</button>
+                <input type="file" id="fileInput" accept="audio/*" class="file-input">
+                <button id="uploadBtn" class="btn secondary">📁 Upload Audio</button>
+            </div>
+
+            <div class="audio-info" id="audioInfo" style="display: none;">
+                <p><strong>Duration:</strong> <span id="audioDuration">0</span>s</p>
+                <p><strong>Size:</strong> <span id="audioSize">0</span> KB</p>
+            </div>
+        </section>
+
+        <!-- Question Selection -->
+        <section class="question-section">
+            <h2>❓ Test Question</h2>
+            <select id="questionSelect" class="question-select">
+                <option value="ingresos_promedio_diarios">¿Cuáles son sus ingresos promedio diarios?</option>
+                <option value="gasto_diario_gasolina">¿Cuánto gasta al día en gasolina?</option>
+                <option value="gastos_mordidas_cuotas">¿Cuánto paga de cuotas o "apoyos" a la semana?</option>
+                <option value="margen_disponible_credito">¿Cuánto le queda libre mensual?</option>
+                <option value="seasonal_vulnerability">¿En qué época del año se te complica más trabajar?</option>
+            </select>
+        </section>
+
+        <!-- Analysis Button -->
+        <section class="analyze-section">
+            <button id="analyzeBtn" class="btn analyze" disabled>🧠 Analyze with AVI + Whisper</button>
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Processing with OpenAI Whisper...</p>
+            </div>
+        </section>
+
+        <!-- Results Dashboard -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <h2>📊 Analysis Results</h2>
+            
+            <div class="result-cards">
+                <!-- Whisper Results -->
+                <div class="card whisper-card">
+                    <h3>🗣️ Transcription</h3>
+                    <p id="transcription" class="transcription">-</p>
+                    <small>Confidence: <span id="whisperConfidence">-</span>%</small>
+                </div>
+
+                <!-- AVI Score -->
+                <div class="card score-card">
+                    <h3>🎯 AVI Score</h3>
+                    <div class="score-display">
+                        <span id="aviScore" class="score">-</span>
+                        <span class="score-suffix">/1000</span>
+                    </div>
+                    <div id="decision" class="decision">-</div>
+                </div>
+
+                <!-- Voice Metrics -->
+                <div class="card metrics-card">
+                    <h3>📈 Voice Metrics</h3>
+                    <div class="metrics">
+                        <div class="metric">
+                            <label>Latency:</label>
+                            <span id="latencyIndex">-</span>
+                        </div>
+                        <div class="metric">
+                            <label>Pitch Variance:</label>
+                            <span id="pitchVar">-</span>
+                        </div>
+                        <div class="metric">
+                            <label>Energy Stability:</label>
+                            <span id="energyStability">-</span>
+                        </div>
+                        <div class="metric">
+                            <label>Honesty Lexicon:</label>
+                            <span id="honestyLexicon">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flags -->
+                <div class="card flags-card">
+                    <h3>🚩 Analysis Flags</h3>
+                    <div id="analysisFlags" class="flags">No flags</div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="result-actions">
+                <button id="exportBtn" class="btn secondary">💾 Export JSON</button>
+                <button id="benchmarkBtn" class="btn secondary">📊 Add to Benchmark</button>
+                <button id="resetBtn" class="btn secondary">🔄 Reset</button>
+            </div>
+        </section>
+
+        <!-- Benchmark Dashboard -->
+        <section class="benchmark-section" id="benchmarkSection" style="display: none;">
+            <h2>📊 Benchmark Results</h2>
+            <div id="benchmarkData" class="benchmark-data">
+                <p>No benchmark data yet. Analyze some audio files to see comparisons!</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🚀 Powered by OpenAI Whisper + NestJS BFF + AVI Engine</p>
+            <p><strong>BFF Status:</strong> <span id="bffStatus">Checking...</span></p>
+        </footer>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="audioPlayer" controls style="display: none;"></audio>
+
+    <script src="app.js"></script>
+</body>
+</html>
