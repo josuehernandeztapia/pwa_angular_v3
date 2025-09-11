@@ -166,7 +166,7 @@ export class CotizadorEngineService {
       balance = Math.max(0, balance - principalPayment);
     }
     
-    return balance;
+    return round2(balance);
   }
 
   // Generate complete quote with financial calculations using real product packages
