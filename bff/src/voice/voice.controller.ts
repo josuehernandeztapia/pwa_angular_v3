@@ -47,11 +47,22 @@ export class VoiceController {
   })
   async analyzeFeatures(
     @Body() dto: VoiceAnalyzeDto,
-    @Headers('x-request-id') requestId?: string
+    @Headers('x-request-id') requestId?: string,
+    @Headers('x-lexicons-enabled') lexiconsEnabled?: string,
+    @Headers('x-lexicon-plaza') lexiconPlaza?: string,
+    @Headers('x-reasons-enabled') reasonsEnabled?: string,
   ): Promise<VoiceScoreResponseDto> {
     this.logger.log(`🔬 POST /v1/voice/analyze - Question: ${dto.questionId} [${requestId}]`);
     
-    return this.voiceService.analyzeFeatures(dto, requestId);
+    // Derive defaults from env when headers absent
+    const envLex = (process.env.LEXICONS_ENABLED || '').toLowerCase() === 'true';
+    const envPlaza = (process.env.LEXICON_PLAZA as any) || 'general';
+    const envReasons = (process.env.REASONS_ENABLED || 'true').toLowerCase() !== 'false';
+    return this.voiceService.analyzeFeatures(dto, requestId, {
+      lexiconsEnabled: (String(lexiconsEnabled || '') ? String(lexiconsEnabled).toLowerCase() === 'true' : envLex),
+      lexiconPlaza: ((lexiconPlaza as any) || envPlaza),
+      reasonsEnabled: (String(reasonsEnabled || '') ? String(reasonsEnabled).toLowerCase() !== 'false' : envReasons),
+    });
   }
 
   @Post('analyze/audio')
@@ -95,7 +106,10 @@ export class VoiceController {
   async analyzeAudio(
     @UploadedFile() file: Express.Multer.File,
     @Body() context: { questionId?: string; contextId?: string },
-    @Headers('x-request-id') requestId?: string
+    @Headers('x-request-id') requestId?: string,
+    @Headers('x-lexicons-enabled') lexiconsEnabled?: string,
+    @Headers('x-lexicon-plaza') lexiconPlaza?: string,
+    @Headers('x-reasons-enabled') reasonsEnabled?: string,
   ): Promise<VoiceScoreResponseDto> {
     this.logger.log(`🎵 POST /v1/voice/analyze/audio - Question: ${context.questionId} [${requestId}]`);
 
@@ -103,7 +117,14 @@ export class VoiceController {
       throw new BadRequestException('Audio file is required');
     }
 
-    return this.voiceService.analyzeAudio(file, context, requestId);
+    const envLex = (process.env.LEXICONS_ENABLED || '').toLowerCase() === 'true';
+    const envPlaza = (process.env.LEXICON_PLAZA as any) || 'general';
+    const envReasons = (process.env.REASONS_ENABLED || 'true').toLowerCase() !== 'false';
+    return this.voiceService.analyzeAudio(file, context, requestId, {
+      lexiconsEnabled: (String(lexiconsEnabled || '') ? String(lexiconsEnabled).toLowerCase() === 'true' : envLex),
+      lexiconPlaza: ((lexiconPlaza as any) || envPlaza),
+      reasonsEnabled: (String(reasonsEnabled || '') ? String(reasonsEnabled).toLowerCase() !== 'false' : envReasons),
+    });
   }
 
   @Post('evaluate')
@@ -148,7 +169,10 @@ export class VoiceController {
     @UploadedFile() file: Express.Multer.File,
     @Body() context: { questionId?: string; contextId?: string; skipped?: string | boolean; orderIndex?: string | number },
     @Headers('x-request-id') requestId?: string,
-    @Headers('x-openai-key') openaiKey?: string
+    @Headers('x-openai-key') openaiKey?: string,
+    @Headers('x-lexicons-enabled') lexiconsEnabled?: string,
+    @Headers('x-lexicon-plaza') lexiconPlaza?: string,
+    @Headers('x-reasons-enabled') reasonsEnabled?: string,
   ): Promise<VoiceEvaluateResponseDto> {
     this.logger.log(`🎯 POST /v1/voice/evaluate - Question: ${context.questionId} [${requestId}]`);
 
@@ -197,7 +221,14 @@ export class VoiceController {
       throw new BadRequestException('Audio file is required');
     }
 
-    return this.voiceService.evaluateAudio(file, context, requestId, openaiKey);
+    const envLex = (process.env.LEXICONS_ENABLED || '').toLowerCase() === 'true';
+    const envPlaza = (process.env.LEXICON_PLAZA as any) || 'general';
+    const envReasons = (process.env.REASONS_ENABLED || 'true').toLowerCase() !== 'false';
+    return this.voiceService.evaluateAudio(file, context, requestId, openaiKey, {
+      lexiconsEnabled: (String(lexiconsEnabled || '') ? String(lexiconsEnabled).toLowerCase() === 'true' : envLex),
+      lexiconPlaza: ((lexiconPlaza as any) || envPlaza),
+      reasonsEnabled: (String(reasonsEnabled || '') ? String(reasonsEnabled).toLowerCase() !== 'false' : envReasons),
+    });
   }
 
   @Get('evaluations/:contextId')
@@ -212,5 +243,31 @@ export class VoiceController {
     this.logger.log(`📄 GET /v1/voice/evaluations/${contextId}?limit=${lim}&offset=${off}`);
     const rows = await this.evalRepo.listByContext(contextId, lim, off);
     return { contextId, limit: lim, offset: off, count: rows.length, items: rows };
+  }
+
+  @Get('evaluations')
+  @ApiOperation({ summary: 'List voice evaluations (pagination, optional contextId)' })
+  async listEvaluationsAll(
+    @Query('contextId') contextId?: string,
+    @Query('limit') limit = '50',
+    @Query('offset') offset = '0',
+  ) {
+    const ctx = contextId || '';
+    const lim = Math.max(1, Math.min(200, parseInt(String(limit), 10) || 50));
+    const off = Math.max(0, parseInt(String(offset), 10) || 0);
+    const rows = await this.evalRepo.listByContext(ctx, lim, off);
+    return { contextId: ctx, limit: lim, offset: off, count: rows.length, items: rows };
+  }
+
+  @Get('evaluations/stats')
+  @ApiOperation({ summary: 'Quick stats for voice evaluations (groupBy=decision|question)' })
+  async stats(
+    @Query('contextId') contextId?: string,
+    @Query('sinceHours') sinceHours = '168',
+    @Query('groupBy') groupBy: 'decision'|'question' = 'decision',
+  ) {
+    const hours = Math.max(1, Math.min(24 * 90, parseInt(String(sinceHours), 10) || 168));
+    const rows = await this.evalRepo.stats({ contextId, sinceHours: hours, groupBy });
+    return { contextId: contextId || null, sinceHours: hours, groupBy, items: rows };
   }
 }

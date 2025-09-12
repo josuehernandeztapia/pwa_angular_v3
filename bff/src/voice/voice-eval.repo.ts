@@ -55,4 +55,31 @@ export class VoiceEvalRepo {
       return [];
     }
   }
+
+  async stats(params: { contextId?: string; sinceHours?: number; groupBy?: 'decision'|'question' }) {
+    try {
+      const contextId = params.contextId || null;
+      const hours = Math.max(1, Math.min(24 * 90, params.sinceHours || 168)); // default 7 days
+      const group = params.groupBy === 'question' ? 'question_id' : 'decision';
+      const sql = `
+        SELECT ${group} as group_key,
+               COUNT(*) as count,
+               AVG(voice_score) as avg_score,
+               SUM(CASE WHEN decision = 'GO' THEN 1 ELSE 0 END) as go_count,
+               SUM(CASE WHEN decision = 'REVIEW' THEN 1 ELSE 0 END) as review_count,
+               SUM(CASE WHEN decision = 'NO-GO' THEN 1 ELSE 0 END) as nogo_count
+        FROM voice_evaluations
+        WHERE created_at >= NOW() - ($1 || ' hours')::interval
+          AND ($2::text IS NULL OR context_id = $2::text)
+        GROUP BY ${group}
+        ORDER BY count DESC
+        LIMIT 200;
+      `;
+      const { rows } = await this.pg.query(sql, [String(hours), contextId]);
+      return rows;
+    } catch (e) {
+      this.logger.warn(`Stats failed or DB not configured: ${e.message}`);
+      return [];
+    }
+  }
 }
