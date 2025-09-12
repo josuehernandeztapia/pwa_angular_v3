@@ -24,7 +24,8 @@ class AVILabComplete {
             bffUrl: 'http://localhost:3000',
             openaiApiKey: '', 
             maxRecordingTime: 300000, // 5 minutes
-            audioFormat: 'audio/wav'
+            audioFormat: 'audio/wav',
+            offlineMode: true // Ejecutar pruebas sin APIs
         };
 
         // State Management
@@ -43,6 +44,8 @@ class AVILabComplete {
         // Testing Data
         this.testingSessions = [];
         this.benchmarkData = [];
+        this.basicFlow = { active: false, list: [], index: 0 };
+        this.randomFlow = { active: false, list: [], index: 0, seed: '' };
         
         // Initialize
         this.init();
@@ -68,6 +71,14 @@ class AVILabComplete {
         this.loadSampleData();
         
         console.log('✅ AVI_LAB Complete initialized successfully');
+        // Restaurar modo offline/online desde localStorage si existe
+        try {
+            const savedMode = window.localStorage.getItem('AVI_LAB_OFFLINE_MODE');
+            if (savedMode === 'true' || savedMode === 'false') {
+                this.config.offlineMode = (savedMode === 'true');
+            }
+        } catch {}
+        await this.updateBFFIndicator();
         this.updateDashboard();
     }
 
@@ -83,6 +94,8 @@ class AVILabComplete {
                     <h1>🧪 AVI_LAB COMPLETE</h1>
                     <p>Voice Analysis + HASE Model + 55 Questions Testing Environment</p>
                     <div class="status" id="status">🟢 Ready for Testing</div>
+                    <div class="bff-indicator" id="bff-indicator">🟡 BFF: Offline (Local Engine)</div>
+                    <button id="toggle-bff-mode" class="btn secondary" style="margin-left:8px;">🔁 Cambiar a Online</button>
                 </header>
 
                 <!-- Navigation -->
@@ -182,10 +195,42 @@ class AVILabComplete {
                                 <button class="btn secondary" onclick="aviLab.filterQuestions()">
                                     🔍 Filtrar
                                 </button>
+                                <button class="btn analyze" onclick="aviLab.startBasicFlow()">
+                                    ▶️ Basic Info Flow
+                                </button>
+                                <button class="btn secondary" onclick="aviLab.randomPickQuestion()">
+                                    🎲 Random
+                                </button>
+                                <button class="btn secondary" onclick="aviLab.startRandomFlow()">
+                                    ▶️ Random Flow
+                                </button>
                             </div>
                         </div>
+
+                        <div id="basic-flow" class="basic-flow" style="display:none; margin:12px 0; padding:12px; border:1px solid #e1e4e8; border-radius:6px; background:#fafbfc;">
+                            <div id="basic-flow-status" style="margin-bottom:8px; font-weight:600;">Flow de Información Básica</div>
+                            <div id="basic-flow-question" style="margin-bottom:8px; font-size:15px;">—</div>
+                            <div class="basic-flow-actions">
+                                <button class="btn secondary" onclick="aviLab.toggleRecording()">🎙️ Grabar/Detener</button>
+                                <button class="btn primary" onclick="aviLab.analyzeCurrentBasicQuestion()">🎤 Analizar y Guardar</button>
+                                <button class="btn secondary" onclick="aviLab.skipCurrentBasicQuestion()">⏭️ Saltar</button>
+                                <button class="btn" onclick="aviLab.finishBasicFlow()">✅ Terminar</button>
+                            </div>
+                        </div>
+
                         <div id="questions-list" class="questions-list">
                             <!-- Questions will be populated here -->
+                        </div>
+
+                        <div id="random-flow" class="basic-flow" style="display:none; margin:12px 0; padding:12px; border:1px solid #e1e4e8; border-radius:6px; background:#fafbfc;">
+                            <div id="random-flow-status" style="margin-bottom:8px; font-weight:600;">Random Flow</div>
+                            <div id="random-flow-question" style="margin-bottom:8px; font-size:15px;">—</div>
+                            <div class="basic-flow-actions">
+                                <button class="btn secondary" onclick="aviLab.toggleRecording()">🎙️ Grabar/Detener</button>
+                                <button class="btn primary" onclick="aviLab.analyzeCurrentRandomQuestion()">🎤 Analizar y Guardar</button>
+                                <button class="btn secondary" onclick="aviLab.skipCurrentRandomQuestion()">⏭️ Saltar</button>
+                                <button class="btn" onclick="aviLab.finishRandomFlow()">✅ Terminar</button>
+                            </div>
                         </div>
                     </section>
 
@@ -193,6 +238,17 @@ class AVILabComplete {
                     <section id="voice-analysis" class="tab-content">
                         <div class="voice-analysis-section">
                             <h3>🎤 Análisis de Voz Matemático</h3>
+                            <div class="instructions" style="margin:8px 0; padding:10px; background:#f6f8fa; border:1px solid #e1e4e8; border-radius:6px;">
+                                <strong>Cómo probar:</strong>
+                                <ol style="margin:6px 0 0 16px; padding:0;">
+                                    <li>Graba o sube un archivo de audio corto (5–10s).</li>
+                                    <li>Ve a la pestaña “Questions”, elige una pregunta y pulsa “Analizar Voz”.</li>
+                                    <li>Revisa score, métricas y flags en este panel.</li>
+                                </ol>
+                                <div style="margin-top:6px; font-size:12px; color:#555;">
+                                    Modo actual: usa el botón del header para cambiar entre Offline (motor local) y Online (BFF).
+                                </div>
+                            </div>
                             
                             <div class="recording-controls">
                                 <button id="record-btn" class="btn primary" onclick="aviLab.toggleRecording()">
@@ -282,6 +338,9 @@ class AVILabComplete {
                     <section id="benchmark" class="tab-content">
                         <div class="benchmark-section">
                             <h3>📈 Benchmark Dashboard</h3>
+                            <div class="benchmark-controls" style="margin:8px 0;">
+                                <button class="btn secondary" onclick="aviLab.exportBenchmarkCSV()">🧾 Export CSV</button>
+                            </div>
                             
                             <div id="benchmark-dashboard" class="benchmark-dashboard">
                                 <!-- Benchmark visualizations will appear here -->
@@ -317,6 +376,24 @@ class AVILabComplete {
                 if (e.target.files.length > 0) {
                     this.processUploadedAudio(e.target.files[0]);
                 }
+            });
+        }
+
+        // Toggle Offline/Online mode + API key prompt when going Online
+        const toggleBtn = document.getElementById('toggle-bff-mode');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', async () => {
+                this.config.offlineMode = !this.config.offlineMode;
+                if (!this.config.offlineMode) {
+                    // Prompt for API key if not present
+                    const existing = window.localStorage.getItem('AVI_LAB_OPENAI_KEY') || '';
+                    if (!existing) {
+                        const key = window.prompt('Ingresa tu OPENAI_API_KEY para usar Whisper (se guarda localmente):', '') || '';
+                        if (key) window.localStorage.setItem('AVI_LAB_OPENAI_KEY', key);
+                    }
+                }
+                try { window.localStorage.setItem('AVI_LAB_OFFLINE_MODE', String(this.config.offlineMode)); } catch {}
+                await this.updateBFFIndicator();
             });
         }
 
@@ -360,9 +437,11 @@ class AVILabComplete {
             case 'questions':
                 this.loadQuestionsContent();
                 break;
+            case 'voice':
             case 'voice-analysis':
                 this.loadVoiceAnalysisContent();
                 break;
+            case 'hase':
             case 'hase-calculator':
                 this.loadHASECalculatorContent();
                 break;
@@ -379,54 +458,60 @@ class AVILabComplete {
      * QUESTIONS MODULE
      */
     loadQuestionsContent() {
-        const questionsList = document.getElementById('questions-list');
-        if (!questionsList) return;
+        const container = document.getElementById('questionsContainer') || document.getElementById('questions-list');
+        const filter = document.getElementById('categoryFilter') || document.getElementById('question-category');
+        if (!container || !filter) return;
 
-        // Mock questions data (would be loaded from ALL_AVI_QUESTIONS)
-        const mockQuestions = [
-            {
-                id: 'ingresos_promedio_diarios',
-                category: 'daily_operation',
-                question: '¿Cuáles son sus ingresos promedio diarios?',
-                weight: 10,
-                riskImpact: 'HIGH',
-                stressLevel: 5
-            },
-            {
-                id: 'gastos_mordidas_cuotas',
-                category: 'operational_costs',
-                question: '¿Cuánto paga de cuotas o "apoyos" a la semana?',
-                weight: 10,
-                riskImpact: 'HIGH',
-                stressLevel: 5
-            },
-            {
-                id: 'prestamistas_informales',
-                category: 'credit_history',
-                question: '¿Ha pedido dinero prestado a prestamistas o agiotistas?',
-                weight: 9,
-                riskImpact: 'HIGH',
-                stressLevel: 5
-            }
+        // Build category options dynamically from AVI_CONFIG (aligned with MAIN)
+        const cfg = window.AVI_CONFIG || {};
+        const byCat = (cfg.questions_by_category) || {};
+        const categories = [
+          { key: 'all', label: `🔍 All Categories (${window.ALL_AVI_QUESTIONS?.length || 0})` },
+          { key: 'basic_info', label: `🧾 Basic Info (${byCat.basic_info || 0})` },
+          { key: 'daily_operation', label: `💰 Daily Operation (${byCat.daily_operation || 0})` },
+          { key: 'operational_costs', label: `📊 Operational Costs (${byCat.operational_costs || 0})` },
+          { key: 'business_structure', label: `🏗️ Business Structure (${byCat.business_structure || 0})` },
+          { key: 'assets_patrimony', label: `🏠 Assets & Patrimony (${byCat.assets_patrimony || 0})` },
+          { key: 'credit_history', label: `📈 Credit History (${byCat.credit_history || 0})` },
+          { key: 'payment_intention', label: `💳 Payment Intention (${byCat.payment_intention || 0})` },
+          { key: 'risk_evaluation', label: `⚠️ Risk Evaluation (${byCat.risk_evaluation || 0})` }
         ];
 
-        questionsList.innerHTML = mockQuestions.map(q => `
-            <div class="question-card" data-question-id="${q.id}">
-                <div class="question-header">
-                    <span class="question-weight">Peso: ${q.weight}</span>
-                    <span class="question-risk risk-${q.riskImpact.toLowerCase()}">${q.riskImpact}</span>
-                    <span class="question-stress">Estrés: ${q.stressLevel}/5</span>
-                </div>
-                <div class="question-text">${q.question}</div>
-                <div class="question-actions">
-                    <button class="btn secondary" onclick="aviLab.testQuestion('${q.id}')">
-                        🧪 Probar
-                    </button>
-                    <button class="btn primary" onclick="aviLab.analyzeQuestion('${q.id}')">
-                        🎤 Analizar Voz
-                    </button>
-                </div>
+        if (!filter.dataset || !filter.dataset.populated) {
+          filter.innerHTML = categories.map(c => `<option value="${c.key}">${c.label}</option>`).join('');
+          if (filter.dataset) filter.dataset.populated = 'true';
+          filter.addEventListener('change', () => this.renderQuestionsList());
+        }
+
+        this.renderQuestionsList();
+    }
+
+    renderQuestionsList() {
+        const container = document.getElementById('questionsContainer') || document.getElementById('questions-list');
+        const filter = document.getElementById('categoryFilter') || document.getElementById('question-category');
+        if (!container || !filter) return;
+        const all = Array.isArray(window.ALL_AVI_QUESTIONS) ? window.ALL_AVI_QUESTIONS : [];
+        const cat = filter.value || 'all';
+        const list = cat === 'all' ? all : all.filter(q => q.category === cat);
+        const audioReady = !!this.state.currentAudio;
+
+        container.innerHTML = list.map(q => `
+          <div class="question-card" data-question-id="${q.id}">
+            <div class="question-header">
+              <span class="question-weight">Peso: ${q.weight ?? '-'}</span>
+              <span class="question-risk risk-${(q.riskImpact||'LOW').toLowerCase()}">${q.riskImpact || ''}</span>
+              <span class="question-stress">Estrés: ${q.stressLevel ?? '-'} / 5</span>
+              <span class="audio-indicator ${audioReady ? 'ready' : 'not-ready'}" style="margin-left:8px; font-size:12px;">
+                ${audioReady ? '🎧 Audio listo' : '⏺️ Sin audio'}
+              </span>
             </div>
+            <div class="question-text">${q.question}</div>
+            <div class="question-actions">
+              <button class="btn secondary" onclick="aviLab.toggleRecording()">🎙️ Grabar</button>
+              <button class="btn secondary" onclick="aviLab.testQuestion('${q.id}')">🧪 Probar</button>
+              <button class="btn primary" onclick="aviLab.analyzeQuestion('${q.id}')">🎤 Analizar Voz</button>
+            </div>
+          </div>
         `).join('');
     }
 
@@ -480,28 +565,21 @@ class AVILabComplete {
 
     processRecording() {
         const audioBlob = new Blob(this.state.audioChunks, { type: 'audio/wav' });
-        this.analyzeAudioBlob(audioBlob);
+        // Guardar como File para evaluación posterior
+        this.state.currentAudio = new File([audioBlob], `record_${Date.now()}.wav`, { type: 'audio/wav' });
+        const kb = Math.round((this.state.currentAudio.size / 1024) * 10) / 10;
+        this.updateStatus(`🎧 Audio grabado (${kb} KB). Selecciona una pregunta y pulsa "Analizar Voz".`, 'info');
+        // Refrescar lista para mostrar indicador
+        try { this.renderQuestionsList(); } catch {}
     }
 
     async analyzeAudioBlob(audioBlob) {
         try {
-            // Mock voice analysis (would use voiceEngine.computeVoiceScore)
-            const mockAnalysis = {
-                success: true,
-                score: 750,
-                decision: 'GO',
-                metrics: {
-                    latencyIndex: 0.3,
-                    pitchVariability: 0.4,
-                    disfluencyRate: 0.2,
-                    energyStability: 0.8,
-                    honestyLexicon: 0.7
-                },
-                flags: [],
-                processingTime: '245ms'
-            };
-
-            this.displayVoiceResults(mockAnalysis);
+            // Solo prepara el audio; el análisis se dispara por pregunta
+            this.state.currentAudio = new File([audioBlob], `record_${Date.now()}.wav`, { type: 'audio/wav' });
+            const kb = Math.round((this.state.currentAudio.size / 1024) * 10) / 10;
+            this.displayVoiceResults({ info: `Audio listo (${kb} KB)` });
+            try { this.renderQuestionsList(); } catch {}
         } catch (error) {
             console.error('Voice analysis failed:', error);
             this.showError('Error en el análisis de voz');
@@ -513,43 +591,65 @@ class AVILabComplete {
         if (!resultsDiv) return;
 
         resultsDiv.style.display = 'block';
+        const voiceScore01 = typeof analysis.voiceScore === 'number' ? analysis.voiceScore : (typeof analysis.score === 'number' ? (analysis.score/1000) : null);
+        const score1000 = voiceScore01 !== null ? Math.round(voiceScore01 * 1000) : (analysis.score ?? '-');
+        const decision = analysis.decision || '-';
+        const m = analysis.metrics || {
+          latencyIndex: analysis.latencyIndex,
+          pitchVariability: analysis.pitchVar,
+          disfluencyRate: analysis.disfluencyRate,
+          energyStability: analysis.energyStability,
+          honestyLexicon: analysis.honestyLexicon
+        };
+        const info = analysis.info ? `<div class="info">${analysis.info}</div>` : '';
         resultsDiv.innerHTML = `
             <div class="voice-result-card">
                 <h4>🎤 Resultado del Análisis</h4>
-                <div class="score-display">
-                    <span class="score">${analysis.score}</span>
-                    <span class="score-suffix">/1000</span>
-                </div>
-                <div class="decision decision-${analysis.decision}">${analysis.decision}</div>
-                
+                ${score1000 ? `<div class="score-display"><span class="score">${score1000}</span><span class="score-suffix">/1000</span></div>` : ''}
+                ${decision !== '-' ? `<div class="decision decision-${decision}">${decision}</div>` : ''}
+                ${m ? `
                 <div class="metrics">
-                    <div class="metric">
-                        <label>Latencia:</label>
-                        <span>${(analysis.metrics.latencyIndex * 100).toFixed(1)}%</span>
-                    </div>
-                    <div class="metric">
-                        <label>Variabilidad Pitch:</label>
-                        <span>${(analysis.metrics.pitchVariability * 100).toFixed(1)}%</span>
-                    </div>
-                    <div class="metric">
-                        <label>Disfluencia:</label>
-                        <span>${(analysis.metrics.disfluencyRate * 100).toFixed(1)}%</span>
-                    </div>
-                    <div class="metric">
-                        <label>Estabilidad:</label>
-                        <span>${(analysis.metrics.energyStability * 100).toFixed(1)}%</span>
-                    </div>
-                    <div class="metric">
-                        <label>Honestidad:</label>
-                        <span>${(analysis.metrics.honestyLexicon * 100).toFixed(1)}%</span>
-                    </div>
-                </div>
+                    <div class="metric"><label>Latencia:</label> <span>${m.latencyIndex !== undefined ? (m.latencyIndex*100).toFixed(1)+'%' : '-'}</span></div>
+                    <div class="metric"><label>Variabilidad Pitch:</label> <span>${(m.pitchVariability ?? m.pitchVar) !== undefined ? (((m.pitchVariability ?? m.pitchVar)*100).toFixed(1)+'%') : '-'}</span></div>
+                    <div class="metric"><label>Disfluencia:</label> <span>${m.disfluencyRate !== undefined ? (m.disfluencyRate*100).toFixed(1)+'%' : '-'}</span></div>
+                    <div class="metric"><label>Estabilidad:</label> <span>${m.energyStability !== undefined ? (m.energyStability*100).toFixed(1)+'%' : '-'}</span></div>
+                    <div class="metric"><label>Honestidad:</label> <span>${m.honestyLexicon !== undefined ? (m.honestyLexicon*100).toFixed(1)+'%' : '-'}</span></div>
+                </div>` : ''}
+                <div class="flags">${(analysis.flags || []).map(f => `<span class="flag">${f}</span>`).join('') || 'Sin banderas'}</div>
+                ${analysis.processingTime ? `<div class="processing-time">Procesado en: ${analysis.processingTime}</div>` : ''}
+                ${info}
+            </div>`;
+    }
 
-                <div class="processing-time">
-                    Procesado en: ${analysis.processingTime}
-                </div>
-            </div>
-        `;
+    async updateBFFIndicator() {
+        const el = document.getElementById('bff-indicator');
+        const toggleBtn = document.getElementById('toggle-bff-mode');
+        if (!el) return;
+        const hasKey = !!window.localStorage.getItem('AVI_LAB_OPENAI_KEY');
+        const keyNote = hasKey ? ' · 🔐 API Key' : ' · 🔓 Sin API Key';
+        if (this.config.offlineMode) {
+            el.innerText = '🟡 BFF: Offline (Local Engine)' + keyNote;
+            if (toggleBtn) toggleBtn.innerText = '🔁 Cambiar a Online';
+            this.updateStatus('Modo Offline (motor local)', 'warning');
+            return;
+        }
+        try {
+            this.updateStatus('Verificando conexión con BFF...', 'info');
+            const res = await fetch(`${this.config.bffUrl}/health`, { method: 'GET' });
+            if (res.ok) {
+                el.innerText = '🟢 BFF: Online' + keyNote;
+                if (toggleBtn) toggleBtn.innerText = '🔁 Cambiar a Offline';
+                this.updateStatus('Conectado a BFF (Online)', 'info');
+            } else {
+                el.innerText = '🔴 BFF: No disponible' + keyNote;
+                if (toggleBtn) toggleBtn.innerText = '🔁 Cambiar a Offline';
+                this.updateStatus('BFF no disponible, usa modo Offline', 'error');
+            }
+        } catch (e) {
+            el.innerText = '🔴 BFF: No disponible' + keyNote;
+            if (toggleBtn) toggleBtn.innerText = '🔁 Cambiar a Offline';
+            this.updateStatus('BFF no disponible, usa modo Offline', 'error');
+        }
     }
 
     /**
@@ -706,7 +806,7 @@ class AVILabComplete {
     }
 
     updateRecordingUI() {
-        const recordBtn = document.getElementById('record-btn');
+        const recordBtn = document.getElementById('recordBtn') || document.getElementById('record-btn');
         const recordingStatus = document.getElementById('recording-status');
         
         if (this.state.isRecording) {
@@ -775,12 +875,111 @@ class AVILabComplete {
         console.log('Testing question:', questionId);
     }
 
-    analyzeQuestion(questionId) {
-        console.log('Analyzing question:', questionId);
+    async analyzeQuestion(questionId) {
+        if (!this.state.currentAudio) {
+            this.showError('No hay audio disponible. Graba o sube un archivo.');
+            return;
+        }
+        this.state.lastQuestionId = questionId;
+        if (this.config.offlineMode || !this.config.bffUrl) {
+            try {
+                if (!window.voiceEngine || !window.voiceEngine.computeVoiceScore) {
+                    throw new Error('voiceEngine no disponible');
+                }
+                this.updateStatus(`Analizando (local) ${questionId}...`, 'info');
+                const features = await this.buildApproxFeatures(this.state.currentAudio);
+                const res = window.voiceEngine.computeVoiceScore(features);
+                this.displayVoiceResults(res);
+                this.recordBenchmark(questionId, res, 'offline');
+                this.updateStatus('✅ Análisis local completado', 'info');
+            } catch (e) {
+                console.error(e);
+                this.showError('No se pudo ejecutar el análisis local');
+            }
+            return;
+        }
+        try {
+            this.updateStatus(`Analizando voz para ${questionId}...`, 'info');
+            const form = new FormData();
+            form.append('audio', this.state.currentAudio, `${questionId}.wav`);
+            form.append('questionId', questionId);
+            form.append('contextId', `lab_${Date.now()}`);
+            const headers = {};
+            const key = window.localStorage.getItem('AVI_LAB_OPENAI_KEY');
+            if (key) headers['X-OpenAI-Key'] = key;
+            const res = await fetch(`${this.config.bffUrl}/v1/voice/evaluate`, { method: 'POST', body: form, headers });
+            if (!res.ok) throw new Error(`BFF error: ${res.status}`);
+            const data = await res.json();
+            this.displayVoiceResults(data);
+            this.recordBenchmark(questionId, data, 'online');
+            this.updateStatus('✅ Análisis completado', 'info');
+        } catch (e) {
+            console.error(e);
+            this.showError('Error al analizar voz con BFF');
+        }
     }
 
     filterQuestions() {
         console.log('Filtering questions...');
+    }
+
+    // ===== Basic Info Flow (secuencial) =====
+    startBasicFlow() {
+        const list = (window.ALL_AVI_QUESTIONS || []).filter(q => q.category === 'basic_info');
+        if (!list || list.length === 0) {
+            this.updateStatus('No hay preguntas básicas disponibles', 'warning');
+            return;
+        }
+        this.basicFlow = { active: true, list, index: 0 };
+        const panel = document.getElementById('basic-flow');
+        if (panel) panel.style.display = 'block';
+        this.renderBasicFlowQuestion();
+        this.updateStatus('Flow básico iniciado', 'info');
+    }
+
+    renderBasicFlowQuestion() {
+        const q = this.basicFlow.list[this.basicFlow.index];
+        const qEl = document.getElementById('basic-flow-question');
+        const sEl = document.getElementById('basic-flow-status');
+        if (!q || !qEl || !sEl) return;
+        qEl.innerText = `(${this.basicFlow.index + 1}/${this.basicFlow.list.length}) ${q.question}`;
+        sEl.innerText = `Flow de Información Básica - Pregunta ${this.basicFlow.index + 1} de ${this.basicFlow.list.length} · Completadas: ${this.basicFlow.index}`;
+    }
+
+    async analyzeCurrentBasicQuestion() {
+        const q = this.basicFlow.list[this.basicFlow.index];
+        if (!q) return;
+        await this.analyzeQuestion(q.id);
+        this.nextBasicQuestion();
+    }
+
+    skipCurrentBasicQuestion() {
+        const q = this.basicFlow.list[this.basicFlow.index];
+        this.updateStatus(`Pregunta omitida: ${q?.id || ''}`, 'warning');
+        // Registrar como SKIPPED en benchmark
+        if (q) {
+            const dummy = { decision: 'SKIPPED', flags: [], transcript: '' };
+            const mode = (this.config.offlineMode || !this.config.bffUrl) ? 'offline' : 'online';
+            this.recordBenchmark(q.id, dummy, mode);
+        }
+        this.nextBasicQuestion();
+    }
+
+    nextBasicQuestion() {
+        if (!this.basicFlow.active) return;
+        this.basicFlow.index += 1;
+        if (this.basicFlow.index >= this.basicFlow.list.length) {
+            this.finishBasicFlow();
+            return;
+        }
+        this.renderBasicFlowQuestion();
+    }
+
+    finishBasicFlow() {
+        this.basicFlow.active = false;
+        const panel = document.getElementById('basic-flow');
+        if (panel) panel.style.display = 'none';
+        this.updateStatus('Flow básico terminado', 'info');
     }
 
     uploadAudio() {
@@ -788,7 +987,10 @@ class AVILabComplete {
     }
 
     processUploadedAudio(file) {
-        console.log('Processing uploaded audio:', file.name);
+        this.state.currentAudio = file;
+        const kb = Math.round((file.size / 1024) * 10) / 10;
+        this.updateStatus(`📁 Audio cargado: ${file.name} (${kb} KB)`, 'info');
+        try { this.renderQuestionsList(); } catch {}
     }
 
     runIntegrationTests() {
@@ -810,6 +1012,88 @@ class AVILabComplete {
             { name: 'Algorithm Consistency', status: 'PASS', time: '15ms' },
             { name: 'Data Integrity', status: 'PASS', time: '8ms' }
         ]);
+    }
+
+    recordBenchmark(questionId, result, mode) {
+        try {
+            const latencyIndex = result.latencyIndex ?? result.metrics?.latencyIndex;
+            const pitchVar = result.pitchVar ?? result.metrics?.pitchVariability;
+            const disfluencyRate = result.disfluencyRate ?? result.metrics?.disfluencyRate;
+            const energyStability = result.energyStability ?? result.metrics?.energyStability;
+            const honestyLexicon = result.honestyLexicon ?? result.metrics?.honestyLexicon;
+            const voiceScore01 = typeof result.voiceScore === 'number' ? result.voiceScore : (typeof result.score === 'number' ? (result.score/1000) : null);
+            const q = (window.ALL_AVI_QUESTIONS || []).find(x => x.id === questionId) || {};
+            // Flow metadata
+            let randomized = false; let seed = ''; let orderIndex = '';
+            if (this.randomFlow && this.randomFlow.active) {
+                const curr = this.randomFlow.list[this.randomFlow.index];
+                if (curr && curr.id === questionId) { randomized = true; seed = this.randomFlow.seed || ''; orderIndex = String(this.randomFlow.index + 1); }
+            } else if (this.basicFlow && this.basicFlow.active) {
+                const curr = this.basicFlow.list[this.basicFlow.index];
+                if (curr && curr.id === questionId) { randomized = false; seed = ''; orderIndex = String(this.basicFlow.index + 1); }
+            }
+            const entry = {
+                ts: new Date().toISOString(),
+                questionId,
+                mode,
+                bffStatus: (this.config.offlineMode || !this.config.bffUrl) ? 'offline' : 'online',
+                voiceScore: voiceScore01,
+                decision: result.decision || '-',
+                latencyIndex,
+                pitchVar,
+                disfluencyRate,
+                energyStability,
+                honestyLexicon,
+                flags: (result.flags || []).join('|'),
+                transcript: result.transcript || '',
+                category: q.category || '',
+                randomized,
+                seed,
+                orderIndex
+            };
+            this.benchmarkData.push(entry);
+            try { window.localStorage.setItem('AVI_LAB_BENCHMARK', JSON.stringify(this.benchmarkData)); } catch {}
+        } catch (e) {
+            console.warn('Benchmark record failed:', e);
+        }
+    }
+
+    exportBenchmarkCSV() {
+        if (!this.benchmarkData || this.benchmarkData.length === 0) {
+            this.updateStatus('No hay datos de benchmark para exportar', 'warning');
+            return;
+        }
+        const headers = ['timestamp','questionId','category','mode','bffStatus','randomized','seed','orderIndex','voiceScore','decision','latencyIndex','pitchVar','disfluencyRate','energyStability','honestyLexicon','flags','transcript'];
+        const rows = this.benchmarkData.map(r => [
+            r.ts,
+            r.questionId,
+            r.category || '',
+            r.mode,
+            r.bffStatus || '',
+            r.randomized ? 'true' : 'false',
+            r.seed || '',
+            r.orderIndex || '',
+            r.voiceScore ?? '',
+            r.decision,
+            r.latencyIndex ?? '',
+            r.pitchVar ?? '',
+            r.disfluencyRate ?? '',
+            r.energyStability ?? '',
+            r.honestyLexicon ?? '',
+            (r.flags||''),
+            (r.transcript || '').replace(/\n/g,' ').replace(/\r/g,' ')
+        ]);
+        const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `avi_lab_benchmark_${Date.now()}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        this.updateStatus('📄 CSV exportado', 'info');
     }
 }
 

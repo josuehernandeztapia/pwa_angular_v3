@@ -270,10 +270,16 @@
     <!-- Audio Element -->
     <audio id="audioPlayer" controls style="display: none;"></audio>
 
-    <!-- Load complete AVI system modules -->
-    <script type="module" src="src/data/avi-questions-complete.js"></script>
-    <script type="module" src="src/services/voice-analysis-engine.js"></script>
-    <script type="module" src="src/services/hase-model.js"></script>
+    <!-- Load complete AVI system modules and expose to window for app-complete.js -->
+    <script type="module">
+      import { ALL_AVI_QUESTIONS, AVI_CONFIG } from './src/data/avi-questions-complete.js';
+      import { VoiceAnalysisEngine } from './src/services/voice-analysis-engine.js';
+      import { HASEModel } from './src/services/hase-model.js';
+      window.ALL_AVI_QUESTIONS = ALL_AVI_QUESTIONS;
+      window.AVI_CONFIG = AVI_CONFIG;
+      window.voiceEngine = new VoiceAnalysisEngine();
+      window.haseModel = new HASEModel();
+    </script>
     <script src="app-complete.js"></script>
 </body>
 </html>
