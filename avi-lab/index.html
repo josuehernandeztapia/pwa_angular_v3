@@ -33,17 +33,155 @@
             </div>
         </section>
 
-        <!-- Question Selection -->
-        <section class="question-section">
-            <h2>❓ Test Question</h2>
-            <select id="questionSelect" class="question-select">
-                <option value="ingresos_promedio_diarios">¿Cuáles son sus ingresos promedio diarios?</option>
-                <option value="gasto_diario_gasolina">¿Cuánto gasta al día en gasolina?</option>
-                <option value="gastos_mordidas_cuotas">¿Cuánto paga de cuotas o "apoyos" a la semana?</option>
-                <option value="margen_disponible_credito">¿Cuánto le queda libre mensual?</option>
-                <option value="seasonal_vulnerability">¿En qué época del año se te complica más trabajar?</option>
-            </select>
-        </section>
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="dashboard">📊 Dashboard</button>
+            <button class="tab-btn" data-tab="questions">❓ Questions</button>
+            <button class="tab-btn" data-tab="voice">🎤 Voice Lab</button>
+            <button class="tab-btn" data-tab="hase">🧮 HASE Model</button>
+            <button class="tab-btn" data-tab="testing">🧪 Test Suite</button>
+            <button class="tab-btn" data-tab="benchmark">📈 Benchmark</button>
+        </nav>
+
+        <!-- Tab Content Containers -->
+        <div class="tab-content">
+            
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-panel active">
+                <!-- Question Selection -->
+                <section class="question-section">
+                    <h2>❓ Test Question</h2>
+                    <select id="questionSelect" class="question-select">
+                        <option value="ingresos_promedio_diarios">¿Cuáles son sus ingresos promedio diarios?</option>
+                        <option value="gasto_diario_gasolina">¿Cuánto gasta al día en gasolina?</option>
+                        <option value="gastos_mordidas_cuotas">¿Cuánto paga de cuotas o "apoyos" a la semana?</option>
+                        <option value="margen_disponible_credito">¿Cuánto le queda libre mensual?</option>
+                        <option value="seasonal_vulnerability">¿En qué época del año se te complica más trabajar?</option>
+                    </select>
+                </section>
+            </div>
+
+            <!-- Questions Tab -->
+            <div id="questions" class="tab-panel">
+                <section class="questions-explorer">
+                    <h2>📋 AVI Questions Explorer (55/55 ✅)</h2>
+                    <div class="questions-controls">
+                        <select id="categoryFilter" class="filter-select">
+                            <option value="all">🔍 All Categories (55)</option>
+                            <option value="ingresos">💰 Ingresos & Operación (12)</option>
+                            <option value="gastos">📊 Gastos & Costos (10)</option>
+                            <option value="vulnerabilidades">⚠️ Vulnerabilidades (8)</option>
+                            <option value="capacidad_pago">💳 Capacidad de Pago (7)</option>
+                            <option value="resiliencia">💪 Resiliencia & Adaptación (6)</option>
+                            <option value="estructura_negocio">🏗️ Estructura de Negocio (4)</option>
+                            <option value="patrimonio_activos">🏠 Patrimonio & Activos (4)</option>
+                            <option value="historial_crediticio">📈 Historial Crediticio (4)</option>
+                        </select>
+                        <button id="testRandomBtn" class="btn secondary">🎲 Test Random</button>
+                    </div>
+                    <div id="questionsContainer" class="questions-grid"></div>
+                </section>
+            </div>
+
+            <!-- Voice Lab Tab -->
+            <div id="voice" class="tab-panel">
+                <section class="voice-lab">
+                    <h2>🎤 Voice Analysis Laboratory</h2>
+                    <div class="voice-metrics-display">
+                        <h3>📊 Mathematical Algorithm Visualization</h3>
+                        <div class="algorithm-formula">
+                            <code>voiceScore = w₁×(1-L) + w₂×(1-P) + w₃×(1-D) + w₄×E + w₅×H</code>
+                        </div>
+                        <div class="weights-display">
+                            <span class="weight">w₁=0.25 (Latency)</span>
+                            <span class="weight">w₂=0.20 (Pitch Var)</span>
+                            <span class="weight">w₃=0.15 (Disfluency)</span>
+                            <span class="weight">w₄=0.20 (Energy)</span>
+                            <span class="weight">w₅=0.20 (Honesty)</span>
+                        </div>
+                        <div id="voiceMetricsChart" class="metrics-chart"></div>
+                        <button id="generateMockDataBtn" class="btn secondary">🧪 Generate Mock Analysis</button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- HASE Model Tab -->
+            <div id="hase" class="tab-panel">
+                <section class="hase-calculator">
+                    <h2>🧮 HASE Model Calculator</h2>
+                    <div class="hase-info">
+                        <p><strong>HASE Formula:</strong> Historical (30%) + Geographic (20%) + Voice/AVI (50%)</p>
+                    </div>
+                    <div class="hase-inputs">
+                        <div class="input-group">
+                            <label>📊 Historical Score (0-1000):</label>
+                            <input type="range" id="historicalSlider" min="0" max="1000" value="650">
+                            <span id="historicalValue">650</span>
+                        </div>
+                        <div class="input-group">
+                            <label>🗺️ Geographic Score (0-1000):</label>
+                            <input type="range" id="geographicSlider" min="0" max="1000" value="500">
+                            <span id="geographicValue">500</span>
+                        </div>
+                        <div class="input-group">
+                            <label>🎤 Voice Score (0-1000):</label>
+                            <input type="range" id="voiceSlider" min="0" max="1000" value="750">
+                            <span id="voiceValue">750</span>
+                        </div>
+                    </div>
+                    <div class="hase-results">
+                        <div class="hase-score-display">
+                            <span id="haseScore">663</span>/1000
+                        </div>
+                        <div id="haseDecision" class="decision REVIEW">REVIEW</div>
+                        <div id="haseRisk" class="risk-level">MEDIUM RISK</div>
+                    </div>
+                    <button id="generateMockProfileBtn" class="btn secondary">👤 Generate Mock Profile</button>
+                </section>
+            </div>
+
+            <!-- Testing Suite Tab -->
+            <div id="testing" class="tab-panel">
+                <section class="testing-suite">
+                    <h2>🧪 AVI Testing Suite</h2>
+                    <div class="testing-controls">
+                        <button id="runVoiceTestBtn" class="btn primary">🎤 Run Voice Algorithm Test</button>
+                        <button id="runHASETestBtn" class="btn primary">🧮 Run HASE Model Test</button>
+                        <button id="runQuestionsTestBtn" class="btn primary">❓ Run Questions Test</button>
+                        <button id="runBenchmarkTestBtn" class="btn primary">📊 Run Benchmark Test</button>
+                    </div>
+                    <div id="testResults" class="test-results"></div>
+                </section>
+            </div>
+
+            <!-- Benchmark Tab -->
+            <div id="benchmark" class="tab-panel">
+                <section class="benchmark-dashboard">
+                    <h2>📈 Benchmark & Analytics</h2>
+                    <div class="benchmark-controls">
+                        <button id="clearBenchmarkBtn" class="btn danger">🗑️ Clear All Data</button>
+                        <button id="exportBenchmarkBtn" class="btn secondary">💾 Export CSV</button>
+                        <button id="generateReportBtn" class="btn secondary">📄 Generate Report</button>
+                    </div>
+                    <div class="benchmark-stats">
+                        <div class="stat-card">
+                            <h3>Total Tests</h3>
+                            <span id="totalTests">0</span>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Avg Score</h3>
+                            <span id="avgScore">-</span>
+                        </div>
+                        <div class="stat-card">
+                            <h3>GO Rate</h3>
+                            <span id="goRate">-</span>
+                        </div>
+                    </div>
+                    <div id="benchmarkChart" class="benchmark-chart"></div>
+                </section>
+            </div>
+
+        </div> <!-- End tab-content -->
 
         <!-- Analysis Button -->
         <section class="analyze-section">
@@ -132,6 +270,10 @@
     <!-- Audio Element -->
     <audio id="audioPlayer" controls style="display: none;"></audio>
 
-    <script src="app.js"></script>
+    <!-- Load complete AVI system modules -->
+    <script type="module" src="src/data/avi-questions-complete.js"></script>
+    <script type="module" src="src/services/voice-analysis-engine.js"></script>
+    <script type="module" src="src/services/hase-model.js"></script>
+    <script src="app-complete.js"></script>
 </body>
 </html>

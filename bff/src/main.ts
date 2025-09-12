@@ -6,9 +6,15 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  // CORS para tu PWA
+  // CORS para PWA y AVI_LAB
   app.enableCors({
-    origin: process.env.PWA_URL || 'http://localhost:4200',
+    origin: [
+      'http://localhost:4200',
+      'http://127.0.0.1:4200',
+      'http://localhost:8080',
+      'http://127.0.0.1:8080',
+      process.env.PWA_URL || 'http://localhost:4200'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-Id'],

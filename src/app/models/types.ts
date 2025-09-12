@@ -525,10 +525,10 @@ export enum AVICategory {
     DAILY_OPERATION = 'daily_operation',
     OPERATIONAL_COSTS = 'operational_costs', 
     BUSINESS_STRUCTURE = 'business_structure',
-    ASSETS = 'assets',
+    ASSETS_PATRIMONY = 'assets_patrimony',
     CREDIT_HISTORY = 'credit_history',
     PAYMENT_INTENTION = 'payment_intention',
-    RISK_ASSESSMENT = 'risk_assessment'
+    RISK_EVALUATION = 'risk_evaluation'
 }
 
 export enum QuestionType {

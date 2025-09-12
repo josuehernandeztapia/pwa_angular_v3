@@ -210,6 +210,108 @@ interface VoiceEvaluationStore {
   fallback?: boolean;
 }
 
+// ===== NEW BFF VOICE ANALYSIS INTERFACES =====
+interface VoiceAnalyzeRequest {
+  questionId: string;
+  latencySec: number;
+  answerDurationSec: number;
+  pitchSeriesHz: number[];
+  energySeries: number[];
+  words: string[];
+  contextId: string;
+}
+
+interface VoiceAnalyzeResponse {
+  success: boolean;
+  score: number;
+  decision: 'GO' | 'NO-GO' | 'REVIEW';
+  metrics: {
+    latencyIndex: number;
+    pitchVariability: number; 
+    disfluencyRate: number;
+    energyStability: number;
+    honestyLexicon: number;
+  };
+  flags: string[];
+  processingTime: string;
+  fallback?: boolean;
+}
+
+interface VoiceEvaluateResponse {
+  success: boolean;
+  transcription: string;
+  confidence: number;
+  voiceAnalysis: VoiceAnalyzeResponse;
+  saved: boolean;
+  evaluationId?: string;
+}
+
+// ===== STANDARDIZED RESILIENCE QUESTIONNAIRE =====
+interface ResilienceQuestion {
+  id: string;
+  text: string;
+  category: 'stress_management' | 'financial_pressure' | 'route_challenges' | 'family_support';
+  expectedPattern: {
+    maxLatencyMs: number;
+    keywordIndicators: string[];
+    riskKeywords: string[];
+  };
+}
+
+const RESILIENCE_QUESTIONS: ResilienceQuestion[] = [
+  {
+    id: 'emergency_funds',
+    text: '¿Qué hace cuando no tiene dinero para la gasolina un día?',
+    category: 'financial_pressure',
+    expectedPattern: {
+      maxLatencyMs: 3000,
+      keywordIndicators: ['ahorro', 'familia', 'préstamo', 'vender'],
+      riskKeywords: ['no_se', 'pedir_prestado', 'empeñar', 'no_tengo']
+    }
+  },
+  {
+    id: 'route_conflict',
+    text: '¿Cómo maneja cuando hay conflictos con otros conductores en su ruta?',
+    category: 'stress_management', 
+    expectedPattern: {
+      maxLatencyMs: 2500,
+      keywordIndicators: ['hablar', 'dialogo', 'autoridad', 'evito'],
+      riskKeywords: ['pelear', 'confronto', 'no_me_dejo', 'violencia']
+    }
+  },
+  {
+    id: 'payment_pressure',
+    text: '¿Qué siente cuando le exigen "cuotas" o "apoyos" extra?',
+    category: 'stress_management',
+    expectedPattern: {
+      maxLatencyMs: 4000,
+      keywordIndicators: ['normal', 'parte_del_trabajo', 'necesario'],
+      riskKeywords: ['injusto', 'corrupcion', 'no_deberia', 'abuso']
+    }
+  },
+  {
+    id: 'income_variation',
+    text: '¿Cómo se organiza cuando los ingresos bajan mucho por temporadas?',
+    category: 'financial_pressure',
+    expectedPattern: {
+      maxLatencyMs: 3500,
+      keywordIndicators: ['planear', 'ahorrar', 'trabajar_mas', 'otros_ingresos'],
+      riskKeywords: ['pedir_prestado', 'no_se', 'me_endeudo', 'vender_cosas']
+    }
+  },
+  // 8 more questions...
+  {
+    id: 'family_support',
+    text: '¿Su familia entiende los riesgos del transporte público?',
+    category: 'family_support',
+    expectedPattern: {
+      maxLatencyMs: 2000,
+      keywordIndicators: ['entienden', 'apoyan', 'saben', 'comprenden'],
+      riskKeywords: ['no_entienden', 'se_preocupan_mucho', 'quieren_que_deje']
+    }
+  }
+];
+
 interface ResilienceSummary {
   voiceResilienceScore: number;    // 0.0-1.0
   finalDecision: 'GO' | 'NO-GO' | 'REVIEW';
@@ -2072,5 +2174,308 @@ export class VoiceValidationService {
       ],
       processing_completed_at: new Date().toISOString()
     };
+  }
+
+  // ===== NEW BFF VOICE ANALYSIS METHODS =====
+
+  /**
+   * Analyze voice features using BFF mathematical algorithms
+   */
+  async analyzeVoiceFeatures(request: VoiceAnalyzeRequest): Promise<VoiceAnalyzeResponse> {
+    try {
+      const response = await this.http.post<VoiceAnalyzeResponse>(
+        `${this.apiConfig.getBffUrl()}/v1/voice/analyze`, 
+        request,
+        {
+          headers: {
+            'Authorization': `Bearer ${this.getAuthToken()}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      ).toPromise();
+
+      return response!;
+    } catch (error) {
+      console.warn('BFF voice analysis failed, using fallback', error);
+      return this.fallbackVoiceAnalysis(request);
+    }
+  }
+
+  /**
+   * Complete audio evaluation: transcribe + analyze + save
+   */
+  async evaluateAudioComplete(audioFile: File, questionId: string): Promise<VoiceEvaluateResponse> {
+    try {
+      const formData = new FormData();
+      formData.append('audio', audioFile);
+      formData.append('questionId', questionId);
+      formData.append('contextId', `avi_${Date.now()}`);
+
+      const response = await this.http.post<VoiceEvaluateResponse>(
+        `${this.apiConfig.getBffUrl()}/v1/voice/evaluate-audio`,
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${this.getAuthToken()}`
+          }
+        }
+      ).toPromise();
+
+      return response!;
+    } catch (error) {
+      console.error('BFF audio evaluation failed', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Process resilience questionnaire with voice pattern validation
+   */
+  async processResilienceQuestion(questionId: string, audioResponse: Blob): Promise<VoiceValidationResult> {
+    const question = RESILIENCE_QUESTIONS.find(q => q.id === questionId);
+    if (!question) {
+      throw new Error(`Resilience question not found: ${questionId}`);
+    }
+
+    try {
+      // Convert Blob to File
+      const audioFile = new File([audioResponse], `${questionId}.wav`, { type: 'audio/wav' });
+      
+      // Get complete evaluation from BFF
+      const evaluation = await this.evaluateAudioComplete(audioFile, questionId);
+      
+      // Analyze resilience patterns
+      const resilienceAnalysis = this.analyzeResiliencePatterns(
+        question, 
+        evaluation.transcription, 
+        evaluation.voiceAnalysis
+      );
+
+      // Store for session tracking
+      this.storeVoiceEvaluation({
+        questionId,
+        voiceScore: evaluation.voiceAnalysis.score,
+        flags: evaluation.voiceAnalysis.flags,
+        decision: evaluation.voiceAnalysis.decision,
+        timestamp: Date.now(),
+        fallback: evaluation.voiceAnalysis.fallback
+      });
+
+      // Convert to VoiceValidationResult format
+      return {
+        session_id: `resilience_${Date.now()}`,
+        transcript: evaluation.transcription,
+        compliance_score: evaluation.voiceAnalysis.score * 100, // Convert to 0-100
+        questions_asked: [questionId],
+        questions_missing: [],
+        risk_flags: resilienceAnalysis.riskFlags,
+        coherence_analysis: {
+          overall_score: evaluation.confidence,
+          cross_validation_score: evaluation.voiceAnalysis.metrics.honestyLexicon,
+          temporal_consistency: evaluation.voiceAnalysis.metrics.latencyIndex,
+          detail_specificity: evaluation.voiceAnalysis.metrics.energyStability,
+          inconsistencies: []
+        },
+        digital_stamps: [{
+          stamp_type: 'questions_completed',
+          timestamp: new Date().toISOString(),
+          valid: evaluation.voiceAnalysis.decision !== 'NO-GO',
+          evidence_hash: evaluation.evaluationId || 'local_hash'
+        }],
+        processing_completed_at: new Date().toISOString()
+      };
+
+    } catch (error) {
+      console.error('Resilience question processing failed', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get resilience questionnaire
+   */
+  getResilienceQuestions(): ResilienceQuestion[] {
+    return RESILIENCE_QUESTIONS;
+  }
+
+  /**
+   * Calculate overall resilience summary
+   */
+  calculateResilienceSummary(): ResilienceSummary {
+    const storedEvaluations = this.getStoredVoiceEvaluations();
+    const resilienceEvaluations = storedEvaluations.filter(eval => 
+      RESILIENCE_QUESTIONS.some(q => q.id === eval.questionId)
+    );
+
+    if (resilienceEvaluations.length === 0) {
+      return {
+        voiceResilienceScore: 0,
+        finalDecision: 'REVIEW',
+        reviewCount: 0,
+        noGoCount: 0,
+        goCount: 0,
+        totalQuestions: 0,
+        humanReviewRequired: true,
+        criticalFlags: ['no_evaluations_completed']
+      };
+    }
+
+    // Calculate scores and decisions
+    const decisions = resilienceEvaluations.map(eval => eval.decision);
+    const goCount = decisions.filter(d => d === 'GO').length;
+    const reviewCount = decisions.filter(d => d === 'REVIEW').length;
+    const noGoCount = decisions.filter(d => d === 'NO-GO').length;
+    
+    const averageScore = resilienceEvaluations.reduce((sum, eval) => sum + eval.voiceScore, 0) / resilienceEvaluations.length;
+    const voiceResilienceScore = averageScore / 1000; // Convert to 0-1 scale
+
+    // Determine final decision based on HASE model rules
+    let finalDecision: 'GO' | 'NO-GO' | 'REVIEW' = 'REVIEW';
+    const criticalFlags: string[] = [];
+
+    if (noGoCount >= 2) {
+      finalDecision = 'NO-GO';
+      criticalFlags.push('multiple_no_go_responses');
+    } else if (voiceResilienceScore >= 0.8 && noGoCount === 0) {
+      finalDecision = 'GO';
+    } else if (voiceResilienceScore >= 0.6 && noGoCount <= 1) {
+      finalDecision = 'REVIEW';
+    } else {
+      finalDecision = 'NO-GO';
+      criticalFlags.push('low_resilience_score');
+    }
+
+    // Check for critical flags
+    resilienceEvaluations.forEach(eval => {
+      if (eval.flags.includes('high_stress') || eval.flags.includes('evasion_detected')) {
+        criticalFlags.push(`critical_pattern_${eval.questionId}`);
+      }
+    });
+
+    return {
+      voiceResilienceScore,
+      finalDecision,
+      reviewCount,
+      noGoCount,
+      goCount,
+      totalQuestions: resilienceEvaluations.length,
+      humanReviewRequired: finalDecision === 'REVIEW' || criticalFlags.length > 0,
+      criticalFlags
+    };
+  }
+
+  // ===== PRIVATE HELPER METHODS =====
+
+  private fallbackVoiceAnalysis(request: VoiceAnalyzeRequest): VoiceAnalyzeResponse {
+    // Heuristic fallback when BFF is unavailable
+    const transcription = request.words.join(' ');
+    
+    // Simple heuristic scoring
+    let score = 0.7; // Base score
+    
+    // Latency penalty
+    if (request.latencySec > 5) score -= 0.2;
+    if (request.latencySec < 0.5) score -= 0.1;
+    
+    // Disfluency detection
+    const hesitationWords = ['eh', 'um', 'este', 'pues', 'bueno'];
+    const disfluencyCount = request.words.filter(word => 
+      hesitationWords.includes(word.toLowerCase())
+    ).length;
+    score -= (disfluencyCount / request.words.length) * 0.3;
+
+    // Risk keywords
+    const riskKeywords = ['no_se', 'no_recuerdo', 'tal_vez', 'creo_que'];
+    const riskCount = request.words.filter(word =>
+      riskKeywords.includes(word.toLowerCase())  
+    ).length;
+    score -= (riskCount / request.words.length) * 0.2;
+
+    const finalScore = Math.max(0, Math.min(1, score)) * 1000;
+    let decision: 'GO' | 'NO-GO' | 'REVIEW' = 'REVIEW';
+    
+    if (finalScore >= 800) decision = 'GO';
+    else if (finalScore < 500) decision = 'NO-GO';
+
+    const flags: string[] = [];
+    if (request.latencySec > 5) flags.push('high_latency');
+    if (disfluencyCount > 2) flags.push('high_disfluency');
+    if (riskCount > 0) flags.push('uncertainty_detected');
+
+    return {
+      success: true,
+      score: Math.round(finalScore),
+      decision,
+      metrics: {
+        latencyIndex: Math.min(1, request.latencySec / 5),
+        pitchVariability: 0.5, // Mock data
+        disfluencyRate: disfluencyCount / request.words.length,
+        energyStability: 0.7, // Mock data  
+        honestyLexicon: 1 - (riskCount / request.words.length)
+      },
+      flags,
+      processingTime: '150ms',
+      fallback: true
+    };
+  }
+
+  private analyzeResiliencePatterns(question: ResilienceQuestion, transcription: string, voiceAnalysis: VoiceAnalyzeResponse) {
+    const riskFlags: RiskFlag[] = [];
+    
+    // Check for expected patterns
+    const words = transcription.toLowerCase().split(' ');
+    
+    // Risk keyword detection
+    const foundRiskKeywords = question.expectedPattern.riskKeywords.filter(keyword =>
+      words.some(word => word.includes(keyword))
+    );
+
+    if (foundRiskKeywords.length > 0) {
+      riskFlags.push({
+        type: 'resilience_concern',
+        severity: 'high',
+        description: `Risk keywords detected: ${foundRiskKeywords.join(', ')}`,
+        evidence: transcription,
+        timestamp_in_audio: 0
+      });
+    }
+
+    // Voice pattern analysis
+    if (voiceAnalysis.metrics.latencyIndex > 0.8) {
+      riskFlags.push({
+        type: 'evasion',
+        severity: 'medium', 
+        description: 'High response latency indicates potential evasion',
+        evidence: `Response time: ${voiceAnalysis.metrics.latencyIndex}`,
+        timestamp_in_audio: 0
+      });
+    }
+
+    if (voiceAnalysis.metrics.disfluencyRate > 0.3) {
+      riskFlags.push({
+        type: 'nervousness',
+        severity: 'medium',
+        description: 'High disfluency rate indicates stress/nervousness', 
+        evidence: `Disfluency rate: ${voiceAnalysis.metrics.disfluencyRate}`,
+        timestamp_in_audio: 0
+      });
+    }
+
+    return { riskFlags };
+  }
+
+  private storeVoiceEvaluation(evaluation: VoiceEvaluationStore): void {
+    const stored = this.getStoredVoiceEvaluations();
+    stored.push(evaluation);
+    localStorage.setItem('voice_evaluations_session', JSON.stringify(stored));
+  }
+
+  private getStoredVoiceEvaluations(): VoiceEvaluationStore[] {
+    const stored = localStorage.getItem('voice_evaluations_session');
+    return stored ? JSON.parse(stored) : [];
+  }
+
+  private getAuthToken(): string {
+    return localStorage.getItem('auth_token') || '';
   }
 }
