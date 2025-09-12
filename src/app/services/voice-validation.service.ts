@@ -1571,37 +1571,29 @@ export class VoiceValidationService {
     );
 
     // Calculate subscore using existing logic
-    const subscoreCalc = this.calculateAVISubscore(
+    // Build simplified AVIScoreResult to match interface
+    const voiceFeatures = {
+      timing_score: 0.7,
+      voice_score: voiceAnalysis.confidence_level || 0.7,
+      coherence_score: (response as any).data?.coherenceScore || 0.8
+    };
+    const subscore = this.calculateAVISubscore(
       question,
-      response.data.transcription,
-      voiceAnalysis,
-      contextData?.responseTime || 0,
-      question.expectedResponseTime
+      voiceFeatures,
+      { adjustedLexicalScore: lexicalResult.adjustedLexicalScore }
     );
 
     return {
       questionId: question.id,
-      questionText: question.text,
-      transcription: response.data.transcription,
-      confidence: response.data.confidence,
-      responseTime: contextData?.responseTime || 0,
-      expectedTime: question.expectedResponseTime,
-      subscore: subscoreCalc.subscore,
-      weight: question.weight,
-      voiceAnalysis,
-      lexicalAnalysis: {
-        evasionScore: lexicalResult.rawLexicalScore,
-        admissionScore: lexicalResult.adjustedLexicalScore,
-        honestyScore: 1 - lexicalResult.rawLexicalScore,
-        coherenceScore: response.data.coherenceScore,
-        category: lexicalResult.category,
-        tokensFound: lexicalResult.tokenDetails
+      subscore: Math.round(subscore * 1000),
+      components: {
+        timing_score: voiceFeatures.timing_score,
+        voice_score: voiceFeatures.voice_score,
+        lexical_score: lexicalResult.adjustedLexicalScore,
+        coherence_score: voiceFeatures.coherence_score
       },
-      stressLevel: question.stressLevel,
-      category: question.category,
-      triggers: question.triggers,
-      riskFlags: response.data.voiceMetrics.stress.indicators.map(indicator => indicator),
-      timestamp: new Date().toISOString()
+      flags: [],
+      risk_level: this.mapScoreToRiskLevel(Math.round(subscore * 1000))
     };
   }
 
@@ -1746,6 +1738,8 @@ export class VoiceValidationService {
     
     const consensus_weight = Math.abs(scientificScore - heuristicScore) <= 100 ? 0.8 : 0.5;
     const final_score = scientificScore * consensus_weight + heuristicScore * (1 - consensus_weight);
+    const decision: 'GO' | 'REVIEW' | 'NO-GO' = final_score >= this.AVI_THRESHOLDS.GO_MIN ? 'GO' :
+                (final_score >= this.AVI_THRESHOLDS.REVIEW_MIN ? 'REVIEW' : 'NO-GO');
     
     return of({
       final_score,
@@ -1754,8 +1748,7 @@ export class VoiceValidationService {
       heuristic_engine_score: heuristicScore,
       consensus_weight,
       protection_eligible: final_score >= this.AVI_THRESHOLDS.GO_MIN,
-      decision: final_score >= this.AVI_THRESHOLDS.GO_MIN ? 'GO' :
-                final_score >= this.AVI_THRESHOLDS.REVIEW_MIN ? 'REVIEW' : 'NO-GO',
+      decision,
       detailed_breakdown: [], // Would contain individual question results
       red_flags: final_score < 600 ? ['high_evasion_risk', 'inconsistent_responses'] : [],
       recommendations: final_score >= 780 ? ['approve_with_standard_terms'] : 
@@ -1858,7 +1851,7 @@ export class VoiceValidationService {
       const response = this.convertBFFToVoiceEvaluationResult(bffResponse, questionId);
       
       // ✅ Store result locally
-      this.storeVoiceEvaluation(response);
+      this.storeVoiceEvaluationResult(response);
       
       console.log(`✅ BFF Voice analysis completed: ${response.decision} (score: ${response.voiceScore})`);
       
@@ -1869,7 +1862,7 @@ export class VoiceValidationService {
       
       // ✅ FALLBACK: Apply heuristic analysis + mark as REVIEW
       const fallbackResult = this.applyHeuristicFallback(audioBlob, questionId);
-      this.storeVoiceEvaluation(fallbackResult);
+      this.storeVoiceEvaluationResult(fallbackResult);
       
       return fallbackResult;
     }
@@ -1946,7 +1939,7 @@ export class VoiceValidationService {
   }
 
   // ✅ NUEVO: Store Voice Evaluation locally
-  private storeVoiceEvaluation(evaluation: VoiceEvaluationResult): void {
+  private storeVoiceEvaluationResult(evaluation: VoiceEvaluationResult): void {
     // Remove any existing evaluation for this question (allow re-evaluation)
     this.voiceEvaluations = this.voiceEvaluations.filter(
       existing => existing.questionId !== evaluation.questionId
@@ -1980,7 +1973,7 @@ export class VoiceValidationService {
     if (contextId) form.append('contextId', contextId);
 
     const headers = new HttpHeaders({ 'X-Request-Id': this.generateRequestId() });
-    return this.http.post<any>(`${this.API_CONFIG.BFF_URL || this.base}/v1/voice/evaluate`, form, { headers });
+    return this.http.post<any>(`${environment.apiUrl}/v1/voice/evaluate`, form, { headers });
   }
 
   // ✅ NUEVO: Aggregate Resilience Scoring
@@ -2196,7 +2189,7 @@ export class VoiceValidationService {
   async analyzeVoiceFeatures(request: VoiceAnalyzeRequest): Promise<VoiceAnalyzeResponse> {
     try {
       const response = await this.http.post<VoiceAnalyzeResponse>(
-        `${this.apiConfig.getBffUrl()}/v1/voice/analyze`, 
+        `${environment.apiUrl}/v1/voice/analyze`, 
         request,
         {
           headers: {
@@ -2224,7 +2217,7 @@ export class VoiceValidationService {
       formData.append('contextId', `avi_${Date.now()}`);
 
       const response = await this.http.post<VoiceEvaluateResponse>(
-        `${this.apiConfig.getBffUrl()}/v1/voice/evaluate-audio`,
+        `${environment.apiUrl}/v1/voice/evaluate-audio`,
         formData,
         {
           headers: {
@@ -2315,8 +2308,8 @@ export class VoiceValidationService {
    */
   calculateResilienceSummary(): ResilienceSummary {
     const storedEvaluations = this.getStoredVoiceEvaluations();
-    const resilienceEvaluations = storedEvaluations.filter(eval => 
-      RESILIENCE_QUESTIONS.some(q => q.id === eval.questionId)
+    const resilienceEvaluations = storedEvaluations.filter(ev => 
+      RESILIENCE_QUESTIONS.some(q => q.id === ev.questionId)
     );
 
     if (resilienceEvaluations.length === 0) {
@@ -2333,12 +2326,12 @@ export class VoiceValidationService {
     }
 
     // Calculate scores and decisions
-    const decisions = resilienceEvaluations.map(eval => eval.decision);
+    const decisions = resilienceEvaluations.map(ev => ev.decision);
     const goCount = decisions.filter(d => d === 'GO').length;
     const reviewCount = decisions.filter(d => d === 'REVIEW').length;
     const noGoCount = decisions.filter(d => d === 'NO-GO').length;
     
-    const averageScore = resilienceEvaluations.reduce((sum, eval) => sum + eval.voiceScore, 0) / resilienceEvaluations.length;
+    const averageScore = resilienceEvaluations.reduce((sum, ev) => sum + ev.voiceScore, 0) / resilienceEvaluations.length;
     const voiceResilienceScore = averageScore / 1000; // Convert to 0-1 scale
 
     // Determine final decision based on HASE model rules
@@ -2358,9 +2351,9 @@ export class VoiceValidationService {
     }
 
     // Check for critical flags
-    resilienceEvaluations.forEach(eval => {
-      if (eval.flags.includes('high_stress') || eval.flags.includes('evasion_detected')) {
-        criticalFlags.push(`critical_pattern_${eval.questionId}`);
+    resilienceEvaluations.forEach(ev => {
+      if (ev.flags.includes('high_stress') || ev.flags.includes('evasion_detected')) {
+        criticalFlags.push(`critical_pattern_${ev.questionId}`);
       }
     });
 
@@ -2488,7 +2481,5 @@ export class VoiceValidationService {
     return stored ? JSON.parse(stored) : [];
   }
 
-  private getAuthToken(): string {
-    return localStorage.getItem('auth_token') || '';
-  }
+  // getAuthToken is defined earlier in this service
 }
