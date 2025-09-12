@@ -46,7 +46,12 @@ export class HASEModel {
 
       const roundedScore = Math.round(totalScore);
       const riskLevel = this.determineRiskLevel(roundedScore);
-      const decision = this.determineDecision(roundedScore, geographic.redFlags);
+      // Hard stop por voz antes de reglas por score
+      const voiceDecision = voice.data?.decision;
+      const voiceFlags = voice.data?.flags || [];
+      let decision = (voiceDecision === 'NO-GO' || voiceFlags.length >= 3)
+        ? 'NO-GO'
+        : this.determineDecision(roundedScore, geographic.redFlags);
       const protectionEligible = this.isProtectionEligible(roundedScore, decision);
 
       const result = {
@@ -202,7 +207,9 @@ export class HASEModel {
         aviScore: aviScore,
         combinedScore: combinedScore,
         voiceWeight: 0.7,
-        aviWeight: 0.3
+        aviWeight: 0.3,
+        decision: (voiceScore >= 750 && redFlags.length <= 1) ? 'GO' : (voiceScore >= 550 && redFlags.length <= 2) ? 'REVIEW' : 'NO-GO',
+        flags: redFlags
       },
       redFlags: redFlags
     };
