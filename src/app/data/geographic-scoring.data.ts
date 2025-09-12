@@ -408,6 +408,35 @@ export function calculateGeographicRiskScore(municipality: string, state: string
   };
 }
 
+// Optional: route-level overrides (0-100). Keyed by `Municipio-RouteName` normalized
+const ROUTE_OVERRIDES: Record<string, number> = {
+  // Ejemplos: penalizar corredores críticos
+  'ecatepec-indios_verdes': 40,
+  'nezahualcoyotl-pantitlan': 35,
+};
+
+function normalizeKey(municipality: string, route?: string) {
+  const mk = (municipality || '').toLowerCase().replace(/\s+/g, '_');
+  const rk = (route || '').toLowerCase().replace(/\s+/g, '_');
+  return `${mk}-${rk}`;
+}
+
+export function calculateGeographicRiskScoreWithRoute(
+  municipality: string,
+  state: string,
+  route?: string
+): GeographicRiskFactors | null {
+  const base = calculateGeographicRiskScore(municipality, state);
+  if (!base) return null;
+  if (!route) return base;
+  const key = normalizeKey(municipality, route);
+  const override = ROUTE_OVERRIDES[key];
+  if (typeof override === 'number') {
+    return { ...base, score: override };
+  }
+  return base;
+}
+
 // ===== RED FLAGS DETECTION =====
 export interface GeographicRedFlag {
   type: 'CRITICAL' | 'HIGH' | 'MEDIUM';

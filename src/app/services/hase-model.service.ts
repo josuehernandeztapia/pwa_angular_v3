@@ -3,7 +3,7 @@ import { Observable, of, combineLatest } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 // Data imports
-import { calculateGeographicRiskScore, detectGeographicRedFlags, GeographicRiskFactors, GeographicRedFlag } from '../data/geographic-scoring.data';
+import { calculateGeographicRiskScore, calculateGeographicRiskScoreWithRoute, detectGeographicRedFlags, GeographicRiskFactors, GeographicRedFlag } from '../data/geographic-scoring.data';
 import { ALL_AVI_QUESTIONS, AVI_CONFIG } from '../data/avi-questions.data';
 
 // Service imports  
@@ -63,6 +63,8 @@ export interface VoiceResilienceData {
   coherenceScore: number;      // 0-1 scale
   responseConsistency: number; // 0-1 scale
   emotionalStability: number;  // 0-1 scale
+  decision?: 'GO' | 'NO-GO' | 'REVIEW';
+  flags?: string[];
 }
 
 export interface TransportistaProfile {
@@ -182,7 +184,7 @@ export class HASEModelService {
    * Based on municipality and route risk factors
    */
   private calculateGeographicComponent(profile: TransportistaProfile): Observable<HASEComponents['geographic']> {
-    const geoRisk = calculateGeographicRiskScore(profile.municipality, profile.state);
+    const geoRisk = calculateGeographicRiskScoreWithRoute(profile.municipality, profile.state, profile.route);
     
     if (!geoRisk) {
       return of({
@@ -266,7 +268,9 @@ export class HASEModelService {
           stressIndicators: this.extractStressIndicators(profile.aviResponses),
           coherenceScore: this.calculateCoherenceScore(profile.aviResponses),
           responseConsistency: this.calculateResponseConsistency(profile.aviResponses),
-          emotionalStability: this.calculateEmotionalStability(profile.aviResponses)
+          emotionalStability: this.calculateEmotionalStability(profile.aviResponses),
+          decision: resilienceSummary.finalDecision,
+          flags: resilienceSummary.criticalFlags
         };
 
         return {
@@ -299,6 +303,13 @@ export class HASEModelService {
     let decision: 'GO' | 'NO-GO' | 'REVIEW' = 'REVIEW';
     let protectionEligible = false;
 
+    // Hard stop por voz: NO-GO de voz o >=3 flags críticos
+    const voiceDecision = components.voice.data.decision;
+    const voiceFlags = components.voice.data.flags || [];
+    if (voiceDecision === 'NO-GO' || voiceFlags.length >= 3) {
+      decision = 'NO-GO';
+      protectionEligible = false;
+    } else
     if (totalScore >= 750 && components.geographic.redFlags.length === 0) {
       decision = 'GO';
       protectionEligible = true;

@@ -1,18 +1,22 @@
 import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { VoiceAnalyzeDto, VoiceScoreResponseDto, VoiceEvaluateResponseDto, AVIResponseDto } from './dto/voice.dto';
-import { 
-  evaluateResponse, 
+import {
+  evaluateResponse,
   evaluateVoiceAnalysis,
   calculateRiskLevel,
   generateRecommendations,
   generateMockVoiceAnalysis,
   AVIResponse,
-  AVIQuestionEnhanced 
+  AVIQuestionEnhanced,
 } from './utils/avi-engine.util';
+import { computeVoiceScore } from './utils/voice-score.util';
 
 @Injectable()
 export class VoiceService {
   private readonly logger = new Logger(VoiceService.name);
+  constructor(
+    private readonly repo?: import('./voice-eval.repo').VoiceEvalRepo,
+  ) {}
 
   /**
    * Análisis de features pre-extraídas
@@ -28,24 +32,17 @@ export class VoiceService {
       // Mock question (en producción vendría de tu base de datos)
       const mockQuestion = this.getMockQuestion(dto.questionId || 'Q1');
       
-      // USAR TU ALGORITMO MIGRADO
-      const responseScore = evaluateResponse(aviResponse, mockQuestion);
-      
-      // Calcular métricas individuales (para compatibilidad con nueva API)
-      const metrics = this.calculateDetailedMetrics(dto);
-      
-      // Determinar decisión
-      const decision = this.getDecision(responseScore, []);
-      
+      // Cálculo matemático L/P/D/E/H con fórmula ponderada
+      const res = computeVoiceScore({
+        latencySec: dto.latencySec,
+        answerDurationSec: dto.answerDurationSec,
+        pitchSeriesHz: dto.pitchSeriesHz,
+        energySeries: dto.energySeries,
+        words: dto.words,
+      });
+
       return {
-        latencyIndex: this.normalizeLatency(dto.latencySec, dto.answerDurationSec),
-        pitchVar: metrics.pitchVariability,
-        disfluencyRate: metrics.disfluencyRate,
-        energyStability: metrics.energyStability,
-        honestyLexicon: metrics.honestyLexicon,
-        voiceScore: responseScore,
-        flags: this.generateFlags(metrics),
-        decision,
+        ...res,
         questionId: dto.questionId,
         contextId: dto.contextId,
       };
@@ -84,12 +81,13 @@ export class VoiceService {
   async evaluateAudio(
     file: Express.Multer.File,
     context: { questionId?: string; contextId?: string },
-    requestId?: string
+    requestId?: string,
+    openaiKeyOverride?: string
   ): Promise<VoiceEvaluateResponseDto> {
     this.logger.log(`🎯 Full evaluation for ${context.questionId} [${requestId}]`);
     
     // TODO: INTEGRAR WHISPER
-    const transcript = await this.transcribeAudio(file);
+    const transcript = await this.transcribeAudio(file, openaiKeyOverride);
     const words = this.tokenizeText(transcript);
     
     // Análisis de audio
@@ -98,11 +96,33 @@ export class VoiceService {
     // Recalcular con palabras reales
     const enhancedAnalysis = this.enhanceWithTranscript(voiceAnalysis, words);
     
-    return {
+    const payload: VoiceEvaluateResponseDto = {
       transcript,
       words,
       ...enhancedAnalysis,
     };
+
+    // Persist (best-effort)
+    try {
+      await this.repo?.insertOne({
+        questionId: payload.questionId || context.questionId,
+        contextId: payload.contextId || context.contextId,
+        latencyIndex: payload.latencyIndex,
+        pitchVar: payload.pitchVar,
+        disfluencyRate: payload.disfluencyRate,
+        energyStability: payload.energyStability,
+        honestyLexicon: payload.honestyLexicon,
+        voiceScore: payload.voiceScore,
+        decision: payload.decision,
+        flags: payload.flags,
+        transcript: payload.transcript,
+        words: payload.words,
+      });
+    } catch (e) {
+      this.logger.warn(`DB insert skipped: ${e.message}`);
+    }
+
+    return payload;
   }
 
   // ===== HELPERS MIGRADOS DESDE TU PWA =====
@@ -239,9 +259,47 @@ export class VoiceService {
     };
   }
 
-  private async transcribeAudio(file: Express.Multer.File): Promise<string> {
-    // TODO: Integrar Whisper
-    return "Esta es una respuesta de prueba desde el sistema";
+  private async transcribeAudio(file: Express.Multer.File, overrideKey?: string): Promise<string> {
+    const apiKey = overrideKey || process.env.OPENAI_API_KEY;
+    // Si no hay API key, usar placeholder para no romper pruebas locales
+    if (!apiKey) {
+      this.logger.warn('OPENAI_API_KEY no configurada. Usando transcripción simulada.');
+      return 'transcripcion simulada sin whisper';
+    }
+
+    try {
+      // Usar fetch + FormData nativo (Node 18+)
+      const FormDataAny: any = (global as any).FormData;
+      const BlobAny: any = (global as any).Blob;
+      if (!FormDataAny || !BlobAny) {
+        this.logger.warn('FormData/Blob no disponible en runtime. Whisper omitido.');
+        return 'transcripcion simulada sin whisper';
+      }
+      const fd = new FormDataAny();
+      fd.append('file', new BlobAny([file.buffer], { type: file.mimetype || 'audio/wav' }), file.originalname || 'audio.wav');
+      fd.append('model', 'whisper-1');
+      fd.append('language', 'es');
+      fd.append('response_format', 'json');
+
+      const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${apiKey}` },
+        body: fd as any,
+      } as any);
+
+      if (!res.ok) {
+        const text = await res.text();
+        this.logger.warn(`Whisper HTTP ${res.status}: ${text}`);
+        return 'transcripcion simulada sin whisper';
+      }
+
+      const data: any = await res.json();
+      const transcript: string = data?.text || '';
+      return transcript || 'transcripcion vacia';
+    } catch (e: any) {
+      this.logger.warn(`Whisper error: ${e?.message || e}`);
+      return 'transcripcion simulada sin whisper';
+    }
   }
 
   private tokenizeText(text: string): string[] {

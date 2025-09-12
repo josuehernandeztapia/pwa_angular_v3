@@ -1971,6 +1971,17 @@ export class VoiceValidationService {
     return `req_${timestamp}_${this.requestIdCounter}`;
   }
 
+  // ===== NEW: Analyze audio file with BFF (evaluate: Whisper + features + scoring)
+  analyzeAudioFile(file: File | Blob, questionId: string, contextId?: string) {
+    const form = new FormData();
+    form.append('audio', file as any, (file as any).name || 'answer.wav');
+    if (questionId) form.append('questionId', questionId);
+    if (contextId) form.append('contextId', contextId);
+
+    const headers = new HttpHeaders({ 'X-Request-Id': this.generateRequestId() });
+    return this.http.post<any>(`${this.API_CONFIG.BFF_URL || this.base}/v1/voice/evaluate`, form, { headers });
+  }
+
   // ✅ NUEVO: Aggregate Resilience Scoring
   aggregateResilience(): ResilienceSummary {
     console.log(`📊 Aggregating resilience from ${this.voiceEvaluations.length} voice evaluations`);
@@ -2371,7 +2382,7 @@ export class VoiceValidationService {
     const transcription = request.words.join(' ');
     
     // Simple heuristic scoring
-    let score = 0.7; // Base score
+    let score = 0.7; // Base score (0-1)
     
     // Latency penalty
     if (request.latencySec > 5) score -= 0.2;
@@ -2391,11 +2402,11 @@ export class VoiceValidationService {
     ).length;
     score -= (riskCount / request.words.length) * 0.2;
 
-    const finalScore = Math.max(0, Math.min(1, score)) * 1000;
+    const finalScore = Math.max(0, Math.min(1, score));
     let decision: 'GO' | 'NO-GO' | 'REVIEW' = 'REVIEW';
     
-    if (finalScore >= 800) decision = 'GO';
-    else if (finalScore < 500) decision = 'NO-GO';
+    if (finalScore >= 0.75) decision = 'GO';
+    else if (finalScore < 0.55) decision = 'NO-GO';
 
     const flags: string[] = [];
     if (request.latencySec > 5) flags.push('high_latency');
@@ -2404,14 +2415,14 @@ export class VoiceValidationService {
 
     return {
       success: true,
-      score: Math.round(finalScore),
+      score: Math.round(finalScore * 1000),
       decision,
       metrics: {
         latencyIndex: Math.min(1, request.latencySec / 5),
         pitchVariability: 0.5, // Mock data
-        disfluencyRate: disfluencyCount / request.words.length,
+        disfluencyRate: disfluencyCount / Math.max(1, request.words.length),
         energyStability: 0.7, // Mock data  
-        honestyLexicon: 1 - (riskCount / request.words.length)
+        honestyLexicon: 1 - (riskCount / Math.max(1, request.words.length))
       },
       flags,
       processingTime: '150ms',
