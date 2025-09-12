@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, Subject, timer } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
@@ -13,6 +14,7 @@ import {
 import { AVIDualEngineService, DualEngineResult } from '../../services/avi-dual-engine.service';
 import { AVIService } from '../../services/avi.service';
 import { AVIVoiceResponse, OpenAIWhisperService } from '../../services/openai-whisper.service';
+import { ApiConfigService } from '../../services/api-config.service';
 
 @Component({
   selector: 'app-avi-interview',
@@ -62,7 +64,9 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   constructor(
     private aviService: AVIService,
     private dualEngine: AVIDualEngineService,
-    private whisperService: OpenAIWhisperService
+    private whisperService: OpenAIWhisperService,
+    private http: HttpClient,
+    private apiConfig: ApiConfigService,
   ) {}
 
   ngOnInit() {
@@ -233,6 +237,10 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
           if (response.stopRecording) {
             this.stopRealVoiceRecording = response.stopRecording;
           }
+          // Marcar indicador de audio listo para la pregunta actual
+          if (this.currentQuestion) {
+            this.markAudioReady(this.currentQuestion.id);
+          }
         }
       },
       error: (error: unknown) => {
@@ -392,7 +400,17 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
     
     // Solo permitir saltar preguntas de peso bajo
     if (this.currentQuestion.weight <= 4) {
-      this.loadNextQuestion();
+      // Registrar evento SKIPPED en BFF (sin audio)
+      const form = new FormData();
+      form.append('questionId', this.currentQuestion.id);
+      form.append('contextId', this.currentSession || 'unknown');
+      form.append('skipped', 'true');
+      // orderIndex no disponible en este flujo; se puede agregar si se usa guided flow
+      const url = `${this.apiConfig.getBffUrl()}/v1/voice/evaluate`;
+      this.http.post(url, form).subscribe({
+        next: () => this.loadNextQuestion(),
+        error: () => this.loadNextQuestion(), // continuar flujo aunque falle persistencia
+      });
     }
   }
 
@@ -495,5 +513,15 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
       event.preventDefault();
       this.submitResponse();
     }
+  }
+
+  // ===== Audio ready indicator =====
+  private audioReady: Record<string, boolean> = {};
+  markAudioReady(questionId: string) {
+    this.audioReady[questionId] = true;
+  }
+  isAudioReady(questionId: string | undefined | null): boolean {
+    if (!questionId) return false;
+    return !!this.audioReady[questionId];
   }
 }

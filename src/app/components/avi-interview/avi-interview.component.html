@@ -63,6 +63,9 @@
           <span class="stress-level">
             Estrés: {{ currentQuestion.stressLevel }}/5
           </span>
+          <span class="audio-indicator" [class.ready]="isAudioReady(currentQuestion.id)">
+            {{ isAudioReady(currentQuestion.id) ? '🎧 Audio listo' : '⏺️ Sin audio' }}
+          </span>
         </div>
       </div>
 

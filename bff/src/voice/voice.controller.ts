@@ -146,11 +146,52 @@ export class VoiceController {
   })
   async evaluateAudio(
     @UploadedFile() file: Express.Multer.File,
-    @Body() context: { questionId?: string; contextId?: string },
+    @Body() context: { questionId?: string; contextId?: string; skipped?: string | boolean; orderIndex?: string | number },
     @Headers('x-request-id') requestId?: string,
     @Headers('x-openai-key') openaiKey?: string
   ): Promise<VoiceEvaluateResponseDto> {
     this.logger.log(`🎯 POST /v1/voice/evaluate - Question: ${context.questionId} [${requestId}]`);
+
+    // Allow logging of skipped questions without audio
+    const skipped = String((context?.skipped as any) || '').toLowerCase() === 'true';
+    const orderIndex = (context?.orderIndex ?? '').toString().trim();
+
+    if (skipped) {
+      const flags = ['skipped'];
+      if (orderIndex) flags.push(`ord:${orderIndex}`);
+      const payload: VoiceEvaluateResponseDto = {
+        questionId: context.questionId,
+        contextId: context.contextId,
+        transcript: '',
+        words: [],
+        latencyIndex: 0,
+        pitchVar: 0,
+        disfluencyRate: 0,
+        energyStability: 0,
+        honestyLexicon: 0,
+        voiceScore: 0,
+        decision: 'REVIEW', // keep type-safe; mark skipped in flags
+        flags,
+      } as any;
+
+      // Best-effort persist
+      await this.evalRepo.insertOne({
+        questionId: payload.questionId,
+        contextId: payload.contextId,
+        latencyIndex: payload.latencyIndex,
+        pitchVar: payload.pitchVar,
+        disfluencyRate: payload.disfluencyRate,
+        energyStability: payload.energyStability,
+        honestyLexicon: payload.honestyLexicon,
+        voiceScore: payload.voiceScore,
+        decision: payload.decision as any,
+        flags: payload.flags,
+        transcript: '',
+        words: [],
+      }).catch(() => undefined);
+
+      return payload;
+    }
 
     if (!file) {
       throw new BadRequestException('Audio file is required');
