@@ -6,7 +6,10 @@ import {
   UploadedFile, 
   BadRequestException,
   Headers,
-  Logger 
+  Logger,
+  Get,
+  Param,
+  Query 
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBody } from '@nestjs/swagger';
@@ -16,13 +19,17 @@ import {
   VoiceScoreResponseDto, 
   VoiceEvaluateResponseDto 
 } from './dto/voice.dto';
+import { VoiceEvalRepo } from './voice-eval.repo';
 
 @ApiTags('voice')
 @Controller('v1/voice')
 export class VoiceController {
   private readonly logger = new Logger(VoiceController.name);
 
-  constructor(private readonly voiceService: VoiceService) {}
+  constructor(
+    private readonly voiceService: VoiceService,
+    private readonly evalRepo: VoiceEvalRepo,
+  ) {}
 
   @Post('analyze')
   @ApiOperation({ 
@@ -140,7 +147,8 @@ export class VoiceController {
   async evaluateAudio(
     @UploadedFile() file: Express.Multer.File,
     @Body() context: { questionId?: string; contextId?: string },
-    @Headers('x-request-id') requestId?: string
+    @Headers('x-request-id') requestId?: string,
+    @Headers('x-openai-key') openaiKey?: string
   ): Promise<VoiceEvaluateResponseDto> {
     this.logger.log(`🎯 POST /v1/voice/evaluate - Question: ${context.questionId} [${requestId}]`);
 
@@ -148,6 +156,20 @@ export class VoiceController {
       throw new BadRequestException('Audio file is required');
     }
 
-    return this.voiceService.evaluateAudio(file, context, requestId);
+    return this.voiceService.evaluateAudio(file, context, requestId, openaiKey);
+  }
+
+  @Get('evaluations/:contextId')
+  @ApiOperation({ summary: 'List voice evaluations by contextId (pagination)' })
+  async listEvaluations(
+    @Param('contextId') contextId: string,
+    @Query('limit') limit = '50',
+    @Query('offset') offset = '0',
+  ) {
+    const lim = Math.max(1, Math.min(200, parseInt(String(limit), 10) || 50));
+    const off = Math.max(0, parseInt(String(offset), 10) || 0);
+    this.logger.log(`📄 GET /v1/voice/evaluations/${contextId}?limit=${lim}&offset=${off}`);
+    const rows = await this.evalRepo.listByContext(contextId, lim, off);
+    return { contextId, limit: lim, offset: off, count: rows.length, items: rows };
   }
 }
