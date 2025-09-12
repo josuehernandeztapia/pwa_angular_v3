@@ -17,6 +17,39 @@ export interface GeographicRiskFactors {
   red_flag_indicators: string[];
 }
 
+// ===== OPTIONAL ROUTE-LEVEL SCORE OVERRIDES =====
+// Allows adjusting municipality base score when a specific known route is operated.
+// Keys are normalized to lowercase with spaces/hyphens as written here for readability.
+export const ROUTE_SCORE_OVERRIDES: Record<string, number> = {
+  // Examples (adjust as data improves):
+  // 'ecatepec-indios verdes': 40,
+  // 'via morelos completa': 20,
+};
+
+// Normalize route string to a key used in overrides map
+function normalizeRouteKey(route: string): string {
+  return route.trim().toLowerCase();
+}
+
+export function applyRouteOverrides(
+  base: GeographicRiskFactors,
+  routes: string[]
+): GeographicRiskFactors {
+  if (!routes || routes.length === 0) return base;
+  let adjusted = { ...base };
+  for (const r of routes) {
+    const key = normalizeRouteKey(r);
+    if (ROUTE_SCORE_OVERRIDES[key] != null) {
+      adjusted = {
+        ...adjusted,
+        score: Math.min(adjusted.score, ROUTE_SCORE_OVERRIDES[key]),
+        factors: Array.from(new Set([...(adjusted.factors || []), 'route_override_applied']))
+      };
+    }
+  }
+  return adjusted;
+}
+
 // ===== CIUDAD DE MÉXICO =====
 export const CDMX_GEOGRAPHIC_SCORING: Record<string, GeographicRiskFactors> = {
   // ALCALDÍAS DE ALTO RIESGO (0-30 pts)
@@ -406,6 +439,27 @@ export function calculateGeographicRiskScore(municipality: string, state: string
     high_risk_routes: [],
     red_flag_indicators: ['require_manual_evaluation']
   };
+}
+
+// Variant with route-level overrides
+export function calculateGeographicRiskScoreWithRoutes(
+  municipality: string,
+  state: string,
+  routes: string[]
+): GeographicRiskFactors | null {
+  const base = calculateGeographicRiskScore(municipality, state);
+  if (!base) return null;
+  return applyRouteOverrides(base, routes || []);
+}
+
+// Backwards-compatible helper for a single route string
+export function calculateGeographicRiskScoreWithRoute(
+  municipality: string,
+  state: string,
+  route?: string
+): GeographicRiskFactors | null {
+  const routes = route ? [route] : [];
+  return calculateGeographicRiskScoreWithRoutes(municipality, state, routes);
 }
 
 // Optional: route-level overrides (0-100). Keyed by `Municipio-RouteName` normalized

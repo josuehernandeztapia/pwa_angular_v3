@@ -1376,8 +1376,9 @@ export class VoiceValidationService {
     const totalScore = (gnvScore * 0.30) + (geoScore * 0.20) + (voiceResilienceScore * 0.50);
     
     // GO/NO-GO Decision Logic
+    // Normalize thresholds to 0–1 scale: GO >= 0.75, NO-GO < 0.55
     const goNoGoEligible = totalScore >= 0.55 && 
-                          voiceScore >= 0.6 && 
+                          voiceScore >= 0.55 && 
                           this.hasNoMajorRedFlags(voiceAnalysis);
                           
     const protectionAutoActivate = goNoGoEligible && 
@@ -2095,7 +2096,7 @@ export class VoiceValidationService {
       return 'GO'; // High score + no major issues = approval
     }
     
-    if (voiceScore >= 0.6 && noGoCount === 0 && reviewCount <= Math.floor(totalQuestions * 0.3)) {
+    if (voiceScore >= 0.55 && noGoCount === 0 && reviewCount <= Math.floor(totalQuestions * 0.3)) {
       return 'GO'; // Good score + no rejections + limited reviews = approval
     }
     
@@ -2405,6 +2406,7 @@ export class VoiceValidationService {
     const finalScore = Math.max(0, Math.min(1, score));
     let decision: 'GO' | 'NO-GO' | 'REVIEW' = 'REVIEW';
     
+    // Unified thresholds on 0–1 scale
     if (finalScore >= 0.75) decision = 'GO';
     else if (finalScore < 0.55) decision = 'NO-GO';
 
