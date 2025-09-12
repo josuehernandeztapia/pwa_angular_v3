@@ -38,7 +38,9 @@ class AVILabComplete {
             isRecording: false,
             mediaRecorder: null,
             audioChunks: [],
-            currentAudio: null
+            currentAudio: null,
+            lexiconsEnabled: (window.localStorage.getItem('lexiconsEnabled') === 'true'),
+            lexiconPlaza: window.localStorage.getItem('lexiconPlaza') || 'general'
         };
 
         // Testing Data
@@ -204,6 +206,16 @@ class AVILabComplete {
                                 <button class="btn secondary" onclick="aviLab.startRandomFlow()">
                                     ▶️ Random Flow
                                 </button>
+                                <div style="display:flex; gap:8px; align-items:center; margin-top:8px;">
+                                  <label><input type="checkbox" id="lexicons-enabled-toggle" onchange="aviLab.setLexiconsEnabled(this.checked)"> Lexicons ON</label>
+                                  <label>Plaza:
+                                    <select id="lexicon-plaza-select" onchange="aviLab.setLexiconPlaza(this.value)">
+                                      <option value="general">General</option>
+                                      <option value="edomex">Edomex</option>
+                                      <option value="aguascalientes">Aguascalientes</option>
+                                    </select>
+                                  </label>
+                                </div>
                             </div>
                         </div>
 
@@ -394,6 +406,28 @@ class AVILabComplete {
                 }
                 try { window.localStorage.setItem('AVI_LAB_OFFLINE_MODE', String(this.config.offlineMode)); } catch {}
                 await this.updateBFFIndicator();
+            });
+        }
+
+        // Lexicon toggles (LAB only)
+        const le = document.getElementById('lexicons-enabled-toggle');
+        const lp = document.getElementById('lexicon-plaza-select');
+        if (le) {
+            le.checked = !!this.state.lexiconsEnabled;
+            le.addEventListener('change', (e) => {
+                const v = e.target.checked;
+                this.state.lexiconsEnabled = !!v;
+                try { window.localStorage.setItem('lexiconsEnabled', this.state.lexiconsEnabled ? 'true' : 'false'); } catch {}
+                this.updateStatus(`Lexicons ${this.state.lexiconsEnabled ? 'activados' : 'desactivados'}`, 'info');
+            });
+        }
+        if (lp) {
+            lp.value = this.state.lexiconPlaza || 'general';
+            lp.addEventListener('change', (e) => {
+                const v = e.target.value;
+                this.state.lexiconPlaza = v || 'general';
+                try { window.localStorage.setItem('lexiconPlaza', this.state.lexiconPlaza); } catch {}
+                this.updateStatus(`Plaza seleccionada: ${this.state.lexiconPlaza}`, 'info');
             });
         }
 
@@ -907,6 +941,9 @@ class AVILabComplete {
             const headers = {};
             const key = window.localStorage.getItem('AVI_LAB_OPENAI_KEY');
             if (key) headers['X-OpenAI-Key'] = key;
+            headers['X-Lexicons-Enabled'] = this.state?.lexiconsEnabled ? 'true' : 'false';
+            headers['X-Lexicon-Plaza'] = this.state?.lexiconPlaza || 'general';
+            headers['X-Reasons-Enabled'] = 'true';
             const res = await fetch(`${this.config.bffUrl}/v1/voice/evaluate`, { method: 'POST', body: form, headers });
             if (!res.ok) throw new Error(`BFF error: ${res.status}`);
             const data = await res.json();

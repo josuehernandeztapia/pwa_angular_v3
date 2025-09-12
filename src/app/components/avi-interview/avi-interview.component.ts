@@ -12,6 +12,7 @@ import {
   VoiceAnalysis
 } from '../../models/types';
 import { AVIDualEngineService, DualEngineResult } from '../../services/avi-dual-engine.service';
+import { ALL_AVI_QUESTIONS } from '../../data/avi-questions.data';
 import { AVIService } from '../../services/avi.service';
 import { AVIVoiceResponse, OpenAIWhisperService } from '../../services/openai-whisper.service';
 import { ApiConfigService } from '../../services/api-config.service';
@@ -60,6 +61,11 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   // Mock voice analysis (en producción sería real)
   private voiceAnalysisEnabled = true;
   private stressIndicators = new BehaviorSubject<string[]>([]);
+
+  // Guided Basic Info (6)
+  guidedBasicActive = false;
+  private guidedList: AVIQuestionEnhanced[] = [];
+  private guidedIndex = 0;
 
   constructor(
     private aviService: AVIService,
@@ -114,7 +120,11 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
         this.isInterviewActive = true;
         this.showResults = false;
         this.answeredQuestions = [];
-        this.loadNextQuestion();
+        if (this.guidedBasicActive) {
+          this.startGuidedBasic();
+        } else {
+          this.loadNextQuestion();
+        }
       });
   }
 
@@ -122,6 +132,19 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
    * Cargar siguiente pregunta
    */
   private loadNextQuestion() {
+    if (this.guidedBasicActive) {
+      const q = this.guidedList[this.guidedIndex];
+      if (q) {
+        this.currentQuestion = q;
+        this.currentResponse = '';
+        this.questionStartTime = Date.now();
+        this.resetStressIndicators();
+        setTimeout(() => this.questionTitleEl?.nativeElement?.focus?.(), 0);
+      } else {
+        this.completeInterview();
+      }
+      return;
+    }
     this.aviService.getNextQuestion()
       .pipe(takeUntil(this.destroy$))
       .subscribe((question: AVIQuestionEnhanced | null) => {
@@ -169,6 +192,7 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
           this.lastSavedAt = Date.now();
           // Pequeño retraso para estabilidad visual antes de avanzar
           setTimeout(() => {
+            if (this.guidedBasicActive) this.guidedIndex += 1;
             this.loadNextQuestion();
           }, 300);
         }
@@ -390,6 +414,10 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
     this.isInterviewActive = false;
     this.showResults = false;
     this.progressPercentage = 0;
+    // reset guided
+    this.guidedBasicActive = false;
+    this.guidedList = [];
+    this.guidedIndex = 0;
   }
 
   /**
@@ -408,9 +436,25 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
       // orderIndex no disponible en este flujo; se puede agregar si se usa guided flow
       const url = `${this.apiConfig.getBffUrl()}/v1/voice/evaluate`;
       this.http.post(url, form).subscribe({
-        next: () => this.loadNextQuestion(),
-        error: () => this.loadNextQuestion(), // continuar flujo aunque falle persistencia
+        next: () => { if (this.guidedBasicActive) this.guidedIndex += 1; this.loadNextQuestion(); },
+        error: () => { if (this.guidedBasicActive) this.guidedIndex += 1; this.loadNextQuestion(); }, // continuar flujo aunque falle persistencia
       });
+    }
+  }
+
+  // ===== Guided helpers =====
+  startGuidedBasic() {
+    this.guidedList = ALL_AVI_QUESTIONS.filter(q => q.category === 'basic_info').slice(0, 6);
+    this.totalQuestions = this.guidedList.length || 6;
+    this.guidedIndex = 0;
+    this.guidedBasicActive = true;
+    // Cargar primera
+    const q = this.guidedList[this.guidedIndex];
+    if (q) {
+      this.currentQuestion = q;
+      this.currentResponse = '';
+      this.questionStartTime = Date.now();
+      this.resetStressIndicators();
     }
   }
 
