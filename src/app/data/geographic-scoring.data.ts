@@ -21,9 +21,24 @@ export interface GeographicRiskFactors {
 // Allows adjusting municipality base score when a specific known route is operated.
 // Keys are normalized to lowercase with spaces/hyphens as written here for readability.
 export const ROUTE_SCORE_OVERRIDES: Record<string, number> = {
-  // Examples (adjust as data improves):
-  // 'ecatepec-indios verdes': 40,
-  // 'via morelos completa': 20,
+  // ZMVM (Estado de México) — corredores de alto riesgo
+  'vía morelos': 20,
+  'via morelos': 20, // sin acento
+  'av central': 25,
+  'circuito exterior mexiquense': 30,
+  'periférico': 30,
+  'periferico': 30, // sin acento
+  'gustavo baz': 35,
+  'indios verdes': 35, // tramo Edomex → Indios Verdes
+  'lopez portillo': 35,
+  'lópez portillo': 35,
+  'valle de aragón': 30,
+  'valle de aragon': 30,
+  'benito juárez neza': 35,
+  'benito juarez neza': 35,
+  'valle de chalco - tláhuac': 25,
+  'valle de chalco - tlahuac': 25,
+  'valle de chalco - iztapalapa': 25,
 };
 
 // Normalize route string to a key used in overrides map
