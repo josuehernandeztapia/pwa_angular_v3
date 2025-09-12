@@ -105,6 +105,9 @@ export class VoiceScoreResponseDto {
   @ApiProperty({ example: ['lowLatency', 'stableEnergy'], description: 'Analysis flags' })
   flags: string[];
 
+  @ApiPropertyOptional({ example: ['unstablePitch','admission_relief_applied'], description: 'Human-readable reason codes' })
+  reasons?: string[];
+
   @ApiProperty({ 
     example: 'GO', 
     enum: ['GO','REVIEW','NO-GO'],
