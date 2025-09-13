@@ -240,7 +240,7 @@ export class TandaDeliveryService {
     client: Client, 
     preferredPosition?: number
   ): Observable<{ success: boolean; position: number; message: string }> {
-    return new Observable(observer => {
+    return new Observable<{ success: boolean; position: number; message: string }>(observer => {
       const tanda = this.tandaGroups.get(tandaId);
       if (!tanda) {
         observer.error('Tanda not found');
@@ -401,7 +401,7 @@ export class TandaDeliveryService {
     paymentMethod: TandaPayment['paymentMethod'],
     receiptUrl?: string
   ): Observable<{ success: boolean; newTotal: number; message: string }> {
-    return new Observable(observer => {
+    return new Observable<{ success: boolean; newTotal: number; message: string }>(observer => {
       const tanda = this.tandaGroups.get(tandaId);
       if (!tanda) {
         observer.error('Tanda not found');
@@ -471,7 +471,7 @@ export class TandaDeliveryService {
     requiresVoting: boolean;
     votingDeadline: Date;
   }> {
-    return new Observable(observer => {
+    return new Observable<{ success: boolean; transferEventId: string; consensusId: string; message: string; requiresVoting: boolean; votingDeadline: Date }>(observer => {
       const tanda = this.tandaGroups.get(tandaId);
       if (!tanda) {
         observer.error('Tanda not found');
@@ -555,7 +555,7 @@ export class TandaDeliveryService {
     consensusReached: boolean;
     message: string;
   }> {
-    return new Observable(observer => {
+    return new Observable<{ success: boolean; voteRecorded: boolean; currentApprovals: number; requiredApprovals: number; consensusReached: boolean; message: string }>(observer => {
       const tanda = this.tandaGroups.get(tandaId);
       const consensus = tanda?.consensusRequests?.find(c => c.id === consensusId);
       
@@ -658,7 +658,7 @@ export class TandaDeliveryService {
     canExecuteTransfer: boolean;
     message: string;
   }> {
-    return new Observable(observer => {
+    return new Observable<{ success: boolean; finalApproval: boolean; canExecuteTransfer: boolean; message: string }>(observer => {
       const tanda = this.tandaGroups.get(tandaId);
       const consensus = tanda?.consensusRequests?.find(c => c.id === consensusId);
       
@@ -734,7 +734,7 @@ export class TandaDeliveryService {
     newSchedule: TandaDeliverySchedule[];
     message: string;
   }> {
-    return new Observable(observer => {
+    return new Observable<{ success: boolean; newSchedule: TandaDeliverySchedule[]; message: string }>(observer => {
       const tanda = this.tandaGroups.get(tandaId);
       const transferEvent = tanda?.transferEvents?.find(t => t.id === transferEventId);
       
@@ -873,7 +873,7 @@ export class TandaDeliveryService {
     tandaId: string,
     clientId: string
   ): Observable<TandaDeliveryResult> {
-    return new Observable(observer => {
+    return new Observable<TandaDeliveryResult>(observer => {
       const tanda = this.tandaGroups.get(tandaId);
       if (!tanda) {
         observer.error('Tanda not found');

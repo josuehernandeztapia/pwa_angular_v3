@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Market } from '../models/types';
+import { environment } from '../../environments/environment';
 import { formatCurrencyMXN } from '../utils/format.util';
 import { annuity as annuityUtil, round2 } from '../utils/math.util';
 
@@ -21,6 +22,18 @@ export class FinancialCalculatorService {
     if (market === 'aguascalientes') return this.TIR_MIN_AGS;
     if (market === 'edomex') return this.TIR_MIN_EDOMEX;
     return this.TIR_MIN_AGS; // Default fallback
+  }
+
+  /**
+   * Target IRR annual by product SKU / collective id with fallback to market baseline.
+   */
+  getIrrTarget(market?: Market | string, opts?: { productSku?: string; collectiveId?: string }): number {
+    const cfg = environment?.finance?.irrTargets as { bySku?: Record<string, number>; byCollective?: Record<string, number> } | undefined;
+    const bySku: Record<string, number> = cfg?.bySku ?? {};
+    const byCollective: Record<string, number> = cfg?.byCollective ?? {};
+    if (opts?.productSku && bySku[opts.productSku] != null) return bySku[opts.productSku];
+    if (opts?.collectiveId && byCollective[opts.collectiveId] != null) return byCollective[opts.collectiveId];
+    return this.getTIRMin(market);
   }
 
   // Newton-Raphson method for TIR calculation - exact port from React
