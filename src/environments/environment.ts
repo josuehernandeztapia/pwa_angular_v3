@@ -126,5 +126,8 @@ export const environment = {
   storage: {
     prefix: 'conductores_pwa_',
     version: '1.0'
+  },
+  finance: {
+    irrToleranceBps: 50 // 0.50% tolerancia por defecto para IRR vs contrato
   }
 };

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Client, EventType, Market, ProtectionScenario } from '../models/types';
@@ -181,8 +182,8 @@ export class ProtectionEngineService {
     // Calculate TIR for this scenario vs. contract target IRR (market = contrato a plazos)
     const annualTIR = this.financialCalc.calculateTIR(cashFlows) * 12; // Convert monthly to annual
     const tirTargetAnnual = this.financialCalc.getTargetContractIRRAnnual(currentBalance, originalPayment, remainingTerm);
-    const tolerance = 0; // bps tolerance could be added here if needed
-    const tirOK = annualTIR + tolerance >= tirTargetAnnual;
+    const tolerance = (environment?.finance?.irrToleranceBps ?? 0) / 10000; // convert bps to decimal
+    const tirOK = (annualTIR + tolerance) >= tirTargetAnnual;
 
     const scenario: ProtectionScenario & {
       irr?: number;

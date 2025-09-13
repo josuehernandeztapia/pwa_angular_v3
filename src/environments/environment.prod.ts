@@ -67,5 +67,8 @@ export const environment = {
   storage: {
     prefix: 'conductores_pwa_',
     version: '1.0'
+  },
+  finance: {
+    irrToleranceBps: Number(process.env['IRR_TOLERANCE_BPS'] || 50)
   }
 };
