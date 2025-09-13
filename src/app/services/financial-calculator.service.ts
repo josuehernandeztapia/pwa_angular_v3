@@ -54,6 +54,57 @@ export class FinancialCalculatorService {
     return rate;
   }
 
+  /**
+   * Compute implied monthly interest rate r from an annuity where:
+   *  payment = principal * (r * (1+r)^n) / ((1+r)^n - 1)
+   * Uses a bounded binary search for robustness (avoids derivative issues).
+   */
+  computeImpliedMonthlyRateFromAnnuity(principal: number, monthlyPayment: number, term: number, 
+    opts: { maxRate?: number; tolerance?: number; maxIterations?: number } = {}): number {
+    const maxRate = opts.maxRate ?? 5; // 500% monthly upper bound (practical cap)
+    const tolerance = opts.tolerance ?? 1e-7;
+    const maxIterations = opts.maxIterations ?? 200;
+
+    if (principal <= 0 || monthlyPayment <= 0 || term <= 0) return 0;
+
+    // If zero-rate annuity fits exactly
+    const zeroRatePayment = principal / term;
+    if (Math.abs(zeroRatePayment - monthlyPayment) < tolerance) return 0;
+
+    // Helper: annuity payment for a given r
+    const pay = (r: number) => {
+      if (r === 0) return principal / term;
+      const a = Math.pow(1 + r, term);
+      return principal * (r * a) / (a - 1);
+    };
+
+    // Binary search on r to match monthlyPayment
+    let lo = 0;
+    let hi = maxRate;
+    let r = 0.0;
+    for (let i = 0; i < maxIterations; i++) {
+      r = (lo + hi) / 2;
+      const p = pay(r);
+      const diff = p - monthlyPayment;
+      if (Math.abs(diff) < tolerance) break;
+      if (diff > 0) {
+        // payment too high → rate too high
+        hi = r;
+      } else {
+        lo = r;
+      }
+    }
+    return r;
+  }
+
+  /**
+   * Convenience wrapper to get annualized IRR target from contract terms (monthly -> annual).
+   */
+  getTargetContractIRRAnnual(principalOrBalance: number, monthlyPayment: number, remainingTerm: number): number {
+    const rMonthly = this.computeImpliedMonthlyRateFromAnnuity(principalOrBalance, monthlyPayment, remainingTerm);
+    return rMonthly * 12;
+  }
+
   // Generate cash flow array for scenario analysis
   generateCashFlows(principal: number, payments: number[], term: number): number[] {
     const flows = new Array(term + 1).fill(0);

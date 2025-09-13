@@ -10,6 +10,8 @@ describe('ProtectionEngineService', () => {
   beforeEach(() => {
     mockFinancialCalc = jasmine.createSpyObj('FinancialCalculatorService', [
       'getTIRMin',
+      'computeImpliedMonthlyRateFromAnnuity',
+      'getTargetContractIRRAnnual',
       'annuity',
       'capitalizeInterest',
       'getTermFromPayment',
@@ -21,6 +23,8 @@ describe('ProtectionEngineService', () => {
     ]);
 
     mockFinancialCalc.getTIRMin.and.returnValue(0.255);
+    mockFinancialCalc.computeImpliedMonthlyRateFromAnnuity.and.returnValue(0.255 / 12);
+    mockFinancialCalc.getTargetContractIRRAnnual.and.callFake((p: number, m: number, n: number) => (0.255));
     mockFinancialCalc.annuity.and.callFake((p: number, r: number, n: number) => {
       if (r === 0 || n === 0) return 0;
       return p * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
@@ -149,4 +153,3 @@ describe('ProtectionEngineService', () => {
     });
   });
 });
-
