@@ -232,6 +232,14 @@ export const routes: Routes = [
     title: 'Catálogo de Productos - Conductores PWA'
   },
 
+  // LAB / Backoffice routes (internal-only)
+  {
+    path: 'lab/tanda-enhanced',
+    loadComponent: () => import('./components/pages/lab/tanda-enhanced-panel.component').then(c => c.TandaEnhancedPanelComponent),
+    canActivate: [AuthGuard],
+    title: 'LAB – Tanda Enhanced Panel'
+  },
+
   // Settings and profile
   {
     path: 'configuracion',
