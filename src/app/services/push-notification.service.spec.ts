@@ -64,8 +64,8 @@ describe('PushNotificationService', () => {
       expect(service.pushSupported).toBe(true);
     });
 
-    it('should initialize with default permission', (done) => {
-      // Set up the Notification.permission before the service initializes
+    it('should initialize with default permission', async () => {
+      // Ensure a fresh module so constructor runs after setting Notification.permission
       Object.defineProperty(window, 'Notification', {
         writable: true,
         configurable: true,
@@ -75,12 +75,28 @@ describe('PushNotificationService', () => {
         }
       });
 
-      // Create a new service to trigger initialization with the correct permission
-      const newService = TestBed.inject(PushNotificationService);
-      
-      newService.permission.subscribe(permission => {
-        expect(permission).toBe('default');
-        done();
+      await TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        providers: [
+          PushNotificationService,
+          { provide: SwPush, useValue: mockSwPush }
+        ]
+      });
+
+      const freshService = TestBed.inject(PushNotificationService);
+
+      await new Promise<void>((resolve, reject) => {
+        const sub = freshService.permission.subscribe(permission => {
+          try {
+            expect(permission).toBe('default');
+            sub.unsubscribe();
+            resolve();
+          } catch (e) {
+            sub.unsubscribe();
+            reject(e);
+          }
+        });
       });
     });
 
@@ -436,7 +452,14 @@ describe('PushNotificationService', () => {
         }
       };
 
-      const assignSpy = spyOn(window.location, 'assign' as any).and.stub();
+      // Safely mock window.location.assign in CI/JSDOM
+      const originalLocation = window.location;
+      const assignSpy = jasmine.createSpy('assign');
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        writable: true,
+        value: { assign: assignSpy } as any
+      });
 
       // Spy on markNotificationAsClicked to verify the method is called
       spyOn(service as any, 'markNotificationAsClicked');
@@ -444,12 +467,17 @@ describe('PushNotificationService', () => {
       service['handleNotificationClick'](mockEvent);
 
       expect(assignSpy).toHaveBeenCalled();
-      const navArg = assignSpy.calls.mostRecent().args[0] as string;
+      const navArg = (assignSpy.calls.mostRecent().args[0] as string) || '';
       expect(navArg).toContain('/clientes/client123#documentos');
       expect(service['markNotificationAsClicked']).toHaveBeenCalledWith('notif123');
       expect(mockEvent.notification.close).toHaveBeenCalled();
-      
-      assignSpy.and.callThrough();
+
+      // Restore original window.location to avoid leaking state to other tests
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        writable: true,
+        value: originalLocation
+      });
     });
   });
 

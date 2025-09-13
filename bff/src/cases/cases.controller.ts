@@ -61,4 +61,9 @@ export class CasesController {
     const fields = Array.isArray(body?.fields) ? body!.fields : [];
     return this.cases.recordNeedInfo(id, fields);
   }
+
+  @Get('metrics/summary')
+  async metricsSummary() {
+    return this.cases.getSummary();
+  }
 }
