@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TandaDeliveryService } from '../../../services/tanda-delivery.service';
 import { EnhancedTandaSimulationService, TandaScenarioResult } from '../../../services/enhanced-tanda-simulation.service';
 import { FinancialCalculatorService } from '../../../services/financial-calculator.service';
+import { RiskService } from '../../../services/risk.service';
 
 @Component({
   selector: 'app-tanda-consensus-panel',
@@ -120,7 +121,12 @@ export class TandaConsensusPanelComponent {
   execMessage = '';
   irrResults: TandaScenarioResult[] = [];
 
-  constructor(private tanda: TandaDeliveryService, private sim: EnhancedTandaSimulationService, private fin: FinancialCalculatorService) {}
+  constructor(
+    private tanda: TandaDeliveryService,
+    private sim: EnhancedTandaSimulationService,
+    private fin: FinancialCalculatorService,
+    private risk: RiskService
+  ) {}
 
   createRequest() {
     this.message = '';
@@ -162,10 +168,13 @@ export class TandaConsensusPanelComponent {
     this.irrResults = [];
     this.tanda.getTandaById(this.tandaId).subscribe(group => {
       if (!group) { this.execMessage = 'No se encontró la tanda'; return; }
-      const target = this.fin.getIrrTarget(group.market, {
+      const baseTarget = this.fin.getIrrTarget(group.market, {
         productSku: this.productSku || undefined,
-        collectiveId: (this.collectiveId || group.id) || undefined
+        collectiveId: (this.collectiveId || group.id) || undefined,
+        ecosystemId: group.ecosystemId
       });
+      const premiumBps = this.risk.getIrrPremiumBps({ ecosystemId: group.ecosystemId });
+      const target = baseTarget + (premiumBps / 10000);
       this.currentTargetIrr = target;
       const res = this.sim.simulateWhatIfFromSchedule(group, group.market as any, { targetIrrAnnual: target, horizonMonths: this.horizon });
       this.irrResults = [res];

@@ -138,9 +138,19 @@ export const environment = {
         'H6C_STD': 0.255,
         'H6C_PREMIUM': 0.299
       },
+      byEcosystem: {
+        // Targets por ruta/ecosistema (ejemplos):
+        // 'ruta-centro-edomex': 0.305
+      },
       byCollective: {
         // Ejemplo:
         'colectivo_edomex_01': 0.305
+      }
+    },
+    // Premiums de riesgo (bps) por ecosistema/ruta u otras dimensiones
+    riskPremiums: {
+      byEcosystem: {
+        // 'ruta-centro-edomex': 25 // = +0.25% anual
       }
     },
     tandaCaps: {

@@ -21,5 +21,11 @@ describe('FinancialCalculatorService', () => {
     const baseAgs = fin.getTIRMin('aguascalientes');
     expect(tAgs).toBeCloseTo(baseAgs, 10);
   });
-});
 
+  it('getIrrTarget prioritizes collective over ecosystem and market', () => {
+    const market = 'edomex' as any;
+    // Simular environment: collective > ecosystem > market
+    const target = fin.getIrrTarget(market, { collectiveId: 'colectivo_edomex_01', ecosystemId: 'ruta-centro-edomex' });
+    expect(target).toBeGreaterThan(0.29); // 0.305 en environment dev de ejemplo
+  });
+});

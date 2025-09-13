@@ -15,14 +15,20 @@ Esta guía resume cómo usar los paneles LAB de Tanda, cómo configurar toleranc
   - `freezeMaxPct`: fracción máx. de miembros congelados simultáneamente.
   - `freezeMaxMonths`: meses máx. de congelamiento por miembro.
   - `activeThreshold`: umbral de miembros activos para permitir entregas.
-- IRR objetivo por producto/colectivo (`environment.finance.irrTargets`):
-  - `bySku`: `{ 'SKU_X': 0.299 }` (anual).
+- IRR objetivo por ruta/grupo (prioridad):
   - `byCollective`: `{ 'colectivo_01': 0.305 }`.
-  - Fallback automático a `getTIRMin(market)` si no hay target específico.
+  - `byEcosystem`: `{ 'ruta-centro-edomex': 0.305 }`.
+  - `bySku` (opcional, para casos excepcionales): `{ 'H6C_STD': 0.255 }`.
+  - Fallback a baseline de mercado: `getTIRMin(market)`.
+- Premiums por riesgo geográfico (bps):
+  - `environment.finance.riskPremiums.byEcosystem`: `{ 'ruta-centro-edomex': 25 }`.
+  - Servicio `RiskService` (opcional) suma bps desde `loadGeographicRisk()` (AVI) según `state/municipality/riskZone`.
 
 ## Paneles
 - Tanda Enhanced: simula grid de escenarios (prioridades/caps/eventos) y exporta CSV.
-- Tanda Consensus: gestiona una transferencia de turno con consenso (crear, votar, aprobar empresa y ejecutar) y previsualiza IRR usando el calendario real (what‑if).
+- Tanda Consensus: gestiona una transferencia de turno con consenso (crear, votar, aprobar empresa y ejecutar) y previsualiza IRR usando el calendario real (what‑if). El target IRR se calcula como:
+  - `target = targetBase(byCollective → byEcosystem → bySku → market) + premiumBps/10000`.
+  - `premiumBps` puede venir de `riskPremiums.byEcosystem` o del `RiskService` (AVI geográfico).
 
 ## Métricas Clave
 - `irrAnnual`: TIR anual del escenario simulado.
@@ -36,6 +42,11 @@ Esta guía resume cómo usar los paneles LAB de Tanda, cómo configurar toleranc
 - `tirOK` debe ser `true` con tolerancia razonable (p. ej., ±50 bps).
 - Evitar patrones con `deficitsDetected` altos o `activeShareAvg` bajo.
 - Ajustar caps según evidencia (bajar `rescueCapPerMonth` si hay rescates recurrentes sin necesidad real; limitar `freezeMaxPct` si cae el `activeShareAvg`).
+
+## Integración con AVI (Riesgo Geográfico)
+- `ApiConfigService.loadGeographicRisk()` expone `riskMatrix` por estado/municipio y `multipliers` (urban/rural/highway/conflictZone).
+- `RiskService` traduce score/multiplier a `premiumBps` (configurable) y lo suma al target IRR.
+- Si no hay backend/config, usar `environment.finance.riskPremiums.byEcosystem`.
 
 ## QA/CI
 - Smokes recomendados en CI:
