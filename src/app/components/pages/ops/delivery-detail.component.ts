@@ -132,6 +132,14 @@ import {
                     {{ formatETA(delivery()!.eta) }}
                   </span>
                 </div>
+                <div class="info-item" *ngIf="delayInfo as di">
+                  <span class="info-label">Retraso:</span>
+                  <span class="info-value overdue">+{{ di.daysLate }} días</span>
+                </div>
+                <div class="info-item" *ngIf="delayInfo?.newCommitment as nc">
+                  <span class="info-label">Nuevo compromiso:</span>
+                  <span class="info-value new-commit">{{ nc }}</span>
+                </div>
                 <div class="info-item">
                   <span class="info-label">Días estimados:</span>
                   <span class="info-value">{{ delivery()!.estimatedTransitDays }}</span>
@@ -760,6 +768,8 @@ import {
       font-size: 12px;
       font-family: monospace;
     }
+    .info-value.overdue { color: #f97316; font-weight: 700; }
+    .info-value.new-commit { color: #22c55e; font-weight: 700; }
 
     .timeline-empty {
       text-align: center;
@@ -1269,6 +1279,24 @@ export class DeliveryDetailComponent implements OnInit {
     }).format(new Date(eta));
   }
 
+  // Recalculate ETA with p80 buffers per tramo and show "nuevo compromiso"
+  get bufferedETA(): string | undefined {
+    const d = this.delivery();
+    if (!d) return undefined;
+    return this.calculateBufferedETA(d.createdAt, d.status);
+  }
+
+  get delayInfo(): { daysLate: number; newCommitment?: string } | null {
+    const d = this.delivery();
+    if (!d || !d.eta) return null;
+    const now = new Date();
+    const eta = new Date(d.eta);
+    if (now <= eta) return null;
+    const daysLate = Math.ceil((now.getTime() - eta.getTime()) / (1000 * 60 * 60 * 24));
+    const newCommitment = this.bufferedETA ? this.formatETA(this.bufferedETA) : undefined;
+    return { daysLate, newCommitment };
+  }
+
   formatEventTime(time: string): string {
     return new Intl.DateTimeFormat('es-MX', {
       day: 'numeric',
@@ -1295,6 +1323,39 @@ export class DeliveryDetailComponent implements OnInit {
   isOverdue(eta?: string): boolean {
     if (!eta) return false;
     return new Date(eta) < new Date();
+  }
+
+  private calculateBufferedETA(createdAt: string, currentStatus: DeliveryStatus): string {
+    // p80 buffers by tramo (multiplicative factors)
+    const p80: Record<string, number> = {
+      IN_PRODUCTION: 1.2,          // 30d → p80
+      READY_AT_FACTORY: 1.1,       // 5d ground to port
+      ON_VESSEL: 1.2,              // 30d vessel
+      IN_CUSTOMS: 1.2,             // 10d customs
+      RELEASED: 1.1,               // 2d to WH
+    };
+
+    // Build total days from base FSM with buffers applied to segments that have estimatedDays
+    const base = new Date(createdAt);
+    let total = 0;
+    // Sum up to current status (historical segments use base estimate as reference)
+    for (const t of DELIVERY_FSM) {
+      const days = t.estimatedDays || 0;
+      const factor = p80[t.to] || 1.0;
+      total += Math.round(days * factor);
+      if (t.to === currentStatus) break;
+    }
+    // Add remaining segments to delivery
+    const currentIndex = DELIVERY_FSM.findIndex(tr => tr.to === currentStatus);
+    const remaining = DELIVERY_FSM.slice(currentIndex + 1);
+    for (const t of remaining) {
+      const days = t.estimatedDays || 0;
+      const factor = p80[t.to] || 1.0;
+      total += Math.round(days * factor);
+    }
+    const eta = new Date(base);
+    eta.setDate(eta.getDate() + total);
+    return eta.toISOString();
   }
 
   // Form field visibility based on action
