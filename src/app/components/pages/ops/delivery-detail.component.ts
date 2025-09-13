@@ -5,6 +5,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { DeliveriesService } from '../../../services/deliveries.service';
+import { RiskService } from '../../../services/risk.service';
 import { ToastService } from '../../../services/toast.service';
 import { 
   DeliveryOrder,
@@ -82,6 +83,10 @@ import {
                 <div class="info-item" *ngIf="delivery()!.route">
                   <span class="info-label">Ruta:</span>
                   <span class="info-value">{{ delivery()!.route!.name }}</span>
+                </div>
+                <div class="info-item" *ngIf="getRouteRiskPremiumBps() > 0">
+                  <span class="info-label">Riesgo Ruta:</span>
+                  <span class="info-value">+{{ getRouteRiskPremiumBps() }} bps</span>
                 </div>
               </div>
             </div>
@@ -1048,6 +1053,7 @@ export class DeliveryDetailComponent implements OnInit {
   private deliveriesService = inject(DeliveriesService);
   private toastService = inject(ToastService);
   private route = inject(ActivatedRoute);
+  private riskService = inject(RiskService);
 
   // Component state
   delivery = signal<DeliveryOrder | null>(null);
@@ -1277,6 +1283,13 @@ export class DeliveryDetailComponent implements OnInit {
       style: 'currency',
       currency: 'MXN'
     }).format(amount);
+  }
+
+  // Risk badge helper
+  getRouteRiskPremiumBps(): number {
+    const d = this.delivery();
+    if (!d || !d.route?.id) return 0;
+    return this.riskService.getIrrPremiumBps({ ecosystemId: d.route.id });
   }
 
   isOverdue(eta?: string): boolean {
