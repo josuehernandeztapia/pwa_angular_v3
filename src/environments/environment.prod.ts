@@ -10,6 +10,7 @@ export const environment = {
     enableAnalytics: true,
     enablePushNotifications: true,
     enableOfflineMode: true,
+    enablePostSalesWizard: false,
     // LAB/Backoffice visibility (oculto por defecto en prod)
     enableTandaLab: false,
     // Dynamic configuration flags

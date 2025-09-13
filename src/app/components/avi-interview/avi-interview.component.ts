@@ -3,6 +3,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, Subject, timer } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { switchMap, takeUntil } from 'rxjs/operators';
 
 import {
@@ -57,6 +58,11 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   // Resultados
   dualEngineResult: DualEngineResult | null = null;
   currentScore: AVIScore | null = null;
+
+  // Pills por pregunta y resumen final
+  questionPills: Array<{ questionId: string; status: 'clear' | 'review' | 'evasive'; label: string; reason: string }>=[];
+  finalDecision: 'GO' | 'REVIEW' | 'NO-GO' | null = null;
+  finalFlags: string[] = [];
   
   // Mock voice analysis (en producción sería real)
   private voiceAnalysisEnabled = true;
@@ -184,6 +190,12 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
       coherenceScore: this.calculateQuickCoherence()
     };
 
+    // Clasificar respuesta (píldora UX)
+    const pill = this.classifyResponse(aviResponse);
+    if (pill) {
+      this.questionPills.push(pill);
+    }
+
     this.aviService.submitResponse(aviResponse)
       .pipe(takeUntil(this.destroy$))
       .subscribe((success: boolean) => {
@@ -217,6 +229,9 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
         this.currentScore = result.consolidatedScore;
         this.isAnalyzing = false;
         this.showResults = true;
+
+        // Resumen final (GO / REVIEW / NO-GO) con regla correctiva
+        this.computeFinalSummary();
       });
   }
 
@@ -567,5 +582,63 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   isAudioReady(questionId: string | undefined | null): boolean {
     if (!questionId) return false;
     return !!this.audioReady[questionId];
+  }
+
+  // ===== Pills & Summary helpers =====
+  private classifyResponse(r: AVIResponse): { questionId: string; status: 'clear' | 'review' | 'evasive'; label: string; reason: string } | null {
+    const stress = r.stressIndicators?.length || 0;
+    const coh = r.coherenceScore ?? 0.8;
+    const text = (r.transcription || r.value || '').toLowerCase();
+
+    // Heurística simple
+    const hasStrongNegation = /(nunca|jam[aá]s|de ning[uú]n modo|neg[oó] tajantemente)/.test(text);
+    const hasPartialAdmission = /(creo|tal vez|posible|podr[ií]a|quiz[aá]s)/.test(text);
+    const evasiveLex = /(no s[eé]|no recuerdo|eso no aplica|prefiero no|no tengo ese dato)/.test(text);
+
+    let status: 'clear'|'review'|'evasive' = 'review';
+    let reason = '';
+    let label = 'Revisar';
+
+    if (coh >= 0.85 && stress <= 1 && !evasiveLex) {
+      status = 'clear'; label = 'Claro'; reason = 'Respuesta consistente, baja tensión';
+    } else if (hasStrongNegation || stress >= 3 || evasiveLex) {
+      status = 'evasive'; label = 'Evasivo';
+      reason = hasStrongNegation ? 'Negación tajante' : evasiveLex ? 'Lenguaje evasivo' : 'Alto nivel de estrés';
+    } else {
+      status = 'review'; label = 'Revisar';
+      reason = stress >= 2 ? 'Demasiadas pausas/muletillas' : 'Coherencia moderada';
+    }
+
+    return { questionId: r.questionId, status, label, reason };
+  }
+
+  private computeFinalSummary() {
+    const goMin = environment.avi?.thresholds?.conservative?.GO_MIN ?? 0.78;
+    const nogoMax = environment.avi?.thresholds?.conservative?.NOGO_MAX ?? 0.55;
+    const score01 = Math.max(0, Math.min(1, (this.currentScore?.totalScore || 0) / 1000));
+
+    let decision: 'GO'|'REVIEW'|'NO-GO' = 'REVIEW';
+    if (score01 >= goMin) decision = 'GO';
+    else if (score01 <= nogoMax) decision = 'NO-GO';
+
+    // Reglas correctivas: nervioso + admisión parcial + sin negación tajante ⇒ HIGH (no CRITICAL) → mover de NO-GO a REVIEW
+    const latestText = (this.answeredQuestions[this.answeredQuestions.length - 1]?.transcription || '').toLowerCase();
+    const anyNervioso = this.questionPills.some(p => /estr[eé]s|pausa|muletillas/.test(p.reason));
+    const partialAdmission = /(creo|tal vez|posible|podr[ií]a|quiz[aá]s)/.test(latestText);
+    const strongNeg = /(nunca|jam[aá]s|neg[oó] tajantemente)/.test(latestText);
+    if (decision === 'NO-GO' && anyNervioso && partialAdmission && !strongNeg) {
+      decision = 'REVIEW';
+    }
+
+    // Top 3 flags desde pills
+    const freq = new Map<string, number>();
+    this.questionPills.forEach(p => {
+      const key = p.reason;
+      freq.set(key, (freq.get(key) || 0) + 1);
+    });
+    const top = Array.from(freq.entries()).sort((a,b)=> b[1]-a[1]).slice(0,3).map(([k])=>k);
+
+    this.finalDecision = decision;
+    this.finalFlags = top;
   }
 }

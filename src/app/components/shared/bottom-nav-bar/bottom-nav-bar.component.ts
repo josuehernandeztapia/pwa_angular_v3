@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 interface BottomNavItem {
   label: string;
@@ -265,6 +266,25 @@ export class BottomNavBarComponent implements OnInit {
 
     // Listen to window resize
     window.addEventListener('resize', () => this.checkMobileView());
+
+    // Conditionally add Postventa Wizard to bottom nav (before "Más")
+    if (environment.features?.enablePostSalesWizard) {
+      const idxMore = this.navItems.findIndex(i => i.route === '/configuracion');
+      const exists = this.navItems.some(i => i.route === '/postventa/wizard');
+      if (!exists) {
+        const item = {
+          label: 'Postventa',
+          route: '/postventa/wizard',
+          icon: '📷',
+          activeIcon: '📷'
+        } as BottomNavItem;
+        if (idxMore > 0) {
+          this.navItems.splice(idxMore, 0, item);
+        } else {
+          this.navItems.push(item);
+        }
+      }
+    }
   }
 
   private checkMobileView(): void {

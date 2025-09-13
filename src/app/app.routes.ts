@@ -294,6 +294,16 @@ const labRoutes: Routes = [
   }
 ];
 
+// Rutas Wizard Postventa (condicional por feature flag)
+const postSalesWizardRoutes: Routes = [
+  {
+    path: 'postventa/wizard',
+    loadComponent: () => import('./components/post-sales/photo-wizard.component').then(c => c.PhotoWizardComponent),
+    canActivate: [AuthGuard],
+    title: 'Postventa – Wizard de 4 Fotos'
+  }
+];
+
 // Cola (wildcard) - siempre al final
 const tailRoutes: Routes = [
   {
@@ -302,6 +312,17 @@ const tailRoutes: Routes = [
   }
 ];
 
-export const routes: Routes = environment.features.enableTandaLab
-  ? [...commonBeforeWildcard, ...labRoutes, ...tailRoutes]
-  : [...commonBeforeWildcard, ...tailRoutes];
+const withLab = environment.features.enableTandaLab
+  ? [...labRoutes]
+  : [];
+
+const withWizard = environment.features.enablePostSalesWizard
+  ? [...postSalesWizardRoutes]
+  : [];
+
+export const routes: Routes = [
+  ...commonBeforeWildcard,
+  ...withLab,
+  ...withWizard,
+  ...tailRoutes
+];

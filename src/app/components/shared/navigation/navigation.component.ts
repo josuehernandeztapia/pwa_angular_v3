@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { PushNotificationService } from '../../../services/push-notification.service';
 import { UserPreferencesService } from '../../../services/user-preferences.service';
 import { NotificationCenterComponent } from '../notification-center/notification-center.component';
+import { environment } from '../../../../environments/environment';
 
 interface NavigationItem {
   label: string;
@@ -633,6 +634,18 @@ export class NavigationComponent implements OnInit {
     // Load user prefs
     this.fontScale = this.userPrefs.getFontScale();
     this.highContrast = this.userPrefs.getHighContrast();
+
+    // Conditionally add Postventa Wizard entry
+    if (environment.features?.enablePostSalesWizard) {
+      const exists = this.navigationItems.some(i => i.route === '/postventa/wizard');
+      if (!exists) {
+        this.navigationItems.splice(3, 0, {
+          label: 'Postventa (Wizard)',
+          route: '/postventa/wizard',
+          icon: '📷'
+        });
+      }
+    }
   }
 
   async initializeNotifications() {

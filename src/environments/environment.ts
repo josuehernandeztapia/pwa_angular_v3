@@ -13,6 +13,8 @@ export const environment = {
     enableAVISystem: true,
     enableVoiceRecording: true,
     enableStressDetection: true,
+    // Post-venta Wizard 4 fotos (feature flag)
+    enablePostSalesWizard: true,
     // LAB/Backoffice visibility
     enableTandaLab: true,
     // Dynamic configuration flags
