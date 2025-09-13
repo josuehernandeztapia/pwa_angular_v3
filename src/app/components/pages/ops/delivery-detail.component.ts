@@ -1081,6 +1081,8 @@ export class DeliveryDetailComponent implements OnInit {
   events = signal<DeliveryEventLog[]>([]);
   loading = signal<boolean>(false);
   eventsLoading = signal<boolean>(false);
+  clientView = false;
+  clientInfo: ClientDeliveryInfo | null = null;
   
   // Modal state
   showAdvanceStateModal = signal<boolean>(false);
@@ -1121,6 +1123,13 @@ export class DeliveryDetailComponent implements OnInit {
       .subscribe({
         next: (delivery) => {
           this.delivery.set(delivery);
+          // Client-friendly snapshot
+          try {
+            const svc: any = this.deliveriesService as any;
+            if (typeof svc['transformToClientView'] === 'function') {
+              this.clientInfo = svc['transformToClientView'](delivery);
+            }
+          } catch {}
         },
         error: (error) => {
           this.toastService.error(error.userMessage || 'Error cargando entrega');
