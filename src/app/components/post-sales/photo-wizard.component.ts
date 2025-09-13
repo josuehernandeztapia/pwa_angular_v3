@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CasesService, CaseRecord } from '../../services/cases.service';
-import { KpiDevDashboardComponent } from './kpi-dev-dashboard.component';
 import { environment } from '../../../environments/environment';
 
 type StepId = 'plate' | 'vin' | 'odometer' | 'evidence';
@@ -23,7 +22,7 @@ interface StepState {
 @Component({
   selector: 'app-photo-wizard',
   standalone: true,
-  imports: [CommonModule, FormsModule, KpiDevDashboardComponent],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="wizard-container" *ngIf="enabled; else disabledTpl">
       <h1 class="title">Postventa – Wizard de 4 Fotos</h1>
