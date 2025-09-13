@@ -182,20 +182,5 @@ export class CasesService implements OnModuleInit {
     return { ok: true, count: rec.needInfoEvents.length };
   }
 
-  getSummary() {
-    const entries = Array.from(this.metrics.entries());
-    const cases = entries.length;
-    const needInfoCases = entries.filter(([, m]) => m.needInfoEvents.length > 0).length;
-    const needInfoEvents = entries.reduce((acc, [, m]) => acc + m.needInfoEvents.length, 0);
-    const firstTimes = entries.map(([, m]) => m.firstRecommendationMs).filter((v): v is number => typeof v === 'number');
-    const avgFirstMs = firstTimes.length ? Math.round(firstTimes.reduce((a,b)=>a+b,0) / firstTimes.length) : 0;
-    const pNeedInfo = cases > 0 ? +(needInfoCases / cases).toFixed(2) : 0;
-    return {
-      cases,
-      needInfoCases,
-      needInfoEvents,
-      p_need_info: pNeedInfo,
-      t_first_recommendation_avg_ms: avgFirstMs,
-    };
-  }
+  // summary endpoint deferred per scope
 }
