@@ -101,15 +101,15 @@ import { environment } from '../../../../environments/environment';
                 </span>
               </div>
               <div class="scenario-body">
-                <div class="row">
+                <div class="row" title="PMT′: Nuevo pago mensual estimado tras aplicar el escenario">
                   <span class="label">PMT′</span>
                   <span class="value">{{ formatCurrency(s.newMonthlyPayment) }}</span>
                 </div>
-                <div class="row">
+                <div class="row" title="n′: Nuevo plazo en meses tras aplicar el escenario">
                   <span class="label">n′</span>
                   <span class="value">{{ s.newTerm }} meses</span>
                 </div>
-                <div class="row">
+                <div class="row" title="TIR post: Tasa Interna de Retorno después del ajuste; debe cumplir con el mínimo de política">
                   <span class="label">TIR post</span>
                   <span class="value">
                     <span class="irr" [class.ok]="(s as any).tirOK" [class.bad]="!(s as any).tirOK">{{ (((s as any).irr) || 0) * 100 | number:'1.0-2' }}%</span>
