@@ -97,7 +97,7 @@ import {
                   <span class="info-value">{{ delivery()!.contract.id }}</span>
                 </div>
                 <div class="info-item">
-                  <span class="info-label">SKU:</span>
+                  <span class="info-label">Producto/Paquete:</span>
                   <span class="info-value">{{ delivery()!.sku }}</span>
                 </div>
                 <div class="info-item">
