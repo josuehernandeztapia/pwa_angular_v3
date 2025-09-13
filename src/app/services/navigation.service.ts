@@ -180,7 +180,9 @@ export class NavigationService {
    */
   private updateNavigationState(url: string): void {
     const currentState = this.navigationState.value;
-    const previousRoute = currentState.currentRoute !== url ? currentState.currentRoute : null;
+    const previousRoute = (currentState.currentRoute && currentState.currentRoute !== '/' && currentState.currentRoute !== url)
+      ? currentState.currentRoute
+      : null;
 
     // Update route history
     if (previousRoute) {

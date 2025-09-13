@@ -505,10 +505,12 @@ describe('CreditScoringService', () => {
         { score: 450, expectedGrade: 'E' }
       ];
 
+      // Use a single spy and adjust its return value per case to avoid re-spying
+      const randomSpy = spyOn(Math, 'random');
+
       testCases.forEach(({ score, expectedGrade }) => {
-        // Mock Math.random to return specific score
         const randomValue = (score - 700) / 100; // Adjust for base score of 700
-        spyOn(Math, 'random').and.returnValue(randomValue);
+        randomSpy.and.returnValue(randomValue as unknown as number);
 
         const result = service['simulateScoring'](mockScoringRequest, `test-${score}`);
         expect(result.grade).toBe(expectedGrade);
@@ -525,8 +527,10 @@ describe('CreditScoringService', () => {
         { mockRandom: -0.8, expectedRisk: 'VERY_HIGH' }
       ];
 
+      const randomSpy = spyOn(Math, 'random');
+
       testCases.forEach(({ mockRandom, expectedRisk }) => {
-        spyOn(Math, 'random').and.returnValue(mockRandom);
+        randomSpy.and.returnValue(mockRandom as unknown as number);
 
         const result = service['simulateScoring'](mockScoringRequest, 'test-risk');
         expect(result.riskLevel).toBe(expectedRisk);

@@ -52,6 +52,8 @@
     "test:visual:ui": "playwright test --config=playwright.config.ts --ui",
     "test:ux-ui": "bash -lc \"trap 'kill %1' EXIT; npx ng serve --configuration=development --port=4200 & npx wait-on http://localhost:4200 && npx cypress run --browser chrome --headless --spec 'cypress/e2e/07-ux-ui-functional.cy.ts'\"",
     "test:smoke": "bash -lc \"trap 'kill %1' EXIT; npx ng serve --configuration=development --port=4200 & npx wait-on http://localhost:4200 && npx cypress run --browser chrome --headless --spec 'cypress/e2e/00-smoke-navigation.cy.ts'\"",
+    "test:smoke:guided": "bash -lc \"trap 'kill %1' EXIT; npx ng serve --configuration=development --port=4200 & npx wait-on http://localhost:4200 && npx cypress run --browser chrome --headless --config supportFile=false --spec 'cypress/e2e/smoke-guided-basic.cy.ts'\"",
+    "test:smoke:lab": "bash -lc \"trap 'kill %1' EXIT; (cd avi-lab && npx http-server . -p 8080) & npx wait-on http://localhost:8080 && npx cypress run --browser chrome --headless --config baseUrl=http://localhost:8080,supportFile=false --spec 'cypress/e2e/smoke-avi-lab.cy.ts'\"",
     "test:ux-ui+smoke": "bash -lc \"trap 'kill %1' EXIT; npx ng serve --configuration=development --port=4200 & npx wait-on http://localhost:4200 && npx cypress run --browser chrome --headless --spec 'cypress/e2e/07-ux-ui-functional.cy.ts,cypress/e2e/00-smoke-navigation.cy.ts'\"",
     "test:accessibility": "ng test --include='**/*.a11y.spec.ts' --watch=false --browsers=ChromeHeadless",
     "test:a11y": "axe --dir ./dist/conductores-pwa --include='*.html' --save ./reports/accessibility/results.json",

@@ -1,5 +1,0 @@
-
-> conductores-pwa@0.0.0 test:unit
-> ng test --watch=false --browsers=ChromeHeadless --watch=false --browsers=ChromeHeadless --reporter=spec
-
-Error: Unknown argument: reporter

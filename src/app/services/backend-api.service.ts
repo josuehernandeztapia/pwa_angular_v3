@@ -161,15 +161,22 @@ export class BackendApiService {
     
     return this.http.put<ClientRecord>(url, clientData, { headers: this.getAuthHeaders() }).pipe(
       tap(async (response) => {
-        // Update local cache
+        // Update local cache (create if missing for robustness)
         const existingClient = await this.storage.getClient(clientId);
-        if (existingClient) {
-          await this.storage.saveClient({
-            ...existingClient,
-            personalInfo: response,
-            updatedAt: Date.now()
-          });
-        }
+        const cacheRecord = existingClient ? {
+          ...existingClient,
+          personalInfo: response,
+          updatedAt: Date.now()
+        } : {
+          id: clientId,
+          personalInfo: response,
+          ecosystemId: response.ecosystem_id || '',
+          formProgress: {},
+          documents: [],
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        };
+        await this.storage.saveClient(cacheRecord as any);
       }),
       catchError((error) => {
         // Queue for offline sync
@@ -362,7 +369,7 @@ export class BackendApiService {
     return this.http.get<DashboardData>(url, options).pipe(
       map(data => ({
         ...data,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: data.lastUpdated || new Date().toISOString()
       })),
       catchError(async (error) => {
         console.error('Error fetching dashboard data:', error);

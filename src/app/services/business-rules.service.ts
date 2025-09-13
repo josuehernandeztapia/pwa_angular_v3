@@ -190,13 +190,17 @@ export class BusinessRulesService {
       d.name.includes('Acta Constitutiva') && d.status === 'Aprobado'
     );
 
+    const hasRutaCriticals = client.documents.some(d => d.name.includes('Carta Aval de Ruta') && d.status === 'Aprobado')
+      && client.documents.some(d => d.name.includes('Carta de Antigüedad') && d.status === 'Aprobado');
+
     const validation: EcosystemValidation = {
-      isValid: missingDocs.length === 0 && hasActaConstitutiva,
+      // Consider ecosystem validated if critical route docs are present, even if broader ecosystem docs are pending
+      isValid: hasActaConstitutiva && hasRutaCriticals,
       ecosystemId: client.ecosystemId,
       routeName: 'Ruta asignada',
       requiredDocuments: requiredDocs,
       missingDocuments: missingDocs,
-      validationStatus: hasActaConstitutiva ? 'approved' : 'pending',
+      validationStatus: (hasActaConstitutiva && hasRutaCriticals) ? 'approved' : 'pending',
       validationNotes: this.getEcosystemValidationNotes(client),
       hasCartaAvalRuta: client.documents.some(d => d.name.includes('Carta Aval de Ruta') && d.status === 'Aprobado'),
       hasCartaAntiguedadRuta: client.documents.some(d => d.name.includes('Carta de Antigüedad') && d.status === 'Aprobado')
@@ -511,6 +515,7 @@ export class BusinessRulesService {
     return [
       'Acta Constitutiva del Ecosistema',
       'RFC del Ecosistema',
+      'Estado de Cuenta Bancario del Ecosistema',
       'Padrón de Socios Actualizado',
       'Acta de Asamblea de Aprobación'
     ];
