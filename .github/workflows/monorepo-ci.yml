@@ -5,6 +5,12 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why are you triggering this run?"
+        required: false
+        default: "manual test run"
 
 jobs:
   detect-changes:
@@ -34,7 +40,8 @@ jobs:
     name: PWA CI
     runs-on: ubuntu-latest
     needs: detect-changes
-    if: needs.detect-changes.outputs.pwa-changed == 'true'
+    # Run on manual dispatch or when PWA files changed
+    if: github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.pwa-changed == 'true'
     
     steps:
       - name: Checkout
@@ -68,7 +75,8 @@ jobs:
     name: BFF CI
     runs-on: ubuntu-latest
     needs: detect-changes
-    if: needs.detect-changes.outputs.bff-changed == 'true'
+    # Run on manual dispatch or when BFF files changed
+    if: github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.bff-changed == 'true'
     
     steps:
       - name: Checkout
@@ -160,3 +168,23 @@ jobs:
         with:
           name: quality-reports
           path: reports/
+
+  pwa-services-tests:
+    name: PWA Services Unit Tests (manual)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install PWA Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run Services Unit Tests
+        run: npm run test:services
