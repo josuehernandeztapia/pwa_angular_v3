@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Market } from '../models/types';
+import { environment } from '../../environments/environment';
 import { FinancialCalculatorService } from './financial-calculator.service';
 
 export type TandaEventType = 'rescue' | 'change_price' | 'freeze' | 'unfreeze';
@@ -52,7 +53,7 @@ export class EnhancedTandaSimulationService {
     market: Market,
     horizonMonths: number,
     params: TandaScenarioParams,
-    options?: { targetIrrAnnual?: number; events?: TandaEvent[]; activeThreshold?: number }
+    options?: { targetIrrAnnual?: number; events?: TandaEvent[]; activeThreshold?: number; rescueCapPerMonth?: number; freezeMaxPct?: number; freezeMaxMonths?: number }
   ): TandaScenarioResult {
     const members = Math.max(1, Math.floor(group.totalMembers || 0));
     const baseMonthly = Math.max(0, group.monthlyAmount || 0);
@@ -85,11 +86,16 @@ export class EnhancedTandaSimulationService {
     // Award schedule tracking
     const contributed = Array.from({ length: members }, () => 0);
     const delivered = Array.from({ length: members }, () => false);
+    const frozenMonths = Array.from({ length: members }, () => 0);
     let awards = 0;
     let firstAwardT: number | undefined;
     let lastAwardT: number | undefined;
 
-    const allowAward = (activeShare: number) => activeShare >= (options?.activeThreshold ?? 0.8);
+    const cfg = environment?.finance?.tandaCaps || {};
+    const allowAward = (activeShare: number) => activeShare >= (options?.activeThreshold ?? cfg.activeThreshold ?? 0.8);
+    const maxFrozenSimultaneous = (options?.freezeMaxPct ?? cfg.freezeMaxPct ?? 0.2) * members;
+    const maxFreezeMonths = Math.max(0, Math.floor(options?.freezeMaxMonths ?? cfg.freezeMaxMonths ?? 2));
+    const rescueCapPerMonth = Math.max(0, Number(options?.rescueCapPerMonth ?? cfg.rescueCapPerMonth ?? 1.0)) * (members * currentMonthly);
     const pickAwardIndex = (): number | undefined => {
       const candidates: number[] = [];
       for (let i = 0; i < members; i++) if (!delivered[i]) candidates.push(i);
@@ -116,11 +122,19 @@ export class EnhancedTandaSimulationService {
     for (let t = 1; t <= h; t++) {
       // Aplicar eventos del mes
       const monthEvents = evIndex.get(t) || [];
+      let usedRescueAmount = 0;
       monthEvents.forEach(e => {
         switch (e.type) {
           case 'freeze': {
             const id = Math.max(0, Math.min(members - 1, Number(e.payload?.memberIndex ?? -1)));
-            if (!Number.isNaN(id) && id >= 0) active[id] = false;
+            if (!Number.isNaN(id) && id >= 0) {
+              const frozenCount = active.filter(v => !v).length;
+              if (frozenCount < maxFrozenSimultaneous && frozenMonths[id] < maxFreezeMonths) {
+                active[id] = false;
+                // contabilizar mes congelado a partir de ahora
+                frozenMonths[id] = Math.min(maxFreezeMonths, frozenMonths[id] + 1);
+              }
+            }
             break;
           }
           case 'unfreeze': {
@@ -135,7 +149,7 @@ export class EnhancedTandaSimulationService {
           }
           case 'rescue': {
             const amount = Number(e.payload?.amount ?? 0);
-            if (amount > 0) { flows[t] += amount; rescuesUsed++; }
+            if (amount > 0 && (usedRescueAmount + amount) <= rescueCapPerMonth) { flows[t] += amount; rescuesUsed++; usedRescueAmount += amount; }
             break;
           }
         }

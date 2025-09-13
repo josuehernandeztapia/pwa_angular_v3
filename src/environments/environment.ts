@@ -128,6 +128,12 @@ export const environment = {
     version: '1.0'
   },
   finance: {
-    irrToleranceBps: 50 // 0.50% tolerancia por defecto para IRR vs contrato
+    irrToleranceBps: 50, // 0.50% tolerancia por defecto para IRR vs contrato
+    tandaCaps: {
+      rescueCapPerMonth: 1.0,   // hasta 1x la aportación mensual del grupo por mes
+      freezeMaxPct: 0.2,        // hasta 20% de miembros congelados simultáneamente
+      freezeMaxMonths: 2,       // máximo 2 meses de congelamiento por miembro
+      activeThreshold: 0.8      // se permite entregar si >=80% activos
+    }
   }
 };
