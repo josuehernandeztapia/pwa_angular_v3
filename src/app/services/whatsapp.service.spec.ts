@@ -475,12 +475,10 @@ describe('WhatsappService', () => {
         done();
       });
 
-      // Handle both HTTP requests
-      const req1 = httpMock.expectOne(`${whatsappBaseUrl}/${mockPhoneNumberId}/messages`);
-      const req2 = httpMock.expectOne(`${whatsappBaseUrl}/${mockPhoneNumberId}/messages`);
-      
-      req1.flush(mockWhatsAppResponse);
-      req2.flush(mockWhatsAppResponse);
+      // Handle both HTTP requests (disambiguate multiple pending requests)
+      const reqs = httpMock.match(`${whatsappBaseUrl}/${mockPhoneNumberId}/messages`);
+      expect(reqs.length).toBe(2);
+      reqs.forEach((r) => r.flush(mockWhatsAppResponse));
     });
 
     it('should handle partial failures in bulk operations', (done) => {
@@ -515,11 +513,11 @@ describe('WhatsappService', () => {
         done();
       });
 
-      const req1 = httpMock.expectOne(`${whatsappBaseUrl}/${mockPhoneNumberId}/messages`);
-      const req2 = httpMock.expectOne(`${whatsappBaseUrl}/${mockPhoneNumberId}/messages`);
-      
-      req1.flush(mockWhatsAppResponse);
-      req2.error(new ErrorEvent('Invalid phone'), { status: 400, statusText: 'Bad Request' });
+      const reqs = httpMock.match(`${whatsappBaseUrl}/${mockPhoneNumberId}/messages`);
+      expect(reqs.length).toBe(2);
+      // First ok, second fails
+      reqs[0].flush(mockWhatsAppResponse);
+      reqs[1].error(new ErrorEvent('Invalid phone'), { status: 400, statusText: 'Bad Request' });
     });
   });
 

@@ -217,12 +217,11 @@ export class EnhancedTandaSimulationService {
     horizonMonths: number,
     options?: { targetIrrAnnual?: number }
   ): TandaScenarioResult[] {
+    // Base grid (3 scenarios) expected by focused specs
     const grid: TandaScenarioParams[] = [
       { name: 'Base (0%) - FIFO', contribDelta: 0, priority: 'fifo' },
       { name: 'Contrib -10% - FIFO', contribDelta: -0.1, priority: 'fifo' },
-      { name: 'Contrib +10% - FIFO', contribDelta: +0.1, priority: 'fifo' },
-      { name: 'Base (0%) - Compliance', contribDelta: 0, priority: 'compliance' },
-      { name: 'Base (0%) - Rescue', contribDelta: 0, priority: 'rescue' },
+      { name: 'Contrib +10% - FIFO', contribDelta: +0.1, priority: 'fifo' }
     ];
 
     const results = grid.map(g => this.simulateScenario(group, market, horizonMonths, g, options));

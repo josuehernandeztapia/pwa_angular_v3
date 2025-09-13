@@ -34,11 +34,25 @@ const mockIDBRequest = {
 describe('StorageService', () => {
   let service: StorageService;
   let mockIndexedDB: jasmine.Spy;
+  let onlineHandler: any;
+  let offlineHandler: any;
 
   beforeEach(async () => {
-    // Mock IndexedDB - use globalThis instead of global for browser compatibility
-    mockIndexedDB = jasmine.createSpy('indexedDB.open').and.returnValue(mockIDBRequest);
-    (globalThis as any).indexedDB = { open: mockIndexedDB };
+    // Mock IndexedDB: spy on existing factory when available to avoid assigning read-only property
+    if ((globalThis as any).indexedDB && typeof (globalThis as any).indexedDB.open === 'function') {
+      mockIndexedDB = spyOn((globalThis as any).indexedDB, 'open').and.returnValue(mockIDBRequest as any);
+    } else {
+      // Fallback (very rare in CI): create a lightweight mock factory
+      mockIndexedDB = jasmine.createSpy('indexedDB.open').and.returnValue(mockIDBRequest as any);
+      try {
+        Object.defineProperty(globalThis as any, 'indexedDB', {
+          configurable: true,
+          value: { open: mockIndexedDB }
+        });
+      } catch {
+        // If defineProperty is not allowed, tests depending on open() call count will be skipped by natural behavior
+      }
+    }
     
     // Mock navigator
     Object.defineProperty(navigator, 'onLine', {
@@ -48,8 +62,10 @@ describe('StorageService', () => {
     
     // Mock window events
     spyOn(window, 'addEventListener').and.callFake(((event: any, listener: any) => {
-      if (event === 'online' || event === 'offline') {
-        // Store callbacks for testing
+      if (event === 'online') {
+        onlineHandler = listener;
+      } else if (event === 'offline') {
+        offlineHandler = listener;
       }
     }) as any);
 
@@ -518,10 +534,11 @@ describe('StorageService', () => {
 
   describe('Utility Methods', () => {
     it('should clear cache', async () => {
-      const clearRequest = { onsuccess: null, onerror: null };
+      const clearRequest1: any = { onsuccess: null, onerror: null };
+      const clearRequest2: any = { onsuccess: null, onerror: null };
       const mockStore = {
-        clear: jasmine.createSpy('clear').and.returnValue(clearRequest)
-      };
+        clear: jasmine.createSpy('clear').and.returnValues(clearRequest1, clearRequest2)
+      } as any;
       const mockTransaction = {
         objectStore: jasmine.createSpy('objectStore').and.returnValue(mockStore)
       };
@@ -530,10 +547,9 @@ describe('StorageService', () => {
       
       const clearPromise = service.clearCache();
       
-      // Simulate successful clear for both stores
-      if (clearRequest.onsuccess) {
-        (clearRequest.onsuccess as any)();
-      }
+      // Simulate successful clear for both stores (after service assigns handlers)
+      setTimeout(() => { clearRequest1.onsuccess && clearRequest1.onsuccess(); });
+      setTimeout(() => { clearRequest2.onsuccess && clearRequest2.onsuccess(); });
       
       await expectAsync(clearPromise).toBeResolved();
       expect(mockIDBDatabase.transaction).toHaveBeenCalledWith(['formCache'], 'readwrite');
@@ -541,10 +557,13 @@ describe('StorageService', () => {
     });
 
     it('should get storage statistics', async () => {
-      const countRequest = { onsuccess: null, onerror: null, result: 5 };
+      const countRequest1: any = { onsuccess: null, onerror: null, result: 5 };
+      const countRequest2: any = { onsuccess: null, onerror: null, result: 5 };
+      const countRequest3: any = { onsuccess: null, onerror: null, result: 5 };
+      const countRequest4: any = { onsuccess: null, onerror: null, result: 5 };
       const mockStore = {
-        count: jasmine.createSpy('count').and.returnValue(countRequest)
-      };
+        count: jasmine.createSpy('count').and.returnValues(countRequest1, countRequest2, countRequest3, countRequest4)
+      } as any;
       const mockTransaction = {
         objectStore: jasmine.createSpy('objectStore').and.returnValue(mockStore)
       };
@@ -553,10 +572,11 @@ describe('StorageService', () => {
       
       const statsPromise = service.getStorageStats();
       
-      // Simulate count responses for all stores
-      if (countRequest.onsuccess) {
-        (countRequest.onsuccess as any)();
-      }
+      // Simulate count responses for all stores (after handlers are assigned)
+      setTimeout(() => { countRequest1.onsuccess && countRequest1.onsuccess(); });
+      setTimeout(() => { countRequest2.onsuccess && countRequest2.onsuccess(); });
+      setTimeout(() => { countRequest3.onsuccess && countRequest3.onsuccess(); });
+      setTimeout(() => { countRequest4.onsuccess && countRequest4.onsuccess(); });
       
       const stats = await statsPromise;
       
@@ -607,7 +627,7 @@ describe('StorageService', () => {
       
       // Simulate going online
       const onlineEvent = new Event('online');
-      window.dispatchEvent(onlineEvent);
+      onlineHandler && onlineHandler(onlineEvent);
       
       service.isOnline.subscribe(status => {
         expect(status).toBe(true);
@@ -617,7 +637,7 @@ describe('StorageService', () => {
     it('should update online status when going offline', () => {
       // Simulate going offline
       const offlineEvent = new Event('offline');
-      window.dispatchEvent(offlineEvent);
+      offlineHandler && offlineHandler(offlineEvent);
       
       service.isOnline.subscribe(status => {
         expect(status).toBe(false);
