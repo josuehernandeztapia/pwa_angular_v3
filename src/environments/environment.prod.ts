@@ -67,5 +67,14 @@ export const environment = {
   storage: {
     prefix: 'conductores_pwa_',
     version: '1.0'
+  },
+  finance: {
+    irrToleranceBps: Number(process.env['IRR_TOLERANCE_BPS'] || 50),
+    tandaCaps: {
+      rescueCapPerMonth: Number(process.env['TANDA_RESCUE_CAP_PER_MONTH'] || 1.0),
+      freezeMaxPct: Number(process.env['TANDA_FREEZE_MAX_PCT'] || 0.2),
+      freezeMaxMonths: Number(process.env['TANDA_FREEZE_MAX_MONTHS'] || 2),
+      activeThreshold: Number(process.env['TANDA_ACTIVE_THRESHOLD'] || 0.8)
+    }
   }
 };
