@@ -335,6 +335,46 @@ interface KpiData {
             Finanzas
           </h2>
 
+          <!-- Te toca en mes X -->
+          <div class="mb-4 p-4 rounded-lg border flex items-center justify-between"
+               [class]="(inflowVsPMT.ok ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200')">
+            <div class="text-sm">
+              <div class="font-semibold text-gray-800">Te toca en mes {{ nextAwardMonth }}</div>
+              <div class="text-gray-600" *ngIf="!inflowVsPMT.ok">
+                Inflow actual insuficiente para cubrir PMT post‑entrega. Recomendado: {{ formatCurrency(inflowVsPMT.recommended) }} adicionales/mes.
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-gray-500">PMT estimada</div>
+              <div class="text-lg font-bold text-gray-800">{{ formatCurrency(inflowVsPMT.pmt) }}</div>
+            </div>
+          </div>
+
+          <!-- Doble barra: Deuda activa vs Ahorro meta -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+            <div class="bg-white border border-gray-200 rounded-xl p-4">
+              <div class="text-sm text-gray-600 mb-2">Cobertura de Deuda (PMT) con Inflow</div>
+              <div class="w-full h-6 bg-gray-100 rounded overflow-hidden">
+                <div class="h-6 bg-emerald-500" [style.width.%]="inflowVsPMT.coveragePct"></div>
+              </div>
+              <div class="mt-2 text-xs text-gray-600 flex justify-between">
+                <span>Inflow: {{ formatCurrency(inflowVsPMT.inflow) }}</span>
+                <span>PMT: {{ formatCurrency(inflowVsPMT.pmt) }} ({{ inflowVsPMT.coveragePct | number:'1.0-0' }}%)</span>
+              </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-xl p-4">
+              <div class="text-sm text-gray-600 mb-2">Ahorro hacia Meta por Miembro</div>
+              <div class="w-full h-6 bg-gray-100 rounded overflow-hidden">
+                <div class="h-6 bg-blue-500" [style.width.%]="savingProgressPct"></div>
+              </div>
+              <div class="mt-2 text-xs text-gray-600 flex justify-between">
+                <span>Meta: {{ formatCurrency(targetPerMember || 0) }}</span>
+                <span>Tiempo estimado: {{ simulationResult?.scenario?.monthsToTarget || 0 }} meses</span>
+              </div>
+            </div>
+          </div>
+
           <!-- KPI Dashboard (Advanced Mode) -->
           <div *ngIf="currentViewMode === 'advanced' && kpiDashboard.length > 0" class="mb-6">
             <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
@@ -685,6 +725,39 @@ export class TandaColectivaComponent implements OnInit, OnDestroy {
     { label: '📄 PDF', click: () => this.generatePDF() },
     { label: '✅ Formalizar Grupo', click: () => this.proceedToClientCreation() }
   ];
+
+  // Derived metrics for double bar/alerts
+  get nextAwardMonth(): number {
+    return this.simulationResult?.scenario?.monthsToFirstAward
+      || this.simulationResult?.tandaResult?.firstAwardT
+      || 0;
+  }
+
+  get targetPerMember(): number | undefined {
+    return this.simulationResult?.scenario?.targetPerMember;
+  }
+
+  get inflowVsPMT(): { inflow: number; pmt: number; coveragePct: number; ok: boolean; recommended: number } {
+    const inflow = this.simulationResult?.scenario?.monthlyContribution || 0; // grupo total
+    const unitPrice = this.configForm.value.unitPrice as number;
+    const downPerMember = this.targetPerMember || (unitPrice * 0.2); // fallback 20%
+    const principal = Math.max(0, unitPrice - downPerMember);
+    const term = 48; // suposición estándar 48 meses
+    const monthlyRate = this.financialCalc.getTIRMin('edomex') / 12;
+    const pmt = principal > 0 ? this.financialCalc.annuity(principal, monthlyRate, term) : 0;
+    const coveragePct = pmt > 0 ? Math.min(100, Math.max(0, (inflow / pmt) * 100)) : 100;
+    const ok = inflow > pmt;
+    const recommended = ok ? 0 : Math.max(0, pmt - inflow);
+    return { inflow, pmt, coveragePct, ok, recommended };
+  }
+
+  get savingProgressPct(): number {
+    // Estimar progreso hacia la meta de enganche por miembro usando meses a meta
+    const months = this.simulationResult?.scenario?.monthsToTarget || 0;
+    if (!months) return 0;
+    const elapsed = Math.min(months, Math.max(0, Math.floor((this.simulationResult?.scenario?.projectedBalance?.length || 0))));
+    return Math.min(100, Math.max(0, (elapsed / months) * 100));
+  }
 
   constructor(
     private fb: FormBuilder,
