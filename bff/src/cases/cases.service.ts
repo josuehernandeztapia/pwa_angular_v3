@@ -24,6 +24,7 @@ export class CasesService implements OnModuleInit {
   private readonly logger = new Logger(CasesService.name);
   private memoryCases = new Map<string, CaseRecord>();
   private memoryAttachments = new Map<string, CaseAttachment>();
+  private metrics = new Map<string, { firstRecommendationMs?: number; needInfoEvents: Array<{ fields: string[]; at: string }>; }>();
 
   constructor(private cfg: ConfigService, private pg: PgService) {}
 
@@ -165,5 +166,19 @@ export class CasesService implements OnModuleInit {
     }
     return { confidence, missing: missing.length ? missing : undefined };
   }
-}
 
+  // Metrics
+  recordFirstRecommendation(caseId: string, millis: number) {
+    const rec = this.metrics.get(caseId) || { needInfoEvents: [] };
+    if (rec.firstRecommendationMs == null) rec.firstRecommendationMs = Math.max(0, Math.floor(millis));
+    this.metrics.set(caseId, rec);
+    return { ok: true, firstRecommendationMs: rec.firstRecommendationMs };
+  }
+
+  recordNeedInfo(caseId: string, fields: string[]) {
+    const rec = this.metrics.get(caseId) || { needInfoEvents: [] };
+    rec.needInfoEvents.push({ fields, at: new Date().toISOString() });
+    this.metrics.set(caseId, rec);
+    return { ok: true, count: rec.needInfoEvents.length };
+  }
+}

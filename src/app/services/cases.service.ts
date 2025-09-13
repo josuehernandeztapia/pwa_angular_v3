@@ -91,5 +91,13 @@ export class CasesService {
       ))
     );
   }
-}
 
+  // Metrics endpoints
+  recordFirstRecommendation(caseId: string, millis: number): Observable<{ ok: boolean; firstRecommendationMs: number }> {
+    return this.http.post<{ ok: boolean; firstRecommendationMs: number }>(`${this.base}/cases/${caseId}/metrics/first-recommendation`, { millis });
+  }
+
+  recordNeedInfo(caseId: string, fields: string[]): Observable<{ ok: boolean; count: number }> {
+    return this.http.post<{ ok: boolean; count: number }>(`${this.base}/cases/${caseId}/metrics/need-info`, { fields });
+  }
+}

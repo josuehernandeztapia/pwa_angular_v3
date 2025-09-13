@@ -146,6 +146,10 @@ export class PhotoWizardComponent {
 
   currentIndex = 0;
   caseId: string | null = null;
+  private startTimeMs: number | null = null;
+  private sentFirstRecommendation = false;
+  private sentNeedInfo = false;
+  firstRecommendationMs: number | null = null;
 
   constructor(private cases: CasesService) {}
 
@@ -194,7 +198,7 @@ export class PhotoWizardComponent {
 
   next() {
     if (!this.caseId) {
-      this.cases.createCase().subscribe(rec => { this.caseId = rec.id; });
+      this.cases.createCase().subscribe(rec => { this.caseId = rec.id; this.startTimeMs = performance.now(); });
       return;
     }
     if (this.currentIndex < this.steps.length - 1) this.currentIndex += 1;
@@ -228,6 +232,14 @@ export class PhotoWizardComponent {
         step.done = true;
         step.confidence = ocr.confidence ?? 0;
         step.missing = ocr.missing || [];
+
+        // Metrics: if we just achieved all 3 basics OK, send t_first_recommendation
+        if (!this.sentFirstRecommendation && this.isAllGood && this.startTimeMs != null) {
+          const elapsed = performance.now() - this.startTimeMs;
+          this.firstRecommendationMs = Math.round(elapsed);
+          this.sentFirstRecommendation = true;
+          this.cases.recordFirstRecommendation(this.caseId!, this.firstRecommendationMs).subscribe();
+        }
       },
       error: (err) => {
         step.uploading = false;
@@ -235,5 +247,20 @@ export class PhotoWizardComponent {
       }
     });
   }
-}
 
+  // When showing summary and not all good, record need_info once
+  get showNeedInfoRecording(): boolean {
+    if (!this.caseId) return false;
+    if (this.sentNeedInfo) return false;
+    const allTried = this.steps.filter(s => s.id !== 'plate').every(s => s.done); // 3 básicos intentados
+    if (allTried && !this.isAllGood) {
+      const missing: string[] = [];
+      if (this.needsVin) missing.push('vin');
+      if (this.needsOdometer) missing.push('odometer');
+      if (this.needsEvidence) missing.push('evidence');
+      this.cases.recordNeedInfo(this.caseId, missing).subscribe();
+      this.sentNeedInfo = true;
+    }
+    return this.sentNeedInfo;
+  }
+}

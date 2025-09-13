@@ -43,5 +43,22 @@ export class CasesController {
   ) {
     return this.cases.ocrAttachment(attId, !!body?.forceLow);
   }
-}
 
+  @Post(':id/metrics/first-recommendation')
+  async firstRecommendation(
+    @Param('id') id: string,
+    @Body() body: { millis: number }
+  ) {
+    const ms = Math.max(0, Number(body?.millis || 0));
+    return this.cases.recordFirstRecommendation(id, ms);
+  }
+
+  @Post(':id/metrics/need-info')
+  async needInfo(
+    @Param('id') id: string,
+    @Body() body: { fields: string[] }
+  ) {
+    const fields = Array.isArray(body?.fields) ? body!.fields : [];
+    return this.cases.recordNeedInfo(id, fields);
+  }
+}

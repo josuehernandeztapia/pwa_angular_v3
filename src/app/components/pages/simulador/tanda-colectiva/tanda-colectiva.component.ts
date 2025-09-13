@@ -341,7 +341,7 @@ interface KpiData {
             <div class="text-sm">
               <div class="font-semibold text-gray-800">Te toca en mes {{ nextAwardMonth }}</div>
               <div class="text-gray-600" *ngIf="!inflowVsPMT.ok">
-                Inflow actual insuficiente para cubrir PMT post‑entrega. Recomendado: {{ formatCurrency(inflowVsPMT.recommended) }} adicionales/mes.
+                Estado: <strong class="text-orange-700">Bloqueado</strong> (sin leftover). Recaudo recomendado: {{ formatCurrency(inflowVsPMT.recommended) }} mensuales.
               </div>
             </div>
             <div class="text-right">

@@ -60,19 +60,31 @@ interface AmortizationRow {
             <div class="label">Plazo</div>
             <div class="value">{{ term }} meses</div>
           </div>
-          <div class="summary-item insurance">
-            <label class="toggle">
-              <input type="checkbox" [(ngModel)]="includeInsurance" />
-              <span>Incluir seguros</span>
-            </label>
-            <input 
-              *ngIf="includeInsurance && !isVentaDirecta"
-              class="insurance-input"
-              type="number"
-              min="0"
-              [placeholder]="'Monto de seguros'"
-              [(ngModel)]="insuranceAmount"
-            />
+          <div class="summary-item insurance" *ngIf="!isVentaDirecta">
+            <div class="row">
+              <label class="toggle">
+                <input type="checkbox" [(ngModel)]="includeInsurance" />
+                <span>Incluir seguros</span>
+              </label>
+              <input 
+                *ngIf="includeInsurance"
+                class="insurance-input"
+                type="number"
+                min="0"
+                [placeholder]="'Monto de seguros'"
+                [(ngModel)]="insuranceAmount"
+              />
+            </div>
+            <div class="row" *ngIf="includeInsurance">
+              <label class="toggle small">
+                <input type="radio" name="insMode" value="financiado" [(ngModel)]="insuranceMode" />
+                <span>Financiado (sumar a F)</span>
+              </label>
+              <label class="toggle small">
+                <input type="radio" name="insMode" value="contado" [(ngModel)]="insuranceMode" />
+                <span>Contado (cargo aparte)</span>
+              </label>
+            </div>
           </div>
         </div>
         
@@ -503,8 +515,10 @@ interface AmortizationRow {
     .summary-item .value { font-weight: 700; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
     .summary-item .value.primary { color: #06d6a0; }
     .summary-item .value.accent { color: #f59e0b; }
-    .summary-item.insurance { display: flex; align-items: center; gap: 8px; }
+    .summary-item.insurance { display: flex; flex-direction: column; gap: 6px; }
+    .summary-item.insurance .row { display:flex; align-items: center; gap: 8px; }
     .toggle { display:flex; align-items:center; gap:8px; font-size: 12px; color:#e2e8f0; }
+    .toggle.small { font-size: 11px; color:#cbd5e1; }
     .insurance-input { width: 120px; padding:6px 8px; background:#1a1f2e; border:1px solid #4a5568; border-radius:6px; color:white; }
     .first-payment { display:flex; align-items:center; gap:16px; margin-top:10px; font-size: 13px; }
     .first-payment .fp-label { color:#a0aec0; }
@@ -1145,6 +1159,7 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
   // UX improvements: insurance financing and first payment breakdown
   includeInsurance = false;
   insuranceAmount: any = '';
+  insuranceMode: 'financiado' | 'contado' = 'financiado';
 
   constructor(
     private cotizadorEngine: CotizadorEngineService,
@@ -1207,7 +1222,8 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
     const base = this.totalPrice - this.downPayment;
     if (this.isVentaDirecta) return base;
     const ins = this.includeInsurance ? (parseFloat(this.insuranceAmount) || 0) : 0;
-    return Math.max(0, base + ins);
+    const addToF = this.includeInsurance && this.insuranceMode === 'financiado' ? ins : 0;
+    return Math.max(0, base + addToF);
   }
 
   get monthlyPayment(): number {
