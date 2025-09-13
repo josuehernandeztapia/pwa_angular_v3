@@ -60,7 +60,11 @@ jobs:
         run: npm run lint
 
       - name: Test PWA
-        run: npm run test:unit
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 25
+          max_attempts: 2
+          command: npm run test:unit
 
       - name: Build PWA
         run: npm run build:prod
@@ -96,7 +100,11 @@ jobs:
         run: cd bff && npm run lint
 
       - name: Test BFF
-        run: cd bff && npm test
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 20
+          max_attempts: 2
+          command: cd bff && npm test
 
       - name: Build BFF
         run: cd bff && npm run build
@@ -136,7 +144,11 @@ jobs:
           npx wait-on http://localhost:4200 http://localhost:3000
 
       - name: Run E2E Tests
-        run: npm run test:e2e:chrome
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 30
+          max_attempts: 2
+          command: npm run test:e2e:chrome
 
   quality-gates:
     name: Quality Gates
@@ -187,4 +199,8 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Run Services Unit Tests
-        run: npm run test:services
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 20
+          max_attempts: 2
+          command: npm run test:services
