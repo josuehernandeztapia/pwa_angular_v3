@@ -18,7 +18,6 @@ Esta guía resume cómo usar los paneles LAB de Tanda, cómo configurar toleranc
 - IRR objetivo por ruta/grupo (prioridad):
   - `byCollective`: `{ 'colectivo_01': 0.305 }`.
   - `byEcosystem`: `{ 'ruta-centro-edomex': 0.305 }`.
-  - `bySku` (opcional, para casos excepcionales): `{ 'H6C_STD': 0.255 }`.
   - Fallback a baseline de mercado: `getTIRMin(market)`.
 - Premiums por riesgo geográfico (bps):
   - `environment.finance.riskPremiums.byEcosystem`: `{ 'ruta-centro-edomex': 25 }`.
@@ -27,12 +26,12 @@ Esta guía resume cómo usar los paneles LAB de Tanda, cómo configurar toleranc
 ## Paneles
 - Tanda Enhanced: simula grid de escenarios (prioridades/caps/eventos) y exporta CSV.
 - Tanda Consensus: gestiona una transferencia de turno con consenso (crear, votar, aprobar empresa y ejecutar) y previsualiza IRR usando el calendario real (what‑if). El target IRR se calcula como:
-  - `target = targetBase(byCollective → byEcosystem → bySku → market) + premiumBps/10000`.
+  - `target = targetBase(byCollective → byEcosystem → market) + premiumBps/10000`.
   - `premiumBps` puede venir de `riskPremiums.byEcosystem` o del `RiskService` (AVI geográfico).
 
 ## Métricas Clave
 - `irrAnnual`: TIR anual del escenario simulado.
-- `tirOK`: `true` si `irrAnnual >= target` (target viene de SKU/colectivo o mercado).
+- `tirOK`: `true` si `irrAnnual >= target` (target viene de colectivo/ruta o mercado).
 - `awardsMade`, `firstAwardT`, `lastAwardT`: volumen y timing de entregas.
 - `activeShareAvg`: fracción promedio de miembros activos.
 - `deficitsDetected`: meses en que las entregas superan aportes.
