@@ -12,6 +12,11 @@ on:
         required: false
         default: "manual test run"
 
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
 jobs:
   detect-changes:
     name: Detect Changes
@@ -204,10 +209,6 @@ jobs:
               `Commit: ${run.data.head_sha}`,
               '',
               'Failed jobs:',
-permissions:
-  contents: read
-  actions: read
-  issues: write
               ...failed.map(j => `- ${j.name}: ${j.html_url} (${j.conclusion})`)
             ].join('\n');
             const title = `CI failure: ${run.data.head_branch} @ ${run.data.head_sha.substring(0,7)}`;
