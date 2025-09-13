@@ -181,6 +181,38 @@ jobs:
           name: quality-reports
           path: reports/
 
+  report-failures:
+    name: Report Failures
+    runs-on: ubuntu-latest
+    needs: [pwa-ci, bff-ci, e2e-tests, quality-gates, pwa-services-tests]
+    if: failure()
+    steps:
+      - name: Create CI failure issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const run_id = context.runId;
+            const run = await github.rest.actions.getWorkflowRun({ owner, repo, run_id });
+            const jobs = await github.rest.actions.listJobsForWorkflowRun({ owner, repo, run_id, per_page: 100 });
+            const failed = jobs.data.jobs.filter(j => ['failure','cancelled','timed_out','action_required'].includes(j.conclusion));
+            const body = [
+              `Workflow: ${run.data.name}`,
+              `Run URL: ${run.data.html_url}`,
+              `Event: ${run.data.event}`,
+              `Branch: ${run.data.head_branch}`,
+              `Commit: ${run.data.head_sha}`,
+              '',
+              'Failed jobs:',
+permissions:
+  contents: read
+  actions: read
+  issues: write
+              ...failed.map(j => `- ${j.name}: ${j.html_url} (${j.conclusion})`)
+            ].join('\n');
+            const title = `CI failure: ${run.data.head_branch} @ ${run.data.head_sha.substring(0,7)}`;
+            await github.rest.issues.create({ owner, repo, title, body });
+
   pwa-services-tests:
     name: PWA Services Unit Tests (manual)
     runs-on: ubuntu-latest
