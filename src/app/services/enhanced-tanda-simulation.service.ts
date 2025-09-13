@@ -232,4 +232,76 @@ export class EnhancedTandaSimulationService {
     );
     return results;
   }
+
+  /**
+   * Simulate using the real delivery schedule from a TandaGroup and return a single "what-if" result.
+   * Allows pre-applying changes to the schedule (e.g., transfer) just for preview.
+   */
+  simulateWhatIfFromSchedule(
+    tanda: import('./tanda-delivery.service').TandaGroup,
+    market: Market,
+    opts?: { targetIrrAnnual?: number; horizonMonths?: number; preApply?: { transfer?: { toMemberId: string; month?: number } } }
+  ): TandaScenarioResult {
+    const members = Math.max(1, Math.floor(tanda.totalMembers || 0));
+    const monthly = Math.max(0, tanda.monthlyAmount || 0);
+    const horizon = Math.max(1, Math.floor(opts?.horizonMonths || tanda.totalMembers));
+
+    // Clone schedule
+    const schedule = (tanda.deliverySchedule || []).map(s => ({ ...s }));
+    // Pre-apply simple transfer: move a member to the next month or given month
+    const toMemberId = opts?.preApply?.transfer?.toMemberId;
+    if (toMemberId) {
+      const targetMonth = opts?.preApply?.transfer?.month ?? (tanda.currentMonth + 1);
+      const entry = schedule.find(s => s.memberId === toMemberId);
+      if (entry) {
+        entry.month = targetMonth;
+        entry.deliveryStatus = 'ready';
+      }
+      schedule.sort((a, b) => a.month - b.month);
+    }
+
+    // Build cash flows: contributions positive each month; deliveries negative when scheduled
+    const flows = new Array(horizon + 1).fill(0);
+    flows[0] = 0; // using real schedule, we account outflows on delivery months
+    let awards = 0;
+    let firstAwardT: number | undefined;
+    let lastAwardT: number | undefined;
+    let activeShareAccum = 0;
+    let deficits = 0;
+    const activeCount = members; // assume all active for base what-if; caps/policies already in service-level ops
+
+    for (let t = 1; t <= horizon; t++) {
+      // contributions from active members
+      flows[t] += activeCount * monthly;
+      activeShareAccum += activeCount / members;
+
+      // deliveries scheduled at month t
+      const deliveries = schedule.filter(s => s.month === t);
+      if (deliveries.length > 0) {
+        awards += deliveries.length;
+        if (firstAwardT === undefined) firstAwardT = t;
+        lastAwardT = t;
+        // assume one unit per month (or multiple if present) at totalAmount each
+        flows[t] -= (tanda.totalAmount * deliveries.length);
+      }
+
+      // deficit if any delivery this month and contributions < required (very rough proxy)
+      if (deliveries.length > 0 && (activeCount * monthly) < tanda.totalAmount) deficits++;
+    }
+
+    const irrMonthly = this.fin.calculateTIR(flows);
+    const irrAnnual = irrMonthly * 12;
+    const target = opts?.targetIrrAnnual ?? this.fin.getTIRMin(market);
+    const tirOK = irrAnnual >= target;
+
+    return {
+      id: `tanda-whatif-${tanda.id}`,
+      name: 'Calendario real (what-if)',
+      params: { name: 'what-if', contribDelta: 0, priority: 'fifo' },
+      cashFlows: flows,
+      irrAnnual,
+      tirOK,
+      metrics: { deficitsDetected: deficits, rescuesUsed: 0, activeShareAvg: activeShareAccum / horizon, awardsMade: awards, firstAwardT, lastAwardT }
+    };
+  }
 }

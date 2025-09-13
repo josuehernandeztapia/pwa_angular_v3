@@ -10,6 +10,8 @@ export const environment = {
     enableAnalytics: true,
     enablePushNotifications: true,
     enableOfflineMode: true,
+    // LAB/Backoffice visibility (oculto por defecto en prod)
+    enableTandaLab: false,
     // Dynamic configuration flags
     enableRemoteConfig: true,
     enableConfigShadowMode: false,
@@ -70,6 +72,13 @@ export const environment = {
   },
   finance: {
     irrToleranceBps: Number(process.env['IRR_TOLERANCE_BPS'] || 50),
+    irrTargets: {
+      bySku: {
+        // Puede configurarse vía remote config o build-time
+      },
+      byCollective: {
+      }
+    },
     tandaCaps: {
       rescueCapPerMonth: Number(process.env['TANDA_RESCUE_CAP_PER_MONTH'] || 1.0),
       freezeMaxPct: Number(process.env['TANDA_FREEZE_MAX_PCT'] || 0.2),

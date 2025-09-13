@@ -13,6 +13,8 @@ export const environment = {
     enableAVISystem: true,
     enableVoiceRecording: true,
     enableStressDetection: true,
+    // LAB/Backoffice visibility
+    enableTandaLab: true,
     // Dynamic configuration flags
     enableRemoteConfig: false,
     enableConfigShadowMode: false,
@@ -129,6 +131,17 @@ export const environment = {
   },
   finance: {
     irrToleranceBps: 50, // 0.50% tolerancia por defecto para IRR vs contrato
+    // Targets de IRR por producto/colectivo (fallback a mercado)
+    irrTargets: {
+      bySku: {
+        // Ejemplos (valores anuales como fracción):
+        // 'SKU_AGS_STD': 0.255,
+        // 'SKU_EDOMEX_COL': 0.299
+      },
+      byCollective: {
+        // 'colectivo_edomex_01': 0.305
+      }
+    },
     tandaCaps: {
       rescueCapPerMonth: 1.0,   // hasta 1x la aportación mensual del grupo por mes
       freezeMaxPct: 0.2,        // hasta 20% de miembros congelados simultáneamente

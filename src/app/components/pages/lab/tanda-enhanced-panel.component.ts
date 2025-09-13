@@ -88,7 +88,7 @@ export class TandaEnhancedPanelComponent {
   constructor(private tandaSvc: EnhancedTandaSimulationService, private fin: FinancialCalculatorService) {}
 
   run() {
-    const target = this.fin.getTIRMin(this.market); // por ahora usar baseline; se puede parametrizar por producto/colectivo
+    const target = this.fin.getIrrTarget(this.market); // permite override por SKU/colectivo vía environment
     this.results = this.tandaSvc.simulateWithGrid({ totalMembers: this.totalMembers, monthlyAmount: this.monthlyAmount }, this.market, this.horizonMonths, { targetIrrAnnual: target });
   }
 
@@ -116,4 +116,3 @@ export class TandaEnhancedPanelComponent {
     URL.revokeObjectURL(url);
   }
 }
-

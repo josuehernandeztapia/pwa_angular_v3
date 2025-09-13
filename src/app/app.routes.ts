@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { environment } from '../environments/environment';
 
-export const routes: Routes = [
+// Rutas comunes (antes del wildcard)
+const commonBeforeWildcard: Routes = [
   // Redirect root to dashboard
   {
     path: '',
@@ -232,13 +234,7 @@ export const routes: Routes = [
     title: 'Catálogo de Productos - Conductores PWA'
   },
 
-  // LAB / Backoffice routes (internal-only)
-  {
-    path: 'lab/tanda-enhanced',
-    loadComponent: () => import('./components/pages/lab/tanda-enhanced-panel.component').then(c => c.TandaEnhancedPanelComponent),
-    canActivate: [AuthGuard],
-    title: 'LAB – Tanda Enhanced Panel'
-  },
+  // (LAB se inserta condicionalmente más abajo)
 
   // Settings and profile
   {
@@ -279,11 +275,33 @@ export const routes: Routes = [
     path: 'unauthorized',
     loadComponent: () => import('./components/shared/unauthorized/unauthorized.component').then(c => c.UnauthorizedComponent),
     title: 'No autorizado - Conductores PWA'
-  },
+  }
+];
 
-  // Wildcard route - must be last
+// Rutas LAB / Backoffice (solo si feature flag activo)
+const labRoutes: Routes = [
+  {
+    path: 'lab/tanda-enhanced',
+    loadComponent: () => import('./components/pages/lab/tanda-enhanced-panel.component').then(c => c.TandaEnhancedPanelComponent),
+    canActivate: [AuthGuard],
+    title: 'LAB – Tanda Enhanced Panel'
+  },
+  {
+    path: 'lab/tanda-consensus',
+    loadComponent: () => import('./components/pages/lab/tanda-consensus-panel.component').then(c => c.TandaConsensusPanelComponent),
+    canActivate: [AuthGuard],
+    title: 'LAB – Tanda Consensus Panel'
+  }
+];
+
+// Cola (wildcard) - siempre al final
+const tailRoutes: Routes = [
   {
     path: '**',
     redirectTo: '/404'
   }
 ];
+
+export const routes: Routes = environment.features.enableTandaLab
+  ? [...commonBeforeWildcard, ...labRoutes, ...tailRoutes]
+  : [...commonBeforeWildcard, ...tailRoutes];
