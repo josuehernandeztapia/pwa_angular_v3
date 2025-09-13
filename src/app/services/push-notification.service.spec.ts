@@ -297,19 +297,20 @@ describe('PushNotificationService', () => {
       // Wait for subscription to load
       return new Promise<void>((resolve) => {
         let timeoutId: any;
+        let subRef: any;
         
-        const subscription$ = newService.currentSubscription.subscribe(sub => {
+        subRef = newService.currentSubscription.subscribe(sub => {
           if (sub !== null && sub.subscription_id === 'sub123') {
             expect(sub).toEqual(subscription);
             clearTimeout(timeoutId);
-            subscription$.unsubscribe();
+            if (subRef) { subRef.unsubscribe(); } else { setTimeout(() => subRef && subRef.unsubscribe()); }
             resolve();
           }
         });
         
         // Fallback timeout
         timeoutId = setTimeout(() => {
-          subscription$.unsubscribe();
+          subRef && subRef.unsubscribe();
           resolve();
         }, 100);
       });
@@ -435,36 +436,20 @@ describe('PushNotificationService', () => {
         }
       };
 
-      // Mock location.href assignment without causing actual navigation
-      const originalLocation = window.location;
-      const mockLocation = {
-        href: '',
-        assign: jasmine.createSpy('assign'),
-        replace: jasmine.createSpy('replace')
-      };
-
-      // Use Object.defineProperty to properly mock location
-      Object.defineProperty(window, 'location', {
-        value: mockLocation,
-        writable: true,
-        configurable: true
-      });
+      const assignSpy = spyOn(window.location, 'assign' as any).and.stub();
 
       // Spy on markNotificationAsClicked to verify the method is called
       spyOn(service as any, 'markNotificationAsClicked');
 
       service['handleNotificationClick'](mockEvent);
 
-      expect(mockLocation.href).toBe('/clientes/client123#documentos');
+      expect(assignSpy).toHaveBeenCalled();
+      const navArg = assignSpy.calls.mostRecent().args[0] as string;
+      expect(navArg).toContain('/clientes/client123#documentos');
       expect(service['markNotificationAsClicked']).toHaveBeenCalledWith('notif123');
       expect(mockEvent.notification.close).toHaveBeenCalled();
       
-      // Restore original location
-      Object.defineProperty(window, 'location', {
-        value: originalLocation,
-        writable: true,
-        configurable: true
-      });
+      assignSpy.and.callThrough();
     });
   });
 

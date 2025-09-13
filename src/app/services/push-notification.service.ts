@@ -282,19 +282,19 @@ export class PushNotificationService {
       case 'document_pending':
         if (data.client_id) {
           // Navigate to client documents
-          window.location.href = `/clientes/${data.client_id}#documentos`;
+          window.location.assign(`/clientes/${data.client_id}#documentos`);
         }
         break;
         
       case 'contract_approved':
         if (data.client_id) {
-          window.location.href = `/clientes/${data.client_id}`;
+          window.location.assign(`/clientes/${data.client_id}`);
         }
         break;
         
       default:
         if (data.action_url) {
-          window.location.href = data.action_url;
+          window.location.assign(data.action_url);
         }
     }
 
