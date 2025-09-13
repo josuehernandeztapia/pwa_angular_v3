@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EnhancedTandaSimulationService, TandaScenarioResult } from '../../../services/enhanced-tanda-simulation.service';
 import { FinancialCalculatorService } from '../../../services/financial-calculator.service';
+import { RiskService } from '../../../services/risk.service';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -34,9 +35,22 @@ import { environment } from '../../../../environments/environment';
           <option value="edomex">Edomex</option>
         </select>
       </label>
+      <label>
+        Colectivo (opcional)
+        <input type="text" [(ngModel)]="collectiveId" name="collectiveId" placeholder="colectivo_edomex_01" class="input" />
+      </label>
+      <label>
+        Ecosistema/Ruta (opcional)
+        <input type="text" [(ngModel)]="ecosystemId" name="ecosystemId" placeholder="ruta-centro-edomex" class="input" />
+      </label>
       <button type="submit" class="btn">Ejecutar</button>
       <button type="button" class="btn" (click)="exportCSV()" [disabled]="results.length===0">Export CSV</button>
     </form>
+
+    <div style="margin-top:8px; color:#555;">
+      Target IRR: <strong>{{ (currentTargetIrr*100) | number:'1.2-2' }}%</strong>
+      · Tolerancia: <strong>{{ environment.finance.irrToleranceBps }} bps</strong>
+    </div>
 
     <div *ngIf="results.length" style="margin-top:16px;">
       <h3>Resultados ({{results.length}})</h3>
@@ -82,13 +96,23 @@ export class TandaEnhancedPanelComponent {
   monthlyAmount = 1000;
   horizonMonths = 24;
   market: any = 'aguascalientes';
+  collectiveId = '';
+  ecosystemId = '';
+  environment = environment;
+  currentTargetIrr = this.fin.getIrrTarget(this.market);
 
   results: TandaScenarioResult[] = [];
 
-  constructor(private tandaSvc: EnhancedTandaSimulationService, private fin: FinancialCalculatorService) {}
+  constructor(private tandaSvc: EnhancedTandaSimulationService, private fin: FinancialCalculatorService, private risk: RiskService) {}
 
   run() {
-    const target = this.fin.getIrrTarget(this.market); // permite override por SKU/colectivo vía environment
+    const baseTarget = this.fin.getIrrTarget(this.market, {
+      collectiveId: this.collectiveId || undefined,
+      ecosystemId: this.ecosystemId || undefined
+    });
+    const premiumBps = this.risk.getIrrPremiumBps({ ecosystemId: this.ecosystemId || undefined });
+    const target = baseTarget + (premiumBps / 10000);
+    this.currentTargetIrr = target;
     this.results = this.tandaSvc.simulateWithGrid({ totalMembers: this.totalMembers, monthlyAmount: this.monthlyAmount }, this.market, this.horizonMonths, { targetIrrAnnual: target });
   }
 

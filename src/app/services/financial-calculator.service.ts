@@ -25,14 +25,17 @@ export class FinancialCalculatorService {
   }
 
   /**
-   * Target IRR annual by product SKU / collective id with fallback to market baseline.
+   * Target IRR anual por colectivo/ecosistema con fallback al baseline de mercado.
    */
-  getIrrTarget(market?: Market | string, opts?: { productSku?: string; collectiveId?: string }): number {
-    const cfg = environment?.finance?.irrTargets as { bySku?: Record<string, number>; byCollective?: Record<string, number> } | undefined;
+  getIrrTarget(market?: Market | string, opts?: { productSku?: string; collectiveId?: string; ecosystemId?: string }): number {
+    const cfg = environment?.finance?.irrTargets as { bySku?: Record<string, number>; byCollective?: Record<string, number>; byEcosystem?: Record<string, number> } | undefined;
     const bySku: Record<string, number> = cfg?.bySku ?? {};
     const byCollective: Record<string, number> = cfg?.byCollective ?? {};
-    if (opts?.productSku && bySku[opts.productSku] != null) return bySku[opts.productSku];
+    const byEcosystem: Record<string, number> = cfg?.byEcosystem ?? {};
+    // Prioridad: colectivo → ecosistema → SKU (opcional) → mercado
     if (opts?.collectiveId && byCollective[opts.collectiveId] != null) return byCollective[opts.collectiveId];
+    if (opts?.ecosystemId && byEcosystem[opts.ecosystemId] != null) return byEcosystem[opts.ecosystemId];
+    if (opts?.productSku && bySku[opts.productSku] != null) return bySku[opts.productSku];
     return this.getTIRMin(market);
   }
 

@@ -76,7 +76,15 @@ export const environment = {
       bySku: {
         // Puede configurarse vía remote config o build-time
       },
+      byEcosystem: {
+        // Configurable por ruta/ecosistema
+      },
       byCollective: {
+      }
+    },
+    riskPremiums: {
+      byEcosystem: {
+        // 'ruta-centro-edomex': Number(process.env['RISK_PREMIUM_RUTA_CENTRO_EDOMEX_BPS'] || 0)
       }
     },
     tandaCaps: {

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TandaDeliveryService } from '../../../services/tanda-delivery.service';
 import { EnhancedTandaSimulationService, TandaScenarioResult } from '../../../services/enhanced-tanda-simulation.service';
 import { FinancialCalculatorService } from '../../../services/financial-calculator.service';
+import { RiskService } from '../../../services/risk.service';
 
 @Component({
   selector: 'app-tanda-consensus-panel',
@@ -76,7 +77,11 @@ import { FinancialCalculatorService } from '../../../services/financial-calculat
       <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
         <label>Tanda ID <input class="input" [(ngModel)]="tandaId" name="tandaId3"></label>
         <label>Horizonte (m) <input type="number" class="input" [(ngModel)]="horizon" name="horizon"></label>
+        <label>Colectivo <input class="input" [(ngModel)]="collectiveId" name="collectiveIdPrev" placeholder="colectivo_edomex_01"></label>
         <button class="btn" (click)="previewIrr()">Calcular</button>
+      </div>
+      <div style="margin-top:8px; color:#555;">
+        Target IRR: <strong>{{ (currentTargetIrr*100) | number:'1.2-2' }}%</strong>
       </div>
       <div *ngIf="irrResults.length" style="margin-top:8px;">
         <table class="table" style="width:100%; border-collapse:collapse;">
@@ -105,6 +110,8 @@ export class TandaConsensusPanelComponent {
   companyApprove = true;
   transferEventId = '';
   horizon = 12;
+  collectiveId = '';
+  currentTargetIrr = 0;
 
   message = '';
   voteMessage = '';
@@ -112,7 +119,12 @@ export class TandaConsensusPanelComponent {
   execMessage = '';
   irrResults: TandaScenarioResult[] = [];
 
-  constructor(private tanda: TandaDeliveryService, private sim: EnhancedTandaSimulationService, private fin: FinancialCalculatorService) {}
+  constructor(
+    private tanda: TandaDeliveryService,
+    private sim: EnhancedTandaSimulationService,
+    private fin: FinancialCalculatorService,
+    private risk: RiskService
+  ) {}
 
   createRequest() {
     this.message = '';
@@ -154,7 +166,13 @@ export class TandaConsensusPanelComponent {
     this.irrResults = [];
     this.tanda.getTandaById(this.tandaId).subscribe(group => {
       if (!group) { this.execMessage = 'No se encontró la tanda'; return; }
-      const target = this.fin.getIrrTarget(group.market);
+      const baseTarget = this.fin.getIrrTarget(group.market, {
+        collectiveId: (this.collectiveId || group.id) || undefined,
+        ecosystemId: group.ecosystemId
+      });
+      const premiumBps = this.risk.getIrrPremiumBps({ ecosystemId: group.ecosystemId });
+      const target = baseTarget + (premiumBps / 10000);
+      this.currentTargetIrr = target;
       const res = this.sim.simulateWhatIfFromSchedule(group, group.market as any, { targetIrrAnnual: target, horizonMonths: this.horizon });
       this.irrResults = [res];
     });
