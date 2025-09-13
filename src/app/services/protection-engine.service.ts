@@ -178,10 +178,11 @@ export class ProtectionEngineService {
       adjustedBalance = adjusted;
     }
 
-    // Calculate TIR for this scenario
+    // Calculate TIR for this scenario vs. contract target IRR (market = contrato a plazos)
     const annualTIR = this.financialCalc.calculateTIR(cashFlows) * 12; // Convert monthly to annual
-    const tirMin = this.financialCalc.getTIRMin(market);
-    const tirOK = annualTIR >= tirMin;
+    const tirTargetAnnual = this.financialCalc.getTargetContractIRRAnnual(currentBalance, originalPayment, remainingTerm);
+    const tolerance = 0; // bps tolerance could be added here if needed
+    const tirOK = annualTIR + tolerance >= tirTargetAnnual;
 
     const scenario: ProtectionScenario & {
       irr?: number;
@@ -238,7 +239,8 @@ export class ProtectionEngineService {
     remainingTerm: number,
     market: Market
   ): ProtectionScenario[] {
-    const monthlyRate = this.financialCalc.getTIRMin(market) / 12;
+    // Derive implied monthly rate from current contract terms (saldo remanente, pago actual, plazo remanente)
+    const monthlyRate = this.financialCalc.computeImpliedMonthlyRateFromAnnuity(currentBalance, originalPayment, remainingTerm);
     const scenarios: ProtectionScenario[] = [];
 
     // Scenario 1: Diferimiento 3 meses

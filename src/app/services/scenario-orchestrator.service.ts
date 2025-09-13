@@ -348,6 +348,47 @@ export class ScenarioOrchestratorService {
   }
 
   // ===============================
+  // TANDA ENHANCED (SCENARIOS + IRR)
+  // ===============================
+
+  async createTandaScenariosEnhanced(
+    group: { totalMembers: number; monthlyAmount: number; startDate?: Date },
+    market: Market,
+    horizonMonths: number,
+    options?: { targetIrrAnnual?: number }
+  ): Promise<CompleteBusinessScenario> {
+    const tandaService = (this as any).enhancedTandaSimulationService as import('./enhanced-tanda-simulation.service').EnhancedTandaSimulationService | undefined;
+    // Safe dynamic import to avoid circular deps in compile path
+    const svc = tandaService ?? new (await import('./enhanced-tanda-simulation.service')).EnhancedTandaSimulationService(this.financialCalc);
+
+    const results = svc.simulateWithGrid(group, market, horizonMonths, options);
+    const best = results[0];
+
+    return {
+      id: `tanda-enhanced-${Date.now()}`,
+      clientName: 'Grupo Colectivo',
+      flow: 0 as any,
+      market,
+      stage: 'PROTECCION',
+      protectionScenarios: [],
+      seniorSummary: {
+        title: '❄️ Tanda Enhanced – Escenarios con IRR de Mercado',
+        description: [
+          `Se evaluaron ${results.length} escenarios de contribución base y ±10%.`,
+          `Mejor escenario: ${best.name} | IRR ${(best.irrAnnual * 100).toFixed(2)}% | ${best.tirOK ? '✓ Cumple' : '✗ No cumple'}`
+        ],
+        keyMetrics: [
+          { label: 'Miembros', value: `${group.totalMembers}`, emoji: '👥' },
+          { label: 'Aportación Base', value: this.financialCalc.formatCurrency(group.monthlyAmount), emoji: '💰' },
+          { label: 'Horizonte', value: `${horizonMonths} meses`, emoji: '📆' },
+        ],
+        timeline: [] as any,
+        whatsAppMessage: `❄️ *Tanda Enhanced*\n\nMejor escenario: ${best.name}\nIRR: ${(best.irrAnnual * 100).toFixed(2)}% ${best.tirOK ? '✓' : '✗'}\nMiembros: ${group.totalMembers} | Aportación: ${this.financialCalc.formatCurrency(group.monthlyAmount)} | Horizonte: ${horizonMonths}m`
+      }
+    };
+  }
+
+  // ===============================
   // UTILITY METHODS
   // ===============================
 
