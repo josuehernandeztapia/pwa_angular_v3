@@ -135,11 +135,12 @@ export const environment = {
     irrTargets: {
       bySku: {
         // Ejemplos (valores anuales como fracción):
-        // 'SKU_AGS_STD': 0.255,
-        // 'SKU_EDOMEX_COL': 0.299
+        'H6C_STD': 0.255,
+        'H6C_PREMIUM': 0.299
       },
       byCollective: {
-        // 'colectivo_edomex_01': 0.305
+        // Ejemplo:
+        'colectivo_edomex_01': 0.305
       }
     },
     tandaCaps: {

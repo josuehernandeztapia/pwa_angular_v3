@@ -34,9 +34,22 @@ import { environment } from '../../../../environments/environment';
           <option value="edomex">Edomex</option>
         </select>
       </label>
+      <label>
+        SKU (opcional)
+        <input type="text" [(ngModel)]="productSku" name="productSku" placeholder="H6C_STD" class="input" />
+      </label>
+      <label>
+        Colectivo (opcional)
+        <input type="text" [(ngModel)]="collectiveId" name="collectiveId" placeholder="colectivo_edomex_01" class="input" />
+      </label>
       <button type="submit" class="btn">Ejecutar</button>
       <button type="button" class="btn" (click)="exportCSV()" [disabled]="results.length===0">Export CSV</button>
     </form>
+
+    <div style="margin-top:8px; color:#555;">
+      Target IRR: <strong>{{ (currentTargetIrr*100) | number:'1.2-2' }}%</strong>
+      · Tolerancia: <strong>{{ environment.finance.irrToleranceBps }} bps</strong>
+    </div>
 
     <div *ngIf="results.length" style="margin-top:16px;">
       <h3>Resultados ({{results.length}})</h3>
@@ -82,13 +95,21 @@ export class TandaEnhancedPanelComponent {
   monthlyAmount = 1000;
   horizonMonths = 24;
   market: any = 'aguascalientes';
+  productSku = '';
+  collectiveId = '';
+  environment = environment;
+  currentTargetIrr = this.fin.getIrrTarget(this.market);
 
   results: TandaScenarioResult[] = [];
 
   constructor(private tandaSvc: EnhancedTandaSimulationService, private fin: FinancialCalculatorService) {}
 
   run() {
-    const target = this.fin.getIrrTarget(this.market); // permite override por SKU/colectivo vía environment
+    const target = this.fin.getIrrTarget(this.market, {
+      productSku: this.productSku || undefined,
+      collectiveId: this.collectiveId || undefined
+    });
+    this.currentTargetIrr = target;
     this.results = this.tandaSvc.simulateWithGrid({ totalMembers: this.totalMembers, monthlyAmount: this.monthlyAmount }, this.market, this.horizonMonths, { targetIrrAnnual: target });
   }
 

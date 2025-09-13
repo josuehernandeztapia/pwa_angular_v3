@@ -76,7 +76,12 @@ import { FinancialCalculatorService } from '../../../services/financial-calculat
       <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
         <label>Tanda ID <input class="input" [(ngModel)]="tandaId" name="tandaId3"></label>
         <label>Horizonte (m) <input type="number" class="input" [(ngModel)]="horizon" name="horizon"></label>
+        <label>SKU <input class="input" [(ngModel)]="productSku" name="productSkuPrev" placeholder="H6C_STD"></label>
+        <label>Colectivo <input class="input" [(ngModel)]="collectiveId" name="collectiveIdPrev" placeholder="colectivo_edomex_01"></label>
         <button class="btn" (click)="previewIrr()">Calcular</button>
+      </div>
+      <div style="margin-top:8px; color:#555;">
+        Target IRR: <strong>{{ (currentTargetIrr*100) | number:'1.2-2' }}%</strong>
       </div>
       <div *ngIf="irrResults.length" style="margin-top:8px;">
         <table class="table" style="width:100%; border-collapse:collapse;">
@@ -105,6 +110,9 @@ export class TandaConsensusPanelComponent {
   companyApprove = true;
   transferEventId = '';
   horizon = 12;
+  productSku = '';
+  collectiveId = '';
+  currentTargetIrr = 0;
 
   message = '';
   voteMessage = '';
@@ -154,7 +162,11 @@ export class TandaConsensusPanelComponent {
     this.irrResults = [];
     this.tanda.getTandaById(this.tandaId).subscribe(group => {
       if (!group) { this.execMessage = 'No se encontró la tanda'; return; }
-      const target = this.fin.getIrrTarget(group.market);
+      const target = this.fin.getIrrTarget(group.market, {
+        productSku: this.productSku || undefined,
+        collectiveId: (this.collectiveId || group.id) || undefined
+      });
+      this.currentTargetIrr = target;
       const res = this.sim.simulateWhatIfFromSchedule(group, group.market as any, { targetIrrAnnual: target, horizonMonths: this.horizon });
       this.irrResults = [res];
     });
