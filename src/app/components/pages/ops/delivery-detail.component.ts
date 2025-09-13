@@ -14,6 +14,7 @@ import {
   DELIVERY_EVENT_DESCRIPTIONS,
   DELIVERY_STATUS_DESCRIPTIONS
 } from '../../../models/deliveries';
+import { ClientDeliveryInfo } from '../../../models/deliveries';
 
 @Component({
   selector: 'app-delivery-detail',
@@ -181,6 +182,16 @@ import {
               <span>Inicio</span>
               <span>{{ getProgress(delivery()!.status) }}%</span>
               <span>Completado</span>
+            </div>
+          </div>
+          <div class="client-toggle">
+            <label>
+              <input type="checkbox" [(ngModel)]="clientView" /> Vista cliente (simplificada)
+            </label>
+            <div class="client-panel" *ngIf="clientView">
+              <div class="client-status">{{ clientInfo?.status }}</div>
+              <div class="client-message">{{ clientInfo?.message }}</div>
+              <div class="client-eta" *ngIf="clientInfo?.estimatedDate">ETA: {{ clientInfo?.estimatedDate }}</div>
             </div>
           </div>
         </div>

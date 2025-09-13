@@ -75,6 +75,9 @@ interface StepState {
 
       <div class="summary" *ngIf="caseId">
         <div class="banner success" *ngIf="isAllGood">Caso listo: 3 básicos completos en el primer intento.</div>
+        <div class="badge-time" *ngIf="firstRecommendationMs != null">
+          ⏱️ Tiempo a primera recomendación: {{ (firstRecommendationMs!/1000) | number:'1.1-1' }}s
+        </div>
         <div class="banner warn" *ngIf="!isAllGood">
           Faltan elementos o calidad baja. Identificamos:
           <ul>
@@ -86,6 +89,8 @@ interface StepState {
             <button class="btn" *ngIf="needsEvidence" (click)="jumpTo('evidence')">Tomar Evidencia</button>
           </div>
         </div>
+        <!-- Trigger need_info recording when applicable -->
+        <ng-container *ngIf="showNeedInfoRecording"></ng-container>
       </div>
 
       <div class="footer">
@@ -131,6 +136,7 @@ interface StepState {
     .summary { margin-top: 12px; }
     .cta-row { display:flex; gap: 8px; margin-top:8px; }
     .footer { margin-top: 16px; display:flex; justify-content: flex-end; }
+    .badge-time { margin-top: 6px; font-size: 12px; color: #93c5fd; }
   `]
 })
 export class PhotoWizardComponent {

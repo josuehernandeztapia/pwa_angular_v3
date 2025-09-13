@@ -6,6 +6,7 @@ import { ToastService } from '../../../services/toast.service';
 import { FinancialCalculatorService } from '../../../services/financial-calculator.service';
 import { ProtectionEngineService } from '../../../services/protection-engine.service';
 import { Market, ProtectionScenario } from '../../../models/types';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-proteccion',
@@ -316,7 +317,7 @@ export class ProteccionComponent {
   }
 
   isBelowMinPayment(s: ProtectionScenario): boolean {
-    const minPct = 0.5; // PMT′ mínimo: 50% del pago original (política de ejemplo)
+    const minPct = environment.finance?.minPaymentRatio ?? 0.5; // Política configurable
     const orig = this.contractForm.value.originalPayment as number;
     return s.newMonthlyPayment < (orig * minPct);
   }

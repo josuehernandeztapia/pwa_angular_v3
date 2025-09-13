@@ -336,6 +336,10 @@ interface AmortizationRow {
                     <span>Monto a Financiar:</span>
                     <span class="price-value">{{ formatCurrency(amountToFinance) }}</span>
                   </div>
+                  <div class="price-row" *ngIf="includeInsurance && insuranceMode==='contado'">
+                    <span>Seguro (contado):</span>
+                    <span class="price-value">{{ formatCurrency(toNumber(insuranceAmount) || 0) }}</span>
+                  </div>
                   <hr class="price-divider">
                   <div class="price-row total-row">
                     <span>Pago Mensual (Est.):</span>

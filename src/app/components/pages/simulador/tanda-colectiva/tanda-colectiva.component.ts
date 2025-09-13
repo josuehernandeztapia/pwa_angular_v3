@@ -728,9 +728,14 @@ export class TandaColectivaComponent implements OnInit, OnDestroy {
 
   // Derived metrics for double bar/alerts
   get nextAwardMonth(): number {
-    return this.simulationResult?.scenario?.monthsToFirstAward
-      || this.simulationResult?.tandaResult?.firstAwardT
-      || 0;
+    const fromScenario = this.simulationResult?.scenario?.monthsToFirstAward
+      || this.simulationResult?.tandaResult?.firstAwardT;
+    if (fromScenario) return fromScenario;
+    // Cálculo T1 = ceil(Me / sum a_i)
+    const Me = this.targetPerMember || (this.configForm.value.unitPrice * 0.2);
+    const sumAi = this.simulationResult?.scenario?.monthlyContribution || 0; // inflow grupal
+    if (sumAi <= 0) return 0;
+    return Math.ceil(Me / sumAi);
   }
 
   get targetPerMember(): number | undefined {
@@ -749,6 +754,15 @@ export class TandaColectivaComponent implements OnInit, OnDestroy {
     const ok = inflow > pmt;
     const recommended = ok ? 0 : Math.max(0, pmt - inflow);
     return { inflow, pmt, coveragePct, ok, recommended };
+  }
+
+  // T2 = ceil(Me / (sum a_i - PMT)) si denominador > 0, si no → bloqueado
+  get secondAwardMonthEstimate(): number | 'bloqueado' {
+    const Me = this.targetPerMember || (this.configForm.value.unitPrice * 0.2);
+    const sumAi = this.simulationResult?.scenario?.monthlyContribution || 0;
+    const denom = Math.max(0, sumAi - this.inflowVsPMT.pmt);
+    if (denom <= 0) return 'bloqueado';
+    return Math.ceil(Me / denom);
   }
 
   get savingProgressPct(): number {
