@@ -45,3 +45,7 @@ Thumbs.db
 
 .nx/cache
 .nx/workspace-data
+
+# BFF build outputs
+bff/dist/
+bff/coverage/
