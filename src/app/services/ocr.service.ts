@@ -431,9 +431,9 @@ export class OCRService {
     });
     
     const expectedIndicators = documentIndicators[expectedType.toUpperCase()] || [];
-    const expectedScore = expectedIndicators.reduce((acc: number, indicator: string) => {
-      return acc + (cleanText.includes(indicator) ? 1 : 0);
-    }, 0) / expectedIndicators.length;
+    const expectedScore = expectedIndicators.length > 0
+      ? expectedIndicators.reduce((acc: number, indicator: string) => acc + (cleanText.includes(indicator) ? 1 : 0), 0) / expectedIndicators.length
+      : 0;
     
     return {
       valid: expectedScore >= 0.3,

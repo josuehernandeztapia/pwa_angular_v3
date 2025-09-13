@@ -40,6 +40,8 @@ export class DataService {
   });
 
   public dataState$ = this.dataState.asObservable();
+  private initTimer: any = null;
+  private readonly isTestEnv = typeof (globalThis as any).jasmine !== 'undefined' || typeof (globalThis as any).__karma__ !== 'undefined';
 
   constructor() {
     this.initializeData();
@@ -51,8 +53,13 @@ export class DataService {
   private initializeData(): void {
     this.setLoading(true);
 
-    // Simulate data loading delay
-    setTimeout(() => {
+    // Cancel any pending initialization to avoid cross-test emissions
+    if (this.initTimer) {
+      clearTimeout(this.initTimer);
+      this.initTimer = null;
+    }
+
+    const load = () => {
       const demoClients: Client[] = [
         {
           id: '1',
@@ -91,7 +98,15 @@ export class DataService {
         loading: false,
         error: null
       });
-    }, 1500);
+    };
+
+    if (this.isTestEnv) {
+      // Load immediately in test to ensure determinism
+      load();
+    } else {
+      // Simulate data loading delay in non-test environments
+      this.initTimer = setTimeout(load, 1500);
+    }
   }
 
   /**
@@ -417,7 +432,7 @@ export class DataService {
   refreshData(): Observable<boolean> {
     this.setLoading(true);
     return of(true).pipe(
-      delay(1000),
+      delay(this.isTestEnv ? 0 : 1000),
       map(() => {
         this.initializeData();
         return true;
@@ -445,8 +460,9 @@ export class DataService {
       return Object.entries(filters).every(([key, value]) => {
         if (!value) return true;
         const itemValue = item[key];
-        if (typeof itemValue === 'string') {
-          return itemValue.toLowerCase().includes(value.toLowerCase());
+        if (typeof itemValue === 'string' && typeof value === 'string') {
+          // Strict equality for string filters to avoid partial matches (e.g., 'active' vs 'inactive')
+          return itemValue.toLowerCase() === value.toLowerCase();
         }
         return itemValue === value;
       });

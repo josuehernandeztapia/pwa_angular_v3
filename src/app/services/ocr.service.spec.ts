@@ -115,6 +115,11 @@ describe('OCRService', () => {
       expect(progressUpdates.some(p => p.status === 'initializing')).toBe(true);
       expect(progressUpdates.some(p => p.status === 'ready')).toBe(true);
     });
+
+    afterEach(() => {
+      // Restore createWorker default resolution to avoid leaking rejections
+      mockCreateWorker.and.returnValue(Promise.resolve(mockTesseractWorker as any));
+    });
   });
 
   describe('Text Extraction from Image File', () => {
@@ -161,9 +166,18 @@ describe('OCRService', () => {
       expect(recognizingUpdate).toBeDefined();
       expect(recognizingUpdate.message).toBe('Procesando imagen...');
     });
+    
+    afterEach(() => {
+      // Restore default behavior to avoid leaking rejection into subsequent tests
+      mockTesseractWorker.recognize.and.returnValue(Promise.resolve(mockTesseractResult));
+    });
   });
 
   describe('Text Extraction from Base64', () => {
+    beforeEach(() => {
+      // Ensure default resolve behavior for each base64 test
+      mockTesseractWorker.recognize.and.returnValue(Promise.resolve(mockTesseractResult));
+    });
     const mockBase64 = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB';
 
     it('should extract text from base64 image', async () => {
