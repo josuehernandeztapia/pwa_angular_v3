@@ -90,7 +90,7 @@ interface AmortizationRow {
         
         <!-- First payment breakdown -->
         <div *ngIf="!isVentaDirecta && amountToFinance>0 && term>0" class="first-payment">
-          <div class="fp-label" data-cy="primer-pago">Primer pago:</div>
+          <div class="fp-label">Primer pago:</div>
           <div class="fp-item"><span>I₁</span> <strong>{{ formatCurrency(firstInterest) }}</strong></div>
           <div class="fp-item"><span>K₁</span> <strong class="capital">{{ formatCurrency(firstPrincipal) }}</strong></div>
           <div class="fp-item"><span>S₁</span> <strong class="balance">{{ formatCurrency(firstBalance) }}</strong></div>

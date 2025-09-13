@@ -89,7 +89,7 @@ interface StepState {
             <button class="btn" *ngIf="needsOdometer" (click)="jumpTo('odometer')">Tomar foto de Odómetro</button>
             <button class="btn" *ngIf="needsEvidence" (click)="jumpTo('evidence')">Tomar Evidencia</button>
         </div>
-        <app-kpi-dev-dashboard *ngIf="!environment.production"></app-kpi-dev-dashboard>
+        
       </div>
         <!-- Trigger need_info recording when applicable -->
         <ng-container *ngIf="showNeedInfoRecording"></ng-container>

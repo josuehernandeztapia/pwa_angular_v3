@@ -48,8 +48,6 @@ interface QuoteData {
   };
   validUntil: Date;
   quoteNumber: string;
-  // Ajuste fino: reflejar seguro contado si aplica
-  insuranceCash?: number;
 }
 
 @Injectable({
@@ -260,10 +258,6 @@ export class PdfExportService {
       doc.text(`Valor del Vehículo: $${this.formatCurrency(quoteData.quoteDetails.vehicleValue)}`, 20, yPos);
       yPos += 6;
       doc.text(`Tasa de Interés: ${quoteData.quoteDetails.interestRate}% anual`, 20, yPos);
-      yPos += 6;
-      if ((quoteData.insuranceCash || 0) > 0) {
-        doc.text(`Seguro (contado): $${this.formatCurrency(quoteData.insuranceCash!)}`, 20, yPos);
-      }
       
       // Options table
       yPos += 15;
