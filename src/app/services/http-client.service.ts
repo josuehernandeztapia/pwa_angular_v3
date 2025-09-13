@@ -286,17 +286,17 @@ export class HttpClientService {
    */
   private handleError(error: HttpErrorResponse, showError: boolean = true): Observable<never> {
     let errorMessage = 'Ha ocurrido un error inesperado';
-    
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
+
+    // Prefer client-side ErrorEvent messages when present
+    if (error.error instanceof ErrorEvent && error.error.message) {
       errorMessage = `Error: ${error.error.message}`;
+    } else if (error.status === 0) {
+      // Connectivity issues
+      errorMessage = 'No se puede conectar al servidor';
+      this.connectionSubject.next(false);
     } else {
       // Server-side error
       switch (error.status) {
-        case 0:
-          errorMessage = 'No se puede conectar al servidor';
-          this.connectionSubject.next(false);
-          break;
         case 400:
           errorMessage = 'Solicitud inválida';
           if (error.error?.message) {

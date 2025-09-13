@@ -19,6 +19,7 @@ export class ToastService {
   public toasts$ = this.toastSubject.asObservable();
   
   private toasts: Toast[] = [];
+  private seq = 0;
 
   constructor() { }
 
@@ -66,7 +67,7 @@ export class ToastService {
     action?: () => void
   ): void {
     const toast: Toast = {
-      id: Date.now().toString(),
+      id: `${Date.now()}-${++this.seq}`,
       type,
       message,
       duration,

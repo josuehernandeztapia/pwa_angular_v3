@@ -35,6 +35,10 @@ export class StorageService {
   private dbVersion = 1;
   private db: IDBDatabase | null = null;
   private isOnline$ = new BehaviorSubject<boolean>(navigator.onLine);
+  private useMemoryStore = false;
+  private memClients = new Map<string, any>();
+  private memQuotes = new Map<string, any>();
+  private memFormCache = new Map<string, any>();
 
   constructor() {
     this.initDB();
@@ -46,6 +50,13 @@ export class StorageService {
   }
 
   private async initDB(): Promise<void> {
+    // Fallback to in-memory store if IndexedDB is unavailable (e.g., test environment)
+    if (typeof indexedDB === 'undefined') {
+      console.warn('IndexedDB not available; using in-memory storage for StorageService');
+      this.useMemoryStore = true;
+      return Promise.resolve();
+    }
+
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName, this.dbVersion);
 
@@ -114,6 +125,12 @@ export class StorageService {
 
   // Client Data Management
   async saveClient(clientData: ClientData): Promise<void> {
+    if (this.useMemoryStore) {
+      const id = clientData.id || String(Date.now());
+      const clientWithTimestamp = { ...clientData, id, updatedAt: Date.now() };
+      this.memClients.set(id, clientWithTimestamp);
+      return Promise.resolve();
+    }
     if (!this.db) throw new Error('Database not initialized');
 
     return new Promise((resolve, reject) => {
@@ -133,6 +150,9 @@ export class StorageService {
   }
 
   async getClient(id: string): Promise<ClientData | null> {
+    if (this.useMemoryStore) {
+      return Promise.resolve(this.memClients.get(id) || null);
+    }
     if (!this.db) throw new Error('Database not initialized');
 
     return new Promise((resolve, reject) => {
@@ -148,6 +168,11 @@ export class StorageService {
   }
 
   async getClientsByEcosystem(ecosystemId: string): Promise<ClientData[]> {
+    if (this.useMemoryStore) {
+      const res: ClientData[] = [] as any;
+      this.memClients.forEach(v => { if (v.ecosystemId === ecosystemId) res.push(v); });
+      return Promise.resolve(res);
+    }
     if (!this.db) throw new Error('Database not initialized');
 
     return new Promise((resolve, reject) => {
@@ -163,6 +188,10 @@ export class StorageService {
 
   // Quote Data Management
   async saveQuote(quoteData: QuoteData): Promise<void> {
+    if (this.useMemoryStore) {
+      this.memQuotes.set(quoteData.id, quoteData);
+      return Promise.resolve();
+    }
     if (!this.db) throw new Error('Database not initialized');
 
     return new Promise((resolve, reject) => {
@@ -176,6 +205,9 @@ export class StorageService {
   }
 
   async getQuote(id: string): Promise<QuoteData | null> {
+    if (this.useMemoryStore) {
+      return Promise.resolve(this.memQuotes.get(id) || null);
+    }
     if (!this.db) throw new Error('Database not initialized');
 
     return new Promise((resolve, reject) => {
@@ -189,6 +221,11 @@ export class StorageService {
   }
 
   async getQuotesByClient(clientId: string): Promise<QuoteData[]> {
+    if (this.useMemoryStore) {
+      const res: QuoteData[] = [] as any;
+      this.memQuotes.forEach(v => { if (v.clientId === clientId) res.push(v); });
+      return Promise.resolve(res);
+    }
     if (!this.db) throw new Error('Database not initialized');
 
     return new Promise((resolve, reject) => {
@@ -204,6 +241,11 @@ export class StorageService {
 
   // Form Cache Management
   async cacheFormData(formId: string, data: any, ttl: number = 3600000): Promise<void> {
+    if (this.useMemoryStore) {
+      const item: StorageItem = { id: formId, data, timestamp: Date.now(), expiresAt: Date.now() + ttl };
+      this.memFormCache.set(formId, item);
+      return Promise.resolve();
+    }
     if (!this.db) throw new Error('Database not initialized');
 
     const item: StorageItem = {
@@ -224,6 +266,15 @@ export class StorageService {
   }
 
   async getCachedFormData(formId: string): Promise<any | null> {
+    if (this.useMemoryStore) {
+      const item = this.memFormCache.get(formId);
+      if (!item) return Promise.resolve(null);
+      if (item.expiresAt && Date.now() > item.expiresAt) {
+        this.memFormCache.delete(formId);
+        return Promise.resolve(null);
+      }
+      return Promise.resolve(item.data);
+    }
     if (!this.db) throw new Error('Database not initialized');
 
     return new Promise((resolve, reject) => {
@@ -252,6 +303,10 @@ export class StorageService {
   }
 
   async deleteCachedFormData(formId: string): Promise<void> {
+    if (this.useMemoryStore) {
+      this.memFormCache.delete(formId);
+      return Promise.resolve();
+    }
     if (!this.db) throw new Error('Database not initialized');
 
     return new Promise((resolve, reject) => {

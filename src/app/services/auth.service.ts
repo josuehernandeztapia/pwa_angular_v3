@@ -315,12 +315,17 @@ export class AuthService {
   isTokenExpired(): boolean {
     const token = this.getToken();
     if (!token) return true;
-    
-    // In a real app, you would decode the JWT and check the expiration
-    // For demo purposes, we'll assume token is valid for 1 hour
-    const tokenParts = token.split('_');
-    const timestampPart = tokenParts.pop();
-    const tokenCreated = timestampPart ? parseInt(timestampPart) : 0;
+    // In a real app, decode JWT and check exp.
+    // Demo: extract trailing timestamp from token (supports '_' or '.' separated or any digits in token)
+    let tokenCreated = 0;
+    const digitMatch = token.match(/(\d{10,})/g);
+    if (digitMatch && digitMatch.length) {
+      tokenCreated = parseInt(digitMatch[digitMatch.length - 1]);
+    } else {
+      const tokenParts = token.split(/[_\.]/);
+      const timestampPart = tokenParts.pop();
+      tokenCreated = timestampPart ? parseInt(timestampPart) : 0;
+    }
     
     // If parsing failed or token format is invalid, consider expired
     if (isNaN(tokenCreated) || tokenCreated === 0) {

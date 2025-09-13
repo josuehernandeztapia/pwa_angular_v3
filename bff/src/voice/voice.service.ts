@@ -1,4 +1,5 @@
 import { Injectable, BadRequestException, Logger } from '@nestjs/common';
+import { VoiceEvalRepo } from './voice-eval.repo';
 import { VoiceAnalyzeDto, VoiceScoreResponseDto, VoiceEvaluateResponseDto, AVIResponseDto } from './dto/voice.dto';
 import {
   evaluateResponse,
@@ -10,19 +11,24 @@ import {
   AVIQuestionEnhanced,
 } from './utils/avi-engine.util';
 import { computeVoiceScore } from './utils/voice-score.util';
+import { analyzeLexicon, Plaza } from './utils/lexicons';
 
 @Injectable()
 export class VoiceService {
   private readonly logger = new Logger(VoiceService.name);
   constructor(
-    private readonly repo?: import('./voice-eval.repo').VoiceEvalRepo,
+    private readonly repo: VoiceEvalRepo,
   ) {}
 
   /**
    * Análisis de features pre-extraídas
    * MIGRADO DESDE: avi.service.ts - calculateScore()
    */
-  async analyzeFeatures(dto: VoiceAnalyzeDto, requestId?: string): Promise<VoiceScoreResponseDto> {
+  async analyzeFeatures(
+    dto: VoiceAnalyzeDto,
+    requestId?: string,
+    opts?: { lexiconsEnabled?: boolean; lexiconPlaza?: Plaza; reasonsEnabled?: boolean }
+  ): Promise<VoiceScoreResponseDto> {
     this.logger.log(`🔬 Analyzing features for ${dto.questionId} [${requestId}]`);
     
     try {
@@ -41,10 +47,46 @@ export class VoiceService {
         words: dto.words,
       });
 
+      // Optional lexicon adjustments and reason codes
+      const reasons: string[] = [];
+      let adjusted = { ...res };
+      if (opts?.lexiconsEnabled) {
+        const { hits, reasons: r } = analyzeLexicon(dto.words, opts.lexiconPlaza || 'general');
+        reasons.push(...r);
+        // Admission relief: attenuate disfluency/latency effect slightly
+        if (hits.admission_partial) {
+          adjusted.disfluencyRate = Math.max(0, adjusted.disfluencyRate - 0.03);
+          adjusted.latencyIndex = Math.max(0, adjusted.latencyIndex - 0.02);
+          adjusted.honestyLexicon = Math.min(1, adjusted.honestyLexicon + 0.02);
+        }
+        // Evasive strong: small penalty
+        if (hits.evasive_strong) {
+          adjusted.honestyLexicon = Math.max(0, adjusted.honestyLexicon - 0.03);
+        }
+        // Recompute voiceScore with adjusted components using same weights
+        const recomputed = computeVoiceScore({
+          latencySec: dto.latencySec,
+          answerDurationSec: dto.answerDurationSec,
+          pitchSeriesHz: dto.pitchSeriesHz,
+          energySeries: dto.energySeries,
+          words: dto.words,
+        });
+        // Blend small: 85% original + 15% adjusted signal (safe)
+        adjusted.voiceScore = Math.max(0, Math.min(1, res.voiceScore * 0.85 + recomputed.voiceScore * 0.15));
+      }
+
+      // Build flags + reasons
+      const flags = res.flags || [];
+      if (opts?.reasonsEnabled !== false && reasons.length) {
+        reasons.forEach(r => { if (!flags.includes(r)) flags.push(r); });
+      }
+
       return {
-        ...res,
+        ...adjusted,
         questionId: dto.questionId,
         contextId: dto.contextId,
+        flags,
+        reasons: opts?.reasonsEnabled !== false ? reasons : undefined,
       };
     } catch (error) {
       this.logger.error(`Error analyzing features: ${error.message}`, error.stack);
@@ -59,7 +101,8 @@ export class VoiceService {
   async analyzeAudio(
     file: Express.Multer.File, 
     context: { questionId?: string; contextId?: string }, 
-    requestId?: string
+    requestId?: string,
+    opts?: { lexiconsEnabled?: boolean; lexiconPlaza?: Plaza; reasonsEnabled?: boolean }
   ): Promise<VoiceScoreResponseDto> {
     if (!file) {
       throw new BadRequestException('Audio file required');
@@ -71,7 +114,7 @@ export class VoiceService {
     // Por ahora simula extracción de features
     const mockFeatures = this.extractFeaturesFromAudio(file, context.questionId);
     
-    return this.analyzeFeatures(mockFeatures, requestId);
+    return this.analyzeFeatures(mockFeatures, requestId, opts);
   }
 
   /**
@@ -82,7 +125,8 @@ export class VoiceService {
     file: Express.Multer.File,
     context: { questionId?: string; contextId?: string },
     requestId?: string,
-    openaiKeyOverride?: string
+    openaiKeyOverride?: string,
+    opts?: { lexiconsEnabled?: boolean; lexiconPlaza?: Plaza; reasonsEnabled?: boolean }
   ): Promise<VoiceEvaluateResponseDto> {
     this.logger.log(`🎯 Full evaluation for ${context.questionId} [${requestId}]`);
     
@@ -91,7 +135,7 @@ export class VoiceService {
     const words = this.tokenizeText(transcript);
     
     // Análisis de audio
-    const voiceAnalysis = await this.analyzeAudio(file, context, requestId);
+    const voiceAnalysis = await this.analyzeAudio(file, context, requestId, opts);
     
     // Recalcular con palabras reales
     const enhancedAnalysis = this.enhanceWithTranscript(voiceAnalysis, words);

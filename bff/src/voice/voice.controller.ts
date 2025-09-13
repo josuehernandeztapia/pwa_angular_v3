@@ -9,7 +9,8 @@ import {
   Logger,
   Get,
   Param,
-  Query 
+  Query, 
+  HttpCode
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBody } from '@nestjs/swagger';
@@ -45,6 +46,7 @@ export class VoiceController {
     status: 400, 
     description: 'Invalid input data' 
   })
+  @HttpCode(200)
   async analyzeFeatures(
     @Body() dto: VoiceAnalyzeDto,
     @Headers('x-request-id') requestId?: string,
@@ -103,6 +105,7 @@ export class VoiceController {
     status: 400, 
     description: 'Audio file required or invalid format' 
   })
+  @HttpCode(200)
   async analyzeAudio(
     @UploadedFile() file: Express.Multer.File,
     @Body() context: { questionId?: string; contextId?: string },
@@ -165,6 +168,7 @@ export class VoiceController {
     status: 400, 
     description: 'Audio file required or invalid format' 
   })
+  @HttpCode(200)
   async evaluateAudio(
     @UploadedFile() file: Express.Multer.File,
     @Body() context: { questionId?: string; contextId?: string; skipped?: string | boolean; orderIndex?: string | number },

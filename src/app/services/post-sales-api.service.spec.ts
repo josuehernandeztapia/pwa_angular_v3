@@ -125,6 +125,7 @@ describe('PostSalesApiService', () => {
         id: 'ps-001',
         vin: mockVin,
         clientId: 'client-1',
+        clientName: 'José Hernández Pérez',
         postSalesAgent: 'agent-1',
         warrantyStatus: 'active',
         servicePackage: 'premium',

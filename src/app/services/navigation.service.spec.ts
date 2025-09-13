@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { NavigationService, BreadcrumbItem, QuickAction } from './navigation.service';
 
 describe('NavigationService', () => {
@@ -42,7 +43,7 @@ describe('NavigationService', () => {
     });
 
     it('should initialize with default navigation state', (done) => {
-      service.navigationState$.subscribe(state => {
+      service.navigationState$.pipe().subscribe(state => {
         expect(state.currentRoute).toBe('/dashboard');
         expect(state.previousRoute).toBeNull();
         expect(state.pageTitle).toBe('Panel Principal');
@@ -369,7 +370,7 @@ describe('NavigationService', () => {
   describe('Route Parameters', () => {
     it('should get route parameters', (done) => {
       const mockParams = { id: '123' };
-      mockActivatedRoute.params = of(mockParams);
+      Object.defineProperty(mockActivatedRoute, 'params', { get: () => of(mockParams), configurable: true });
 
       service.getRouteParams().subscribe(params => {
         expect(params).toEqual(mockParams);
@@ -379,7 +380,7 @@ describe('NavigationService', () => {
 
     it('should get query parameters', (done) => {
       const mockQueryParams = { filter: 'active', page: '1' };
-      mockActivatedRoute.queryParams = of(mockQueryParams);
+      Object.defineProperty(mockActivatedRoute, 'queryParams', { get: () => of(mockQueryParams), configurable: true });
 
       service.getQueryParams().subscribe(queryParams => {
         expect(queryParams).toEqual(mockQueryParams);
@@ -412,7 +413,7 @@ describe('NavigationService', () => {
     it('should handle nested routes correctly', () => {
       service['updateNavigationState']('/cotizador/ags-individual');
 
-      service.navigationState$.subscribe(state => {
+      service.navigationState$.pipe(take(1)).subscribe(state => {
         expect(state.pageTitle).toBe('Cotizador AGS Individual');
         expect(state.breadcrumbs.length).toBe(3);
         expect(state.showBackButton).toBe(true);
@@ -422,7 +423,7 @@ describe('NavigationService', () => {
     it('should handle simulador nested routes', () => {
       service['updateNavigationState']('/simulador/tanda-colectiva');
 
-      service.navigationState$.subscribe(state => {
+      service.navigationState$.pipe(take(1)).subscribe(state => {
         expect(state.pageTitle).toBe('Simulador Tanda Colectiva');
         expect(state.breadcrumbs.length).toBe(3);
         expect(state.breadcrumbs[2].label).toBe('🌨️ Tanda Colectiva');
@@ -441,8 +442,7 @@ describe('NavigationService', () => {
 
       mainRoutes.forEach(route => {
         service['updateNavigationState'](route);
-        
-        service.navigationState$.subscribe(state => {
+        service.navigationState$.pipe(take(1)).subscribe(state => {
           expect(state.currentRoute).toBe(route);
           expect(state.pageTitle).toBeTruthy();
           expect(state.breadcrumbs.length).toBeGreaterThan(0);

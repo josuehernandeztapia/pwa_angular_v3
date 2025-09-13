@@ -646,6 +646,8 @@ describe('WhatsappService', () => {
     });
 
     it('should retry failed requests', () => {
+      // Enable 2 retries (original + 2 retries = 3 total)
+      (service as any).setRetryCountForTests(2);
       service.sendTextMessage('5512345678', 'test').subscribe({
         next: () => {},
         error: () => {}
@@ -664,7 +666,7 @@ describe('WhatsappService', () => {
       req3.flush('Network error', { status: 500, statusText: 'Internal Server Error' });
       
       // Should have made 3 attempts total (original + 2 retries)
-      expect(httpMock.verify).not.toThrow();
+      expect(() => httpMock.verify()).not.toThrow();
     });
   });
 

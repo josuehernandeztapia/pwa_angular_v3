@@ -59,8 +59,12 @@ class AVILabComplete {
     async init() {
         console.log('🧪 Initializing AVI_LAB Complete...');
         
-        // Load modules
-        loadModules();
+        // Wait for modules to load
+        if (!window.voiceEngine || !window.haseModel) {
+            await new Promise(resolve => {
+                window.addEventListener('aviModulesLoaded', resolve, { once: true });
+            });
+        }
         
         // Setup UI
         this.setupUI();

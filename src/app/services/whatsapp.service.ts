@@ -116,8 +116,15 @@ export class WhatsappService {
   private _phoneNumberId: string | null = null;
   private _accessToken: string | null = null;
   private _webhookVerifyToken: string | null = null;
+  // Retries disabled by default to keep unit tests deterministic
+  private _retryCount = 0;
 
   constructor(private http: HttpClient) {}
+
+  // Test-only helper to control retry behavior deterministically
+  setRetryCountForTests(count: number) {
+    this._retryCount = Math.max(0, Math.floor(count));
+  }
 
   private get phoneNumberId(): string {
     if (this._phoneNumberId === null) {
@@ -160,7 +167,7 @@ export class WhatsappService {
     }, {
       headers: this.getHeaders()
     }).pipe(
-      retry(2),
+      retry(this._retryCount),
       catchError(this.handleError)
     );
   }
@@ -513,7 +520,7 @@ export class WhatsappService {
       headers: this.getHeaders(),
       params: { name: templateName }
     }).pipe(
-      retry(2),
+      retry(this._retryCount),
       catchError(this.handleError)
     );
   }

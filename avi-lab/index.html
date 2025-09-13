@@ -272,13 +272,27 @@
 
     <!-- Load complete AVI system modules and expose to window for app-complete.js -->
     <script type="module">
-      import { ALL_AVI_QUESTIONS, AVI_CONFIG } from './src/data/avi-questions-complete.js';
-      import { VoiceAnalysisEngine } from './src/services/voice-analysis-engine.js';
-      import { HASEModel } from './src/services/hase-model.js';
-      window.ALL_AVI_QUESTIONS = ALL_AVI_QUESTIONS;
-      window.AVI_CONFIG = AVI_CONFIG;
-      window.voiceEngine = new VoiceAnalysisEngine();
-      window.haseModel = new HASEModel();
+      try {
+        const { ALL_AVI_QUESTIONS, AVI_CONFIG } = await import('./src/data/avi-questions-complete.js');
+        const { VoiceAnalysisEngine } = await import('./src/services/voice-analysis-engine.js');
+        const { HASEModel } = await import('./src/services/hase-model.js');
+        
+        window.ALL_AVI_QUESTIONS = ALL_AVI_QUESTIONS;
+        window.AVI_CONFIG = AVI_CONFIG;
+        window.voiceEngine = new VoiceAnalysisEngine();
+        window.haseModel = new HASEModel();
+        
+        // Notify that modules are loaded
+        window.dispatchEvent(new CustomEvent('aviModulesLoaded'));
+      } catch (error) {
+        console.error('Failed to load AVI modules:', error);
+        // Fallback: provide basic functionality
+        window.ALL_AVI_QUESTIONS = [];
+        window.AVI_CONFIG = { total_questions: 55, implemented_questions: 55 };
+        window.voiceEngine = { computeVoiceScore: () => ({ success: false, error: 'Module loading failed' }) };
+        window.haseModel = { calculateHASEScore: () => ({ totalScore: 0, decision: 'ERROR' }) };
+        window.dispatchEvent(new CustomEvent('aviModulesLoaded'));
+      }
     </script>
     <script src="app-complete.js"></script>
 </body>
