@@ -108,7 +108,7 @@ import { NextBestActionService, NextBestAction, ActionInsights } from '../../../
             class="view-all-btn"
             (click)="toggleShowAll()"
           >
-            {{ showingAll ? 'Mostrar menos' : `Ver todas (${allActions.length})` }}
+            {{ showingAll ? 'Mostrar menos' : ('Ver todas (' + allActions.length + ')') }}
             <span class="btn-icon">{{ showingAll ? '▲' : '▼' }}</span>
           </button>
         </div>

@@ -37,6 +37,66 @@ interface AmortizationRow {
         </h2>
       </div>
 
+      <!-- Sticky Finance Summary -->
+      <div *ngIf="pkg" class="sticky-summary" role="region" aria-label="Resumen financiero">
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="label">Precio</div>
+            <div class="value">{{ formatCurrency(totalPrice) }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="label">Enganche</div>
+            <div class="value">{{ formatCurrency(downPayment) }} ({{ (downPayment/Math.max(totalPrice,1) * 100) | number:'1.0-0' }}%)</div>
+          </div>
+          <div class="summary-item">
+            <div class="label">A Financiar</div>
+            <div class="value primary">{{ formatCurrency(amountToFinance) }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="label">PMT</div>
+            <div class="value accent">{{ formatCurrency(monthlyPayment) }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="label">Plazo</div>
+            <div class="value">{{ term }} meses</div>
+          </div>
+          <div class="summary-item insurance" *ngIf="!isVentaDirecta">
+            <div class="row">
+              <label class="toggle">
+                <input type="checkbox" [(ngModel)]="includeInsurance" />
+                <span>Incluir seguros</span>
+              </label>
+              <input 
+                *ngIf="includeInsurance"
+                class="insurance-input"
+                type="number"
+                min="0"
+                [placeholder]="'Monto de seguros'"
+                [(ngModel)]="insuranceAmount"
+              />
+            </div>
+            <div class="row" *ngIf="includeInsurance">
+              <label class="toggle small">
+                <input type="radio" name="insMode" value="financiado" [(ngModel)]="insuranceMode" />
+                <span>Financiado (sumar a F)</span>
+              </label>
+              <label class="toggle small">
+                <input type="radio" name="insMode" value="contado" [(ngModel)]="insuranceMode" />
+                <span>Contado (cargo aparte)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- First payment breakdown -->
+        <div *ngIf="!isVentaDirecta && amountToFinance>0 && term>0" class="first-payment">
+          <div class="fp-label">Primer pago:</div>
+          <div class="fp-item"><span>I₁</span> <strong>{{ formatCurrency(firstInterest) }}</strong></div>
+          <div class="fp-item"><span>K₁</span> <strong class="capital">{{ formatCurrency(firstPrincipal) }}</strong></div>
+          <div class="fp-item"><span>S₁</span> <strong class="balance">{{ formatCurrency(firstBalance) }}</strong></div>
+        </div>
+      </div>
+
       <!-- Main Content -->
       <div [class]="initialMode === 'acquisition' ? 'acquisition-layout' : 'savings-layout'">
         
@@ -276,6 +336,10 @@ interface AmortizationRow {
                     <span>Monto a Financiar:</span>
                     <span class="price-value">{{ formatCurrency(amountToFinance) }}</span>
                   </div>
+                  <div class="price-row" *ngIf="includeInsurance && insuranceMode==='contado'">
+                    <span>Seguro (contado):</span>
+                    <span class="price-value">{{ formatCurrency(toNumber(insuranceAmount) || 0) }}</span>
+                  </div>
                   <hr class="price-divider">
                   <div class="price-row total-row">
                     <span>Pago Mensual (Est.):</span>
@@ -433,6 +497,36 @@ interface AmortizationRow {
       justify-content: center;
       gap: 12px;
     }
+
+    .sticky-summary {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(15, 20, 25, 0.9);
+      backdrop-filter: saturate(120%) blur(6px);
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin: 12px 0 20px 0;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0,1fr));
+      gap: 12px;
+      align-items: center;
+    }
+    .summary-item .label { color: #a0aec0; font-size: 12px; }
+    .summary-item .value { font-weight: 700; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .summary-item .value.primary { color: #06d6a0; }
+    .summary-item .value.accent { color: #f59e0b; }
+    .summary-item.insurance { display: flex; flex-direction: column; gap: 6px; }
+    .summary-item.insurance .row { display:flex; align-items: center; gap: 8px; }
+    .toggle { display:flex; align-items:center; gap:8px; font-size: 12px; color:#e2e8f0; }
+    .toggle.small { font-size: 11px; color:#cbd5e1; }
+    .insurance-input { width: 120px; padding:6px 8px; background:#1a1f2e; border:1px solid #4a5568; border-radius:6px; color:white; }
+    .first-payment { display:flex; align-items:center; gap:16px; margin-top:10px; font-size: 13px; }
+    .first-payment .fp-label { color:#a0aec0; }
+    .first-payment .fp-item span { color:#a0aec0; margin-right:6px; }
 
     .acquisition-layout, .savings-layout {
       display: grid;
@@ -1066,6 +1160,11 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
   tandaMembers = 5;
   isProtectionDemoOpen = false;
 
+  // UX improvements: insurance financing and first payment breakdown
+  includeInsurance = false;
+  insuranceAmount: any = '';
+  insuranceMode: 'financiado' | 'contado' = 'financiado';
+
   constructor(
     private cotizadorEngine: CotizadorEngineService,
     private toast: ToastService
@@ -1124,13 +1223,31 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
   }
 
   get amountToFinance(): number {
-    return this.totalPrice - this.downPayment;
+    const base = this.totalPrice - this.downPayment;
+    if (this.isVentaDirecta) return base;
+    const ins = this.includeInsurance ? (parseFloat(this.insuranceAmount) || 0) : 0;
+    const addToF = this.includeInsurance && this.insuranceMode === 'financiado' ? ins : 0;
+    return Math.max(0, base + addToF);
   }
 
   get monthlyPayment(): number {
     if (this.amountToFinance <= 0 || !this.term || !this.pkg?.rate) return 0;
     const monthlyRate = this.pkg.rate / 12;
     return (this.amountToFinance * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -this.term));
+  }
+
+  // First amortization row breakdown (I1, K1, S1)
+  get firstInterest(): number {
+    if (!this.pkg?.rate) return 0;
+    const r = this.pkg.rate / 12;
+    return this.amountToFinance * r;
+  }
+  get firstPrincipal(): number {
+    const pmt = this.monthlyPayment;
+    return Math.max(0, pmt - this.firstInterest);
+  }
+  get firstBalance(): number {
+    return Math.max(0, this.amountToFinance - this.firstPrincipal);
   }
 
   // Port exacto de savings calculations desde React líneas 235-282

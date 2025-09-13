@@ -10,6 +10,7 @@ export const environment = {
     enableAnalytics: true,
     enablePushNotifications: true,
     enableOfflineMode: true,
+    enablePostSalesWizard: false,
     // LAB/Backoffice visibility (oculto por defecto en prod)
     enableTandaLab: false,
     // Dynamic configuration flags
@@ -72,6 +73,7 @@ export const environment = {
   },
   finance: {
     irrToleranceBps: Number(process.env['IRR_TOLERANCE_BPS'] || 50),
+    minPaymentRatio: Number(process.env['MIN_PAYMENT_RATIO'] || 0.5),
     irrTargets: {
       bySku: {
         // Puede configurarse vía remote config o build-time

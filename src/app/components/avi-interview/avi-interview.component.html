@@ -81,6 +81,15 @@
           Tiempo estimado: {{ currentQuestion.estimatedTime }}s
         </div>
         <div class="question-hint">Responde con normalidad. No hay respuestas correctas o incorrectas.</div>
+        <!-- Pill de feedback inmediato para la última respuesta registrada -->
+        <div class="pill-feedback" *ngIf="questionPills.length > 0">
+          <ng-container *ngIf="questionPills[questionPills.length - 1] as pill">
+            <span class="pill" [class.clear]="pill.status==='clear'" [class.review]="pill.status==='review'" [class.evasive]="pill.status==='evasive'">
+              {{ pill.label }}
+            </span>
+            <span class="pill-reason">{{ pill.reason }}</span>
+          </ng-container>
+        </div>
       </div>
 
       <!-- Área de respuesta -->
@@ -191,6 +200,18 @@
   <!-- Estado: Resultados -->
   <div class="results-state" *ngIf="showResults && dualEngineResult">
     <div class="results-container">
+      <!-- Resumen GO/REVIEW/NO-GO -->
+      <div class="final-summary" *ngIf="finalDecision as fd">
+        <div class="decision" [class.go]="fd==='GO'" [class.review]="fd==='REVIEW'" [class.nogo]="fd==='NO-GO'">
+          <span class="label">{{ fd }}</span>
+          <span class="action" *ngIf="fd==='GO'">Acción: Continuar</span>
+          <span class="action" *ngIf="fd==='REVIEW'">Acción: Revisión / Evidencia extra</span>
+          <span class="action" *ngIf="fd==='NO-GO'">Acción: No continuar</span>
+        </div>
+        <div class="flags" *ngIf="finalFlags.length > 0">
+          <span class="flag" *ngFor="let f of finalFlags">{{ f }}</span>
+        </div>
+      </div>
       
       <!-- Score principal -->
       <div class="main-score-card">

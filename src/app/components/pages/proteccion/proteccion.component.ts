@@ -1,12 +1,17 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PdfExportService } from '../../../services/pdf-export.service';
 import { ToastService } from '../../../services/toast.service';
+import { FinancialCalculatorService } from '../../../services/financial-calculator.service';
+import { ProtectionEngineService } from '../../../services/protection-engine.service';
+import { Market, ProtectionScenario } from '../../../models/types';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-proteccion',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="proteccion-container">
       <header class="page-header">
@@ -55,6 +60,78 @@ import { ToastService } from '../../../services/toast.service';
             </button>
           </div>
         </div>
+
+        <!-- Escenarios de Protección (P0.5) -->
+        <section class="scenarios-section">
+          <h2>📦 Escenarios de Reestructura</h2>
+
+          <!-- Configuración actual del contrato -->
+          <form [formGroup]="contractForm" class="scenario-form">
+            <div class="form-row">
+              <label>Saldo Actual</label>
+              <input type="number" formControlName="currentBalance" placeholder="Ej. 320000" />
+            </div>
+            <div class="form-row">
+              <label>Pago Mensual Actual (PMT)</label>
+              <input type="number" formControlName="originalPayment" placeholder="Ej. 10500" />
+            </div>
+            <div class="form-row">
+              <label>Plazo Remanente (meses)</label>
+              <input type="number" formControlName="remainingTerm" placeholder="Ej. 36" />
+            </div>
+            <div class="form-row">
+              <label>Mercado</label>
+              <select formControlName="market">
+                <option value="aguascalientes">Aguascalientes</option>
+                <option value="edomex">Estado de México</option>
+              </select>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn" (click)="computeScenarios()" [disabled]="!contractForm.valid">Calcular Escenarios</button>
+            </div>
+          </form>
+
+          <!-- Grid de escenarios -->
+          <div class="scenario-grid" *ngIf="scenarios && scenarios.length">
+            <div class="scenario-card" *ngFor="let s of scenarios" [class.rejected]="!isScenarioEligible(s)">
+              <div class="scenario-header">
+                <h3>{{ s.title }}</h3>
+                <span class="badge" [class.ok]="isScenarioEligible(s)" [class.bad]="!isScenarioEligible(s)">
+                  {{ isScenarioEligible(s) ? 'Elegible' : 'No Elegible' }}
+                </span>
+              </div>
+              <div class="scenario-body">
+                <div class="row">
+                  <span class="label">PMT′</span>
+                  <span class="value">{{ formatCurrency(s.newMonthlyPayment) }}</span>
+                </div>
+                <div class="row">
+                  <span class="label">n′</span>
+                  <span class="value">{{ s.newTerm }} meses</span>
+                </div>
+                <div class="row">
+                  <span class="label">TIR post</span>
+                  <span class="value">
+                    <span class="irr" [class.ok]="(s as any).tirOK" [class.bad]="!(s as any).tirOK">{{ (((s as any).irr) || 0) * 100 | number:'1.0-2' }}%</span>
+                  </span>
+                </div>
+
+                <!-- Motivos de rechazo y sugerencias -->
+                <div class="rejection" *ngIf="!isScenarioEligible(s)">
+                  <div class="reason" *ngIf="!(s as any).tirOK">Motivo: IRRpost < IRRmin</div>
+                  <div class="reason" *ngIf="isBelowMinPayment(s)">Motivo: PMT′ < PMTmin</div>
+                  <div class="suggestion" *ngIf="s.type==='step-down'">Sugerencia: reducir α a 20% y recalcular</div>
+                  <div class="suggestion" *ngIf="s.type==='defer'">Sugerencia: limitar diferimiento a 3 meses</div>
+                </div>
+
+                <!-- Detalles -->
+                <ul class="details" *ngIf="isScenarioEligible(s)">
+                  <li *ngFor="let d of s.details">{{ d }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   `,
@@ -118,59 +195,54 @@ import { ToastService } from '../../../services/toast.service';
       margin-bottom: 12px;
     }
 
-    .high-risk .risk-count {
-      color: #e53e3e;
-    }
+    .high-risk .risk-count { color: #e53e3e; }
+    .medium-risk .risk-count { color: #dd6b20; }
+    .low-risk .risk-count { color: #38a169; }
 
-    .medium-risk .risk-count {
-      color: #dd6b20;
-    }
+    .analysis-card p { margin: 0; color: #718096; }
 
-    .low-risk .risk-count {
-      color: #38a169;
-    }
-
-    .analysis-card p {
-      margin: 0;
-      color: #718096;
-    }
-
-    .tools-section h2 {
-      margin-bottom: 20px;
-      color: #2d3748;
-      text-align: center;
-    }
-
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-    }
-
+    .tools-section h2 { margin-bottom: 20px; color: #2d3748; text-align: center; }
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
     .tool-card {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 20px;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 1rem;
-      color: #4a5568;
+      background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; cursor: pointer; transition: all 0.2s; font-size: 1rem; color: #4a5568;
     }
+    .tool-card:hover { background: #f7fafc; transform: translateY(-1px); }
 
-    .tool-card:hover {
-      background: #f7fafc;
-      transform: translateY(-1px);
+    /* Scenarios */
+    .scenarios-section { margin-top: 32px; }
+    .scenario-form {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px;
+      background: #ffffff; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px;
     }
+    .scenario-form .form-row { display:flex; flex-direction:column; gap:6px; }
+    .scenario-form label { font-size: 12px; color: #4a5568; }
+    .scenario-form input, .scenario-form select { padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 6px; }
+    .scenario-form .actions { grid-column: 1 / -1; display:flex; justify-content: flex-end; }
+    .scenario-form .btn { padding: 10px 16px; background: #2b6cb0; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+
+    .scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .scenario-card { background: #fff; border:1px solid #e2e8f0; border-radius: 10px; padding: 16px; }
+    .scenario-card.rejected { opacity: 0.9; }
+    .scenario-header { display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .scenario-header h3 { margin: 0; font-size: 16px; color:#2d3748; }
+    .badge { padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; background:#edf2f7; color:#4a5568; }
+    .badge.ok { background: #e6fffa; color: #047857; border:1px solid #99f6e4; }
+    .badge.bad { background: #fff7ed; color: #9a3412; border:1px solid #fed7aa; }
+    .scenario-body .row { display:flex; justify-content: space-between; padding: 6px 0; border-bottom:1px dashed #edf2f7; }
+    .scenario-body .row:last-child { border-bottom:none; }
+    .label { color:#718096; font-size: 12px; }
+    .value { font-weight:700; color:#2d3748; }
+    .irr.ok { color:#047857; font-weight:700; }
+    .irr.bad { color:#b91c1c; font-weight:700; }
+    .rejection { margin-top:10px; background:#fff7ed; border:1px solid #fed7aa; color:#9a3412; border-radius:8px; padding:8px; font-size: 13px; }
+    .rejection .reason { margin-bottom:4px; }
+    .rejection .suggestion { color:#7c2d12; }
+    .details { margin-top:10px; padding-left: 16px; color:#4a5568; }
 
     @media (max-width: 768px) {
-      .proteccion-container {
-        padding: 16px;
-      }
-
-      .analysis-grid, .tools-grid {
-        grid-template-columns: 1fr;
-      }
+      .proteccion-container { padding: 16px; }
+      .analysis-grid, .tools-grid { grid-template-columns: 1fr; }
+      .scenario-form { grid-template-columns: 1fr; }
     }
   `]
 })
@@ -178,11 +250,23 @@ export class ProteccionComponent {
   highRiskClients = 12;
   mediumRiskClients = 28;
   lowRiskClients = 156;
+  contractForm: FormGroup;
+  scenarios: ProtectionScenario[] = [];
 
   constructor(
+    private fb: FormBuilder,
+    private financialCalc: FinancialCalculatorService,
+    private protectionEngine: ProtectionEngineService,
     private pdfExportService: PdfExportService,
     private toast: ToastService
-  ) {}
+  ) {
+    this.contractForm = this.fb.group({
+      currentBalance: [320000, [Validators.required, Validators.min(10000)]],
+      originalPayment: [10500, [Validators.required, Validators.min(1000)]],
+      remainingTerm: [36, [Validators.required, Validators.min(6)]],
+      market: ['edomex', Validators.required]
+    });
+  }
 
   openTool(tool: string): void {
     console.log('Abrir herramienta:', tool);
@@ -216,4 +300,27 @@ export class ProteccionComponent {
         this.toast.error('Error al generar reporte de protección');
       });
   }
+
+  computeScenarios(): void {
+    if (!this.contractForm.valid) return;
+    const { currentBalance, originalPayment, remainingTerm, market } = this.contractForm.value as {
+      currentBalance: number; originalPayment: number; remainingTerm: number; market: Market;
+    };
+    this.scenarios = this.protectionEngine.generateProtectionScenarios(currentBalance, originalPayment, remainingTerm, market);
+    if (!this.scenarios || this.scenarios.length === 0) {
+      this.toast.info('No hay escenarios elegibles con los datos actuales');
+    }
+  }
+
+  isScenarioEligible(s: ProtectionScenario): boolean {
+    return ((s as any).tirOK !== false) && !this.isBelowMinPayment(s);
+  }
+
+  isBelowMinPayment(s: ProtectionScenario): boolean {
+    const minPct = environment.finance?.minPaymentRatio ?? 0.5; // Política configurable
+    const orig = this.contractForm.value.originalPayment as number;
+    return s.newMonthlyPayment < (orig * minPct);
+  }
+
+  formatCurrency(v: number): string { return this.financialCalc.formatCurrency(v); }
 }

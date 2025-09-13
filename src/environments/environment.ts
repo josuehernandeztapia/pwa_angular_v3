@@ -13,6 +13,8 @@ export const environment = {
     enableAVISystem: true,
     enableVoiceRecording: true,
     enableStressDetection: true,
+    // Post-venta Wizard 4 fotos (feature flag)
+    enablePostSalesWizard: true,
     // LAB/Backoffice visibility
     enableTandaLab: true,
     // Dynamic configuration flags
@@ -131,6 +133,7 @@ export const environment = {
   },
   finance: {
     irrToleranceBps: 50, // 0.50% tolerancia por defecto para IRR vs contrato
+    minPaymentRatio: 0.5, // PMT' mínimo como % de PMT original (política)
     // Targets de IRR por producto/colectivo (fallback a mercado)
     irrTargets: {
       bySku: {
