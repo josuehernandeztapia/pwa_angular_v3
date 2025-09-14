@@ -30,6 +30,8 @@
     "build:prod:premium": "npm run build:prod",
     "build:staging": "ng build --configuration=staging",
     "serve:staging": "ng serve --configuration=staging",
+    "smoke:bff": "bash scripts/smoke-bff.sh",
+    "smoke:pwa": "bash scripts/smoke-pwa.sh",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:unit": "ng test --watch=false --browsers=ChromeHeadless",
