@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -15,6 +15,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
   selector: 'app-edomex-individual',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, SummaryPanelComponent, SkeletonCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="command-container p-6 space-y-6">
       <!-- Header -->
@@ -260,6 +261,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
             <button
               (click)="generatePDF()"
               class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center"
+              data-cy="edomex-pdf"
             >
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -274,6 +276,14 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
               </svg>
               Crear Cliente con este Plan
+            </button>
+            <button
+              (click)="saveDraft()"
+              [disabled]="!scenario"
+              class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200"
+              data-cy="save-scenario" title="Guardar simulación"
+            >
+              💾 Guardar
             </button>
             <button
               (click)="recalculate()"
@@ -461,5 +471,27 @@ export class EdomexIndividualComponent implements OnInit, OnDestroy {
       .catch(() => {
         this.toast.error('Error al generar PDF');
       });
+  }
+
+  saveDraft(): void {
+    if (!this.scenario) { this.toast.error('No hay simulación para guardar'); return; }
+    const values = this.configForm.value;
+    const draftKey = `edomex-individual-${Date.now()}-draft`;
+    const draft = {
+      clientName: '',
+      market: 'edomex',
+      clientType: 'Individual',
+      timestamp: Date.now(),
+      type: 'EDOMEX_INDIVIDUAL',
+      targetDownPayment: this.scenario.targetAmount,
+      scenario: this.scenario,
+      configParams: values
+    };
+    try {
+      localStorage.setItem(draftKey, JSON.stringify(draft));
+      this.toast.success('Simulación guardada');
+    } catch {
+      this.toast.error('No se pudo guardar la simulación');
+    }
   }
 }

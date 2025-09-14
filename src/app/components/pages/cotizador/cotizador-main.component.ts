@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { Quote, ProductPackage, Market, ClientType, SimulatorMode, BusinessFlow, Client, TandaMilestone } from '../../../models/types';
 import { CotizadorEngineService, ProductComponent } from '../../../services/cotizador-engine.service';
+import { PdfExportService } from '../../../services/pdf-export.service';
 import { SavingsProjectionChartComponent } from '../../shared/savings-projection-chart.component';
 import { TandaTimelineComponent } from '../../shared/tanda-timeline.component';
 import { ToastService } from '../../../services/toast.service';
@@ -28,6 +29,7 @@ interface AmortizationRow {
   selector: 'app-cotizador-main',
   standalone: true,
   imports: [CommonModule, FormsModule, SavingsProjectionChartComponent, TandaTimelineComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="cotizador-container command-container">
       <!-- Header Section -->
@@ -38,32 +40,32 @@ interface AmortizationRow {
       </div>
 
       <!-- Sticky Finance Summary -->
-      <div *ngIf="pkg" class="sticky-summary" role="region" aria-label="Resumen financiero">
+      <div *ngIf="pkg" class="sticky-summary" role="region" aria-label="Resumen financiero" data-cy="cotizador-summary">
         <div class="summary-grid">
           <div class="summary-item">
             <div class="label">Precio</div>
-            <div class="value">{{ formatCurrency(totalPrice) }}</div>
+            <div class="value" title="Precio total del paquete" data-cy="sum-precio">{{ formatCurrency(totalPrice) }}</div>
           </div>
           <div class="summary-item">
             <div class="label">Enganche</div>
-            <div class="value">{{ formatCurrency(downPayment) }} ({{ (downPayment/Math.max(totalPrice,1) * 100) | number:'1.0-0' }}%)</div>
+            <div class="value" title="Enganche estimado" data-cy="sum-enganche">{{ formatCurrency(downPayment) }} ({{ (downPayment/Math.max(totalPrice,1) * 100) | number:'1.0-0' }}%)</div>
           </div>
           <div class="summary-item">
             <div class="label">A Financiar</div>
-            <div class="value primary">{{ formatCurrency(amountToFinance) }}</div>
+            <div class="value primary" title="Monto a financiar" data-cy="sum-financiar">{{ formatCurrency(amountToFinance) }}</div>
           </div>
           <div class="summary-item">
             <div class="label">PMT</div>
-            <div class="value accent">{{ formatCurrency(monthlyPayment) }}</div>
+            <div class="value accent" title="Pago mensual estimado (PMT)" data-cy="sum-pmt">{{ formatCurrency(monthlyPayment) }}</div>
           </div>
           <div class="summary-item">
             <div class="label">Plazo</div>
-            <div class="value">{{ term }} meses</div>
+            <div class="value" title="Plazo en meses" data-cy="sum-plazo">{{ term }} meses</div>
           </div>
           <div class="summary-item insurance" *ngIf="!isVentaDirecta">
             <div class="row">
               <label class="toggle">
-                <input type="checkbox" [(ngModel)]="includeInsurance" />
+                <input type="checkbox" [(ngModel)]="includeInsurance" data-cy="toggle-insurance" />
                 <span>Incluir seguros</span>
               </label>
               <input 
@@ -72,16 +74,16 @@ interface AmortizationRow {
                 type="number"
                 min="0"
                 [placeholder]="'Monto de seguros'"
-                [(ngModel)]="insuranceAmount"
+                [(ngModel)]="insuranceAmount" data-cy="insurance-amount"
               />
             </div>
             <div class="row" *ngIf="includeInsurance">
               <label class="toggle small">
-                <input type="radio" name="insMode" value="financiado" [(ngModel)]="insuranceMode" />
+                <input type="radio" name="insMode" value="financiado" [(ngModel)]="insuranceMode" data-cy="ins-financiado" />
                 <span>Financiado (sumar a F)</span>
               </label>
               <label class="toggle small">
-                <input type="radio" name="insMode" value="contado" [(ngModel)]="insuranceMode" />
+                <input type="radio" name="insMode" value="contado" [(ngModel)]="insuranceMode" data-cy="ins-contado" />
                 <span>Contado (cargo aparte)</span>
               </label>
             </div>
@@ -186,15 +188,17 @@ interface AmortizationRow {
                       [(ngModel)]="downPaymentPercentage"
                       (input)="onDownPaymentSliderChange()"
                       class="form-range premium-input"
+                      [attr.aria-describedby]="'dp-note'"
+                      [attr.title]="'Ajusta el % de enganche. Mínimo según política y paquete'"
                     />
-                    <div class="range-note">
+                    <div class="range-note" id="dp-note">
                       Mínimo: {{ pkg.minDownPaymentPercentage * 100 }}% ({{ formatCurrency(minDownPaymentRequired) }})
                     </div>
                   </div>
                   
                   <div class="form-group">
                     <label for="term">Plazo (meses)</label>
-                    <select id="term" [(ngModel)]="term" (change)="onTermChange()" class="premium-select">
+                    <select id="term" [(ngModel)]="term" (change)="onTermChange()" class="premium-select" title="Selecciona el plazo del financiamiento en meses">
                       <option *ngFor="let t of pkg.terms" [value]="t">{{ t }} meses</option>
                     </select>
                   </div>
@@ -215,7 +219,7 @@ interface AmortizationRow {
                     id="initialDown"
                     [(ngModel)]="initialDownPayment"
                     (input)="onSavingsConfigChange()"
-                    class="premium-input"
+                    class="premium-input" title="Monto de enganche disponible al inicio"
                     placeholder="Ej: 400000"
                   />
                 </div>
@@ -228,7 +232,7 @@ interface AmortizationRow {
                     max="6"
                     [(ngModel)]="deliveryTerm"
                     (input)="onSavingsConfigChange()"
-                    class="form-range premium-input"
+                    class="form-range premium-input" title="Mes estimado de entrega"
                   />
                 </div>
               </div>
@@ -244,7 +248,7 @@ interface AmortizationRow {
                     max="20"
                     [(ngModel)]="tandaMembers"
                     (input)="onTandaMembersChange()"
-                    class="form-range premium-input"
+                    class="form-range premium-input" title="Número de integrantes del grupo"
                   />
                 </div>
               </div>
@@ -260,7 +264,7 @@ interface AmortizationRow {
                     step="500"
                     [(ngModel)]="voluntaryContribution"
                     (input)="onSavingsConfigChange()"
-                    class="form-range premium-input"
+                    class="form-range premium-input" title="Aportación voluntaria mensual"
                   />
                   <input 
                     type="number" 
@@ -352,7 +356,7 @@ interface AmortizationRow {
               <button 
                 *ngIf="!isVentaDirecta" 
                 (click)="calculateAmortization()" 
-                class="btn-amortization"
+                class="btn-amortization" data-cy="calc-amort" title="Calcula la tabla de amortización para el monto a financiar"
               >
                 Calcular y Ver Amortización
               </button>
@@ -465,7 +469,7 @@ interface AmortizationRow {
 
           <!-- Action Buttons -->
           <div *ngIf="pkg" class="action-section">
-            <button class="btn-secondary">Generar Propuesta en PDF</button>
+            <button class="btn-secondary" (click)="generateOnePagePDF()" data-cy="cotizador-pdf">Generar Propuesta en PDF</button>
             <button class="btn-primary" (click)="handleFormalizeClick()">
               Formalizar y Continuar Proceso
             </button>
@@ -1167,6 +1171,7 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
 
   constructor(
     private cotizadorEngine: CotizadorEngineService,
+    private pdf: PdfExportService,
     private toast: ToastService
   ) {}
 
@@ -1511,5 +1516,29 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
       style: 'currency', 
       currency: 'MXN' 
     }).format(amount);
+  }
+
+  async generateOnePagePDF(): Promise<void> {
+    try {
+      if (!this.pkg) { this.toast.error('Selecciona un paquete primero'); return; }
+      const quoteData = {
+        clientInfo: { name: this.client?.name || 'Cliente', contact: this.client?.email || '' },
+        ecosystemInfo: { name: this.market || '-', route: this.client?.collectiveGroupName || '-', market: (this.market === 'aguascalientes' ? 'AGS' : 'EDOMEX') as any },
+        quoteDetails: {
+          vehicleValue: this.totalPrice,
+          downPaymentOptions: [this.downPayment],
+          monthlyPaymentOptions: [Math.round(this.monthlyPayment)],
+          termOptions: [this.term || (this.pkg.terms[0] || 24)],
+          interestRate: Math.round((this.pkg.rate || 0) * 10000) / 100
+        },
+        validUntil: new Date(Date.now() + 14 * 86400000),
+        quoteNumber: 'Q-' + Date.now()
+      };
+      const blob = await this.pdf.generateQuotePDF(quoteData as any);
+      this.pdf.downloadPDF(blob, `cotizacion-${Date.now()}.pdf`);
+      this.toast.success('PDF generado');
+    } catch (e) {
+      this.toast.error('No se pudo generar el PDF');
+    }
   }
 }

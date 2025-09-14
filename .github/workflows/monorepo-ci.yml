@@ -64,7 +64,16 @@ jobs:
       - name: Lint PWA
         run: npm run lint
 
-      - name: Test PWA
+      - name: Test PWA (services on PR)
+        if: github.event_name == 'pull_request'
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 25
+          max_attempts: 2
+          command: npm run test:services
+
+      - name: Test PWA (full)
+        if: github.event_name != 'pull_request'
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 25

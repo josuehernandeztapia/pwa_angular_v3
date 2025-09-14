@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TandaMilestone } from '../../models/types';
 
@@ -6,6 +6,7 @@ import { TandaMilestone } from '../../models/types';
   selector: 'app-tanda-timeline',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="tanda-timeline">
       <div *ngFor="let milestone of milestones; let i = index" class="timeline-item">

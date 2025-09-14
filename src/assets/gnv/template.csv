@@ -1,0 +1,2 @@
+station_id,station_name,file_name,rows_total,rows_accepted,rows_rejected,warnings
+SAMPLE-01,Estación Ejemplo 01,example.csv,100,100,0,0

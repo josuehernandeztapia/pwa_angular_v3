@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CotizadorEngineService } from '../../../../services/cotizador-engine.service';
@@ -15,6 +15,7 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
   selector: 'app-ags-ahorro',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, SummaryPanelComponent, SkeletonCardComponent, FormFieldComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="ags-ahorro-simulator command-container">
       <!-- Header -->
@@ -216,8 +217,9 @@ import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-pan
             <!-- Simple Actions -->
             <div *ngIf="currentViewMode === 'simple'" class="simple-actions">
               <div class="action-grid">
-                <button (click)="speakSummary()" class="action-btn voice-btn">🔊 Escuchar</button>
-                <button (click)="shareWhatsApp()" class="action-btn whatsapp-btn">📱 WhatsApp</button>
+              <button (click)="speakSummary()" class="action-btn voice-btn" title="Leer resumen" data-cy="ags-voice">🔊 Escuchar</button>
+                <button (click)="shareWhatsApp" class="action-btn whatsapp-btn" title="Compartir por WhatsApp" data-cy="ags-wa">📱 WhatsApp</button>
+                <button (click)="saveDraft()" class="action-btn" [disabled]="!currentScenario" data-cy="save-scenario" title="Guardar simulación">💾 Guardar</button>
                 <button (click)="proceedWithScenario()" class="action-btn proceed-btn">✅ Continuar</button>
                 <button (click)="resetSimulation()" class="action-btn reset-btn">🔄 Nuevo</button>
               </div>
@@ -1276,6 +1278,37 @@ export class AgsAhorroComponent implements OnInit {
       this.toast.error('Error al generar PDF');
       console.error('PDF Error:', error);
     });
+  }
+
+  saveDraft(): void {
+    if (!this.currentScenario) { this.toast.error('Primero ejecuta la simulación'); return; }
+    const formValue = this.simuladorForm.value;
+    const draftKey = `agsScenario-${Date.now()}-draft`;
+    const draft = {
+      clientName: '',
+      market: 'aguascalientes',
+      clientType: 'Individual',
+      timestamp: Date.now(),
+      scenario: {
+        targetAmount: this.currentScenario.targetAmount,
+        monthsToTarget: this.currentScenario.monthsToTarget,
+        monthlyContribution: this.currentScenario.monthlyContribution
+      },
+      configParams: {
+        unitValue: formValue.unitValue,
+        initialDownPayment: formValue.initialDownPayment,
+        deliveryMonths: formValue.deliveryMonths,
+        plates: this.plates,
+        consumptions: this.consumptions,
+        overpricePerLiter: formValue.overpricePerLiter
+      }
+    };
+    try {
+      localStorage.setItem(draftKey, JSON.stringify(draft));
+      this.toast.success('Simulación guardada');
+    } catch (e) {
+      this.toast.error('No se pudo guardar la simulación');
+    }
   }
 
   // Getters and helpers

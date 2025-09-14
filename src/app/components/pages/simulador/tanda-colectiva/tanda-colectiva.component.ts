@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -33,6 +33,7 @@ interface KpiData {
   selector: 'app-tanda-colectiva',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule, SummaryPanelComponent, SkeletonCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="command-container p-6 space-y-6">
       <!-- Header -->
@@ -339,21 +340,21 @@ interface KpiData {
           <div class="mb-4 p-4 rounded-lg border flex items-center justify-between"
                [class]="(inflowVsPMT.ok ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200')">
             <div class="text-sm">
-              <div class="font-semibold text-gray-800">Te toca en mes {{ nextAwardMonth }}</div>
-              <div class="text-gray-600" *ngIf="!inflowVsPMT.ok">
+              <div class="font-semibold text-gray-800" title="Cálculo T1 = ceil(Meta / Σ aportes)">Te toca en mes {{ nextAwardMonth }}</div>
+              <div class="text-gray-600" *ngIf="!inflowVsPMT.ok" title="Bloqueado si Σ aportes ≤ PMT estimada; se recomienda aumentar el recaudo mensual">
                 Estado: <strong class="text-orange-700">Bloqueado</strong> (sin leftover). Recaudo recomendado: {{ formatCurrency(inflowVsPMT.recommended) }} mensuales.
               </div>
             </div>
             <div class="text-right">
               <div class="text-xs text-gray-500">PMT estimada</div>
-              <div class="text-lg font-bold text-gray-800">{{ formatCurrency(inflowVsPMT.pmt) }}</div>
+              <div class="text-lg font-bold text-gray-800" title="Pago mensual de referencia para el remanente">{{ formatCurrency(inflowVsPMT.pmt) }}</div>
             </div>
           </div>
 
           <!-- Doble barra: Deuda activa vs Ahorro meta -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
             <div class="bg-white border border-gray-200 rounded-xl p-4">
-              <div class="text-sm text-gray-600 mb-2">Cobertura de Deuda (PMT) con Inflow</div>
+              <div class="text-sm text-gray-600 mb-2" title="Porcentaje del inflow grupal que cubre la PMT estimada">Cobertura de Deuda (PMT) con Inflow</div>
               <div class="w-full h-6 bg-gray-100 rounded overflow-hidden">
                 <div class="h-6 bg-emerald-500" [style.width.%]="inflowVsPMT.coveragePct"></div>
               </div>
@@ -655,6 +656,33 @@ interface KpiData {
               </div>
             </div>
           </div>
+
+          <!-- Inline Actions -->
+          <div class="flex gap-4 mt-4">
+            <button
+              type="button"
+              (click)="saveDraft()"
+              [disabled]="!simulationResult"
+              class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200"
+              data-cy="save-scenario"
+            >
+              💾 Guardar
+            </button>
+            <button
+              type="button"
+              (click)="generatePDF()"
+              class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+            >
+              📄 PDF
+            </button>
+            <button
+              type="button"
+              (click)="proceedToClientCreation()"
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+            >
+              ✅ Formalizar Grupo
+            </button>
+          </div>
         </div>
 
         <!-- Initial Help Panel -->
@@ -723,6 +751,7 @@ export class TandaColectivaComponent implements OnInit, OnDestroy {
   kpiDashboard: KpiData[] = [];
   asideActions = [
     { label: '📄 PDF', click: () => this.generatePDF() },
+    { label: '💾 Guardar', click: () => this.saveDraft() },
     { label: '✅ Formalizar Grupo', click: () => this.proceedToClientCreation() }
   ];
 
@@ -884,6 +913,34 @@ export class TandaColectivaComponent implements OnInit, OnDestroy {
         isGroupClient: 'true'
       }
     });
+  }
+
+  saveDraft(): void {
+    if (!this.simulationResult) { this.toast.error('No hay simulación para guardar'); return; }
+    const values = this.configForm.value;
+    const draftKey = `tanda-collective-${Date.now()}-draft`;
+    const draft = {
+      clientName: '',
+      market: 'edomex',
+      clientType: 'Colectivo',
+      timestamp: Date.now(),
+      type: 'EDOMEX_COLLECTIVE',
+      simulationResult: {
+        scenario: {
+          targetAmount: this.simulationResult.scenario.targetAmount,
+          monthsToTarget: this.simulationResult.scenario.monthsToTarget,
+          monthlyContribution: this.simulationResult.scenario.monthlyContribution,
+          targetPerMember: this.simulationResult.scenario.targetPerMember
+        }
+      },
+      configParams: values
+    };
+    try {
+      localStorage.setItem(draftKey, JSON.stringify(draft));
+      this.toast.success('Simulación de Tanda guardada');
+    } catch {
+      this.toast.error('No se pudo guardar la simulación');
+    }
   }
 
   formatCurrency(value: number): string {
