@@ -22,7 +22,7 @@
       "resources": {
         "files": [
           "/assets/**",
-          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
+          "/*.(eot|svg|cur|jpg|jpeg|png|webp|avif|gif|otf|ttf|woff|woff2|ani)"
         ]
       }
     }
@@ -37,7 +37,8 @@
       "cacheConfig": {
         "strategy": "freshness",
         "maxSize": 50,
-        "maxAge": "1h"
+        "maxAge": "1h",
+        "timeout": "3s"
       }
     },
     {
@@ -50,7 +51,8 @@
       "cacheConfig": {
         "strategy": "freshness",
         "maxSize": 50,
-        "maxAge": "1h"
+        "maxAge": "1h",
+        "timeout": "3s"
       }
     },
     {
