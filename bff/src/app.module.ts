@@ -4,6 +4,8 @@ import { VoiceModule } from './voice/voice.module';
 import { DbModule } from './db/db.module';
 import { HealthModule } from './health/health.module';
 import { CasesModule } from './cases/cases.module';
+import { OdooModule } from './odoo/odoo.module';
+import { GnvModule } from './gnv/gnv.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { CasesModule } from './cases/cases.module';
     DbModule,
     VoiceModule,
     CasesModule,
+    OdooModule,
+    GnvModule,
   ],
 })
 export class AppModule {}
