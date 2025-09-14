@@ -290,7 +290,7 @@ describe('ClienteFormComponent Integration Tests', () => {
     expect(screen.getByLabelText('Nombre Completo *')).toBeTruthy();
     expect(screen.getByLabelText('Correo Electrónico *')).toBeTruthy();
     expect(screen.getByLabelText('Teléfono *')).toBeTruthy();
-    expect(screen.getByRole('button', { name: /guardar/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /crear cliente/i })).toBeTruthy();
   });
 
   it('should show validation errors when submitting empty form', async () => {
@@ -314,12 +314,12 @@ describe('ClienteFormComponent Integration Tests', () => {
       ]
     });
 
-    const submitButton = screen.getByRole('button', { name: /guardar/i });
+    const submitButton = screen.getByRole('button', { name: /crear cliente/i });
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(screen.getByText('Nombre completo es requerido')).toBeTruthy();
-      expect(screen.getByText('Correo electrónico es requerido')).toBeTruthy();
+      expect(screen.getByText('Correo es requerido')).toBeTruthy();
     });
   });
 
@@ -384,7 +384,7 @@ describe('ClienteFormComponent Integration Tests', () => {
     const nameInput = screen.getByLabelText('Nombre Completo *');
     const emailInput = screen.getByLabelText('Correo Electrónico *');
     const phoneInput = screen.getByLabelText('Teléfono *');
-    const submitButton = screen.getByRole('button', { name: /guardar/i });
+    const submitButton = screen.getByRole('button', { name: /crear cliente/i });
 
     await user.type(nameInput, 'Juan Pérez García');
     await user.type(emailInput, 'juan@example.com');
