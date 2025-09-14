@@ -10,6 +10,8 @@ import { ContextualKPIsComponent, KPIData } from '../../shared/contextual-kpis/c
 import { ActivityItem, HumanActivityFeedComponent } from '../../shared/human-activity-feed/human-activity-feed.component';
 import { ActionButton, NextBestActionData, NextBestActionHeroComponent } from '../../shared/next-best-action-hero/next-best-action-hero.component';
 import { RiskRadarClient, RiskRadarComponent } from '../../shared/risk-radar/risk-radar.component';
+import { DevKpiMiniComponent } from '../../shared/dev-kpi-mini.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +23,8 @@ import { RiskRadarClient, RiskRadarComponent } from '../../shared/risk-radar/ris
     ContextualKPIsComponent,
     RiskRadarComponent,
     HumanActivityFeedComponent,
-    ClientModeToggleComponent
+    ClientModeToggleComponent,
+    DevKpiMiniComponent
   ],
   template: `
     <div class="command-center-dashboard">
@@ -76,6 +79,9 @@ import { RiskRadarClient, RiskRadarComponent } from '../../shared/risk-radar/ris
               [kpis]="contextualKPIs"
               [showTrends]="true">
             </app-contextual-kpis>
+            <div *ngIf="env.features?.enableDevKpi" style="margin-top:12px">
+              <app-dev-kpi-mini></app-dev-kpi-mini>
+            </div>
           </div>
           
           <div class="risk-radar-section">
@@ -366,6 +372,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private router: Router,
     private dashboardService: DashboardService
   ) {}
+
+  env = environment as any;
 
   ngOnInit(): void {
     this.loadDashboardData();

@@ -527,3 +527,68 @@ Para soporte técnico o preguntas:
 **🚛 Conductores PWA - Desarrollado con ❤️ y las mejores prácticas de la industria**
 
 </div>
+### 🔌 Integraciones BFF (marcadas y listas)
+
+Estas integraciones están pre-cableadas con feature flags. En dev funcionan con stubs locales; al encender los flags y exponer los endpoints en el BFF, la UI llamará al backend real sin más cambios.
+
+#### Postventa → Odoo (P1.8)
+
+- Flag: `environment.features.enableOdooQuoteBff`
+  - dev: `false` (draft local)
+  - prod: `true` (BFF real)
+- Servicio FE: `src/app/services/post-sales-quote-api.service.ts`
+  - `getOrCreateDraftQuote(clientId?, meta?)` → POST `/bff/odoo/quotes`
+  - `addLine(quoteId, part, qty?, meta?)` → POST `/bff/odoo/quotes/{quoteId}/lines`
+- Punto de uso: `src/app/components/post-sales/photo-wizard.component.ts` → método `addToQuote(p)` switchea por flag.
+- Contratos sugeridos:
+  - Request (línea): `{ sku|oem, name, qty, unitPrice, currency:'MXN', equivalent?, meta? }`
+  - Response: `{ quoteId, lineId, total?, currency? }`
+
+#### GNV T+1 — Salud por estación (P1.9)
+
+- Flag: `environment.features.enableGnvBff`
+  - dev: `false` (CSV local)
+  - prod: `true` (BFF JSON)
+- Servicio FE: `src/app/services/gnv-health.service.ts`
+  - CSV stub: `assets/gnv/ingesta_yesterday.csv`
+  - BFF JSON: GET `/bff/gnv/stations/health?date=YYYY-MM-DD`
+- Vista Ops: `src/app/components/pages/ops/gnv-health.component.ts`
+
+### 🧩 Feature Flags Clave
+
+En `src/environments/environment*.ts`:
+
+- `enablePostSalesWizard`: Wizard de 4 fotos en Postventa.
+- `enablePostSalesAddToQuote`: Chips “Agregar a cotización” (dev-only UI).
+- `enableOdooQuoteBff`: Usar BFF Odoo para cotización Postventa.
+- `enableGnvBff`: Usar BFF para panel GNV.
+- `enableDevKpi`: Mini KPIs dev (t_first_recommendation y %need_info) en Dashboard.
+
+### 🧪 Pruebas (mapa rápido)
+
+- Unit
+  - PMT/I₁/K₁/S₁: `src/app/components/pages/cotizador/cotizador-main.component.spec.ts`
+  - Seguros (F vs contado): `src/app/components/pages/cotizador/cotizador-insurance.spec.ts`
+  - Fórmulas financieras: `src/app/utils/math.util.spec.ts`
+- E2E (Cypress)
+  - Cotizador summary + seguros + amortización: `cypress/e2e/cotizador_summary_e2e.cy.ts`
+  - Protección tooltips: `cypress/e2e/proteccion_tooltips_e2e.cy.ts`
+  - Tanda tooltips: `cypress/e2e/tanda_tooltips_e2e.cy.ts`
+  - Postventa chips: `cypress/e2e/post_sales_add_to_quote.cy.ts`
+  - Simulador comparador: `cypress/e2e/simulator_compare_saved.cy.ts`
+  - GNV panel: `cypress/e2e/gnv_health_panel.cy.ts`
+  - A11y modal/keyboard: `cypress/e2e/a11y_keyboard.cy.ts`
+
+### 🧭 Tooltips y data‑cy (QA friendly)
+
+- Cotizador: `data-cy="cotizador-summary"`, `sum-precio|enganche|financiar|pmt|plazo`, `toggle-insurance`, `insurance-amount`, `ins-financiado`, `calc-amort`. Sliders/selects con títulos accesibles.
+- Protección: `tip-pmt`, `tip-term`, `tip-irr`, `rejection-box`.
+- Tanda: títulos en “Te toca en mes” (T1), “Cobertura PMT con Inflow”.
+- Documentos (Postventa): `tip-factura|poliza|contratos|endosos`, `upload-*` con títulos.
+
+### 📈 Performance y A11y (P2.11)
+
+- OnPush en módulos pesados (Wizard, Cotizador, AVI, Tanda, Protección, Entregas, Simuladores, GNV).
+- Preconnect/dns-prefetch a API; SW `api-cache-core` cache-first para `/api/clients|quotes|reports|post-sales/**`.
+- Focus-visible global, targets ≥ 44px, contraste ajustado.
+- Lighthouse budgets: `lighthouse-budgets.json` y workflow CI: `.github/workflows/lighthouse.yml`.

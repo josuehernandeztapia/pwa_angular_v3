@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, Subject, timer } from 'rxjs';
@@ -23,7 +23,8 @@ import { ApiConfigService } from '../../services/api-config.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './avi-interview.component.html',
-  styleUrls: ['./avi-interview.component.scss']
+  styleUrls: ['./avi-interview.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AVIInterviewComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();

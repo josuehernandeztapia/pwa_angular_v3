@@ -288,7 +288,7 @@ html.hc body { background: var(--bg); color: var(--text); }
 
 .helper-text {
   font-size: var(--font-small-size);
-  color: rgba(255,255,255,0.7);
+  color: #cbd5e1; /* improve contrast on dark bg */
 }
 
 .error-text {
@@ -383,9 +383,9 @@ html.hc body { background: var(--bg); color: var(--text); }
 /* ===== UX STANDARDIZATION ALIASES ===== */
 /* Unified secondary button style */
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--bg-gray-100);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.24);
   padding: var(--space-button-padding);
   border-radius: var(--radius-md);
   font-weight: 600;
