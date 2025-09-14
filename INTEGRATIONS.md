@@ -1,195 +1,156 @@
-# Integrations Guide (BFF)
+# Integrations Guide (BFF + PWA)
 
-This document specifies the FE↔BFF contracts that are pre‑wired in the app and gated behind feature flags. In dev they run with stubs; when the BFF is ready, enable the flags and the UI will call the backend without further code changes.
+This guide consolidates the FE↔BFF contracts already pre‑wired in the app, and adds the PMO‑level checklists for pending integrations. All endpoints are stubbed in dev; flip feature flags per environment to activate real calls.
 
 ## Status overview
 
 - Odoo Quotes (Postventa Chips) → Pre‑wired, behind `enableOdooQuoteBff`
 - GNV T+1 station health → Pre‑wired, behind `enableGnvBff`
+- MetaMap (KYC) → Stubs ready (`enableKycBff`)
+- Conekta (Payments) → Stubs ready (`enablePaymentsBff`)
+- Mifiel (Contracts) → Stubs ready (`enableContractsBff`)
+- Make/n8n (Automation) → Stubs ready (`enableAutomationBff`)
 
 ## Environment flags
 
 - Dev (src/environments/environment.ts)
   - `features.enableOdooQuoteBff = false`
   - `features.enableGnvBff = false`
-- Prod (src/environments/environment.prod.ts)
-  - `features.enableOdooQuoteBff = true`
-  - `features.enableGnvBff = true`
+  - `features.enableKycBff = false`
+  - `features.enablePaymentsBff = false`
+  - `features.enableContractsBff = false`
+  - `features.enableAutomationBff = false`
+- Staging/Prod (src/environments/*)
+  - Flags on según entorno; baseUrl opcional en `environment.integrations.*`
 
-## Auth
-
-- FE uses the app’s bearer token to call BFF endpoints.
-- The BFF owns integration secrets (Odoo credentials, etc.). FE never sees them.
-
-## HTTP
+## HTTP & Auth
 
 - Base: `${environment.apiUrl}` (dev: http://localhost:3000/api)
-- All requests JSON (`application/json`) unless stated otherwise.
+- JSON (`application/json`) salvo descargas CSV/PDF
+- FE usa bearer del app; BFF guarda secretos de proveedores
 
 ---
 
-## 1) Postventa → Odoo Quotes (P1.8)
-
-### FE usage (code)
+## 1) Postventa → Odoo Quotes
 
 - Service: `src/app/services/post-sales-quote-api.service.ts`
-  - `getOrCreateDraftQuote(clientId?: string, meta?: any)` → POST /bff/odoo/quotes
-  - `addLine(quoteId: string, part: PartSuggestion, qty = 1, meta?: any)` → POST /bff/odoo/quotes/{quoteId}/lines
-- Entry point: `src/app/components/post-sales/photo-wizard.component.ts` (`addToQuote(p)`) switches by `enableOdooQuoteBff`.
-
-### Endpoints (proposed)
-
-1) Create (or return) draft quote
-
-- POST `/bff/odoo/quotes`
-- Body
-```json
-{
-  "clientId": "c_123",
-  "market": "edomex",
-  "notes": "Postventa chips",
-  "meta": { "caseId": "case_abc" }
-}
-```
-- Response
-```json
-{
-  "quoteId": "Q-10045",
-  "number": "SO02031"
-}
-```
-
-2) Add line to quote
-
-- POST `/bff/odoo/quotes/{quoteId}/lines`
-- Body
-```json
-{
-  "sku": "front-brake-pads",
-  "oem": "C789-BP",
-  "name": "Pastillas freno (delanteras)",
-  "equivalent": "BREMBO-P1234",
-  "qty": 1,
-  "unitPrice": 899,
-  "currency": "MXN",
-  "meta": { "caseId": "case_abc" }
-}
-```
-- Response
-```json
-{
-  "quoteId": "Q-10045",
-  "lineId": "L-00032",
-  "total": 1299,
-  "currency": "MXN"
-}
-```
-
-3) Get quote (optional)
-
-- GET `/bff/odoo/quotes/{quoteId}` → totals, status, number
-
-### Error handling
-
-- 400 invalid product/price/qty → FE shows toast error, keeps local draft untouched
-- 401/403 refresh/reauth → FE uses AuthInterceptor
-- 5xx shows toast “No se pudo agregar a cotización”
-
-### FE model (PartSuggestion)
-
-```ts
-interface PartSuggestion {
-  id: string;        // mapped to sku
-  name: string;
-  oem: string;
-  equivalent?: string;
-  stock: number;
-  priceMXN: number;  // mapped to unitPrice
-}
-```
+  - `getOrCreateDraftQuote(clientId?, meta?)` → POST /bff/odoo/quotes
+  - `addLine(quoteId, part, qty?, meta?)` → POST /bff/odoo/quotes/{quoteId}/lines
+- UI entry points: Wizard/Chips (condicional por flag)
+- QA: addLine < 500 ms
 
 ---
 
-## 2) GNV T+1 station health (P1.9)
+## 2) GNV T+1 station health
 
-### FE usage (code)
-
-- Service: `src/app/services/gnv-health.service.ts`
-  - `getYesterdayHealth()` switches by `enableGnvBff`:
-    - CSV: `assets/gnv/ingesta_yesterday.csv`
-    - JSON: `/bff/gnv/stations/health?date=YYYY-MM-DD`
+- Service: `src/app/services/gnv-health.service.ts` (CSV assets o JSON BFF según flag)
 - View: `src/app/components/pages/ops/gnv-health.component.ts`
+- Endpoints BFF:
+  - GET `/bff/gnv/stations/health?date=YYYY-MM-DD`
+  - GET `/bff/gnv/template.csv`, `/bff/gnv/guide.pdf`
 
-### Endpoint
+---
 
-- GET `/bff/gnv/stations/health?date=2025-09-12`
-- Response
-```json
-[
-  {
-    "stationId": "AGS-01",
-    "stationName": "Estación Aguascalientes 01",
-    "fileName": "ags01_2025-09-12.csv",
-    "rowsTotal": 1200,
-    "rowsAccepted": 1200,
-    "rowsRejected": 0,
-    "warnings": 0,
-    "status": "green",
-    "updatedAt": "2025-09-12T07:12:00Z"
-  },
-  {
-    "stationId": "EDMX-11",
-    "stationName": "Estación EdoMex 11",
-    "fileName": "edmx11_2025-09-12.csv",
-    "rowsTotal": 980,
-    "rowsAccepted": 940,
-    "rowsRejected": 40,
-    "warnings": 3,
-    "status": "yellow",
-    "updatedAt": "2025-09-12T07:22:00Z"
-  }
-]
+## 3) MetaMap (KYC)
+
+Env (BFF):
+
+```
+METAMAP_CLIENT_ID=
+METAMAP_FLOW_ID=
 ```
 
-### Status rules (server‑side)
+Endpoints BFF:
 
-- red: missing fileName or rowsTotal=0
-- yellow: warnings>0 or rowsRejected>0
-- green: otherwise
+- POST `/api/bff/kyc/start`
+- POST `/webhooks/metamap`
 
-### Downloads
+QA:
 
-- GET `/bff/gnv/template.csv` (CSV template)
-- GET `/bff/gnv/guide.pdf` (how‑to / FAQ)
+1. Crear cliente en PWA
+2. Iniciar flujo KYC (INE/selfie)
+3. Confirmar webhook → documento KYC “Aprobado”; `healthScore` +15
 
-### Error handling
-
-- 5xx shows table empty with “No hay datos de ingesta disponibles.”
-- FE uses SW cache (if configured) for quick loads.
+Dependencias: Odoo (expedientes), Airtable (registro docs)
 
 ---
 
-## Rollout checklist
+## 4) Conekta (Pagos)
 
-- [ ] Deploy BFF endpoints above
-- [ ] Ensure BFF uses backend secrets (e.g., Odoo credentials) and enforces auth
-- [ ] Switch flags to true in the target environment (dev/stage/prod)
-  - `enableOdooQuoteBff = true`
-  - `enableGnvBff = true`
-- [ ] Verify FE happy paths
-  - Chips → add line shows toast/updates
-  - GNV health loads JSON and shows semaphores
-- [ ] Add backend budgets/observability (latency < 500ms for addLine)
+Env (BFF):
 
-## Local stubs (dev mode)
+```
+CONEKTA_PUBLIC_KEY=
+CONEKTA_PRIVATE_KEY=
+CONEKTA_WEBHOOK_SECRET=
+```
 
-- Odoo: FE stores provisional quote lines in localStorage draft; no backend needed
-- GNV: CSVs under `assets/gnv/` are used to render the panel
+Endpoints BFF:
+
+- POST `/api/bff/payments/orders`
+- POST `/api/bff/payments/checkouts`
+- POST `/webhooks/conekta`
+
+QA:
+
+1. Tarjeta 4242 éxito / 4000 declinada
+2. Generar link OXXO/SPEI y validar URL
+3. Webhook `payment.paid` → factura “Pagada” (Odoo/NEON)
+
+Dependencias: Odoo (facturas), NEON (transactions)
 
 ---
 
-## Security & Compliance
+## 5) Mifiel (Contratos)
 
-- FE never embeds integration secrets; only calls BFF with bearer auth
-- BFF sanitizes and validates payloads, maps fields to provider (Odoo)
-- Log PII carefully (hash/omit as needed)
+Env (BFF):
+
+```
+MIFIEL_APP_ID=
+MIFIEL_SECRET=
+MIFIEL_WEBHOOK_URL=
+```
+
+Endpoints BFF:
+
+- POST `/api/bff/contracts/create`
+- POST `/webhooks/mifiel`
+
+QA:
+
+1. Generar contrato en PWA
+2. Abrir sesión de firma en Mifiel
+3. Guardar URL firmada en cliente
+4. Webhook actualiza contrato (Odoo/NEON)
+
+Dependencias: NEON (contracts), Odoo (documentos)
+
+---
+
+## 6) Make / n8n (Automatización)
+
+Env (BFF):
+
+```
+MAKE_WEBHOOK_URL=
+```
+
+Endpoints BFF:
+
+- POST `/api/bff/events/*` (recibe evento y reenvía)
+
+QA:
+
+1. Disparar `vehicle.delivered` desde PWA
+2. Confirmar recepción en Make
+3. Airtable crea fila y Odoo actualiza expediente
+
+Dependencias: Airtable (CRM), Odoo (expedientes)
+
+---
+
+## Seguridad y cumplimiento
+
+- FE nunca expone secretos; sólo bearer del app
+- BFF valida/sanitiza payloads; mapea a proveedores
+- Log de PII con criterio (enmascarar/omitir si aplica)

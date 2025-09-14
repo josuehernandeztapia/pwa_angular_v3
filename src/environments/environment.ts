@@ -34,13 +34,27 @@ export const environment = {
     enableCatalogConfig: false,
     enableLocalizationConfig: false,
     enableIntegrationsConfig: false,
-    enableSecurityConfig: false
+    enableSecurityConfig: false,
+    // Integrations (BFF) flags
+    enableKycBff: false,
+    enablePaymentsBff: false,
+    enableContractsBff: false,
+    enableAutomationBff: false
   },
 
   // Dynamic configuration base paths
   config: {
     assetsBasePath: '/assets/config',
     remoteBaseUrl: '' // e.g. 'https://config.conductores.mx/config'
+  },
+  // Integrations base URLs (optional overrides)
+  integrations: {
+    odoo: { baseUrl: '' },
+    gnv: { baseUrl: '' },
+    kyc: { baseUrl: '' },
+    payments: { baseUrl: '' },
+    contracts: { baseUrl: '' },
+    automation: { baseUrl: '' }
   },
 
   // AVI System Configuration
