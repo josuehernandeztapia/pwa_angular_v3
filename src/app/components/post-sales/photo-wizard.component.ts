@@ -92,14 +92,7 @@ interface StepState {
             <button class="btn" *ngIf="needsEvidence" (click)="jumpTo('evidence')">Tomar Evidencia</button>
         </div>
         
-        <!-- Chips: Agregar a cotización (flag) -->
-        <div class="add-to-quote" *ngIf="features.enablePostSalesAddToQuote">
-          <button class="btn" (click)="addToQuote()" [disabled]="addingToQuote()">
-            {{ addingToQuote() ? 'Agregando…' : '➕ Agregar a cotización' }}
-          </button>
-          <span class="status" *ngIf="quoteStatus()">{{ quoteStatus() }}</span>
-          <small class="hint" *ngIf="!features.enableOdooQuoteBff">(Modo local: sin BFF)</small>
-        </div>
+        <!-- Chips de refacciones y CTA de agregado a cotización (dev/BFF flags) abajo -->
       </div>
         <!-- Trigger need_info recording when applicable -->
         <ng-container *ngIf="showNeedInfoRecording"></ng-container>
@@ -118,7 +111,7 @@ interface StepState {
                 <span class="meta" *ngIf="p.equivalent">Equiv: {{ p.equivalent }}</span>
                 <span class="meta" [class.low]="p.stock === 0">Stock: {{ p.stock }}</span>
               </div>
-              <button class="btn add" (click)="addToQuote(p)" [attr.data-cy]="'add-' + p.id" aria-label="Agregar {{ p.name }} a cotización">
+              <button class="btn add" (click)="addToQuote(p)" [attr.data-cy]="'add-' + p.id" [attr.aria-label]="'Agregar ' + p.name + ' a cotización'">
                 ➕ Agregar a cotización
               </button>
             </div>
@@ -209,13 +202,6 @@ export class PhotoWizardComponent {
   private sentFirstRecommendation = false;
   private sentNeedInfo = false;
   firstRecommendationMs: number | null = null;
-<<<<<<< HEAD
-  addingToQuote = signal(false);
-  quoteStatus = signal('');
-  features: any = (environment as any).features || {};
-
-  constructor(private cases: CasesService, private quoteApi: PostSalesQuoteApiService) {}
-=======
   draftCount = 0;
   recommendedParts: PartSuggestion[] = [];
 
@@ -225,7 +211,6 @@ export class PhotoWizardComponent {
       this.draftCount = this.quoteDraft.getCount();
     }
   }
->>>>>>> origin/main
 
   get ctaText(): string {
     if (!this.caseId) return 'Iniciar';

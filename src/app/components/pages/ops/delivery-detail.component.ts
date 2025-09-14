@@ -12,7 +12,9 @@ import {
   DeliveryEventLog,
   DeliveryEvent,
   DELIVERY_EVENT_DESCRIPTIONS,
-  DELIVERY_STATUS_DESCRIPTIONS
+  DELIVERY_STATUS_DESCRIPTIONS,
+  DeliveryStatus,
+  DELIVERY_FSM
 } from '../../../models/deliveries';
 import { ClientDeliveryInfo } from '../../../models/deliveries';
 

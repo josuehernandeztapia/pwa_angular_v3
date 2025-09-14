@@ -1133,6 +1133,7 @@ interface AmortizationRow {
   `]
 })
 export class CotizadorMainComponent implements OnInit, OnDestroy {
+  Math = Math;
   @Input() client?: Client;
   @Input() initialMode: SimulatorMode = 'acquisition';
   @Output() onFormalize = new EventEmitter<Quote | Event>();
