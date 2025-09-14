@@ -516,22 +516,7 @@ export class DocumentsPhaseComponent {
     });
   }
 
-  constructor() {
-    this.documentsForm = this.fb.group({
-      fechaTransferencia: [new Date().toISOString().split('T')[0], Validators.required],
-      titular: ['', [Validators.required, Validators.minLength(3)]],
-      proveedorSeguro: ['', Validators.required],
-      duracionPoliza: ['', Validators.required],
-      facturaValida: [false],
-      polizaVigente: [false],
-      contratosFirmados: [false],
-      datosCorrectos: [false],
-      observaciones: ['']
-    });
-
-    // Initialize data
-    this.loadDocumentsData();
-  }
+  // Form/data init
 
   private loadDocumentsData(): void {
     // Simulate loading client data
@@ -717,9 +702,20 @@ export class DocumentsPhaseComponent {
       this.closeSuccessModal();
     }
   }
-<<<<<<< HEAD
-=======
-  constructor(private router: Router, private fb: FormBuilder, private integratedImportTracker: IntegratedImportTrackerService, private postSalesApi: PostSalesApiService, private pdfExport?: any) {}
+  constructor(private router: Router, private fb: FormBuilder, private integratedImportTracker: IntegratedImportTrackerService, private postSalesApi: PostSalesApiService, private pdfExport?: any) {
+    this.documentsForm = this.fb.group({
+      fechaTransferencia: [new Date().toISOString().split('T')[0], Validators.required],
+      titular: ['', [Validators.required, Validators.minLength(3)]],
+      proveedorSeguro: ['', Validators.required],
+      duracionPoliza: ['', Validators.required],
+      facturaValida: [false],
+      polizaVigente: [false],
+      contratosFirmados: [false],
+      datosCorrectos: [false],
+      observaciones: ['']
+    });
+    this.loadDocumentsData();
+  }
 
   async printOnePager() {
     try {
@@ -747,5 +743,4 @@ export class DocumentsPhaseComponent {
       console.error('PDF error', e);
     }
   }
->>>>>>> origin/main
 }
