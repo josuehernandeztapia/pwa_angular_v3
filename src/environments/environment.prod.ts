@@ -23,13 +23,27 @@ export const environment = {
     enableCatalogConfig: true,
     enableLocalizationConfig: true,
     enableIntegrationsConfig: true,
-    enableSecurityConfig: true
+    enableSecurityConfig: true,
+    // Integrations (BFF) flags
+    enableKycBff: true,
+    enablePaymentsBff: true,
+    enableContractsBff: true,
+    enableAutomationBff: true
   },
 
   // Dynamic configuration base paths
   config: {
     assetsBasePath: '/assets/config',
     remoteBaseUrl: process.env['CONFIG_REMOTE_BASE_URL'] || ''
+  },
+  // Integrations base URLs (optional overrides via env vars)
+  integrations: {
+    odoo: { baseUrl: '' },
+    gnv: { baseUrl: '' },
+    kyc: { baseUrl: '' },
+    payments: { baseUrl: '' },
+    contracts: { baseUrl: '' },
+    automation: { baseUrl: '' }
   },
 
   // API endpoints configuration

@@ -27,7 +27,19 @@ export const environment = {
     enableCatalogConfig: true,
     enableLocalizationConfig: true,
     enableIntegrationsConfig: true,
-    enableSecurityConfig: true
+    enableSecurityConfig: true,
+    // Integrations (BFF) flags
+    enableKycBff: true,
+    enablePaymentsBff: true,
+    enableContractsBff: true,
+    enableAutomationBff: true
+  },
+  integrations: {
+    odoo: { baseUrl: '' },
+    gnv: { baseUrl: '' },
+    kyc: { baseUrl: '' },
+    payments: { baseUrl: '' },
+    contracts: { baseUrl: '' },
+    automation: { baseUrl: '' }
   },
 };
-

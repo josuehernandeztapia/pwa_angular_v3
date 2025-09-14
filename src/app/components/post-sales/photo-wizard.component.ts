@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CasesService, CaseRecord } from '../../services/cases.service';
+import { PostSalesQuoteApiService } from '../../services/post-sales-quote-api.service';
 import { environment } from '../../../environments/environment';
 
 type StepId = 'plate' | 'vin' | 'odometer' | 'evidence';
@@ -89,6 +90,14 @@ interface StepState {
             <button class="btn" *ngIf="needsEvidence" (click)="jumpTo('evidence')">Tomar Evidencia</button>
         </div>
         
+        <!-- Chips: Agregar a cotización (flag) -->
+        <div class="add-to-quote" *ngIf="features.enablePostSalesAddToQuote">
+          <button class="btn" (click)="addToQuote()" [disabled]="addingToQuote()">
+            {{ addingToQuote() ? 'Agregando…' : '➕ Agregar a cotización' }}
+          </button>
+          <span class="status" *ngIf="quoteStatus()">{{ quoteStatus() }}</span>
+          <small class="hint" *ngIf="!features.enableOdooQuoteBff">(Modo local: sin BFF)</small>
+        </div>
       </div>
         <!-- Trigger need_info recording when applicable -->
         <ng-container *ngIf="showNeedInfoRecording"></ng-container>
@@ -158,8 +167,11 @@ export class PhotoWizardComponent {
   private sentFirstRecommendation = false;
   private sentNeedInfo = false;
   firstRecommendationMs: number | null = null;
+  addingToQuote = signal(false);
+  quoteStatus = signal('');
+  features: any = (environment as any).features || {};
 
-  constructor(private cases: CasesService) {}
+  constructor(private cases: CasesService, private quoteApi: PostSalesQuoteApiService) {}
 
   get ctaText(): string {
     if (!this.caseId) return 'Iniciar';

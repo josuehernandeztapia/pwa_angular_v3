@@ -4,6 +4,12 @@ import { VoiceModule } from './voice/voice.module';
 import { DbModule } from './db/db.module';
 import { HealthModule } from './health/health.module';
 import { CasesModule } from './cases/cases.module';
+import { OdooModule } from './odoo/odoo.module';
+import { GnvModule } from './gnv/gnv.module';
+import { KycModule } from './kyc/kyc.module';
+import { PaymentsModule } from './payments/payments.module';
+import { ContractsModule } from './contracts/contracts.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -15,6 +21,12 @@ import { CasesModule } from './cases/cases.module';
     DbModule,
     VoiceModule,
     CasesModule,
+    OdooModule,
+    GnvModule,
+    KycModule,
+    PaymentsModule,
+    ContractsModule,
+    EventsModule,
   ],
 })
 export class AppModule {}

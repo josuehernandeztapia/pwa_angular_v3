@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { PostSalesQuoteApiService } from '../../services/post-sales-quote-api.service';
+import { environment } from '../../../environments/environment';
 import {
   DocumentFile,
   LegalDocuments
@@ -335,7 +337,16 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
           </button>
         </div>
 
-        <!-- Validation Summary -->
+      <!-- Postventa → Chips "Agregar a cotización" (flag) -->
+      <div class="add-to-quote" *ngIf="features.enablePostSalesAddToQuote">
+        <button type="button" class="chip" (click)="addToQuote()" [disabled]="addingToQuote()">
+          {{ addingToQuote() ? 'Agregando...' : '➕ Agregar a cotización' }}
+        </button>
+        <span class="status" *ngIf="quoteStatus()">{{ quoteStatus() }}</span>
+        <small class="hint" *ngIf="!features.enableOdooQuoteBff">(Modo local: sin BFF)</small>
+      </div>
+
+      <!-- Validation Summary -->
         @if (validationErrors().length > 0) {
           <div class="validation-summary">
             <h4>⚠️ Campos requeridos:</h4>
@@ -400,6 +411,7 @@ export class DocumentsPhaseComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private importTracker = inject(IntegratedImportTrackerService);
+  private quoteApi = inject(PostSalesQuoteApiService);
   private postSalesApi = inject(PostSalesApiService);
 
   // Signals
@@ -420,6 +432,9 @@ export class DocumentsPhaseComponent {
   isSaving = signal(false);
   isSubmitting = signal(false);
   showSuccessModal = signal(false);
+  addingToQuote = signal(false);
+  quoteStatus = signal<string>('');
+  features = (environment as any).features || {};
 
   // Form
   documentsForm: FormGroup;
@@ -471,6 +486,32 @@ export class DocumentsPhaseComponent {
 
     return errors;
   });
+
+  addToQuote(): void {
+    this.quoteStatus.set('');
+    this.addingToQuote.set(true);
+    const clientId = this.clientId();
+    // Create or get draft, then add a simple line item representing this phase
+    this.quoteApi.createOrGetDraft(clientId).subscribe({
+      next: (res) => {
+        const quoteId = res.quoteId;
+        this.quoteApi.addLine(quoteId, { name: 'Gestión Documental Postventa', unitPrice: 990 }).subscribe({
+          next: () => {
+            this.addingToQuote.set(false);
+            this.quoteStatus.set(`Agregado a cotización (${quoteId})`);
+          },
+          error: () => {
+            this.addingToQuote.set(false);
+            this.quoteStatus.set('Error al agregar línea a cotización');
+          }
+        });
+      },
+      error: () => {
+        this.addingToQuote.set(false);
+        this.quoteStatus.set('Error creando borrador de cotización');
+      }
+    });
+  }
 
   constructor() {
     this.documentsForm = this.fb.group({

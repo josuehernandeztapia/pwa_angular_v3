@@ -26,3 +26,12 @@ curl -s -f "$BFF_URL/api/bff/gnv/guide.pdf" >/dev/null && echo "GNV guide OK"
 
 echo "✅ BFF smoke passed"
 
+# Extended smoke (stubs): KYC, Payments, Contracts, Events
+if command -v curl >/dev/null 2>&1; then
+  echo "🔎 Extended BFF smoke (stubs)"
+  curl -s -f -X POST "$BFF_URL/api/bff/kyc/start" -H 'Content-Type: application/json' -d '{"clientId":"smoke"}' >/dev/null && echo "KYC start OK"
+  curl -s -f -X POST "$BFF_URL/api/bff/payments/orders" -H 'Content-Type: application/json' -d '{"amount":12345,"currency":"MXN"}' >/dev/null && echo "Payments order OK"
+  curl -s -f -X POST "$BFF_URL/api/bff/payments/checkouts" -H 'Content-Type: application/json' -d '{"orderId":"ord_test"}' >/dev/null && echo "Payments checkout OK"
+  curl -s -f -X POST "$BFF_URL/api/bff/contracts/create" -H 'Content-Type: application/json' -d '{"clientId":"smoke","type":"adenda_proteccion"}' >/dev/null && echo "Contracts create OK"
+  curl -s -f -X POST "$BFF_URL/api/bff/events/vehicle.delivered" -H 'Content-Type: application/json' -d '{"clientId":"smoke","vehicleId":"v1"}' >/dev/null && echo "Events forward OK"
+fi

@@ -180,6 +180,12 @@ const commonBeforeWildcard: Routes = [
         loadComponent: () => import('./components/pages/ops/triggers-monitor.component').then(c => c.TriggersMonitorComponent),
         title: 'Monitor de Triggers Automáticos - Operaciones'
       }
+      ,
+      {
+        path: 'gnv-health',
+        loadComponent: () => import('./components/pages/ops/gnv-health.component').then(c => c.GnvHealthComponent),
+        title: 'GNV Health (T+1) - Operaciones'
+      }
     ]
   },
 
