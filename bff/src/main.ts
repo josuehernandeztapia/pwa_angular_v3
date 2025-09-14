@@ -34,6 +34,8 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('voice', 'Voice analysis and scoring endpoints')
     .addTag('health', 'Health check endpoints')
+    .addTag('odoo', 'Odoo quotes integration endpoints')
+    .addTag('gnv', 'GNV ingestion health endpoints')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
