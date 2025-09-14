@@ -1,6 +1,7 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { OdooService } from './odoo.service';
+import { AddLineDto, CreateDraftDto } from './dto';
 
 @ApiTags('odoo')
 @Controller('api/bff/odoo/quotes')
@@ -8,7 +9,7 @@ export class OdooController {
   constructor(private odoo: OdooService) {}
 
   @Post()
-  createDraft(@Body() body: { clientId?: string; market?: string; notes?: string; meta?: any }) {
+  createDraft(@Body() body: CreateDraftDto) {
     return this.odoo.createOrGetDraft(body?.clientId, body);
   }
 
@@ -16,18 +17,8 @@ export class OdooController {
   addLine(
     @Param('id') quoteId: string,
     @Body()
-    body: {
-      sku?: string;
-      oem?: string;
-      name: string;
-      equivalent?: string;
-      qty?: number;
-      unitPrice: number;
-      currency?: string;
-      meta?: any;
-    },
+    body: AddLineDto,
   ) {
     return this.odoo.addLine(quoteId, body);
   }
 }
-
