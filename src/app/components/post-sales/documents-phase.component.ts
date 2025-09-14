@@ -35,6 +35,9 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
           <span class="client-name">{{ clientInfo()?.name }}</span>
           <span class="vin">VIN: {{ clientInfo()?.vin }}</span>
         </div>
+        <div class="actions">
+          <button type="button" class="btn pdf" (click)="printOnePager()" data-cy="postventa-pdf">Imprimir/PDF</button>
+        </div>
       </div>
 
       <!-- Progress Steps -->
@@ -124,12 +127,12 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
             <!-- Factura -->
             <div class="document-item">
               <div class="document-header">
-                <h4>🧾 Factura Original</h4>
-                <span class="required-badge">REQUERIDO</span>
+                <h4 title="Documento que acredita propiedad del vehículo. Requerido para la transferencia legal." data-cy="tip-factura">🧾 Factura Original</h4>
+                <span class="required-badge" title="Obligatorio para cerrar la fase de Documentos">REQUERIDO</span>
               </div>
               <div class="document-content">
                 @if (!uploadedDocuments().factura) {
-                  <div class="upload-area" (click)="triggerFileUpload('factura')">
+                  <div class="upload-area" (click)="triggerFileUpload('factura')" title="Sube la factura original en PDF para proceder con la transferencia" data-cy="upload-factura">
                     <span class="upload-icon">📄</span>
                     <p>Subir factura original (PDF)</p>
                     <small>Máximo 10MB - Solo PDF</small>
@@ -157,12 +160,12 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
             <!-- Póliza de Seguro -->
             <div class="document-item">
               <div class="document-header">
-                <h4>🛡️ Póliza de Seguro</h4>
-                <span class="required-badge">REQUERIDO</span>
+                <h4 title="Comprobante de cobertura vigente para la unidad" data-cy="tip-poliza">🛡️ Póliza de Seguro</h4>
+                <span class="required-badge" title="Debe estar vigente y cubrir la unidad">REQUERIDO</span>
               </div>
               <div class="document-content">
                 @if (!uploadedDocuments().polizaSeguro) {
-                  <div class="upload-area" (click)="triggerFileUpload('polizaSeguro')">
+                  <div class="upload-area" (click)="triggerFileUpload('polizaSeguro')" title="Sube la póliza de seguro vigente (PDF)" data-cy="upload-poliza">
                     <span class="upload-icon">🛡️</span>
                     <p>Subir póliza de seguro (PDF)</p>
                     <small>Vigente y con cobertura completa</small>
@@ -190,12 +193,12 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
             <!-- Contratos -->
             <div class="document-item">
               <div class="document-header">
-                <h4>📜 Contratos Firmados</h4>
-                <span class="required-badge">REQUERIDO</span>
+                <h4 title="Contratos necesarios para formalizar la operación" data-cy="tip-contratos">📜 Contratos Firmados</h4>
+                <span class="required-badge" title="Obligatorios para la entrega final">REQUERIDO</span>
               </div>
               <div class="document-content">
                 @if (uploadedDocuments().contratos.length === 0) {
-                  <div class="upload-area" (click)="triggerFileUpload('contratos')">
+                  <div class="upload-area" (click)="triggerFileUpload('contratos')" title="Sube los contratos firmados (PDF); puedes seleccionar múltiples" data-cy="upload-contratos">
                     <span class="upload-icon">📜</span>
                     <p>Subir contratos firmados (PDF)</p>
                     <small>Puede seleccionar múltiples archivos</small>
@@ -228,12 +231,12 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
             <!-- Endosos (Opcional) -->
             <div class="document-item optional">
               <div class="document-header">
-                <h4>📃 Endosos</h4>
-                <span class="optional-badge">OPCIONAL</span>
+                <h4 title="Documentos adicionales de transferencia (si aplica)" data-cy="tip-endosos">📃 Endosos</h4>
+                <span class="optional-badge" title="Solo si aplica">OPCIONAL</span>
               </div>
               <div class="document-content">
                 @if (uploadedDocuments().endosos.length === 0) {
-                  <div class="upload-area" (click)="triggerFileUpload('endosos')">
+                  <div class="upload-area" (click)="triggerFileUpload('endosos')" title="Sube endosos relacionados con la transferencia" data-cy="upload-endosos">
                     <span class="upload-icon">📃</span>
                     <p>Subir endosos (si aplica)</p>
                     <small>Documentos adicionales de transferencia</small>
@@ -714,4 +717,35 @@ export class DocumentsPhaseComponent {
       this.closeSuccessModal();
     }
   }
+<<<<<<< HEAD
+=======
+  constructor(private router: Router, private fb: FormBuilder, private integratedImportTracker: IntegratedImportTrackerService, private postSalesApi: PostSalesApiService, private pdfExport?: any) {}
+
+  async printOnePager() {
+    try {
+      const mod = await import('../../services/pdf-export.service');
+      const pdf = new mod.PdfExportService();
+      const docs = this.uploadedDocuments();
+      const legal = this.documentsForm.value;
+      const data = {
+        clientName: this.clientInfo()?.name,
+        vin: this.clientInfo()?.vin,
+        titular: legal?.titular,
+        fechaTransferencia: legal?.fechaTransferencia,
+        proveedorSeguro: legal?.proveedorSeguro,
+        duracionPoliza: legal?.duracionPoliza,
+        docs: {
+          factura: !!docs.factura,
+          poliza: !!docs.polizaSeguro,
+          contratos: docs.contratos?.length || 0,
+          endosos: docs.endosos?.length || 0
+        }
+      } as any;
+      const blob = await pdf.generatePostSalesOnePager(data);
+      pdf.downloadPDF(blob, `postventa-${data.vin || 'expediente'}.pdf`);
+    } catch (e) {
+      console.error('PDF error', e);
+    }
+  }
+>>>>>>> origin/main
 }

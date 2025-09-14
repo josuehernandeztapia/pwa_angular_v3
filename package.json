@@ -6,6 +6,7 @@
     "prebuild:prod": "npm run assets:app-icons",
     "ng": "ng",
     "start": "ng serve",
+    "lh:ci": "lighthouse http://localhost:4200 --preset=mobile --budgets-path=./lighthouse-budgets.json --quiet --chrome-flags='--headless --no-sandbox'",
     "bff:install": "cd bff && npm install",
     "bff:dev": "cd bff && npm run start:dev",
     "bff:build": "cd bff && npm run build",

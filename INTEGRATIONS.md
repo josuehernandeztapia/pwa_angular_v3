@@ -1,18 +1,57 @@
-# Integrations – BFF + PWA Orchestration
+# Integrations Guide (BFF + PWA)
 
-This document enumerates environment variables, BFF endpoints, QA steps and dependencies for each external integration. All endpoints are stubbed in dev; flip feature flags per environment to activate real calls.
+This guide consolidates the FE↔BFF contracts already pre‑wired in the app, and adds the PMO‑level checklists for pending integrations. All endpoints are stubbed in dev; flip feature flags per environment to activate real calls.
 
-## Odoo (Quotes)
+## Status overview
 
-- Endpoints:
-  - POST `/api/bff/odoo/quotes`
-  - POST `/api/bff/odoo/quotes/:id/lines`
-- Flags (PWA): `features.enableOdooQuoteBff`
-- QA: Chips “Agregar a cotización” → `addLine` < 500 ms
+- Odoo Quotes (Postventa Chips) → Pre‑wired, behind `enableOdooQuoteBff`
+- GNV T+1 station health → Pre‑wired, behind `enableGnvBff`
+- MetaMap (KYC) → Stubs ready (`enableKycBff`)
+- Conekta (Payments) → Stubs ready (`enablePaymentsBff`)
+- Mifiel (Contracts) → Stubs ready (`enableContractsBff`)
+- Make/n8n (Automation) → Stubs ready (`enableAutomationBff`)
+
+## Environment flags
+
+- Dev (src/environments/environment.ts)
+  - `features.enableOdooQuoteBff = false`
+  - `features.enableGnvBff = false`
+  - `features.enableKycBff = false`
+  - `features.enablePaymentsBff = false`
+  - `features.enableContractsBff = false`
+  - `features.enableAutomationBff = false`
+- Staging/Prod (src/environments/*)
+  - Flags on según entorno; baseUrl opcional en `environment.integrations.*`
+
+## HTTP & Auth
+
+- Base: `${environment.apiUrl}` (dev: http://localhost:3000/api)
+- JSON (`application/json`) salvo descargas CSV/PDF
+- FE usa bearer del app; BFF guarda secretos de proveedores
 
 ---
 
-## MetaMap (KYC)
+## 1) Postventa → Odoo Quotes
+
+- Service: `src/app/services/post-sales-quote-api.service.ts`
+  - `getOrCreateDraftQuote(clientId?, meta?)` → POST /bff/odoo/quotes
+  - `addLine(quoteId, part, qty?, meta?)` → POST /bff/odoo/quotes/{quoteId}/lines
+- UI entry points: Wizard/Chips (condicional por flag)
+- QA: addLine < 500 ms
+
+---
+
+## 2) GNV T+1 station health
+
+- Service: `src/app/services/gnv-health.service.ts` (CSV assets o JSON BFF según flag)
+- View: `src/app/components/pages/ops/gnv-health.component.ts`
+- Endpoints BFF:
+  - GET `/bff/gnv/stations/health?date=YYYY-MM-DD`
+  - GET `/bff/gnv/template.csv`, `/bff/gnv/guide.pdf`
+
+---
+
+## 3) MetaMap (KYC)
 
 Env (BFF):
 
@@ -21,7 +60,7 @@ METAMAP_CLIENT_ID=
 METAMAP_FLOW_ID=
 ```
 
-Endpoints:
+Endpoints BFF:
 
 - POST `/api/bff/kyc/start`
 - POST `/webhooks/metamap`
@@ -36,7 +75,7 @@ Dependencias: Odoo (expedientes), Airtable (registro docs)
 
 ---
 
-## Conekta (Payments)
+## 4) Conekta (Pagos)
 
 Env (BFF):
 
@@ -46,7 +85,7 @@ CONEKTA_PRIVATE_KEY=
 CONEKTA_WEBHOOK_SECRET=
 ```
 
-Endpoints:
+Endpoints BFF:
 
 - POST `/api/bff/payments/orders`
 - POST `/api/bff/payments/checkouts`
@@ -62,7 +101,7 @@ Dependencias: Odoo (facturas), NEON (transactions)
 
 ---
 
-## Mifiel (Contracts)
+## 5) Mifiel (Contratos)
 
 Env (BFF):
 
@@ -72,7 +111,7 @@ MIFIEL_SECRET=
 MIFIEL_WEBHOOK_URL=
 ```
 
-Endpoints:
+Endpoints BFF:
 
 - POST `/api/bff/contracts/create`
 - POST `/webhooks/mifiel`
@@ -88,7 +127,7 @@ Dependencias: NEON (contracts), Odoo (documentos)
 
 ---
 
-## Make / n8n (Automation)
+## 6) Make / n8n (Automatización)
 
 Env (BFF):
 
@@ -96,9 +135,9 @@ Env (BFF):
 MAKE_WEBHOOK_URL=
 ```
 
-Endpoints:
+Endpoints BFF:
 
-- POST `/api/bff/events/*` (recibir evento y reenviar a Make/n8n)
+- POST `/api/bff/events/*` (recibe evento y reenvía)
 
 QA:
 
@@ -110,10 +149,8 @@ Dependencias: Airtable (CRM), Odoo (expedientes)
 
 ---
 
-## Flags & Config (PWA)
+## Seguridad y cumplimiento
 
-- Features:
-  - `enableOdooQuoteBff`, `enableGnvBff`
-  - `enableKycBff`, `enablePaymentsBff`, `enableContractsBff`, `enableAutomationBff`
-- Optional base URLs: `environment.integrations.{odoo,gnv,kyc,payments,contracts,automation}.baseUrl`
-
+- FE nunca expone secretos; sólo bearer del app
+- BFF valida/sanitiza payloads; mapea a proveedores
+- Log de PII con criterio (enmascarar/omitir si aplica)

@@ -15,6 +15,13 @@ export const environment = {
     enableStressDetection: true,
     // Post-venta Wizard 4 fotos (feature flag)
     enablePostSalesWizard: true,
+    // Dev mini KPIs panel
+    enableDevKpi: true,
+    // Post-venta: Chips "Agregar a cotización" (dev only)
+    enablePostSalesAddToQuote: true,
+    // Integraciones BFF (activar cuando haya backend real)
+    enableOdooQuoteBff: false,
+    enableGnvBff: false,
     // LAB/Backoffice visibility
     enableTandaLab: true,
     // Dynamic configuration flags

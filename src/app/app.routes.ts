@@ -171,6 +171,11 @@ const commonBeforeWildcard: Routes = [
         title: 'Import Tracker - Operaciones'
       },
       {
+        path: 'gnv-health',
+        loadComponent: () => import('./components/pages/ops/gnv-health.component').then(c => c.GnvHealthComponent),
+        title: 'GNV T+1 — Salud por estación'
+      },
+      {
         path: 'deliveries/:id',
         loadComponent: () => import('./components/pages/ops/delivery-detail.component').then(c => c.DeliveryDetailComponent),
         title: 'Detalle de Entrega - Operaciones'

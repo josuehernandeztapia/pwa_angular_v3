@@ -1,39 +1,54 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import type { PartSuggestion } from './post-sales-quote-draft.service';
 
-interface QuoteDraftResponse { quoteId: string; created?: boolean }
-interface AddLineDto { name: string; unitPrice: number; quantity?: number }
+export interface DraftQuoteResponse {
+  quoteId: string;
+  number?: string;
+}
+
+export interface AddLineResponse {
+  quoteId: string;
+  lineId: string;
+  total?: number;
+  currency?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class PostSalesQuoteApiService {
-  private readonly useBff = !!(environment as any)?.features?.enableOdooQuoteBff;
-  private readonly base = `${environment.apiUrl}/bff/odoo/quotes`;
+  private http = inject(HttpClient);
+  private base = `${environment.apiUrl}/bff/odoo/quotes`;
 
-  // Local stub store when flag is off
-  private draftsByClient = new Map<string, string>();
-
-  constructor(private http: HttpClient) {}
-
-  createOrGetDraft(clientId: string, payload?: any): Observable<QuoteDraftResponse> {
-    if (!this.useBff) {
-      let qid = this.draftsByClient.get(clientId);
-      if (!qid) {
-        qid = `Q-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-        this.draftsByClient.set(clientId, qid);
-      }
-      return of({ quoteId: qid, created: true });
+  getOrCreateDraftQuote(clientId?: string, meta?: any): Observable<DraftQuoteResponse> {
+    if (!environment.features.enableOdooQuoteBff) {
+      return of({ quoteId: 'dev-draft' });
     }
-    return this.http.post<QuoteDraftResponse>(`${this.base}`, { clientId, ...(payload || {}) });
+    const body: any = { clientId, meta };
+    return this.http.post<any>(this.base, body).pipe(
+      map(res => ({ quoteId: res.quoteId || res.id || 'unknown', number: res.number }))
+    );
   }
 
-  addLine(quoteId: string, line: AddLineDto): Observable<{ ok: boolean }> {
-    if (!this.useBff) {
-      // Pretend success in stub mode
-      return of({ ok: true });
+  addLine(quoteId: string, part: PartSuggestion, qty: number = 1, meta?: any): Observable<AddLineResponse> {
+    if (!environment.features.enableOdooQuoteBff) {
+      return of({ quoteId: quoteId || 'dev-draft', lineId: `dev-${Date.now()}` });
     }
-    return this.http.post<{ ok: boolean }>(`${this.base}/${encodeURIComponent(quoteId)}/lines`, line);
+    const body: any = {
+      sku: part.id,
+      name: part.name,
+      oem: part.oem,
+      equivalent: part.equivalent,
+      qty,
+      unitPrice: part.priceMXN,
+      currency: 'MXN',
+      meta
+    };
+    return this.http.post<any>(`${this.base}/${quoteId}/lines`, body).pipe(
+      map(res => ({ quoteId: res.quoteId || quoteId, lineId: res.lineId || res.id, total: res.total, currency: res.currency }))
+    );
   }
 }
 

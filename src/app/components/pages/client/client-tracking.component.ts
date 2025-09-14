@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, Input, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -15,6 +15,7 @@ import {
   selector: 'app-client-tracking',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="client-tracking-container">
       <!-- Header -->
@@ -56,6 +57,7 @@ import {
             <div class="status-badge" [class]="'status-' + getStatusClass(info.status)">
               {{ getStatusIcon(info.status) }} {{ info.status }}
             </div>
+            <button class="btn-refresh" style="margin-left:8px" (click)="printOnePager(info)" data-cy="entregas-pdf">Imprimir/PDF</button>
           </div>
 
           <!-- Progress Section -->
@@ -837,5 +839,22 @@ export class ClientTrackingComponent implements OnInit {
 
   trackByOrderId(index: number, item: ClientDeliveryInfo): string {
     return item.orderId;
+  }
+
+  async printOnePager(info: ClientDeliveryInfo) {
+    try {
+      const mod = await import('../../../services/pdf-export.service');
+      const svc = new mod.PdfExportService();
+      const blob = await svc.generateDeliveryOnePager({
+        orderId: info.orderId,
+        status: info.status,
+        estimatedDate: info.estimatedDate,
+        message: info.message,
+        clientName: this.clientName()
+      });
+      svc.downloadPDF(blob, `entrega-${info.orderId}.pdf`);
+    } catch (e) {
+      console.error('PDF error', e);
+    }
   }
 }

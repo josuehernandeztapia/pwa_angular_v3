@@ -1,6 +1,6 @@
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ApplicationConfig, ErrorHandler } from '@angular/core';
-import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { createWorker } from 'tesseract.js';
 import { environment } from '../environments/environment';
@@ -14,11 +14,12 @@ import { TESSERACT_CREATE_WORKER } from './tokens/ocr.tokens';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, withPreloading(PreloadAllModules)),
+    // Keep route-based code-splitting; avoid global preloading to improve LCP
+    provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
     provideServiceWorker('ngsw-worker.js', {
       enabled: environment.production,
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerImmediately'
     }),
     {
       provide: HTTP_INTERCEPTORS,

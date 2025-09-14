@@ -1,9 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CasesService, CaseRecord } from '../../services/cases.service';
-import { PostSalesQuoteApiService } from '../../services/post-sales-quote-api.service';
 import { environment } from '../../../environments/environment';
+import { PostSalesQuoteDraftService, PartSuggestion } from '../../services/post-sales-quote-draft.service';
+import { PostSalesQuoteApiService } from '../../services/post-sales-quote-api.service';
 
 type StepId = 'plate' | 'vin' | 'odometer' | 'evidence';
 
@@ -23,7 +24,8 @@ interface StepState {
 @Component({
   selector: 'app-photo-wizard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgOptimizedImage],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="wizard-container" *ngIf="enabled; else disabledTpl">
       <h1 class="title">Postventa – Wizard de 4 Fotos</h1>
@@ -46,7 +48,7 @@ interface StepState {
           <div class="step-body">
             <div class="example" *ngIf="step.example">
               <div class="example-label">Ejemplo</div>
-              <img [src]="step.example" alt="Ejemplo {{ step.title }}" (error)="onExampleError($event)">
+              <img ngSrc="{{ step.example }}" width="320" height="180" alt="Ejemplo {{ step.title }}" (error)="onExampleError($event)">
             </div>
 
             <p class="hint">{{ step.hint }}</p>
@@ -101,10 +103,35 @@ interface StepState {
       </div>
         <!-- Trigger need_info recording when applicable -->
         <ng-container *ngIf="showNeedInfoRecording"></ng-container>
+
+        <!-- Dev-only: Chips de refacciones sugeridas + CTA Agregar a cotización -->
+        <div *ngIf="enableAddToQuote && recommendedParts.length > 0" class="parts-suggested" data-cy="parts-suggested">
+          <h3 class="parts-title">🔧 Piezas sugeridas</h3>
+          <div class="chips">
+            <div class="chip" *ngFor="let p of recommendedParts" [attr.data-cy]="'chip-' + p.id">
+              <div class="chip-main">
+                <span class="chip-name">{{ p.name }}</span>
+                <span class="chip-price">{{ p.priceMXN | currency:'MXN':'symbol-narrow':'1.0-0' }}</span>
+              </div>
+              <div class="chip-meta">
+                <span class="meta">OEM: {{ p.oem }}</span>
+                <span class="meta" *ngIf="p.equivalent">Equiv: {{ p.equivalent }}</span>
+                <span class="meta" [class.low]="p.stock === 0">Stock: {{ p.stock }}</span>
+              </div>
+              <button class="btn add" (click)="addToQuote(p)" [attr.data-cy]="'add-' + p.id" aria-label="Agregar {{ p.name }} a cotización">
+                ➕ Agregar a cotización
+              </button>
+            </div>
+          </div>
+          <div class="draft-summary" data-cy="quote-draft-summary" aria-live="polite">
+            En cotización provisional: <strong>{{ draftCount }}</strong> artículos
+            <button class="btn clear" (click)="clearDraft()" data-cy="clear-draft">Limpiar</button>
+          </div>
+        </div>
       </div>
 
       <div class="footer">
-        <button class="btn primary" [disabled]="!caseId" (click)="next()">{{ ctaText }}</button>
+        <button class="btn primary" [disabled]="!caseId" (click)="next()" data-cy="wizard-next">{{ ctaText }}</button>
       </div>
     </div>
     <ng-template #disabledTpl>
@@ -147,12 +174,27 @@ interface StepState {
     .cta-row { display:flex; gap: 8px; margin-top:8px; }
     .footer { margin-top: 16px; display:flex; justify-content: flex-end; }
     .badge-time { margin-top: 6px; font-size: 12px; color: #93c5fd; }
+
+    /* Parts chips */
+    .parts-suggested { margin-top: 16px; border-top: 1px dashed #374151; padding-top: 12px; }
+    .parts-title { color:#fbbf24; font-size:16px; margin: 0 0 8px 0; }
+    .chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+    .chip { border:1px solid #374151; background:#0b1220; border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:6px; }
+    .chip-main { display:flex; justify-content:space-between; align-items:center; }
+    .chip-name { font-weight:700; color:#e5e7eb; }
+    .chip-price { color:#06d6a0; font-weight:700; }
+    .chip-meta { display:flex; gap:8px; color:#9ca3af; font-size:12px; }
+    .chip-meta .meta.low { color:#f87171; }
+    .btn.add { align-self:flex-start; font-size:12px; padding:6px 8px; }
+    .draft-summary { margin-top:8px; font-size:13px; color:#e5e7eb; display:flex; align-items:center; gap:8px; }
+    .btn.clear { background:#374151; }
   `]
 })
 export class PhotoWizardComponent {
   enabled = environment.features?.enablePostSalesWizard === true;
   threshold = 0.7; // QA threshold
   environment = environment;
+  enableAddToQuote = environment.features?.enablePostSalesAddToQuote === true;
 
   steps: StepState[] = [
     { id: 'plate', title: 'Placa de circulación', hint: 'Asegúrate de buena luz y enfoque. Evita reflejos.', example: 'assets/examples/plate-example.jpg' },
@@ -167,11 +209,23 @@ export class PhotoWizardComponent {
   private sentFirstRecommendation = false;
   private sentNeedInfo = false;
   firstRecommendationMs: number | null = null;
+<<<<<<< HEAD
   addingToQuote = signal(false);
   quoteStatus = signal('');
   features: any = (environment as any).features || {};
 
   constructor(private cases: CasesService, private quoteApi: PostSalesQuoteApiService) {}
+=======
+  draftCount = 0;
+  recommendedParts: PartSuggestion[] = [];
+
+  constructor(private cases: CasesService, private quoteDraft: PostSalesQuoteDraftService, private quoteApi: PostSalesQuoteApiService) {
+    if (this.enableAddToQuote) {
+      this.recommendedParts = this.buildDevRecommendedParts();
+      this.draftCount = this.quoteDraft.getCount();
+    }
+  }
+>>>>>>> origin/main
 
   get ctaText(): string {
     if (!this.caseId) return 'Iniciar';
@@ -259,6 +313,13 @@ export class PhotoWizardComponent {
           this.firstRecommendationMs = Math.round(elapsed);
           this.sentFirstRecommendation = true;
           this.cases.recordFirstRecommendation(this.caseId!, this.firstRecommendationMs).subscribe();
+          // Dev KPI: store locally
+          try {
+            const raw = localStorage.getItem('kpi:firstRecommendation:list');
+            const arr = raw ? JSON.parse(raw) : [];
+            arr.push(this.firstRecommendationMs);
+            localStorage.setItem('kpi:firstRecommendation:list', JSON.stringify(arr));
+          } catch {}
         }
       },
       error: (err) => {
@@ -280,7 +341,47 @@ export class PhotoWizardComponent {
       if (this.needsEvidence) missing.push('evidence');
       this.cases.recordNeedInfo(this.caseId, missing).subscribe();
       this.sentNeedInfo = true;
+      // Dev KPI: aggregate need_info
+      try {
+        const raw = localStorage.getItem('kpi:needInfo:agg');
+        const agg = raw ? JSON.parse(raw) : { need: 0, total: 0 };
+        agg.need = (agg.need || 0) + 1;
+        agg.total = (agg.total || 0) + 1;
+        localStorage.setItem('kpi:needInfo:agg', JSON.stringify(agg));
+      } catch {}
     }
     return this.sentNeedInfo;
+  }
+
+  // Dev-only parts: simple static suggestions to illustrate UX before BFF
+  private buildDevRecommendedParts(): PartSuggestion[] {
+    return [
+      { id: 'oil-filter', name: 'Filtro de aceite', oem: 'A123-OF', equivalent: 'WIX-57045', stock: 12, priceMXN: 189 },
+      { id: 'air-filter', name: 'Filtro de aire', oem: 'B456-AF', equivalent: 'MANN-C26168', stock: 5, priceMXN: 349 },
+      { id: 'front-brake-pads', name: 'Pastillas freno (delanteras)', oem: 'C789-BP', equivalent: 'BREMBO-P1234', stock: 0, priceMXN: 899 },
+      { id: 'wiper-blade', name: 'Limpia parabrisas', oem: 'D234-WB', equivalent: 'BOSCH-AEROTWIN', stock: 20, priceMXN: 249 }
+    ];
+  }
+
+  addToQuote(p: PartSuggestion) {
+    if (!this.enableAddToQuote) return;
+    // Switch: if BFF enabled, call API; else, use local draft
+    if ((this.environment.features as any)?.enableOdooQuoteBff) {
+      const meta = { caseId: this.caseId };
+      this.quoteApi.getOrCreateDraftQuote(undefined, meta).subscribe(({ quoteId }) => {
+        this.quoteApi.addLine(quoteId, p, 1, meta).subscribe(() => {
+          this.draftCount += 1; // UI feedback only; real totals vendrán del BFF
+        });
+      });
+    } else {
+      this.quoteDraft.addItem(p, 1);
+      this.draftCount = this.quoteDraft.getCount();
+    }
+  }
+
+  clearDraft() {
+    if (!this.enableAddToQuote) return;
+    this.quoteDraft.clear();
+    this.draftCount = 0;
   }
 }

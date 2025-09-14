@@ -11,6 +11,12 @@ export const environment = {
     enablePushNotifications: true,
     enableOfflineMode: true,
     enablePostSalesWizard: false,
+    enableDevKpi: false,
+    // Post-venta: Chips "Agregar a cotización" (disabled by default in prod)
+    enablePostSalesAddToQuote: false,
+    // Integraciones BFF
+    enableOdooQuoteBff: true,
+    enableGnvBff: true,
     // LAB/Backoffice visibility (oculto por defecto en prod)
     enableTandaLab: false,
     // Dynamic configuration flags

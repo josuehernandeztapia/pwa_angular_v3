@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ViewChild, AfterViewChecked, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 interface SimulatorScenario {
@@ -35,6 +35,7 @@ interface SavedSimulation {
   selector: 'app-simulador-main',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="simulator-hub" *ngIf="!isRedirecting">
       <!-- Header -->
@@ -148,14 +149,14 @@ interface SavedSimulation {
         </div>
 
         <!-- FASE 3: Comparison Controls -->
-        <div class="comparison-controls" *ngIf="savedSimulations.length > 1">
-          <div class="comparison-header">
-            <button 
-              (click)="toggleComparisonMode()" 
-              [class.active]="comparisonMode"
-              class="comparison-toggle-btn">
-              {{ comparisonMode ? '✅ Modo Comparación' : '📊 Comparar Escenarios' }}
-            </button>
+          <div class="comparison-controls" *ngIf="savedSimulations.length > 1" data-cy="comparison-controls">
+            <div class="comparison-header">
+              <button 
+                (click)="toggleComparisonMode()" 
+                [class.active]="comparisonMode"
+              class="comparison-toggle-btn" data-cy="toggle-compare">
+                {{ comparisonMode ? '✅ Modo Comparación' : '📊 Comparar Escenarios' }}
+              </button>
             
             <div class="comparison-counter" *ngIf="comparisonMode">
               <span class="counter-text">
@@ -174,7 +175,7 @@ interface SavedSimulation {
             <button 
               (click)="compareSelectedSimulations()" 
               [disabled]="selectedForComparison.size < 2"
-              class="compare-btn">
+              class="compare-btn" data-cy="open-comparison">
               🔬 Comparar {{ selectedForComparison.size }} Escenarios
             </button>
           </div>
@@ -207,12 +208,12 @@ interface SavedSimulation {
     </div>
 
     <!-- FASE 3: Comparison Modal -->
-    <div class="comparison-modal" *ngIf="showComparisonModal">
+    <div class="comparison-modal" *ngIf="showComparisonModal" data-cy="comparison-modal">
       <div class="modal-overlay" (click)="closeComparisonModal()"></div>
-      <div class="comparison-modal-content">
+      <div class="comparison-modal-content" role="dialog" aria-modal="true" aria-labelledby="cmp-title" tabindex="-1" #cmpDialog>
         <div class="comparison-modal-header">
-          <h2>📊 Comparación de Escenarios</h2>
-          <button (click)="closeComparisonModal()" class="modal-close-btn">×</button>
+          <h2 id="cmp-title">📊 Comparación de Escenarios</h2>
+          <button (click)="closeComparisonModal()" class="modal-close-btn" #cmpClose aria-label="Cerrar">×</button>
         </div>
 
         <div class="comparison-table-container">
@@ -1236,7 +1237,9 @@ interface SavedSimulation {
     }
   `]
 })
-export class SimuladorMainComponent implements OnInit {
+export class SimuladorMainComponent implements OnInit, AfterViewChecked {
+  @ViewChild('cmpDialog') cmpDialog?: ElementRef<HTMLDivElement>;
+  @ViewChild('cmpClose') cmpClose?: ElementRef<HTMLButtonElement>;
   isRedirecting = false;
   redirectMessage = '';
   
@@ -1300,6 +1303,21 @@ export class SimuladorMainComponent implements OnInit {
   ngOnInit(): void {
     this.analyzeContext();
     this.loadSavedSimulations();
+  }
+
+  ngAfterViewChecked(): void {
+    // Move focus to dialog when it opens
+    if (this.showComparisonModal && this.cmpDialog?.nativeElement) {
+      const el = this.cmpDialog.nativeElement;
+      if (document.activeElement !== el) {
+        el.focus();
+      }
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEsc() {
+    if (this.showComparisonModal) this.closeComparisonModal();
   }
 
   private analyzeContext(): void {

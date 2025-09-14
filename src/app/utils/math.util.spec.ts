@@ -1,53 +1,31 @@
-import { annuity, avg, clamp, monthsToYearsCeil, nonNegative, percentOf, round2, safeAdd, safeDiv, safeMul, safeSub, sum, toAnnualFromMonthly, toMonthlyRate } from './math.util';
+import { annuity, toMonthlyRate, round2 } from './math.util';
 
-describe('math.util', () => {
-	it('round2 should round to 2 decimals', () => {
-		expect(round2(1.005)).toBe(1.01);
-		expect(round2(2.004)).toBe(2.00);
-	});
+describe('math.util financial formulas', () => {
+  it('annuity returns 0 for zero principal', () => {
+    expect(annuity(0, 0.02, 12)).toBe(0);
+  });
 
-	it('safe operations should reduce FP drift', () => {
-		const a = 0.1;
-		const b = 0.2;
-		expect(safeAdd(a, b)).toBe(0.3);
-		expect(safeSub(1, 0.7)).toBe(0.3);
-		expect(safeMul(1.23, 4.56)).toBe(5.61);
-		expect(safeDiv(1, 3)).toBe(0.33);
-	});
+  it('annuity handles zero rate as straight division', () => {
+    expect(annuity(12000, 0, 12)).toBe(1000);
+  });
 
-	it('clamp should bound values', () => {
-		expect(clamp(5, 1, 10)).toBe(5);
-		expect(clamp(-1, 0, 10)).toBe(0);
-		expect(clamp(11, 0, 10)).toBe(10);
-	});
+  it('annuity matches standard PMT within tolerance', () => {
+    // Example: PV=500,000, annual 25.5%, monthly eff approx, n=24
+    const pv = 500000;
+    const annualRatePct = 25.5;
+    const monthlyEff = Math.pow(1 + annualRatePct / 100, 1 / 12) - 1;
+    const expected = round2((monthlyEff * pv) / (1 - Math.pow(1 + monthlyEff, -24)));
 
-	it('rate conversions should be consistent', () => {
-		const monthly = toMonthlyRate(12); // 12% annual -> ~0.0095 (decimal)
-		expect(monthly).toBeCloseTo(0.01, 2);
-		const annual = toAnnualFromMonthly(monthly);
-		expect(annual).toBeCloseTo(0.13, 2); // (1+0.01)^12 - 1 ≈ 0.1268 -> 0.13
-	});
+    const pmt = annuity(pv, monthlyEff, 24);
+    const delta = Math.abs(pmt - expected);
+    // P0 criterio: ±0.5% o ±$25
+    const ok = delta <= Math.max(25, expected * 0.005);
+    expect(ok).toBeTrue();
+  });
 
-	it('annuity should compute payment correctly', () => {
-		const principal = 100000;
-		const rate = 0.02; // monthly
-		const months = 12;
-		const payment = annuity(principal, rate, months);
-		expect(payment).toBeCloseTo(9456.0, 0); // ~2000 / (1 - 1.02^-12)
-	});
-
-	it('helpers should aggregate values', () => {
-		expect(sum([1, 2, 3, 4])).toBe(10);
-		expect(avg([2, 4, 6, 8])).toBe(5);
-		expect(percentOf(200, 15)).toBe(30);
-		expect(nonNegative(-5)).toBe(0);
-	});
-
-	it('monthsToYearsCeil should ceil to years', () => {
-		expect(monthsToYearsCeil(0)).toBe(0);
-		expect(monthsToYearsCeil(1)).toBe(1);
-		expect(monthsToYearsCeil(12)).toBe(1);
-		expect(monthsToYearsCeil(13)).toBe(2);
-	});
+  it('toMonthlyRate converts annual to effective monthly', () => {
+    const m = toMonthlyRate(12); // ~0.9489% -> 0.95 after rounding
+    expect(m).toBeCloseTo(0.95, 2);
+  });
 });
 

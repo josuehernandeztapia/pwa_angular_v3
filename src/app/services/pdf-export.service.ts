@@ -392,6 +392,96 @@ export class PdfExportService {
     }).format(amount)}`;
   }
 
+  // One-pager: Postventa resumen documentos
+  async generatePostSalesOnePager(data: {
+    clientName?: string;
+    vin?: string;
+    titular?: string;
+    fechaTransferencia?: string;
+    proveedorSeguro?: string;
+    duracionPoliza?: string;
+    docs: { factura: boolean; poliza: boolean; contratos: number; endosos: number };
+  }): Promise<Blob> {
+    const { default: jsPDF } = await import('jspdf');
+    return new Promise((resolve) => {
+      const doc = new jsPDF();
+      doc.setFontSize(18);
+      doc.setTextColor(6, 214, 160);
+      doc.text('POSTVENTA – DOCUMENTOS TRANSFERIDOS', 105, 20, { align: 'center' });
+
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      let y = 32;
+      doc.text(`Cliente: ${data.clientName || '—'}`, 20, y); y += 6;
+      doc.text(`VIN: ${data.vin || '—'}`, 20, y); y += 6;
+      doc.text(`Titular: ${data.titular || '—'}`, 20, y); y += 6;
+      if (data.fechaTransferencia) { doc.text(`Fecha de Transferencia: ${data.fechaTransferencia}`, 20, y); y += 6; }
+      if (data.proveedorSeguro) { doc.text(`Aseguradora: ${data.proveedorSeguro}`, 20, y); y += 6; }
+      if (data.duracionPoliza) { doc.text(`Duración de Póliza: ${data.duracionPoliza} meses`, 20, y); y += 8; }
+
+      // Status grid
+      doc.setFontSize(14);
+      doc.setTextColor(45, 55, 72);
+      doc.text('Estado de Documentos', 20, y); y += 8;
+      doc.setFontSize(11);
+      doc.setTextColor(0, 0, 0);
+      const rows = [
+        ['🧾 Factura', data.docs.factura ? '✓ Entregada' : '✗ Pendiente'],
+        ['🛡️ Póliza', data.docs.poliza ? '✓ Entregada' : '✗ Pendiente'],
+        ['📜 Contratos', `${data.docs.contratos} archivo(s)`],
+        ['📃 Endosos', `${data.docs.endosos} archivo(s)`]
+      ];
+      rows.forEach(r => { doc.text(`${r[0]}: ${r[1]}`, 24, y); y += 7; });
+
+      // Footer
+      doc.setFontSize(8);
+      doc.setTextColor(128, 128, 128);
+      doc.text('Resumen generado por Conductores PWA', 105, 285, { align: 'center' });
+      resolve(doc.output('blob'));
+    });
+  }
+
+  // One-pager: Entrega/Tracking
+  async generateDeliveryOnePager(data: {
+    orderId: string;
+    status: string;
+    estimatedDate?: string;
+    message?: string;
+    clientName?: string;
+  }): Promise<Blob> {
+    const { default: jsPDF } = await import('jspdf');
+    return new Promise((resolve) => {
+      const doc = new jsPDF();
+      doc.setFontSize(18);
+      doc.setTextColor(6, 214, 160);
+      doc.text('ENTREGA – SEGUIMIENTO', 105, 20, { align: 'center' });
+
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      let y = 32;
+      if (data.clientName) { doc.text(`Cliente: ${data.clientName}`, 20, y); y += 6; }
+      doc.text(`Pedido: ${data.orderId}`, 20, y); y += 6;
+      doc.text(`Estado: ${data.status}`, 20, y); y += 6;
+      if (data.estimatedDate) { doc.text(`ETA: ${data.estimatedDate}`, 20, y); y += 8; }
+      if (data.message) {
+        const lines = doc.splitTextToSize(data.message, 170);
+        doc.text(lines as any, 20, y); y += 8 + lines.length * 5;
+      }
+
+      // Simple timeline legend
+      y += 6;
+      doc.setFontSize(14); doc.setTextColor(45, 55, 72);
+      doc.text('Hitos', 20, y); y += 8; doc.setFontSize(11); doc.setTextColor(0,0,0);
+      const steps = ['📋 Pedido', '🏭 Producción', '🚢 En camino', '🏪 Lista para entrega', '🎉 Entregada'];
+      steps.forEach((s, i) => { doc.text(`${i+1}. ${s}`, 24, y); y += 6; });
+
+      doc.setFontSize(8);
+      doc.setTextColor(128, 128, 128);
+      doc.text('Documento de seguimiento generado por Conductores PWA', 105, 285, { align: 'center' });
+      resolve(doc.output('blob'));
+    });
+  }
+
   private formatDate(date: Date): string {
     return new Intl.DateTimeFormat('es-MX', {
       year: 'numeric',
