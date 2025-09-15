@@ -180,10 +180,11 @@ export class ProtectionEngineService {
     }
 
     // Calculate TIR for this scenario vs. contract target IRR (market = contrato a plazos)
-    const annualTIR = this.financialCalc.calculateTIR(cashFlows) * 12; // Convert monthly to annual
+    const monthlyTIR = this.financialCalc.calculateTIR(cashFlows);
+    const annualTIR = Number.isFinite(monthlyTIR) ? monthlyTIR * 12 : 0; // Convert monthly to annual, handle NaN/Inf
     const tirTargetAnnual = this.financialCalc.getTargetContractIRRAnnual(currentBalance, originalPayment, remainingTerm);
     const tolerance = (environment?.finance?.irrToleranceBps ?? 0) / 10000; // convert bps to decimal
-    const tirOK = (annualTIR + tolerance) >= tirTargetAnnual;
+    const tirOK = Number.isFinite(annualTIR) && (annualTIR + tolerance) >= tirTargetAnnual;
 
     const scenario: ProtectionScenario & {
       irr?: number;
@@ -304,7 +305,7 @@ export class ProtectionEngineService {
     );
     if (recalendar) scenarios.push(recalendar);
 
-    return scenarios.filter(s => s.tirOK === true); // Only return scenarios that meet TIR requirements
+    return scenarios; // Return all scenarios for analysis, let UI handle eligibility display
   }
 
   // Calculate impact summary for protection scenarios

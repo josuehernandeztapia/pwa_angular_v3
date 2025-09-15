@@ -5,14 +5,13 @@ describe('Authentication Flow', () => {
 
   describe('Login Process', () => {
     it('should display login form correctly', () => {
-      cy.visit('/login');
-      cy.waitForAngular();
+      cy.navigateAndWait('/login');
       
-      // Verify login form elements are present
-      cy.get('[data-cy="login-form"]').should('be.visible');
-      cy.get('[data-cy="email-input"]').should('be.visible');
-      cy.get('[data-cy="password-input"]').should('be.visible');
-      cy.get('[data-cy="login-submit"]').should('be.visible');
+      // Verify login form elements are present using enhanced commands
+      cy.waitForElement('[data-cy="login-form"]');
+      cy.waitForElement('[data-cy="email-input"]');
+      cy.waitForElement('[data-cy="password-input"]');
+      cy.waitForElement('[data-cy="login-submit"]');
       
       // Verify branding elements
       cy.contains('Centro de Comando').should('be.visible');
@@ -20,13 +19,13 @@ describe('Authentication Flow', () => {
     });
 
     it('should show validation errors for empty fields', () => {
-      cy.visit('/login');
-      cy.waitForAngular();
+      cy.navigateAndWait('/login');
       
       // Try to submit empty form
-      cy.get('[data-cy="login-submit"]').click();
+      cy.waitForElement('[data-cy="login-submit"]').click();
       
-      // Verify validation messages appear
+      // Wait for form validation and verify messages
+      cy.waitForFormValidation('[data-cy="login-form"]');
       cy.contains('El correo es requerido').should('be.visible');
       cy.contains('La contraseña es requerida').should('be.visible');
       
@@ -35,12 +34,13 @@ describe('Authentication Flow', () => {
     });
 
     it('should show validation error for invalid email format', () => {
-      cy.visit('/login');
-      cy.waitForAngular();
+      cy.navigateAndWait('/login');
       
-      cy.get('[data-cy="email-input"]').type('invalid-email');
-      cy.get('[data-cy="password-input"]').type('somepassword');
-      cy.get('[data-cy="login-submit"]').click();
+      // Use enhanced form filling with validation
+      cy.fillFormField('email-input', 'invalid-email');
+      cy.fillFormField('password-input', 'somepassword');
+      cy.waitForElement('[data-cy="login-submit"]').click();
+      cy.waitForFormValidation('[data-cy="login-form"]');
       
       cy.contains('Formato de correo inválido').should('be.visible');
     });
@@ -60,19 +60,20 @@ describe('Authentication Flow', () => {
         }
       }).as('loginRequest');
 
-      cy.visit('/login');
-      cy.waitForAngular();
+      cy.navigateAndWait('/login');
       
-      cy.get('[data-cy="email-input"]').type('ricardo.montoya@cmu.com');
-      cy.get('[data-cy="password-input"]').type('testPassword123');
-      cy.get('[data-cy="login-submit"]').click();
+      // Use enhanced form filling
+      cy.fillFormField('email-input', 'ricardo.montoya@cmu.com');
+      cy.fillFormField('password-input', 'testPassword123');
+      cy.waitForElement('[data-cy="login-submit"]').click();
       
-      // Wait for login API call
+      // Wait for login API call and page transition
       cy.wait('@loginRequest');
+      cy.waitForApiIdle();
       
-      // Verify redirect to dashboard
-      cy.url().should('include', '/dashboard');
-      cy.get('[data-cy="dashboard-header"]').should('be.visible');
+      // Verify redirect to dashboard with enhanced wait
+      cy.waitForPageLoad('/dashboard');
+      cy.waitForElement('[data-cy="dashboard-header"]');
       
       // Verify authentication state
       cy.window().its('localStorage.authToken').should('exist');
@@ -88,17 +89,18 @@ describe('Authentication Flow', () => {
         }
       }).as('failedLogin');
 
-      cy.visit('/login');
-      cy.waitForAngular();
+      cy.navigateAndWait('/login');
       
-      cy.get('[data-cy="email-input"]').type('wrong@email.com');
-      cy.get('[data-cy="password-input"]').type('wrongpassword');
-      cy.get('[data-cy="login-submit"]').click();
+      // Use enhanced form filling
+      cy.fillFormField('email-input', 'wrong@email.com');
+      cy.fillFormField('password-input', 'wrongpassword');
+      cy.waitForElement('[data-cy="login-submit"]').click();
       
       cy.wait('@failedLogin');
+      cy.waitForApiIdle();
       
-      // Verify error message is displayed
-      cy.get('[data-cy="login-error"]').should('be.visible');
+      // Verify error message is displayed with enhanced waiting
+      cy.waitForElement('[data-cy="login-error"]');
       cy.contains('Credenciales inválidas').should('be.visible');
       
       // Verify user stays on login page
@@ -117,31 +119,31 @@ describe('Authentication Flow', () => {
         });
       }).as('slowLogin');
 
-      cy.visit('/login');
-      cy.waitForAngular();
+      cy.navigateAndWait('/login');
       
-      cy.get('[data-cy="email-input"]').type('test@email.com');
-      cy.get('[data-cy="password-input"]').type('password123');
-      cy.get('[data-cy="login-submit"]').click();
+      // Use enhanced form filling
+      cy.fillFormField('email-input', 'test@email.com');
+      cy.fillFormField('password-input', 'password123');
+      cy.waitForElement('[data-cy="login-submit"]').click();
       
-      // Verify loading state
-      cy.get('[data-cy="login-submit"]').should('be.disabled');
-      cy.get('[data-cy="login-loading"]').should('be.visible');
+      // Verify loading state with enhanced waiting
+      cy.waitForElement('[data-cy="login-submit"]').should('be.disabled');
+      cy.waitForElement('[data-cy="login-loading"]');
       
       cy.wait('@slowLogin');
     });
 
     it('should toggle password visibility', () => {
-      cy.visit('/login');
-      cy.waitForAngular();
+      cy.navigateAndWait('/login');
       
-      cy.get('[data-cy="password-input"]').type('secretPassword123');
+      // Use enhanced form filling
+      cy.fillFormField('password-input', 'secretPassword123');
       
       // Initially password should be hidden
       cy.get('[data-cy="password-input"]').should('have.attr', 'type', 'password');
       
-      // Click toggle button
-      cy.get('[data-cy="password-toggle"]').click();
+      // Click toggle button with enhanced element waiting
+      cy.waitForElement('[data-cy="password-toggle"]').click();
       
       // Password should now be visible
       cy.get('[data-cy="password-input"]').should('have.attr', 'type', 'text');
@@ -157,35 +159,37 @@ describe('Authentication Flow', () => {
   describe('Authentication State', () => {
     it('should redirect unauthenticated users to login', () => {
       // Try to access protected route without authentication
-      cy.visit('/dashboard');
+      cy.navigateAndWait('/dashboard');
       
-      // Should redirect to login
-      cy.url().should('include', '/login');
+      // Should redirect to login with enhanced wait
+      cy.waitForPageLoad('/login');
     });
 
     it('should maintain session after page refresh', () => {
       // Login first
       cy.login();
-      cy.visit('/dashboard');
+      cy.navigateAndWait('/dashboard');
       
-      // Refresh page
+      // Refresh page and wait for complete reload
       cy.reload();
+      cy.waitForLoadComplete();
       
       // Should remain authenticated
-      cy.url().should('include', '/dashboard');
-      cy.get('[data-cy="dashboard-header"]').should('be.visible');
+      cy.waitForPageLoad('/dashboard');
+      cy.waitForElement('[data-cy="dashboard-header"]');
     });
 
     it('should logout successfully', () => {
       cy.login();
-      cy.visit('/dashboard');
+      cy.navigateAndWait('/dashboard');
       
-      // Click logout button
-      cy.get('[data-cy="user-menu"]').click();
-      cy.get('[data-cy="logout-button"]').click();
+      // Click logout button with enhanced waiting
+      cy.waitForElement('[data-cy="user-menu"]').click();
+      cy.waitForElement('[data-cy="logout-button"]').click();
+      cy.waitForApiIdle();
       
       // Should redirect to login
-      cy.url().should('include', '/login');
+      cy.waitForPageLoad('/login');
       
       // Authentication token should be cleared
       cy.window().its('localStorage.authToken').should('not.exist');
@@ -194,10 +198,10 @@ describe('Authentication Flow', () => {
 
   describe('Accessibility', () => {
     it('should be accessible', () => {
-      cy.visit('/login');
-      cy.waitForAngular();
+      cy.navigateAndWait('/login');
       
-      // Check accessibility
+      // Check accessibility with enhanced waiting
+      cy.waitForLoadComplete();
       cy.checkA11y();
       
       // Verify keyboard navigation
@@ -212,11 +216,11 @@ describe('Authentication Flow', () => {
     });
 
     it('should announce form validation errors to screen readers', () => {
-      cy.visit('/login');
-      cy.waitForAngular();
+      cy.navigateAndWait('/login');
       
-      // Submit empty form
-      cy.get('[data-cy="login-submit"]').click();
+      // Submit empty form with enhanced waiting
+      cy.waitForElement('[data-cy="login-submit"]').click();
+      cy.waitForFormValidation('[data-cy="login-form"]');
       
       // Verify ARIA attributes for errors
       cy.get('[data-cy="email-input"]').should('have.attr', 'aria-invalid', 'true');
@@ -238,18 +242,17 @@ describe('Authentication Flow', () => {
     viewports.forEach(({ width, height, name }) => {
       it(`should display correctly on ${name}`, () => {
         cy.viewport(width, height);
-        cy.visit('/login');
-        cy.waitForAngular();
+        cy.navigateAndWait('/login');
         
-        // Verify login form is visible and functional
-        cy.get('[data-cy="login-form"]').should('be.visible');
-        cy.get('[data-cy="email-input"]').should('be.visible');
-        cy.get('[data-cy="password-input"]').should('be.visible');
-        cy.get('[data-cy="login-submit"]').should('be.visible');
+        // Verify login form is visible and functional with enhanced waits
+        cy.waitForElement('[data-cy="login-form"]');
+        cy.waitForElement('[data-cy="email-input"]');
+        cy.waitForElement('[data-cy="password-input"]');
+        cy.waitForElement('[data-cy="login-submit"]');
         
-        // Verify form is usable
-        cy.get('[data-cy="email-input"]').type('test@email.com');
-        cy.get('[data-cy="password-input"]').type('password123');
+        // Verify form is usable with enhanced form filling
+        cy.fillFormField('email-input', 'test@email.com');
+        cy.fillFormField('password-input', 'password123');
         
         // Verify inputs contain the typed values
         cy.get('[data-cy="email-input"]').should('have.value', 'test@email.com');
@@ -260,15 +263,15 @@ describe('Authentication Flow', () => {
 
   describe('Network Conditions', () => {
     it('should handle offline condition gracefully', () => {
-      cy.visit('/login');
-      cy.waitForAngular();
+      cy.navigateAndWait('/login');
       
       // Simulate offline condition
       cy.simulateNetworkCondition('offline');
       
-      cy.get('[data-cy="email-input"]').type('test@email.com');
-      cy.get('[data-cy="password-input"]').type('password123');
-      cy.get('[data-cy="login-submit"]').click();
+      // Use enhanced form filling
+      cy.fillFormField('email-input', 'test@email.com');
+      cy.fillFormField('password-input', 'password123');
+      cy.waitForElement('[data-cy="login-submit"]').click();
       
       // Should show network error
       cy.get('[data-cy="network-error"]').should('be.visible');
@@ -276,15 +279,15 @@ describe('Authentication Flow', () => {
     });
 
     it('should handle slow network condition', () => {
-      cy.visit('/login');
-      cy.waitForAngular();
+      cy.navigateAndWait('/login');
       
       // Simulate slow network
       cy.simulateNetworkCondition('slow');
       
-      cy.get('[data-cy="email-input"]').type('test@email.com');
-      cy.get('[data-cy="password-input"]').type('password123');
-      cy.get('[data-cy="login-submit"]').click();
+      // Use enhanced form filling
+      cy.fillFormField('email-input', 'test@email.com');
+      cy.fillFormField('password-input', 'password123');
+      cy.waitForElement('[data-cy="login-submit"]').click();
       
       // Should show loading state for extended period
       cy.get('[data-cy="login-loading"]').should('be.visible');

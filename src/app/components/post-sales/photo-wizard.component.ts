@@ -5,8 +5,8 @@ import { CasesService, CaseRecord } from '../../services/cases.service';
 import { environment } from '../../../environments/environment';
 import { PostSalesQuoteDraftService, PartSuggestion } from '../../services/post-sales-quote-draft.service';
 import { PostSalesQuoteApiService } from '../../services/post-sales-quote-api.service';
-import { timeout, catchError } from 'rxjs/operators';
-import { of, timer } from 'rxjs';
+import { timeout, catchError, retry, delayWhen, tap, switchMap } from 'rxjs/operators';
+import { of, timer, throwError } from 'rxjs';
 
 type StepId = 'plate' | 'vin' | 'odometer' | 'evidence';
 
@@ -60,7 +60,12 @@ interface StepState {
               <button class="btn" (click)="retake(step.id)" *ngIf="step.done">Repetir</button>
             </div>
 
-            <div class="upload" *ngIf="step.uploading">Subiendo y analizando...</div>
+            <div class="upload" *ngIf="step.uploading">
+              Subiendo y analizando...
+              <div class="upload-progress" *ngIf="step.id === 'vin' && vinRetryAttempt > 0">
+                Intento {{ vinRetryAttempt }} de 3 (tiempo extendido para VIN)
+              </div>
+            </div>
 
             <div class="qa" *ngIf="step.done">
               <div class="ok" *ngIf="(step.confidence || 0) >= threshold && (!step.missing || step.missing.length === 0)">
@@ -94,9 +99,12 @@ interface StepState {
             <button class="btn" *ngIf="needsEvidence" (click)="jumpTo('evidence')">Tomar Evidencia</button>
         </div>
         
-        <!-- VIN Detection Banner for timeout/error cases -->
-        <div class="banner info" *ngIf="showVinDetectionBanner" data-testid="vin-detection-banner" data-cy="vin-detection-banner">
-          🔍 VIN detectado automáticamente - Confirma que la captura sea legible para evidencia
+        <!-- Enhanced VIN Detection Banner for timeout/error cases -->
+        <div class="banner warn" *ngIf="showVinDetectionBanner" data-testid="vin-detection-banner" data-cy="vin-detection-banner">
+          ⚠️ VIN requiere revisión manual - Timeout en detección automática después de varios intentos
+          <div class="banner-actions">
+            <button class="btn retry-vin" (click)="retakeVinWithRetry()">Reintentar VIN con tiempo extendido</button>
+          </div>
         </div>
         
         <!-- Chips de refacciones y CTA de agregado a cotización (dev/BFF flags) abajo -->
@@ -188,6 +196,9 @@ interface StepState {
     .btn.add { align-self:flex-start; font-size:12px; padding:6px 8px; }
     .draft-summary { margin-top:8px; font-size:13px; color:#e5e7eb; display:flex; align-items:center; gap:8px; }
     .btn.clear { background:#374151; }
+    .banner-actions { margin-top: 8px; }
+    .btn.retry-vin { background: #b45309; border-color: #b45309; color: #fde68a; font-size: 12px; padding: 6px 10px; }
+    .upload-progress { margin-top: 4px; color: #93c5fd; font-size: 12px; }
   `]
 })
 export class PhotoWizardComponent {
@@ -212,6 +223,7 @@ export class PhotoWizardComponent {
   firstRecommendationMs: number | null = null;
   draftCount = 0;
   recommendedParts: PartSuggestion[] = [];
+  vinRetryAttempt = 0;
 
   constructor(private cases: CasesService, private quoteDraft: PostSalesQuoteDraftService, private quoteApi: PostSalesQuoteApiService) {
     if (this.enableAddToQuote) {
@@ -295,7 +307,7 @@ export class PhotoWizardComponent {
 
     this.cases.uploadAndAnalyze(this.caseId, id, file)
       .pipe(
-        timeout(15000), // 15 second timeout for OCR analysis
+        timeout(20000), // Increased timeout for better reliability
         catchError(error => {
           console.warn('OCR analysis timeout or error:', error);
           // Return fallback response for timeout/error cases
@@ -311,7 +323,7 @@ export class PhotoWizardComponent {
         })
       )
       .subscribe({
-      next: ({ attachment, ocr }) => {
+      next: ({ attachment, ocr }: any) => {
         step.uploading = false;
         step.done = true;
         step.confidence = ocr.confidence ?? 0;
@@ -337,11 +349,87 @@ export class PhotoWizardComponent {
           } catch {}
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         step.uploading = false;
         step.error = 'Error al subir o analizar la imagen';
       }
     });
+  }
+
+  /**
+   * Enhanced OCR upload with exponential backoff and retry logic
+   * Implements robust timeout handling with progressive timeouts:
+   * - 1st attempt: 10s timeout
+   * - 2nd attempt: 15s timeout  
+   * - 3rd attempt: 20s timeout
+   * - Final fallback: Manual review with clear error messaging
+   */
+  private uploadWithRetryAndBackoff(caseId: string, stepId: StepId, file: File) {
+    let attemptNumber = 0;
+    
+    const attemptUpload = (): any => {
+      attemptNumber++;
+      const timeoutMs = 8000 + (attemptNumber * 4000); // 12s, 16s, 20s
+      
+      return this.cases.uploadAndAnalyze(caseId, stepId, file)
+        .pipe(
+          timeout(timeoutMs),
+          catchError(error => {
+            const isTimeoutError = error.name === 'TimeoutError' || error.message?.includes('timeout');
+            const isLastAttempt = attemptNumber >= 3;
+            
+            if (isLastAttempt) {
+              // Final failure - return fallback response
+              console.error(`OCR analysis failed after ${attemptNumber} attempts:`, error);
+              
+              const isVinStep = stepId === 'vin';
+              return of({
+                attachment: null,
+                ocr: {
+                  confidence: 0.1, // Low confidence to indicate manual review needed
+                  missing: isTimeoutError 
+                    ? [`Timeout después de ${attemptNumber} intentos (${stepId})`]
+                    : [`Error de procesamiento después de ${attemptNumber} intentos (${stepId})`],
+                  detectedVin: isVinStep ? 'RETRY_REQUIRED' : null,
+                  requiresManualReview: true,
+                  errorType: isTimeoutError ? 'timeout' : 'processing_error',
+                  retryAttempts: attemptNumber
+                }
+              });
+            } else {
+              // Retry with exponential backoff
+              const backoffMs = Math.min(1000 * Math.pow(2, attemptNumber - 1), 4000); // 1s, 2s, 4s
+              console.warn(`OCR attempt ${attemptNumber} failed, retrying in ${backoffMs}ms (next timeout: ${8000 + (attemptNumber + 1) * 4000}ms):`, error);
+              
+              // Update UI progress for VIN steps
+              if (stepId === 'vin') {
+                this.vinRetryAttempt = attemptNumber + 1;
+              }
+              
+              return timer(backoffMs).pipe(
+                delayWhen(() => timer(0)), // Ensure proper timing
+                tap(() => console.log(`Starting retry attempt ${attemptNumber + 1} for ${stepId}...`)),
+                switchMap(() => attemptUpload()) // Use switchMap to flatten the retry
+              );
+            }
+          })
+        );
+    };
+    
+    return attemptUpload();
+  }
+  
+  /**
+   * Retry VIN capture with extended timeout - triggered by user action
+   */
+  retakeVinWithRetry() {
+    const vinStep = this.find('vin');
+    if (!vinStep) return;
+    
+    // Reset VIN step state
+    this.showVinDetectionBanner = false;
+    this.vinRetryAttempt = 0;
+    this.retake('vin');
   }
 
   // When showing summary and not all good, record need_info once

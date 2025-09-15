@@ -1,6 +1,6 @@
 station_id,station_name,file_name,rows_total,rows_accepted,rows_rejected,warnings
 AGS-01,Estación Aguascalientes 01,ags01_2025-09-12.csv,1200,1200,0,0
-AGS-02,Estación Aguascalientes 02,,0,0,0,0
-EDMX-11,Estación EdoMex 11,edmx11_2025-09-12.csv,980,940,40,3
+AGS-02,Estación Aguascalientes 02,ags02_2025-09-12.csv,320,310,10,1
+EDMX-11,Estación EdoMex 11,edmx11_2025-09-12.csv,980,950,30,2
 EDMX-12,Estación EdoMex 12,edmx12_2025-09-12.csv,760,760,0,1
-QRO-03,Estación Querétaro 03,qro03_2025-09-12.csv,550,550,0,0
+QRO-03,Estación Querétaro 03,qro03_2025-09-12.csv,550,545,5,0

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, throwError, map } from 'rxjs';
+import { Observable, catchError, throwError, map, of, forkJoin, switchMap } from 'rxjs';
 import { 
   DeliveryOrder,
   DeliveryEventLog,
@@ -14,7 +14,8 @@ import {
   Market,
   canTransition,
   getValidTransitions,
-  DELIVERY_STATUS_DESCRIPTIONS
+  DELIVERY_STATUS_DESCRIPTIONS,
+  calculateETA
 } from '../models/deliveries';
 
 declare global {
@@ -29,6 +30,7 @@ declare global {
 export class DeliveriesService {
   private http = inject(HttpClient);
   private baseUrl = (window as any).__BFF_BASE__ ?? '/api';
+  private logger = console; // Could be replaced with proper logging service
 
   /**
    * List deliveries with hierarchical filtering
@@ -402,5 +404,218 @@ export class DeliveriesService {
     if (currentIndex === -1) return 0;
     
     return Math.round((currentIndex / (statusOrder.length - 1)) * 100);
+  }
+
+  // NEON Database Integration Methods
+
+  /**
+   * Initialize NEON database schema for delivery ETA persistence
+   */
+  initializeDatabase(): Observable<{ success: boolean; message: string }> {
+    this.logger.log('Initializing NEON database for delivery ETA persistence...');
+    
+    return this.http.post<{ success: boolean; message: string }>(
+      `${this.baseUrl}/v1/deliveries/admin/init-db`, 
+      {}
+    ).pipe(
+      map(response => {
+        if (response.success) {
+          this.logger.log('✅ NEON database initialized successfully');
+        } else {
+          this.logger.error('❌ Failed to initialize NEON database');
+        }
+        return response;
+      }),
+      catchError(this.handleError('initialize NEON database'))
+    );
+  }
+
+  /**
+   * Sync existing delivery data to NEON database
+   * This would be called once during migration
+   */
+  syncDeliveriesToNeon(deliveries: DeliveryOrder[]): Observable<{ synced: number; errors: number }> {
+    this.logger.log(`Syncing ${deliveries.length} deliveries to NEON database...`);
+    
+    const syncPromises = deliveries.map(delivery => 
+      this.http.post(`${this.baseUrl}/v1/deliveries`, delivery).pipe(
+        map(() => ({ success: true })),
+        catchError(() => of({ success: false }))
+      )
+    );
+
+    return forkJoin(syncPromises).pipe(
+      map(results => {
+        const synced = results.filter(r => r.success).length;
+        const errors = results.filter(r => !r.success).length;
+        
+        this.logger.log(`✅ Synced ${synced} deliveries to NEON`);
+        if (errors > 0) {
+          this.logger.warn(`⚠️ ${errors} deliveries failed to sync`);
+        }
+        
+        return { synced, errors };
+      })
+    );
+  }
+
+  /**
+   * Get ETA calculation history from NEON database
+   */
+  getEtaHistory(deliveryId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/v1/deliveries/${deliveryId}/eta-history`)
+      .pipe(
+        catchError(this.handleError('get ETA history'))
+      );
+  }
+
+  /**
+   * Manually adjust ETA with reason (persisted in NEON)
+   */
+  adjustEta(deliveryId: string, newEta: string, reason: string, adjustedBy: string): Observable<{ success: boolean; message: string }> {
+    return this.http.put<{ success: boolean; message: string }>(
+      `${this.baseUrl}/v1/deliveries/${deliveryId}/eta`,
+      { newEta, reason, adjustedBy }
+    ).pipe(
+      map(response => {
+        if (response.success) {
+          this.logger.log(`✅ ETA adjusted for delivery ${deliveryId}`);
+        }
+        return response;
+      }),
+      catchError(this.handleError('adjust ETA'))
+    );
+  }
+
+  /**
+   * Get delivery performance metrics from NEON
+   */
+  getPerformanceMetrics(market?: Market): Observable<{
+    totalDeliveries: number;
+    onTimePercentage: number;
+    avgTransitDays: number;
+    delayedDeliveries: number;
+  }> {
+    const params: any = market ? { market: market as string } : undefined;
+    
+    return this.http.get<any>(`${this.baseUrl}/v1/deliveries/stats/summary`, { params })
+      .pipe(
+        map((stats: any) => ({
+          totalDeliveries: stats?.totalOrders || 0,
+          onTimePercentage: (stats?.onTimeDeliveries || 0) > 0 
+            ? Math.round(((stats.onTimeDeliveries || 0) / (stats.totalOrders || 1)) * 100) 
+            : 0,
+          avgTransitDays: Math.round(stats?.averageTransitDays || 77),
+          delayedDeliveries: (stats?.totalOrders || 0) - (stats?.onTimeDeliveries || 0)
+        })),
+        catchError(this.handleError('get performance metrics'))
+      );
+  }
+
+  /**
+   * Test NEON database connection and ETA persistence
+   */
+  testNeonIntegration(): Observable<{
+    databaseConnected: boolean;
+    etaPersistenceWorking: boolean;
+    sampleDataCount: number;
+    message: string;
+  }> {
+    this.logger.log('🧪 Testing NEON database integration...');
+    
+    // Test by creating a sample delivery order
+    const testDelivery = {
+      contract: { id: 'test-contract-001' },
+      client: { 
+        id: 'test-client-001', 
+        name: 'Test Cliente',
+        market: 'AGS' as Market,
+        routeId: 'route_ags_001'
+      },
+      market: 'AGS' as Market,
+      sku: 'CON_asientos',
+      qty: 1,
+      status: 'PO_ISSUED' as DeliveryStatus
+    };
+
+    return this.create(testDelivery).pipe(
+      switchMap((createdDelivery) => {
+        // Test ETA persistence by transitioning status
+        return this.transition(createdDelivery.id, {
+          event: 'START_PROD',
+          notes: 'NEON integration test'
+        }).pipe(
+          switchMap(() => this.getEtaHistory(createdDelivery.id)),
+          map((history) => ({
+            databaseConnected: true,
+            etaPersistenceWorking: history.length > 0,
+            sampleDataCount: history.length,
+            message: `✅ NEON integration test successful. ETA history entries: ${history.length}`
+          }))
+        );
+      }),
+      catchError((error) => {
+        this.logger.error('❌ NEON integration test failed:', error);
+        return of({
+          databaseConnected: false,
+          etaPersistenceWorking: false,
+          sampleDataCount: 0,
+          message: `❌ NEON integration test failed: ${error.message}`
+        });
+      })
+    );
+  }
+
+  /**
+   * Validate ETA calculation accuracy
+   */
+  validateEtaCalculations(): Observable<{
+    calculationsAccurate: boolean;
+    testedTransitions: number;
+    accuracyPercentage: number;
+    issues: string[];
+  }> {
+    this.logger.log('🧪 Validating ETA calculation accuracy...');
+    
+    const testStatuses: DeliveryStatus[] = [
+      'PO_ISSUED', 'IN_PRODUCTION', 'READY_AT_FACTORY',
+      'AT_ORIGIN_PORT', 'ON_VESSEL', 'AT_DEST_PORT'
+    ];
+    
+    const createdAt = new Date().toISOString();
+    const validationResults: boolean[] = [];
+    const issues: string[] = [];
+    
+    testStatuses.forEach(status => {
+      try {
+        const calculatedEta = calculateETA(createdAt, status);
+        const etaDate = new Date(calculatedEta);
+        const createdDate = new Date(createdAt);
+        const daysDiff = Math.floor((etaDate.getTime() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        // Validate that ETA is reasonable (0-77 days from creation)
+        const isValid = daysDiff >= 0 && daysDiff <= 77;
+        validationResults.push(isValid);
+        
+        if (!isValid) {
+          issues.push(`Status ${status}: ETA calculation resulted in ${daysDiff} days (expected 0-77)`);
+        }
+        
+        this.logger.log(`Status ${status}: ${daysDiff} days from creation ${isValid ? '✅' : '❌'}`);
+      } catch (error) {
+        validationResults.push(false);
+        issues.push(`Status ${status}: Calculation error - ${error instanceof Error ? error.message : String(error)}`);
+      }
+    });
+    
+    const accurateCount = validationResults.filter(Boolean).length;
+    const accuracyPercentage = Math.round((accurateCount / testStatuses.length) * 100);
+    
+    return of({
+      calculationsAccurate: accuracyPercentage >= 90, // 90% threshold
+      testedTransitions: testStatuses.length,
+      accuracyPercentage,
+      issues
+    });
   }
 }

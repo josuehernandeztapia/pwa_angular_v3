@@ -6,7 +6,7 @@
 
 // IMPORT MODULES (Simulated ES6 imports for browser)
 // In production, these would be actual ES6 modules
-let ALL_AVI_QUESTIONS, AVI_CONFIG, voiceEngine, haseModel;
+let ALL_AVI_QUESTIONS, AVI_CONFIG, voiceEngine, haseModel, calibrationSystem, calibrationUI;
 
 // Mock imports until we can implement ES6 modules
 const loadModules = () => {
@@ -15,6 +15,8 @@ const loadModules = () => {
   AVI_CONFIG = window.AVI_CONFIG || {};
   voiceEngine = window.voiceEngine || null;
   haseModel = window.haseModel || null;
+  calibrationSystem = window.calibrationSystem || null;
+  calibrationUI = window.calibrationUI || null;
 };
 
 class AVILabComplete {
@@ -60,7 +62,7 @@ class AVILabComplete {
         console.log('🧪 Initializing AVI_LAB Complete...');
         
         // Wait for modules to load
-        if (!window.voiceEngine || !window.haseModel) {
+        if (!window.voiceEngine || !window.haseModel || !window.calibrationSystem || !window.calibrationUI) {
             await new Promise(resolve => {
                 window.addEventListener('aviModulesLoaded', resolve, { once: true });
             });
@@ -111,6 +113,7 @@ class AVILabComplete {
                     <button class="tab-btn" data-tab="voice-analysis">🎤 Voice Analysis</button>
                     <button class="tab-btn" data-tab="hase-calculator">🧮 HASE Model</button>
                     <button class="tab-btn" data-tab="testing">🧪 Testing Suite</button>
+                    <button class="tab-btn" data-tab="calibration">⚙️ Calibration</button>
                     <button class="tab-btn" data-tab="benchmark">📈 Benchmark</button>
                 </nav>
 
@@ -350,6 +353,16 @@ class AVILabComplete {
                         </div>
                     </section>
 
+                    <!-- Calibration Tab -->
+                    <section id="calibration" class="tab-content">
+                        <div class="calibration-system">
+                            <h3>⚙️ AVI Calibration System</h3>
+                            <div id="calibration-interface" class="calibration-interface">
+                                <!-- Calibration interface will be rendered here -->
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- Benchmark Tab -->
                     <section id="benchmark" class="tab-content">
                         <div class="benchmark-section">
@@ -485,6 +498,9 @@ class AVILabComplete {
                 break;
             case 'testing':
                 this.loadTestingContent();
+                break;
+            case 'calibration':
+                this.loadCalibrationContent();
                 break;
             case 'benchmark':
                 this.loadBenchmarkContent();
@@ -800,6 +816,26 @@ class AVILabComplete {
                 </div>
             </div>
         `;
+    }
+
+    /**
+     * CALIBRATION MODULE
+     */
+    loadCalibrationContent() {
+        console.log('Loading calibration content...');
+        if (window.calibrationUI && window.calibrationUI.renderCalibrationInterface) {
+            window.calibrationUI.renderCalibrationInterface();
+        } else {
+            const calibrationInterface = document.getElementById('calibration-interface');
+            if (calibrationInterface) {
+                calibrationInterface.innerHTML = `
+                    <div class="calibration-placeholder">
+                        <p>⚙️ Calibration system initializing...</p>
+                        <p>Please wait for modules to load completely.</p>
+                    </div>
+                `;
+            }
+        }
     }
 
     /**

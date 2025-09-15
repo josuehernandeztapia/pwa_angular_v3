@@ -48,7 +48,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
@@ -65,7 +65,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
@@ -82,7 +82,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
@@ -99,7 +99,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
@@ -116,7 +116,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
@@ -133,7 +133,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
@@ -150,7 +150,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 30000
       }
     ],
     "shard": null,
@@ -173,8 +173,8 @@
     }
   ],
   "stats": {
-    "startTime": "2025-09-15T04:49:17.177Z",
-    "duration": 8692.358,
+    "startTime": "2025-09-15T05:50:52.599Z",
+    "duration": 12632.931,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,

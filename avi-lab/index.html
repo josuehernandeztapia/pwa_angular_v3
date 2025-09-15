@@ -40,6 +40,7 @@
             <button class="tab-btn" data-tab="voice">🎤 Voice Lab</button>
             <button class="tab-btn" data-tab="hase">🧮 HASE Model</button>
             <button class="tab-btn" data-tab="testing">🧪 Test Suite</button>
+            <button class="tab-btn" data-tab="calibration">⚙️ Calibration</button>
             <button class="tab-btn" data-tab="benchmark">📈 Benchmark</button>
         </nav>
 
@@ -151,6 +152,16 @@
                         <button id="runBenchmarkTestBtn" class="btn primary">📊 Run Benchmark Test</button>
                     </div>
                     <div id="testResults" class="test-results"></div>
+                </section>
+            </div>
+
+            <!-- Calibration Tab -->
+            <div id="calibration" class="tab-panel">
+                <section class="calibration-section">
+                    <h2>⚙️ AVI Calibration System</h2>
+                    <div id="calibrationInterface">
+                        <!-- Calibration UI will be rendered here -->
+                    </div>
                 </section>
             </div>
 
@@ -276,11 +287,18 @@
         const { ALL_AVI_QUESTIONS, AVI_CONFIG } = await import('./src/data/avi-questions-complete.js');
         const { VoiceAnalysisEngine } = await import('./src/services/voice-analysis-engine.js');
         const { HASEModel } = await import('./src/services/hase-model.js');
+        const { AVICalibrationSystem } = await import('./src/calibration-system.js');
+        const { AVICalibrationUI } = await import('./src/calibration-ui.js');
         
         window.ALL_AVI_QUESTIONS = ALL_AVI_QUESTIONS;
         window.AVI_CONFIG = AVI_CONFIG;
         window.voiceEngine = new VoiceAnalysisEngine();
         window.haseModel = new HASEModel();
+        window.calibrationSystem = new AVICalibrationSystem();
+        window.calibrationUI = new AVICalibrationUI();
+        
+        // Initialize calibration interface
+        window.calibrationUI.renderCalibrationInterface();
         
         // Notify that modules are loaded
         window.dispatchEvent(new CustomEvent('aviModulesLoaded'));
@@ -291,6 +309,8 @@
         window.AVI_CONFIG = { total_questions: 55, implemented_questions: 55 };
         window.voiceEngine = { computeVoiceScore: () => ({ success: false, error: 'Module loading failed' }) };
         window.haseModel = { calculateHASEScore: () => ({ totalScore: 0, decision: 'ERROR' }) };
+        window.calibrationSystem = { startCalibration: () => console.log('Calibration system not available') };
+        window.calibrationUI = { renderCalibrationInterface: () => console.log('Calibration UI not available') };
         window.dispatchEvent(new CustomEvent('aviModulesLoaded'));
       }
     </script>
