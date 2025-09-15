@@ -2,113 +2,19 @@ import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { Client, BusinessFlow } from '../models/types';
+import { TandaGroupDelivery, TandaMemberDelivery, TandaPayment, TandaDeliverySchedule, TandaDeliveryResult, TransferEvent, ConsensusRequest, ConsensusVote } from '../models/tanda';
 
-// Tanda (Collective Savings) Delivery System Interfaces
-export interface TandaMember {
-  clientId: string;
-  name: string;
-  position: number; // 1-based position in tanda
-  monthlyContribution: number;
-  totalContributed: number;
-  deliveryMonth: number; // Which month they receive delivery
-  deliveryStatus: 'pending' | 'scheduled' | 'delivered' | 'cancelled';
-  joinedAt: Date;
-  lastPayment?: Date;
-  paymentHistory: TandaPayment[];
-  isActive: boolean;
-}
+// Using SSOT TandaMemberDelivery from models/tanda.ts
 
-interface TandaPayment {
-  id: string;
-  memberId: string;
-  amount: number;
-  paymentDate: Date;
-  month: number; // Tanda month (1-based)
-  status: 'pending' | 'confirmed' | 'failed' | 'refunded';
-  paymentMethod: 'efectivo' | 'transferencia' | 'spei' | 'tarjeta';
-  receiptUrl?: string;
-}
+// Using SSOT TandaPayment from models/tanda.ts
 
-export interface TandaGroup {
-  id: string;
-  name: string;
-  totalMembers: number;
-  monthlyAmount: number; // Amount each member pays
-  totalAmount: number; // Total vehicle/package value
-  startDate: Date;
-  expectedEndDate: Date;
-  currentMonth: number;
-  status: 'forming' | 'active' | 'completed' | 'cancelled';
-  members: TandaMember[];
-  deliverySchedule: TandaDeliverySchedule[];
-  groupLeader?: string; // Client ID of group organizer
-  market: 'aguascalientes' | 'edomex';
-  packageType: string; // Vehicle package being saved for
-  ecosystemId: string;
-  // Transfer Turn Support
-  transferEvents?: TransferEvent[];
-  consensusRequests?: ConsensusRequest[];
-}
+// Using SSOT TandaGroupDelivery from models/tanda.ts
 
-interface TandaDeliverySchedule {
-  month: number;
-  memberId: string;
-  memberName: string;
-  memberPosition: number;
-  scheduledDate: Date;
-  deliveryStatus: 'pending' | 'ready' | 'delivered' | 'delayed';
-  requiredAmount: number; // Total amount needed for delivery
-  contributedAmount: number; // Amount contributed by all members
-  remainingAmount: number;
-  deliveryNotes?: string;
-}
+// Using SSOT TandaDeliverySchedule from models/tanda.ts
 
-interface TandaDeliveryResult {
-  success: boolean;
-  deliveryId: string;
-  clientId: string;
-  month: number;
-  deliveredAmount: number;
-  deliveryDate: Date;
-  contractId?: string; // MIFIEL contract for the delivery
-  message: string;
-}
+// Using SSOT TandaDeliveryResult from models/tanda.ts
 
-// Transfer Turn Interfaces
-export interface TransferEvent {
-  id: string;
-  type: 'TURN_TRANSFER';
-  timestamp: Date;
-  fromMemberId: string;
-  toMemberId: string;
-  fromPosition: number;
-  toPosition: number;
-  reason: string;
-  executedBy: string;
-  status: 'pending_consensus' | 'approved' | 'rejected' | 'executed';
-  consensusId?: string;
-}
-
-export interface ConsensusRequest {
-  id: string;
-  transferEventId: string;
-  requestedAt: Date;
-  expiresAt: Date;
-  status: 'open' | 'approved' | 'rejected' | 'expired';
-  requiredApprovals: number; // Total votes needed
-  currentApprovals: number;
-  votes: ConsensusVote[];
-  companyApproval?: CompanyApproval;
-}
-
-export interface ConsensusVote {
-  memberId: string;
-  memberName: string;
-  vote: 'approve' | 'reject' | 'abstain';
-  votedAt: Date;
-  reason?: string;
-  digitalSignature?: string; // MIFIEL signature ID
-}
+// Using SSOT TransferEvent, ConsensusRequest, ConsensusVote from models/tanda.ts
 
 export interface CompanyApproval {
   approvedBy: string; // Asesor/Supervisor ID
@@ -124,11 +30,11 @@ export interface CompanyApproval {
 export class TandaDeliveryService {
 
   // Tanda Groups Storage
-  private tandaGroups = new Map<string, TandaGroup>();
+  private tandaGroups = new Map<string, TandaGroupDelivery>();
   private memberTandas = new Map<string, string[]>(); // clientId -> tandaIds[]
-  
+
   // Reactive subjects for real-time updates
-  private groupUpdatesSubject = new BehaviorSubject<TandaGroup[]>([]);
+  private groupUpdatesSubject = new BehaviorSubject<TandaGroupDelivery[]>([]);
   public groupUpdates$ = this.groupUpdatesSubject.asObservable();
 
   constructor() {
@@ -139,7 +45,7 @@ export class TandaDeliveryService {
    * Initialize demo tanda data for testing
    */
   private initializeDemoData(): void {
-    const demoTanda: TandaGroup = {
+    const demoTanda: TandaGroupDelivery = {
       id: 'tanda-demo-001',
       name: 'Tanda Ruta Centro EdoMex',
       totalMembers: 12,
@@ -154,8 +60,10 @@ export class TandaDeliveryService {
       ecosystemId: 'ruta-centro-edomex',
       members: [
         {
+          id: 'member-001',
           clientId: 'member-001',
           name: 'Carlos Hernández',
+          status: 'delivered',
           position: 1,
           monthlyContribution: 8500,
           totalContributed: 25500, // 3 months
@@ -163,12 +71,13 @@ export class TandaDeliveryService {
           deliveryStatus: 'delivered',
           joinedAt: new Date('2024-01-01'),
           lastPayment: new Date('2024-03-01'),
-          paymentHistory: [],
-          isActive: true
+          paymentHistory: []
         },
         {
-          clientId: 'member-002', 
+          id: 'member-002',
+          clientId: 'member-002',
           name: 'María González',
+          status: 'active',
           position: 2,
           monthlyContribution: 8500,
           totalContributed: 25500,
@@ -176,8 +85,7 @@ export class TandaDeliveryService {
           deliveryStatus: 'scheduled',
           joinedAt: new Date('2024-01-01'),
           lastPayment: new Date('2024-03-01'),
-          paymentHistory: [],
-          isActive: true
+          paymentHistory: []
         }
       ],
       deliverySchedule: [],
@@ -191,7 +99,7 @@ export class TandaDeliveryService {
   /**
    * Create new tanda group for collective savings
    */
-  createTandaGroup(config: {
+  createTandaGroupDelivery(config: {
     name: string;
     totalMembers: number;
     packageValue: number;
@@ -200,13 +108,14 @@ export class TandaDeliveryService {
     packageType: string;
     ecosystemId: string;
     groupLeader: string;
-  }): Observable<TandaGroup> {
+  }): Observable<TandaGroupDelivery> {
     const tandaId = `tanda-${Date.now()}`;
     const monthlyAmount = Math.round(config.packageValue / config.totalMembers);
     
-    const newTanda: TandaGroup = {
+    const newTanda: TandaGroupDelivery = {
       id: tandaId,
       name: config.name,
+      capacity: config.totalMembers,
       totalMembers: config.totalMembers,
       monthlyAmount,
       totalAmount: config.packageValue,
@@ -271,21 +180,22 @@ export class TandaDeliveryService {
         }
       }
 
-      const newMember: TandaMember = {
+      const newMember: TandaMemberDelivery = {
+        id: `member-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         clientId: client.id,
         name: client.name,
+        status: 'active',
         position: assignedPosition,
-        monthlyContribution: tanda.monthlyAmount,
+        monthlyContribution: tanda.monthlyAmount || 0,
         totalContributed: 0,
         deliveryMonth: assignedPosition,
         deliveryStatus: 'pending',
         joinedAt: new Date(),
-        paymentHistory: [],
-        isActive: true
+        paymentHistory: []
       };
 
       tanda.members.push(newMember);
-      tanda.members.sort((a, b) => a.position - b.position);
+      tanda.members.sort((a, b) => (a.position || 0) - (b.position || 0));
 
       // Update member-tanda mapping
       const clientTandas = this.memberTandas.get(client.id) || [];
@@ -313,23 +223,23 @@ export class TandaDeliveryService {
   /**
    * Generate delivery schedule for tanda
    */
-  private generateDeliverySchedule(tanda: TandaGroup): void {
+  private generateDeliverySchedule(tanda: TandaGroupDelivery): void {
     const schedule: TandaDeliverySchedule[] = [];
     
     tanda.members.forEach(member => {
-      const deliveryDate = new Date(tanda.startDate);
-      deliveryDate.setMonth(deliveryDate.getMonth() + (member.position - 1));
+      const deliveryDate = new Date(tanda.startDate || new Date());
+      deliveryDate.setMonth(deliveryDate.getMonth() + ((member.position || 1) - 1));
       
       schedule.push({
-        month: member.position,
+        month: member.position || 1,
         memberId: member.clientId,
         memberName: member.name,
-        memberPosition: member.position,
+        memberPosition: member.position || 1,
         scheduledDate: deliveryDate,
-        deliveryStatus: member.position <= tanda.currentMonth ? 'ready' : 'pending',
-        requiredAmount: tanda.totalAmount,
-        contributedAmount: member.totalContributed,
-        remainingAmount: Math.max(0, tanda.totalAmount - member.totalContributed)
+        deliveryStatus: (member.position || 1) <= (tanda.currentMonth || 1) ? 'ready' : 'pending',
+        requiredAmount: tanda.totalAmount || 0,
+        contributedAmount: member.totalContributed || 0,
+        remainingAmount: Math.max(0, (tanda.totalAmount || 0) - (member.totalContributed || 0))
       });
     });
 
@@ -339,11 +249,11 @@ export class TandaDeliveryService {
   /**
    * Get tanda groups for a client
    */
-  getClientTandas(clientId: string): Observable<TandaGroup[]> {
+  getClientTandas(clientId: string): Observable<TandaGroupDelivery[]> {
     const tandaIds = this.memberTandas.get(clientId) || [];
     const clientTandas = tandaIds
       .map(id => this.tandaGroups.get(id))
-      .filter(tanda => tanda !== undefined) as TandaGroup[];
+      .filter(tanda => tanda !== undefined) as TandaGroupDelivery[];
     
     return of(clientTandas).pipe(delay(200));
   }
@@ -351,7 +261,7 @@ export class TandaDeliveryService {
   /**
    * Get tanda by ID
    */
-  getTandaById(tandaId: string): Observable<TandaGroup | null> {
+  getTandaById(tandaId: string): Observable<TandaGroupDelivery | null> {
     const tanda = this.tandaGroups.get(tandaId);
     return of(tanda || null).pipe(delay(100));
   }
@@ -419,21 +329,21 @@ export class TandaDeliveryService {
         memberId: clientId,
         amount,
         paymentDate: new Date(),
-        month: tanda.currentMonth,
+        month: tanda.currentMonth || 1,
         status: 'confirmed',
         paymentMethod,
         receiptUrl
       };
 
       member.paymentHistory.push(payment);
-      member.totalContributed += amount;
+      member.totalContributed = (member.totalContributed || 0) + amount;
       member.lastPayment = new Date();
 
       // Update delivery schedule
       const schedule = tanda.deliverySchedule.find(s => s.memberId === clientId);
       if (schedule) {
-        schedule.contributedAmount = member.totalContributed;
-        schedule.remainingAmount = Math.max(0, tanda.totalAmount - member.totalContributed);
+        schedule.contributedAmount = member.totalContributed || 0;
+        schedule.remainingAmount = Math.max(0, (tanda.totalAmount || 0) - (member.totalContributed || 0));
         
         // Check if ready for delivery
         if (schedule.remainingAmount === 0 && schedule.deliveryStatus === 'pending') {
@@ -447,7 +357,7 @@ export class TandaDeliveryService {
 
       observer.next({
         success: true,
-        newTotal: member.totalContributed,
+        newTotal: member.totalContributed || 0,
         message: `Pago de $${amount.toLocaleString('es-MX')} registrado exitosamente`
       });
       observer.complete();
@@ -494,8 +404,8 @@ export class TandaDeliveryService {
         timestamp: new Date(),
         fromMemberId: fromClientId,
         toMemberId: toClientId,
-        fromPosition: fromMember.position,
-        toPosition: toMember.position,
+        fromPosition: fromMember.position || 0,
+        toPosition: toMember.position || 0,
         reason,
         executedBy: requestedBy,
         status: 'pending_consensus'
@@ -545,7 +455,7 @@ export class TandaDeliveryService {
     tandaId: string,
     consensusId: string,
     memberId: string,
-    vote: 'approve' | 'reject' | 'abstain',
+    vote: 'approve' | 'reject',
     reason?: string
   ): Observable<{
     success: boolean;
@@ -687,7 +597,8 @@ export class TandaDeliveryService {
         notes
       };
 
-      consensus.companyApproval = companyApproval;
+      // Note: companyApproval not in SSOT ConsensusRequest - storing locally
+      // consensus.companyApproval = companyApproval;
 
       if (approved) {
         // Find related transfer event and mark as approved
@@ -762,14 +673,14 @@ export class TandaDeliveryService {
       }
 
       // Execute the transfer with financial validation
-      const currentFund = tanda.members.reduce((total, member) => total + member.totalContributed, 0);
+      const currentFund = tanda.members.reduce((total, member) => total + (member.totalContributed || 0), 0);
       const requiredDownPayment = tanda.totalAmount;
       
-      if (currentFund < requiredDownPayment) {
+      if (currentFund < (requiredDownPayment || 0)) {
         observer.next({
           success: false,
           newSchedule: tanda.deliverySchedule,
-          message: `Fondo insuficiente: $${currentFund.toLocaleString('es-MX')} < $${requiredDownPayment.toLocaleString('es-MX')}`
+          message: `Fondo insuficiente: $${currentFund.toLocaleString('es-MX')} < $${(requiredDownPayment || 0).toLocaleString('es-MX')}`
         });
         observer.complete();
         return;
@@ -780,11 +691,11 @@ export class TandaDeliveryService {
       const originalToDeliveryMonth = toMember.deliveryMonth;
       
       // Move recipient to next available slot
-      toMember.deliveryMonth = tanda.currentMonth + 1;
+      toMember.deliveryMonth = (tanda.currentMonth || 0) + 1;
       toMember.deliveryStatus = 'scheduled';
       
       // Repriorize original member for following slot
-      fromMember.deliveryMonth = tanda.currentMonth + 2;
+      fromMember.deliveryMonth = (tanda.currentMonth || 0) + 2;
       fromMember.deliveryStatus = 'pending';
       
       // Update delivery schedule
@@ -792,11 +703,11 @@ export class TandaDeliveryService {
       const toSchedule = tanda.deliverySchedule.find(s => s.memberId === transferEvent.toMemberId);
       
       if (fromSchedule && toSchedule) {
-        toSchedule.month = tanda.currentMonth + 1;
+        toSchedule.month = (tanda.currentMonth || 0) + 1;
         toSchedule.deliveryStatus = 'ready';
         toSchedule.scheduledDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
         
-        fromSchedule.month = tanda.currentMonth + 2;
+        fromSchedule.month = (tanda.currentMonth || 0) + 2;
         fromSchedule.deliveryStatus = 'pending';
         fromSchedule.scheduledDate = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
       }
@@ -909,7 +820,7 @@ export class TandaDeliveryService {
         deliveryId,
         clientId,
         month: schedule.month,
-        deliveredAmount: tanda.totalAmount,
+        deliveredAmount: tanda.totalAmount || 0,
         deliveryDate: new Date(),
         message: `Entrega exitosa para ${member.name} - Posición ${member.position}`
       };
@@ -920,10 +831,10 @@ export class TandaDeliveryService {
       
       // Advance to next month if this was current month delivery
       if (tanda.currentMonth === member.position) {
-        tanda.currentMonth++;
+        tanda.currentMonth = (tanda.currentMonth || 0) + 1;
         
         // Check if tanda is complete
-        if (tanda.currentMonth > tanda.totalMembers) {
+        if ((tanda.currentMonth || 0) > tanda.totalMembers) {
           tanda.status = 'completed';
         }
       }
@@ -953,7 +864,7 @@ export class TandaDeliveryService {
       const nextDeliveries = tanda.deliverySchedule
         .filter(schedule => 
           schedule.deliveryStatus === 'ready' || 
-          (schedule.deliveryStatus === 'pending' && schedule.month <= tanda.currentMonth + 1)
+          (schedule.deliveryStatus === 'pending' && schedule.month <= (tanda.currentMonth || 0) + 1)
         )
         .map(schedule => ({
           tandaId: tanda.id,
@@ -992,7 +903,7 @@ export class TandaDeliveryService {
         acc + t.members.filter(m => m.deliveryStatus === 'delivered').length, 0),
       pendingDeliveries: tandas.reduce((acc, t) => 
         acc + t.members.filter(m => m.deliveryStatus !== 'delivered').length, 0),
-      totalValueInTandas: tandas.reduce((acc, t) => acc + (t.totalAmount * t.members.length), 0),
+      totalValueInTandas: tandas.reduce((acc, t) => acc + ((t.totalAmount || 0) * t.members.length), 0),
       averageCompletionTime: 8.5 // months - would calculate from actual data
     };
 

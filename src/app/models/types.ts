@@ -1,6 +1,9 @@
 // Core Business Types for Conductores PWA
 // Ported from React PWA to ensure full compatibility
 
+import { ImportStatus } from './postventa';
+import { CollectiveCreditGroup } from './tanda';
+
 export enum BusinessFlow {
   VentaPlazo = 'Venta a Plazo',
   AhorroProgramado = 'Plan de Ahorro',
@@ -114,37 +117,8 @@ export interface PaymentPlan {
   interestRate?: number; // monthly/annual interest rate as fraction
 }
 
-export interface CollectiveCreditMember {
-  clientId: string;
-  name: string;
-  avatarUrl: string;
-  status: 'active' | 'pending';
-  individualContribution: number;
-}
-
-export interface CollectiveCreditGroup {
-  id: string;
-  name: string;
-  capacity: number;
-  members: CollectiveCreditMember[];
-  totalUnits: number;
-  unitsDelivered: number;
-  savingsGoalPerUnit: number;
-  currentSavingsProgress: number; // Savings towards the *next* unit
-  monthlyPaymentPerUnit: number;
-  currentMonthPaymentProgress: number; // Payment towards the *collective debt*
-
-  // Derived properties for UI convenience
-  phase?: 'saving' | 'payment' | 'dual' | 'completed';
-  savingsGoal?: number;
-  currentSavings?: number;
-  monthlyPaymentGoal?: number;
-  // Extended fields for mock specs
-  ecosystemId?: string;
-  status?: 'active' | 'inactive' | string;
-  createdAt?: Date;
-  totalMembers?: number;
-}
+// TANDA/CollectiveCreditGroup types moved to models/tanda.ts for SSOT
+// Import from: import { CollectiveCreditMember, CollectiveCreditGroup } from '../models/tanda';
 
 export type ImportMilestoneStatus = {
   status?: 'completed' | 'in_progress' | 'pending';
@@ -157,217 +131,29 @@ export type ImportMilestoneStatus = {
   inProgress?: boolean;
 };
 
-// POST-SALES SYSTEM TYPES
-export interface DeliveryData {
-  odometroEntrega: number;
-  fechaEntrega: Date;
-  horaEntrega: string;
-  domicilioEntrega: string;
-  fotosVehiculo: string[]; // URLs de fotos
-  firmaDigitalCliente: string; // URL de firma
-  checklistEntrega: DeliveryChecklistItem[];
-  incidencias?: string[];
-  entregadoPor: string; // ID del asesor
-}
+// DELIVERY AND DOCUMENT TYPES moved to models/postventa.ts for SSOT
+// Import from: import { DeliveryData, DeliveryChecklistItem, LegalDocuments, PlatesData, DocumentFile } from '../models/postventa';
 
-export interface DeliveryChecklistItem {
-  item: string;
-  status: 'approved' | 'with_issues' | 'rejected';
-  notes?: string;
-  photos?: string[];
-}
+// POST-SALES TYPES moved to models/postventa.ts for SSOT
+// Import from: import { ServicePackage, ServiceType, ContactChannel, ContactPurpose, ContactOutcome } from '../models/postventa';
 
-export interface LegalDocuments {
-  factura: DocumentFile;
-  polizaSeguro: DocumentFile;
-  endosos?: DocumentFile[];
-  contratos: DocumentFile[];
-  fechaTransferencia: Date;
-  proveedorSeguro: string;
-  duracionPoliza: number; // meses
-  titular: string;
-}
+// PostSalesRecord moved to models/postventa.ts for SSOT
+// Import from: import { PostSalesRecord } from '../models/postventa';
 
-export interface PlatesData {
-  numeroPlacas: string;
-  estado: string;
-  fechaAlta: Date;
-  tarjetaCirculacion: DocumentFile;
-  fotografiasPlacas: string[]; // URLs
-  hologramas: boolean;
-}
+// PostSalesService, ServicePart, PostSalesContact, MaintenanceReminder, PostSalesRevenue moved to models/postventa.ts for SSOT
+// Import from: import { PostSalesService, ServicePart, PostSalesContact, MaintenanceReminder, PostSalesRevenue } from '../models/postventa';
 
-export interface DocumentFile {
-  filename: string;
-  url: string;
-  uploadedAt: Date;
-  size: number; // bytes
-  type: 'pdf' | 'image' | 'document';
-}
+// VehicleDeliveredEvent moved to models/postventa.ts for SSOT
+// Import from: import { VehicleDeliveredEvent } from '../models/postventa';
 
-export type ServicePackage = 'basic' | 'premium' | 'extended';
-export type ServiceType = 'mantenimiento' | 'reparacion' | 'garantia' | 'revision';
-export type ContactChannel = 'whatsapp' | 'sms' | 'email' | 'phone';
-export type ContactPurpose = 'delivery' | '30_days' | '90_days' | '6_months' | '12_months' | 'maintenance_reminder' | 'warranty_claim';
-export type ContactOutcome = 'sent' | 'answered' | 'escalated' | 'no_response';
+// PostSalesSurveyResponse moved to models/postventa.ts for SSOT
+// Import from: import { PostSalesSurveyResponse } from '../models/postventa';
 
-export interface PostSalesRecord {
-  id: string;
-  vin: string;
-  clientId: string;
-  postSalesAgent: string;
-  warrantyStatus: 'active' | 'expired';
-  servicePackage: ServicePackage;
-  nextMaintenanceDate: Date;
-  nextMaintenanceKm: number;
-  odometroEntrega: number;
-  createdAt: Date;
-  warrantyStart: Date;
-  warrantyEnd: Date;
-}
+// VehicleUnit moved to models/postventa.ts for SSOT
+// Import from: import { VehicleUnit } from '../models/postventa';
 
-export interface PostSalesService {
-  id: string;
-  vin: string;
-  serviceType: ServiceType;
-  serviceDate: Date;
-  odometroKm: number;
-  descripcion: string;
-  costo: number;
-  tecnico: string;
-  customerSatisfaction: number; // 1-5
-  partesUsadas?: ServicePart[];
-  tiempoServicio: number; // minutos
-  notas?: string;
-  fotos?: string[];
-}
-
-export interface ServicePart {
-  codigo: string;
-  nombre: string;
-  cantidad: number;
-  precioUnitario: number;
-  precioTotal: number;
-  garantia: number; // meses
-}
-
-export interface PostSalesContact {
-  id: string;
-  vin: string;
-  contactDate: Date;
-  channel: ContactChannel;
-  purpose: ContactPurpose;
-  outcome: ContactOutcome;
-  mensaje?: string;
-  respuestaCliente?: string;
-  notas?: string;
-  programarSeguimiento?: Date;
-}
-
-export interface MaintenanceReminder {
-  id: string;
-  vin: string;
-  dueDate: Date;
-  dueKm: number;
-  serviceType: string;
-  reminder30dSent: boolean;
-  reminder15dSent: boolean;
-  reminder7dSent: boolean;
-  completed: boolean;
-  scheduledService?: Date;
-}
-
-export interface PostSalesRevenue {
-  id: string;
-  clientId: string;
-  vin: string;
-  serviceRevenue: number;
-  partsRevenue: number;
-  warrantyWork: number;
-  profitMargin: number;
-  ltv: number; // Customer Lifetime Value
-  updatedAt: Date;
-}
-
-export interface VehicleDeliveredEvent {
-  event: 'vehicle.delivered';
-  timestamp: Date;
-  payload: {
-    clientId: string;
-    vehicle: {
-      vin: string;
-      modelo: string;
-      numeroMotor: string;
-      odometer_km_delivery: number;
-      placas: string;
-      estado: string;
-    };
-    contract: {
-      id: string;
-      servicePackage: ServicePackage;
-      warranty_start: Date;
-      warranty_end: Date;
-    };
-    contacts: {
-      primary: {
-        name: string;
-        phone: string;
-        email: string;
-      };
-      whatsapp_optin: boolean;
-    };
-    delivery: DeliveryData;
-    legalDocuments: LegalDocuments;
-    plates: PlatesData;
-  };
-}
-
-export interface PostSalesSurveyResponse {
-  id: string;
-  vin: string;
-  clientId: string;
-  surveyType: ContactPurpose;
-  respuestas: { [pregunta: string]: string | number };
-  nps?: number; // Net Promoter Score
-  csat?: number; // Customer Satisfaction Score
-  comentarios?: string;
-  completedAt: Date;
-}
-
-// Información específica de la unidad asignada
-export interface VehicleUnit {
-  id: string;
-  vin: string;
-  serie: string;
-  modelo: string;
-  year: number;
-  color: 'Blanco'; // Solo blanco por ahora
-  numeroMotor: string;
-  transmission?: 'Manual' | 'Automatica';
-  fuelType: 'Gasolina'; // Solo gasolina por ahora
-  assignedAt: Date;
-  assignedBy: string; // ID del usuario que asignó
-  productionBatch?: string;
-  factoryLocation?: string;
-  notes?: string;
-}
-
-export type ImportStatus = {
-    pedidoPlanta: ImportMilestoneStatus;
-    unidadFabricada: ImportMilestoneStatus;
-    transitoMaritimo: ImportMilestoneStatus;
-    enAduana: ImportMilestoneStatus;
-    liberada: ImportMilestoneStatus;
-    // POST-SALES PHASES
-    entregada?: ImportMilestoneStatus;
-    documentosTransferidos?: ImportMilestoneStatus;
-    placasEntregadas?: ImportMilestoneStatus;
-    // Unidad asignada cuando se completa unidadFabricada
-    assignedUnit?: VehicleUnit;
-    // Post-sales delivery data
-    deliveryData?: DeliveryData;
-    postSalesRecord?: PostSalesRecord;
-};
+// ImportStatus moved to models/postventa.ts for SSOT
+// Import from: import { ImportStatus } from '../models/postventa';
 
 export interface Ecosystem {
     id: string;
@@ -412,21 +198,7 @@ export interface ProtectionPlan {
   annualResets: number;
 }
 
-export interface ProtectionScenario {
-  type: 'defer' | 'step-down' | 'recalendar';
-  title: string;
-  description: string;
-  newMonthlyPayment: number;
-  newTerm: number;
-  termChange: number;
-  details: string[];
-  // Optional analytics used internally/tests
-  irr?: number;
-  tirOK?: boolean;
-  cashFlows?: number[];
-  capitalizedInterest?: number;
-  principalBalance?: number;
-}
+// ProtectionScenario moved to models/protection.ts for SSOT
 
 export interface Client {
   id: string;
@@ -599,14 +371,7 @@ export type NotificationAction = {
     type: 'convert' | 'assign_unit' | 'configure_plan';
 }
 
-export interface Notification {
-    id: number;
-    message: string;
-    type: NotificationType;
-    timestamp: Date;
-    clientId?: string;
-    action?: NotificationAction;
-}
+// 🔥 Notification interface moved to models/notification.ts as SSOT
 
 export type OpportunityStage = {
     name: 'Nuevas Oportunidades' | 'Expediente en Proceso' | 'Aprobado' | 'Activo' | 'Completado';
@@ -633,21 +398,8 @@ export interface ToastMessage {
   type: 'success' | 'info' | 'error';
 }
 
-export type TandaMilestone = {
-    type: 'ahorro' | 'entrega';
-    unitNumber?: number;
-    duration: number; // in months
-    label: string;
-    month?: number;
-    completed?: boolean;
-    current?: boolean;
-    emoji?: string;
-    title?: string;
-    description?: string;
-    amount?: number;
-    details?: string[];
-    memberName?: string;
-};
+// TandaMilestone moved to models/tanda.ts for SSOT
+// Import from: import { TandaMilestone } from '../models/tanda';
 
 export interface NavigationContext {
   ecosystem?: Ecosystem;
@@ -656,87 +408,8 @@ export interface NavigationContext {
 
 // --- Tanda Simulator Types ---
 
-export type TandaMemberStatus = 'active' | 'frozen' | 'left' | 'delivered';
-
-export interface TandaMember {
-  id: string;
-  name: string;
-  prio: number;
-  status: TandaMemberStatus;
-  C: number; // Base monthly contribution
-}
-
-export interface TandaProduct {
-  price: number;
-  dpPct: number;
-  term: number;
-  rateAnnual: number;
-  fees?: number;
-}
-
-export interface TandaGroupInput {
-  name: string;
-  members: TandaMember[];
-  product: TandaProduct;
-  rules: {
-    allocRule: 'debt_first';
-    eligibility: { requireThisMonthPaid: boolean };
-  };
-  seed: number;
-}
-
-export type TandaEventType = 'miss' | 'extra';
-
-export interface TandaSimEvent {
-  t: number; // month
-  type: TandaEventType;
-  data: {
-    memberId: string;
-    amount: number;
-  };
-  id: string;
-}
-
-export interface TandaSimConfig {
-  horizonMonths: number;
-  events: TandaSimEvent[];
-}
-
-export interface TandaAward {
-  memberId: string;
-  name: string;
-  month: number;
-  mds: number; // monthly payment
-}
-
-export type TandaRiskBadge = 'ok' | 'debtDeficit' | 'lowInflow';
-
-export interface TandaMonthState {
-  t: number;
-  inflow: number;
-  debtDue: number;
-  deficit: number;
-  savings: number;
-  awards: TandaAward[];
-  riskBadge: TandaRiskBadge;
-}
-
-export interface TandaSimulationResult {
-  months: TandaMonthState[];
-  awardsByMember: Record<string, TandaAward | undefined>;
-  firstAwardT?: number;
-  lastAwardT?: number;
-  kpis: {
-    coverageRatioMean: number;
-    deliveredCount: number;
-    avgTimeToAward: number;
-  };
-}
-
-export interface TandaSimDraft {
-  group: TandaGroupInput;
-  config: TandaSimConfig;
-}
+// TANDA Simulator types moved to models/tanda.ts for SSOT
+// Import from: import { TandaMemberStatus, TandaMember, TandaProduct, TandaGroupSim, TandaEventType, TandaSimEvent, TandaSimConfig, TandaAward, TandaRiskBadge, TandaMonthState, TandaSimulationResult, TandaSimDraft } from '../models/tanda';
 
 // Additional types for cotizador
 export type ClientType = 'individual' | 'colectivo';
