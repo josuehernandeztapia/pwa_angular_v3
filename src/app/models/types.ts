@@ -3,6 +3,7 @@
 
 import { ImportStatus, ImportMilestoneStatus } from './postventa';
 import { CollectiveCreditGroup } from './tanda';
+import { AVICategory, QuestionType, AVIQuestionAnalytics, AVIQuestionEnhanced, AVIResponse, VoiceAnalysis, AVIScore, RedFlag } from './avi';
 
 export enum BusinessFlow {
   VentaPlazo = 'Venta a Plazo',
@@ -284,79 +285,8 @@ export enum NotificationType {
 }
 
 // === AVI SYSTEM TYPES ===
-export enum AVICategory {
-    BASIC_INFO = 'basic_info',
-    DAILY_OPERATION = 'daily_operation',
-    OPERATIONAL_COSTS = 'operational_costs', 
-    BUSINESS_STRUCTURE = 'business_structure',
-    ASSETS_PATRIMONY = 'assets_patrimony',
-    CREDIT_HISTORY = 'credit_history',
-    PAYMENT_INTENTION = 'payment_intention',
-    RISK_EVALUATION = 'risk_evaluation'
-}
-
-export enum QuestionType {
-    OPEN_NUMERIC = 'open_numeric',
-    OPEN_TEXT = 'open_text',
-    MULTIPLE_CHOICE = 'multiple_choice',
-    YES_NO = 'yes_no',
-    RANGE_ESTIMATE = 'range_estimate'
-}
-
-export interface AVIQuestionAnalytics {
-    expectedResponseTime: number;
-    stressIndicators: string[];
-    truthVerificationKeywords: string[];
-    sigmaRatio?: number;
-}
-
-export interface AVIQuestionEnhanced {
-    id: string;
-    category: AVICategory;
-    question: string;
-    weight: number; // 1-10
-    riskImpact: 'HIGH' | 'MEDIUM' | 'LOW';
-    stressLevel: number; // 1-5
-    estimatedTime: number; // segundos
-    verificationTriggers: string[];
-    followUpQuestions?: string[];
-    analytics: AVIQuestionAnalytics;
-}
-
-export interface AVIResponse {
-    questionId: string;
-    value: string;
-    responseTime: number; // milliseconds
-    transcription: string;
-    voiceAnalysis?: VoiceAnalysis;
-    stressIndicators: string[];
-    coherenceScore?: number;
-}
-
-export interface VoiceAnalysis {
-    pitch_variance: number;     // 0-1
-    speech_rate_change: number; // 0-1  
-    pause_frequency: number;    // 0-1
-    voice_tremor: number;       // 0-1
-    confidence_level: number;   // 0-1 from Whisper
-}
-
-export interface AVIScore {
-    totalScore: number; // 0-1000
-    riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    categoryScores: { [key in AVICategory]: number };
-    redFlags: RedFlag[];
-    recommendations: string[];
-    processingTime: number;
-}
-
-export interface RedFlag {
-    type: string;
-    questionId: string;
-    reason: string;
-    impact: number;
-    severity: 'CRITICAL' | 'HIGH' | 'MEDIUM';
-}
+// AVI System types moved to models/avi.ts for SSOT
+// Import from: import { AVICategory, QuestionType, AVIQuestionAnalytics, AVIQuestionEnhanced, AVIResponse, VoiceAnalysis, AVIScore, RedFlag } from './avi';
 
 export type NotificationAction = {
     text: string;
