@@ -1,10 +1,19 @@
 /* ===== CONDUCTORES PWA - PREMIUM FINTECH THEME =====
- * Global styles and theme imports
- * Version: Centro de Comando
+ * Global styles and theme imports - Performance Optimized
+ * Version: Centro de Comando + Performance Pack
  */
 
-/* Import Premium FinTech Theme */
+/* Performance-Critical Styles First */
+@import 'styles/performance.scss';
+
+/* Phosphor Icons - Premium Icon System */
+/* Essential styles for Phosphor Icons integration */
+
+/* Premium FinTech Theme - Lazy loaded */
 @import 'styles/theme-premium.css';
+
+/* Premium Animations - Deferred for better performance */
+@import 'styles/premium-animations.scss';
 
 /* ===== CSS VARIABLES (Common tokens) ===== */
 :root {
@@ -462,4 +471,125 @@ html.hc body { background: var(--bg); color: var(--text); }
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   color: var(--bg-gray-100);
+}
+
+/* ===== PREMIUM ICONS ANIMATIONS - INTEGRATED FROM DESIGN SYSTEM ===== */
+
+/* Tokens Conductores - Fuente de verdad */
+:root {
+  --icon-stroke: 2.5px;
+}
+
+/* Animaciones Premium para Iconografía */
+@keyframes rotate-gear {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(20deg); }
+}
+
+@keyframes progress-radial {
+  0% { stroke-dasharray: 0 100; }
+  100% { stroke-dasharray: 75 100; }
+}
+
+@keyframes radial-fill {
+  0% { stroke-dasharray: 0 100; }
+  100% { stroke-dasharray: 100 100; }
+}
+
+@keyframes sequential-illuminate {
+  0% { stroke: var(--muted); }
+  25% { stroke: var(--acc); }
+  50% { stroke: var(--acc); }
+  75% { stroke: var(--acc); }
+  100% { stroke: var(--acc); }
+}
+
+@keyframes shield-ring-fill {
+  0% {
+    stroke: var(--muted);
+    stroke-dasharray: 0 100;
+  }
+  100% {
+    stroke: var(--acc);
+    stroke-dasharray: 100 100;
+  }
+}
+
+@keyframes shield-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px var(--ok));
+    stroke: var(--ok);
+  }
+  50% {
+    filter: drop-shadow(0 0 10px var(--ok));
+    stroke: var(--ok);
+  }
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    stroke: var(--bad);
+    transform: scale(1);
+  }
+  50% {
+    stroke: var(--bad);
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px var(--bad));
+  }
+}
+
+@keyframes toolbox-open {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(20deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+@keyframes truck-move-forward {
+  0% { transform: translateX(0px); }
+  50% { transform: translateX(10px); }
+  100% { transform: translateX(0px); }
+}
+
+@keyframes truck-delay-shake {
+  0%, 100% { transform: translateX(0px); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+@keyframes leaf-glow {
+  0% {
+    stroke: var(--muted);
+    filter: none;
+  }
+  100% {
+    stroke: var(--ok);
+    filter: drop-shadow(0 0 8px var(--ok));
+  }
+}
+
+@keyframes wave-pulse {
+  0%, 100% {
+    stroke: var(--acc);
+    stroke-width: var(--icon-stroke);
+  }
+  50% {
+    stroke: var(--acc);
+    stroke-width: calc(var(--icon-stroke) * 1.5);
+    filter: drop-shadow(0 0 6px var(--acc));
+  }
+}
+
+/* Premium Icon System Variables - Conductores Design Tokens */
+:root {
+  --bg: #0B1220;
+  --ink: #E6ECFF;
+  --muted: #A8B3CF;
+  --card: #101826;
+  --line: #1F2937;
+  --acc: #3AA6FF;
+  --ok: #22C55E;
+  --warn: #F59E0B;
+  --bad: #EF4444;
+  --radius: 16px;
+  --shadow: 0 6px 24px rgba(0,0,0,.25);
 }

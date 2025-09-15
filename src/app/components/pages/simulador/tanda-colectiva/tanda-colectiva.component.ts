@@ -371,7 +371,7 @@ interface KpiData {
               </div>
               <div class="mt-2 text-xs text-gray-600 flex justify-between">
                 <span>Meta: {{ formatCurrency(targetPerMember || 0) }}</span>
-                <span>Tiempo estimado: {{ simulationResult.scenario?.monthsToTarget || 0 }} meses</span>
+                <span>Tiempo estimado: {{ simulationResult.scenario.monthsToTarget || 0 }} meses</span>
               </div>
             </div>
           </div>

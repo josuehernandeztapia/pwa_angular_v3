@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AVIResponse, AVIQuestionEnhanced, AVIScore, RedFlag, VoiceAnalysis } from '../models/types';
+import { AVIResponse, AVIQuestionEnhanced, AVIScore, RedFlag, VoiceAnalysis } from '../models/avi';
 
 // Mathematical utilities
 const sigmoid = (x: number): number => 1 / (1 + Math.exp(-x));

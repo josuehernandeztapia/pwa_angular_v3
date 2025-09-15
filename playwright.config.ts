@@ -5,7 +5,7 @@ import { defineConfig, devices } from 'playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: './tests/visual',
+  testDir: './e2e',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -22,7 +22,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:4300',
+    baseURL: 'http://localhost:4200',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     /* Screenshot configuration */
@@ -94,16 +94,16 @@ export default defineConfig({
   },
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'node_modules/.bin/ng serve --configuration=development --port=4300',
-    url: 'http://localhost:4300',
-    reuseExistingServer: !process.env.CI,
-    timeout: 600 * 1000,
-  },
+  // webServer: {
+  //   command: 'node_modules/.bin/ng serve --configuration=development --port=4200',
+  //   url: 'http://localhost:4200',
+  //   reuseExistingServer: !process.env.CI,
+  //   timeout: 600 * 1000,
+  // },
 
   /* Global setup and teardown */
-  globalSetup: require.resolve('./tests/visual/setup/global-setup.ts'),
-  globalTeardown: require.resolve('./tests/visual/setup/global-teardown.ts'),
+  // globalSetup: require.resolve('./tests/visual/setup/global-setup.ts'),
+  // globalTeardown: require.resolve('./tests/visual/setup/global-teardown.ts'),
 
   /* Test timeout */
   timeout: 30 * 1000,

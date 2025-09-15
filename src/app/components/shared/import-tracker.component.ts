@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { Client, ImportStatus } from '../../models/types';
+import { Client } from '../../models/types';
+import { ImportStatus } from '../../models/postventa';
 import { IntegratedImportTrackerService, IntegratedImportStatus } from '../../services/integrated-import-tracker.service';
 
 interface ImportMilestone {

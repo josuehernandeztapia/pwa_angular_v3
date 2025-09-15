@@ -4,19 +4,18 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { FinancialCalculatorService } from '../../services/financial-calculator.service';
 import { ToastService } from '../../services/toast.service';
 import { Client } from '../../models/types';
+import { ProtectionScenario, ProtectionType } from '../../models/protection';
 
-interface ProtectionScenario {
-  type: 'payment_pause' | 'term_extension' | 'payment_reduction' | 'restructure';
-  title: string;
-  description: string;
-  monthlyPaymentBefore: number;
-  monthlyPaymentAfter: number;
-  termBefore: number;
-  termAfter: number;
-  savings: number;
-  benefits: string[];
-  drawbacks: string[];
-  recommended: boolean;
+// UI extension of the SSOT ProtectionScenario
+interface ProtectionScenarioUI extends ProtectionScenario {
+  monthlyPaymentBefore?: number;
+  monthlyPaymentAfter?: number;
+  termBefore?: number;
+  termAfter?: number;
+  savings?: number;
+  benefits?: string[];
+  drawbacks?: string[];
+  recommended?: boolean;
 }
 
 @Component({
@@ -156,8 +155,8 @@ export class ProtectionSimulatorComponent {
   @Output() onApply = new EventEmitter<any>();
 
   configForm: FormGroup;
-  scenarios: ProtectionScenario[] = [];
-  selectedScenario?: ProtectionScenario;
+  scenarios: ProtectionScenarioUI[] = [];
+  selectedScenario?: ProtectionScenarioUI;
   isCalculating = false;
 
   constructor(
@@ -188,9 +187,15 @@ export class ProtectionSimulatorComponent {
     
     this.scenarios = [
       {
-        type: 'payment_pause',
-        title: '⏸️ Pausa de Pagos',
+        // SSOT required fields
+        type: 'DEFER',
+        params: { d: monthsAffected, capitalizeInterest: true },
+        Mprime: 0,
+        nPrime: 24 + monthsAffected,
         description: `Suspende pagos por ${monthsAffected} meses sin penalizaciones`,
+        // Legacy compatibility fields
+        title: '⏸️ Pausa de Pagos',
+        // UI extension fields
         monthlyPaymentBefore: currentPayment,
         monthlyPaymentAfter: 0,
         termBefore: 24,
@@ -208,9 +213,15 @@ export class ProtectionSimulatorComponent {
         recommended: monthsAffected <= 3
       },
       {
-        type: 'payment_reduction',
-        title: '📉 Reducción de Pago',
+        // SSOT required fields
+        type: 'STEPDOWN',
+        params: { months: monthsAffected, alpha: 0.6 },
+        Mprime: currentPayment * 0.6,
+        nPrime: 30,
         description: 'Reduce temporalmente tu pago mensual',
+        // Legacy compatibility fields
+        title: '📉 Reducción de Pago',
+        // UI extension fields
         monthlyPaymentBefore: currentPayment,
         monthlyPaymentAfter: currentPayment * 0.6,
         termBefore: 24,
@@ -233,7 +244,7 @@ export class ProtectionSimulatorComponent {
     this.toast.success('Opciones de protección generadas');
   }
 
-  selectScenario(scenario: ProtectionScenario): void {
+  selectScenario(scenario: ProtectionScenarioUI): void {
     this.selectedScenario = scenario;
   }
 

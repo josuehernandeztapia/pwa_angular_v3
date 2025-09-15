@@ -11,20 +11,22 @@ import { ActivityItem, HumanActivityFeedComponent } from '../../shared/human-act
 import { ActionButton, NextBestActionData, NextBestActionHeroComponent } from '../../shared/next-best-action-hero/next-best-action-hero.component';
 import { RiskRadarClient, RiskRadarComponent } from '../../shared/risk-radar/risk-radar.component';
 import { DevKpiMiniComponent } from '../../shared/dev-kpi-mini.component';
+import { PremiumIconComponent } from '../../ui/premium-icon/premium-icon.component';
 import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterModule, 
+    CommonModule,
+    RouterModule,
     NextBestActionHeroComponent,
     ContextualKPIsComponent,
     RiskRadarComponent,
     HumanActivityFeedComponent,
     ClientModeToggleComponent,
-    DevKpiMiniComponent
+    DevKpiMiniComponent,
+    PremiumIconComponent
   ],
   template: `
     <div class="command-center-dashboard">
@@ -32,7 +34,13 @@ import { environment } from '../../../../environments/environment';
       <header class="command-header">
         <div class="command-title-section">
           <h1 class="command-title">
-            <span class="command-icon">✨</span>
+            <app-premium-icon
+              class="command-icon"
+              iconName="cotizador"
+              size="lg"
+              [showLabel]="false"
+              ariaLabel="Centro de Comando">
+            </app-premium-icon>
             Centro de Comando
           </h1>
           <p class="command-subtitle">Tu plan de acción para hoy, Ricardo.</p>
@@ -46,12 +54,18 @@ import { environment } from '../../../../environments/environment';
           
           <div class="user-info">
             <span class="user-name">👤 {{ userName }} ⏷</span>
-            <button 
-              class="client-mode-badge" 
+            <button
+              class="client-mode-badge"
               [class.active]="currentViewMode === 'client'"
               (click)="toggleProfileDropdown()"
             >
-              🚚 Modo Cliente
+              <app-premium-icon
+                iconName="entregas"
+                size="xs"
+                [showLabel]="false"
+                ariaLabel="Modo Cliente">
+              </app-premium-icon>
+              Modo Cliente
             </button>
           </div>
         </div>
@@ -61,7 +75,15 @@ import { environment } from '../../../../environments/environment';
         <!-- Tu Próxima Mejor Acción (The Brain) -->
         <section class="next-best-action-hero">
           <div class="hero-header">
-            <h2 class="hero-title">💡 TU PRÓXIMA MEJOR ACCIÓN</h2>
+            <h2 class="hero-title">
+              <app-premium-icon
+                iconName="simulador"
+                size="md"
+                [showLabel]="false"
+                ariaLabel="Tu Próxima Mejor Acción">
+              </app-premium-icon>
+              TU PRÓXIMA MEJOR ACCIÓN
+            </h2>
           </div>
           
           <app-next-best-action-hero 
@@ -74,7 +96,15 @@ import { environment } from '../../../../environments/environment';
         <!-- KPIs Contextuales & Radar de Riesgo -->
         <section class="intelligence-grid">
           <div class="kpis-section">
-            <h3 class="section-title">📊 KPIs Clave (vs. Semana Pasada)</h3>
+            <h3 class="section-title">
+              <app-premium-icon
+                iconName="cotizador"
+                size="sm"
+                [showLabel]="false"
+                ariaLabel="KPIs Clave">
+              </app-premium-icon>
+              KPIs Clave (vs. Semana Pasada)
+            </h3>
             <app-contextual-kpis 
               [kpis]="contextualKPIs"
               [showTrends]="true">
@@ -85,7 +115,16 @@ import { environment } from '../../../../environments/environment';
           </div>
           
           <div class="risk-radar-section">
-            <h3 class="section-title">🔥 Radar de Riesgo</h3>
+            <h3 class="section-title">
+              <app-premium-icon
+                iconName="proteccion"
+                size="sm"
+                [showLabel]="false"
+                variant="error"
+                ariaLabel="Radar de Riesgo">
+              </app-premium-icon>
+              Radar de Riesgo
+            </h3>
             <p class="section-subtitle">(Visualización de clientes por Health Score)</p>
             <app-risk-radar 
               [clients]="riskRadarClients"
@@ -97,7 +136,15 @@ import { environment } from '../../../../environments/environment';
 
         <!-- Feed de Actividad Humano -->
         <section class="human-activity-section">
-          <h2 class="section-title">🛰️ Feed de Actividad en Tiempo Real</h2>
+          <h2 class="section-title">
+            <app-premium-icon
+              iconName="avi"
+              size="sm"
+              [showLabel]="false"
+              ariaLabel="Feed de Actividad en Tiempo Real">
+            </app-premium-icon>
+            Feed de Actividad en Tiempo Real
+          </h2>
           <div class="activity-feed-container">
             <app-human-activity-feed 
               [activities]="premiumActivityFeed"
@@ -152,7 +199,10 @@ import { environment } from '../../../../environments/environment';
     }
 
     .command-icon {
-      font-size: 2.5rem;
+      margin-right: 8px;
+    }
+
+    .command-icon app-premium-icon {
       animation: glow-pulse 3s ease-in-out infinite;
     }
 
@@ -202,6 +252,9 @@ import { environment } from '../../../../environments/environment';
       cursor: pointer;
       transition: all 0.2s ease;
       box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .client-mode-badge:hover {
@@ -261,6 +314,10 @@ import { environment } from '../../../../environments/environment';
       margin: 0;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
     }
 
     /* ===== INTELLIGENCE GRID ===== */
@@ -284,6 +341,9 @@ import { environment } from '../../../../environments/environment';
       font-weight: 700;
       color: var(--primary-cyan-300);
       margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .section-subtitle {

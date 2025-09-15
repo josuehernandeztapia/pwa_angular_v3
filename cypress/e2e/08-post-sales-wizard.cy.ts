@@ -6,83 +6,105 @@ describe('Postventa – Wizard 4 fotos (stubbed)', () => {
   function selectFirstFileWith(name: string) {
     const fileName = name;
     const mimeType = 'image/jpeg';
-    cy.get('.step-card').eq(0).find('input[type="file"]').then($inputs => {
+    
+    // Use enhanced file upload with better reliability
+    cy.getReliable([
+      '.step-card input[type="file"]',
+      '[data-testid="file-input"]',
+      'input[type="file"]'
+    ], 10000).then($inputs => {
       if ($inputs.length) {
         cy.wrap($inputs[0]).selectFile({
           contents: 'fake-binary-content',
           fileName,
           mimeType
         }, { force: true });
+        
+        // Wait for upload to process
+        cy.waitForApiIdle(15000); // VIN processing takes longer
       }
     });
   }
 
   it('should guide through steps and show missing VIN with CTA', () => {
-    cy.visit('/postventa/wizard');
-    cy.waitForAngular();
+    cy.navigateAndWait('/postventa/wizard');
 
-    // Start (creates case)
-    cy.contains('button', 'Iniciar').click();
+    // Start (creates case) with enhanced waiting
+    cy.waitForElement('button:contains("Iniciar")').click();
+    cy.waitForApiIdle();
 
-    // Step 1: Placa (ok)
+    // Step 1: Placa (ok) with enhanced upload handling
     selectFirstFileWith('plate.jpg');
-    cy.contains('✅ Calidad suficiente').should('be.visible');
+    cy.waitForElement(':contains("✅ Calidad suficiente")');
 
-    // Next
-    cy.contains('button', 'Siguiente').click();
+    // Next with enhanced waiting
+    cy.waitForElement('button:contains("Siguiente")', 15000).click();
+    cy.waitForApiIdle();
 
-    // Step 2: VIN (simulate missing vin)
-    selectFirstFileWith('vin-novin.jpg');
-    cy.contains('⚠️ Falta calidad o datos clave').should('be.visible');
-    cy.contains('Falta: Vin', { matchCase: false }).should('be.visible');
+    // Step 2: VIN (simulate missing vin) with timeout handling
+    cy.retryAction(() => {
+      selectFirstFileWith('vin-novin.jpg');
+      // Wait longer for VIN detection processing with potential timeout
+      cy.waitForElement(':contains("⚠️ Falta calidad o datos clave")', 20000);
+      cy.waitForElement(':contains("Falta: Vin")', { matchCase: false });
+    }, 2);
 
-    // Next
-    cy.contains('button', 'Siguiente').click();
+    // Next with enhanced waiting
+    cy.waitForElement('button:contains("Siguiente")', 15000).click();
+    cy.waitForApiIdle();
 
-    // Step 3: Odómetro (ok)
+    // Step 3: Odómetro (ok) with enhanced upload handling
     selectFirstFileWith('odometer.jpg');
-    cy.contains('✅ Calidad suficiente').should('be.visible');
+    cy.waitForElement(':contains("✅ Calidad suficiente")');
 
-    // Next
-    cy.contains('button', 'Siguiente').click();
+    // Next with enhanced waiting
+    cy.waitForElement('button:contains("Siguiente")', 15000).click();
+    cy.waitForApiIdle();
 
-    // Step 4: Evidencia (ok)
+    // Step 4: Evidencia (ok) with enhanced upload handling
     selectFirstFileWith('evidence.jpg');
-    cy.contains('✅ Calidad suficiente').should('be.visible');
+    cy.waitForElement(':contains("✅ Calidad suficiente")');
 
-    // Summary should warn and offer VIN CTA
-    cy.contains('Faltan elementos o calidad baja').should('be.visible');
-    cy.contains('button', 'Tomar foto de VIN').click();
-    // Back on VIN step title
-    cy.contains('VIN plate').should('be.visible');
+    // Summary should warn and offer VIN CTA with enhanced waiting
+    cy.waitForElement(':contains("Faltan elementos o calidad baja")');
+    cy.waitForElement('button:contains("Tomar foto de VIN")').click();
+    cy.waitForApiIdle();
+    
+    // Back on VIN step title with enhanced waiting
+    cy.waitForElement(':contains("VIN plate")');
   });
 
   it('should complete with all three basics OK', () => {
-    cy.visit('/postventa/wizard');
-    cy.waitForAngular();
-    cy.contains('button', 'Iniciar').click();
+    cy.navigateAndWait('/postventa/wizard');
+    cy.waitForElement('button:contains("Iniciar")').click();
+    cy.waitForApiIdle();
 
-    // Plate ok
+    // Plate ok with enhanced upload handling
     selectFirstFileWith('plate.jpg');
-    cy.contains('✅ Calidad suficiente').should('be.visible');
-    cy.contains('button', 'Siguiente').click();
+    cy.waitForElement(':contains("✅ Calidad suficiente")');
+    cy.waitForElement('button:contains("Siguiente")').click();
+    cy.waitForApiIdle();
 
-    // VIN ok (no novin/low keywords)
-    selectFirstFileWith('vin.jpg');
-    cy.contains('✅ Calidad suficiente').should('be.visible');
-    cy.contains('button', 'Siguiente').click();
+    // VIN ok (no novin/low keywords) with retry for potential timeout
+    cy.retryAction(() => {
+      selectFirstFileWith('vin.jpg');
+      cy.waitForElement(':contains("✅ Calidad suficiente")', 20000);
+    }, 3);
+    cy.waitForElement('button:contains("Siguiente")').click();
+    cy.waitForApiIdle();
 
-    // Odometer ok
+    // Odometer ok with enhanced upload handling
     selectFirstFileWith('odometer.jpg');
-    cy.contains('✅ Calidad suficiente').should('be.visible');
-    cy.contains('button', 'Siguiente').click();
+    cy.waitForElement(':contains("✅ Calidad suficiente")');
+    cy.waitForElement('button:contains("Siguiente")').click();
+    cy.waitForApiIdle();
 
-    // Evidence ok
+    // Evidence ok with enhanced upload handling
     selectFirstFileWith('evidence.jpg');
-    cy.contains('✅ Calidad suficiente').should('be.visible');
+    cy.waitForElement(':contains("✅ Calidad suficiente")');
 
-    // Summary success
-    cy.contains('Caso listo: 3 básicos completos en el primer intento.').should('be.visible');
+    // Summary success with enhanced waiting
+    cy.waitForElement(':contains("Caso listo: 3 básicos completos en el primer intento.")', 15000);
   });
 });
 

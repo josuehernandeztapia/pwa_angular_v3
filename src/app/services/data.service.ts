@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map, catchError } from 'rxjs/operators';
-import { Client, Quote, CompleteBusinessScenario } from '../models/types';
+import { Client } from '../models/types';
+import { Quote, CompleteBusinessScenario } from '../models/business';
 
 export interface DataState {
   clients: Client[];

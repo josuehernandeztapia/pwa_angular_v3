@@ -2,25 +2,175 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Conductores PWA</title>
+  <title>Conductores PWA - Fintech Mobility Platform</title>
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
   <meta name="color-scheme" content="dark light">
+  <meta name="description" content="Plataforma fintech para conductores con evaluación de riesgo KIBAN, gestión de entregas y monitoreo GNV en tiempo real">
+  <meta name="keywords" content="fintech,conductores,kiban,gnv,riesgo,movilidad">
+  <meta name="author" content="Conductores PWA Team">
+
+  <!-- Favicon and App Icons -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="assets/icons/icon-512x512.png">
+
+  <!-- PWA and Mobile Configuration -->
   <meta name="theme-color" content="#06b6d4" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0b3a4a" media="(prefers-color-scheme: dark)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Conductores PWA">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-192x192.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <meta name="apple-mobile-web-app-title" content="Conductores">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Conductores PWA">
+
+  <!-- High-Priority Resource Preloading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://api.conductores-pwa.com" crossorigin>
-  <link rel="dns-prefetch" href="https://api.conductores-pwa.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://api.kiban.conductores.com" crossorigin>
+  <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+
+  <!-- Font Loading Strategy - Critical First -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+  <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Critical Resource Hints -->
+  <link rel="modulepreload" href="main.js">
+  <link rel="modulepreload" href="polyfills.js">
+
+  <!-- Critical Above-the-fold CSS - Inline for immediate render -->
+  <style>
+    /* CSS Reset & Base Styles */
+    *,*::before,*::after{box-sizing:border-box}
+    html{line-height:1.15;-webkit-text-size-adjust:100%;height:100%}
+    body{margin:0;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+         background:#f8fafc;color:#1e293b;height:100%;overflow-x:hidden}
+
+    /* App Shell Critical Styles */
+    app-root{display:block;min-height:100vh;position:relative}
+
+    /* Premium Loading Experience */
+    .app-shell-loading{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      min-height:100vh;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      color:white;text-align:center;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999
+    }
+
+    .loading-logo{
+      width:80px;height:80px;margin-bottom:24px;
+      background:rgba(255,255,255,0.1);border-radius:20px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:32px;animation:pulse 2s infinite
+    }
+
+    .loading-text{font-size:20px;font-weight:600;margin-bottom:8px;opacity:0.9}
+    .loading-subtitle{font-size:14px;opacity:0.7;margin-bottom:32px}
+
+    /* Loading Animation */
+    .loading-spinner{
+      width:40px;height:40px;border:3px solid rgba(255,255,255,0.3);
+      border-top:3px solid white;border-radius:50%;
+      animation:spin 1s linear infinite
+    }
+
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+    /* Hide loading when app ready */
+    .app-ready .app-shell-loading{display:none}
+
+    /* Critical Header Styles for LCP */
+    .header{height:64px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:100}
+    .nav{height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+    .logo{font-size:20px;font-weight:700;color:#06b6d4}
+
+    /* Critical Button Styles */
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:12px 24px;border-radius:8px;font-weight:600;
+      text-decoration:none;border:none;cursor:pointer;
+      transition:all 0.2s cubic-bezier(0.4,0,0.2,1)
+    }
+    .btn-primary{background:#06b6d4;color:white}
+    .btn-primary:hover{background:#0891b2;transform:translateY(-1px)}
+
+    /* Performance Optimized Utilities */
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+             overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    /* Prevent FOUC */
+    [ng-cloak],[data-ng-cloak],.ng-cloak,.x-ng-cloak{display:none!important}
+
+    /* Critical Layout Shift Prevention */
+    .container{max-width:1200px;margin:0 auto;padding:0 16px}
+    .grid{display:grid;gap:24px}
+    .card{background:white;border-radius:12px;border:1px solid #e2e8f0;padding:24px}
+  </style>
+
+  <!-- Non-critical CSS - Load Async -->
+  <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="styles.css"></noscript>
+
+  <!-- Font Loading - Async -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+
+  <!-- Performance Monitoring -->
+  <script>
+    // Mark start time for performance measurement
+    window.__APP_START_TIME__ = performance.now();
+
+    // Critical Web Vitals tracking
+    window.__CWV__ = {
+      fcp: null,
+      lcp: null,
+      cls: 0,
+      fid: null
+    };
+
+    // Preload critical resources
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/ngsw-worker.js')
+          .catch(err => console.log('SW registration failed'));
+      });
+    }
+  </script>
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <div class="app-shell-loading" id="initial-loader">
+      <div class="loading-logo">🚗</div>
+      <div class="loading-text">Conductores PWA</div>
+      <div class="loading-subtitle">Plataforma fintech para movilidad</div>
+      <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Fallback for non-JS environments -->
+    <noscript>
+      <div style="text-align:center;padding:50px;background:#f8fafc;min-height:100vh">
+        <h1>⚠️ JavaScript requerido</h1>
+        <p>Esta aplicación requiere JavaScript para funcionar correctamente.</p>
+        <p>Por favor habilita JavaScript en tu navegador.</p>
+      </div>
+    </noscript>
+  </app-root>
+
+  <!-- Remove loading screen when app is ready -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('initial-loader');
+        if (loader) {
+          loader.style.opacity = '0';
+          loader.style.transition = 'opacity 0.3s ease';
+          setTimeout(() => loader.remove(), 300);
+        }
+        document.body.classList.add('app-ready');
+      }, 1000);
+    });
+  </script>
 </body>
 </html>

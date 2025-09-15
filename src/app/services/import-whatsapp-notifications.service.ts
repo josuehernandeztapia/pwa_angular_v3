@@ -3,7 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, forkJoin, map, catchError, tap, switchMap } from 'rxjs';
 import { WhatsappService } from './whatsapp.service';
 import { IntegratedImportStatus, ImportMilestoneEvent } from './integrated-import-tracker.service';
-import { Client, ImportStatus } from '../models/types';
+import { Client } from '../models/types';
+import { ImportStatus } from '../models/postventa';
+import { NotificationResult, WhatsAppNotificationResult } from '../models/notification';
 
 declare global {
   interface Window {
@@ -56,18 +58,7 @@ export interface ImportNotificationSettings {
   lastNotificationSent?: Date;
 }
 
-export interface NotificationResult {
-  messageId: string;
-  clientId: string;
-  phoneNumber: string;
-  milestone: keyof ImportStatus;
-  notificationType: 'milestone_start' | 'milestone_completed' | 'milestone_delayed' | 'delivery_update';
-  templateUsed: string;
-  sentAt: Date;
-  success: boolean;
-  errorMessage?: string;
-  whatsappResponse?: any;
-}
+// ✅ Using SSOT WhatsAppNotificationResult from models/notification.ts
 
 @Injectable({
   providedIn: 'root'
@@ -117,7 +108,7 @@ export class ImportWhatsAppNotificationsService {
     status: 'in_progress' | 'completed' | 'delayed',
     importStatus: IntegratedImportStatus,
     clientData?: Partial<Client>
-  ): Observable<NotificationResult> {
+  ): Observable<WhatsAppNotificationResult> {
     
     console.log(`📱 Enviando notificación de milestone ${milestone} (${status}) para cliente ${clientId}`);
 
@@ -154,7 +145,7 @@ export class ImportWhatsAppNotificationsService {
         )
       ),
       map((whatsappResponse: any) => {
-        const result: NotificationResult = {
+        const result: WhatsAppNotificationResult = {
           messageId: whatsappResponse.messages?.[0]?.id || 'unknown',
           clientId,
           phoneNumber: clientData?.phone || 'unknown',
@@ -174,7 +165,7 @@ export class ImportWhatsAppNotificationsService {
       catchError(error => {
         console.error(`❌ Error enviando notificación de milestone:`, error);
         
-        const result: NotificationResult = {
+        const result: WhatsAppNotificationResult = {
           messageId: 'failed',
           clientId,
           phoneNumber: clientData?.phone || 'unknown',
@@ -199,7 +190,7 @@ export class ImportWhatsAppNotificationsService {
     deliveryOrderId: string,
     updateType: 'order_created' | 'status_changed' | 'delay_alert' | 'ready_for_pickup',
     metadata?: any
-  ): Observable<NotificationResult> {
+  ): Observable<WhatsAppNotificationResult> {
     
     console.log(`📦 Enviando notificación de delivery ${updateType} para cliente ${clientId}`);
 
@@ -249,7 +240,7 @@ export class ImportWhatsAppNotificationsService {
         )
       ),
       map((whatsappResponse: any) => {
-        const result: NotificationResult = {
+        const result: WhatsAppNotificationResult = {
           messageId: whatsappResponse.messages?.[0]?.id || 'unknown',
           clientId,
           phoneNumber: metadata?.clientPhone || 'unknown',
@@ -321,9 +312,9 @@ export class ImportWhatsAppNotificationsService {
   getNotificationHistory(
     clientId: string, 
     limit = 50
-  ): Observable<NotificationResult[]> {
+  ): Observable<WhatsAppNotificationResult[]> {
     
-    return this.http.get<NotificationResult[]>(
+    return this.http.get<WhatsAppNotificationResult[]>(
       `${this.baseUrl}/v1/clients/${clientId}/import-notifications`,
       { params: { limit: limit.toString() } }
     ).pipe(
@@ -338,7 +329,7 @@ export class ImportWhatsAppNotificationsService {
     milestone: keyof ImportStatus,
     clientIds: string[],
     status: 'in_progress' | 'completed' | 'delayed'
-  ): Observable<NotificationResult[]> {
+  ): Observable<WhatsAppNotificationResult[]> {
     
     console.log(`📢 Enviando notificaciones masivas de ${milestone} (${status}) a ${clientIds.length} clientes`);
 
@@ -347,7 +338,7 @@ export class ImportWhatsAppNotificationsService {
     );
 
     return forkJoin(notificationPromises).pipe(
-      map(results => results.filter(r => r !== null) as NotificationResult[]),
+      map(results => results.filter(r => r !== null) as WhatsAppNotificationResult[]),
       tap(results => {
         const successful = results.filter(r => r.success).length;
         const failed = results.length - successful;
@@ -494,7 +485,7 @@ export class ImportWhatsAppNotificationsService {
     return messages[updateType as keyof typeof messages] || 'Tu entrega ha sido actualizada.';
   }
 
-  private logNotificationSent(result: NotificationResult): Observable<void> {
+  private logNotificationSent(result: WhatsAppNotificationResult): Observable<void> {
     return this.http.post<void>(
       `${this.baseUrl}/v1/import-notifications/log`,
       result

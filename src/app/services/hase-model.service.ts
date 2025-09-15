@@ -11,7 +11,7 @@ import { AVIService } from './avi.service';
 import { VoiceValidationService } from './voice-validation.service';
 
 // Types
-import { AVIScore, AVIResponse } from '../models/types';
+import { AVIScore, AVIResponse } from '../models/avi';
 
 // ===== HASE MODEL INTERFACES =====
 export interface HASEComponents {

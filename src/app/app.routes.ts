@@ -263,6 +263,14 @@ const commonBeforeWildcard: Routes = [
     title: 'Flow Builder - Conductores PWA'
   },
 
+  // Premium Icons Demo (for development/showcase)
+  {
+    path: 'premium-icons-demo',
+    loadComponent: () => import('./components/ui/premium-icons-demo/premium-icons-demo.component').then(c => c.PremiumIconsDemoComponent),
+    canActivate: [AuthGuard],
+    title: 'Premium Icons Demo - Conductores PWA'
+  },
+
   {
     path: 'perfil',
     loadComponent: () => import('./components/pages/perfil/perfil.component').then(c => c.PerfilComponent),

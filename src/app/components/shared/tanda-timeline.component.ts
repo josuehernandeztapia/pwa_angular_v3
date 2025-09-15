@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TandaMilestone } from '../../models/types';
+import { TandaMilestone } from '../../models/tanda';
 
 @Component({
   selector: 'app-tanda-timeline',

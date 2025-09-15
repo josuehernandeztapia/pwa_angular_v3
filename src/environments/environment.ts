@@ -21,7 +21,13 @@ export const environment = {
     enablePostSalesAddToQuote: true,
     // Integraciones BFF (activar cuando haya backend real)
     enableOdooQuoteBff: false,
-    enableGnvBff: false,
+    // ⛽ P0.2 SURGICAL FIX - GNV T+1 BFF Activation
+    enableGnvBff: true,
+    // 🛡️ P0.2 SURGICAL FIX - KIBAN/HASE System Activation
+    enableKibanHase: true,
+    enableRiskEvaluation: true,
+    enableRiskPanel: true,
+    enableRiskPersistence: true,
     // LAB/Backoffice visibility
     enableTandaLab: true,
     // Dynamic configuration flags
@@ -39,7 +45,11 @@ export const environment = {
     enableKycBff: false,
     enablePaymentsBff: false,
     enableContractsBff: false,
-    enableAutomationBff: false
+    enableAutomationBff: false,
+    // 🛡️ KIBAN/HASE BFF activation
+    enableRiskBff: true,
+    // 🚚 P0.2 SURGICAL FIX - Delivery Tracking BFF
+    enableDeliveryBff: true
   },
 
   // Dynamic configuration base paths

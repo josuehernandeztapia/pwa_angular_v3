@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Market } from '../models/types';
 import { environment } from '../../environments/environment';
 import { FinancialCalculatorService } from './financial-calculator.service';
+import { TandaGroupBase, TandaGroupDelivery } from '../models/tanda';
 
 export type TandaEventType = 'rescue' | 'change_price' | 'freeze' | 'unfreeze';
 
@@ -11,9 +12,8 @@ export interface TandaEvent {
   payload?: any;
 }
 
-export interface TandaGroupInput {
-  totalMembers: number;
-  monthlyAmount: number;
+// Using SSOT TandaGroupBase for input - mapping simple input to full structure
+export interface TandaGroupInput extends Pick<TandaGroupBase, 'totalMembers' | 'monthlyAmount'> {
   startDate?: Date;
 }
 
@@ -237,7 +237,7 @@ export class EnhancedTandaSimulationService {
    * Allows pre-applying changes to the schedule (e.g., transfer) just for preview.
    */
   simulateWhatIfFromSchedule(
-    tanda: import('./tanda-delivery.service').TandaGroup,
+    tanda: TandaGroupDelivery,
     market: Market,
     opts?: { targetIrrAnnual?: number; horizonMonths?: number; preApply?: { transfer?: { toMemberId: string; month?: number } } }
   ): TandaScenarioResult {
@@ -246,17 +246,17 @@ export class EnhancedTandaSimulationService {
     const horizon = Math.max(1, Math.floor(opts?.horizonMonths || tanda.totalMembers));
 
     // Clone schedule
-    const schedule = (tanda.deliverySchedule || []).map(s => ({ ...s }));
+    const schedule = (tanda.deliverySchedule || []).map((s: any) => ({ ...s }));
     // Pre-apply simple transfer: move a member to the next month or given month
     const toMemberId = opts?.preApply?.transfer?.toMemberId;
     if (toMemberId) {
-      const targetMonth = opts?.preApply?.transfer?.month ?? (tanda.currentMonth + 1);
-      const entry = schedule.find(s => s.memberId === toMemberId);
+      const targetMonth = opts?.preApply?.transfer?.month ?? ((tanda.currentMonth || 0) + 1);
+      const entry = schedule.find((s: any) => s.memberId === toMemberId);
       if (entry) {
         entry.month = targetMonth;
         entry.deliveryStatus = 'ready';
       }
-      schedule.sort((a, b) => a.month - b.month);
+      schedule.sort((a: any, b: any) => a.month - b.month);
     }
 
     // Build cash flows: contributions positive each month; deliveries negative when scheduled
@@ -275,17 +275,17 @@ export class EnhancedTandaSimulationService {
       activeShareAccum += activeCount / members;
 
       // deliveries scheduled at month t
-      const deliveries = schedule.filter(s => s.month === t);
+      const deliveries = schedule.filter((s: any) => s.month === t);
       if (deliveries.length > 0) {
         awards += deliveries.length;
         if (firstAwardT === undefined) firstAwardT = t;
         lastAwardT = t;
         // assume one unit per month (or multiple if present) at totalAmount each
-        flows[t] -= (tanda.totalAmount * deliveries.length);
+        flows[t] -= ((tanda.totalAmount || 0) * deliveries.length);
       }
 
       // deficit if any delivery this month and contributions < required (very rough proxy)
-      if (deliveries.length > 0 && (activeCount * monthly) < tanda.totalAmount) deficits++;
+      if (deliveries.length > 0 && (activeCount * monthly) < (tanda.totalAmount || 0)) deficits++;
     }
 
     const irrMonthly = this.fin.calculateTIR(flows);

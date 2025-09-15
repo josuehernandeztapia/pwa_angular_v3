@@ -36,6 +36,31 @@ export interface ProtectionScenario {
     termChange: number;
     totalCostChange: number;
   };
+  // Legacy compatibility fields for migration
+  id?: string;
+  title?: string;
+  newPayment?: number;
+  newTerm?: number;
+  totalCost?: number;
+  savings?: number;
+  eligible?: boolean;
+  details?: string[];
+  newMonthlyPayment?: number;
+  termChange?: number;
+  cashFlows?: number[];
+  capitalizedInterest?: number;
+  principalBalance?: number;
+}
+
+// UI-specific extension for components that need presentational data
+export interface ProtectionScenarioUI extends ProtectionScenario {
+  monthlyPaymentBefore?: number;
+  monthlyPaymentAfter?: number;
+  benefits?: string[];
+  drawbacks?: string[];
+  recommended?: boolean;
+  displayTitle?: string;
+  displayDescription?: string;
 }
 
 export interface ProtectionUsageCounters {

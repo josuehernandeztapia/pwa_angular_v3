@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TandaGroupInput, TandaSimConfig, TandaSimulationResult, TandaMonthState, TandaAward, TandaRiskBadge } from '../models/types';
+import { TandaGroupSim, TandaMemberSim, TandaSimConfig, TandaSimulationResult, TandaMonthState, TandaAward, TandaRiskBadge } from '../models/tanda';
 import { FinancialCalculatorService } from './financial-calculator.service';
 
 @Injectable({
@@ -10,10 +10,10 @@ export class TandaEngineService {
   constructor(private financialCalc: FinancialCalculatorService) { }
 
   // Core Tanda simulation algorithm - exact port from React
-  async simulateTanda(groupInput: TandaGroupInput, config: TandaSimConfig): Promise<TandaSimulationResult> {
+  async simulateTanda(groupInput: TandaGroupSim, config: TandaSimConfig): Promise<TandaSimulationResult> {
     let savings = 0;
     const debtSet = new Map<string, number>(); // memberId -> monthly payment (MDS)
-    const queue = [...groupInput.members].filter(m => m.status === 'active').sort((a, b) => a.prio - b.prio);
+    const queue = [...groupInput.members].filter(m => m.status === 'active').sort((a, b) => (a.prio || 0) - (b.prio || 0));
     const months: TandaMonthState[] = [];
     const awards: TandaAward[] = [];
     const awardsByMember: Record<string, TandaAward> = {};
@@ -111,7 +111,7 @@ export class TandaEngineService {
 
   // Enhanced simulation with delta scenarios - for Senior-first UX
   async simulateWithDelta(
-    originalGroup: TandaGroupInput, 
+    originalGroup: TandaGroupSim, 
     config: TandaSimConfig, 
     deltaAmount: number = 500
   ): Promise<{ original: TandaSimulationResult; withDelta: TandaSimulationResult }> {
@@ -119,7 +119,7 @@ export class TandaEngineService {
     const original = await this.simulateTanda(originalGroup, config);
     
     // Create modified group with delta amount added to each member's contribution
-    const modifiedGroup: TandaGroupInput = {
+    const modifiedGroup: TandaGroupSim = {
       ...originalGroup,
       members: originalGroup.members.map(member => ({
         ...member,
@@ -134,17 +134,23 @@ export class TandaEngineService {
   }
 
   // Generate baseline tanda configuration for simulation
-  generateBaselineTanda(memberCount: number, unitPrice: number, memberContribution: number): TandaGroupInput {
-    const members = Array.from({ length: memberCount }, (_, i) => ({
+  generateBaselineTanda(memberCount: number, unitPrice: number, memberContribution: number): TandaGroupSim {
+    const members: TandaMemberSim[] = Array.from({ length: memberCount }, (_, i) => ({
       id: `member-${i + 1}`,
+      clientId: `member-${i + 1}`,
       name: `Miembro ${i + 1}`,
-      prio: i + 1,
       status: 'active' as const,
+      monthlyContribution: memberContribution,
+      prio: i + 1,
       C: memberContribution
     }));
 
     return {
+      id: `tanda-sim-${memberCount}-${Date.now()}`,
       name: `Tanda ${memberCount} Miembros`,
+      status: 'active' as const,
+      capacity: memberCount,
+      totalMembers: memberCount,
       members,
       product: {
         price: unitPrice,

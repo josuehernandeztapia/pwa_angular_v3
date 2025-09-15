@@ -1,8 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { 
+  WebhookRetryService, 
+  WEBHOOK_PROVIDER_CONFIGS, 
+  WebhookDeadLetterQueue 
+} from '../utils/webhook-retry.utils';
 
 declare global {
   interface Window { Conekta?: any }
@@ -107,6 +112,8 @@ export class ConektaPaymentService {
   }
   
   private isLoaded = false;
+  private webhookRetryService = new WebhookRetryService();
+  private deadLetterQueue = WebhookDeadLetterQueue.getInstance();
 
   constructor(private http: HttpClient) {
     // Defer initialization to allow tests to set environment first
@@ -198,10 +205,17 @@ export class ConektaPaymentService {
       metadata: paymentData.metadata || {}
     };
 
-    return this.http.post<PaymentResponse>(url, orderData)
-      .pipe(
-        catchError(this.handleError)
-      );
+    return WebhookRetryService.withExponentialBackoff(
+      this.http.post<PaymentResponse>(url, orderData),
+      WEBHOOK_PROVIDER_CONFIGS['CONEKTA']
+    ).pipe(
+      catchError((error) => {
+        this.webhookRetryService.recordFailure('CONEKTA_ORDER');
+        this.deadLetterQueue.addFailedWebhook('CONEKTA_ORDER', orderData, error, WEBHOOK_PROVIDER_CONFIGS['CONEKTA'].maxAttempts || 4);
+        return this.handleError(error);
+      }),
+      tap(() => this.webhookRetryService.recordSuccess('CONEKTA_ORDER'))
+    );
   }
 
   // Create payment link for cash payments (OXXO, etc.)
@@ -231,10 +245,17 @@ export class ConektaPaymentService {
       allowed_payment_methods: ['cash', 'card', 'bank_transfer']
     };
 
-    return this.http.post<PaymentResponse>(url, checkoutData)
-      .pipe(
-        catchError(this.handleError)
-      );
+    return WebhookRetryService.withExponentialBackoff(
+      this.http.post<PaymentResponse>(url, checkoutData),
+      WEBHOOK_PROVIDER_CONFIGS['CONEKTA']
+    ).pipe(
+      catchError((error) => {
+        this.webhookRetryService.recordFailure('CONEKTA_CHECKOUT');
+        this.deadLetterQueue.addFailedWebhook('CONEKTA_CHECKOUT', checkoutData, error, WEBHOOK_PROVIDER_CONFIGS['CONEKTA'].maxAttempts || 4);
+        return this.handleError(error);
+      }),
+      tap(() => this.webhookRetryService.recordSuccess('CONEKTA_CHECKOUT'))
+    );
   }
 
   // Customer Management

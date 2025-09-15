@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { DataService, PaginatedResult } from './data.service';
-import { Client, BusinessFlow, CompleteBusinessScenario } from '../models/types';
+import { Client, BusinessFlow } from '../models/types';
+import { CompleteBusinessScenario } from '../models/business';
 
 describe('DataService', () => {
   let service: DataService;

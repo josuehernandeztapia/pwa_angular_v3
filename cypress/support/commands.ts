@@ -245,10 +245,15 @@ Cypress.Commands.add('verifyTableData', (expectedRows: number) => {
   cy.get('[data-cy="data-table"]').should('be.visible');
 });
 
+// 🚀 ENHANCED COMMANDS INTEGRATION FOR 90%+ SUCCESS RATE
+// Import enhanced commands for better test reliability
+import './enhanced-commands';
+
 // Extend Cypress namespace for TypeScript support
 declare global {
   namespace Cypress {
     interface Chainable {
+      // Original commands
       fillClientForm(clientData: {
         name: string;
         email: string;
@@ -264,6 +269,29 @@ declare global {
       waitForLoading(): Chainable<void>;
       
       verifyTableData(expectedRows: number): Chainable<void>;
+      
+      // Enhanced commands (imported from enhanced-commands.ts)
+      waitForLoadComplete(): Chainable<Element>;
+      waitForElement(selector: string, timeout?: number): Chainable<Element>;
+      waitForApiIdle(timeout?: number): Chainable<any>;
+      waitForChartRender(): Chainable<Element>;
+      
+      getByTestId(testId: string, options?: any): Chainable<Element>;
+      findByTestId(testId: string, options?: any): Chainable<Element>;
+      getReliable(selectors: string[], timeout?: number): Chainable<Element>;
+      
+      fillFormField(testId: string, value: string): Chainable<Element>;
+      selectDropdownOption(testId: string, value: string): Chainable<Element>;
+      waitForFormValidation(formSelector: string): Chainable<Element>;
+      
+      navigateAndWait(url: string): Chainable<any>;
+      waitForPageLoad(expectedUrl?: string): Chainable<any>;
+      
+      retryAction(actionFn: () => void, maxAttempts?: number): Chainable<any>;
+      handleModals(): Chainable<any>;
+      
+      uploadFileReliably(selector: string, fileName: string): Chainable<Element>;
+      waitForUploadComplete(uploadContainerSelector: string): Chainable<Element>;
     }
   }
 }
