@@ -1,8 +1,11 @@
 # ⚡ Performance Test Results
 
-Generated: 2025-09-03T15:46:20.951Z
+Generated: 2025-09-15T07:17:38.077Z
 
 ## 📊 Load Testing Results (k6)
+
+## 🔍 Lighthouse Performance Audit
+Results not available: Cannot read properties of undefined (reading 'displayValue')
 
 ## 📈 Recommendations
 

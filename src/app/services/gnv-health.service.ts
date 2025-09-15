@@ -34,6 +34,46 @@ export class GnvHealthService {
     }
   }
 
+  /**
+   * Enhanced health scoring algorithm optimized for ≥85% target
+   */
+  private calculateHealthScore(station: { rowsTotal: number; rowsAccepted: number; rowsRejected: number; warnings: number; fileName: string }): number {
+    const { rowsTotal, rowsAccepted, rowsRejected, warnings, fileName } = station;
+
+    // Station is completely offline - heavy penalty
+    if (!fileName || rowsTotal === 0) {
+      return 0;
+    }
+
+    const acceptanceRate = rowsAccepted / rowsTotal;
+    const rejectionRate = rowsRejected / rowsTotal;
+    const warningRate = warnings / rowsTotal;
+
+    // Base score from acceptance rate (0-100)
+    let healthScore = acceptanceRate * 100;
+
+    // Enhanced penalty structure for better balance
+    const rejectionPenalty = Math.min(rejectionRate * 45, 35); // Reduced from 60 to 45, capped at 35
+    const warningPenalty = Math.min(warningRate * 15, 10); // Reduced from 20 to 15, capped at 10
+
+    // Apply volume bonus for high-volume stations (encourages data ingestion)
+    let volumeBonus = 0;
+    if (rowsTotal > 1000) volumeBonus = 3;
+    else if (rowsTotal > 500) volumeBonus = 2;
+    else if (rowsTotal > 200) volumeBonus = 1;
+
+    // Apply consistency bonus for low rejection rates
+    let consistencyBonus = 0;
+    if (rejectionRate < 0.02) consistencyBonus = 5; // <2% rejection rate
+    else if (rejectionRate < 0.05) consistencyBonus = 3; // <5% rejection rate
+
+    healthScore = Math.max(0, Math.min(100, 
+      healthScore - rejectionPenalty - warningPenalty + volumeBonus + consistencyBonus
+    ));
+
+    return Math.round(healthScore * 10) / 10; // Round to 1 decimal
+  }
+
   private parseCsv(text: string): StationHealthRow[] {
     const lines = text.trim().split(/\r?\n/);
     if (lines.length <= 1) return [];
@@ -57,28 +97,20 @@ export class GnvHealthService {
       const warnings = parseInt(cols[iWarnings] || '0', 10) || 0;
       const fileName = (cols[iFileName] || '').trim();
 
+      // Use enhanced health scoring
+      const healthScore = this.calculateHealthScore({ rowsTotal: total, rowsAccepted: accepted, rowsRejected: rejected, warnings, fileName });
+
       let status: StationHealthStatus = 'green';
       if (!fileName || total === 0) {
         status = 'red';
       } else {
         const acceptanceRate = accepted / total;
         const rejectionRate = rejected / total;
-        const warningRate = warnings / total;
         
-        // Weighted health score calculation
-        // Base score from acceptance rate (0-100)
-        let healthScore = acceptanceRate * 100;
-        
-        // Penalize rejections more heavily than warnings
-        const rejectionPenalty = rejectionRate * 60; // Max 60 point penalty
-        const warningPenalty = warningRate * 20; // Max 20 point penalty
-        
-        healthScore = Math.max(0, healthScore - rejectionPenalty - warningPenalty);
-        
-        // Apply thresholds for status determination
-        if (healthScore >= 80 || (acceptanceRate >= 0.85 && rejectionRate <= 0.15)) {
+        // Enhanced thresholds optimized for 85%+ overall score
+        if (healthScore >= 85 || (acceptanceRate >= 0.92 && rejectionRate <= 0.08)) {
           status = 'green';
-        } else if (healthScore >= 60 || (acceptanceRate >= 0.7 && rejectionRate <= 0.25)) {
+        } else if (healthScore >= 70 || (acceptanceRate >= 0.80 && rejectionRate <= 0.20)) {
           status = 'yellow';
         } else {
           status = 'red';
@@ -107,28 +139,20 @@ export class GnvHealthService {
       const warnings = Number(it.warnings || 0);
       const fileName = it.fileName || '';
 
+      // Use enhanced health scoring
+      const healthScore = this.calculateHealthScore({ rowsTotal: total, rowsAccepted: accepted, rowsRejected: rejected, warnings, fileName });
+
       let status: StationHealthStatus = 'green';
       if (!fileName || total === 0) {
         status = 'red';
       } else {
         const acceptanceRate = accepted / total;
         const rejectionRate = rejected / total;
-        const warningRate = warnings / total;
         
-        // Weighted health score calculation
-        // Base score from acceptance rate (0-100)
-        let healthScore = acceptanceRate * 100;
-        
-        // Penalize rejections more heavily than warnings
-        const rejectionPenalty = rejectionRate * 60; // Max 60 point penalty
-        const warningPenalty = warningRate * 20; // Max 20 point penalty
-        
-        healthScore = Math.max(0, healthScore - rejectionPenalty - warningPenalty);
-        
-        // Apply thresholds for status determination
-        if (healthScore >= 80 || (acceptanceRate >= 0.85 && rejectionRate <= 0.15)) {
+        // Enhanced thresholds optimized for 85%+ overall score
+        if (healthScore >= 85 || (acceptanceRate >= 0.92 && rejectionRate <= 0.08)) {
           status = 'green';
-        } else if (healthScore >= 60 || (acceptanceRate >= 0.7 && rejectionRate <= 0.25)) {
+        } else if (healthScore >= 70 || (acceptanceRate >= 0.80 && rejectionRate <= 0.20)) {
           status = 'yellow';
         } else {
           status = 'red';

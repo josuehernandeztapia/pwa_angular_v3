@@ -110,6 +110,7 @@ import { environment } from '../../../../environments/environment';
                   <span class="label">n′</span>
                   <span class="value">{{ s.newTerm }} meses</span>
                 </div>
+                <!-- Always show TIR post value, regardless of scenario eligibility -->
                 <div class="row" title="Tasa interna de retorno posterior a la reestructura; debe cumplir con IRR mínima de políticas" data-cy="tip-irr" id="tir-post" data-testid="tir-post">
                   <span class="label">TIR post</span>
                   <span class="value">
@@ -117,12 +118,12 @@ import { environment } from '../../../../environments/environment';
                   </span>
                 </div>
 
-                <!-- Motivos de rechazo y sugerencias -->
-                <div class="rejection" *ngIf="!isScenarioEligible(s)" data-cy="rejection-box" data-testid="rejection-reason" title="Causas por las que el escenario no es elegible según políticas">
+                <!-- Always show rejection reasons when they apply, regardless of overall eligibility -->
+                <div class="rejection" *ngIf="hasRejectionReasons(s)" data-cy="rejection-box" data-testid="rejection-reason" title="Causas por las que el escenario no es elegible según políticas">
                   <div class="reason" *ngIf="!isTirOk(s)" title="La TIR posterior es menor a la mínima aceptada" data-testid="irr-rejection">Motivo: IRRpost < IRRmin</div>
                   <div class="reason" *ngIf="isBelowMinPayment(s)" title="El pago mensual reestructurado es inferior al mínimo permitido" data-testid="pmt-rejection">Motivo: PMT′ < PMTmin</div>
-                  <div class="suggestion" *ngIf="s.type==='step-down'" data-testid="step-down-suggestion">Sugerencia: reducir α a 20% y recalcular</div>
-                  <div class="suggestion" *ngIf="s.type==='defer'" data-testid="defer-suggestion">Sugerencia: limitar diferimiento a 3 meses</div>
+                  <div class="suggestion" *ngIf="s.type==='step-down' && !isScenarioEligible(s)" data-testid="step-down-suggestion">Sugerencia: reducir α a 20% y recalcular</div>
+                  <div class="suggestion" *ngIf="s.type==='defer' && !isScenarioEligible(s)" data-testid="defer-suggestion">Sugerencia: limitar diferimiento a 3 meses</div>
                 </div>
 
                 <!-- Detalles -->
@@ -326,6 +327,9 @@ export class ProteccionComponent {
   // Template helpers to avoid type assertions in bindings
   isTirOk(s: any): boolean { return !!(s && (s as any).tirOK); }
   getIrrPct(s: any): number { return Math.max(0, Number((s && (s as any).irr) || 0) * 100); }
+  hasRejectionReasons(s: any): boolean { 
+    return !this.isTirOk(s) || this.isBelowMinPayment(s);
+  }
 
   formatCurrency(v: number): string { return this.financialCalc.formatCurrency(v); }
 }

@@ -14,13 +14,26 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Conductores PWA">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-192x192.png">
+  <!-- Critical Resource Preloading for Performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://api.conductores-pwa.com" crossorigin>
   <link rel="dns-prefetch" href="https://api.conductores-pwa.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  
+  <!-- Critical Above-the-fold CSS inline -->
+  <style>
+    body{margin:0;font-family:Inter,sans-serif;background:#f8fafc}
+    app-root{display:block;min-height:100vh}
+    .loading{display:flex;align-items:center;justify-content:center;min-height:100vh;font-size:18px;color:#64748b}
+  </style>
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <div class="loading">
+      <div>⚡ Cargando Conductores PWA...</div>
+    </div>
+  </app-root>
 </body>
 </html>

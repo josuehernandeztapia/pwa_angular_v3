@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PaymentsService } from './payments.service';
 
@@ -17,6 +17,18 @@ export class PaymentsController {
   @ApiOperation({ summary: 'Create checkout session (stub)' })
   createCheckout(@Body() body: any) {
     return this.payments.createCheckout(body);
+  }
+
+  @Get('webhook-stats')
+  @ApiOperation({ summary: 'Get webhook retry statistics' })
+  getWebhookStatistics() {
+    return this.payments.getWebhookStatistics();
+  }
+
+  @Get('dead-letter-queue')
+  @ApiOperation({ summary: 'Get dead letter queue for debugging' })
+  getDeadLetterQueue() {
+    return this.payments.getDeadLetterQueue();
   }
 }
 
