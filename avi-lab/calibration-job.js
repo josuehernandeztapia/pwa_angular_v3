@@ -57,10 +57,10 @@ class AviRealCalibrationJob {
       console.log(`   Found ${evaluations.length} recent evaluations`);
 
       // Filter for complete evaluations with ground truth
-      const validSamples = evaluations.filter(eval => 
-        eval.audioData && 
-        eval.groundTruth && 
-        eval.humanVerified === true
+      const validSamples = evaluations.filter(evaluation => 
+        evaluation.audioData && 
+        evaluation.groundTruth && 
+        evaluation.humanVerified === true
       );
 
       console.log(`   Valid samples with ground truth: ${validSamples.length}`);

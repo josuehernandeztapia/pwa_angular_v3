@@ -1,6 +1,7 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ManualEntryComponent, ManualEntryData } from '../shared/manual-entry/manual-entry.component';
 import { CasesService, CaseRecord } from '../../services/cases.service';
 import { environment } from '../../../environments/environment';
 import { PostSalesQuoteDraftService, PartSuggestion } from '../../services/post-sales-quote-draft.service';
@@ -26,7 +27,7 @@ interface StepState {
 @Component({
   selector: 'app-photo-wizard',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgOptimizedImage],
+  imports: [CommonModule, FormsModule, NgOptimizedImage, ManualEntryComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="wizard-container" *ngIf="enabled; else disabledTpl">
@@ -77,6 +78,9 @@ interface StepState {
                   <li *ngFor="let m of step.missing">Falta: {{ m | titlecase }}</li>
                 </ul>
                 <button class="btn retry" (click)="retake(step.id)">Tomar de nuevo {{ step.title }}</button>
+                <button class="btn manual" (click)="openManualEntry(step.id)" *ngIf="step.id === 'vin' || step.id === 'odometer'" data-testid="manual-entry-btn">
+                  📝 Ingresar manualmente
+                </button>
               </div>
             </div>
           </div>
@@ -142,6 +146,17 @@ interface StepState {
         <button class="btn primary" [disabled]="!caseId" (click)="next()" data-cy="wizard-next">{{ ctaText }}</button>
       </div>
     </div>
+    
+    <!-- P0.2 Surgical Fix - Manual Entry Modal -->
+    <app-manual-entry
+      *ngIf="showManualEntry && manualEntryType && (manualEntryType === 'vin' || manualEntryType === 'odometer')"
+      [documentType]="manualEntryType"
+      [fieldName]="manualEntryType === 'vin' ? 'VIN' : 'Kilometraje'"
+      (save)="onManualSave($event)"
+      (cancel)="onManualCancel()"
+      (retry)="onManualRetry()">
+    </app-manual-entry>
+    
     <ng-template #disabledTpl>
       <div class="wizard-container">
         <div class="banner warn">El Wizard de Postventa está desactivado. Actívalo con el flag environment.features.enablePostSalesWizard.</div>
@@ -217,6 +232,10 @@ export class PhotoWizardComponent {
   currentIndex = 0;
   caseId: string | null = null;
   private startTimeMs: number | null = null;
+
+  // P0.2 Surgical Fix - Manual Entry State
+  showManualEntry = false;
+  manualEntryType: StepId | null = null;
   private sentFirstRecommendation = false;
   private sentNeedInfo = false;
   showVinDetectionBanner = false;
@@ -273,6 +292,47 @@ export class PhotoWizardComponent {
     // Graceful fallback if example asset is missing
     const img = evt.target as HTMLImageElement;
     img.style.display = 'none';
+  }
+
+  // P0.2 Surgical Fix - Manual Entry Methods
+  openManualEntry(stepId: StepId) {
+    if (stepId === 'vin' || stepId === 'odometer') {
+      this.manualEntryType = stepId;
+      this.showManualEntry = true;
+    }
+  }
+
+  onManualSave(data: ManualEntryData) {
+    if (!this.manualEntryType) return;
+    
+    const step = this.find(this.manualEntryType);
+    if (step) {
+      // Mark step as complete with manual data
+      step.done = true;
+      step.confidence = 1.0; // Manual entry is always 100% confident
+      step.missing = [];
+      step.error = null;
+      
+      // Store manual entry value (you might want to save this to a service)
+      console.log(`Manual entry for ${this.manualEntryType}:`, data.userEnteredValue);
+    }
+    
+    this.showManualEntry = false;
+    this.manualEntryType = null;
+  }
+
+  onManualCancel() {
+    this.showManualEntry = false;
+    this.manualEntryType = null;
+  }
+
+  onManualRetry() {
+    // Close manual entry and retry OCR
+    this.showManualEntry = false;
+    if (this.manualEntryType) {
+      this.retake(this.manualEntryType);
+    }
+    this.manualEntryType = null;
   }
 
   next() {

@@ -2,7 +2,6 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { ApplicationConfig, ErrorHandler } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
-import { createWorker } from 'tesseract.js';
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
@@ -19,7 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     provideServiceWorker('ngsw-worker.js', {
       enabled: environment.production,
-      registrationStrategy: 'registerImmediately'
+      registrationStrategy: 'registerWhenStable:30000'
     }),
     {
       provide: HTTP_INTERCEPTORS,
@@ -40,7 +39,13 @@ export const appConfig: ApplicationConfig = {
     ,
     {
       provide: TESSERACT_CREATE_WORKER,
-      useValue: createWorker
+      useFactory: () => {
+        // Lazy load tesseract.js only when needed
+        return async (...args: any[]) => {
+          const { createWorker } = await import('tesseract.js');
+          return createWorker(...args);
+        };
+      }
     }
   ]
 };

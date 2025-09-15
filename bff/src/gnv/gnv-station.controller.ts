@@ -407,4 +407,61 @@ export class GnvStationController {
       );
     }
   }
+
+  @Get('stations/:stationId/data/t+1')
+  @ApiOperation({ 
+    summary: 'Get T+1 incremental station data',
+    description: 'Retrieve incremental/delta station data since last sync for efficient updates'
+  })
+  @ApiParam({ name: 'stationId', description: 'Station identifier' })
+  @ApiQuery({ name: 'lastSync', required: false, description: 'Last sync timestamp (ISO 8601)' })
+  @ApiQuery({ name: 'limit', required: false, description: 'Maximum number of records to return' })
+  @ApiResponse({ status: 200, description: 'T+1 incremental data retrieved successfully' })
+  async getT1IncrementalData(
+    @Param('stationId') stationId: string,
+    @Query('lastSync') lastSync?: string,
+    @Query('limit') limit?: string
+  ) {
+    try {
+      const lastSyncDate = lastSync ? new Date(lastSync) : new Date(Date.now() - 24 * 60 * 60 * 1000); // Default to 24h ago
+      const maxLimit = limit ? parseInt(limit, 10) : 1000; // Default limit of 1000 records
+      
+      const incrementalData = await this.gnvStationService.getIncrementalData(
+        stationId, 
+        lastSyncDate, 
+        maxLimit
+      );
+      
+      // Health score monitoring - trigger alert if below 85%
+      const currentHealth = await this.gnvStationService.getStationHealth(stationId);
+      const healthAlert = currentHealth && currentHealth.healthScore < 85;
+      
+      return {
+        success: true,
+        data: {
+          station_id: stationId,
+          records: incrementalData.records,
+          metrics: incrementalData.metrics,
+          health: {
+            current_score: currentHealth?.healthScore || 0,
+            alert_triggered: healthAlert,
+            meets_threshold: currentHealth?.healthScore >= 85
+          },
+          sync_info: {
+            last_sync: lastSync || null,
+            sync_timestamp: new Date().toISOString(),
+            next_recommended_sync: new Date(Date.now() + 60 * 60 * 1000).toISOString(), // 1h from now
+            record_count: incrementalData.records.length,
+            has_more_data: incrementalData.hasMore
+          }
+        },
+        timestamp: new Date().toISOString()
+      };
+    } catch (error) {
+      throw new HttpException(
+        `Failed to retrieve T+1 incremental data for station ${stationId}: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 }

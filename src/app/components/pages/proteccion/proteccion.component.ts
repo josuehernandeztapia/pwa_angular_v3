@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PdfExportService } from '../../../services/pdf-export.service';
@@ -102,13 +102,13 @@ import { environment } from '../../../../environments/environment';
                 </span>
               </div>
               <div class="scenario-body">
-                <div class="row" title="Nuevo pago mensual estimado después de aplicar la reestructura" data-cy="tip-pmt">
+                <div class="row" title="Nuevo pago mensual estimado después de aplicar la reestructura" data-cy="tip-pmt" data-testid="pmt-prime">
                   <span class="label">PMT′</span>
-                  <span class="value">{{ formatCurrency(s.newMonthlyPayment) }}</span>
+                  <span class="value">{{ formatCurrency(getNewMonthlyPayment(s)) }}</span>
                 </div>
-                <div class="row" title="Nuevo plazo en meses tras la reestructura" data-cy="tip-term">
+                <div class="row" title="Nuevo plazo en meses tras la reestructura" data-cy="tip-term" data-testid="n-prime">
                   <span class="label">n′</span>
-                  <span class="value">{{ s.newTerm }} meses</span>
+                  <span class="value">{{ getNewTerm(s) }} meses</span>
                 </div>
                 <!-- Always show TIR post value, regardless of scenario eligibility -->
                 <div class="row" title="Tasa interna de retorno posterior a la reestructura; debe cumplir con IRR mínima de políticas" data-cy="tip-irr" id="tir-post" data-testid="tir-post">
@@ -248,7 +248,7 @@ import { environment } from '../../../../environments/environment';
     }
   `]
 })
-export class ProteccionComponent {
+export class ProteccionComponent implements OnInit {
   highRiskClients = 12;
   mediumRiskClients = 28;
   lowRiskClients = 156;
@@ -260,7 +260,8 @@ export class ProteccionComponent {
     private financialCalc: FinancialCalculatorService,
     private protectionEngine: ProtectionEngineService,
     private pdfExportService: PdfExportService,
-    private toast: ToastService
+    private toast: ToastService,
+    private cdr: ChangeDetectorRef
   ) {
     this.contractForm = this.fb.group({
       currentBalance: [320000, [Validators.required, Validators.min(10000)]],
@@ -268,6 +269,13 @@ export class ProteccionComponent {
       remainingTerm: [36, [Validators.required, Validators.min(6)]],
       market: ['edomex', Validators.required]
     });
+  }
+
+  ngOnInit(): void {
+    // Initialize scenarios immediately to ensure DOM elements are always rendered
+    this.computeScenarios();
+    // Force change detection to ensure DOM is updated
+    this.cdr.markForCheck();
   }
 
   openTool(tool: string): void {
@@ -308,9 +316,26 @@ export class ProteccionComponent {
     const { currentBalance, originalPayment, remainingTerm, market } = this.contractForm.value as {
       currentBalance: number; originalPayment: number; remainingTerm: number; market: Market;
     };
-    this.scenarios = this.protectionEngine.generateProtectionScenarios(currentBalance, originalPayment, remainingTerm, market);
-    if (!this.scenarios || this.scenarios.length === 0) {
-      this.toast.info('No hay escenarios elegibles con los datos actuales');
+    
+    try {
+      this.scenarios = this.protectionEngine.generateProtectionScenarios(currentBalance, originalPayment, remainingTerm, market);
+      
+      // Ensure scenarios always exist to prevent DOM rendering issues
+      if (!this.scenarios) {
+        this.scenarios = [];
+      }
+      
+      // Force change detection to ensure DOM updates
+      this.cdr.markForCheck();
+      
+      if (this.scenarios.length === 0) {
+        this.toast.info('No hay escenarios elegibles con los datos actuales');
+      }
+    } catch (error) {
+      console.error('Error computing scenarios:', error);
+      this.scenarios = [];
+      this.cdr.markForCheck();
+      this.toast.error('Error al calcular escenarios de protección');
     }
   }
 
@@ -324,11 +349,30 @@ export class ProteccionComponent {
     return s.newMonthlyPayment < (orig * minPct);
   }
 
-  // Template helpers to avoid type assertions in bindings
-  isTirOk(s: any): boolean { return !!(s && (s as any).tirOK); }
-  getIrrPct(s: any): number { return Math.max(0, Number((s && (s as any).irr) || 0) * 100); }
+  // Template helpers with null safety to ensure DOM always renders
+  isTirOk(s: any): boolean { 
+    if (!s) return false;
+    return Boolean((s as any).tirOK);
+  }
+  
+  getIrrPct(s: any): number { 
+    if (!s) return 0;
+    const irr = Number((s as any).irr) || 0;
+    return Math.max(0, Math.min(999.99, irr * 100)); // Cap at reasonable max
+  }
+  
   hasRejectionReasons(s: any): boolean { 
+    if (!s) return false;
     return !this.isTirOk(s) || this.isBelowMinPayment(s);
+  }
+
+  // Safe getter methods for template bindings to prevent undefined errors
+  getNewMonthlyPayment(s: any): number {
+    return s?.newMonthlyPayment || 0;
+  }
+
+  getNewTerm(s: any): number {
+    return s?.newTerm || 0;
   }
 
   formatCurrency(v: number): string { return this.financialCalc.formatCurrency(v); }
