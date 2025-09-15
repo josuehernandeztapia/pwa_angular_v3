@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { SimuladorEngineService, SavingsScenario, CollectiveScenarioConfig } from './simulador-engine.service';
 import { TandaEngineService } from './tanda-engine.service';
+import { TandaMemberSim } from '../models/tanda';
 import { FinancialCalculatorService } from './financial-calculator.service';
 
 describe('SimuladorEngineService', () => {
@@ -22,7 +23,11 @@ describe('SimuladorEngineService', () => {
 
     // Set up default return values
     mockTandaEngine.generateBaselineTanda.and.returnValue({
+      id: 'test-group-1',
       name: 'Test Group',
+      status: 'active',
+      capacity: 10,
+      totalMembers: 0,
       members: [],
       product: { price: 800000, dpPct: 0.15, term: 60, rateAnnual: 0.299 },
       rules: { allocRule: 'debt_first', eligibility: { requireThisMonthPaid: true } },

@@ -304,7 +304,15 @@ describe('MockApiService', () => {
     });
 
     it('should add member to group with normal network delay', (done) => {
-      const member = { clientId: '1', name: 'Test Member', avatarUrl: '', status: 'active' as const, individualContribution: 0 };
+      const member = {
+        id: 'member-1',
+        clientId: '1',
+        name: 'Test Member',
+        avatarUrl: '',
+        status: 'active' as const,
+        individualContribution: 0,
+        monthlyContribution: 1500
+      };
       const updatedGroup = { ...mockCollectiveGroup };
       collectiveGroupDataSpy.addMemberToGroup.and.returnValue(of(updatedGroup));
 
