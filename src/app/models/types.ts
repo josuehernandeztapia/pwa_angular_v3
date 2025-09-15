@@ -4,6 +4,7 @@
 import { ImportStatus, ImportMilestoneStatus } from './postventa';
 import { CollectiveCreditGroup } from './tanda';
 import { AVICategory, QuestionType, AVIQuestionAnalytics, AVIQuestionEnhanced, AVIResponse, VoiceAnalysis, AVIScore, RedFlag } from './avi';
+import { Quote, ProductPackage, ProductComponent, CompleteBusinessScenario, ClientType, SimulatorMode } from './business';
 
 export enum BusinessFlow {
   VentaPlazo = 'Venta a Plazo',
@@ -164,25 +165,8 @@ export interface Ecosystem {
     lastModified?: Date;
 }
 
-export interface Quote {
-    totalPrice: number;
-    downPayment: number;
-    amountToFinance: number;
-    term: number;
-    monthlyPayment: number;
-    market: string;
-    clientType: string;
-    flow: BusinessFlow;
-    // Additional properties for API operations (optional for compatibility)
-    id?: string;
-    clientId?: string;
-    product?: any;
-    financialSummary?: any;
-    timeline?: any[];
-    createdAt?: Date;
-    expiresAt?: Date;
-    status?: string;
-}
+// Quote interface moved to models/business.ts for SSOT
+// Import from: import { Quote } from './business';
 
 export interface ProtectionPlan {
   type: 'Esencial' | 'Total';
@@ -333,47 +317,5 @@ export interface NavigationContext {
 // TANDA Simulator types moved to models/tanda.ts for SSOT
 // Import from: import { TandaMemberStatus, TandaMember, TandaProduct, TandaGroupSim, TandaEventType, TandaSimEvent, TandaSimConfig, TandaAward, TandaRiskBadge, TandaMonthState, TandaSimulationResult, TandaSimDraft } from '../models/tanda';
 
-// Additional types for cotizador
-export type ClientType = 'individual' | 'colectivo';
-export type SimulatorMode = 'acquisition' | 'savings';
-
-export interface ProductPackage {
-  name: string;
-  rate: number;
-  terms: number[];
-  minDownPaymentPercentage: number;
-  maxDownPaymentPercentage?: number;
-  defaultMembers?: number;
-  maxMembers?: number;
-  components: ProductComponent[];
-}
-
-export interface ProductComponent {
-  id: string;
-  name: string;
-  price: number;
-  isOptional: boolean;
-  isMultipliedByTerm?: boolean;
-}
-
-export interface CompleteBusinessScenario {
-  id: string;
-  clientName: string;
-  flow: BusinessFlow;
-  market: Market;
-  stage: 'COTIZACION' | 'SIMULACION' | 'ACTIVO' | 'PROTECCION';
-  
-  quote?: Quote;
-  amortizationTable?: any[];
-  savingsScenario?: any;
-  tandaSimulation?: any;
-  protectionScenarios?: any[];
-  
-  seniorSummary: {
-    title: string;
-    description: string[];
-    keyMetrics: Array<{ label: string; value: string; emoji: string }>;
-    timeline: Array<{ month: number; event: string; emoji: string }>;
-    whatsAppMessage: string;
-  };
-}
+// Business/Cotizador types moved to models/business.ts for SSOT
+// Import from: import { ClientType, SimulatorMode, ProductPackage, ProductComponent, CompleteBusinessScenario } from './business';
