@@ -409,4 +409,70 @@ export class PremiumIconsService {
       accessibilityLabel: 'Icono genérico'
     };
   }
+  
+  /**
+   * Generate CSS custom properties for icon theming
+   */
+  generateIconCSS(): string {
+    return `
+      :root {
+        /* Conductores Premium Icon Tokens */
+        --icon-stroke-width: 2px;
+        --icon-color-primary: #3AA6FF;
+        --icon-color-muted: #A8B3CF;
+        --icon-animation-speed: 0.2s;
+        --icon-shadow-glow: 0 0 12px;
+      }
+      
+      .premium-icon {
+        stroke-width: var(--icon-stroke-width);
+        transition: all var(--icon-animation-speed) ease-in-out;
+      }
+      
+      .premium-stroke-2\\.5 {
+        stroke-width: 2.5px;
+      }
+      
+      /* Premium Icon States */
+      .premium-icon-hover {
+        color: var(--icon-color-primary);
+        transform: scale(1.05);
+      }
+      
+      .premium-icon-active {
+        color: var(--icon-color-primary);
+        transform: scale(0.95);
+      }
+      
+      .premium-icon-disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      
+      .premium-icon-loading {
+        animation: spin 1s linear infinite;
+      }
+      
+      .premium-icon-success {
+        color: #22C55E;
+      }
+      
+      .premium-icon-error {
+        color: #EF4444;
+      }
+      
+      /* Product Icon Specific Styles */
+      .premium-icon-cotizador:hover {
+        animation: rotate 0.2s ease-in-out;
+      }
+      
+      .premium-icon-proteccion.premium-icon-rejected {
+        animation: pulse-red 0.5s infinite;
+      }
+      
+      .premium-icon-avi:hover {
+        animation: wave-pulse 1.5s infinite;
+      }
+    `;
+  }
 }
