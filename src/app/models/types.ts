@@ -1,7 +1,7 @@
 // Core Business Types for Conductores PWA
 // Ported from React PWA to ensure full compatibility
 
-import { ImportStatus, ImportMilestoneStatus } from './postventa';
+import { ImportStatus, ImportMilestoneStatus, DocumentFile, LegalDocuments, VehicleUnit } from './postventa';
 import { CollectiveCreditGroup } from './tanda';
 import { AVICategory, QuestionType, AVIQuestionAnalytics, AVIQuestionEnhanced, AVIResponse, VoiceAnalysis, AVIScore, RedFlag } from './avi';
 import { Quote, ProductPackage, ProductComponent, CompleteBusinessScenario, ClientType, SimulatorMode } from './business';
@@ -319,3 +319,45 @@ export interface NavigationContext {
 
 // Business/Cotizador types moved to models/business.ts for SSOT
 // Import from: import { ClientType, SimulatorMode, ProductPackage, ProductComponent, CompleteBusinessScenario } from './business';
+
+// Re-exported types for backward compatibility
+export {
+  DocumentFile,
+  LegalDocuments,
+  VehicleUnit,
+  ImportStatus,
+  ImportMilestoneStatus
+} from './postventa';
+
+export {
+  CollectiveCreditGroup
+} from './tanda';
+
+export {
+  CompleteBusinessScenario,
+  ClientType,
+  SimulatorMode,
+  ProductPackage,
+  ProductComponent,
+  Quote
+} from './business';
+
+export {
+  AVICategory,
+  QuestionType,
+  AVIQuestionAnalytics,
+  AVIQuestionEnhanced,
+  AVIResponse,
+  VoiceAnalysis,
+  AVIScore,
+  RedFlag
+} from './avi';
+
+export {
+  NotificationBase,
+  NotificationUI,
+  NotificationPayload,
+  NotificationHistory,
+  NotificationResult,
+  WhatsAppNotificationResult
+} from './notification';

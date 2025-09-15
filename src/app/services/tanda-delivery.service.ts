@@ -72,7 +72,8 @@ export class TandaDeliveryService {
           deliveryStatus: 'delivered',
           joinedAt: new Date('2024-01-01'),
           lastPayment: new Date('2024-03-01'),
-          paymentHistory: []
+          paymentHistory: [],
+          isActive: true
         },
         {
           id: 'member-002',
@@ -86,7 +87,8 @@ export class TandaDeliveryService {
           deliveryStatus: 'scheduled',
           joinedAt: new Date('2024-01-01'),
           lastPayment: new Date('2024-03-01'),
-          paymentHistory: []
+          paymentHistory: [],
+          isActive: true
         }
       ],
       deliverySchedule: [],
@@ -192,7 +194,9 @@ export class TandaDeliveryService {
         deliveryMonth: assignedPosition,
         deliveryStatus: 'pending',
         joinedAt: new Date(),
-        paymentHistory: []
+        lastPayment: new Date(),
+        paymentHistory: [],
+        isActive: true
       };
 
       tanda.members.push(newMember);
@@ -296,7 +300,7 @@ export class TandaDeliveryService {
           deliveryStatus: member.deliveryStatus || 'pending',
           contributedAmount: member.totalContributed || 0,
           remainingAmount: schedule.remainingAmount,
-          isMyTurn: tanda.currentMonth === (member.position || 1)
+          isMyTurn: (tanda.currentMonth || 1) === (member.position || 1)
         };
       })
     );
@@ -509,11 +513,24 @@ export class TandaDeliveryService {
         return;
       }
 
-      // Record vote
+      // Record vote (filter out abstain votes as they're not counted)
+      if (vote === 'abstain') {
+        observer.next({
+          success: true,
+          voteRecorded: true,
+          currentApprovals: consensus.votes.filter(v => v.vote === 'approve').length,
+          requiredApprovals: Math.ceil((tanda.members.length * 2) / 3),
+          consensusReached: false,
+          message: 'Tu abstención ha sido registrada'
+        });
+        observer.complete();
+        return;
+      }
+
       const consensusVote: ConsensusVote = {
         memberId,
         memberName: member.name,
-        vote,
+        vote: vote as 'approve' | 'reject',
         timestamp: new Date(),
         votedAt: new Date(),
         reason

@@ -23,16 +23,22 @@ export class CollectiveGroupDataService {
    */
   initializeCollectiveGroups(clients: Client[]): void {
     // Port exacto de createMembers function
-    const createMembers = (clientList: Client[]): CollectiveCreditMember[] => { 
-      return clientList.map(c => ({ 
-        clientId: c.id, 
-        name: c.name, 
-        avatarUrl: c.avatarUrl || `https://picsum.photos/seed/${c.id}/100/100`, 
-        status: 'active' as const, 
-        individualContribution: c.events
+    const createMembers = (clientList: Client[]): CollectiveCreditMember[] => {
+      return clientList.map(c => {
+        const individualContribution = c.events
           .filter(e => e.type === EventType.Contribution && e.details?.amount)
-          .reduce((sum, e) => sum + (e.details?.amount || 0), 0) 
-      })); 
+          .reduce((sum, e) => sum + (e.details?.amount || 0), 0);
+
+        return {
+          id: `member-${c.id}`,
+          clientId: c.id,
+          name: c.name,
+          avatarUrl: c.avatarUrl || `https://picsum.photos/seed/${c.id}/100/100`,
+          status: 'active' as const,
+          individualContribution,
+          monthlyContribution: Math.max(individualContribution / 12, 1200) // Minimum 1200 MXN/month
+        };
+      });
     };
 
     // Port exacto de group members creation
@@ -50,53 +56,61 @@ export class CollectiveGroupDataService {
 
     // Port exacto de initialCollectiveCreditGroups
     const initialCollectiveCreditGroups: CollectiveCreditGroup[] = [
-      { 
-        id: 'cc-2405', 
-        name: 'CC-2405 MAYO', 
-        capacity: 10, 
-        members: group1Members, 
-        totalUnits: 5, 
-        unitsDelivered: 0, 
-        savingsGoalPerUnit: 153075, 
-        currentSavingsProgress: group1Members.reduce((sum, m) => sum + m.individualContribution, 0), 
-        monthlyPaymentPerUnit: 25720.52, 
+      {
+        id: 'cc-2405',
+        name: 'CC-2405 MAYO',
+        capacity: 10,
+        members: group1Members,
+        totalUnits: 5,
+        unitsDelivered: 0,
+        savingsGoalPerUnit: 153075,
+        currentSavingsProgress: group1Members.reduce((sum, m) => sum + (m.individualContribution || 0), 0),
+        monthlyPaymentPerUnit: 25720.52,
         currentMonthPaymentProgress: 0,
+        status: 'active' as const,
+        totalMembers: group1Members.length
       },
-      { 
-        id: 'cc-2406', 
-        name: 'CC-2406 JUNIO', 
-        capacity: 10, 
-        members: group2Members, 
-        totalUnits: 5, 
-        unitsDelivered: 0, 
-        savingsGoalPerUnit: 153075, 
-        currentSavingsProgress: group2Members.reduce((sum, m) => sum + m.individualContribution, 0), 
-        monthlyPaymentPerUnit: 25720.52, 
+      {
+        id: 'cc-2406',
+        name: 'CC-2406 JUNIO',
+        capacity: 10,
+        members: group2Members,
+        totalUnits: 5,
+        unitsDelivered: 0,
+        savingsGoalPerUnit: 153075,
+        currentSavingsProgress: group2Members.reduce((sum, m) => sum + (m.individualContribution || 0), 0),
+        monthlyPaymentPerUnit: 25720.52,
         currentMonthPaymentProgress: 0,
+        status: 'active' as const,
+        totalMembers: group2Members.length
       },
-      { 
-        id: 'cc-2407', 
-        name: 'CC-2407 JULIO', 
-        capacity: 10, 
-        members: [], 
-        totalUnits: 5, 
-        unitsDelivered: 5, 
-        savingsGoalPerUnit: 153075, 
-        currentSavingsProgress: 0, 
-        monthlyPaymentPerUnit: 25720.52, 
+      {
+        id: 'cc-2407',
+        name: 'CC-2407 JULIO',
+        capacity: 10,
+        members: [],
+        totalUnits: 5,
+        unitsDelivered: 5,
+        savingsGoalPerUnit: 153075,
+        currentSavingsProgress: 0,
+        monthlyPaymentPerUnit: 25720.52,
         currentMonthPaymentProgress: 100000,
+        status: 'active' as const,
+        totalMembers: 0
       },
-      { 
-        id: 'cc-2408', 
-        name: 'CC-2408 AGOSTO', 
-        capacity: 10, 
-        members: group3Members, 
-        totalUnits: 5, 
-        unitsDelivered: 1, 
-        savingsGoalPerUnit: 153075, 
-        currentSavingsProgress: 45000, 
-        monthlyPaymentPerUnit: 25720.52, 
+      {
+        id: 'cc-2408',
+        name: 'CC-2408 AGOSTO',
+        capacity: 10,
+        members: group3Members,
+        totalUnits: 5,
+        unitsDelivered: 1,
+        savingsGoalPerUnit: 153075,
+        currentSavingsProgress: 45000,
+        monthlyPaymentPerUnit: 25720.52,
         currentMonthPaymentProgress: 18000,
+        status: 'active' as const,
+        totalMembers: group3Members.length
       },
     ];
 
@@ -115,15 +129,15 @@ export class CollectiveGroupDataService {
    * Port exacto de addDerivedGroupProperties desde React
    */
   private addDerivedGroupProperties(group: CollectiveCreditGroup): CollectiveCreditGroup {
-    const isSavingPhase = group.unitsDelivered < group.totalUnits;
-    const isPayingPhase = group.unitsDelivered > 0;
+    const isSavingPhase = (group.unitsDelivered ?? 0) < (group.totalUnits ?? 0);
+    const isPayingPhase = (group.unitsDelivered ?? 0) > 0;
 
     let phase: 'saving' | 'payment' | 'dual' | 'completed' = 'saving';
     if (isSavingPhase && isPayingPhase) {
         phase = 'dual';
     } else if (isPayingPhase && !isSavingPhase) {
         phase = 'payment';
-    } else if (group.unitsDelivered === group.totalUnits) {
+    } else if ((group.unitsDelivered ?? 0) === (group.totalUnits ?? 0)) {
         phase = 'payment';
     }
 
@@ -132,7 +146,7 @@ export class CollectiveGroupDataService {
         phase,
         savingsGoal: group.savingsGoalPerUnit,
         currentSavings: group.currentSavingsProgress,
-        monthlyPaymentGoal: group.monthlyPaymentPerUnit * group.unitsDelivered,
+        monthlyPaymentGoal: (group.monthlyPaymentPerUnit ?? 0) * (group.unitsDelivered ?? 0),
     };
   }
 
@@ -184,10 +198,10 @@ export class CollectiveGroupDataService {
     const updatedGroup = {
       ...group,
       members: updatedMembers,
-      currentSavingsProgress: updatedMembers.reduce((sum, m) => sum + m.individualContribution, 0)
+      currentSavingsProgress: updatedMembers.reduce((sum, m) => sum + (m.individualContribution || 0), 0)
     };
 
-    const finalGroup = this.addDerivedGroupProperties(updatedGroup);
+    const finalGroup = this.addDerivedGroupProperties(updatedGroup as CollectiveCreditGroup);
     this.collectiveCreditGroupsDB.set(groupId, finalGroup);
     this.groupsSubject.next(Array.from(this.collectiveCreditGroupsDB.values()));
 
@@ -207,10 +221,10 @@ export class CollectiveGroupDataService {
     const updatedGroup = {
       ...group,
       members: updatedMembers,
-      currentSavingsProgress: updatedMembers.reduce((sum, m) => sum + m.individualContribution, 0)
+      currentSavingsProgress: updatedMembers.reduce((sum, m) => sum + (m.individualContribution || 0), 0)
     };
 
-    const finalGroup = this.addDerivedGroupProperties(updatedGroup);
+    const finalGroup = this.addDerivedGroupProperties(updatedGroup as CollectiveCreditGroup);
     this.collectiveCreditGroupsDB.set(groupId, finalGroup);
     this.groupsSubject.next(Array.from(this.collectiveCreditGroupsDB.values()));
 
@@ -235,10 +249,10 @@ export class CollectiveGroupDataService {
     const updatedGroup = {
       ...group,
       members: updatedMembers,
-      currentSavingsProgress: updatedMembers.reduce((sum, m) => sum + m.individualContribution, 0)
+      currentSavingsProgress: updatedMembers.reduce((sum, m) => sum + (m.individualContribution || 0), 0)
     };
 
-    const finalGroup = this.addDerivedGroupProperties(updatedGroup);
+    const finalGroup = this.addDerivedGroupProperties(updatedGroup as CollectiveCreditGroup);
     this.collectiveCreditGroupsDB.set(groupId, finalGroup);
     this.groupsSubject.next(Array.from(this.collectiveCreditGroupsDB.values()));
 
@@ -254,18 +268,18 @@ export class CollectiveGroupDataService {
       return of(null).pipe(delay(200));
     }
 
-    if (group.unitsDelivered >= group.totalUnits) {
+    if ((group.unitsDelivered ?? 0) >= (group.totalUnits ?? 0)) {
       throw new Error(`Grupo ${group.name} ya ha recibido todas sus unidades`);
     }
 
     const updatedGroup = {
       ...group,
-      unitsDelivered: group.unitsDelivered + 1,
+      unitsDelivered: (group.unitsDelivered ?? 0) + 1,
       // Reset savings progress after delivery
-      currentSavingsProgress: Math.max(0, group.currentSavingsProgress - group.savingsGoalPerUnit)
+      currentSavingsProgress: Math.max(0, (group.currentSavingsProgress ?? 0) - (group.savingsGoalPerUnit ?? 0))
     };
 
-    const finalGroup = this.addDerivedGroupProperties(updatedGroup);
+    const finalGroup = this.addDerivedGroupProperties(updatedGroup as CollectiveCreditGroup);
     this.collectiveCreditGroupsDB.set(groupId, finalGroup);
     this.groupsSubject.next(Array.from(this.collectiveCreditGroupsDB.values()));
 
@@ -284,12 +298,12 @@ export class CollectiveGroupDataService {
     const updatedGroup = {
       ...group,
       currentMonthPaymentProgress: Math.min(
-        group.currentMonthPaymentProgress + amount,
-        group.monthlyPaymentPerUnit * group.unitsDelivered
+        (group.currentMonthPaymentProgress ?? 0) + amount,
+        (group.monthlyPaymentPerUnit ?? 0) * (group.unitsDelivered ?? 0)
       )
     };
 
-    const finalGroup = this.addDerivedGroupProperties(updatedGroup);
+    const finalGroup = this.addDerivedGroupProperties(updatedGroup as CollectiveCreditGroup);
     this.collectiveCreditGroupsDB.set(groupId, finalGroup);
     this.groupsSubject.next(Array.from(this.collectiveCreditGroupsDB.values()));
 
@@ -311,6 +325,8 @@ export class CollectiveGroupDataService {
       currentSavingsProgress: 0,
       monthlyPaymentPerUnit: groupData.monthlyPaymentPerUnit || 25720.52,
       currentMonthPaymentProgress: 0,
+      status: 'active' as const,
+      totalMembers: 0,
       ...groupData
     };
 
@@ -340,10 +356,10 @@ export class CollectiveGroupDataService {
     }, {} as Record<string, number>);
 
     const totalMembers = groups.reduce((sum, group) => sum + group.members.length, 0);
-    const totalUnitsDelivered = groups.reduce((sum, group) => sum + group.unitsDelivered, 0);
+    const totalUnitsDelivered = groups.reduce((sum, group) => sum + (group.unitsDelivered ?? 0), 0);
     
     const completionRates = groups.map(group => 
-      group.totalUnits > 0 ? (group.unitsDelivered / group.totalUnits) * 100 : 0
+      (group.totalUnits ?? 0) > 0 ? ((group.unitsDelivered ?? 0) / (group.totalUnits ?? 0)) * 100 : 0
     );
     const averageCompletion = completionRates.reduce((sum, rate) => sum + rate, 0) / completionRates.length;
 
@@ -369,10 +385,10 @@ export class CollectiveGroupDataService {
     // In real implementation, this would check payment history, priority, etc.
     const eligibleMembers = group.members.filter(member => 
       member.status === 'active' && 
-      member.individualContribution >= (group.savingsGoalPerUnit * 0.8) // 80% of goal
+      (member.individualContribution ?? 0) >= ((group.savingsGoalPerUnit ?? 0) * 0.8) // 80% of goal
     );
 
-    return of(eligibleMembers).pipe(delay(300));
+    return of(eligibleMembers as CollectiveCreditMember[]).pipe(delay(300));
   }
 
   /**
@@ -407,13 +423,13 @@ export class CollectiveGroupDataService {
     // Calculate various health factors
     const memberParticipation = (group.members.length / group.capacity) * 100;
     
-    const savingsProgress = group.savingsGoalPerUnit > 0 
-      ? (group.currentSavingsProgress / group.savingsGoalPerUnit) * 100 
+    const savingsProgress = (group.savingsGoalPerUnit ?? 0) > 0
+      ? ((group.currentSavingsProgress ?? 0) / (group.savingsGoalPerUnit ?? 0)) * 100
       : 0;
     
-    const expectedPayment = group.monthlyPaymentPerUnit * group.unitsDelivered;
+    const expectedPayment = (group.monthlyPaymentPerUnit ?? 0) * (group.unitsDelivered ?? 0);
     const paymentConsistency = expectedPayment > 0 
-      ? (group.currentMonthPaymentProgress / expectedPayment) * 100 
+      ? ((group.currentMonthPaymentProgress ?? 0) / expectedPayment) * 100 
       : 100;
 
     // Overall health score (weighted average)

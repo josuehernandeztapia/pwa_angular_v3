@@ -207,11 +207,11 @@ export class ConektaPaymentService {
 
     return WebhookRetryService.withExponentialBackoff(
       this.http.post<PaymentResponse>(url, orderData),
-      WEBHOOK_PROVIDER_CONFIGS.CONEKTA
+      WEBHOOK_PROVIDER_CONFIGS['CONEKTA']
     ).pipe(
       catchError((error) => {
         this.webhookRetryService.recordFailure('CONEKTA_ORDER');
-        this.deadLetterQueue.addFailedWebhook('CONEKTA_ORDER', orderData, error, WEBHOOK_PROVIDER_CONFIGS.CONEKTA.maxAttempts || 4);
+        this.deadLetterQueue.addFailedWebhook('CONEKTA_ORDER', orderData, error, WEBHOOK_PROVIDER_CONFIGS['CONEKTA'].maxAttempts || 4);
         return this.handleError(error);
       }),
       tap(() => this.webhookRetryService.recordSuccess('CONEKTA_ORDER'))
@@ -247,11 +247,11 @@ export class ConektaPaymentService {
 
     return WebhookRetryService.withExponentialBackoff(
       this.http.post<PaymentResponse>(url, checkoutData),
-      WEBHOOK_PROVIDER_CONFIGS.CONEKTA
+      WEBHOOK_PROVIDER_CONFIGS['CONEKTA']
     ).pipe(
       catchError((error) => {
         this.webhookRetryService.recordFailure('CONEKTA_CHECKOUT');
-        this.deadLetterQueue.addFailedWebhook('CONEKTA_CHECKOUT', checkoutData, error, WEBHOOK_PROVIDER_CONFIGS.CONEKTA.maxAttempts || 4);
+        this.deadLetterQueue.addFailedWebhook('CONEKTA_CHECKOUT', checkoutData, error, WEBHOOK_PROVIDER_CONFIGS['CONEKTA'].maxAttempts || 4);
         return this.handleError(error);
       }),
       tap(() => this.webhookRetryService.recordSuccess('CONEKTA_CHECKOUT'))

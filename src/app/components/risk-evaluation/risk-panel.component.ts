@@ -4,8 +4,9 @@
  */
 
 import { Component, Input, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf, NgFor, AsyncPipe, DecimalPipe } from '@angular/common';
 import { Subject, takeUntil, timer } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 
 import { PremiumIconsService } from '../../services/premium-icons.service';
 import { HumanMicrocopyService } from '../../services/human-microcopy.service';
@@ -80,7 +81,15 @@ export interface RiskEvaluation {
 @Component({
   selector: 'app-risk-panel',
   standalone: true,
-  imports: [CommonModule, PremiumIconComponent, HumanMessageComponent],
+  imports: [
+    CommonModule,
+    NgIf,
+    NgFor,
+    AsyncPipe,
+    DecimalPipe,
+    PremiumIconComponent,
+    HumanMessageComponent
+  ],
   template: `
     <div class="risk-panel" 
          [attr.data-testid]="'risk-panel'"
@@ -323,14 +332,14 @@ export interface RiskEvaluation {
             <div class="recommendation-item">
               <span class="label">Monto Máximo:</span>
               <span class="value currency">
-                ${{ (riskEvaluation()?.financialRecommendations.maxLoanAmount || 0) | number:'1.0-0' }}
+                {{ getFormattedMaxLoanAmount() }}
               </span>
             </div>
-            
+
             <div class="recommendation-item">
               <span class="label">Enganche Mínimo:</span>
               <span class="value currency">
-                ${{ (riskEvaluation()?.financialRecommendations.minDownPayment || 0) | number:'1.0-0' }}
+                {{ getFormattedMinDownPayment() }}
               </span>
             </div>
             
@@ -351,7 +360,7 @@ export interface RiskEvaluation {
             <div class="recommendation-item">
               <span class="label">Pago Mensual:</span>
               <span class="value currency">
-                ${{ (riskEvaluation()?.financialRecommendations.estimatedMonthlyPayment || 0) | number:'1.0-0' }}
+                {{ getFormattedEstimatedMonthlyPayment() }}
               </span>
             </div>
             
@@ -633,6 +642,35 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
   onRetryEvaluation() {
     // Emit retry event or call evaluation service again
     console.log('Retrying evaluation...');
+  }
+
+  // Financial helper methods for cleaner template
+  getMaxLoanAmount(): number {
+    return this.riskEvaluation()?.financialRecommendations?.maxLoanAmount || 0;
+  }
+
+  getMinDownPayment(): number {
+    return this.riskEvaluation()?.financialRecommendations?.minDownPayment || 0;
+  }
+
+  getEstimatedMonthlyPayment(): number {
+    return this.riskEvaluation()?.financialRecommendations?.estimatedMonthlyPayment || 0;
+  }
+
+  // Formatted methods to avoid template parsing issues with complex expressions
+  getFormattedMaxLoanAmount(): string {
+    const amount = this.getMaxLoanAmount();
+    return `$${amount.toLocaleString('es-MX', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  }
+
+  getFormattedMinDownPayment(): string {
+    const amount = this.getMinDownPayment();
+    return `$${amount.toLocaleString('es-MX', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  }
+
+  getFormattedEstimatedMonthlyPayment(): string {
+    const amount = this.getEstimatedMonthlyPayment();
+    return `$${amount.toLocaleString('es-MX', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   }
 
   // Personalization data for human messages

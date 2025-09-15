@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TandaGroupSim, TandaSimConfig, TandaSimulationResult, TandaMonthState, TandaAward, TandaRiskBadge } from '../models/tanda';
+import { TandaGroupSim, TandaMemberSim, TandaSimConfig, TandaSimulationResult, TandaMonthState, TandaAward, TandaRiskBadge } from '../models/tanda';
 import { FinancialCalculatorService } from './financial-calculator.service';
 
 @Injectable({
@@ -135,7 +135,7 @@ export class TandaEngineService {
 
   // Generate baseline tanda configuration for simulation
   generateBaselineTanda(memberCount: number, unitPrice: number, memberContribution: number): TandaGroupSim {
-    const members = Array.from({ length: memberCount }, (_, i) => ({
+    const members: TandaMemberSim[] = Array.from({ length: memberCount }, (_, i) => ({
       id: `member-${i + 1}`,
       clientId: `member-${i + 1}`,
       name: `Miembro ${i + 1}`,
