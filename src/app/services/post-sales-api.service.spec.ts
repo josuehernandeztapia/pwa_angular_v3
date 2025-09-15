@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
 import { PostSalesApiService } from './post-sales-api.service';
-import { VehicleDeliveredEvent, PostSalesRecord } from '../models/types';
+import { VehicleDeliveredEvent, PostSalesRecord } from '../models/postventa';
 
 describe('PostSalesApiService', () => {
   let service: PostSalesApiService;

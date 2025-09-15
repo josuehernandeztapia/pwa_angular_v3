@@ -76,9 +76,9 @@ describe('ProtectionEngineService', () => {
       service.simulateRestructure(baseClient, 3).subscribe(scenarios => {
         expect(Array.isArray(scenarios)).toBeTrue();
         expect(scenarios.length).toBeGreaterThan(0);
-        expect(scenarios.some(s => s.type === 'defer')).toBeTrue();
-        expect(scenarios.some(s => s.type === 'step-down')).toBeTrue();
-        expect(scenarios.some(s => s.type === 'recalendar')).toBeTrue();
+        expect(scenarios.some(s => s.type === 'DEFER')).toBeTrue();
+        expect(scenarios.some(s => s.type === 'STEPDOWN')).toBeTrue();
+        expect(scenarios.some(s => s.type === 'RECALENDAR')).toBeTrue();
         done();
       });
     });
@@ -95,7 +95,7 @@ describe('ProtectionEngineService', () => {
   describe('generateScenarioWithTIR', () => {
     it('should generate a valid defer scenario meeting TIR min', () => {
       const scenario = service.generateScenarioWithTIR(
-        'defer',
+        'DEFER',
         'Diferimiento',
         'Prueba defer',
         200000,
@@ -107,13 +107,13 @@ describe('ProtectionEngineService', () => {
         'edomex' as any
       );
       expect(scenario).toBeTruthy();
-      expect(scenario!.type).toBe('defer');
+      expect(scenario!.type).toBe('DEFER');
       expect((scenario as any).tirOK).toBeTrue();
     });
 
     it('should generate step-down scenario', () => {
       const scenario = service.generateScenarioWithTIR(
-        'step-down',
+        'STEPDOWN',
         'Reducción',
         'Prueba step-down',
         150000,
@@ -125,7 +125,7 @@ describe('ProtectionEngineService', () => {
         'edomex' as any
       );
       expect(scenario).toBeTruthy();
-      expect(scenario!.type).toBe('step-down');
+      expect(scenario!.type).toBe('STEPDOWN');
       expect((scenario as any).tirOK).toBeTrue();
     });
   });
@@ -143,12 +143,12 @@ describe('ProtectionEngineService', () => {
 
   describe('validateProtectionUsage', () => {
     it('should deny when limit reached', () => {
-      const res = service.validateProtectionUsage(1, 1, 'defer');
+      const res = service.validateProtectionUsage(1, 1, 'DEFER');
       expect(res.canUse).toBeFalse();
     });
 
     it('should allow when under limit', () => {
-      const res = service.validateProtectionUsage(3, 1, 'defer');
+      const res = service.validateProtectionUsage(3, 1, 'DEFER');
       expect(res.canUse).toBeTrue();
     });
   });
