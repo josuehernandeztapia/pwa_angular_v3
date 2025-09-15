@@ -4,6 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { SwPush } from '@angular/service-worker';
 import { of, throwError } from 'rxjs';
 import { PushNotificationService } from './push-notification.service';
+import { NotificationHistory, NotificationPayload } from '../models/notification';
 
 describe('PushNotificationService', () => {
   let service: PushNotificationService;
@@ -371,9 +372,12 @@ describe('PushNotificationService', () => {
     });
 
     it('should handle incoming notification message', () => {
-      const mockNotification = {
+      const mockNotification: NotificationPayload = {
+        id: 'test-notification-1',
         type: 'payment_due' as const,
         title: 'Payment Due',
+        message: 'Your payment is due soon',
+        timestamp: new Date().toISOString(),
         body: 'Your payment is due soon',
         data: { client_id: 'client123', amount: 1000 }
       };
@@ -395,9 +399,12 @@ describe('PushNotificationService', () => {
     });
 
     it('should show in-app notification when document is visible', () => {
-      const mockNotification = {
+      const mockNotification: NotificationPayload = {
+        id: 'test-notification-2',
         type: 'general' as const,
         title: 'Test',
+        message: 'Test body',
+        timestamp: new Date().toISOString(),
         body: 'Test body'
       };
 
@@ -494,14 +501,24 @@ describe('PushNotificationService', () => {
     it('should get unread notification count', (done) => {
       const notifications = [
         {
-          id: '1', user_id: 'user123', title: 'Test 1', body: 'Body 1',
-          type: 'general', sent_at: new Date().toISOString(),
-          delivered: true, clicked: false
+          id: '1',
+          userId: 'user123',
+          title: 'Test 1',
+          message: 'Body 1',
+          type: 'general',
+          timestamp: new Date().toISOString(),
+          delivered: true,
+          clicked: false
         },
         {
-          id: '2', user_id: 'user123', title: 'Test 2', body: 'Body 2',
-          type: 'general', sent_at: new Date().toISOString(),
-          delivered: true, clicked: true
+          id: '2',
+          userId: 'user123',
+          title: 'Test 2',
+          message: 'Body 2',
+          type: 'general',
+          timestamp: new Date().toISOString(),
+          delivered: true,
+          clicked: true
         }
       ];
 
@@ -516,14 +533,24 @@ describe('PushNotificationService', () => {
     it('should mark all notifications as read', () => {
       const notifications = [
         {
-          id: '1', user_id: 'user123', title: 'Test 1', body: 'Body 1',
-          type: 'general', sent_at: new Date().toISOString(),
-          delivered: true, clicked: false
+          id: '1',
+          userId: 'user123',
+          title: 'Test 1',
+          message: 'Body 1',
+          type: 'general',
+          timestamp: new Date().toISOString(),
+          delivered: true,
+          clicked: false
         },
         {
-          id: '2', user_id: 'user123', title: 'Test 2', body: 'Body 2',
-          type: 'general', sent_at: new Date().toISOString(),
-          delivered: true, clicked: false
+          id: '2',
+          userId: 'user123',
+          title: 'Test 2',
+          message: 'Body 2',
+          type: 'general',
+          timestamp: new Date().toISOString(),
+          delivered: true,
+          clicked: false
         }
       ];
 
@@ -539,9 +566,14 @@ describe('PushNotificationService', () => {
     it('should clear notification history', () => {
       const notifications = [
         {
-          id: '1', user_id: 'user123', title: 'Test', body: 'Body',
-          type: 'general', sent_at: new Date().toISOString(),
-          delivered: true, clicked: false
+          id: '1',
+          userId: 'user123',
+          title: 'Test',
+          message: 'Body',
+          type: 'general',
+          timestamp: new Date().toISOString(),
+          delivered: true,
+          clicked: false
         }
       ];
 
@@ -559,9 +591,14 @@ describe('PushNotificationService', () => {
     it('should load stored notifications on initialization', async () => {
       const notifications = [
         {
-          id: '1', user_id: 'user123', title: 'Test', body: 'Body',
-          type: 'general', sent_at: new Date().toISOString(),
-          delivered: true, clicked: false
+          id: '1',
+          userId: 'user123',
+          title: 'Test',
+          message: 'Body',
+          type: 'general',
+          timestamp: new Date().toISOString(),
+          delivered: true,
+          clicked: false
         }
       ];
 
@@ -619,11 +656,11 @@ describe('PushNotificationService', () => {
     it('should limit notification history to 50 items', () => {
       const existingNotifications = Array.from({ length: 49 }, (_, i) => ({
         id: `existing-${i}`,
-        user_id: 'user123',
+        userId: 'user123',
         title: `Test ${i}`,
-        body: `Body ${i}`,
+        message: `Body ${i}`,
         type: 'general',
-        sent_at: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
         delivered: true,
         clicked: false
       }));
@@ -632,11 +669,11 @@ describe('PushNotificationService', () => {
 
       const newNotification = {
         id: 'new-notification',
-        user_id: 'user123',
+        userId: 'user123',
         title: 'New Test',
-        body: 'New Body',
+        message: 'New Body',
         type: 'general',
-        sent_at: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
         delivered: true,
         clicked: false
       };
