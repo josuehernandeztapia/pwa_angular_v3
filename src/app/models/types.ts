@@ -145,7 +145,6 @@ export interface PaymentPlan {
 
 // VehicleUnit moved to models/postventa.ts for SSOT
 // Import from: import { VehicleUnit } from '../models/postventa';
-
 // ImportStatus moved to models/postventa.ts for SSOT
 // Import from: import { ImportStatus } from '../models/postventa';
 
