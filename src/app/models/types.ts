@@ -5,6 +5,7 @@ import { ImportStatus, ImportMilestoneStatus } from './postventa';
 import { CollectiveCreditGroup } from './tanda';
 import { AVICategory, QuestionType, AVIQuestionAnalytics, AVIQuestionEnhanced, AVIResponse, VoiceAnalysis, AVIScore, RedFlag } from './avi';
 import { Quote, ProductPackage, ProductComponent, CompleteBusinessScenario, ClientType, SimulatorMode } from './business';
+import { NotificationBase, NotificationUI, NotificationPayload, NotificationHistory, NotificationResult, WhatsAppNotificationResult } from './notification';
 
 export enum BusinessFlow {
   VentaPlazo = 'Venta a Plazo',

@@ -323,14 +323,14 @@ export interface RiskEvaluation {
             <div class="recommendation-item">
               <span class="label">Monto Máximo:</span>
               <span class="value currency">
-                ${{ riskEvaluation()?.financialRecommendations.maxLoanAmount | number:'1.0-0' }}
+                ${{ (riskEvaluation()?.financialRecommendations.maxLoanAmount || 0) | number:'1.0-0' }}
               </span>
             </div>
             
             <div class="recommendation-item">
               <span class="label">Enganche Mínimo:</span>
               <span class="value currency">
-                ${{ riskEvaluation()?.financialRecommendations.minDownPayment | number:'1.0-0' }}
+                ${{ (riskEvaluation()?.financialRecommendations.minDownPayment || 0) | number:'1.0-0' }}
               </span>
             </div>
             
@@ -351,7 +351,7 @@ export interface RiskEvaluation {
             <div class="recommendation-item">
               <span class="label">Pago Mensual:</span>
               <span class="value currency">
-                ${{ riskEvaluation()?.financialRecommendations.estimatedMonthlyPayment | number:'1.0-0' }}
+                ${{ (riskEvaluation()?.financialRecommendations.estimatedMonthlyPayment || 0) | number:'1.0-0' }}
               </span>
             </div>
             

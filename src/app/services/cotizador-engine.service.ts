@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
-import { BusinessFlow, Market, Quote } from '../models/types';
+import { BusinessFlow, Market } from '../models/types';
+import { Quote } from '../models/business';
 import { monthsToYearsCeil, round2, toAnnualFromMonthly } from '../utils/math.util';
 import { FinancialCalculatorService } from './financial-calculator.service';
 

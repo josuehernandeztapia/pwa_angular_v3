@@ -6,7 +6,7 @@ import { AVIService } from './avi.service';
 import { AVIDualEngineService } from './avi-dual-engine.service';
 import { AVICalibrationService } from './avi-calibration.service';
 import { AVITestDataGenerator, ValidationCase, ValidationBatch } from '../test-helpers/avi-test-data';
-import { AVIResponse, AVIScore } from '../models/types';
+import { AVIResponse, AVIScore } from '../models/avi';
 
 @Injectable({
   providedIn: 'root'

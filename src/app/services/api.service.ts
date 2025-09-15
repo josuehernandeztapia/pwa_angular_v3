@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { HttpClientService, ApiResponse } from './http-client.service';
-import { Client, BusinessFlow, Quote, Document, EventLog, DocumentStatus } from '../models/types';
+import { Client, BusinessFlow, Document, EventLog, DocumentStatus } from '../models/types';
+import { Quote } from '../models/business';
 import { environment } from '../../environments/environment';
 
 @Injectable({

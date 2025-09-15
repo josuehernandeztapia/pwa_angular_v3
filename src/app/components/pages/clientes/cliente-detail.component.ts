@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Client, EventLog, ImportStatus } from '../../../models/types';
+import { Client, EventLog } from '../../../models/types';
+import { ImportStatus } from '../../../models/postventa';
 import { AviVerificationModalComponent } from '../../shared/avi-verification-modal/avi-verification-modal.component';
 import { EventLogComponent } from '../../shared/event-log.component';
 import { ImportTrackerComponent } from '../../shared/import-tracker.component';

@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
-import { 
-  CollectiveCreditGroup,
-  CollectiveCreditMember,
-  Client,
-  EventType
-} from '../../models/types';
+import { Client, EventType } from '../../models/types';
+import { CollectiveCreditGroup, CollectiveCreditMember } from '../../models/tanda';
 
 @Injectable({
   providedIn: 'root'

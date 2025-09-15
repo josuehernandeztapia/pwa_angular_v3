@@ -1,7 +1,7 @@
 // AVI QUESTIONS - CATÁLOGO COMPLETO
 // 55 preguntas consolidadas con ponderación científica
 
-import { AVIQuestionEnhanced, AVICategory } from '../models/types';
+import { AVIQuestionEnhanced, AVICategory } from '../models/avi';
 
 // === SECCIÓN A: INFORMACIÓN BÁSICA ===
 export const AVI_BASIC_INFO: AVIQuestionEnhanced[] = [

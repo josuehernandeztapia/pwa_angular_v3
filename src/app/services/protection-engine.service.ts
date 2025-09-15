@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Client, EventType, Market, ProtectionScenario } from '../models/types';
+import { Client, EventType, Market } from '../models/types';
+import { ProtectionScenario, ProtectionType } from '../models/protection';
 import { round2 } from '../utils/math.util';
 import { FinancialCalculatorService } from './financial-calculator.service';
 
 // Port exacto de getBalance desde React simulationService.ts
 function getBalance(principal: number, monthlyPayment: number, monthlyRate: number, monthsPaid: number): number {
   if (monthlyRate === 0) return principal - (monthlyPayment * monthsPaid);
-  
+
   let balance = principal;
   for (let i = 0; i < monthsPaid; i++) {
     const interestPayment = balance * monthlyRate;
@@ -52,7 +53,7 @@ export class ProtectionEngineService {
     if (remainingTerm <= months) {
       return of([]).pipe(delay(100));
     }
-    
+
     const B_k = Math.max(0, getBalance(P, M, r, monthsPaid));
     const scenarios: ProtectionScenario[] = [];
 
@@ -60,14 +61,18 @@ export class ProtectionEngineService {
     const newRemainingTerm_A = remainingTerm - months;
     const newPayment_A = round2(Math.max(0, annuity(B_k, r, newRemainingTerm_A)));
     scenarios.push({
-      type: 'defer',
-      title: 'Pausa y Prorrateo',
+      type: 'DEFER',
+      params: { d: months, capitalizeInterest: true },
+      Mprime: newPayment_A,
+      nPrime: originalTerm,
       description: 'Pausa los pagos y distribuye el monto en las mensualidades restantes.',
-      newMonthlyPayment: newPayment_A,
+      // Legacy compatibility
+      title: 'Pausa y Prorrateo',
+      newPayment: newPayment_A,
       newTerm: originalTerm,
       termChange: 0,
       details: [
-        `Pagos de $0 por ${months} meses`, 
+        `Pagos de $0 por ${months} meses`,
         `El pago mensual sube a ${this.financialCalc.formatCurrency(newPayment_A)} después.`
       ]
     });
@@ -77,14 +82,18 @@ export class ProtectionEngineService {
     const principalAfterStepDown = Math.max(0, getBalance(B_k, reducedPayment, r, months));
     const compensationPayment = round2(Math.max(0, annuity(principalAfterStepDown, r, remainingTerm - months)));
     scenarios.push({
-      type: 'step-down',
-      title: 'Reducción y Compensación',
+      type: 'STEPDOWN',
+      params: { months: months, alpha: 0.5 },
+      Mprime: compensationPayment,
+      nPrime: originalTerm,
       description: 'Reduce el pago a la mitad y compensa la diferencia más adelante.',
-      newMonthlyPayment: compensationPayment,
+      // Legacy compatibility
+      title: 'Reducción y Compensación',
+      newPayment: compensationPayment,
       newTerm: originalTerm,
       termChange: 0,
       details: [
-        `Pagos de ${this.financialCalc.formatCurrency(reducedPayment)} por ${months} meses`, 
+        `Pagos de ${this.financialCalc.formatCurrency(reducedPayment)} por ${months} meses`,
         `El pago sube a ${this.financialCalc.formatCurrency(compensationPayment)} después.`
       ]
     });
@@ -96,14 +105,18 @@ export class ProtectionEngineService {
     const impliedTermAfterResume = this.financialCalc.getTermFromPayment(capitalizedBalance_C, r, M);
     const finalNewTerm_C = Number.isFinite(impliedTermAfterResume) ? months + impliedTermAfterResume : newTerm_C;
     scenarios.push({
-      type: 'recalendar',
-      title: 'Extensión de Plazo',
+      type: 'RECALENDAR',
+      params: { delta: months },
+      Mprime: round2(M),
+      nPrime: Math.max(newTerm_C, finalNewTerm_C),
       description: 'Mantener el pago actual y extender el plazo para compensar.',
-      newMonthlyPayment: round2(M),
+      // Legacy compatibility
+      title: 'Extensión de Plazo',
+      newPayment: round2(M),
       newTerm: Math.max(newTerm_C, finalNewTerm_C),
       termChange: Math.max(newTerm_C, finalNewTerm_C) - originalTerm,
       details: [
-        `Pagos de $0 por ${months} meses`, 
+        `Pagos de $0 por ${months} meses`,
         `Interés capitalizado durante diferimiento`,
         `El plazo se extiende en ${Math.max(newTerm_C, finalNewTerm_C) - originalTerm} meses.`
       ]
@@ -115,8 +128,8 @@ export class ProtectionEngineService {
 
   // Enhanced scenario generation with TIR validation - exact port from React
   generateScenarioWithTIR(
-    type: 'defer' | 'step-down' | 'recalendar', 
-    title: string, 
+    type: ProtectionType,
+    title: string,
     description: string,
     currentBalance: number,
     monthlyRate: number,
@@ -126,13 +139,13 @@ export class ProtectionEngineService {
     reductionFactor: number = 1,
     market?: Market | string
   ): ProtectionScenario | null {
-    
+
     const policyValidation = this.financialCalc.validateScenarioPolicy(
-      type, 
-      affectedMonths, 
+      type,
+      affectedMonths,
       reductionFactor < 1 ? 1 - reductionFactor : undefined
     );
-    
+
     if (!policyValidation.valid) {
       return null; // Skip invalid scenarios
     }
@@ -143,35 +156,35 @@ export class ProtectionEngineService {
     let adjustedBalance = currentBalance;
     let capitalizedInterest = 0;
 
-    if (type === 'defer') {
+    if (type === 'DEFER') {
       // Capitalize interest during deferral
       adjustedBalance = this.financialCalc.capitalizeInterest(currentBalance, monthlyRate, affectedMonths);
       capitalizedInterest = adjustedBalance - currentBalance;
       const newRemainingTerm = remainingTerm - affectedMonths;
       newPayment = this.financialCalc.annuity(adjustedBalance, monthlyRate, newRemainingTerm);
-      
+
       // Cash flows: 0 for deferral months, then new payments
       const payments = new Array(affectedMonths).fill(0)
           .concat(new Array(newRemainingTerm).fill(newPayment));
       cashFlows = this.financialCalc.generateCashFlows(currentBalance, payments, remainingTerm);
-      
-    } else if (type === 'step-down') {
+
+    } else if (type === 'STEPDOWN') {
       const reducedPayment = originalPayment * reductionFactor;
       const balanceAfterReduced = this.financialCalc.getBalance(currentBalance, reducedPayment, monthlyRate, affectedMonths);
       const compensationPayment = this.financialCalc.annuity(balanceAfterReduced, monthlyRate, remainingTerm - affectedMonths);
       newPayment = compensationPayment;
-      
+
       // Cash flows: reduced payments, then compensation payments
       const payments = new Array(affectedMonths).fill(reducedPayment)
           .concat(new Array(remainingTerm - affectedMonths).fill(compensationPayment));
       cashFlows = this.financialCalc.generateCashFlows(currentBalance, payments, remainingTerm);
-      
-    } else if (type === 'recalendar') {
-      // Capitalize interest during deferral as in 'defer'
+
+    } else if (type === 'RECALENDAR') {
+      // Capitalize interest during deferral as in 'DEFER'
       const adjusted = this.financialCalc.capitalizeInterest(currentBalance, monthlyRate, affectedMonths);
       newTerm = remainingTerm + affectedMonths;
       newPayment = originalPayment;
-      
+
       // Cash flows: 0 for deferral months, then original payments; use adjusted principal in cash flow engine
       const payments = new Array(affectedMonths).fill(0)
           .concat(new Array(remainingTerm).fill(originalPayment));
@@ -186,44 +199,43 @@ export class ProtectionEngineService {
     const tolerance = (environment?.finance?.irrToleranceBps ?? 0) / 10000; // convert bps to decimal
     const tirOK = Number.isFinite(annualTIR) && (annualTIR + tolerance) >= tirTargetAnnual;
 
-    const scenario: ProtectionScenario & {
-      irr?: number;
-      tirOK?: boolean;
-      cashFlows?: number[];
-      capitalizedInterest?: number;
-      principalBalance?: number;
-    } = {
+    const scenario: ProtectionScenario = {
       type,
-      title,
-      description,
-      newMonthlyPayment: newPayment,
-      newTerm: type === 'recalendar' ? remainingTerm + affectedMonths : remainingTerm,
-      termChange: type === 'recalendar' ? affectedMonths : 0,
-      details: [],
-      // Advanced properties for mathematical analysis
+      params: type === 'DEFER' ? { d: affectedMonths, capitalizeInterest: true } :
+              type === 'STEPDOWN' ? { months: affectedMonths, alpha: reductionFactor } :
+              { delta: affectedMonths },
+      Mprime: newPayment,
+      nPrime: type === 'RECALENDAR' ? remainingTerm + affectedMonths : remainingTerm,
       irr: annualTIR,
       tirOK,
+      description,
+      // Legacy compatibility fields
+      title,
+      newPayment: newPayment,
+      newTerm: type === 'RECALENDAR' ? remainingTerm + affectedMonths : remainingTerm,
+      termChange: type === 'RECALENDAR' ? affectedMonths : 0,
+      details: [],
       cashFlows,
       capitalizedInterest,
-      principalBalance: adjustedBalance,
+      principalBalance: adjustedBalance
     };
 
     // Generate appropriate details based on scenario type
-    if (type === 'defer') {
+    if (type === 'DEFER') {
       scenario.details = [
         `Pagos de $0 por ${affectedMonths} meses`,
         `Interés capitalizado: ${this.financialCalc.formatCurrency(capitalizedInterest)}`,
         `El pago mensual sube a ${this.financialCalc.formatCurrency(newPayment)} después.`,
         `TIR: ${(annualTIR * 100).toFixed(2)}% ${tirOK ? '✓' : '✗'}`
       ];
-    } else if (type === 'step-down') {
+    } else if (type === 'STEPDOWN') {
       const reducedPayment = originalPayment * reductionFactor;
       scenario.details = [
         `Pagos de ${this.financialCalc.formatCurrency(reducedPayment)} por ${affectedMonths} meses`,
         `El pago sube a ${this.financialCalc.formatCurrency(newPayment)} después.`,
         `TIR: ${(annualTIR * 100).toFixed(2)}% ${tirOK ? '✓' : '✗'}`
       ];
-    } else if (type === 'recalendar') {
+    } else if (type === 'RECALENDAR') {
       scenario.details = [
         `Pagos de $0 por ${affectedMonths} meses`,
         `El plazo se extiende en ${affectedMonths} meses.`,
@@ -247,7 +259,7 @@ export class ProtectionEngineService {
 
     // Scenario 1: Diferimiento 3 meses
     const defer3 = this.generateScenarioWithTIR(
-      'defer',
+      'DEFER',
       'Diferimiento 3 meses',
       'Suspender pagos por 3 meses, capitalizar interés',
       currentBalance,
@@ -262,7 +274,7 @@ export class ProtectionEngineService {
 
     // Scenario 2: Diferimiento 6 meses
     const defer6 = this.generateScenarioWithTIR(
-      'defer',
+      'DEFER',
       'Diferimiento 6 meses',
       'Suspender pagos por 6 meses, capitalizar interés',
       currentBalance,
@@ -277,7 +289,7 @@ export class ProtectionEngineService {
 
     // Scenario 3: Step-down 50% por 6 meses
     const stepDown = this.generateScenarioWithTIR(
-      'step-down',
+      'STEPDOWN',
       'Reducción 50% por 6 meses',
       'Pagar 50% durante 6 meses, compensar después',
       currentBalance,
@@ -292,7 +304,7 @@ export class ProtectionEngineService {
 
     // Scenario 4: Recalendarización 6 meses
     const recalendar = this.generateScenarioWithTIR(
-      'recalendar',
+      'RECALENDAR',
       'Recalendarización 6 meses',
       'Extender plazo y diferir 6 meses',
       currentBalance,
@@ -315,12 +327,15 @@ export class ProtectionEngineService {
     termChange: number;
     totalCostChange: number;
   } {
-    const paymentChange = scenario.newMonthlyPayment - originalPayment;
+    const newPayment = scenario.Mprime || scenario.newPayment || 0;
+    const newTerm = scenario.nPrime || scenario.newTerm || originalTerm;
+
+    const paymentChange = newPayment - originalPayment;
     const paymentChangePercent = (paymentChange / originalPayment) * 100;
-    const termChange = scenario.termChange;
-    
+    const termChange = scenario.termChange || 0;
+
     const originalTotalCost = originalPayment * originalTerm;
-    const newTotalCost = scenario.newMonthlyPayment * scenario.newTerm;
+    const newTotalCost = newPayment * newTerm;
     const totalCostChange = newTotalCost - originalTotalCost;
 
     return {
@@ -335,7 +350,7 @@ export class ProtectionEngineService {
   validateProtectionUsage(
     restructuresAvailable: number,
     restructuresUsed: number,
-    scenarioType: 'defer' | 'step-down' | 'recalendar'
+    scenarioType: ProtectionType
   ): { canUse: boolean; reason?: string } {
     if (restructuresUsed >= restructuresAvailable) {
       return {

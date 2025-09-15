@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, BehaviorSubject, map, catchError, of } from 'rxjs';
-import { VehicleUnit, Client, ImportStatus } from '../models/types';
+import { Client } from '../models/types';
+import { VehicleUnit, ImportStatus } from '../models/postventa';
 
 export interface VehicleAssignmentRequest {
   clientId: string;

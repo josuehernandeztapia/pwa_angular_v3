@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TandaGroupInput, TandaSimConfig } from '../models/types';
+import { TandaGroupSim, TandaSimConfig } from '../models/tanda';
 import { round2 } from '../utils/math.util';
 import { FinancialCalculatorService } from './financial-calculator.service';
 import { TandaEngineService } from './tanda-engine.service';
@@ -167,7 +167,7 @@ export class SimuladorEngineService {
     const totalContributionPerMember = round2(collectionPerMember + Math.max(0, config.voluntaryMonthly));
 
     // Create tanda configuration
-    const tandaInput: TandaGroupInput = this.tandaEngine.generateBaselineTanda(
+    const tandaInput: TandaGroupSim = this.tandaEngine.generateBaselineTanda(
       memberCount,
       config.unitPrice,
       totalContributionPerMember

@@ -2,6 +2,8 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ManualEntryComponent, ManualEntryData } from '../shared/manual-entry/manual-entry.component';
+import { ManualOCREntryComponent, ManualOCRData } from '../shared/manual-ocr-entry/manual-ocr-entry.component';
+import { VisionOCRRetryService, OCRResult } from '../../services/vision-ocr-retry.service';
 import { CasesService, CaseRecord } from '../../services/cases.service';
 import { environment } from '../../../environments/environment';
 import { PostSalesQuoteDraftService, PartSuggestion } from '../../services/post-sales-quote-draft.service';
@@ -27,7 +29,7 @@ interface StepState {
 @Component({
   selector: 'app-photo-wizard',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgOptimizedImage, ManualEntryComponent],
+  imports: [CommonModule, FormsModule, NgOptimizedImage, ManualEntryComponent, ManualOCREntryComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="wizard-container" *ngIf="enabled; else disabledTpl">
@@ -102,7 +104,7 @@ interface StepState {
             <button class="btn" *ngIf="needsOdometer" (click)="jumpTo('odometer')">Tomar foto de Odómetro</button>
             <button class="btn" *ngIf="needsEvidence" (click)="jumpTo('evidence')">Tomar Evidencia</button>
         </div>
-        
+
         <!-- Enhanced VIN Detection Banner for timeout/error cases -->
         <div class="banner warn" *ngIf="showVinDetectionBanner" data-testid="vin-detection-banner" data-cy="vin-detection-banner">
           ⚠️ VIN requiere revisión manual - Timeout en detección automática después de varios intentos
@@ -110,7 +112,7 @@ interface StepState {
             <button class="btn retry-vin" (click)="retakeVinWithRetry()">Reintentar VIN con tiempo extendido</button>
           </div>
         </div>
-        
+
         <!-- Chips de refacciones y CTA de agregado a cotización (dev/BFF flags) abajo -->
       </div>
         <!-- Trigger need_info recording when applicable -->
@@ -146,17 +148,15 @@ interface StepState {
         <button class="btn primary" [disabled]="!caseId" (click)="next()" data-cy="wizard-next">{{ ctaText }}</button>
       </div>
     </div>
-    
-    <!-- P0.2 Surgical Fix - Manual Entry Modal -->
-    <app-manual-entry
-      *ngIf="showManualEntry && manualEntryType && (manualEntryType === 'vin' || manualEntryType === 'odometer')"
-      [documentType]="manualEntryType"
-      [fieldName]="manualEntryType === 'vin' ? 'VIN' : 'Kilometraje'"
-      (save)="onManualSave($event)"
-      (cancel)="onManualCancel()"
-      (retry)="onManualRetry()">
-    </app-manual-entry>
-    
+
+    <!-- P0.2 Surgical Fix - Manual OCR Entry Modal -->
+    <app-manual-ocr-entry
+      [documentType]="manualEntryType || ''"
+      [isOpen]="showManualEntry"
+      (save)="onManualOCRSave($event)"
+      (cancel)="onManualCancel()">
+    </app-manual-ocr-entry>
+
     <ng-template #disabledTpl>
       <div class="wizard-container">
         <div class="banner warn">El Wizard de Postventa está desactivado. Actívalo con el flag environment.features.enablePostSalesWizard.</div>
@@ -244,9 +244,14 @@ export class PhotoWizardComponent {
   recommendedParts: PartSuggestion[] = [];
   vinRetryAttempt = 0;
 
-  constructor(private cases: CasesService, private quoteDraft: PostSalesQuoteDraftService, private quoteApi: PostSalesQuoteApiService) {
+  constructor(
+    private cases: CasesService,
+    private quoteDraft: PostSalesQuoteDraftService,
+    private quoteApi: PostSalesQuoteApiService,
+    private ocrRetryService: VisionOCRRetryService
+  ) {
     if (this.enableAddToQuote) {
-      this.recommendedParts = this.buildDevRecommendedParts();
+      this.recommendedParts = this.buildRecommendedParts();
       this.draftCount = this.quoteDraft.getCount();
     }
   }
@@ -281,6 +286,28 @@ export class PhotoWizardComponent {
     return issues;
   }
 
+  get showNeedInfoRecording(): boolean {
+    if (!this.caseId) return false;
+    if (this.sentNeedInfo) return false;
+    const allTried = this.steps.filter(s => s.id !== 'plate').every(s => s.done);
+    if (allTried && !this.isAllGood) {
+      const missing: string[] = [];
+      if (this.needsVin) missing.push('vin');
+      if (this.needsOdometer) missing.push('odometer');
+      if (this.needsEvidence) missing.push('evidence');
+      this.cases.recordNeedInfo(this.caseId, missing).subscribe();
+      this.sentNeedInfo = true;
+      try {
+        const raw = localStorage.getItem('kpi:needInfo:agg');
+        const agg = raw ? JSON.parse(raw) : { need: 0, total: 0 };
+        agg.need = (agg.need || 0) + 1;
+        agg.total = (agg.total || 0) + 1;
+        localStorage.setItem('kpi:needInfo:agg', JSON.stringify(agg));
+      } catch {}
+    }
+    return this.sentNeedInfo;
+  }
+
   private titleFor(id: StepId): string { return this.find(id)?.title || id; }
   private find(id: StepId) { return this.steps.find(s => s.id === id); }
   private hasMissing(key: 'vin' | 'odometer' | 'evidence'): boolean {
@@ -289,12 +316,10 @@ export class PhotoWizardComponent {
   }
 
   onExampleError(evt: Event) {
-    // Graceful fallback if example asset is missing
     const img = evt.target as HTMLImageElement;
     img.style.display = 'none';
   }
 
-  // P0.2 Surgical Fix - Manual Entry Methods
   openManualEntry(stepId: StepId) {
     if (stepId === 'vin' || stepId === 'odometer') {
       this.manualEntryType = stepId;
@@ -302,21 +327,21 @@ export class PhotoWizardComponent {
     }
   }
 
-  onManualSave(data: ManualEntryData) {
+  onManualOCRSave(data: ManualOCRData) {
     if (!this.manualEntryType) return;
-    
+
     const step = this.find(this.manualEntryType);
     if (step) {
-      // Mark step as complete with manual data
       step.done = true;
-      step.confidence = 1.0; // Manual entry is always 100% confident
+      step.confidence = data.confidence;
       step.missing = [];
       step.error = null;
-      
-      // Store manual entry value (you might want to save this to a service)
-      console.log(`Manual entry for ${this.manualEntryType}:`, data.userEnteredValue);
+
+      if (this.caseId) {
+        console.log(`📝 Manual OCR data for ${this.manualEntryType}:`, data.fields);
+      }
     }
-    
+
     this.showManualEntry = false;
     this.manualEntryType = null;
   }
@@ -326,18 +351,12 @@ export class PhotoWizardComponent {
     this.manualEntryType = null;
   }
 
-  onManualRetry() {
-    // Close manual entry and retry OCR
-    this.showManualEntry = false;
-    if (this.manualEntryType) {
-      this.retake(this.manualEntryType);
-    }
-    this.manualEntryType = null;
-  }
-
   next() {
     if (!this.caseId) {
-      this.cases.createCase().subscribe(rec => { this.caseId = rec.id; this.startTimeMs = performance.now(); });
+      this.cases.createCase().subscribe(rec => {
+        this.caseId = rec.id;
+        this.startTimeMs = performance.now();
+      });
       return;
     }
     if (this.currentIndex < this.steps.length - 1) this.currentIndex += 1;
@@ -351,7 +370,12 @@ export class PhotoWizardComponent {
   retake(id: StepId) {
     const s = this.find(id);
     if (!s) return;
-    s.file = null; s.uploading = false; s.done = false; s.confidence = undefined; s.missing = undefined; s.error = null;
+    s.file = null;
+    s.uploading = false;
+    s.done = false;
+    s.confidence = undefined;
+    s.missing = undefined;
+    s.error = null;
     this.jumpTo(id);
   }
 
@@ -365,42 +389,22 @@ export class PhotoWizardComponent {
     step.uploading = true;
     step.error = null;
 
-    this.cases.uploadAndAnalyze(this.caseId, id, file)
-      .pipe(
-        timeout(20000), // Increased timeout for better reliability
-        catchError(error => {
-          console.warn('OCR analysis timeout or error:', error);
-          // Return fallback response for timeout/error cases
-          return of({
-            attachment: null,
-            ocr: {
-              confidence: 0,
-              missing: ['Timeout en detección automática'],
-              detectedVin: null,
-              requiresManualReview: true
-            }
-          });
-        })
-      )
-      .subscribe({
+    this.uploadWithOCRRetry(this.caseId, id, file).subscribe({
       next: ({ attachment, ocr }: any) => {
         step.uploading = false;
         step.done = true;
         step.confidence = ocr.confidence ?? 0;
         step.missing = ocr.missing || [];
-        
-        // Show VIN detection banner for timeout/error cases
+
         if ((ocr as any).requiresManualReview && id === 'vin') {
           this.showVinDetectionBanner = true;
         }
 
-        // Metrics: if we just achieved all 3 basics OK, send t_first_recommendation
         if (!this.sentFirstRecommendation && this.isAllGood && this.startTimeMs != null) {
           const elapsed = performance.now() - this.startTimeMs;
           this.firstRecommendationMs = Math.round(elapsed);
           this.sentFirstRecommendation = true;
           this.cases.recordFirstRecommendation(this.caseId!, this.firstRecommendationMs).subscribe();
-          // Dev KPI: store locally
           try {
             const raw = localStorage.getItem('kpi:firstRecommendation:list');
             const arr = raw ? JSON.parse(raw) : [];
@@ -416,108 +420,79 @@ export class PhotoWizardComponent {
     });
   }
 
-  /**
-   * Enhanced OCR upload with exponential backoff and retry logic
-   * Implements robust timeout handling with progressive timeouts:
-   * - 1st attempt: 10s timeout
-   * - 2nd attempt: 15s timeout  
-   * - 3rd attempt: 20s timeout
-   * - Final fallback: Manual review with clear error messaging
-   */
-  private uploadWithRetryAndBackoff(caseId: string, stepId: StepId, file: File) {
-    let attemptNumber = 0;
-    
-    const attemptUpload = (): any => {
-      attemptNumber++;
-      const timeoutMs = 8000 + (attemptNumber * 4000); // 12s, 16s, 20s
-      
-      return this.cases.uploadAndAnalyze(caseId, stepId, file)
-        .pipe(
-          timeout(timeoutMs),
-          catchError(error => {
-            const isTimeoutError = error.name === 'TimeoutError' || error.message?.includes('timeout');
-            const isLastAttempt = attemptNumber >= 3;
-            
-            if (isLastAttempt) {
-              // Final failure - return fallback response
-              console.error(`OCR analysis failed after ${attemptNumber} attempts:`, error);
-              
-              const isVinStep = stepId === 'vin';
-              return of({
-                attachment: null,
-                ocr: {
-                  confidence: 0.1, // Low confidence to indicate manual review needed
-                  missing: isTimeoutError 
-                    ? [`Timeout después de ${attemptNumber} intentos (${stepId})`]
-                    : [`Error de procesamiento después de ${attemptNumber} intentos (${stepId})`],
-                  detectedVin: isVinStep ? 'RETRY_REQUIRED' : null,
-                  requiresManualReview: true,
-                  errorType: isTimeoutError ? 'timeout' : 'processing_error',
-                  retryAttempts: attemptNumber
-                }
-              });
-            } else {
-              // Retry with exponential backoff
-              const backoffMs = Math.min(1000 * Math.pow(2, attemptNumber - 1), 4000); // 1s, 2s, 4s
-              console.warn(`OCR attempt ${attemptNumber} failed, retrying in ${backoffMs}ms (next timeout: ${8000 + (attemptNumber + 1) * 4000}ms):`, error);
-              
-              // Update UI progress for VIN steps
-              if (stepId === 'vin') {
-                this.vinRetryAttempt = attemptNumber + 1;
-              }
-              
-              return timer(backoffMs).pipe(
-                delayWhen(() => timer(0)), // Ensure proper timing
-                tap(() => console.log(`Starting retry attempt ${attemptNumber + 1} for ${stepId}...`)),
-                switchMap(() => attemptUpload()) // Use switchMap to flatten the retry
-              );
+  private uploadWithOCRRetry(caseId: string, stepId: StepId, file: File) {
+    const mockImageUrl = `data:image/jpeg;base64,${stepId}-${Date.now()}`;
+
+    return this.ocrRetryService.ocrWithRetry(mockImageUrl, stepId, {
+      maxRetries: 3,
+      baseDelay: 1000,
+      maxDelay: 5000,
+      confidenceThreshold: this.threshold,
+      enableFallback: true
+    }).pipe(
+      tap(result => {
+        if (stepId === 'vin' && result.retryCount) {
+          this.vinRetryAttempt = result.retryCount;
+        }
+      }),
+      switchMap(ocrResult => {
+        if (ocrResult.fallbackUsed) {
+          return of({
+            attachment: null,
+            ocr: {
+              confidence: 0,
+              missing: [`OCR falló después de ${ocrResult.retryCount || 0} intentos - fallback manual activado`],
+              detectedVin: stepId === 'vin' ? 'MANUAL_ENTRY_REQUIRED' : null,
+              requiresManualReview: true,
+              retryCount: ocrResult.retryCount
             }
-          })
-        );
-    };
-    
-    return attemptUpload();
+          });
+        }
+
+        return of({
+          attachment: { id: `mock-${stepId}-${Date.now()}` },
+          ocr: {
+            confidence: ocrResult.confidence,
+            missing: this.extractMissingFields(ocrResult.fields, stepId),
+            detectedVin: stepId === 'vin' ? ocrResult.fields['vin'] : null,
+            processingTime: ocrResult.processingTime,
+            retryCount: ocrResult.retryCount
+          }
+        });
+      })
+    );
   }
-  
-  /**
-   * Retry VIN capture with extended timeout - triggered by user action
-   */
+
+  private extractMissingFields(fields: Record<string, any>, stepId: StepId): string[] {
+    const missing: string[] = [];
+
+    switch (stepId) {
+      case 'vin':
+        if (!fields['vin']) missing.push('vin');
+        break;
+      case 'odometer':
+        if (!fields['kilometers']) missing.push('kilometers');
+        break;
+      case 'plate':
+        if (!fields['plate']) missing.push('plate');
+        break;
+      case 'evidence':
+        break;
+    }
+
+    return missing;
+  }
+
   retakeVinWithRetry() {
     const vinStep = this.find('vin');
     if (!vinStep) return;
-    
-    // Reset VIN step state
+
     this.showVinDetectionBanner = false;
     this.vinRetryAttempt = 0;
     this.retake('vin');
   }
 
-  // When showing summary and not all good, record need_info once
-  get showNeedInfoRecording(): boolean {
-    if (!this.caseId) return false;
-    if (this.sentNeedInfo) return false;
-    const allTried = this.steps.filter(s => s.id !== 'plate').every(s => s.done); // 3 básicos intentados
-    if (allTried && !this.isAllGood) {
-      const missing: string[] = [];
-      if (this.needsVin) missing.push('vin');
-      if (this.needsOdometer) missing.push('odometer');
-      if (this.needsEvidence) missing.push('evidence');
-      this.cases.recordNeedInfo(this.caseId, missing).subscribe();
-      this.sentNeedInfo = true;
-      // Dev KPI: aggregate need_info
-      try {
-        const raw = localStorage.getItem('kpi:needInfo:agg');
-        const agg = raw ? JSON.parse(raw) : { need: 0, total: 0 };
-        agg.need = (agg.need || 0) + 1;
-        agg.total = (agg.total || 0) + 1;
-        localStorage.setItem('kpi:needInfo:agg', JSON.stringify(agg));
-      } catch {}
-    }
-    return this.sentNeedInfo;
-  }
-
-  // Dev-only parts: simple static suggestions to illustrate UX before BFF
-  private buildDevRecommendedParts(): PartSuggestion[] {
+  private buildRecommendedParts(): PartSuggestion[] {
     return [
       { id: 'oil-filter', name: 'Filtro de aceite', oem: 'A123-OF', equivalent: 'WIX-57045', stock: 12, priceMXN: 189 },
       { id: 'air-filter', name: 'Filtro de aire', oem: 'B456-AF', equivalent: 'MANN-C26168', stock: 5, priceMXN: 349 },
@@ -528,12 +503,11 @@ export class PhotoWizardComponent {
 
   addToQuote(p: PartSuggestion) {
     if (!this.enableAddToQuote) return;
-    // Switch: if BFF enabled, call API; else, use local draft
     if ((this.environment.features as any)?.enableOdooQuoteBff) {
       const meta = { caseId: this.caseId };
       this.quoteApi.getOrCreateDraftQuote(undefined, meta).subscribe(({ quoteId }) => {
         this.quoteApi.addLine(quoteId, p, 1, meta).subscribe(() => {
-          this.draftCount += 1; // UI feedback only; real totals vendrán del BFF
+          this.draftCount += 1;
         });
       });
     } else {

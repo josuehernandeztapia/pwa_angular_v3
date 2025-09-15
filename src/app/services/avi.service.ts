@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { map, delay, catchError } from 'rxjs/operators';
-import { 
-  AVIQuestionEnhanced, 
-  AVIResponse, 
-  AVIScore, 
+import {
+  AVIQuestionEnhanced,
+  AVIResponse,
+  AVIScore,
   AVICategory,
   VoiceAnalysis,
   RedFlag
-} from '../models/types';
+} from '../models/avi';
 import { ALL_AVI_QUESTIONS } from '../data/avi-questions.data';
 import { ConfigurationService } from './configuration.service';
 import { environment } from '../../environments/environment';

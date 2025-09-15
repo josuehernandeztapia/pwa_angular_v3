@@ -270,14 +270,17 @@ export class DeliveriesDbService {
       if (!current) {
         return {
           success: false,
-          newStatus: current?.status || 'PO_ISSUED',
+          newStatus: 'PO_ISSUED',
           message: 'Delivery not found',
           validationErrors: ['Delivery order not found']
         };
       }
 
-      // Validate transition
-      if (!canTransition(current.status, request.event)) {
+      // Determine new status from event
+      const validTransitions = getValidTransitions(current.status);
+      const transition = validTransitions.find(t => t.event === request.event);
+
+      if (!transition) {
         return {
           success: false,
           newStatus: current.status,
@@ -286,16 +289,13 @@ export class DeliveriesDbService {
         };
       }
 
-      // Determine new status from event
-      const validTransitions = getValidTransitions(current.status);
-      const transition = validTransitions.find(t => t.event === request.event);
-      
-      if (!transition) {
+      // Validate transition
+      if (!canTransition(current.status, transition.to, request.event)) {
         return {
           success: false,
           newStatus: current.status,
-          message: 'No valid transition found',
-          validationErrors: [`No transition found for event ${request.event}`]
+          message: 'Invalid status transition',
+          validationErrors: [`Cannot perform ${request.event} from status ${current.status}`]
         };
       }
 
@@ -344,7 +344,7 @@ export class DeliveriesDbService {
       this.logger.error(`Failed to transition delivery ${id}:`, error);
       return {
         success: false,
-        newStatus: current?.status || 'PO_ISSUED',
+        newStatus: 'PO_ISSUED',
         message: 'Internal server error',
         validationErrors: [error.message]
       };

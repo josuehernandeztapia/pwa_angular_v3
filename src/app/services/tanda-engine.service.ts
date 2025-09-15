@@ -146,7 +146,11 @@ export class TandaEngineService {
     }));
 
     return {
+      id: `tanda-sim-${memberCount}-${Date.now()}`,
       name: `Tanda ${memberCount} Miembros`,
+      status: 'active' as const,
+      capacity: memberCount,
+      totalMembers: memberCount,
       members,
       product: {
         price: unitPrice,

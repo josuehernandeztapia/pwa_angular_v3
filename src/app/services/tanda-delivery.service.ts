@@ -49,6 +49,7 @@ export class TandaDeliveryService {
       id: 'tanda-demo-001',
       name: 'Tanda Ruta Centro EdoMex',
       totalMembers: 12,
+      capacity: 12, // Maximum members capacity
       monthlyAmount: 8500, // Each member pays 8,500 monthly
       totalAmount: 102000, // Vehicle package value
       startDate: new Date('2024-01-01'),
@@ -289,13 +290,13 @@ export class TandaDeliveryService {
         if (!schedule) return null;
         
         return {
-          position: member.position,
-          deliveryMonth: member.deliveryMonth,
+          position: member.position || 1,
+          deliveryMonth: member.deliveryMonth || 1,
           deliveryDate: schedule.scheduledDate,
-          deliveryStatus: member.deliveryStatus,
-          contributedAmount: member.totalContributed,
+          deliveryStatus: member.deliveryStatus || 'pending',
+          contributedAmount: member.totalContributed || 0,
           remainingAmount: schedule.remainingAmount,
-          isMyTurn: tanda.currentMonth === member.position
+          isMyTurn: tanda.currentMonth === (member.position || 1)
         };
       })
     );
@@ -455,7 +456,7 @@ export class TandaDeliveryService {
     tandaId: string,
     consensusId: string,
     memberId: string,
-    vote: 'approve' | 'reject',
+    vote: 'approve' | 'reject' | 'abstain',
     reason?: string
   ): Observable<{
     success: boolean;
@@ -513,6 +514,7 @@ export class TandaDeliveryService {
         memberId,
         memberName: member.name,
         vote,
+        timestamp: new Date(),
         votedAt: new Date(),
         reason
       };

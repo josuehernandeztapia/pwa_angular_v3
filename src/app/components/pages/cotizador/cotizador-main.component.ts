@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Quote, ProductPackage, Market, ClientType, SimulatorMode, BusinessFlow, Client, TandaMilestone } from '../../../models/types';
+import { Market, BusinessFlow, Client } from '../../../models/types';
+import { Quote, ProductPackage, ClientType, SimulatorMode } from '../../../models/business';
+import { TandaMilestone } from '../../../models/tanda';
 import { CotizadorEngineService, ProductComponent } from '../../../services/cotizador-engine.service';
 import { PdfExportService } from '../../../services/pdf-export.service';
 import { SavingsProjectionChartComponent } from '../../shared/savings-projection-chart.component';

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
-import { Client, BusinessFlow, Market, VehicleUnit } from '../models/types';
+import { Client, BusinessFlow, Market } from '../models/types';
+import { VehicleUnit } from '../models/postventa';
 
 export interface ContractTemplate {
   id: string;

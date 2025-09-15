@@ -7,7 +7,7 @@ import { Controller, Post, Body, Get, Param, HttpStatus, HttpException } from '@
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { KibanRiskService } from './kiban-risk.service';
 import { RiskEvaluationRequestDto } from './dto/risk-evaluation-request.dto';
-import { RiskEvaluationResponseDto } from './dto/risk-evaluation-response.dto';
+import { RiskEvaluationResponseDto, RiskDecision } from './dto/risk-evaluation-response.dto';
 
 @ApiTags('KIBAN Risk Evaluation')
 @Controller('risk')
@@ -42,7 +42,7 @@ export class KibanRiskController {
       // Execute HASE algorithm
       const result = await this.kibanRiskService.evaluateRisk(requestDto);
       
-      console.log(`✅ Risk Evaluation Complete - Decision: ${result.decision}, Score: ${result.scoreBreakdown.totalScore}`);
+      console.log(`✅ Risk Evaluation Complete - Decision: ${result.decision}, Score: ${result.scoreBreakdown.finalScore}`);
       
       return result;
     } catch (error) {
@@ -75,15 +75,15 @@ export class KibanRiskController {
       const summary = {
         total: results.length,
         decisions: {
-          GO: results.filter(r => r.decision === 'GO').length,
-          REVIEW: results.filter(r => r.decision === 'REVIEW').length,
-          NO_GO: results.filter(r => r.decision === 'NO_GO').length
+          GO: results.filter(r => r.decision === RiskDecision.GO).length,
+          REVIEW: results.filter(r => r.decision === RiskDecision.REVIEW).length,
+          NO_GO: results.filter(r => r.decision === RiskDecision.NO_GO).length
         },
-        avgScore: results.reduce((sum, r) => sum + r.scoreBreakdown.totalScore, 0) / results.length,
+        avgScore: results.reduce((sum, r) => sum + r.scoreBreakdown.finalScore, 0) / results.length,
         processingTime: new Date().toISOString()
       };
       
-      console.log(`✅ Batch Evaluation Complete - GO: ${summary.decisions.GO}, REVIEW: ${summary.decisions.REVIEW}, NO-GO: ${summary.decisions.NO_GO}`);
+      console.log(`✅ Batch Evaluation Complete - GO: ${summary.decisions.GO}, REVIEW: ${summary.decisions.REVIEW}, NO_GO: ${summary.decisions.NO_GO}`);
       
       return { results, summary };
     } catch (error) {

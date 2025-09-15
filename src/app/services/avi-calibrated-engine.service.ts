@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { AVIResponse, AVIScore, AVIQuestionEnhanced, RedFlag, AVICategory } from '../models/types';
+import { AVIResponse, AVIScore, AVIQuestionEnhanced, RedFlag, AVICategory } from '../models/avi';
 import { environment } from '../../environments/environment';
 import { ALL_AVI_QUESTIONS } from '../data/avi-questions.data';
 import { 

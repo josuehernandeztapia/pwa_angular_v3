@@ -11,7 +11,7 @@ import {
   AVIResponse,
   AVIScore,
   VoiceAnalysis
-} from '../../models/types';
+} from '../../models/avi';
 import { AVIDualEngineService, DualEngineResult } from '../../services/avi-dual-engine.service';
 import { ALL_AVI_QUESTIONS } from '../../data/avi-questions.data';
 import { AVIService } from '../../services/avi.service';

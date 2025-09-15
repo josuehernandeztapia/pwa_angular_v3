@@ -5,7 +5,8 @@ import { RouterModule, Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { CotizadorEngineService } from '../../../services/cotizador-engine.service';
 import { ToastService } from '../../../services/toast.service';
-import { Client, BusinessFlow, Market, Quote } from '../../../models/types';
+import { Client, BusinessFlow, Market } from '../../../models/types';
+import { Quote } from '../../../models/business';
 
 interface Opportunity {
   id: string;

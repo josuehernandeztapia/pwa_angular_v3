@@ -6,21 +6,10 @@ import { Subject, interval, takeUntil, combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ApiService } from '../../../services/api.service';
 import { Client, EventType, Actor, BusinessFlow } from '../../../models/types';
+import { NotificationUI } from '../../../models/notification';
 import { ToastService } from '../../../services/toast.service';
 
-interface Notification {
-  id: string;
-  type: 'payment_reminder' | 'document_required' | 'client_action' | 'system_alert' | 'opportunity';
-  title: string;
-  message: string;
-  timestamp: Date;
-  isRead: boolean;
-  priority: 'high' | 'medium' | 'low';
-  clientId?: string;
-  actionUrl?: string;
-  actionLabel?: string;
-  metadata?: any;
-}
+// ✅ Using SSOT NotificationUI from models/notification.ts
 
 @Component({
   selector: 'app-notifications-panel',
@@ -513,8 +502,8 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
   @Input() isOpen = false;
   @Output() onClose = new EventEmitter<void>();
 
-  notifications: Notification[] = [];
-  filteredNotifications: Notification[] = [];
+  notifications: NotificationUI[] = [];
+  filteredNotifications: NotificationUI[] = [];
   clients: Client[] = [];
   showUnreadOnly = false;
   isLoading = false;
@@ -560,7 +549,7 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
   }
 
   private generateBusinessNotifications(): void {
-    const notifications: Notification[] = [];
+    const notifications: NotificationUI[] = [];
     const now = new Date();
 
     this.clients.forEach(client => {
@@ -713,7 +702,7 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
     this.toast.success('Notificaciones actualizadas');
   }
 
-  onNotificationClick(notification: Notification): void {
+  onNotificationClick(notification: NotificationUI): void {
     if (!notification.isRead) {
       this.markAsRead(notification.id);
     }
@@ -771,7 +760,7 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
     });
   }
 
-  trackByNotificationId(index: number, notification: Notification): string {
+  trackByNotificationId(index: number, notification: NotificationUI): string {
     return notification.id;
   }
 }
