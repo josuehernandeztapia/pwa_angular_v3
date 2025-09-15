@@ -1,7 +1,7 @@
 // Core Business Types for Conductores PWA
 // Ported from React PWA to ensure full compatibility
 
-import { ImportStatus } from './postventa';
+import { ImportStatus, ImportMilestoneStatus } from './postventa';
 import { CollectiveCreditGroup } from './tanda';
 
 export enum BusinessFlow {
@@ -120,16 +120,8 @@ export interface PaymentPlan {
 // TANDA/CollectiveCreditGroup types moved to models/tanda.ts for SSOT
 // Import from: import { CollectiveCreditMember, CollectiveCreditGroup } from '../models/tanda';
 
-export type ImportMilestoneStatus = {
-  status?: 'completed' | 'in_progress' | 'pending';
-  startedAt?: Date;
-  completedAt?: Date;
-  estimatedDays?: number;
-  notes?: string;
-  // Backwards-compatibility flags used in legacy UI code
-  completed?: boolean;
-  inProgress?: boolean;
-};
+// ImportMilestoneStatus moved to models/postventa.ts for SSOT
+// Import from: import { ImportMilestoneStatus } from './postventa';
 
 // DELIVERY AND DOCUMENT TYPES moved to models/postventa.ts for SSOT
 // Import from: import { DeliveryData, DeliveryChecklistItem, LegalDocuments, PlatesData, DocumentFile } from '../models/postventa';
