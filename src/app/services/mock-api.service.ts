@@ -4,12 +4,12 @@ import { delay, map, catchError } from 'rxjs/operators';
 import { ClientDataService } from './data/client-data.service';
 import { EcosystemDataService } from './data/ecosystem-data.service';
 import { CollectiveGroupDataService } from './data/collective-group-data.service';
-import { 
-  Client, 
-  Ecosystem, 
-  CollectiveCreditGroup,
-  CompleteBusinessScenario 
+import {
+  Client,
+  Ecosystem,
+  CompleteBusinessScenario
 } from '../models/types';
+import { CollectiveCreditGroup } from '../models/tanda';
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay, switchMap } from 'rxjs/operators';
-import { TandaGroup, TandaMember, TransferEvent, ConsensusRequest } from './tanda-delivery.service';
+import { TandaGroupDelivery, TandaMemberDelivery, TransferEvent, ConsensusRequest } from '../models/tanda';
 import { TandaDeliveryService } from './tanda-delivery.service';
 
 // Transfer Turn System - "Adjudicación Manual Asistida"
@@ -159,7 +159,7 @@ export class TandaTransferService {
    * PASO 1: Validar Transferencia de Turno (Guardarraíl Inteligente) - LEGACY
    */
   validateTurnTransfer(
-    tanda: TandaGroup,
+    tanda: TandaGroupDelivery,
     request: TurnTransferRequest
   ): Observable<TransferValidation> {
     return new Observable(observer => {
@@ -232,7 +232,7 @@ export class TandaTransferService {
    * PASO 2: Ejecutar Transferencia de Turno (Inyección de Evento)
    */
   executeTurnTransfer(
-    tanda: TandaGroup,
+    tanda: TandaGroupDelivery,
     request: TurnTransferRequest,
     validation: TransferValidation
   ): Observable<TransferExecution> {
@@ -318,14 +318,14 @@ export class TandaTransferService {
   /**
    * Calcular fondo actual del grupo (S_t)
    */
-  private calculateCurrentGroupFund(tanda: TandaGroup): number {
+  private calculateCurrentGroupFund(tanda: TandaGroupDelivery): number {
     return tanda.members.reduce((total, member) => total + member.totalContributed, 0);
   }
 
   /**
    * Calcular enganche requerido para miembro específico (DP_nuevo)
    */
-  private calculateRequiredDownPayment(tanda: TandaGroup, member: TandaMember): number {
+  private calculateRequiredDownPayment(tanda: TandaGroupDelivery, member: TandaMemberDelivery): number {
     // En tandas, normalmente el enganche es el valor total de la unidad
     // porque el grupo ha estado ahorrando para cubrirlo
     return tanda.totalAmount;
@@ -334,7 +334,7 @@ export class TandaTransferService {
   /**
    * Verificar si miembro está al corriente con pagos
    */
-  private isMemberCurrentWithPayments(member: TandaMember, currentMonth: number): boolean {
+  private isMemberCurrentWithPayments(member: TandaMemberDelivery, currentMonth: number): boolean {
     // Verificar que el miembro haya pagado su aportación del mes actual
     const currentMonthPayment = member.paymentHistory.find(
       payment => payment.month === currentMonth && payment.status === 'confirmed'
@@ -345,7 +345,7 @@ export class TandaTransferService {
   /**
    * Recalcular cronograma de entregas después de transferencia
    */
-  private recalculateDeliverySchedule(tanda: TandaGroup, transferEvent: any): any[] {
+  private recalculateDeliverySchedule(tanda: TandaGroupDelivery, transferEvent: any): any[] {
     // Reconstruir el cronograma considerando la transferencia
     const newSchedule = tanda.deliverySchedule.map(schedule => {
       if (schedule.memberId === transferEvent.toMemberId) {
@@ -380,9 +380,9 @@ export class TandaTransferService {
   /**
    * Simular validación en interfaz (para PWA)
    */
-  getTransferEligibleMembers(tanda: TandaGroup): Observable<{
-    canCedeTurn: TandaMember[];
-    canReceiveTurn: TandaMember[];
+  getTransferEligibleMembers(tanda: TandaGroupDelivery): Observable<{
+    canCedeTurn: TandaMemberDelivery[];
+    canReceiveTurn: TandaMemberDelivery[];
   }> {
     const canCedeTurn = tanda.members.filter(member => 
       member.deliveryStatus === 'scheduled' || 
