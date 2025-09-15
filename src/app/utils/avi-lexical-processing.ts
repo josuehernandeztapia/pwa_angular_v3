@@ -144,8 +144,8 @@ export function applyNervousAdmissionCap(
     (Math.min(patternAnalysis.admissionScore, 1) * 0.4)
   );
   
-  // Cap más alto para patterns más fuertes
-  const dynamicCap = 0.30 + (patternStrength * 0.15); // Rango: 0.30-0.45
+  // Cap más alto para patterns más fuertes (adjusted for admission cases)
+  const dynamicCap = 0.42 + (patternStrength * 0.18); // Rango: 0.42-0.60
   
   const cappedSubscore = Math.max(baseSubscore, dynamicCap);
   

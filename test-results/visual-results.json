@@ -1,0 +1,183 @@
+{
+  "config": {
+    "configFile": "/Users/josuehernandez/pwa_angular/playwright.config.ts",
+    "rootDir": "/Users/josuehernandez/pwa_angular/tests/visual",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/Users/josuehernandez/pwa_angular/tests/visual/setup/global-setup.ts",
+    "globalTeardown": "/Users/josuehernandez/pwa_angular/tests/visual/setup/global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "project": "Conductores PWA",
+      "description": "Visual regression tests for UI components and pages"
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/visual-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 15000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 15000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 15000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 15000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 15000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "iPad",
+        "name": "iPad",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 15000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages"
+        },
+        "id": "High DPI",
+        "name": "High DPI",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 15000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 4,
+    "webServer": {
+      "command": "node_modules/.bin/ng serve --configuration=development --port=4300",
+      "url": "http://localhost:4300",
+      "reuseExistingServer": true,
+      "timeout": 600000
+    }
+  },
+  "suites": [],
+  "errors": [
+    {
+      "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+      "stack": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments."
+    }
+  ],
+  "stats": {
+    "startTime": "2025-09-15T04:49:17.177Z",
+    "duration": 8692.358,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

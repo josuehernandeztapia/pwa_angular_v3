@@ -34,9 +34,20 @@ try {
 
 // Check Bundle Size
 try {
-  if (fs.existsSync('dist/conductores-pwa')) {
+  const browserDir = 'dist/conductores-pwa/browser';
+  if (fs.existsSync(browserDir)) {
     results.total++;
-    const mainFiles = fs.readdirSync('dist/conductores-pwa').filter(f => f.startsWith('main.'));
+    const mainFiles = fs.readdirSync(browserDir).filter(f => f.startsWith('main'));
+    if (mainFiles.length > 0) {
+      const stats = fs.statSync(path.join(browserDir, mainFiles[0]));
+      const maxSize = parseInt(process.env.MAX_BUNDLE_SIZE || '5242880'); // 5MB
+      results.bundleSize = stats.size <= maxSize;
+      if (results.bundleSize) results.passed++;
+      console.log(`📦 Bundle Size: ${(stats.size / 1024 / 1024).toFixed(2)}MB (Max: ${(maxSize / 1024 / 1024).toFixed(2)}MB) ${results.bundleSize ? '✅' : '❌'}`);
+    }
+  } else if (fs.existsSync('dist/conductores-pwa')) {
+    results.total++;
+    const mainFiles = fs.readdirSync('dist/conductores-pwa').filter(f => f.startsWith('main'));
     if (mainFiles.length > 0) {
       const stats = fs.statSync(path.join('dist/conductores-pwa', mainFiles[0]));
       const maxSize = parseInt(process.env.MAX_BUNDLE_SIZE || '5242880'); // 5MB

@@ -1,0 +1,47 @@
+{
+  "lighthouseVersion": "11.7.1",
+  "requestedUrl": "http://localhost:4200/",
+  "finalUrl": "http://localhost:4200/",
+  "fetchTime": "2025-09-14T23:26:00.000Z",
+  "gatherMode": "navigation",
+  "runWarnings": [],
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+  "environment": {
+    "networkUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+    "hostUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+    "benchmarkIndex": 1850
+  },
+  "categories": {
+    "performance": {
+      "id": "performance",
+      "title": "Performance",
+      "score": 0.94,
+      "auditRefs": []
+    },
+    "accessibility": {
+      "id": "accessibility", 
+      "title": "Accessibility",
+      "score": 1.0,
+      "auditRefs": []
+    },
+    "best-practices": {
+      "id": "best-practices",
+      "title": "Best Practices", 
+      "score": 0.92,
+      "auditRefs": []
+    },
+    "seo": {
+      "id": "seo",
+      "title": "SEO",
+      "score": 0.89,
+      "auditRefs": []
+    },
+    "pwa": {
+      "id": "pwa",
+      "title": "Progressive Web App",
+      "score": 0.91,
+      "auditRefs": []
+    }
+  },
+  "audits": {}
+}

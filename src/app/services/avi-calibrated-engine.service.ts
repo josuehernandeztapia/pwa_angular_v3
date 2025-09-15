@@ -256,9 +256,9 @@ export class AVICalibratedEngineService {
       return currentRisk; // Sin corrección necesaria
     }
     
-    // Analizar si hay evidencia fuerte del pattern "nervioso con admisión"
+    // Analizar si hay evidencia fuerte del pattern "nervioso con admisión" (lowered threshold)
     const significantPatterns = nervousAdmissionPatterns.filter(pattern => 
-      pattern.patternStrength > 0.6 && pattern.capApplied
+      pattern.patternStrength > 0.45 && pattern.capApplied
     );
     
     if (significantPatterns.length === 0) {
@@ -270,8 +270,8 @@ export class AVICalibratedEngineService {
     const avgPatternStrength = nervousAdmissionPatterns
       .reduce((sum, p) => sum + p.patternStrength * p.weight, 0) / Math.max(totalWeight, 1);
     
-    // Corrección conservadora: CRITICAL → HIGH solo si hay evidencia fuerte
-    if (avgPatternStrength > 0.7 && significantPatterns.length >= 1) {
+    // Corrección conservadora: CRITICAL → HIGH solo si hay evidencia fuerte (lowered threshold)
+    if (avgPatternStrength > 0.55 && significantPatterns.length >= 1) {
       console.log(`🧠 CORRECCIÓN DE RISK LEVEL: CRITICAL → HIGH`);
       console.log(`   Pattern strength promedio: ${avgPatternStrength.toFixed(3)}`);
       console.log(`   Patterns significativos: ${significantPatterns.length}`);

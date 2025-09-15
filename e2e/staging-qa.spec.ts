@@ -263,8 +263,8 @@ test.describe('🧪 Staging QA Suite - Conductores PWA', () => {
         await expect(photoUploader).toBeVisible();
       }
       
-      // Check for VIN detection banner
-      const vinBanner = page.locator('.banner, .alert').filter({ hasText: /vin|evidencia/i });
+      // Check for VIN detection banner with specific test selector
+      const vinBanner = page.locator('[data-testid="vin-detection-banner"], .banner').filter({ hasText: /vin|evidencia/i });
       if (await vinBanner.count() > 0) {
         await expect(vinBanner.first()).toBeVisible();
       }

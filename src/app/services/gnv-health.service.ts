@@ -58,8 +58,32 @@ export class GnvHealthService {
       const fileName = (cols[iFileName] || '').trim();
 
       let status: StationHealthStatus = 'green';
-      if (!fileName || total === 0) status = 'red';
-      else if (warnings > 0 || rejected > 0) status = 'yellow';
+      if (!fileName || total === 0) {
+        status = 'red';
+      } else {
+        const acceptanceRate = accepted / total;
+        const rejectionRate = rejected / total;
+        const warningRate = warnings / total;
+        
+        // Weighted health score calculation
+        // Base score from acceptance rate (0-100)
+        let healthScore = acceptanceRate * 100;
+        
+        // Penalize rejections more heavily than warnings
+        const rejectionPenalty = rejectionRate * 60; // Max 60 point penalty
+        const warningPenalty = warningRate * 20; // Max 20 point penalty
+        
+        healthScore = Math.max(0, healthScore - rejectionPenalty - warningPenalty);
+        
+        // Apply thresholds for status determination
+        if (healthScore >= 80 || (acceptanceRate >= 0.85 && rejectionRate <= 0.15)) {
+          status = 'green';
+        } else if (healthScore >= 60 || (acceptanceRate >= 0.7 && rejectionRate <= 0.25)) {
+          status = 'yellow';
+        } else {
+          status = 'red';
+        }
+      }
 
       rows.push({
         stationId: (cols[iStationId] || '').trim(),
@@ -76,15 +100,51 @@ export class GnvHealthService {
   }
 
   private normalize(items: any[]): StationHealthRow[] {
-    return (items || []).map(it => ({
-      stationId: it.stationId || it.id || '',
-      stationName: it.stationName || it.name || '',
-      fileName: it.fileName || '',
-      rowsTotal: Number(it.rowsTotal || 0),
-      rowsAccepted: Number(it.rowsAccepted || 0),
-      rowsRejected: Number(it.rowsRejected || 0),
-      warnings: Number(it.warnings || 0),
-      status: (it.status || 'red') as StationHealthStatus
-    }));
+    return (items || []).map(it => {
+      const total = Number(it.rowsTotal || 0);
+      const accepted = Number(it.rowsAccepted || 0);
+      const rejected = Number(it.rowsRejected || 0);
+      const warnings = Number(it.warnings || 0);
+      const fileName = it.fileName || '';
+
+      let status: StationHealthStatus = 'green';
+      if (!fileName || total === 0) {
+        status = 'red';
+      } else {
+        const acceptanceRate = accepted / total;
+        const rejectionRate = rejected / total;
+        const warningRate = warnings / total;
+        
+        // Weighted health score calculation
+        // Base score from acceptance rate (0-100)
+        let healthScore = acceptanceRate * 100;
+        
+        // Penalize rejections more heavily than warnings
+        const rejectionPenalty = rejectionRate * 60; // Max 60 point penalty
+        const warningPenalty = warningRate * 20; // Max 20 point penalty
+        
+        healthScore = Math.max(0, healthScore - rejectionPenalty - warningPenalty);
+        
+        // Apply thresholds for status determination
+        if (healthScore >= 80 || (acceptanceRate >= 0.85 && rejectionRate <= 0.15)) {
+          status = 'green';
+        } else if (healthScore >= 60 || (acceptanceRate >= 0.7 && rejectionRate <= 0.25)) {
+          status = 'yellow';
+        } else {
+          status = 'red';
+        }
+      }
+
+      return {
+        stationId: it.stationId || it.id || '',
+        stationName: it.stationName || it.name || '',
+        fileName,
+        rowsTotal: total,
+        rowsAccepted: accepted,
+        rowsRejected: rejected,
+        warnings,
+        status
+      };
+    });
   }
 }

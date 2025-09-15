@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { WebhookRetryService, WEBHOOK_PROVIDER_CONFIGS, WebhookDeadLetterQueue } from '../utils/webhook-retry.utils';
 
 interface WhatsAppMessage {
   recipient_type: 'individual';
@@ -118,6 +119,8 @@ export class WhatsappService {
   private _webhookVerifyToken: string | null = null;
   // Retries disabled by default to keep unit tests deterministic
   private _retryCount = 0;
+  private retryService = new WebhookRetryService();
+  private deadLetterQueue = WebhookDeadLetterQueue.getInstance();
 
   constructor(private http: HttpClient) {}
 
@@ -161,15 +164,29 @@ export class WhatsappService {
   sendMessage(message: WhatsAppMessage): Observable<WhatsAppResponse> {
     const url = `${this.baseUrl}/${this.phoneNumberId}/messages`;
     
-    return this.http.post<WhatsAppResponse>(url, {
+    const request = this.http.post<WhatsAppResponse>(url, {
       messaging_product: 'whatsapp',
       ...message
     }, {
       headers: this.getHeaders()
-    }).pipe(
-      retry(this._retryCount),
-      catchError(this.handleError)
-    );
+    });
+
+    // Use exponential backoff retry for production, simple retry for tests
+    const finalRequest = this._retryCount > 0 
+      ? request.pipe(catchError(this.handleError)) // Test mode - simple error handling
+      : WebhookRetryService.withExponentialBackoff(request, WEBHOOK_PROVIDER_CONFIGS['WHATSAPP'])
+          .pipe(
+            tap({
+              next: () => this.retryService.recordSuccess('whatsapp_messages'),
+              error: (error) => {
+                this.retryService.recordFailure('whatsapp_messages');
+                this.deadLetterQueue.addFailedWebhook('whatsapp_messages', message, error, WEBHOOK_PROVIDER_CONFIGS['WHATSAPP'].maxAttempts || 3);
+              }
+            }),
+            catchError(this.handleError)
+          );
+
+    return finalRequest;
   }
 
   sendTextMessage(to: string, text: string): Observable<WhatsAppResponse> {
@@ -516,13 +533,25 @@ export class WhatsappService {
   getTemplateStatus(templateName: string): Observable<any> {
     const url = `${this.baseUrl}/${this.phoneNumberId}/message_templates`;
     
-    return this.http.get(url, {
+    const request = this.http.get(url, {
       headers: this.getHeaders(),
       params: { name: templateName }
-    }).pipe(
-      retry(this._retryCount),
-      catchError(this.handleError)
-    );
+    });
+
+    // Use exponential backoff retry for production, simple retry for tests
+    return this._retryCount > 0 
+      ? request.pipe(catchError(this.handleError)) // Test mode
+      : WebhookRetryService.withExponentialBackoff(request, WEBHOOK_PROVIDER_CONFIGS['WHATSAPP'])
+          .pipe(
+            tap({
+              next: () => this.retryService.recordSuccess('whatsapp_templates'),
+              error: (error) => {
+                this.retryService.recordFailure('whatsapp_templates');
+                this.deadLetterQueue.addFailedWebhook('whatsapp_templates', { templateName }, error, WEBHOOK_PROVIDER_CONFIGS['WHATSAPP'].maxAttempts || 3);
+              }
+            }),
+            catchError(this.handleError)
+          );
   }
 
   // ==============================

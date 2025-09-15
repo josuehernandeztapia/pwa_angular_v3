@@ -11,7 +11,7 @@ import { ActivityItem, HumanActivityFeedComponent } from '../../shared/human-act
 import { ActionButton, NextBestActionData, NextBestActionHeroComponent } from '../../shared/next-best-action-hero/next-best-action-hero.component';
 import { RiskRadarClient, RiskRadarComponent } from '../../shared/risk-radar/risk-radar.component';
 import { DevKpiMiniComponent } from '../../shared/dev-kpi-mini.component';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',

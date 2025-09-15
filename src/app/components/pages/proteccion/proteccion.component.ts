@@ -14,7 +14,7 @@ import { environment } from '../../../../environments/environment';
   imports: [CommonModule, ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="proteccion-container">
+    <div class="proteccion-container premium-container" data-testid="proteccion-container">
       <header class="page-header">
         <h1>🛡️ Sistema de Protección</h1>
         <p>Análisis de riesgo y protección financiera para transportistas</p>
@@ -110,19 +110,19 @@ import { environment } from '../../../../environments/environment';
                   <span class="label">n′</span>
                   <span class="value">{{ s.newTerm }} meses</span>
                 </div>
-                <div class="row" title="Tasa interna de retorno posterior a la reestructura; debe cumplir con IRR mínima de políticas" data-cy="tip-irr">
+                <div class="row" title="Tasa interna de retorno posterior a la reestructura; debe cumplir con IRR mínima de políticas" data-cy="tip-irr" id="tir-post" data-testid="tir-post">
                   <span class="label">TIR post</span>
                   <span class="value">
-                    <span class="irr" [class.ok]="isTirOk(s)" [class.bad]="!isTirOk(s)">{{ getIrrPct(s) | number:'1.0-2' }}%</span>
+                    <span class="irr" [class.ok]="isTirOk(s)" [class.bad]="!isTirOk(s)" data-testid="tir-value">{{ getIrrPct(s) | number:'1.0-2' }}%</span>
                   </span>
                 </div>
 
                 <!-- Motivos de rechazo y sugerencias -->
-                <div class="rejection" *ngIf="!isScenarioEligible(s)" data-cy="rejection-box" title="Causas por las que el escenario no es elegible según políticas">
-                  <div class="reason" *ngIf="!isTirOk(s)" title="La TIR posterior es menor a la mínima aceptada">Motivo: IRRpost < IRRmin</div>
-                  <div class="reason" *ngIf="isBelowMinPayment(s)" title="El pago mensual reestructurado es inferior al mínimo permitido">Motivo: PMT′ < PMTmin</div>
-                  <div class="suggestion" *ngIf="s.type==='step-down'">Sugerencia: reducir α a 20% y recalcular</div>
-                  <div class="suggestion" *ngIf="s.type==='defer'">Sugerencia: limitar diferimiento a 3 meses</div>
+                <div class="rejection" *ngIf="!isScenarioEligible(s)" data-cy="rejection-box" data-testid="rejection-reason" title="Causas por las que el escenario no es elegible según políticas">
+                  <div class="reason" *ngIf="!isTirOk(s)" title="La TIR posterior es menor a la mínima aceptada" data-testid="irr-rejection">Motivo: IRRpost < IRRmin</div>
+                  <div class="reason" *ngIf="isBelowMinPayment(s)" title="El pago mensual reestructurado es inferior al mínimo permitido" data-testid="pmt-rejection">Motivo: PMT′ < PMTmin</div>
+                  <div class="suggestion" *ngIf="s.type==='step-down'" data-testid="step-down-suggestion">Sugerencia: reducir α a 20% y recalcular</div>
+                  <div class="suggestion" *ngIf="s.type==='defer'" data-testid="defer-suggestion">Sugerencia: limitar diferimiento a 3 meses</div>
                 </div>
 
                 <!-- Detalles -->

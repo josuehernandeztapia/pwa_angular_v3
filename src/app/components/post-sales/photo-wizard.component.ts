@@ -5,6 +5,8 @@ import { CasesService, CaseRecord } from '../../services/cases.service';
 import { environment } from '../../../environments/environment';
 import { PostSalesQuoteDraftService, PartSuggestion } from '../../services/post-sales-quote-draft.service';
 import { PostSalesQuoteApiService } from '../../services/post-sales-quote-api.service';
+import { timeout, catchError } from 'rxjs/operators';
+import { of, timer } from 'rxjs';
 
 type StepId = 'plate' | 'vin' | 'odometer' | 'evidence';
 
@@ -90,6 +92,11 @@ interface StepState {
             <button class="btn" *ngIf="needsVin" (click)="jumpTo('vin')">Tomar foto de VIN</button>
             <button class="btn" *ngIf="needsOdometer" (click)="jumpTo('odometer')">Tomar foto de Odómetro</button>
             <button class="btn" *ngIf="needsEvidence" (click)="jumpTo('evidence')">Tomar Evidencia</button>
+        </div>
+        
+        <!-- VIN Detection Banner for timeout/error cases -->
+        <div class="banner info" *ngIf="showVinDetectionBanner" data-testid="vin-detection-banner" data-cy="vin-detection-banner">
+          🔍 VIN detectado automáticamente - Confirma que la captura sea legible para evidencia
         </div>
         
         <!-- Chips de refacciones y CTA de agregado a cotización (dev/BFF flags) abajo -->
@@ -201,6 +208,7 @@ export class PhotoWizardComponent {
   private startTimeMs: number | null = null;
   private sentFirstRecommendation = false;
   private sentNeedInfo = false;
+  showVinDetectionBanner = false;
   firstRecommendationMs: number | null = null;
   draftCount = 0;
   recommendedParts: PartSuggestion[] = [];
@@ -285,12 +293,34 @@ export class PhotoWizardComponent {
     step.uploading = true;
     step.error = null;
 
-    this.cases.uploadAndAnalyze(this.caseId, id, file).subscribe({
+    this.cases.uploadAndAnalyze(this.caseId, id, file)
+      .pipe(
+        timeout(15000), // 15 second timeout for OCR analysis
+        catchError(error => {
+          console.warn('OCR analysis timeout or error:', error);
+          // Return fallback response for timeout/error cases
+          return of({
+            attachment: null,
+            ocr: {
+              confidence: 0,
+              missing: ['Timeout en detección automática'],
+              detectedVin: null,
+              requiresManualReview: true
+            }
+          });
+        })
+      )
+      .subscribe({
       next: ({ attachment, ocr }) => {
         step.uploading = false;
         step.done = true;
         step.confidence = ocr.confidence ?? 0;
         step.missing = ocr.missing || [];
+        
+        // Show VIN detection banner for timeout/error cases
+        if ((ocr as any).requiresManualReview && id === 'vin') {
+          this.showVinDetectionBanner = true;
+        }
 
         // Metrics: if we just achieved all 3 basics OK, send t_first_recommendation
         if (!this.sentFirstRecommendation && this.isAllGood && this.startTimeMs != null) {
