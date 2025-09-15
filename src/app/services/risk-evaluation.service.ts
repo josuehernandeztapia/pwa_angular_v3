@@ -12,6 +12,7 @@ import { RiskEvaluation } from '../components/risk-evaluation/risk-panel.compone
 import { WebhookRetryService } from './webhook-retry.service';
 import { PremiumIconsService } from './premium-icons.service';
 import { HumanMicrocopyService } from './human-microcopy.service';
+import { RiskPersistenceService } from './risk-persistence.service';
 
 export interface RiskEvaluationRequest {
   clientId: string;
@@ -66,6 +67,7 @@ export class RiskEvaluationService {
   private webhookRetryService = inject(WebhookRetryService);
   private premiumIconsService = inject(PremiumIconsService);
   private humanMicrocopyService = inject(HumanMicrocopyService);
+  private riskPersistenceService = inject(RiskPersistenceService);
 
   private readonly BFF_BASE_URL = '/api/bff/risk';
   private readonly EVALUATION_TIMEOUT = 30000; // 30 seconds
@@ -116,7 +118,17 @@ export class RiskEvaluationService {
       tap(evaluation => {
         this.updatePerformanceMetrics(startTime, true);
         this.setLoadingState(false, null, evaluation);
-        
+
+        // 🛡️ P0.2 SURGICAL FIX - Persist evaluation
+        this.riskPersistenceService.storeEvaluation(
+          request.clientId,
+          evaluation,
+          { requestData: request, processingTime: Date.now() - startTime }
+        ).subscribe({
+          next: (result) => console.log(`✅ Risk evaluation persisted: ${result.id}`),
+          error: (err) => console.warn('⚠️ Failed to persist evaluation:', err)
+        });
+
         // Track successful evaluation for analytics
         this.trackEvaluationEvent('success', evaluation);
       }),
@@ -136,13 +148,18 @@ export class RiskEvaluationService {
    * Get evaluation history for a client
    */
   getEvaluationHistory(clientId: string): Observable<RiskEvaluation[]> {
-    return this.http.get<RiskEvaluationResponse[]>(`${this.BFF_BASE_URL}/evaluations/${clientId}`).pipe(
-      map(responses => responses.map(response => 
-        this.transformResponse(response, { clientId } as RiskEvaluationRequest, 0)
-      )),
+    // 🛡️ P0.2 SURGICAL FIX - Use persistence service for history
+    return this.riskPersistenceService.getEvaluationHistory(clientId).pipe(
+      map(storedEvaluations => storedEvaluations.map(stored => stored.evaluation)),
       catchError(error => {
         console.error('Failed to fetch evaluation history:', error);
-        return throwError(() => error);
+        // Fallback to direct API call
+        return this.http.get<RiskEvaluationResponse[]>(`${this.BFF_BASE_URL}/evaluations/${clientId}`).pipe(
+          map(responses => responses.map(response =>
+            this.transformResponse(response, { clientId } as RiskEvaluationRequest, 0)
+          )),
+          catchError(() => of([]))
+        );
       })
     );
   }
@@ -217,6 +234,27 @@ export class RiskEvaluationService {
       error: null,
       lastEvaluation: null
     });
+  }
+
+  /**
+   * 🛡️ P0.2 SURGICAL FIX - Access persistence service
+   */
+  get persistenceService() {
+    return this.riskPersistenceService;
+  }
+
+  /**
+   * Get persisted evaluations observable
+   */
+  get persistedEvaluations$() {
+    return this.riskPersistenceService.evaluations$;
+  }
+
+  /**
+   * Get evaluation summary observable
+   */
+  get evaluationSummary$() {
+    return this.riskPersistenceService.summary$;
   }
 
   /**

@@ -2,22 +2,22 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, combineLatest, map, of, tap } from 'rxjs';
 import { DeliveryOrder } from '../models/deliveries';
+import { Client, Market } from '../models/types';
 import {
-  Client,
   DeliveryData,
   ImportMilestoneStatus,
   ImportStatus,
   LegalDocuments,
-  Market,
   PlatesData,
   PostSalesRecord,
   VehicleDeliveredEvent,
   VehicleUnit
-} from '../models/types';
+} from '../models/postventa';
 import { ContractTriggersService, TriggerEvent } from './contract-triggers.service';
 import { ContractService } from './contract.service';
 import { DeliveriesService } from './deliveries.service';
 import { ImportWhatsAppNotificationsService } from './import-whatsapp-notifications.service';
+import { WhatsAppNotificationResult } from '../models/notification';
 import { VehicleAssignmentRequest, VehicleAssignmentService } from './vehicle-assignment.service';
 
 declare global {

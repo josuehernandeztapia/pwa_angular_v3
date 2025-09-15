@@ -1,14 +1,22 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { AVIResponse, AVIScore } from '../models/types';
+import { Injectable, inject, signal } from '@angular/core';
+import { Observable, BehaviorSubject, of, combineLatest } from 'rxjs';
+import { map, tap, switchMap } from 'rxjs/operators';
+import { AVIResponse, AVIScore } from '../models/avi';
 import { AVIDualEngineService, DualEngineResult } from './avi-dual-engine.service';
+import { AVIConfusionMatrixService, CalibrationSample } from './avi-confusion-matrix.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AVICalibrationService {
-  
+  private confusionMatrixService = inject(AVIConfusionMatrixService);
+
+  // 🎙️ P0.2 SURGICAL FIX - Enhanced tracking for ≥30 audios
+  private readonly TARGET_AUDIO_SAMPLES = 30;
+  readonly audioSamplesCollected = signal(0);
+  readonly calibrationProgress = signal(0);
+  readonly isFullyCalibrated = signal(false);
+
   private calibrationData$ = new BehaviorSubject<CalibrationData>({
     totalInterviews: 0,
     successfulInterviews: 0,
@@ -36,6 +44,248 @@ export class AVICalibrationService {
 
   constructor(private dualEngine: AVIDualEngineService) {
     this.loadCalibrationData();
+    this.initializeCalibrationTracking();
+  }
+
+  /**
+   * 🎙️ P0.2 SURGICAL FIX - Initialize calibration tracking
+   */
+  private initializeCalibrationTracking(): void {
+    // Subscribe to confusion matrix service to track progress
+    this.confusionMatrixService.calibrationReport$.subscribe(report => {
+      this.audioSamplesCollected.set(report.totalSamples);
+      this.calibrationProgress.set(report.completionPercentage);
+      this.isFullyCalibrated.set(report.calibrationStatus === 'SUFFICIENT' || report.calibrationStatus === 'EXCELLENT');
+
+      console.log(`🎙️ AVI Calibration Progress: ${report.totalSamples}/${this.TARGET_AUDIO_SAMPLES} samples (${report.completionPercentage}%)`);
+    });
+  }
+
+  /**
+   * 🎯 Record audio sample with validation outcome
+   */
+  recordAudioSampleWithOutcome(
+    responses: AVIResponse[],
+    dualResult: DualEngineResult,
+    actualOutcome: 'GOOD' | 'ACCEPTABLE' | 'RISKY' | 'VERY_RISKY',
+    audioMetadata: {
+      duration: number;
+      quality: number;
+      format: string;
+      deviceInfo?: string;
+    },
+    validationSource: 'MANUAL' | 'BEHAVIORAL' | 'OUTCOME_DATA' = 'MANUAL',
+    notes?: string
+  ): Observable<boolean> {
+    // Map risk level from dual result
+    const predictedRisk = this.mapRiskLevel(dualResult.consolidatedScore.riskLevel);
+
+    const calibrationSample: Omit<CalibrationSample, 'id' | 'timestamp'> = {
+      audioMetadata,
+      responses,
+      dualResult,
+      predictedRisk,
+      actualOutcome,
+      validationSource,
+      notes
+    };
+
+    return this.confusionMatrixService.addCalibrationSample(calibrationSample).pipe(
+      tap(sample => {
+        console.log(`✅ Audio sample recorded for calibration: ${sample.id}`);
+
+        // Update legacy calibration data for backwards compatibility
+        const currentData = this.calibrationData$.value;
+        currentData.totalInterviews++;
+
+        // Check if prediction was correct for success rate
+        const wasCorrect = this.isPredictionCorrect(predictedRisk, actualOutcome);
+        if (wasCorrect) {
+          currentData.successfulInterviews++;
+        }
+
+        // Update accuracy
+        currentData.averageAccuracy = currentData.successfulInterviews / currentData.totalInterviews;
+
+        this.updateCalibrationData(currentData);
+      }),
+      map(() => true)
+    );
+  }
+
+  /**
+   * 📊 Get enhanced calibration status with confusion matrix
+   */
+  getEnhancedCalibrationStatus(): Observable<{
+    audioSamplesCollected: number;
+    targetSamples: number;
+    progress: number;
+    isCalibrated: boolean;
+    confusionMatrix: any;
+    metrics: any;
+    recommendations: string[];
+  }> {
+    return combineLatest([
+      this.confusionMatrixService.calibrationReport$,
+      this.confusionMatrixService.calculateMetrics(),
+      this.calibrationData$
+    ]).pipe(
+      map(([report, metrics, legacyData]) => ({
+        audioSamplesCollected: report.totalSamples,
+        targetSamples: this.TARGET_AUDIO_SAMPLES,
+        progress: report.completionPercentage,
+        isCalibrated: report.calibrationStatus === 'SUFFICIENT' || report.calibrationStatus === 'EXCELLENT',
+        confusionMatrix: report.confusionMatrix,
+        metrics,
+        recommendations: report.recommendations,
+        // Legacy data for backwards compatibility
+        legacyCalibration: legacyData
+      }))
+    );
+  }
+
+  /**
+   * 🎲 Generate mock calibration samples for testing (DEV ONLY)
+   */
+  generateMockCalibrationSamples(count: number = 35): Observable<boolean> {
+    if (count < 1 || count > 100) {
+      console.warn('⚠️ Invalid sample count. Using default: 35');
+      count = 35;
+    }
+
+    console.log(`🎲 Generating ${count} mock calibration samples...`);
+
+    const mockSamples: Array<Omit<CalibrationSample, 'id' | 'timestamp'>> = [];
+
+    for (let i = 0; i < count; i++) {
+      const riskLevels: Array<'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'> = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
+      const outcomes: Array<'GOOD' | 'ACCEPTABLE' | 'RISKY' | 'VERY_RISKY'> = ['GOOD', 'ACCEPTABLE', 'RISKY', 'VERY_RISKY'];
+
+      const predictedRisk = riskLevels[Math.floor(Math.random() * riskLevels.length)];
+
+      // Create realistic correlation between prediction and outcome
+      let actualOutcome: 'GOOD' | 'ACCEPTABLE' | 'RISKY' | 'VERY_RISKY';
+
+      // 80% accuracy simulation
+      if (Math.random() < 0.8) {
+        // Correct prediction
+        actualOutcome = predictedRisk === 'LOW' ? 'GOOD' :
+                       predictedRisk === 'MEDIUM' ? 'ACCEPTABLE' :
+                       predictedRisk === 'HIGH' ? 'RISKY' : 'VERY_RISKY';
+      } else {
+        // Incorrect prediction
+        actualOutcome = outcomes[Math.floor(Math.random() * outcomes.length)];
+      }
+
+      const mockSample: Omit<CalibrationSample, 'id' | 'timestamp'> = {
+        audioMetadata: {
+          duration: 60000 + Math.random() * 180000, // 1-4 minutes
+          quality: 75 + Math.random() * 25, // 75-100%
+          format: 'audio/webm',
+          deviceInfo: `MockDevice-${i % 5}`
+        },
+        responses: this.generateMockResponses(),
+        dualResult: this.generateMockDualResult(predictedRisk),
+        predictedRisk,
+        actualOutcome,
+        validationSource: Math.random() > 0.5 ? 'MANUAL' : 'BEHAVIORAL',
+        notes: `Mock sample ${i + 1} for calibration testing`
+      };
+
+      mockSamples.push(mockSample);
+    }
+
+    // Add samples sequentially with slight delay for realistic feel
+    return this.addMockSamplesSequentially(mockSamples, 0);
+  }
+
+  // Private helper methods for mock data
+
+  private addMockSamplesSequentially(samples: Array<Omit<CalibrationSample, 'id' | 'timestamp'>>, index: number): Observable<boolean> {
+    if (index >= samples.length) {
+      console.log(`✅ Generated ${samples.length} mock calibration samples`);
+      return of(true);
+    }
+
+    return this.confusionMatrixService.addCalibrationSample(samples[index]).pipe(
+      switchMap(() => {
+        // Small delay between samples
+        return new Promise(resolve => setTimeout(resolve, 50)).then(() =>
+          this.addMockSamplesSequentially(samples, index + 1)
+        );
+      })
+    );
+  }
+
+  private generateMockResponses(): any[] {
+    return [
+      {
+        questionId: 'q1',
+        answer: 'Mock response',
+        responseTime: 2000 + Math.random() * 3000,
+        stressIndicators: Math.random() > 0.7 ? ['hesitation'] : []
+      }
+    ];
+  }
+
+  private generateMockDualResult(predictedRisk: string): DualEngineResult {
+    const riskScore = predictedRisk === 'LOW' ? 800 + Math.random() * 200 :
+                     predictedRisk === 'MEDIUM' ? 600 + Math.random() * 200 :
+                     predictedRisk === 'HIGH' ? 400 + Math.random() * 200 :
+                     200 + Math.random() * 200;
+
+    return {
+      scientificScore: {
+        totalScore: riskScore + (Math.random() - 0.5) * 100,
+        riskLevel: predictedRisk as any,
+        confidence: 70 + Math.random() * 30,
+        components: {},
+        redFlags: [],
+        processingTime: 1000 + Math.random() * 1000
+      },
+      heuristicScore: {
+        totalScore: riskScore + (Math.random() - 0.5) * 100,
+        riskLevel: predictedRisk as any,
+        confidence: 70 + Math.random() * 30,
+        components: {},
+        redFlags: [],
+        processingTime: 100 + Math.random() * 200
+      },
+      consolidatedScore: {
+        totalScore: riskScore,
+        riskLevel: predictedRisk as any,
+        confidence: 70 + Math.random() * 30,
+        components: {},
+        redFlags: [],
+        processingTime: 1200 + Math.random() * 1200
+      },
+      consensus: {
+        level: 'HIGH',
+        difference: Math.random() * 100,
+        agreementPercentage: 70 + Math.random() * 30
+      },
+      metadata: {
+        timestamp: new Date(),
+        engineVersions: { scientific: '2.1.0', heuristic: '1.5.0' },
+        processingFlags: []
+      }
+    } as DualEngineResult;
+  }
+
+  private mapRiskLevel(riskLevel: string): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
+    switch (riskLevel?.toUpperCase()) {
+      case 'LOW': return 'LOW';
+      case 'MEDIUM': return 'MEDIUM';
+      case 'HIGH': return 'HIGH';
+      case 'CRITICAL': return 'CRITICAL';
+      default: return 'MEDIUM';
+    }
+  }
+
+  private isPredictionCorrect(predicted: string, actual: string): boolean {
+    const isRiskyPrediction = predicted === 'HIGH' || predicted === 'CRITICAL';
+    const isRiskyOutcome = actual === 'RISKY' || actual === 'VERY_RISKY';
+    return isRiskyPrediction === isRiskyOutcome;
   }
 
   /**

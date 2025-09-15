@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
-import { 
+import {
   PostSalesRecord,
   PostSalesService,
   PostSalesContact,
@@ -13,7 +13,7 @@ import {
   ServiceType,
   ContactChannel,
   ContactPurpose
-} from '../models/types';
+} from '../models/postventa';
 
 declare global {
   interface Window {

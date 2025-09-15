@@ -3,18 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PushNotificationService } from '../../../services/push-notification.service';
+import { NotificationHistory } from '../../../models/notification';
 
-interface NotificationHistory {
-  id: string;
-  user_id: string;
-  title: string;
-  body: string;
-  type: string;
-  sent_at: string;
-  delivered: boolean;
-  clicked: boolean;
-  data?: any;
-}
+// ✅ Using SSOT NotificationHistory from models/notification.ts
 
 @Component({
   selector: 'app-notification-center',
@@ -86,7 +77,7 @@ interface NotificationHistory {
             <div class="notification-title">{{ notification.title }}</div>
             <div class="notification-body">{{ notification.body }}</div>
             <div class="notification-meta">
-              <span class="notification-time">{{ formatTime(notification.sent_at) }}</span>
+              <span class="notification-time">{{ formatTime(getTimeString(notification)) }}</span>
               <span class="notification-type">{{ getTypeLabel(notification.type) }}</span>
             </div>
           </div>
@@ -667,6 +658,15 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
       default:
         return type.toUpperCase();
     }
+  }
+
+  getTimeString(notification: NotificationHistory): string {
+    // Try sent_at first (legacy field), then timestamp (new field)
+    const timeValue = notification.sent_at || notification.timestamp;
+    if (timeValue instanceof Date) {
+      return timeValue.toISOString();
+    }
+    return String(timeValue || new Date().toISOString());
   }
 
   formatTime(timestamp: string): string {

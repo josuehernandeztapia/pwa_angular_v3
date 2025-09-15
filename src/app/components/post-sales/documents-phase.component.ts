@@ -495,10 +495,18 @@ export class DocumentsPhaseComponent {
     this.addingToQuote.set(true);
     const clientId = this.clientId();
     // Create or get draft, then add a simple line item representing this phase
-    this.quoteApi.createOrGetDraft(clientId).subscribe({
-      next: (res) => {
+    this.quoteApi.getOrCreateDraftQuote(clientId).subscribe({
+      next: (res: any) => {
         const quoteId = res.quoteId;
-        this.quoteApi.addLine(quoteId, { name: 'Gestión Documental Postventa', unitPrice: 990 }).subscribe({
+        const managementPart = {
+          id: 'DOC-MGMT',
+          name: 'Gestión Documental Postventa',
+          priceMXN: 990,
+          stock: 1,
+          oem: '',
+          equivalent: ''
+        };
+        this.quoteApi.addLine(quoteId, managementPart).subscribe({
           next: () => {
             this.addingToQuote.set(false);
             this.quoteStatus.set(`Agregado a cotización (${quoteId})`);
@@ -702,7 +710,7 @@ export class DocumentsPhaseComponent {
       this.closeSuccessModal();
     }
   }
-  constructor(private router: Router, private fb: FormBuilder, private integratedImportTracker: IntegratedImportTrackerService, private postSalesApi: PostSalesApiService, private pdfExport?: any) {
+  constructor(private integratedImportTracker: IntegratedImportTrackerService, private pdfExport?: any) {
     this.documentsForm = this.fb.group({
       fechaTransferencia: [new Date().toISOString().split('T')[0], Validators.required],
       titular: ['', [Validators.required, Validators.minLength(3)]],

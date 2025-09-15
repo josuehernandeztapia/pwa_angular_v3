@@ -15,9 +15,12 @@ export type ImportMilestoneStatus = {
   estimatedDate?: Date;
   documents?: string[];
   notes?: string;
-  // Legacy compatibility
+  // Legacy compatibility - alternative property names used in codebase
   completed?: boolean;
   inProgress?: boolean;
+  completedAt?: Date; // Alternative to completionDate
+  startedAt?: Date; // Alternative to startDate
+  estimatedDays?: number; // Alternative to estimatedDate
 };
 
 // Delivery and documentation

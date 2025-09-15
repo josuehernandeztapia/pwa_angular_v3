@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
-import { 
-  Client, 
-  Document, 
-  DocumentStatus, 
-  BusinessFlow, 
-  Actor, 
-  EventType,
-  CollectiveCreditMember,
-  ImportStatus
+import {
+  Client,
+  Document,
+  DocumentStatus,
+  BusinessFlow,
+  Actor,
+  EventType
 } from '../../models/types';
+import { ImportStatus } from '../../models/postventa';
+import { CollectiveCreditMember } from '../../models/tanda';
 
 // --- Document Checklists - Port exacto desde React ---
 const CONTADO_DOCS: Document[] = [

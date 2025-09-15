@@ -1,97 +1,122 @@
 /**
- * 🔢 Internal Rate of Return (IRR) Calculator
- * Newton-Raphson method implementation for robust TIR calculations
- * Part of P0.1 Surgical Fix - ensures TIR always computes correctly
+ * 🧮 IRR (Internal Rate of Return) Calculator
+ * Newton-Raphson method implementation for financial calculations
  */
 
 export function irr(cashflows: number[], guess = 0.02): number {
   if (!cashflows || cashflows.length < 2) {
-    console.warn('IRR: Invalid cashflows array');
-    return 0;
+    throw new Error('IRR requires at least 2 cashflow values');
   }
 
-  // Newton-Raphson iterative method
+  // Newton-Raphson iteration
   let r = guess;
-  
-  for (let i = 0; i < 50; i++) {
-    let f = 0;  // NPV function
-    let df = 0; // Derivative of NPV
-    
+  const maxIterations = 50;
+  const tolerance = 1e-9;
+
+  for (let i = 0; i < maxIterations; i++) {
+    let f = 0;
+    let df = 0;
+
+    // Calculate NPV and its derivative
     for (let t = 0; t < cashflows.length; t++) {
       const cf = cashflows[t];
-      if (!isFinite(cf)) continue;
-      
       const dr = Math.pow(1 + r, t);
-      if (dr === 0) continue;
-      
+
+      if (dr === 0) return NaN; // Avoid division by zero
+
       f += cf / dr;
       df += -t * cf / (dr * (1 + r));
     }
-    
+
+    if (Math.abs(f) < tolerance) {
+      return r; // Converged
+    }
+
+    if (Math.abs(df) < tolerance) {
+      break; // Derivative too small, can't continue
+    }
+
+    const newR = r - f / df;
+
     // Check for convergence
-    if (Math.abs(f) < 1e-9) {
-      return r;
+    if (Math.abs(newR - r) < tolerance) {
+      return newR;
     }
-    
-    // Newton-Raphson step
-    if (df === 0) break;
-    const nr = r - f / df;
-    
-    // Check if result is reasonable
-    if (!isFinite(nr) || Math.abs(nr - r) < 1e-9) {
-      return r;
-    }
-    
-    r = nr;
-    
+
+    r = newR;
+
     // Prevent extreme values
-    if (r < -0.99) r = -0.99;
-    if (r > 10) r = 10;
+    if (!isFinite(r) || Math.abs(r) > 10) {
+      break;
+    }
   }
-  
+
   return r;
 }
 
 /**
- * Calculate TIR for protection scenarios
- * Handles edge cases and provides fallbacks
+ * Calculate effective rate considering fees and insurance
  */
-export function calculateTIR(
-  originalPayment: number,
-  newPayment: number,
-  originalTerm: number,
-  newTerm: number,
-  balance: number
+export function calculateEffectiveRate(
+  principal: number,
+  monthlyPayment: number,
+  termMonths: number,
+  fees: number = 0
 ): number {
+  // Create cashflow array: -principal (outflow), then monthly payments (inflows)
+  const cashflows = [-principal - fees];
+
+  for (let i = 0; i < termMonths; i++) {
+    cashflows.push(monthlyPayment);
+  }
+
   try {
-    // Build cashflow array
-    const cashflows: number[] = [];
-    
-    // Initial balance (negative - cash outflow)
-    cashflows.push(-balance);
-    
-    // Original payments for remaining original term
-    for (let i = 0; i < originalTerm; i++) {
-      cashflows.push(originalPayment);
-    }
-    
-    // Additional payments if new term is longer
-    if (newTerm > originalTerm) {
-      for (let i = originalTerm; i < newTerm; i++) {
-        cashflows.push(newPayment);
-      }
-    }
-    
-    return irr(cashflows);
+    const monthlyRate = irr(cashflows);
+    return monthlyRate * 12; // Convert to annual rate
   } catch (error) {
-    console.error('Error calculating TIR:', error);
-    return 0;
+    console.warn('IRR calculation failed:', error);
+    return NaN;
   }
 }
 
 /**
- * Validate if TIR meets minimum requirements
+ * Validate IRR result against minimum acceptable rate
  */
-export function validateTIR(tirValue: number, minTIR = 0.18): boolean {
-  return isFinite(tirValue) && tirValue >= minTIR;
+export function validateIRR(
+  irrValue: number,
+  minRate: number = 0.18,
+  maxRate: number = 0.35
+): {
+  isValid: boolean;
+  reason?: string;
+  severity: 'info' | 'warning' | 'error';
+} {
+  if (!isFinite(irrValue) || isNaN(irrValue)) {
+    return {
+      isValid: false,
+      reason: 'IRR calculation resulted in invalid value',
+      severity: 'error'
+    };
+  }
+
+  if (irrValue < minRate) {
+    return {
+      isValid: false,
+      reason: `IRR (${(irrValue * 100).toFixed(2)}%) below minimum required rate (${(minRate * 100).toFixed(2)}%)`,
+      severity: 'error'
+    };
+  }
+
+  if (irrValue > maxRate) {
+    return {
+      isValid: false,
+      reason: `IRR (${(irrValue * 100).toFixed(2)}%) exceeds maximum acceptable rate (${(maxRate * 100).toFixed(2)}%)`,
+      severity: 'warning'
+    };
+  }
+
+  return {
+    isValid: true,
+    severity: 'info'
+  };
 }

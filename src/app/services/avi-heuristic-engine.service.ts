@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AVIQuestionEnhanced, AVIResponse, AVIScore, RedFlag, AVICategory } from '../models/types';
+import { AVIQuestionEnhanced, AVIResponse, AVIScore, RedFlag, AVICategory } from '../models/avi';
 import { ALL_AVI_QUESTIONS } from '../data/avi-questions.data';
 
 @Injectable({

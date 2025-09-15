@@ -2,7 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 import { HttpClientService, ApiResponse } from './http-client.service';
-import { Client, BusinessFlow, Quote, Document, EventLog, DocumentStatus, Actor, EventType, Market } from '../models/types';
+import { Client, BusinessFlow, Document, EventLog, DocumentStatus, Actor, EventType, Market } from '../models/types';
+import { Quote } from '../models/business';
 import { environment } from '../../environments/environment';
 
 describe('ApiService', () => {

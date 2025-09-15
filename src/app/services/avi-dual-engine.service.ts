@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin, of, from } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { AVIResponse, AVIScore, RedFlag } from '../models/types';
+import { AVIResponse, AVIScore, RedFlag } from '../models/avi';
 import { AVIScientificEngineService } from './avi-scientific-engine.service';
 import { AVIHeuristicEngineService } from './avi-heuristic-engine.service';
 import { ALL_AVI_QUESTIONS } from '../data/avi-questions.data';

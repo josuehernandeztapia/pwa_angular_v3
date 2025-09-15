@@ -126,7 +126,7 @@ export class DeliveriesController {
   @Get(':id/eta-history')
   @ApiOperation({ summary: 'Get ETA calculation and adjustment history' })
   @ApiParam({ name: 'id', description: 'Delivery order ID' })
-  async getEtaHistory(@Param('id') id: string) {
+  async getEtaHistory(@Param('id') id: string): Promise<any> {
     return this.deliveriesDb.getEtaHistory(id);
   }
 

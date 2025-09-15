@@ -17,9 +17,22 @@
       }
     },
     {
-      "name": "assets",
+      "name": "assets-critical",
+      "installMode": "prefetch",
+      "updateMode": "lazy",
+      "resources": {
+        "files": [
+          "/assets/icons/icon-192x192.png",
+          "/assets/icons/icon-512x512.png",
+          "/assets/icons/icon-192x192.webp",
+          "/assets/icons/icon-512x512.webp"
+        ]
+      }
+    },
+    {
+      "name": "assets-lazy",
       "installMode": "lazy",
-      "updateMode": "prefetch",
+      "updateMode": "lazy",
       "resources": {
         "files": [
           "/assets/**",
@@ -30,34 +43,21 @@
   ],
   "dataGroups": [
     {
-      "name": "api-fresh",
+      "name": "api-critical",
       "urls": [
-        "https://api.conductores-pwa.com/public/**",
-        "http://localhost:3000/api/public/**"
+        "/api/auth/**",
+        "/api/dashboard/**",
+        "/api/user/**"
       ],
       "cacheConfig": {
         "strategy": "freshness",
-        "maxSize": 50,
-        "maxAge": "1h",
-        "timeout": "3s"
+        "maxSize": 20,
+        "maxAge": "5m",
+        "timeout": "2s"
       }
     },
     {
-      "name": "api-freshness",
-      "urls": [
-        "https://api.mifiel.com/**",
-        "https://api.metamap.com/**",
-        "https://api.kinban.com/**"
-      ],
-      "cacheConfig": {
-        "strategy": "freshness",
-        "maxSize": 50,
-        "maxAge": "1h",
-        "timeout": "3s"
-      }
-    },
-    {
-      "name": "api-cache-core",
+      "name": "api-performance",
       "urls": [
         "/api/clients",
         "/api/clients/**",
@@ -65,12 +65,42 @@
         "/api/quotes/**",
         "/api/reports",
         "/api/reports/**",
-        "/api/post-sales/**"
+        "/api/products/**",
+        "/api/configurations/**"
       ],
       "cacheConfig": {
         "strategy": "performance",
-        "maxSize": 100,
-        "maxAge": "12h"
+        "maxSize": 150,
+        "maxAge": "6h"
+      }
+    },
+    {
+      "name": "api-fresh",
+      "urls": [
+        "https://api.conductores-pwa.com/public/**",
+        "http://localhost:3000/api/public/**",
+        "/api/post-sales/**",
+        "/api/documents/**"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 75,
+        "maxAge": "30m",
+        "timeout": "3s"
+      }
+    },
+    {
+      "name": "api-external",
+      "urls": [
+        "https://api.mifiel.com/**",
+        "https://api.metamap.com/**",
+        "https://api.kinban.com/**"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 30,
+        "maxAge": "15m",
+        "timeout": "5s"
       }
     }
   ],

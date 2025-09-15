@@ -3,30 +3,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { SwPush } from '@angular/service-worker';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { NotificationPayload, NotificationHistory } from '../models/notification';
 
-interface NotificationPayload {
-  type: 'payment_due' | 'gnv_overage' | 'document_pending' | 'contract_approved' | 'general';
-  title: string;
-  body: string;
-  icon?: string;
-  badge?: string;
-  tag?: string;
-  data?: {
-    client_id?: string;
-    payment_link?: string;
-    amount?: number;
-    due_date?: string;
-    action_url?: string;
-    [key: string]: any;
-  };
-  actions?: {
-    action: string;
-    title: string;
-    icon?: string;
-  }[];
-  requireInteraction?: boolean;
-  silent?: boolean;
-}
+// ✅ Using SSOT NotificationPayload from models/notification.ts
 
 interface PushSubscription {
   subscription_id?: string;
@@ -46,17 +25,7 @@ interface PushSubscription {
   active: boolean;
 }
 
-interface NotificationHistory {
-  id: string;
-  user_id: string;
-  title: string;
-  body: string;
-  type: string;
-  sent_at: string;
-  delivered: boolean;
-  clicked: boolean;
-  data?: any;
-}
+// ✅ Using SSOT NotificationHistory from models/notification.ts
 
 @Injectable({
   providedIn: 'root'
@@ -241,10 +210,13 @@ export class PushNotificationService {
     const notification: NotificationHistory = {
       id: Date.now().toString(),
       user_id: this.getCurrentUserId(),
+      userId: this.getCurrentUserId(),
       title: message.title,
-      body: message.body,
+      body: message.body || message.message,
+      message: message.message || message.body || message.title,
       type: message.type,
       sent_at: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
       delivered: true,
       clicked: false,
       data: message.data
@@ -305,9 +277,9 @@ export class PushNotificationService {
     if (!this.isSupported || Notification.permission !== 'granted') return;
 
     const options: NotificationOptions = {
-      body: payload.body,
+      body: payload.body || payload.message,
       icon: payload.icon || '/assets/icons/icon-192x192.png',
-      badge: payload.badge || '/assets/icons/icon-72x72.png',
+      badge: typeof payload.badge === 'string' ? payload.badge : '/assets/icons/icon-72x72.png',
       tag: payload.tag || payload.type,
       data: payload.data,
       requireInteraction: payload.requireInteraction || false,
@@ -385,9 +357,12 @@ export class PushNotificationService {
 
   async sendTestNotification(): Promise<void> {
     const testPayload: NotificationPayload = {
+      id: Date.now().toString(),
       type: 'general',
       title: 'Prueba de Notificación',
+      message: 'Esta es una notificación de prueba del sistema Conductores PWA',
       body: 'Esta es una notificación de prueba del sistema Conductores PWA',
+      timestamp: new Date(),
       icon: '/assets/icons/icon-192x192.png',
       data: {
         test: true,

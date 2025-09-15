@@ -18,6 +18,45 @@ import {
   RiskFactorSeverity 
 } from '../dto/risk-evaluation-response.dto';
 
+
+  const mockRequest = {
+    evaluationId: 'EVAL-001',
+    tipoEvaluacion: 'INDIVIDUAL' as any,
+    clienteId: 'CLI-001',
+    asesorId: 'ASE-001',
+    datosPersonales: {
+      edad: 35,
+      genero: 'M',
+      ocupacion: 'Transportista',
+      ingresosMensuales: 25000,
+      estadoCivil: 'casado'
+    },
+    perfilFinanciero: {
+      scoreCrediticio: 720,
+      historialPagos: 85,
+      deudaActual: 150000,
+      capacidadPago: 8000,
+      antiguedadCrediticia: 5,
+      ingresosMensuales: 25000
+    },
+    datosVehiculo: {
+      marca: 'Nissan',
+      modelo: 'NV200',
+      año: 2022,
+      year: 2022,
+      precio: 380000,
+      valor: 380000,
+      enganche: 76000,
+      plazoMeses: 48
+    },
+    factoresRiesgo: {
+      factoresDetectados: [],
+      estabilidadLaboral: 8,
+      nivelEndeudamiento: 35,
+      riesgoGeografico: 6
+    }
+  };
+  
 describe('🎯 RiskEvaluationService', () => {
   let service: RiskEvaluationService;
   let httpService: HttpService;

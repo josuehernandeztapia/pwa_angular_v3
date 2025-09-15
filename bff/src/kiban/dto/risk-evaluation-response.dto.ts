@@ -6,11 +6,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RiskCategory, EvaluationType } from './risk-evaluation-request.dto';
 
+// Export RiskCategory for external imports
+export { RiskCategory } from './risk-evaluation-request.dto';
+
 export enum RiskDecision {
-  APROBADO = 'aprobado',
-  APROBADO_CONDICIONAL = 'aprobado_condicional', 
-  PENDIENTE_REVISION = 'pendiente_revision',
-  RECHAZADO = 'rechazado'
+  GO = 'GO',
+  REVIEW = 'REVIEW',
+  NO_GO = 'NO_GO'
 }
 
 export enum RiskFactorSeverity {
@@ -41,6 +43,29 @@ export class RiskScoreBreakdownDto {
 
   @ApiProperty({ description: 'Puntaje final consolidado (0-100)' })
   finalScore: number;
+
+  // Additional properties for HASE algorithm compatibility
+  @ApiProperty({ description: 'Total score (0-100)' })
+  totalScore: number;
+
+  @ApiProperty({ description: 'Historical score (0-100)' })
+  historicalScore: number;
+
+  @ApiProperty({ description: 'Geographic score (0-100)' })
+  geographicScore: number;
+
+  @ApiProperty({ description: 'Voice analysis score (0-100)' })
+  voiceScore: number;
+
+  @ApiProperty({ description: 'Algorithm weights' })
+  weights: {
+    historical: number;
+    geographic: number;
+    voice: number;
+  };
+
+  @ApiProperty({ description: 'Confidence level (0-100)' })
+  confidence: number;
 }
 
 export class RiskFactorDetailDto {
@@ -174,6 +199,23 @@ export class RiskEvaluationResponseDto {
 
   @ApiProperty({ description: 'Metadatos adicionales del procesamiento' })
   metadata?: Record<string, any>;
+
+  // Additional properties for service compatibility
+  @ApiProperty({ description: 'Risk reasons array', type: Array })
+  reasons?: Array<{
+    type: string;
+    description: string;
+    severity: string;
+    impact: string;
+  }>;
+
+  @ApiProperty({ description: 'Risk mitigation plan compatibility' })
+  riskMitigationPlan?: {
+    actions: string[];
+    expectedReduction?: number;
+    timeline?: string;
+  };
+
 }
 
 export class BatchRiskEvaluationResponseDto {

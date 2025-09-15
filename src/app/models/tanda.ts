@@ -181,9 +181,11 @@ export interface ConsensusRequest {
 export interface ConsensusVote {
   memberId: string;
   memberName: string;
-  vote: 'approve' | 'reject';
+  vote: 'approve' | 'reject' | 'abstain';
   timestamp: Date;
   reason?: string;
+  // Legacy compatibility
+  votedAt?: Date; // Alternative to timestamp
 }
 
 // Simulator event types

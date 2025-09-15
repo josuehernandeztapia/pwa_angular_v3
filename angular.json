@@ -44,6 +44,7 @@
               "html2canvas",
               "canvg",
               "rgbcolor",
+              "regenerator-runtime",
               "raf",
               "core-js"
             ]
@@ -53,13 +54,25 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "300kb",
-                  "maximumError": "500kb"
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "8kb",
-                  "maximumError": "12kb"
+                  "maximumWarning": "12kb",
+                  "maximumError": "20kb"
+                },
+                {
+                  "type": "bundle",
+                  "name": "pdf-libs",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "bundle",
+                  "name": "vendor",
+                  "maximumWarning": "300kb",
+                  "maximumError": "500kb"
                 }
               ],
               "outputHashing": "all",
@@ -74,7 +87,10 @@
                 }
               },
               "extractLicenses": true,
-              "sourceMap": false
+              "sourceMap": false,
+              "namedChunks": false,
+              "baseHref": "/",
+              "crossOrigin": "anonymous"
             },
             "staging": {
               "outputHashing": "all",

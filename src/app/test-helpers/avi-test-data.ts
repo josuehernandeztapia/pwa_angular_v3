@@ -1,5 +1,5 @@
 // Test data and helpers for AVI system testing
-import { AVIResponse, AVIQuestionEnhanced, AVICategory, VoiceAnalysis } from '../models/types';
+import { AVIResponse, AVIQuestionEnhanced, AVICategory, VoiceAnalysis } from '../models/avi';
 import { DualEngineResult } from '../services/avi-dual-engine.service';
 import { CalibrationSample, OutcomeType } from '../services/avi-calibration.service';
 

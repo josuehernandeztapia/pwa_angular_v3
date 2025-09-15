@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BusinessFlow, Client, Quote, SimulatorMode } from '../../models/types';
+import { BusinessFlow, Client } from '../../models/types';
+import { Quote, SimulatorMode } from '../../models/business';
 import { CotizadorEngineService, ProductPackage } from '../../services/cotizador-engine.service';
 import { FinancialCalculatorService } from '../../services/financial-calculator.service';
 import { SavingsScenario, SimuladorEngineService } from '../../services/simulador-engine.service';

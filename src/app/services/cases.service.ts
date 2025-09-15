@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, of, switchMap } from 'rxjs';
+import { ManualOCRData } from '../components/shared/manual-ocr-entry/manual-ocr-entry.component';
 
 export type AttachmentType = 'plate' | 'vin' | 'odometer' | 'evidence' | 'other';
 
@@ -99,5 +100,20 @@ export class CasesService {
 
   recordNeedInfo(caseId: string, fields: string[]): Observable<{ ok: boolean; count: number }> {
     return this.http.post<{ ok: boolean; count: number }>(`${this.base}/cases/${caseId}/metrics/need-info`, { fields });
+  }
+
+  /**
+   * 🔄 P0.2 SURGICAL FIX - Store manual OCR data
+   */
+  storeManualOCRData(caseId: string, documentType: string, data: ManualOCRData): Observable<{ ok: boolean; stored: boolean }> {
+    const body = {
+      documentType,
+      fields: data.fields,
+      confidence: data.confidence,
+      isManual: data.isManual,
+      timestamp: new Date().toISOString()
+    };
+
+    return this.http.post<{ ok: boolean; stored: boolean }>(`${this.base}/cases/${caseId}/manual-ocr`, body);
   }
 }

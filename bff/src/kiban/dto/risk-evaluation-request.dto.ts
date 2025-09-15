@@ -59,6 +59,44 @@ export class PersonalDataDto {
   @IsString()
   @IsEnum(['soltero', 'casado', 'divorciado', 'viudo', 'union_libre'])
   estadoCivil: string;
+
+  @ApiProperty({ description: 'Historial crediticio', required: false })
+  @IsOptional()
+  @IsObject()
+  creditHistory?: {
+    creditScore?: number;
+    latePayments?: number;
+    defaults?: number;
+  };
+
+  @ApiProperty({ description: 'Dirección del evaluado', required: false })
+  @IsOptional()
+  @IsObject()
+  direccion?: {
+    estado: string;
+    ciudad: string;
+    colonia: string;
+  };
+
+  @ApiProperty({ description: 'Datos de voz para análisis', required: false })
+  @IsOptional()
+  @IsObject()
+  voiceData?: {
+    audioFile?: string;
+    quality?: string;
+  };
+
+  @ApiProperty({ description: 'Nivel educativo', required: false })
+  @IsOptional()
+  @IsString()
+  educacion?: string;
+
+  @ApiProperty({ description: 'Empleo actual', required: false })
+  @IsOptional()
+  @IsObject()
+  empleoActual?: {
+    tiempoEmpleo?: number;
+  };
 }
 
 export class FinancialProfileDto {
@@ -89,6 +127,13 @@ export class FinancialProfileDto {
   @Min(0)
   @Max(50)
   antiguedadCrediticia: number;
+
+  // Additional property for service compatibility
+  @ApiProperty({ description: 'Ingresos mensuales', minimum: 0 })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  ingresosMensuales?: number;
 }
 
 export class VehicleDataDto {
@@ -125,6 +170,18 @@ export class VehicleDataDto {
   @Min(12)
   @Max(96)
   plazoMeses: number;
+
+  // Additional properties for service compatibility
+  @ApiProperty({ description: 'Año del vehículo (alias)', minimum: 1990, maximum: 2030 })
+  @IsNumber()
+  @Min(1990)
+  @Max(2030)
+  year: number;
+
+  @ApiProperty({ description: 'Valor del vehículo', minimum: 50000 })
+  @IsNumber()
+  @Min(50000)
+  valor: number;
 }
 
 export class RiskFactorsDto {
@@ -151,6 +208,17 @@ export class RiskFactorsDto {
   @Min(1)
   @Max(10)
   riesgoGeografico: number;
+
+  // Additional properties for service compatibility
+  @ApiProperty({ description: 'Previous claims', required: false })
+  @IsOptional()
+  @IsNumber()
+  previousClaims?: number;
+
+  @ApiProperty({ description: 'Driving violations', required: false })
+  @IsOptional()
+  @IsNumber()
+  drivingViolations?: number;
 }
 
 export class RiskEvaluationRequestDto {
@@ -200,6 +268,15 @@ export class RiskEvaluationRequestDto {
   @IsOptional()
   @IsObject()
   metadata?: Record<string, any>;
+
+  // Additional property for service compatibility
+  @ApiProperty({ description: 'Risk factors for service', required: false })
+  @IsOptional()
+  @IsObject()
+  riskFactors?: {
+    previousClaims?: number;
+    drivingViolations?: number;
+  };
 }
 
 export class BatchRiskEvaluationRequestDto {

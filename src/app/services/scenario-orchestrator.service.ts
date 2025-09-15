@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BusinessFlow, Market, Quote, Client } from '../models/types';
+import { BusinessFlow, Market, Client } from '../models/types';
+import { Quote } from '../models/business';
 import { FinancialCalculatorService } from './financial-calculator.service';
 import { CotizadorEngineService, CotizadorConfig } from './cotizador-engine.service';
 import { TandaEngineService } from './tanda-engine.service';

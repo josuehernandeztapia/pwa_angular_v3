@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Quote } from '../../../../models/types';
+import { Quote } from '../../../../models/business';
 import { CotizadorEngineService, ProductPackage } from '../../../../services/cotizador-engine.service';
 import { PdfExportService } from '../../../../services/pdf-export.service';
 import { SpeechService } from '../../../../services/speech.service';
