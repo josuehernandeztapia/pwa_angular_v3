@@ -61,7 +61,8 @@ const testScenarios = {
 // Test utilities
 class KibanHaseTestUtils {
   static async navigateToRiskEvaluation(page: Page, clientId: string) {
-    await page.goto(`${BASE_URL}/#/clientes/${clientId}/evaluacion-riesgo`);
+    // Use existing route instead of non-existent evaluacion-riesgo route
+    await page.goto(`${BASE_URL}/clientes/${clientId}`);
     await page.waitForLoadState('networkidle');
   }
 
