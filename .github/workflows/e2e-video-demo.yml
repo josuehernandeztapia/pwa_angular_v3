@@ -34,8 +34,6 @@ on:
 
 env:
   NODE_VERSION: '18'
-  DEMO_ENVIRONMENT: ${{ github.event.inputs.environment || 'staging' }}
-  DEMO_BROWSER: ${{ github.event.inputs.browser || 'chromium' }}
 
 jobs:
   generate-e2e-demo:
@@ -46,7 +44,7 @@ jobs:
     strategy:
       matrix:
         # Run on single browser for demo consistency
-        browser: ['${{ env.DEMO_BROWSER }}']
+        browser: ['chromium']
 
     steps:
       # =================================================================
@@ -84,9 +82,13 @@ jobs:
 
       - name: 🚀 Start Application Server
         run: |
-          npm run serve:prod &
-          sleep 10
-          curl -f http://localhost:4200 || exit 1
+          echo "Starting production server..."
+          npx http-server dist/conductores-pwa/browser -p 4200 --cors &
+          echo "Waiting for server to start..."
+          sleep 15
+          echo "Testing server connection..."
+          curl -f http://localhost:4200 || (echo "Server failed to start" && exit 1)
+          echo "Server is ready!"
         env:
           CI: true
 
@@ -96,7 +98,6 @@ jobs:
       - name: 🧪 Run E2E Demo Tests (Recording Videos)
         run: |
           echo "🎥 Starting E2E Demo Recording..."
-          echo "Environment: ${{ env.DEMO_ENVIRONMENT }}"
           echo "Browser: ${{ matrix.browser }}"
           echo "Recording Configuration:"
           echo "  - Video: ON"
@@ -262,7 +263,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pwa-e2e-demo-${{ env.DEMO_BROWSER }}-${{ github.run_number }}
+          name: pwa-e2e-demo-${{ matrix.browser }}-${{ github.run_number }}
           path: |
             reports/videos/
             VIDEO-DEMO-REPORT.md
@@ -275,7 +276,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-${{ env.DEMO_BROWSER }}-${{ github.run_number }}
+          name: playwright-report-${{ matrix.browser }}-${{ github.run_number }}
           path: |
             playwright-report/
             test-results*/
@@ -292,8 +293,8 @@ jobs:
           echo "===================================="
           echo ""
           echo "📁 Artifacts Generated:"
-          echo "  - pwa-e2e-demo-${{ env.DEMO_BROWSER }}-${{ github.run_number }}"
-          echo "  - playwright-report-${{ env.DEMO_BROWSER }}-${{ github.run_number }}"
+          echo "  - pwa-e2e-demo-${{ matrix.browser }}-${{ github.run_number }}"
+          echo "  - playwright-report-${{ matrix.browser }}-${{ github.run_number }}"
           echo ""
           echo "📥 Download Instructions:"
           echo "  1. Go to Actions tab: https://github.com/${{ github.repository }}/actions"
