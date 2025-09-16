@@ -31,7 +31,8 @@ export function calculateIRR(cashflows: number[], guess: number = 0.02, maxItera
       npv += cashflow / discountFactor;
 
       if (t > 0) {
-        derivativeNPV += (-t * cashflow) / (discountFactor * (1 + r));
+        // CORRECTED DERIVATIVE CALCULATION
+        derivativeNPV += (-t * cashflow) / Math.pow(1 + r, t + 1);
       }
     }
 

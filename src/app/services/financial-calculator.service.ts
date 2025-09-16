@@ -50,7 +50,8 @@ export class FinancialCalculatorService {
       for (let t = 0; t < cashFlows.length; t++) {
         const denominator = Math.pow(1 + rate, t);
         npv += cashFlows[t] / denominator;
-        npvDerivative -= (t * cashFlows[t]) / Math.pow(1 + rate, t + 1);
+        // CORRECTED DERIVATIVE CALCULATION
+        npvDerivative += -t * cashFlows[t] / Math.pow(1 + rate, t + 1);
       }
       
       if (Math.abs(npv) < tolerance) {

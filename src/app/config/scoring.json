@@ -1,0 +1,48 @@
+{
+  "businessFlowRequirements": {
+    "VentaDirecta": {
+      "minScore": 700,
+      "preferredGrades": ["A+", "A"],
+      "maxLoanToValue": 0.50,
+      "requiredDocuments": ["credit_report", "income_verification"]
+    },
+    "VentaPlazo": {
+      "minScore": 650,
+      "preferredGrades": ["A+", "A", "B+"],
+      "maxLoanToValue": 0.70,
+      "requiredDocuments": ["credit_report", "business_license"]
+    },
+    "CreditoColectivo": {
+      "minScore": 600,
+      "preferredGrades": ["A+", "A", "B+", "B"],
+      "maxLoanToValue": 0.80,
+      "requiredDocuments": ["group_formation_docs", "leader_credit_report"]
+    }
+  },
+  "riskThresholds": {
+    "low": {
+      "debt": 0.25,
+      "payment": 0.15
+    },
+    "medium": {
+      "debt": 0.35,
+      "payment": 0.25
+    },
+    "high": {
+      "debt": 0.45,
+      "payment": 0.35
+    }
+  },
+  "paymentCapacity": {
+    "debtToIncomeRatios": {
+      "maxTotalDebt": 0.35,
+      "availableForNewDebt": 0.4
+    }
+  },
+  "meta": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-09-16T00:00:00.000Z",
+    "source": "configuration.service.ts migration",
+    "businessLogicPreserved": true
+  }
+}

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, timer, of, throwError } from 'rxjs';
 import { map, catchError, tap, switchMap, retry, shareReplay } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { MonitoringService } from './monitoring.service';
 
 export interface DeliveryLocation {
   lat: number;
@@ -67,6 +68,7 @@ export interface DeliveryMetrics {
 
 @Injectable({ providedIn: 'root' })
 export class DeliveryTrackingService {
+  private monitoringService = inject(MonitoringService);
   private http = inject(HttpClient);
   private readonly BFF_BASE_URL = `${environment.apiUrl}/bff/delivery`;
   private readonly STORAGE_PREFIX = 'delivery_tracking_';
@@ -105,7 +107,12 @@ export class DeliveryTrackingService {
         console.log(`✅ Delivery commitment created: ${commitment.trackingCode}`);
       }),
       catchError(error => {
-        console.warn('⚠️ BFF sync failed, storing locally:', error);
+        this.monitoringService.captureWarning(
+          'DeliveryTrackingService',
+          'syncWithBFF',
+          'BFF sync failed, storing locally',
+          { deliveryId, error: error.message }
+        );
         this.addCommitmentToState(newCommitment);
         this.persistCommitment(newCommitment);
         return of(newCommitment);
@@ -133,7 +140,12 @@ export class DeliveryTrackingService {
         console.log(`📍 ETA updated for ${commitmentId}: ${update.estimatedArrival} (${Math.round(update.confidence * 100)}% confidence)`);
       }),
       catchError(error => {
-        console.warn('⚠️ ETA sync failed, persisting locally:', error);
+        this.monitoringService.captureWarning(
+          'DeliveryTrackingService',
+          'updateETA',
+          'ETA sync failed, persisting locally',
+          { deliveryId, newETA, error: error.message }
+        );
         this.addETAToState(etaUpdate);
         this.persistETAUpdate(etaUpdate);
         return of(etaUpdate);
@@ -273,7 +285,13 @@ export class DeliveryTrackingService {
         }
       },
       error: (error) => {
-        console.error('❌ ETA monitoring error:', error);
+        this.monitoringService.captureError(
+          'DeliveryTrackingService',
+          'monitorETAChanges',
+          error,
+          {},
+          'critical'
+        );
         this.trackingReliability.set(85); // Degraded mode
       }
     });
@@ -305,7 +323,13 @@ export class DeliveryTrackingService {
 
       console.log('📂 Delivery data loaded from persistence');
     } catch (error) {
-      console.warn('⚠️ Failed to load persisted delivery data:', error);
+      this.monitoringService.captureError(
+        'DeliveryTrackingService',
+        'loadPersistedData',
+        error,
+        {},
+        'medium'
+      );
     }
   }
 
@@ -318,7 +342,13 @@ export class DeliveryTrackingService {
 
       localStorage.setItem(`${this.STORAGE_PREFIX}commitments`, JSON.stringify(updated));
     } catch (error) {
-      console.warn('⚠️ Failed to persist commitment:', error);
+      this.monitoringService.captureError(
+        'DeliveryTrackingService',
+        'persistCommitmentUpdate',
+        error,
+        { deliveryId },
+        'medium'
+      );
     }
   }
 
@@ -340,7 +370,13 @@ export class DeliveryTrackingService {
 
       localStorage.setItem(`${this.STORAGE_PREFIX}eta_updates`, JSON.stringify(filtered));
     } catch (error) {
-      console.warn('⚠️ Failed to persist ETA update:', error);
+      this.monitoringService.captureError(
+        'DeliveryTrackingService',
+        'persistETAUpdate',
+        error,
+        { deliveryId, newETA },
+        'medium'
+      );
     }
   }
 

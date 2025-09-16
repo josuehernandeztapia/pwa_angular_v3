@@ -25,7 +25,7 @@ export function irr(cashflows: number[], guess = 0.02): number {
       if (dr === 0) return NaN; // Avoid division by zero
 
       f += cf / dr;
-      df += -t * cf / (dr * (1 + r));
+      df += -t * cf / Math.pow(1 + r, t + 1);
     }
 
     if (Math.abs(f) < tolerance) {
@@ -74,7 +74,13 @@ export function calculateEffectiveRate(
     const monthlyRate = irr(cashflows);
     return monthlyRate * 12; // Convert to annual rate
   } catch (error) {
-    console.warn('IRR calculation failed:', error);
+    // Try bisection method as fallback
+    try {
+      return irrBisection(cashflows, -0.99, 5.0, 1e-6, 1000);
+    } catch (bisectionError) {
+      console.warn('IRR calculation failed (Newton-Raphson and Bisection):', error);
+      return approximateIRR(cashflows);
+    }
     return NaN;
   }
 }
@@ -119,4 +125,57 @@ export function validateIRR(
     isValid: true,
     severity: 'info'
   };
+}
+
+/**
+ * Bisection method fallback for TIR calculation
+ */
+export function irrBisection(cashflows: number[], low = -0.99, high = 5.0, tolerance = 1e-6, maxIterations = 1000): number {
+  if (!cashflows || cashflows.length < 2) {
+    throw new Error('IRR requires at least 2 cashflow values');
+  }
+
+  function calculateNPV(rate: number): number {
+    let npv = 0;
+    for (let t = 0; t < cashflows.length; t++) {
+      npv += cashflows[t] / Math.pow(1 + rate, t);
+    }
+    return npv;
+  }
+
+  for (let i = 0; i < maxIterations; i++) {
+    const mid = (low + high) / 2;
+    const npvMid = calculateNPV(mid);
+
+    if (Math.abs(npvMid) < tolerance) {
+      return mid;
+    }
+
+    const npvLow = calculateNPV(low);
+    if ((npvLow > 0 && npvMid > 0) || (npvLow < 0 && npvMid < 0)) {
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+
+  throw new Error('Bisection method failed to converge');
+}
+
+/**
+ * Simple approximation fallback for TIR
+ */
+export function approximateIRR(cashflows: number[]): number {
+  if (!cashflows || cashflows.length < 2) return NaN;
+
+  const totalInflow = cashflows.slice(1).reduce((sum, cf) => sum + Math.max(0, cf), 0);
+  const initialOutflow = Math.abs(cashflows[0]);
+
+  if (initialOutflow === 0 || totalInflow === 0) return 0;
+
+  // Simple approximation: (total return / initial investment)^(1/periods) - 1
+  const periods = cashflows.length - 1;
+  const totalReturn = totalInflow / initialOutflow;
+
+  return Math.pow(totalReturn, 1 / periods) - 1;
 }
