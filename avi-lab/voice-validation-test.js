@@ -140,6 +140,8 @@ class VoiceValidationSuite {
                 const payload = this.generateAudioPayload(testCase.profile);
                 const result = this.engine.computeVoiceScore(payload);
 
+                const decisionKey = result.decision.replace('-', '_');
+
                 this.testResults.push({
                     testId: totalTests + 1,
                     profile: testCase.profile,
@@ -148,17 +150,17 @@ class VoiceValidationSuite {
                     score: result.score,
                     metrics: result.metrics,
                     flags: result.flags.length,
-                    correct: result.decision === testCase.expectedCategory
+                    correct: decisionKey === testCase.expectedCategory
                 });
 
-                this.categories[result.decision].count++;
-                if (result.decision === testCase.expectedCategory) {
+                this.categories[decisionKey].count++;
+                if (decisionKey === testCase.expectedCategory) {
                     correctPredictions++;
                 }
 
                 totalTests++;
 
-                console.log(`  Test ${totalTests}: Score=${result.score}, Decision=${result.decision}, Flags=${result.flags.length} ${result.decision === testCase.expectedCategory ? '✅' : '❌'}`);
+                console.log(`  Test ${totalTests}: Score=${result.score}, Decision=${result.decision}, Flags=${result.flags.length} ${decisionKey === testCase.expectedCategory ? '✅' : '❌'}`);
             }
         }
 
