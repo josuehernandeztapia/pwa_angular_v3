@@ -1,0 +1,18 @@
+{
+  "aguascalientes": {
+    "interestRate": 0.255,
+    "standardTerm": 24,
+    "minimumDownPayment": 0.60
+  },
+  "edomex": {
+    "interestRate": 0.285,
+    "standardTerm": 36,
+    "minimumDownPayment": 0.25
+  },
+  "meta": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-09-16T00:00:00.000Z",
+    "source": "configuration.service.ts migration",
+    "businessLogicPreserved": true
+  }
+}

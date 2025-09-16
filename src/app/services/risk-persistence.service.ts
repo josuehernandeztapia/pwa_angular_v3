@@ -3,10 +3,11 @@
  * P0.2 SURGICAL FIX - KIBAN/HASE persistence layer
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
+import { MonitoringService } from './monitoring.service';
 
 import { environment } from '../../environments/environment';
 import { RiskEvaluation } from '../components/risk-evaluation/risk-panel.component';
@@ -41,6 +42,7 @@ interface RiskEvaluationSummary {
   providedIn: 'root'
 })
 export class RiskPersistenceService {
+  private monitoringService = inject(MonitoringService);
   private readonly BFF_BASE_URL = '/api/bff/risk/persistence';
   private readonly LOCAL_STORAGE_KEY = 'conductores_risk_evaluations';
   private readonly enabled = environment.features?.enableRiskPersistence === true;
@@ -93,7 +95,12 @@ export class RiskPersistenceService {
           console.log(`✅ Risk evaluation ${response.id} stored remotely`);
         }),
         catchError(error => {
-          console.warn('⚠️ Remote storage failed, using local fallback:', error);
+          this.monitoringService.captureWarning(
+            'RiskPersistenceService',
+            'storeEvaluation',
+            'Remote storage failed, using local fallback',
+            { evaluationId: evaluation.evaluationId, error: error.message }
+          );
           return of({ stored: true, id: storedEvaluation.id });
         })
       );
@@ -120,7 +127,12 @@ export class RiskPersistenceService {
           this.updateLocalCache(clientId, evaluations);
         }),
         catchError(error => {
-          console.warn('⚠️ Remote history failed, using local fallback:', error);
+          this.monitoringService.captureWarning(
+            'RiskPersistenceService',
+            'getHistory',
+            'Remote history failed, using local fallback',
+            { clientId, error: error.message }
+          );
           return this.getLocalHistory(clientId, limit);
         })
       );
@@ -146,7 +158,12 @@ export class RiskPersistenceService {
     if (this.shouldUseRemoteStorage()) {
       return this.http.get<StoredRiskEvaluation>(`${this.BFF_BASE_URL}/evaluation/${evaluationId}`).pipe(
         catchError(error => {
-          console.warn('⚠️ Remote get failed, evaluation not found:', error);
+          this.monitoringService.captureWarning(
+            'RiskPersistenceService',
+            'getEvaluation',
+            'Remote get failed, evaluation not found',
+            { evaluationId, error: error.message }
+          );
           return of(null);
         })
       );
@@ -175,7 +192,12 @@ export class RiskPersistenceService {
           this.summaryCache$.next(summary);
         }),
         catchError(error => {
-          console.warn('⚠️ Remote summary failed, using local calculation:', error);
+          this.monitoringService.captureWarning(
+            'RiskPersistenceService',
+            'getSummary',
+            'Remote summary failed, using local calculation',
+            { clientId, error: error.message }
+          );
           return of(this.calculateLocalSummary());
         })
       );
@@ -210,7 +232,13 @@ export class RiskPersistenceService {
         { updates }
       ).pipe(
         catchError(error => {
-          console.warn('⚠️ Remote update failed:', error);
+          this.monitoringService.captureError(
+            'RiskPersistenceService',
+            'updateEvaluation',
+            error,
+            { evaluationId, updatedFields: Object.keys(updates) },
+            'medium'
+          );
           return of({ updated: !!cached });
         })
       );
@@ -236,7 +264,13 @@ export class RiskPersistenceService {
     if (this.shouldUseRemoteStorage()) {
       return this.http.delete<{ deleted: boolean }>(`${this.BFF_BASE_URL}/evaluation/${evaluationId}`).pipe(
         catchError(error => {
-          console.warn('⚠️ Remote delete failed:', error);
+          this.monitoringService.captureError(
+            'RiskPersistenceService',
+            'deleteEvaluation',
+            error,
+            { evaluationId },
+            'medium'
+          );
           return of({ deleted: true }); // Local delete succeeded
         })
       );
@@ -287,7 +321,13 @@ export class RiskPersistenceService {
         }
       }),
       catchError(error => {
-        console.warn('⚠️ Sync failed:', error);
+        this.monitoringService.captureError(
+          'RiskPersistenceService',
+          'syncWithRemote',
+          error,
+          { localItemsCount: localItems.length },
+          'medium'
+        );
         return of({ synced: false, conflicts: 0 });
       })
     );
@@ -379,7 +419,13 @@ export class RiskPersistenceService {
         this.evaluationsCache$.next(evaluations);
       }
     } catch (error) {
-      console.warn('⚠️ Failed to load risk evaluations from localStorage:', error);
+      this.monitoringService.captureError(
+        'RiskPersistenceService',
+        'loadFromLocalStorage',
+        error,
+        {},
+        'medium'
+      );
     }
   }
 
@@ -388,7 +434,13 @@ export class RiskPersistenceService {
       const evaluations = this.evaluationsCache$.value;
       localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(evaluations));
     } catch (error) {
-      console.warn('⚠️ Failed to save risk evaluations to localStorage:', error);
+      this.monitoringService.captureError(
+        'RiskPersistenceService',
+        'saveToLocalStorage',
+        error,
+        { evaluationsCount: this.evaluations.length },
+        'medium'
+      );
     }
   }
 

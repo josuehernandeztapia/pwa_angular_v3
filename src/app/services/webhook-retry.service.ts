@@ -15,6 +15,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, BehaviorSubject, timer, throwError, of } from 'rxjs';
 import { map, catchError, retry, tap, switchMap, mergeMap } from 'rxjs/operators';
+import { MonitoringService } from './monitoring.service';
 
 import { environment } from '../../environments/environment';
 import {
@@ -79,6 +80,7 @@ export interface PersistentWebhookState {
   providedIn: 'root'
 })
 export class WebhookRetryService {
+  private monitoringService = inject(MonitoringService);
   private http = inject(HttpClient);
   private webhookRetryUtils = new WebhookRetryUtils();
   private deadLetterQueue = WebhookDeadLetterQueue.getInstance();
@@ -277,10 +279,21 @@ export class WebhookRetryService {
           webhookState.nextRetryAt = Date.now() + delayMs;
           webhookState.lastError = error.message;
 
-          console.warn(`🔄 Webhook ${webhookState.id} will retry in ${delayMs}ms (attempt ${webhookState.attempts}/${config.maxAttempts})`);
+          this.monitoringService.captureWarning(
+            'WebhookRetryService',
+            'retryWebhook',
+            `Webhook ${webhookState.id} will retry in ${delayMs}ms (attempt ${webhookState.attempts}/${config.maxAttempts})`,
+            { webhookId: webhookState.id, attempts: webhookState.attempts, delayMs, maxAttempts: config.maxAttempts }
+          );
         } else {
           webhookState.status = 'DEAD_LETTER';
-          console.error(`💀 Webhook ${webhookState.id} moved to dead letter queue after ${webhookState.attempts} attempts`);
+          this.monitoringService.captureError(
+            'WebhookRetryService',
+            'retryWebhook',
+            new Error(`Webhook ${webhookState.id} moved to dead letter queue after ${webhookState.attempts} attempts`),
+            { webhookId: webhookState.id, attempts: webhookState.attempts, maxAttempts: config.maxAttempts },
+            'critical'
+          );
         }
 
         this.updatePersistentQueue();
@@ -334,7 +347,12 @@ export class WebhookRetryService {
 
     // Log reliability alert if below target
     if (metrics.reliabilityRate < this.RELIABILITY_TARGET * 100) {
-      console.warn(`🚨 Webhook reliability (${metrics.reliabilityRate}%) below target (${this.RELIABILITY_TARGET * 100}%)`);
+      this.monitoringService.captureWarning(
+        'WebhookRetryService',
+        'checkReliability',
+        `Webhook reliability (${metrics.reliabilityRate}%) below target (${this.RELIABILITY_TARGET * 100}%)`,
+        { reliabilityRate: metrics.reliabilityRate, target: this.RELIABILITY_TARGET * 100, metrics }
+      );
     }
   }
 
@@ -479,7 +497,13 @@ export class WebhookRetryService {
       const queue = this.persistentQueue$.value;
       localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(queue));
     } catch (error) {
-      console.warn('⚠️ Failed to update webhook queue in localStorage:', error);
+      this.monitoringService.captureError(
+        'WebhookRetryService',
+        'updatePersistentQueue',
+        error,
+        { queueLength: this.pendingWebhooks.size },
+        'medium'
+      );
     }
   }
 
@@ -491,7 +515,13 @@ export class WebhookRetryService {
         this.persistentQueue$.next(queue);
       }
     } catch (error) {
-      console.warn('⚠️ Failed to load webhook queue from localStorage:', error);
+      this.monitoringService.captureError(
+        'WebhookRetryService',
+        'loadPersistentQueue',
+        error,
+        {},
+        'medium'
+      );
     }
   }
 
