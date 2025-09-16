@@ -11,6 +11,12 @@ import {
   RedFlag
 } from '../models/avi';
 import { ALL_AVI_QUESTIONS } from '../data/avi-questions.data';
+import {
+  AVI_LEXICONS,
+  AVI_VOICE_WEIGHTS,
+  AVI_VOICE_THRESHOLDS,
+  AVILexiconAnalyzer
+} from '../data/avi-lexicons.data';
 import { ConfigurationService } from './configuration.service';
 import { environment } from '../../environments/environment';
 
@@ -113,7 +119,8 @@ export class AVIService {
         categoryScores: {} as any,
         redFlags: [],
         recommendations: ['Complete interview to get score'],
-        processingTime: 0
+        processingTime: 0,
+        confidence: 0.1
       });
     }
 
@@ -199,10 +206,54 @@ export class AVIService {
       categoryScores,
       redFlags,
       recommendations: this.generateRecommendations(finalScore, redFlags),
-      processingTime
+      processingTime,
+      confidence: this.calculateConfidence(responses)
     };
 
     return of(result).pipe(delay(200));
+  }
+
+  /**
+   * Calculate confidence level for AVI analysis (aligned with HASE model)
+   */
+  private calculateConfidence(responses: AVIResponse[]): number {
+    let confidence = 0.5; // Base confidence
+
+    // Data availability confidence
+    const totalQuestions = ALL_AVI_QUESTIONS.length;
+    const responseRatio = responses.length / totalQuestions;
+    confidence += responseRatio * 0.2; // Up to 20% for question completeness
+
+    // Voice data quality confidence
+    const voiceResponses = responses.filter(r => r.voiceAnalysis);
+    if (voiceResponses.length > 0) {
+      const avgVoiceConfidence = voiceResponses.reduce((sum, r) =>
+        sum + (r.voiceAnalysis?.confidence_level || 0), 0) / voiceResponses.length;
+      confidence += avgVoiceConfidence * 0.2; // Up to 20% for voice quality
+    }
+
+    // Response consistency confidence
+    const responseVariance = this.calculateResponseVariance(responses);
+    confidence += (1 - responseVariance) * 0.1; // Up to 10% for consistency
+
+    return Math.min(1, confidence);
+  }
+
+  /**
+   * Calculate response variance to measure consistency
+   */
+  private calculateResponseVariance(responses: AVIResponse[]): number {
+    if (responses.length < 2) return 0;
+
+    const scores = responses.map(response => {
+      const question = this.getQuestionById(response.questionId);
+      return question ? this.evaluateResponse(response, question) : 0.5;
+    });
+
+    const mean = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+    const variance = scores.reduce((sum, score) => sum + Math.pow(score - mean, 2), 0) / scores.length;
+
+    return Math.min(1, Math.sqrt(variance)); // Normalize to 0-1 range
   }
 
   /**
@@ -256,53 +307,64 @@ export class AVIService {
   }
 
   private evaluateVoiceAnalysis(voice: VoiceAnalysis, question: AVIQuestionEnhanced): number {
-    // Adjust expectations based on question stress level
-    const stressAdjustment = question.stressLevel / 5; // 0-1 scale
-    
-    let voiceScore = 0.5;
-    
-    // High pitch variance might indicate stress/lying
-    if (voice.pitch_variance > 0.7) voiceScore -= 0.2;
-    if (voice.pitch_variance < 0.2 && question.stressLevel >= 4) voiceScore -= 0.1; // Too calm
-    
-    // Speech rate changes
-    if (voice.speech_rate_change > 0.6) voiceScore -= 0.15;
-    
-    // Pause frequency
-    if (voice.pause_frequency > 0.8) voiceScore -= 0.2;
-    
-    // Voice tremor
-    if (voice.voice_tremor > 0.5) voiceScore -= 0.1;
-    
-    // Confidence from speech recognition
-    voiceScore += voice.confidence_level * 0.3;
-    
-    // Adjust for expected stress level
-    if (question.stressLevel >= 4) {
-      voiceScore += stressAdjustment * 0.2; // Some stress is expected
-    }
-    
-    return Math.max(0, Math.min(1, voiceScore));
+    // ALIGNED WITH AVI_LAB: Use L,P,D,E,H algorithm
+    const transcription = voice.transcription || '';
+    const words = this.tokenizeTranscription(transcription);
+
+    // 1. NORMALIZE LATENCY (L) - 0-1 scale
+    const answerDuration = this.estimateAnswerDuration(transcription);
+    const expectedLatency = Math.max(1, answerDuration * 0.1);
+    const latencyRatio = (voice.latency_seconds || 1.5) / expectedLatency;
+    const L = Math.min(1, Math.abs(latencyRatio - 1.5) / 2); // 0=perfect, 1=suspicious
+
+    // 2. PITCH VARIABILITY (P) - 0-1 scale
+    const P = Math.min(1, voice.pitch_variance || 0.3); // Higher variance = higher P
+
+    // 3. DISFLUENCY RATE (D) - 0-1 scale
+    const D = AVILexiconAnalyzer.calculateDisfluencyRate(words);
+
+    // 4. ENERGY STABILITY (E) - 0-1 scale (inverted: stable=high, unstable=low)
+    const energyStability = 1 - Math.min(1, (voice.voice_tremor || 0.2));
+    const E = energyStability;
+
+    // 5. HONESTY LEXICON (H) - 0-1 scale
+    const H = AVILexiconAnalyzer.calculateHonestyScore(words);
+
+    // WEIGHTED COMBINATION - EXACT AVI_LAB FORMULA
+    const voiceScore =
+      AVI_VOICE_WEIGHTS.w1 * (1 - L) +
+      AVI_VOICE_WEIGHTS.w2 * (1 - P) +
+      AVI_VOICE_WEIGHTS.w3 * (1 - D) +
+      AVI_VOICE_WEIGHTS.w4 * E +
+      AVI_VOICE_WEIGHTS.w5 * H;
+
+    // Apply question stress level adjustment
+    const stressAdjustment = question.stressLevel >= 4 ? 0.1 : 0;
+
+    return Math.max(0, Math.min(1, voiceScore + stressAdjustment));
   }
 
   private calculateRiskLevel(score: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
-    if (score >= 800) return 'LOW';
-    if (score >= 650) return 'MEDIUM';
-    if (score >= 500) return 'HIGH';
-    return 'CRITICAL';
+    // ALIGNED WITH AVI_LAB THRESHOLDS
+    // GO ≥750 = LOW, REVIEW 500-749 = MEDIUM/HIGH, NO-GO ≤499 = CRITICAL
+    if (score >= 750) return 'LOW';      // GO range
+    if (score >= 600) return 'MEDIUM';   // REVIEW upper range
+    if (score >= 500) return 'HIGH';     // REVIEW lower range
+    return 'CRITICAL';                   // NO-GO range
   }
 
   private generateRecommendations(score: number, redFlags: RedFlag[]): string[] {
     const recommendations: string[] = [];
 
-    if (score >= 800) {
-      recommendations.push('Cliente de bajo riesgo - puede proceder');
-    } else if (score >= 650) {
-      recommendations.push('Riesgo moderado - revisar documentación adicional');
+    // ALIGNED WITH AVI_LAB THRESHOLDS
+    if (score >= 750) {
+      recommendations.push('Cliente de bajo riesgo - puede proceder (GO)');
+    } else if (score >= 600) {
+      recommendations.push('Riesgo moderado - revisar documentación adicional (REVIEW)');
     } else if (score >= 500) {
-      recommendations.push('Alto riesgo - requiere garantías adicionales');
+      recommendations.push('Alto riesgo - requiere garantías adicionales (REVIEW)');
     } else {
-      recommendations.push('Riesgo crítico - no recomendado para crédito');
+      recommendations.push('Riesgo crítico - no recomendado para crédito (NO-GO)');
     }
 
     // Add specific recommendations based on red flags
@@ -357,7 +419,8 @@ export class AVIService {
           categoryScores: {},
           redFlags: [],
           recommendations: ['Based on BFF analysis - requires review'],
-          processingTime: Date.now() - startTime
+          processingTime: Date.now() - startTime,
+          confidence: 0.8
         };
       })
     );

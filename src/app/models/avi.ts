@@ -60,6 +60,9 @@ export interface VoiceAnalysis {
     pause_frequency: number;    // 0-1
     voice_tremor: number;       // 0-1
     confidence_level: number;   // 0-1 from Whisper
+    transcription?: string;     // Transcribed text from voice
+    latency_seconds?: number;   // Response latency in seconds
+    recognition_accuracy?: number; // 0-1 recognition confidence
 }
 
 // Response data for AVI system including voice analysis
@@ -71,6 +74,8 @@ export interface AVIResponse {
     voiceAnalysis?: VoiceAnalysis;
     stressIndicators: string[];
     coherenceScore?: number;
+    sessionId?: string;
+    timestamp?: string;
 }
 
 // Red flags detected during AVI evaluation
@@ -90,6 +95,7 @@ export interface AVIScore {
     redFlags: RedFlag[];
     recommendations: string[];
     processingTime: number;
+    confidence: number; // 0-1, aligned with HASE model
 }
 
 // AVI Session for tracking complete evaluation process
