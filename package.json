@@ -107,7 +107,7 @@
     "quality:report": "node scripts/quality-report.js",
     "quality:badge": "node scripts/quality-badge.js",
     "mock:api": "json-server --watch db.json --port 3000",
-    "test:e2e-demo": "playwright test e2e/pwa-e2e-demo.spec.ts --project=chromium --reporter=html,json",
+    "test:e2e-demo": "playwright test e2e/simple-demo.spec.ts --project=chromium --reporter=html,json",
     "test:all": "npm run test:unit && npm run test:accessibility && npm run test:visual && npm run test:e2e:chrome && npm run test:mutation:quick && npm run coverage:generate",
     "test:config:settings:persistence": "ng test --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.spec.configuracion.json",
     "test:config:theme:switching": "ng test --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.spec.configuracion.json",
