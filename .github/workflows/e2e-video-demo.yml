@@ -104,8 +104,8 @@ jobs:
           echo "  - Resolution: 1280x720"
           echo "  - Trace: ON"
 
-          # Run the simple demo test with video recording
-          npx playwright test e2e/simple-demo.spec.ts \
+          # Run the comprehensive login flow test with video recording
+          npx playwright test tests/e2e/login-flow.spec.ts \
             --project=${{ matrix.browser }} \
             --reporter=html,json \
             --output=test-results-demo

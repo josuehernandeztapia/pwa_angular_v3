@@ -5,7 +5,7 @@ import { defineConfig, devices } from 'playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: './e2e',
+  testDir: './tests/e2e',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -24,11 +24,13 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'http://localhost:4200',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'on',
     /* Screenshot configuration */
-    screenshot: 'only-on-failure',
-    /* Video recording */
-    video: 'retain-on-failure',
+    screenshot: 'on',
+    /* Video recording - ALWAYS record for demo generation */
+    video: 'on',
+    /* Video size for demo quality */
+    viewport: { width: 1280, height: 720 },
   },
 
   /* Configure projects for major browsers */
@@ -94,12 +96,20 @@ export default defineConfig({
   },
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'node_modules/.bin/ng serve --configuration=development --port=4200',
-  //   url: 'http://localhost:4200',
-  //   reuseExistingServer: !process.env.CI,
-  //   timeout: 600 * 1000,
-  // },
+  webServer: [
+    {
+      command: 'cd bff && npm run start:dev',
+      url: 'http://localhost:3000/health',
+      reuseExistingServer: !process.env.CI,
+      timeout: 120 * 1000,
+    },
+    {
+      command: 'ng serve --configuration=development --port=4200',
+      url: 'http://localhost:4200',
+      reuseExistingServer: !process.env.CI,
+      timeout: 120 * 1000,
+    }
+  ],
 
   /* Global setup and teardown */
   // globalSetup: require.resolve('./tests/visual/setup/global-setup.ts'),

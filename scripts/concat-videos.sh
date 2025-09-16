@@ -47,8 +47,9 @@ echo "🔍 Searching for Playwright video files..."
 VIDEO_PATHS=(
     "$PLAYWRIGHT_VIDEOS_DIR/**/videos/*.webm"
     "test-results/**/videos/*.webm"
-    "test-results/pwa-e2e-demo-Complete-PWA-Journey-All-Flows-Demo-chromium/*.webm"
+    "test-results/**/login-flow-Complete-PWA-User-Journey-Professional-Demo-chromium/*.webm"
     "test-results/*chromium*/*.webm"
+    "test-results/visual/*chromium*/*.webm"
 )
 
 # Find all video files
