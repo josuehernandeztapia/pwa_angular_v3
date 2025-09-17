@@ -6,6 +6,7 @@ import { defineConfig, devices } from 'playwright/test';
  */
 export default defineConfig({
   testDir: './tests/e2e',
+  testMatch: ['**/*.spec.ts'],
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -22,7 +23,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:4200',
+    baseURL: 'http://localhost:4300',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on',
     /* Screenshot configuration */
@@ -96,20 +97,12 @@ export default defineConfig({
   },
 
   /* Run your local dev server before starting the tests */
-  webServer: [
-    {
-      command: 'cd bff && npm run start:dev',
-      url: 'http://localhost:3000/health',
-      reuseExistingServer: !process.env.CI,
-      timeout: 120 * 1000,
-    },
-    {
-      command: 'ng serve --configuration=development --port=4200',
-      url: 'http://localhost:4200',
-      reuseExistingServer: !process.env.CI,
-      timeout: 120 * 1000,
-    }
-  ],
+  webServer: {
+    command: 'npm run start',
+    url: 'http://localhost:4300',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+  },
 
   /* Global setup and teardown */
   // globalSetup: require.resolve('./tests/visual/setup/global-setup.ts'),
