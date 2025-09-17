@@ -102,7 +102,7 @@ describe('LoginComponent Accessibility Tests', () => {
       const statusRegions = fixture.nativeElement.querySelectorAll('[aria-live], [role="status"], [role="alert"]');
       
       // If there are status updates, they should be announced
-      if (component.isLoading || component.loginError) {
+      if (component.isLoading || component.errorMessage) {
         expect(statusRegions.length).toBeGreaterThan(0);
       }
     });
@@ -309,14 +309,14 @@ describe('LoginComponent Accessibility Tests', () => {
   describe('Error Handling Accessibility', () => {
     it('should announce authentication errors accessibly', () => {
       // Simulate login error
-      component.loginError = 'Invalid credentials';
+      component.errorMessage = 'Invalid credentials';
       fixture.detectChanges();
       
       const errorElements = fixture.nativeElement.querySelectorAll(
         '[role="alert"], .error, .alert-error, [aria-live="assertive"]'
       );
       
-      if (component.loginError) {
+      if (component.errorMessage) {
         expect(errorElements.length).toBeGreaterThan(0);
         
         errorElements.forEach((error: HTMLElement) => {
@@ -335,7 +335,7 @@ describe('LoginComponent Accessibility Tests', () => {
       ];
       
       errorScenarios.forEach(errorMessage => {
-        component.loginError = errorMessage;
+        component.errorMessage = errorMessage;
         fixture.detectChanges();
         
         const errorElement = fixture.nativeElement.querySelector('.error-message, [role="alert"]');
