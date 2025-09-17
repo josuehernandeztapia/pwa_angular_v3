@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CotizadorEngineService } from '../../../../services/cotizador-engine.service';
@@ -11,330 +11,492 @@ import { FormFieldComponent } from '../../../shared/form-field.component';
 import { SkeletonCardComponent } from '../../../shared/skeleton-card.component';
 import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-panel.component';
 
+declare var Chart: any;
+
 @Component({
   selector: 'app-ags-ahorro',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, SummaryPanelComponent, SkeletonCardComponent, FormFieldComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="ags-ahorro-simulator command-container">
+    <!-- Skip Link for Accessibility -->
+    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+
+    <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
       <!-- Header -->
-      <div class="simulator-header">
-        <button (click)="goBack()" class="back-btn">← Volver</button>
-        <h1>🌵 Simulador AGS Ahorro</h1>
-        <p>Proyecta tu ahorro, calcula liquidación en entrega</p>
-      </div>
-
-      <!-- Resumen KPIs -->
-      <div class="premium-card kpi-summary" *ngIf="!isLoading">
-        <h2 class="section-title">Resumen</h2>
-        <div class="kpi-grid">
-          <div class="kpi-item">
-            <span class="kpi-label">Mensualidad</span>
-            <strong class="kpi-value">{{ (currentScenario?.monthlyContribution || 0) | currency:'MXN':'symbol':'1.0-0' }}</strong>
-          </div>
-          <div class="kpi-item">
-            <span class="kpi-label">Tiempo</span>
-            <strong class="kpi-value">{{ (currentScenario?.monthsToTarget || simuladorForm.value.deliveryMonths) }} meses</strong>
-          </div>
-          <div class="kpi-item">
-            <span class="kpi-label">Meta Total</span>
-            <strong class="kpi-value">{{ (currentScenario?.targetAmount || simuladorForm.value.unitValue) | currency:'MXN':'symbol':'1.0-0' }}</strong>
+      <header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+          <div class="flex items-center gap-4">
+            <button (click)="goBack()" class="ui-btn ui-btn-ghost ui-btn-sm" data-cy="back-button">
+              ← Volver
+            </button>
+            <div>
+              <h1 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Simulador AGS Ahorro</h1>
+              <p class="text-sm text-slate-600 dark:text-slate-400">Proyecta tu ahorro, calcula liquidación en entrega</p>
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div class="simulator-content grid-aside" *ngIf="!isLoading" data-loading="false">
-        <!-- Left: Configuration Panel -->
-        <div class="premium-card config-panel">
-          <form [formGroup]="simuladorForm">
-            
-            <!-- Unidad y Valor -->
-            <div class="section">
-              <h2>🚐 Unidad</h2>
-              <app-form-field size="sm" [label]="'Valor Total de la Unidad'" [id]="'unitValue'" [helper]="'Precio típico AGS: $799,000 (vagoneta + GNV)'">
-                <div class="currency-input">
-                  <span>$</span>
-                  <input class="input-sm" id="unitValue" type="number" formControlName="unitValue" min="700000" max="1000000" (input)="onConfigChange()" placeholder="799000" aria-describedby="unitValue-helper">
+      <main id="main-content" class="max-w-6xl mx-auto px-6 py-8">
+        <!-- KPIs -->
+        <div class="ui-card mb-6" *ngIf="!isLoading">
+          <div class="grid grid-cols-3 gap-6">
+            <div class="text-center">
+              <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="sim-ahorro-label">Mensualidad</div>
+              <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="sim-ahorro">
+                {{ formatCurrency(currentScenario?.monthlyContribution || 0) }}
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="sim-plazo-label">Tiempo</div>
+              <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="sim-plazo">
+                {{ (currentScenario?.monthsToTarget || simuladorForm.value.deliveryMonths) }} meses
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="sim-pmt-label">Meta Total</div>
+              <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="sim-pmt">
+                {{ formatCurrency(currentScenario?.targetAmount || simuladorForm.value.unitValue) }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid lg:grid-cols-2 gap-8" *ngIf="!isLoading">
+          <!-- Configuration Panel -->
+          <div class="ui-card">
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Configuración</h2>
+
+            <form [formGroup]="simuladorForm" class="space-y-6">
+              <!-- Unidad -->
+              <div class="space-y-4">
+                <h3 class="text-sm font-medium text-slate-700 dark:text-slate-300">Unidad</h3>
+
+                <div>
+                  <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Valor Total de la Unidad</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500">$</span>
+                    <input
+                      type="number"
+                      formControlName="unitValue"
+                      class="ui-input pl-8"
+                      placeholder="799000"
+                      min="700000"
+                      max="1000000"
+                      (input)="onConfigChange()"
+                      data-cy="unit-value">
+                  </div>
+                  <p class="text-xs text-slate-500 mt-1">Precio típico AGS: $799,000 (vagoneta + GNV)</p>
                 </div>
-                <input class="input-sm" type="range" formControlName="unitValue" min="700000" max="1000000" step="10000" (input)="onConfigChange()" aria-label="Ajustar valor de unidad" />
-              </app-form-field>
 
-              <app-form-field size="sm" [label]="'Enganche Inicial Disponible'" [id]="'initialDown'" [helper]="'Monto que tienes disponible ahora'">
-                <div class="currency-input">
-                  <span>$</span>
-                  <input class="input-sm" id="initialDown" type="number" formControlName="initialDownPayment" min="0" (input)="onConfigChange()" placeholder="400000" aria-describedby="initialDown-helper">
+                <div>
+                  <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Enganche Inicial Disponible</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500">$</span>
+                    <input
+                      type="number"
+                      formControlName="initialDownPayment"
+                      class="ui-input pl-8"
+                      placeholder="400000"
+                      min="0"
+                      (input)="onConfigChange()"
+                      data-cy="initial-down">
+                  </div>
+                  <p class="text-xs text-slate-500 mt-1">Monto que tienes disponible ahora</p>
                 </div>
-                <input class="input-sm" type="range" formControlName="initialDownPayment" min="0" [max]="simuladorForm.value.unitValue || 1000000" step="10000" (input)="onConfigChange()" aria-label="Ajustar enganche" />
-              </app-form-field>
 
-              <app-form-field size="sm" [label]="'Meses Estimados para Entrega'" [id]="'deliveryMonths'">
-                <select class="input-sm" id="deliveryMonths" formControlName="deliveryMonths" (change)="onConfigChange()">
-                  <option value="">Seleccionar</option>
-                  <option value="3">3 meses (entrega rápida)</option>
-                  <option value="6">6 meses (estándar)</option>
-                  <option value="9">9 meses (planificado)</option>
-                  <option value="12">12 meses (extendido)</option>
-                </select>
-                <input class="input-sm" type="range" formControlName="deliveryMonths" min="3" max="12" step="3" (input)="onConfigChange()" aria-label="Ajustar meses de entrega" />
-              </app-form-field>
+                <div>
+                  <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Meses Estimados para Entrega</label>
+                  <select
+                    formControlName="deliveryMonths"
+                    class="ui-input"
+                    (change)="onConfigChange()"
+                    data-cy="delivery-months">
+                    <option value="">Seleccionar</option>
+                    <option value="3">3 meses (entrega rápida)</option>
+                    <option value="6">6 meses (estándar)</option>
+                    <option value="9">9 meses (planificado)</option>
+                    <option value="12">12 meses (extendido)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Consumo -->
+              <div class="space-y-4">
+                <h3 class="text-sm font-medium text-slate-700 dark:text-slate-300">Consumo</h3>
+
+                <div>
+                  <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Placas de Unidades Actuales</label>
+                  <div class="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      [(ngModel)]="newPlate"
+                      placeholder="ABC-1234"
+                      class="ui-input flex-1"
+                      (keyup.enter)="addPlate()"
+                      #plateInput
+                      data-cy="new-plate">
+                    <button
+                      type="button"
+                      (click)="addPlate(); plateInput.value=''"
+                      class="ui-btn ui-btn-secondary"
+                      data-cy="add-plate">
+                      Agregar
+                    </button>
+                  </div>
+
+                  <div class="space-y-2" *ngIf="plates.length > 0">
+                    <div *ngFor="let plate of plates; let i = index" class="flex items-center gap-2 p-2 bg-slate-50 dark:bg-slate-800 rounded-md">
+                      <span class="text-sm font-medium text-slate-900 dark:text-slate-100">{{ plate }}</span>
+                      <input
+                        type="number"
+                        [(ngModel)]="consumptions[i]"
+                        placeholder="Litros/mes"
+                        class="ui-input ui-input-sm flex-1"
+                        min="0"
+                        max="10000"
+                        data-cy="plate-consumption">
+                      <button
+                        type="button"
+                        (click)="removePlate(i)"
+                        class="text-red-500 hover:text-red-700 w-6 h-6 flex items-center justify-center"
+                        aria-label="Eliminar placa"
+                        data-cy="remove-plate">
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Sobreprecio por Litro</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500">$</span>
+                    <input
+                      type="number"
+                      formControlName="overpricePerLiter"
+                      class="ui-input pl-8"
+                      placeholder="5.00"
+                      min="1"
+                      max="20"
+                      step="0.5"
+                      (input)="onConfigChange()"
+                      data-cy="overprice-per-liter">
+                  </div>
+                  <p class="text-xs text-slate-500 mt-1">Cantidad extra por litro que vas a ahorrar</p>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <button
+                type="button"
+                (click)="simulateScenario()"
+                [disabled]="!canSimulate()"
+                class="ui-btn ui-btn-primary w-full"
+                data-cy="simulate-btn">
+                {{ isSimulating ? 'Simulando...' : 'Simular Escenario' }}
+              </button>
+            </form>
+          </div>
+
+          <!-- Results Panel -->
+          <div class="ui-card" *ngIf="currentScenario">
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Proyección de Ahorro AGS</h2>
+
+            <!-- Key Metrics -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+                <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Meta Total</div>
+                <div class="text-xl font-bold text-slate-900 dark:text-slate-100">
+                  {{ formatCurrency(currentScenario.targetAmount) }}
+                </div>
+              </div>
+
+              <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+                <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Tiempo</div>
+                <div class="text-xl font-bold text-slate-900 dark:text-slate-100">
+                  {{ currentScenario.monthsToTarget }} meses
+                </div>
+              </div>
+
+              <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+                <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Recaudación Mensual</div>
+                <div class="text-xl font-bold text-slate-900 dark:text-slate-100">
+                  {{ formatCurrency(currentScenario.monthlyContribution) }}
+                </div>
+              </div>
+
+              <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg"
+                   [class]="remainderAmount <= 0 ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' : 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800'">
+                <div class="text-xs mb-1"
+                     [class]="remainderAmount <= 0 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'">
+                  {{ remainderAmount <= 0 ? 'Ahorro Completo' : 'Remanente' }}
+                </div>
+                <div class="text-xl font-bold"
+                     [class]="remainderAmount <= 0 ? 'text-green-900 dark:text-green-100' : 'text-amber-900 dark:text-amber-100'">
+                  {{ formatCurrency(remainderAmount) }}
+                </div>
+              </div>
             </div>
 
-            <!-- Placas y Consumo -->
-            <div class="section">
-              <h2>⛽ Consumo</h2>
-              
-              <div class="plates-section">
-                <label>Placas de Unidades Actuales</label>
-                <div class="plates-input">
-                  <input type="text" [(ngModel)]="newPlate" placeholder="ABC-1234" (keyup.enter)="addPlate()" #plateInput>
-                  <button type="button" (click)="addPlate(); plateInput.value=''" class="add-btn">+ Agregar</button>
-                </div>
-                
-                <div class="plates-list" *ngIf="plates.length > 0">
-                  <div *ngFor="let plate of plates; let i = index" class="plate-item">
-                    <span class="plate-number">{{ plate }}</span>
-                    <input type="number" [(ngModel)]="consumptions[i]" min="0" max="10000" placeholder="Litros/mes">
-                    <button type="button" (click)="removePlate(i)" class="remove-btn" aria-label="Eliminar placa" title="Eliminar placa">×</button>
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+              <!-- Ahorro Chart -->
+              <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+                <canvas #ahorroChart width="300" height="200"></canvas>
+              </div>
+
+              <!-- PMT Distribution Chart -->
+              <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+                <canvas #pmtChart width="300" height="200"></canvas>
+              </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="mb-6" *ngIf="displayTimeline.length > 0">
+              <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Cronología de Ahorro</h4>
+              <div class="space-y-2 max-h-48 overflow-y-auto">
+                <div *ngFor="let event of displayTimeline" class="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-800 rounded-md">
+                  <div class="text-sm text-slate-600 dark:text-slate-400">Mes {{ event.month }}</div>
+                  <div class="text-sm text-slate-900 dark:text-slate-100">{{ event.event }}</div>
+                  <div class="text-sm font-medium"
+                       [class]="event.amount > 0 ? 'text-green-600' : 'text-red-600'">
+                    {{ formatCurrency(event.amount) }}
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Finanzas -->
-            <div class="section">
-              <h2>💳 Finanzas</h2>
-              <div class="form-group">
-                <app-form-field size="sm" [label]="'Sobreprecio por Litro'" [id]="'overprice'" [helper]="'Cantidad extra por litro que vas a ahorrar'">
-                  <div class="currency-input">
-                    <span>$</span>
-                    <input class="input-sm" id="overprice" type="number" formControlName="overpricePerLiter" min="1" max="20" step="0.5" (input)="onConfigChange()" placeholder="5.00" aria-describedby="overprice-helper">
-                  </div>
-                  <input class="input-sm" type="range" formControlName="overpricePerLiter" min="1" max="20" step="0.5" (input)="onConfigChange()" aria-label="Ajustar sobreprecio por litro" />
-                </app-form-field>
+            <!-- Comparison Table -->
+            <div class="mb-6">
+              <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Comparación de Escenarios</h4>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="border-b border-slate-200 dark:border-slate-700">
+                      <th class="text-left py-2 text-slate-600 dark:text-slate-400">Concepto</th>
+                      <th class="text-right py-2 text-slate-600 dark:text-slate-400">Con Ahorro Programado</th>
+                      <th class="text-right py-2 text-slate-600 dark:text-slate-400">Sin Ahorro</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="border-b border-slate-100 dark:border-slate-800">
+                      <td class="py-2 text-slate-900 dark:text-slate-100">Enganche</td>
+                      <td class="py-2 text-right text-slate-900 dark:text-slate-100">{{ formatCurrency(simuladorForm.value.initialDownPayment + (currentScenario.monthlyContribution * currentScenario.monthsToTarget)) }}</td>
+                      <td class="py-2 text-right text-slate-900 dark:text-slate-100">{{ formatCurrency(simuladorForm.value.initialDownPayment) }}</td>
+                    </tr>
+                    <tr class="border-b border-slate-100 dark:border-slate-800">
+                      <td class="py-2 text-slate-900 dark:text-slate-100">Remanente a financiar</td>
+                      <td class="py-2 text-right font-medium text-green-600">{{ formatCurrency(remainderAmount) }}</td>
+                      <td class="py-2 text-right font-medium text-red-600">{{ formatCurrency(simuladorForm.value.unitValue - simuladorForm.value.initialDownPayment) }}</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 text-slate-900 dark:text-slate-100 font-medium">Ahorro estimado</td>
+                      <td class="py-2 text-right font-bold text-green-600">{{ formatCurrency((simuladorForm.value.unitValue - simuladorForm.value.initialDownPayment) - remainderAmount) }}</td>
+                      <td class="py-2 text-right font-bold text-slate-500">$0</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 
-            <!-- Actions -->
-            <div class="form-actions">
-              <button type="button" (click)="simulateScenario()" [disabled]="!canSimulate()" class="simulate-btn">
-                {{ isSimulating ? 'Simulando...' : '📊 Simular Escenario' }}
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Right: Summary Aside -->
-        <app-summary-panel class="aside" *ngIf="currentScenario"
-          [metrics]="[
-            { label: 'Mensualidad', value: (currentScenario.monthlyContribution | currency:'MXN':'symbol':'1.0-0')!, badge: 'success' },
-            { label: 'Meses a Meta', value: (currentScenario.monthsToTarget + ' meses')! },
-            { label: 'Ahorro Total', value: (currentScenario.targetAmount | currency:'MXN':'symbol':'1.0-0')! },
-            { label: (remainderAmount <= 0 ? 'Validez' : 'Remanente'), value: (remainderAmount | currency:'MXN':'symbol':'1.0-0')!, badge: (remainderAmount <= 0 ? 'success' : 'warning') }
-          ]"
-          [actions]="asideActions"
-        ></app-summary-panel>
-
-        <!-- Results Panel (left column visual details) -->
-        <div class="premium-card results-panel" *ngIf="currentScenario">
-          <h3>📈 Proyección de Ahorro AGS</h3>
-          
-          <!-- Key Metrics -->
-          <div class="metrics-grid">
-            <div class="metric-card highlight">
-              <div class="metric-icon">🎯</div>
-              <div class="metric-content">
-                <span class="metric-label">Meta Total</span>
-                <span class="metric-value">{{ currentScenario.targetAmount | currency:'MXN':'symbol':'1.0-0' }}</span>
+            <!-- Enhanced Actions -->
+            <div class="border-t border-slate-200 dark:border-slate-700 pt-6 mt-6">
+              <!-- View Mode Toggle -->
+              <div class="flex justify-center mb-4">
+                <button
+                  (click)="toggleViewMode()"
+                  class="ui-btn ui-btn-ghost ui-btn-sm"
+                  data-cy="toggle-view-mode">
+                  {{ currentViewMode === 'simple' ? 'Vista Avanzada' : 'Vista Simple' }}
+                </button>
               </div>
-            </div>
-            
-            <div class="metric-card">
-              <div class="metric-icon">⏱️</div>
-              <div class="metric-content">
-                <span class="metric-label">Tiempo</span>
-                <span class="metric-value">{{ currentScenario.monthsToTarget }} meses</span>
-              </div>
-            </div>
-            
-            <div class="metric-card">
-              <div class="metric-icon">💰</div>
-              <div class="metric-content">
-                <span class="metric-label">Recaudación Mensual</span>
-                <span class="metric-value">{{ currentScenario.monthlyContribution | currency:'MXN':'symbol':'1.0-0' }}</span>
-              </div>
-            </div>
-            
-            <div class="metric-card" [class.success]="remainderAmount <= 0" [class.warning]="remainderAmount > 0">
-              <div class="metric-icon">{{ remainderAmount <= 0 ? '✅' : '⚠️' }}</div>
-              <div class="metric-content">
-                <span class="metric-label">{{ remainderAmount <= 0 ? 'Ahorro Completo' : 'Remanente' }}</span>
-                <span class="metric-value">{{ remainderAmount | currency:'MXN':'symbol':'1.0-0' }}</span>
-              </div>
-            </div>
-          </div>
 
-          <!-- Timeline -->
-          <div class="timeline-section">
-            <h4>📅 Cronología de Ahorro</h4>
-            <div class="timeline">
-              <div *ngFor="let event of displayTimeline" class="timeline-item" [class]="getTimelineClass(event)">
-                <div class="timeline-marker"></div>
-                <div class="timeline-content">
-                  <span class="timeline-month">Mes {{ event.month }}</span>
-                  <span class="timeline-event">{{ event.event }}</span>
-                  <span class="timeline-amount">{{ event.amount | currency:'MXN':'symbol':'1.0-0' }}</span>
-                </div>
+              <!-- Simple Actions -->
+              <div *ngIf="currentViewMode === 'simple'" class="grid grid-cols-2 gap-3 mb-4">
+                <button
+                  (click)="speakSummary()"
+                  class="ui-btn ui-btn-secondary"
+                  title="Leer resumen"
+                  data-cy="ags-voice">
+                  Escuchar
+                </button>
+                <button
+                  (click)="shareWhatsApp()"
+                  class="ui-btn ui-btn-secondary"
+                  title="Compartir por WhatsApp"
+                  data-cy="ags-wa">
+                  WhatsApp
+                </button>
+                <button
+                  (click)="saveDraft()"
+                  [disabled]="!currentScenario"
+                  class="ui-btn ui-btn-secondary"
+                  data-cy="save-scenario"
+                  title="Guardar simulación">
+                  Guardar
+                </button>
+                <button
+                  (click)="resetSimulation()"
+                  class="ui-btn ui-btn-secondary">
+                  Nuevo
+                </button>
               </div>
-            </div>
-          </div>
 
-          <!-- Balance Chart -->
-          <div class="chart-section">
-            <h4>📊 Proyección de Balance</h4>
-            <div class="balance-chart">
-              <div *ngFor="let balance of currentScenario.projectedBalance; let i = index" 
-                   class="balance-bar" 
-                   [style.height.%]="(balance / currentScenario.targetAmount) * 100"
-                   [title]="'Mes ' + (i + 1) + ': ' + (balance | currency:'MXN':'symbol':'1.0-0')">
-                <span class="bar-label">{{ i + 1 }}</span>
-              </div>
-            </div>
-            <div class="chart-target-line">
-              <span>Meta: {{ currentScenario.targetAmount | currency:'MXN':'symbol':'1.0-0' }}</span>
-            </div>
-          </div>
+              <!-- Advanced Actions -->
+              <div *ngIf="currentViewMode === 'advanced'" class="space-y-4 mb-4">
+                <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300">Herramientas Avanzadas</h4>
 
-          <!-- Enhanced Actions -->
-          <div class="enhanced-actions">
-            <!-- View Mode Toggle -->
-            <div class="view-toggle">
-              <button (click)="toggleViewMode()" class="toggle-btn">
-                {{ currentViewMode === 'simple' ? '🔬 Vista Avanzada' : '📱 Vista Simple' }}
-              </button>
-            </div>
-
-            <!-- Simple Actions -->
-            <div *ngIf="currentViewMode === 'simple'" class="simple-actions">
-              <div class="action-grid">
-              <button (click)="speakSummary()" class="action-btn voice-btn" title="Leer resumen" data-cy="ags-voice">🔊 Escuchar</button>
-                <button (click)="shareWhatsApp" class="action-btn whatsapp-btn" title="Compartir por WhatsApp" data-cy="ags-wa">📱 WhatsApp</button>
-                <button (click)="saveDraft()" class="action-btn" [disabled]="!currentScenario" data-cy="save-scenario" title="Guardar simulación">💾 Guardar</button>
-                <button (click)="proceedWithScenario()" class="action-btn proceed-btn">✅ Continuar</button>
-                <button (click)="resetSimulation()" class="action-btn reset-btn">🔄 Nuevo</button>
-              </div>
-            </div>
-
-            <!-- Advanced Actions -->
-            <div *ngIf="currentViewMode === 'advanced'" class="advanced-actions">
-              <div class="advanced-tools">
-                <h4>🛠️ Herramientas Avanzadas</h4>
-                
                 <!-- Amortization Section -->
-                <div class="tool-section">
-                  <div class="tool-header">
-                    <span>💰 Financiamiento del Remanente</span>
-                    <span class="remainder-amount">{{ remainderAmount | currency:'MXN':'symbol':'1.0-0' }}</span>
+                <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-medium text-slate-900 dark:text-slate-100">Financiamiento del Remanente</span>
+                    <span class="text-xs bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 px-2 py-1 rounded">
+                      {{ formatCurrency(remainderAmount) }}
+                    </span>
                   </div>
-                  <button (click)="calculateAmortization()" 
-                          [disabled]="remainderAmount <= 0"
-                          class="tool-btn">
-                    📊 Calcular Tabla de Amortización
+                  <button
+                    (click)="calculateAmortization()"
+                    [disabled]="remainderAmount <= 0"
+                    class="ui-btn ui-btn-primary ui-btn-sm w-full"
+                    data-cy="calculate-amortization">
+                    Calcular Tabla de Amortización
                   </button>
                 </div>
 
                 <!-- Protection Demo -->
-                <div class="tool-section">
-                  <div class="tool-header">
-                    <span>🛡️ Simulador de Protección</span>
-                    <span class="protection-label">Para imprevistos</span>
+                <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-medium text-slate-900 dark:text-slate-100">Simulador de Protección</span>
+                    <span class="text-xs bg-sky-100 dark:bg-sky-900 text-sky-800 dark:text-sky-200 px-2 py-1 rounded">
+                      Para imprevistos
+                    </span>
                   </div>
-                  <button (click)="showProtectionDemo = true" class="tool-btn">
-                    🔐 Ver Protección Conductores
+                  <button
+                    (click)="showProtectionDemo = true"
+                    class="ui-btn ui-btn-primary ui-btn-sm w-full">
+                    Ver Protección Conductores
+                  </button>
+                </div>
+              </div>
+
+              <!-- Main Actions -->
+              <div class="flex gap-3">
+                <button
+                  (click)="generatePDF()"
+                  class="ui-btn ui-btn-secondary"
+                  data-cy="generate-pdf">
+                  PDF
+                </button>
+                <button
+                  (click)="proceedWithScenario()"
+                  class="ui-btn ui-btn-primary flex-1"
+                  data-cy="proceed-scenario">
+                  Continuar con este Plan
+                </button>
+              </div>
+
+              <p class="text-xs text-slate-500 dark:text-slate-400 text-center mt-4">
+                ¿Qué sigue? Puedes pasar al Cotizador o generar un PDF con tu plan.
+              </p>
+            </div>
+
+            <!-- Amortization Table Modal -->
+            <div *ngIf="showAmortizationTable"
+                 class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+                 (click)="showAmortizationTable = false">
+              <div class="ui-card max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                   (click)="$event.stopPropagation()"
+                   role="dialog"
+                   aria-modal="true"
+                   aria-labelledby="amortization-title">
+                <div class="flex justify-between items-center mb-6">
+                  <h4 id="amortization-title" class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                    Tabla de Amortización del Remanente
+                  </h4>
+                  <button
+                    (click)="showAmortizationTable = false"
+                    class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    aria-label="Cerrar">
+                    ×
                   </button>
                 </div>
 
-                <!-- Traditional Actions -->
-                <div class="traditional-actions">
-                  <button (click)="proceedWithScenario()" class="proceed-btn">✅ Continuar con este Plan</button>
-                  <button (click)="generatePDF()" class="pdf-btn">📄 Descargar PDF</button>
-                  <button (click)="resetSimulation()" class="reset-btn">🔄 Nueva Simulación</button>
+                <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg mb-6">
+                  <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="flex justify-between">
+                      <span class="text-slate-600 dark:text-slate-400">Monto a financiar:</span>
+                      <strong class="text-slate-900 dark:text-slate-100">{{ formatCurrency(remainderAmount) }}</strong>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-slate-600 dark:text-slate-400">Tasa anual AGS:</span>
+                      <strong class="text-slate-900 dark:text-slate-100">25.5%</strong>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-slate-600 dark:text-slate-400">Plazo típico:</span>
+                      <strong class="text-slate-900 dark:text-slate-100">24 meses</strong>
+                    </div>
+                    <div class="flex justify-between font-medium">
+                      <span class="text-slate-900 dark:text-slate-100">Pago mensual estimado:</span>
+                      <strong class="text-green-600 dark:text-green-400">{{ formatCurrency(amortizationTable[0]?.monthlyPayment || 0) }}</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead>
+                      <tr class="border-b border-slate-200 dark:border-slate-700">
+                        <th class="text-left py-2 text-slate-600 dark:text-slate-400"># Pago</th>
+                        <th class="text-right py-2 text-slate-600 dark:text-slate-400">Pago Mensual</th>
+                        <th class="text-right py-2 text-slate-600 dark:text-slate-400">Capital</th>
+                        <th class="text-right py-2 text-slate-600 dark:text-slate-400">Interés</th>
+                        <th class="text-right py-2 text-slate-600 dark:text-slate-400">Saldo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let row of amortizationTable.slice(0, 12)"
+                          class="border-b border-slate-100 dark:border-slate-800"
+                          [class.bg-amber-50]="row.paymentNumber === 1"
+                          [class.dark:bg-amber-900/20]="row.paymentNumber === 1">
+                        <td class="py-2 text-slate-900 dark:text-slate-100">{{ row.paymentNumber }}</td>
+                        <td class="py-2 text-right text-slate-900 dark:text-slate-100">{{ formatCurrency(row.monthlyPayment) }}</td>
+                        <td class="py-2 text-right font-medium text-green-600">{{ formatCurrency(row.principal) }}</td>
+                        <td class="py-2 text-right font-medium text-red-600">{{ formatCurrency(row.interest) }}</td>
+                        <td class="py-2 text-right text-slate-900 dark:text-slate-100">{{ formatCurrency(row.balance) }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 text-center mt-4">
+                    * Se muestran los primeros 12 pagos. Total: 24 meses
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- Amortization Table Modal -->
-          <div *ngIf="showAmortizationTable" class="amortization-modal">
-            <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="amortization-title">
-              <div class="modal-header">
-                <h4 id="amortization-title">📊 Tabla de Amortización del Remanente</h4>
-                <button (click)="showAmortizationTable = false" class="close-btn" aria-label="Cerrar" title="Cerrar">×</button>
-              </div>
-              
-              <div class="amortization-summary">
-                <div class="summary-row">
-                  <span>Monto a financiar:</span>
-                  <strong>{{ remainderAmount | currency:'MXN':'symbol':'1.0-0' }}</strong>
-                </div>
-                <div class="summary-row">
-                  <span>Tasa anual AGS:</span>
-                  <strong>25.5%</strong>
-                </div>
-                <div class="summary-row">
-                  <span>Plazo típico:</span>
-                  <strong>24 meses</strong>
-                </div>
-                <div class="summary-row highlight">
-                  <span>Pago mensual estimado:</span>
-                  <strong>{{ amortizationTable[0]?.monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</strong>
-                </div>
-              </div>
-
-              <div class="table-container">
-                <table class="amortization-table table-lg">
-                  <thead>
-                    <tr>
-                      <th># Pago</th>
-                      <th>Pago Mensual</th>
-                      <th>Capital</th>
-                      <th>Interés</th>
-                      <th>Saldo</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let row of amortizationTable.slice(0, 12)" 
-                        [class.highlight]="row.paymentNumber === 1">
-                      <td class="num">{{ row.paymentNumber }}</td>
-                      <td class="num">{{ row.monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</td>
-                      <td class="principal num">{{ row.principal | currency:'MXN':'symbol':'1.0-0' }}</td>
-                      <td class="interest num">{{ row.interest | currency:'MXN':'symbol':'1.0-0' }}</td>
-                      <td class="num">{{ row.balance | currency:'MXN':'symbol':'1.0-0' }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div class="table-note">
-                  <small>* Se muestran los primeros 12 pagos. Total: 24 meses</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="helper-text" style="margin-top: var(--space-16);">
-            ¿Qué sigue? Puedes pasar al Cotizador o generar un PDF con tu plan.
           </div>
         </div>
-      </div>
 
-      <!-- Loading -->
-      <div *ngIf="isLoading" class="loading" data-loading="true">
-        <app-skeleton-card ariaLabel="Calculando escenario de ahorro AGS" [titleWidth]="70" [subtitleWidth]="60" [buttonWidth]="30"></app-skeleton-card>
-      </div>
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="flex justify-center py-12">
+          <app-skeleton-card
+            ariaLabel="Calculando escenario de ahorro AGS"
+            [titleWidth]="70"
+            [subtitleWidth]="60"
+            [buttonWidth]="30">
+          </app-skeleton-card>
+        </div>
+      </main>
     </div>
   `,
   styleUrl: './ags-ahorro.component.scss',
 })
-export class AgsAhorroComponent implements OnInit {
+export class AgsAhorroComponent implements OnInit, AfterViewInit {
+  @ViewChild('ahorroChart') ahorroChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('pmtChart') pmtChartRef!: ElementRef<HTMLCanvasElement>;
+  private ahorroChart: any;
+  private pmtChart: any;
   simuladorForm!: FormGroup;
   currentScenario?: SavingsScenario;
   plates: string[] = [];
@@ -368,6 +530,10 @@ export class AgsAhorroComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDefaultValues();
+  }
+
+  ngAfterViewInit(): void {
+    // Chart.js will be initialized when a scenario is calculated
   }
 
   private createForm(): void {
@@ -423,6 +589,9 @@ export class AgsAhorroComponent implements OnInit {
       this.currentScenario = scenario;
       this.toast.success('Escenario AGS simulado exitosamente');
       this.isSimulating = false;
+
+      // Initialize charts after scenario is set
+      setTimeout(() => this.initializeCharts(), 100);
     } catch (error) {
       this.toast.error('Error al simular escenario AGS');
       this.isSimulating = false;
@@ -622,6 +791,108 @@ export class AgsAhorroComponent implements OnInit {
     Quedaría un remanente de ${formatter.format(this.remainderAmount)} pesos para liquidar.`;
 
     this.speech.speak(text);
+  }
+
+  private initializeCharts(): void {
+    if (!this.currentScenario) return;
+
+    this.initializeAhorroChart();
+    this.initializePMTChart();
+  }
+
+  private initializeAhorroChart(): void {
+    if (!this.ahorroChartRef?.nativeElement || !this.currentScenario) return;
+
+    if (this.ahorroChart) {
+      this.ahorroChart.destroy();
+    }
+
+    const ctx = this.ahorroChartRef.nativeElement.getContext('2d');
+    const months = Array.from({ length: this.currentScenario.monthsToTarget }, (_, i) => i + 1);
+    const projectedData = this.currentScenario.projectedBalance || [];
+
+    this.ahorroChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Ahorro Acumulado',
+          data: projectedData,
+          borderColor: 'rgb(59, 130, 246)',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'Proyección de Ahorro Mensual',
+            font: { size: 14, weight: '600' },
+            color: '#374151'
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'Mes', color: '#6B7280' },
+            grid: { color: '#E5E7EB' }
+          },
+          y: {
+            title: { display: true, text: 'Monto ($)', color: '#6B7280' },
+            grid: { color: '#E5E7EB' },
+            ticks: {
+              callback: (value: any) => this.formatCurrency(Number(value))
+            }
+          }
+        }
+      }
+    });
+  }
+
+  private initializePMTChart(): void {
+    if (!this.pmtChartRef?.nativeElement || !this.currentScenario) return;
+
+    if (this.pmtChart) {
+      this.pmtChart.destroy();
+    }
+
+    const ctx = this.pmtChartRef.nativeElement.getContext('2d');
+    const remainderAmount = this.remainderAmount;
+    const monthlyContribution = this.currentScenario.monthlyContribution;
+
+    this.pmtChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Ahorro Programado', 'Remanente a Financiar'],
+        datasets: [{
+          data: [monthlyContribution * this.currentScenario.monthsToTarget, remainderAmount],
+          backgroundColor: ['#10B981', '#F59E0B'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: { usePointStyle: true }
+          },
+          title: {
+            display: true,
+            text: 'Distribución de Financiamiento',
+            font: { size: 14, weight: '600' },
+            color: '#374151'
+          }
+        }
+      }
+    });
   }
 
   formatCurrency(value: number): string {
