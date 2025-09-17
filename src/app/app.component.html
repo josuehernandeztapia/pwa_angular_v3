@@ -1,16 +1,98 @@
-<!-- App Layout with Navigation and Content -->
+<!-- Skip Link for Accessibility -->
 <a class="skip-link" href="#main-content">Saltar al contenido</a>
-<div class="app-layout">
-  <!-- Desktop/Tablet Navigation -->
-  <app-navigation role="navigation" aria-label="Navegación principal"></app-navigation>
-  
-  <!-- Main Content Area -->
-  <main id="main-content" class="main-content" role="main">
-    <router-outlet></router-outlet>
-  </main>
 
-  <!-- Mobile Bottom Navigation -->
-  <app-bottom-nav-bar role="navigation" aria-label="Navegación inferior"></app-bottom-nav-bar>
+<!-- Enterprise Layout: Sidebar + Topbar + Main Content -->
+<div class="min-h-screen flex bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+
+  <!-- Sidebar Navigation - OpenAI Style -->
+  <aside class="w-64 bg-slate-900 text-slate-200 border-r border-slate-800 flex flex-col">
+    <div class="p-4 font-semibold text-white border-b border-slate-800">
+      Conductores
+    </div>
+
+    <nav class="flex-1 px-2 py-4 space-y-2" role="navigation" aria-label="Navegación principal">
+      <!-- Crear -->
+      <div class="text-xs uppercase text-slate-400 px-2 mb-2">Crear</div>
+      <a routerLink="/chat" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-chat">
+        Chat
+      </a>
+      <a routerLink="/audio" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-audio">
+        Audio
+      </a>
+      <a routerLink="/images" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-images">
+        Images
+      </a>
+      <a routerLink="/assistants" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-assistants">
+        Assistants
+      </a>
+
+      <!-- Gestionar -->
+      <div class="text-xs uppercase text-slate-400 px-2 mt-6 mb-2">Gestionar</div>
+      <a routerLink="/usage" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-usage">
+        Usage
+      </a>
+      <a routerLink="/cotizador" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-cotizador">
+        Cotizador
+      </a>
+      <a routerLink="/simulador" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-simulador">
+        Simulador
+      </a>
+      <a routerLink="/documentos" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-documentos">
+        Documentos
+      </a>
+      <a routerLink="/entregas" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-entregas">
+        Entregas
+      </a>
+
+      <!-- Optimizar -->
+      <div class="text-xs uppercase text-slate-400 px-2 mt-6 mb-2">Optimizar</div>
+      <a routerLink="/avi" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-avi">
+        AVI
+      </a>
+      <a routerLink="/proteccion" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-proteccion">
+        Protección
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Topbar - Enterprise Style -->
+    <header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur flex items-center justify-between px-6">
+      <div class="text-sm text-slate-600 dark:text-slate-400">
+        Organización: <span class="font-medium text-slate-900 dark:text-slate-100" data-cy="org-name">mvpcoductores</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button class="ui-btn ui-btn-primary ui-btn-sm" data-cy="export">
+          Exportar
+        </button>
+        <button class="ui-btn ui-btn-secondary ui-btn-sm" data-cy="date-range">
+          Rango de fechas
+        </button>
+        <button
+          class="ui-btn ui-btn-ghost ui-btn-sm"
+          (click)="toggleDarkMode()"
+          data-cy="toggle-dark"
+          [attr.aria-label]="isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'">
+          <span class="text-base">{{ isDarkMode ? '☀️' : '🌙' }}</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Router Content -->
+    <main id="main-content" class="flex-1 p-6 overflow-auto" role="main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Navigation (Hidden on Desktop) -->
+  <app-bottom-nav-bar
+    class="lg:hidden"
+    role="navigation"
+    aria-label="Navegación móvil">
+  </app-bottom-nav-bar>
 </div>
 
 <!-- Update Banner for PWA updates -->

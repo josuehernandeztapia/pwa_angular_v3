@@ -1,9 +1,20 @@
 /* ===== CONDUCTORES PWA - PREMIUM FINTECH THEME =====
  * Global styles and theme imports - Performance Optimized
- * Version: Centro de Comando + Performance Pack
+ * Version: Centro de Comando + Performance Pack + Tailwind Enterprise
  */
 
-/* Performance-Critical Styles First */
+/* ===== TAILWIND CSS - ENTERPRISE DESIGN SYSTEM ===== */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* UI Helpers - Enterprise Components */
+@import './app/styles/ui-helpers.scss';
+
+/* Inter Font - Enterprise Typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Performance-Critical Styles */
 @import 'styles/performance.scss';
 
 /* Phosphor Icons - Premium Icon System */

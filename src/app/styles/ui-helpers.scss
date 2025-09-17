@@ -1,0 +1,290 @@
+/**
+ * 🎨 UI Helpers - Conductores PWA
+ * Helpers globales reutilizables con estilo enterprise minimalista
+ * Usa @apply para mantener consistencia con Tailwind
+ */
+
+/* ===============================================
+   📄 CARDS
+   =============================================== */
+
+.ui-card {
+  @apply rounded-lg border border-slate-200 dark:border-slate-800
+         bg-white dark:bg-slate-900 shadow-sm p-4
+         transition-colors duration-150;
+}
+
+.ui-card-hover {
+  @apply ui-card hover:bg-slate-50 dark:hover:bg-slate-800
+         cursor-pointer transition-all duration-150;
+}
+
+.ui-card-compact {
+  @apply ui-card p-3;
+}
+
+.ui-card-spacious {
+  @apply ui-card p-6;
+}
+
+/* ===============================================
+   🔘 BUTTONS
+   =============================================== */
+
+.ui-btn {
+  @apply px-4 py-2 rounded-md text-sm font-medium
+         transition-colors duration-150
+         focus:outline-none focus:ring-2 focus:ring-offset-2
+         disabled:opacity-50 disabled:cursor-not-allowed
+         inline-flex items-center justify-center;
+}
+
+.ui-btn-primary {
+  @apply ui-btn bg-sky-600 text-white
+         hover:bg-sky-700 focus:ring-sky-500
+         dark:bg-sky-500 dark:hover:bg-sky-600;
+}
+
+.ui-btn-secondary {
+  @apply ui-btn border border-slate-300 text-slate-700
+         hover:bg-slate-100 focus:ring-slate-500
+         dark:border-slate-600 dark:text-slate-200
+         dark:hover:bg-slate-700 dark:focus:ring-slate-400;
+}
+
+.ui-btn-ghost {
+  @apply ui-btn text-slate-600
+         hover:text-slate-900 hover:bg-slate-100
+         focus:ring-slate-500
+         dark:text-slate-400 dark:hover:text-slate-100
+         dark:hover:bg-slate-800;
+}
+
+.ui-btn-danger {
+  @apply ui-btn bg-red-600 text-white
+         hover:bg-red-700 focus:ring-red-500;
+}
+
+.ui-btn-success {
+  @apply ui-btn bg-green-600 text-white
+         hover:bg-green-700 focus:ring-green-500;
+}
+
+/* Tamaños de botones */
+.ui-btn-sm {
+  @apply px-3 py-1.5 text-xs;
+}
+
+.ui-btn-lg {
+  @apply px-6 py-3 text-base;
+}
+
+.ui-btn-block {
+  @apply w-full justify-center;
+}
+
+/* ===============================================
+   📝 FORM CONTROLS
+   =============================================== */
+
+.ui-input {
+  @apply w-full border rounded-md px-3 py-2 text-sm
+         border-slate-300 dark:border-slate-600
+         bg-transparent
+         focus:ring-1 focus:ring-sky-600 focus:border-sky-600
+         dark:focus:ring-sky-500 dark:focus:border-sky-500
+         transition-colors duration-150;
+}
+
+.ui-select {
+  @apply ui-input bg-white dark:bg-slate-800;
+}
+
+.ui-textarea {
+  @apply ui-input min-h-[80px];
+  resize: vertical;
+}
+
+.ui-input-error {
+  @apply border-red-300 dark:border-red-600
+         focus:ring-red-600 focus:border-red-600
+         dark:focus:ring-red-500 dark:focus:border-red-500;
+}
+
+/* ===============================================
+   🏷️ LABELS & TEXT
+   =============================================== */
+
+.ui-label {
+  @apply block text-sm font-medium mb-1
+         text-slate-700 dark:text-slate-300;
+}
+
+.ui-label-required::after {
+  content: ' *';
+  @apply text-red-500;
+}
+
+.ui-help-text {
+  @apply text-xs text-slate-500 dark:text-slate-400 mt-1;
+}
+
+.ui-error-text {
+  @apply text-xs text-red-600 dark:text-red-400 mt-1;
+}
+
+/* ===============================================
+   📊 METRICS & KPI CARDS
+   =============================================== */
+
+.ui-metric-card {
+  @apply ui-card min-h-[80px] flex flex-col justify-center;
+}
+
+.ui-metric-label {
+  @apply text-xs text-slate-500 dark:text-slate-400 mb-1;
+}
+
+.ui-metric-value {
+  @apply text-2xl font-semibold text-slate-900 dark:text-slate-100;
+}
+
+.ui-metric-change {
+  @apply text-xs font-medium mt-1;
+}
+
+.ui-metric-change-positive {
+  @apply ui-metric-change text-green-600 dark:text-green-400;
+}
+
+.ui-metric-change-negative {
+  @apply ui-metric-change text-red-600 dark:text-red-400;
+}
+
+/* ===============================================
+   🔔 ALERTS & STATUS
+   =============================================== */
+
+.ui-alert {
+  @apply rounded-md p-4 border;
+}
+
+.ui-alert-info {
+  @apply ui-alert bg-blue-50 border-blue-200 text-blue-800
+         dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-200;
+}
+
+.ui-alert-success {
+  @apply ui-alert bg-green-50 border-green-200 text-green-800
+         dark:bg-green-900/20 dark:border-green-800 dark:text-green-200;
+}
+
+.ui-alert-warning {
+  @apply ui-alert bg-yellow-50 border-yellow-200 text-yellow-800
+         dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-200;
+}
+
+.ui-alert-error {
+  @apply ui-alert bg-red-50 border-red-200 text-red-800
+         dark:bg-red-900/20 dark:border-red-800 dark:text-red-200;
+}
+
+/* ===============================================
+   ⏳ LOADING & SKELETON
+   =============================================== */
+
+.ui-skeleton {
+  @apply animate-pulse bg-slate-200 dark:bg-slate-700 rounded;
+}
+
+.ui-skeleton-text {
+  @apply ui-skeleton h-4 mb-2;
+}
+
+.ui-skeleton-title {
+  @apply ui-skeleton h-6 mb-4;
+}
+
+.ui-spinner {
+  @apply inline-block animate-spin rounded-full border-2
+         border-slate-300 border-t-sky-600
+         dark:border-slate-600 dark:border-t-sky-400;
+}
+
+.ui-spinner-sm {
+  @apply ui-spinner h-4 w-4;
+}
+
+.ui-spinner-md {
+  @apply ui-spinner h-6 w-6;
+}
+
+.ui-spinner-lg {
+  @apply ui-spinner h-8 w-8;
+}
+
+/* ===============================================
+   📱 RESPONSIVE UTILITIES
+   =============================================== */
+
+.ui-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.ui-section {
+  @apply py-8 md:py-12;
+}
+
+.ui-grid-cards {
+  @apply grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+}
+
+.ui-grid-metrics {
+  @apply grid gap-4 md:grid-cols-2 lg:grid-cols-4;
+}
+
+/* ===============================================
+   🎯 UTILITY CLASSES
+   =============================================== */
+
+.ui-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ui-slide-up {
+  animation: slideUp 0.3s ease-in-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================================
+   🌙 DARK MODE UTILITIES
+   =============================================== */
+
+.ui-dark-toggle {
+  @apply ui-btn-ghost p-2;
+}
+
+.ui-dark-indicator {
+  @apply h-2 w-2 rounded-full bg-sky-500 dark:bg-yellow-400;
+}
