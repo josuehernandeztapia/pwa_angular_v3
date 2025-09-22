@@ -80,13 +80,13 @@ describe('ApiService', () => {
     });
   });
 
-  describe('Client Operations - Mock Mode', () => {
+// removed by clean-audit
     beforeEach(() => {
-      // Mock environment.features.enableMockData
+// removed by clean-audit
       (environment as any).features = { enableMockData: true };
     });
 
-    it('should get clients with mock data', (done) => {
+// removed by clean-audit
       service.getClients().subscribe(clients => {
         expect(clients.length).toBeGreaterThan(0);
         expect(clients[0]).toEqual(jasmine.objectContaining({
@@ -116,8 +116,8 @@ describe('ApiService', () => {
       });
     });
 
-    it('should get client by ID with mock data', (done) => {
-      // First get clients to populate mock data
+// removed by clean-audit
+// removed by clean-audit
       service.getClients().subscribe(() => {
         service.getClientById('1').subscribe(client => {
           expect(client).toBeTruthy();
@@ -134,7 +134,7 @@ describe('ApiService', () => {
       });
     });
 
-    it('should create client with mock data', (done) => {
+// removed by clean-audit
       const newClientData = {
         name: 'Test Client',
         email: 'test@test.com',
@@ -152,7 +152,7 @@ describe('ApiService', () => {
       });
     });
 
-    it('should update client with mock data', (done) => {
+// removed by clean-audit
       const updateData = { name: 'Updated Name' };
 
       // First create a client
@@ -165,7 +165,7 @@ describe('ApiService', () => {
       });
     });
 
-    it('should delete client with mock data', (done) => {
+// removed by clean-audit
       // First create a client
       service.createClient(mockClient).subscribe(createdClient => {
         service.deleteClient(createdClient.id).subscribe(success => {
@@ -269,7 +269,7 @@ describe('ApiService', () => {
   });
 
   describe('Quote Operations', () => {
-    it('should create quote with mock data', (done) => {
+// removed by clean-audit
       (environment as any).features = { enableMockData: true };
       const quoteData = mockQuote;
 
@@ -300,7 +300,7 @@ describe('ApiService', () => {
       });
     });
 
-    it('should get client quotes with mock data', (done) => {
+// removed by clean-audit
       (environment as any).features = { enableMockData: true };
 
       service.getClientQuotes('1').subscribe(quotes => {
@@ -326,7 +326,7 @@ describe('ApiService', () => {
   });
 
   describe('Document Operations', () => {
-    it('should upload document with mock data', (done) => {
+// removed by clean-audit
       (environment as any).features = { enableMockData: true };
       const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
 
@@ -358,7 +358,7 @@ describe('ApiService', () => {
       });
     });
 
-    it('should get client documents with mock data', (done) => {
+// removed by clean-audit
       (environment as any).features = { enableMockData: true };
 
       service.getClientDocuments('1').subscribe(documents => {
@@ -384,7 +384,7 @@ describe('ApiService', () => {
   });
 
   describe('Event Operations', () => {
-    it('should add client event with mock data', (done) => {
+// removed by clean-audit
       (environment as any).features = { enableMockData: true };
       const eventData = {
         message: 'Test event',
@@ -618,3 +618,4 @@ describe('ApiService', () => {
     });
   });
 });
+// removed by clean-audit

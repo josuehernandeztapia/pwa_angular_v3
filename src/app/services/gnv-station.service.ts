@@ -198,7 +198,7 @@ export class GnvStationService {
             timestamp: Date.now()
           }));
         },
-        error: (error) => console.error('Price polling error:', error)
+// removed by clean-audit
       });
   }
 
@@ -374,7 +374,7 @@ export class GnvStationService {
     return R * c;
   }
 
-  // Mock Data
+// removed by clean-audit
   private getMockStations(state?: string): GNVStation[] {
     const stations: GNVStation[] = [
       {
@@ -508,3 +508,4 @@ export class GnvStationService {
     };
   }
 }
+// removed by clean-audit

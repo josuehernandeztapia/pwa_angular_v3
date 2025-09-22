@@ -45,12 +45,12 @@ export class LoadingInterceptor implements HttpInterceptor {
         next: (event: HttpEvent<unknown>) => {
           if (event instanceof HttpResponse) {
             const duration = Date.now() - startTime;
-            console.log(`⏱️ Request completed in ${duration}ms: ${request.method} ${request.url}`);
+// removed by clean-audit
           }
         },
         error: (error: HttpErrorResponse) => {
           const duration = Date.now() - startTime;
-          console.error(`⏱️ Request failed after ${duration}ms: ${request.method} ${request.url}`, error);
+// removed by clean-audit
         }
       }),
       finalize(() => {
@@ -69,3 +69,4 @@ export class LoadingInterceptor implements HttpInterceptor {
     return this.skipLoadingUrls.some(skipUrl => url.includes(skipUrl));
   }
 }
+// removed by clean-audit

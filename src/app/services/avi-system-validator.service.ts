@@ -23,7 +23,7 @@ export class AVISystemValidatorService {
    * Ejecutar validación completa del sistema AVI
    */
   runCompleteValidation(): Observable<ValidationReport> {
-    console.log('🧪 Iniciando validación completa del sistema AVI...');
+// removed by clean-audit
     
     const validationBatch = AVITestDataGenerator.generateValidationBatch();
     
@@ -39,7 +39,7 @@ export class AVISystemValidatorService {
     }).pipe(
       map(results => this.compileValidationReport(results)),
       catchError(error => {
-        console.error('Error en validación:', error);
+// removed by clean-audit
         return of(this.getErrorReport(error));
       })
     );
@@ -242,7 +242,7 @@ export class AVISystemValidatorService {
               }
             } catch (error) {
               completedTests++;
-              console.error('Error en caso de bajo riesgo:', error);
+// removed by clean-audit
             }
           }
         );
@@ -263,7 +263,7 @@ export class AVISystemValidatorService {
               }
             } catch (error) {
               completedTests++;
-              console.error('Error en caso de alto riesgo:', error);
+// removed by clean-audit
             }
           }
         );
@@ -348,7 +348,7 @@ export class AVISystemValidatorService {
               message: `${result.heuristicScore.processingTime}ms`
             });
             
-            // Test 4: Memoria no excesiva (mock)
+// removed by clean-audit
             const memoryUsage = process.memoryUsage ? process.memoryUsage().heapUsed / 1024 / 1024 : 50;
             tests.push({
               name: 'Uso de memoria',
@@ -433,7 +433,7 @@ export class AVISystemValidatorService {
               }
             } catch (error) {
               completedRuns++;
-              console.error('Error en test de consistencia:', error);
+// removed by clean-audit
             }
           }
         );
@@ -486,7 +486,7 @@ export class AVISystemValidatorService {
               }
             } catch (error) {
               completedCases++;
-              console.error('Error en caso extremo:', error);
+// removed by clean-audit
             }
           }
         );
@@ -502,7 +502,7 @@ export class AVISystemValidatorService {
       const startTime = Date.now();
       const tests: TestCase[] = [];
       
-      // Generar datos de calibración mock
+// removed by clean-audit
       const calibrationSamples = AVITestDataGenerator.generateCalibrationSamples(50);
       
       this.calibrationService.performAutoCalibration(calibrationSamples).subscribe({
@@ -657,3 +657,4 @@ export interface TestCase {
   passed: boolean;
   message: string;
 }
+// removed by clean-audit

@@ -1,0 +1,198 @@
+/**
+ * 🔧 Configuración de Flujos y Productos - Minimalista Enterprise
+ * Dual-mode configuration system with OpenAI dashboard patterns
+ */
+
+:host {
+  @apply block space-y-6;
+
+  // Dual mode selector
+  .mode-selector {
+    @apply flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1 w-fit mx-auto;
+
+    .mode-btn {
+      @apply px-4 py-2 text-sm font-medium rounded-md transition-all duration-200;
+      @apply text-slate-600 dark:text-slate-400;
+
+      &.active {
+        @apply bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100;
+        @apply shadow-sm border border-slate-200 dark:border-slate-600;
+      }
+
+      &:hover:not(.active) {
+        @apply text-slate-900 dark:text-slate-200;
+      }
+    }
+  }
+
+  // Configuration fields
+  .config-field {
+    @apply space-y-2;
+
+    .field-label {
+      @apply block text-sm font-medium text-slate-700 dark:text-slate-300;
+    }
+
+    .field-input, .field-select {
+      @apply w-full px-3 py-2 border border-slate-200 dark:border-slate-700;
+      @apply rounded-md bg-white dark:bg-slate-800;
+      @apply text-slate-900 dark:text-slate-100;
+      @apply text-sm transition-colors;
+
+      &:focus {
+        @apply outline-none ring-2 ring-blue-500/20 border-blue-500 dark:border-blue-400;
+      }
+
+      &::placeholder {
+        @apply text-slate-400 dark:text-slate-500;
+      }
+    }
+
+    .field-error {
+      @apply text-sm text-red-600 dark:text-red-400 mt-1;
+    }
+  }
+
+  // Product packages
+  .product-package {
+    @apply border border-slate-200 dark:border-slate-700 rounded-lg p-4;
+    @apply cursor-pointer transition-all duration-200;
+    @apply bg-white dark:bg-slate-800;
+
+    &:hover {
+      @apply border-slate-300 dark:border-slate-600 shadow-sm;
+    }
+
+    &.selected {
+      @apply border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-950/20;
+      @apply shadow-md;
+    }
+
+    &.recommended {
+      @apply relative;
+
+      &::before {
+        content: "Recomendado";
+        @apply absolute -top-2 -right-2 bg-amber-400 text-amber-900;
+        @apply text-xs font-semibold px-2 py-1 rounded-full;
+      }
+    }
+
+    .package-header {
+      @apply flex items-center gap-3 mb-2;
+
+      .package-icon {
+        @apply text-xl;
+      }
+
+      .package-info {
+        @apply flex-1;
+
+        .package-name {
+          @apply font-semibold text-slate-900 dark:text-slate-100;
+        }
+
+        .package-price {
+          @apply text-sm text-slate-600 dark:text-slate-400;
+        }
+      }
+    }
+
+    .package-description {
+      @apply text-sm text-slate-600 dark:text-slate-400 mb-3;
+    }
+
+    .package-features {
+      @apply list-none space-y-1;
+
+      li {
+        @apply text-xs text-slate-600 dark:text-slate-400;
+        @apply flex items-center gap-2;
+
+        &::before {
+          content: "✓";
+          @apply text-emerald-600 dark:text-emerald-400 font-semibold;
+        }
+      }
+    }
+  }
+
+  // Financial results
+  .financial-results {
+    @apply bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4;
+    @apply border border-slate-200 dark:border-slate-700;
+
+    .results-loading {
+      @apply space-y-2;
+    }
+
+    .results-grid {
+      @apply grid grid-cols-3 gap-4;
+
+      .result-item {
+        @apply text-center;
+
+        .result-label {
+          @apply text-xs text-slate-600 dark:text-slate-400 mb-1;
+        }
+
+        .result-value {
+          @apply font-semibold text-slate-900 dark:text-slate-100;
+        }
+
+        &.col-span-3 {
+          @apply border-t border-slate-200 dark:border-slate-700 pt-3 mt-3;
+
+          .result-value {
+            @apply text-xl;
+          }
+        }
+      }
+    }
+  }
+
+  // Grid responsive adjustments
+  @media (max-width: 640px) {
+    .mode-selector {
+      @apply w-full;
+
+      .mode-btn {
+        @apply flex-1 text-center;
+      }
+    }
+
+    .grid-cols-2 {
+      @apply grid-cols-1;
+    }
+
+    .grid-cols-3 {
+      @apply grid-cols-1;
+
+      .product-package.recommended::before {
+        @apply -top-3 left-1/2 transform -translate-x-1/2;
+      }
+    }
+
+    .financial-results .results-grid {
+      @apply grid-cols-1 gap-3;
+
+      .result-item.col-span-3 {
+        @apply col-span-1;
+      }
+    }
+  }
+
+  // Animation classes
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+}

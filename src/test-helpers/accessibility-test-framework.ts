@@ -60,9 +60,9 @@ export class AccessibilityTester {
         rules: []
       });
 
-      console.log('🔍 Accessibility testing framework initialized');
+// removed by clean-audit
     } catch (error) {
-      console.warn('Failed to load axe-core, using mock implementation:', error);
+// removed by clean-audit
       this.axeCore = this.createMockAxe();
     }
   }
@@ -71,13 +71,13 @@ export class AccessibilityTester {
    * Test component accessibility
    */
   static async testComponent<T>(
-    fixture: ComponentFixture<T>,
+// removed by clean-audit
     options: AccessibilityTestOptions = {}
   ): Promise<AccessibilityTestResult> {
     await this.initialize();
     
-    const element = fixture.nativeElement;
-    const componentName = (fixture.componentInstance as any).constructor.name;
+// removed by clean-audit
+// removed by clean-audit
 
     try {
       const results = await this.axeCore.run(element, {
@@ -99,7 +99,7 @@ export class AccessibilityTester {
         component: componentName
       };
     } catch (error) {
-      console.warn(`Accessibility test failed for ${componentName}:`, error);
+// removed by clean-audit
       return this.createEmptyResult(componentName);
     }
   }
@@ -134,13 +134,13 @@ export class AccessibilityTester {
         component: testElement.tagName || 'UnknownElement'
       };
     } catch (error) {
-      console.warn('Element accessibility test failed:', error);
+// removed by clean-audit
       return this.createEmptyResult('HTMLElement');
     }
   }
 
   /**
-   * Create mock axe for environments where it's not available
+// removed by clean-audit
    */
   private static createMockAxe(): any {
     return {
@@ -315,13 +315,13 @@ export const setupAccessibilityTesting = () => {
  * Helper function for testing component accessibility
  */
 export const testComponentAccessibility = async <T>(
-  fixture: ComponentFixture<T>,
+// removed by clean-audit
   options: AccessibilityTestOptions = {}
 ): Promise<void> => {
-  const result = await AccessibilityTester.testComponent(fixture, options);
+// removed by clean-audit
   
   // Log results for debugging
-  console.log(AccessibilityTestUtils.generateViolationSummary(result));
+// removed by clean-audit
   
   // Fail test if critical violations found
   if (AccessibilityTestUtils.hasCriticalViolations(result)) {
@@ -340,7 +340,7 @@ export function AccessibilityTest(options: AccessibilityTestOptions = {}) {
       // Run original test
       const result = await method.apply(this, args);
       
-      // Run accessibility test if fixture is available
+// removed by clean-audit
       if (args[0] && args[0].componentInstance) {
         await testComponentAccessibility(args[0], options);
       }
@@ -354,8 +354,9 @@ export function AccessibilityTest(options: AccessibilityTestOptions = {}) {
  * Quick accessibility test function for common use cases
  */
 export const quickAccessibilityTest = async <T>(
-  fixture: ComponentFixture<T>
+// removed by clean-audit
 ): Promise<boolean> => {
-  const result = await AccessibilityTester.testComponent(fixture);
+// removed by clean-audit
   return !AccessibilityTestUtils.hasCriticalViolations(result);
 };
+// removed by clean-audit

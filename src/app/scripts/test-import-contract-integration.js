@@ -1,14 +1,14 @@
 // Test de integración completa: Import Tracking → Vehicle Assignment → Contract Update
 // Valida el flujo end-to-end desde fabricación hasta contrato actualizado
 
-console.log('🔗 TESTING IMPORT-CONTRACT INTEGRATION');
-console.log('=====================================\n');
+// removed by clean-audit
+// removed by clean-audit
 
 // Simulador integrado para testing
 class ImportContractIntegrationTestEngine {
   
   static testCompleteIntegrationFlow() {
-    console.log('🧪 EJECUTANDO TESTS DE INTEGRACIÓN IMPORT-CONTRACT\n');
+// removed by clean-audit
     
     const testCases = [
       {
@@ -139,50 +139,50 @@ class ImportContractIntegrationTestEngine {
     const totalTests = testCases.length;
 
     testCases.forEach((testCase, index) => {
-      console.log(`📋 Test ${index + 1}: ${testCase.name}`);
-      console.log('────────────────────────────────────────────────────────────────────────────────');
+// removed by clean-audit
+// removed by clean-audit
       
       const result = this.executeIntegrationTest(testCase);
       
       if (result.success && result.actualResult === testCase.expectedResult) {
-        console.log(`✅ PASÓ - Integración completa exitosa`);
-        console.log(`   Import Status: ✅ Actualizado con unidad`);
-        console.log(`   Contratos: ✅ ${result.contractsUpdated} actualizados`);
-        console.log(`   Consistencia: ✅ ${result.consistencyValidated ? 'Validada' : 'Pendiente'}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
         passedTests++;
       } else {
-        console.log(`❌ FALLÓ - Esperado: ${testCase.expectedResult}, Obtenido: ${result.actualResult}`);
-        console.log(`   Error: ${result.error || 'Sin error específico'}`);
+// removed by clean-audit
+// removed by clean-audit
       }
       
-      console.log('\n================================================================================\n');
+// removed by clean-audit
     });
 
     // Resumen final
-    console.log('🏆 RESUMEN DE IMPORT-CONTRACT INTEGRATION TESTING');
-    console.log('═══════════════════════════════════════════════════════════════');
-    console.log(`📊 Tests pasados: ${passedTests}/${totalTests}`);
-    console.log(`🎯 Éxito: ${((passedTests/totalTests) * 100).toFixed(1)}%`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
     if (passedTests === totalTests) {
-      console.log('✅ TODOS LOS TESTS PASARON - INTEGRACIÓN FUNCIONANDO CORRECTAMENTE');
-      console.log('🎉 El flujo completo Import → Vehicle → Contract está operacional');
+// removed by clean-audit
+// removed by clean-audit
     } else {
-      console.log('❌ ALGUNOS TESTS FALLARON - REVISAR INTEGRACIÓN');
+// removed by clean-audit
     }
     
-    console.log('\n🔗 IMPORT-CONTRACT INTEGRATION TESTING COMPLETADO');
+// removed by clean-audit
   }
 
   static executeIntegrationTest(testCase) {
     try {
-      console.log(`🔬 Ejecutando integración para: ${testCase.clientName}`);
-      console.log(`   Cliente ID: ${testCase.clientId}`);
-      console.log(`   Contratos iniciales: ${testCase.initialState.existingContracts.length}`);
-      console.log(`   VIN a asignar: ${testCase.vehicleAssignment.vin}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
 
       // PASO 1: Simular estado inicial
-      console.log('\n   📋 PASO 1: Validando estado inicial...');
+// removed by clean-audit
       const initialValidation = this.validateInitialState(testCase.initialState);
       if (!initialValidation.valid) {
         return {
@@ -191,10 +191,10 @@ class ImportContractIntegrationTestEngine {
           error: initialValidation.reason
         };
       }
-      console.log('   ✅ Estado inicial válido');
+// removed by clean-audit
 
       // PASO 2: Ejecutar asignación de vehículo
-      console.log('\n   🚛 PASO 2: Ejecutando asignación de vehículo...');
+// removed by clean-audit
       const vehicleAssignmentResult = this.executeVehicleAssignment(
         testCase.clientId, 
         testCase.vehicleAssignment
@@ -207,44 +207,44 @@ class ImportContractIntegrationTestEngine {
           error: vehicleAssignmentResult.error
         };
       }
-      console.log('   ✅ Vehículo asignado exitosamente');
+// removed by clean-audit
 
       // PASO 3: Actualizar import status
-      console.log('\n   📊 PASO 3: Actualizando import status...');
+// removed by clean-audit
       const updatedImportStatus = this.updateImportStatusWithVehicle(
         testCase.clientId,
         vehicleAssignmentResult.assignedUnit
       );
-      console.log('   ✅ Import status actualizado');
+// removed by clean-audit
 
       // PASO 4: Propagar a contratos
-      console.log('\n   📜 PASO 4: Propagando a contratos...');
+// removed by clean-audit
       const contractUpdateResults = this.propagateToContracts(
         testCase.clientId,
         testCase.initialState.existingContracts,
         vehicleAssignmentResult.assignedUnit
       );
       
-      console.log(`   ✅ ${contractUpdateResults.updatedCount} contratos actualizados`);
+// removed by clean-audit
       if (contractUpdateResults.warnings.length > 0) {
         contractUpdateResults.warnings.forEach(warning => {
-          console.log(`   ⚠️ Warning: ${warning}`);
+// removed by clean-audit
         });
       }
 
       // PASO 5: Validar consistencia final
-      console.log('\n   🔍 PASO 5: Validando consistencia final...');
+// removed by clean-audit
       const consistencyValidation = this.validateFinalConsistency(
         updatedImportStatus,
         contractUpdateResults.updatedContracts
       );
       
       if (consistencyValidation.consistent) {
-        console.log('   ✅ Consistencia validada - Datos integrados correctamente');
+// removed by clean-audit
       } else {
-        console.log('   ⚠️ Issues de consistencia detectados:');
+// removed by clean-audit
         consistencyValidation.issues.forEach(issue => {
-          console.log(`      - ${issue}`);
+// removed by clean-audit
         });
       }
 
@@ -270,7 +270,7 @@ class ImportContractIntegrationTestEngine {
       };
 
     } catch (error) {
-      console.log(`   💥 Error inesperado en integración: ${error.message}`);
+// removed by clean-audit
       return {
         success: false,
         actualResult: 'ERROR_UNEXPECTED',
@@ -328,8 +328,8 @@ class ImportContractIntegrationTestEngine {
       lastSyncDate: new Date()
     };
 
-    console.log(`     📝 Import status actualizado para cliente ${clientId}`);
-    console.log(`     🚛 Unidad asignada: ${assignedUnit.vin} (${assignedUnit.modelo})`);
+// removed by clean-audit
+// removed by clean-audit
     
     return updatedImportStatus;
   }
@@ -368,7 +368,7 @@ class ImportContractIntegrationTestEngine {
         updatedContracts.push(updatedContract);
         updatedCount++;
         
-        console.log(`     📜 Contrato ${contract.id} actualizado con VIN ${assignedUnit.vin}`);
+// removed by clean-audit
       } else {
         warnings.push(`Contrato ${contract.id} ya tenía vehículo asignado`);
       }
@@ -420,3 +420,4 @@ class ImportContractIntegrationTestEngine {
 
 // Ejecutar los tests de integración
 ImportContractIntegrationTestEngine.testCompleteIntegrationFlow();
+// removed by clean-audit

@@ -117,7 +117,7 @@ import { NextBestActionService, NextBestAction, ActionInsights } from '../../../
       <!-- Empty state -->
       <div class="empty-state" *ngIf="!isLoading && allActions.length === 0">
         <div class="empty-icon">✨</div>
-        <div class="empty-title">¡Todo al día!</div>
+// removed by clean-audit
         <div class="empty-description">No hay acciones urgentes en este momento.</div>
       </div>
 
@@ -630,7 +630,7 @@ export class NextBestActionWidgetComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Error loading next best actions:', error);
+// removed by clean-audit
           this.isLoading = false;
           this.allActions = [];
           this.displayActions = [];
@@ -708,3 +708,5 @@ export class NextBestActionWidgetComponent implements OnInit, OnDestroy {
     return index;
   }
 }
+
+// removed by clean-audit

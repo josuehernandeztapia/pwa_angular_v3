@@ -245,7 +245,7 @@ export class IntegratedImportTrackerService {
       return of();
     }
 
-    console.log(`🔗 Integrando trigger ${triggerEvent.id} con import tracker para cliente ${triggerEvent.clientId}`);
+// removed by clean-audit
 
     return this.initializeImportTrackingForDeliveryOrder(triggerEvent.clientId, deliveryOrder).pipe(
       tap(() => {
@@ -264,17 +264,17 @@ export class IntegratedImportTrackerService {
         ).subscribe({
           next: (result) => {
             if (result.success) {
-              console.log(`✅ Notificación WhatsApp enviada para nueva orden: ${result.messageId}`);
+// removed by clean-audit
             }
           },
           error: (error) => {
-            console.error('Error enviando notificación WhatsApp:', error);
+// removed by clean-audit
           }
         });
       }),
       map(() => void 0),
       catchError(error => {
-        console.error('Error integrando trigger con import tracker:', error);
+// removed by clean-audit
         return of(void 0);
       })
     );
@@ -304,7 +304,7 @@ export class IntegratedImportTrackerService {
       }
     }).pipe(
       tap(status => {
-        console.log(`✅ Import tracking inicializado para cliente ${clientId}, orden ${deliveryOrder.id}`);
+// removed by clean-audit
         
         // Registrar evento inicial
         this.recordMilestoneEvent(clientId, 'pedidoPlanta', 'in_progress', {
@@ -611,18 +611,18 @@ export class IntegratedImportTrackerService {
         ).subscribe({
           next: (result) => {
             if (result.success) {
-              console.log(`✅ Notificación WhatsApp enviada para milestone ${milestone}: ${result.messageId}`);
+// removed by clean-audit
             } else {
-              console.warn(`⚠️ Notificación WhatsApp falló para milestone ${milestone}: ${result.errorMessage}`);
+// removed by clean-audit
             }
           },
           error: (error) => {
-            console.error(`❌ Error enviando notificación WhatsApp de milestone:`, error);
+// removed by clean-audit
           }
         });
       },
       error: (error) => {
-        console.error('Error obteniendo datos del cliente para notificación:', error);
+// removed by clean-audit
       }
     });
   }
@@ -703,10 +703,10 @@ export class IntegratedImportTrackerService {
       notes?: string;
     }
   ): void {
-    console.log('🚛 Triggering vehicle assignment flow for client:', clientId);
+// removed by clean-audit
     
     // Log del evento para debugging
-    console.log('📋 Unidad fabricada completada - Lista para asignación:', {
+// removed by clean-audit
       clientId,
       completedAt: metadata?.actualDate || new Date(),
       notes: metadata?.notes
@@ -750,15 +750,15 @@ export class IntegratedImportTrackerService {
     // - WhatsApp message al asesor
     // - Task creation en sistema de tareas
 
-    console.log('📧 Unit ready notification sent:', notificationData);
+// removed by clean-audit
     
     // Opcional: usar el WhatsApp service para notificar
     // this.importWhatsAppService.sendNotification(clientId, 'UNIT_READY', notificationData);
   }
 
   /**
-   * 🚛 NUEVO MÉTODO: Asignar unidad específica al cliente
-   * Método público para que pueda ser llamado desde la UI
+// removed by clean-audit
+// removed by clean-audit
    */
   assignVehicleToClient(
     clientId: string,
@@ -776,7 +776,7 @@ export class IntegratedImportTrackerService {
     }
   ): Observable<{ success: boolean; assignedUnit?: VehicleUnit; error?: string }> {
     
-    console.log('🚛 Assigning vehicle to client through integrated tracker:', clientId);
+// removed by clean-audit
 
     // Validar que el cliente esté en el estado correcto (unidadFabricada completed)
     return this.getIntegratedImportStatus(clientId).pipe(
@@ -812,7 +812,7 @@ export class IntegratedImportTrackerService {
         this.vehicleAssignmentService.assignVehicleToClient(assignmentRequest).subscribe({
           next: (result) => {
             if (result.success && result.assignedUnit) {
-              console.log('✅ Vehicle assigned successfully:', result.assignedUnit);
+// removed by clean-audit
               
               // Actualizar el import status con la unidad asignada
               this.updateImportStatusWithAssignedUnit(clientId, result.assignedUnit);
@@ -824,17 +824,17 @@ export class IntegratedImportTrackerService {
               this.sendVehicleAssignmentNotification(clientId, result.assignedUnit);
               
             } else {
-              console.error('❌ Vehicle assignment failed:', result.error);
+// removed by clean-audit
             }
           },
           error: (error) => {
-            console.error('❌ Vehicle assignment error:', error);
+// removed by clean-audit
           }
         });
       }),
       map(() => ({ success: true })),
       catchError((error) => {
-        console.error('❌ Assignment validation error:', error);
+// removed by clean-audit
         return of({ success: false, error: error.message });
       })
     );
@@ -845,7 +845,7 @@ export class IntegratedImportTrackerService {
    */
   private updateImportStatusWithAssignedUnit(clientId: string, assignedUnit: VehicleUnit): void {
     // En producción, esto sería una API call para actualizar el import status
-    console.log('📝 Updating import status with assigned unit:', {
+// removed by clean-audit
       clientId,
       unitId: assignedUnit.id,
       vin: assignedUnit.vin
@@ -867,7 +867,7 @@ export class IntegratedImportTrackerService {
       currentCache.set(clientId, updatedStatus);
       this.importStatusCache$.next(currentCache);
       
-      console.log('✅ Import status updated with assigned unit in cache');
+// removed by clean-audit
     }
   }
 
@@ -889,7 +889,7 @@ export class IntegratedImportTrackerService {
       timestamp: new Date()
     };
 
-    console.log('🎉 Vehicle assignment notification sent:', notificationData);
+// removed by clean-audit
     
     // Opcional: integrar con WhatsApp para notificar al cliente
     // this.importWhatsAppService.sendNotification(clientId, 'VEHICLE_ASSIGNED', notificationData);
@@ -900,7 +900,7 @@ export class IntegratedImportTrackerService {
    * Propaga la información de la unidad específica a los contratos del cliente
    */
   private updateContractWithAssignedVehicle(clientId: string, assignedUnit: VehicleUnit): void {
-    console.log('📜 Actualizando contratos con unidad asignada:', {
+// removed by clean-audit
       clientId,
       vin: assignedUnit.vin,
       modelo: assignedUnit.modelo
@@ -910,11 +910,11 @@ export class IntegratedImportTrackerService {
     this.contractService.getClientContracts(clientId).subscribe({
       next: (contracts) => {
         if (contracts.length === 0) {
-          console.log('ℹ️ No se encontraron contratos para el cliente:', clientId);
+// removed by clean-audit
           return;
         }
 
-        console.log(`🔍 Encontrados ${contracts.length} contratos para actualizar`);
+// removed by clean-audit
 
         // Actualizar cada contrato con la unidad asignada
         contracts.forEach(contract => {
@@ -923,25 +923,25 @@ export class IntegratedImportTrackerService {
             this.contractService.assignVehicleToContract(contract.id, assignedUnit).subscribe({
               next: (result) => {
                 if (result.success) {
-                  console.log(`✅ Contrato ${contract.id} actualizado con unidad ${assignedUnit.vin}`);
+// removed by clean-audit
                   
                   // Log para tracking
                   this.logContractVehicleAssignment(clientId, contract.id, assignedUnit);
                 } else {
-                  console.error(`❌ Error actualizando contrato ${contract.id}:`, result.error);
+// removed by clean-audit
                 }
               },
               error: (error) => {
-                console.error(`❌ Error en asignación a contrato ${contract.id}:`, error);
+// removed by clean-audit
               }
             });
           } else {
-            console.log(`ℹ️ Contrato ${contract.id} ya tiene unidad asignada: ${contract.assignedVehicle.vin}`);
+// removed by clean-audit
           }
         });
       },
       error: (error) => {
-        console.error('❌ Error obteniendo contratos del cliente:', error);
+// removed by clean-audit
       }
     });
   }
@@ -966,32 +966,32 @@ export class IntegratedImportTrackerService {
       source: 'integrated_import_tracker'
     };
 
-    console.log('📊 Contract-Vehicle assignment logged:', logEvent);
+// removed by clean-audit
     
     // En producción, esto se guardaría en el sistema de auditoría:
     // this.auditService.logEvent(logEvent);
   }
 
   /**
-   * 🚛 MÉTODO PÚBLICO: Obtener contratos con unidades asignadas para un cliente
+// removed by clean-audit
    */
   getClientContractsWithVehicles(clientId: string): Observable<any[]> {
-    console.log('🔍 Obteniendo contratos con vehículos para cliente:', clientId);
+// removed by clean-audit
 
     return this.contractService.getClientContracts(clientId).pipe(
       map(contracts => contracts.filter(contract => contract.assignedVehicle)),
       tap(contractsWithVehicles => {
-        console.log(`✅ Encontrados ${contractsWithVehicles.length} contratos con vehículos asignados`);
+// removed by clean-audit
       }),
       catchError(error => {
-        console.error('❌ Error obteniendo contratos con vehículos:', error);
+// removed by clean-audit
         return of([]);
       })
     );
   }
 
   /**
-   * 🚛 MÉTODO PÚBLICO: Resumen completo de asignaciones (Import + Contract)
+// removed by clean-audit
    */
   getIntegratedSummary(clientId: string): Observable<{
     importStatus: any;
@@ -1067,7 +1067,7 @@ export class IntegratedImportTrackerService {
     clientId: string,
     deliveryData: DeliveryData
   ): Observable<IntegratedImportStatus> {
-    console.log('📦 Completing delivery phase for client:', clientId);
+// removed by clean-audit
 
     return this.updateImportMilestone(clientId, 'entregada', 'completed', {
       actualDate: deliveryData.fechaEntrega,
@@ -1091,7 +1091,7 @@ export class IntegratedImportTrackerService {
     clientId: string,
     legalDocuments: LegalDocuments
   ): Observable<IntegratedImportStatus> {
-    console.log('📜 Completing legal documents phase for client:', clientId);
+// removed by clean-audit
 
     return this.updateImportMilestone(clientId, 'documentosTransferidos', 'completed', {
       actualDate: legalDocuments.fechaTransferencia,
@@ -1126,7 +1126,7 @@ export class IntegratedImportTrackerService {
     }
   ): Observable<{ success: boolean }> {
     // En una implementación real, esto llamaría a la API para actualizar la asignación
-    console.log('🔄 Updating vehicle assignment for client', clientId, assignment);
+// removed by clean-audit
     return of({ success: true });
   }
 
@@ -1138,7 +1138,7 @@ export class IntegratedImportTrackerService {
     clientId: string,
     platesData: PlatesData
   ): Observable<{ success: boolean; postSalesRecord?: PostSalesRecord }> {
-    console.log('🚗 Completing plates phase for client:', clientId);
+// removed by clean-audit
 
     return this.updateImportMilestone(clientId, 'placasEntregadas', 'completed', {
       actualDate: platesData.fechaAlta,
@@ -1146,12 +1146,12 @@ export class IntegratedImportTrackerService {
     }).pipe(
       // Al completar placas, se dispara el handover completo a Post-Venta
       tap(() => {
-        console.log('🎯 ALL DELIVERY PHASES COMPLETED - TRIGGERING POST-SALES HANDOVER');
+// removed by clean-audit
         this.triggerPostSalesHandover(clientId, platesData);
       }),
       map(() => ({ success: true })),
       catchError(error => {
-        console.error('❌ Error completing plates phase:', error);
+// removed by clean-audit
         return of({ success: false, error: error.message });
       })
     );
@@ -1162,12 +1162,12 @@ export class IntegratedImportTrackerService {
    * Esto crea el expediente post-venta y activa todos los recordatorios
    */
   private triggerPostSalesHandover(clientId: string, platesData: PlatesData): void {
-    console.log('🚀 TRIGGERING POST-SALES HANDOVER for client:', clientId);
+// removed by clean-audit
 
     // Obtener todos los datos necesarios para el handover
     this.getIntegratedImportStatus(clientId).subscribe(importStatus => {
       if (!importStatus || !importStatus.assignedUnit) {
-        console.error('❌ Cannot trigger handover: Missing import status or assigned unit');
+// removed by clean-audit
         return;
       }
 
@@ -1176,12 +1176,12 @@ export class IntegratedImportTrackerService {
       const legalDocsFromCache = this.getLegalDocumentsFromCache(clientId);
 
       if (!deliveryDataFromCache) {
-        console.error('❌ Cannot trigger handover: Missing delivery data in cache');
+// removed by clean-audit
         return;
       }
 
       if (!legalDocsFromCache) {
-        console.error('❌ Cannot trigger handover: Missing legal documents in cache');
+// removed by clean-audit
         return;
       }
 
@@ -1225,7 +1225,7 @@ export class IntegratedImportTrackerService {
       // Inicializar expediente post-venta localmente
       this.initializePostSalesRecord(vehicleDeliveredEvent);
 
-      console.log('✅ POST-SALES HANDOVER COMPLETED - Vehicle delivered event sent');
+// removed by clean-audit
     });
   }
 
@@ -1233,14 +1233,14 @@ export class IntegratedImportTrackerService {
    * Enviar evento vehicle.delivered a la API de Post-Venta
    */
   private sendVehicleDeliveredEvent(event: VehicleDeliveredEvent): void {
-    console.log('📡 Sending vehicle.delivered event to Post-Sales API:', event);
+// removed by clean-audit
 
     this.http.post(`${this.baseUrl}/events/vehicle-delivered`, event).subscribe({
       next: (response) => {
-        console.log('✅ Vehicle delivered event sent successfully:', response);
+// removed by clean-audit
       },
       error: (error) => {
-        console.error('❌ Failed to send vehicle delivered event:', error);
+// removed by clean-audit
         // En caso de falla, almacenar para reintentar después
         this.storeFailedEvent(event, error);
       }
@@ -1269,7 +1269,7 @@ export class IntegratedImportTrackerService {
     // Store in cache and send to API
     this.storePostSalesRecord(postSalesRecord);
 
-    console.log('📊 Post-sales record initialized:', postSalesRecord);
+// removed by clean-audit
   }
 
   /**
@@ -1280,7 +1280,7 @@ export class IntegratedImportTrackerService {
     localStorage.setItem(cacheKey, JSON.stringify(deliveryData));
     
     // En producción, esto sería una API call
-    console.log('💾 Delivery data stored for client:', clientId);
+// removed by clean-audit
   }
 
   /**
@@ -1290,7 +1290,7 @@ export class IntegratedImportTrackerService {
     const cacheKey = `legal_${clientId}`;
     localStorage.setItem(cacheKey, JSON.stringify(legalDocuments));
     
-    console.log('📋 Legal documents stored for client:', clientId);
+// removed by clean-audit
   }
 
   /**
@@ -1322,10 +1322,10 @@ export class IntegratedImportTrackerService {
     // Send to API
     this.http.post(`${this.baseUrl}/post-sales/record`, record).subscribe({
       next: (response) => {
-        console.log('✅ Post-sales record stored in API:', response);
+// removed by clean-audit
       },
       error: (error) => {
-        console.error('❌ Failed to store post-sales record:', error);
+// removed by clean-audit
       }
     });
   }
@@ -1343,7 +1343,7 @@ export class IntegratedImportTrackerService {
     });
     localStorage.setItem('failed_events', JSON.stringify(failedEvents));
     
-    console.log('💾 Failed event stored for retry:', event.payload.vehicle.vin);
+// removed by clean-audit
   }
 
   /**
@@ -1401,18 +1401,18 @@ export class IntegratedImportTrackerService {
    * Notificaciones para completar fases post-venta
    */
   private sendDeliveryCompletionNotification(clientId: string, deliveryData: DeliveryData): void {
-    console.log('📧 Sending delivery completion notification:', clientId);
+// removed by clean-audit
     // Implementar notificación WhatsApp, email, etc.
   }
 
   private sendDocumentsCompletionNotification(clientId: string, legalDocuments: LegalDocuments): void {
-    console.log('📧 Sending documents completion notification:', clientId);
+// removed by clean-audit
     // Implementar notificación
   }
 
   private handleError<T>(operation = 'operation') {
     return (error: any): Observable<T> => {
-      console.error(`IntegratedImportTrackerService.${operation} failed:`, error);
+// removed by clean-audit
       
       let userMessage = 'Error en el sistema de seguimiento integrado';
       
@@ -1430,3 +1430,4 @@ export class IntegratedImportTrackerService {
     };
   }
 }
+// removed by clean-audit

@@ -52,7 +52,7 @@ export class StorageService {
   private async initDB(): Promise<void> {
     // Fallback to in-memory store if IndexedDB is unavailable (e.g., test environment)
     if (typeof indexedDB === 'undefined') {
-      console.warn('IndexedDB not available; using in-memory storage for StorageService');
+// removed by clean-audit
       this.useMemoryStore = true;
       return Promise.resolve();
     }
@@ -61,13 +61,13 @@ export class StorageService {
       const request = indexedDB.open(this.dbName, this.dbVersion);
 
       request.onerror = () => {
-        console.error('Failed to open IndexedDB:', request.error);
+// removed by clean-audit
         reject(request.error);
       };
 
       request.onsuccess = () => {
         this.db = request.result;
-        console.log('IndexedDB initialized successfully');
+// removed by clean-audit
         resolve();
       };
 
@@ -374,13 +374,13 @@ export class StorageService {
         try {
           await this.executeAction(action);
           await this.removeCompletedAction(action.id);
-          console.log('Synced action:', action.type);
+// removed by clean-audit
         } catch (error) {
-          console.error('Failed to sync action:', action.type, error);
+// removed by clean-audit
         }
       }
     } catch (error) {
-      console.error('Failed to sync pending actions:', error);
+// removed by clean-audit
     }
   }
 
@@ -399,7 +399,7 @@ export class StorageService {
         // Implement API call to submit form
         break;
       default:
-        console.warn('Unknown action type:', action.type);
+// removed by clean-audit
     }
   }
 
@@ -463,3 +463,5 @@ export class StorageService {
     return stats;
   }
 }
+
+// removed by clean-audit

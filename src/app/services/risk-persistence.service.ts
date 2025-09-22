@@ -92,7 +92,7 @@ export class RiskPersistenceService {
         storedEvaluation
       ).pipe(
         tap(response => {
-          console.log(`✅ Risk evaluation ${response.id} stored remotely`);
+// removed by clean-audit
         }),
         catchError(error => {
           this.monitoringService.captureWarning(
@@ -472,3 +472,4 @@ export class RiskPersistenceService {
     return 'unknown';
   }
 }
+// removed by clean-audit

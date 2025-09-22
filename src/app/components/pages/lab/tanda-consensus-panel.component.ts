@@ -97,7 +97,7 @@ import { RiskService } from '../../../services/risk.service';
   styles: [`.input{padding:6px 8px;border:1px solid #ccc;border-radius:4px}.btn{padding:8px 12px;border:1px solid #333;background:#fff;border-radius:4px;cursor:pointer}`]
 })
 export class TandaConsensusPanelComponent {
-  tandaId = 'tanda-demo-001';
+// removed by clean-audit
   fromMemberId = '';
   toMemberId = '';
   reason = '';
@@ -178,3 +178,5 @@ export class TandaConsensusPanelComponent {
     });
   }
 }
+
+// removed by clean-audit

@@ -340,7 +340,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     this.questionGenerator.refreshQuestionsFromLLM(this.municipality)
       .then(refreshed => {
         if (refreshed) {
-          console.log(`Micro-local questions refreshed for ${this.municipality}`);
+// removed by clean-audit
         }
       });
   }
@@ -390,7 +390,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
           this.showQuestionResult(voiceEvaluation);
           
         } catch (voiceError) {
-          console.warn('Voice evaluation failed, continuing with transcript only:', voiceError);
+// removed by clean-audit
         }
       }
       
@@ -398,7 +398,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
       this.processVoiceResult(result);
       
     } catch (error) {
-      console.error('Stop recording error:', error);
+// removed by clean-audit
     } finally {
       this.isAnalyzing = false;
     }
@@ -726,7 +726,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
   }
 
   private showQuestionResult(evaluation: any): void {
-    console.log(`🎯 Showing result for question: ${evaluation.questionId}`, evaluation);
+// removed by clean-audit
     
     this._questionResults[evaluation.questionId] = {
       questionId: evaluation.questionId,
@@ -777,10 +777,10 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
       this.finalSummary = this.voiceValidation.aggregateResilience();
       this.showFinalSummary = true;
       
-      console.log('📊 Final resilience summary:', this.finalSummary);
+// removed by clean-audit
       
     } catch (error) {
-      console.error('Failed to generate resilience summary:', error);
+// removed by clean-audit
       this.showFinalSummary = false;
     }
   }
@@ -823,3 +823,4 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     return 'Necesita Mejora';
   }
 }
+// removed by clean-audit

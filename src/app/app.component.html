@@ -11,45 +11,62 @@
     </div>
 
     <nav class="flex-1 px-2 py-4 space-y-2" role="navigation" aria-label="Navegación principal">
+    <style>
+      /* Icon hover state enhancement */
+      .nav-link:hover lucide-icon {
+        color: white !important;
+      }
+    </style>
       <!-- Crear -->
       <div class="text-xs uppercase text-slate-400 px-2 mb-2">Crear</div>
-      <a routerLink="/chat" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-chat">
+      <a routerLink="/chat" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-chat">
+        <lucide-icon name="HelpCircle" class="w-5 h-5 text-slate-400"></lucide-icon>
         Chat
       </a>
-      <a routerLink="/audio" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-audio">
+      <a routerLink="/audio" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-audio">
+        <lucide-icon name="Mic" class="w-5 h-5 text-slate-400"></lucide-icon>
         Audio
       </a>
-      <a routerLink="/images" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-images">
+      <a routerLink="/images" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-images">
+        <lucide-icon name="Activity" class="w-5 h-5 text-slate-400"></lucide-icon>
         Images
       </a>
-      <a routerLink="/assistants" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-assistants">
+      <a routerLink="/assistants" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-assistants">
+        <lucide-icon name="Settings" class="w-5 h-5 text-slate-400"></lucide-icon>
         Assistants
       </a>
 
       <!-- Gestionar -->
       <div class="text-xs uppercase text-slate-400 px-2 mt-6 mb-2">Gestionar</div>
-      <a routerLink="/usage" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-usage">
+      <a routerLink="/usage" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-usage">
+        <lucide-icon name="BarChart" class="w-5 h-5 text-slate-400"></lucide-icon>
         Usage
       </a>
-      <a routerLink="/cotizador" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-cotizador">
+      <a routerLink="/cotizador" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-cotizador">
+        <lucide-icon name="Calculator" class="w-5 h-5 text-slate-400"></lucide-icon>
         Cotizador
       </a>
-      <a routerLink="/simulador" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-simulador">
+      <a routerLink="/simulador" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-simulador">
+        <lucide-icon name="LineChart" class="w-5 h-5 text-slate-400"></lucide-icon>
         Simulador
       </a>
-      <a routerLink="/documentos" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-documentos">
+      <a routerLink="/documentos" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-documentos">
+        <lucide-icon name="FileText" class="w-5 h-5 text-slate-400"></lucide-icon>
         Documentos
       </a>
-      <a routerLink="/entregas" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-entregas">
+      <a routerLink="/entregas" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-entregas">
+        <lucide-icon name="Truck" class="w-5 h-5 text-slate-400"></lucide-icon>
         Entregas
       </a>
 
       <!-- Optimizar -->
       <div class="text-xs uppercase text-slate-400 px-2 mt-6 mb-2">Optimizar</div>
-      <a routerLink="/avi" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-avi">
+      <a routerLink="/avi" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-avi">
+        <lucide-icon name="Mic" class="w-5 h-5 text-slate-400"></lucide-icon>
         AVI
       </a>
-      <a routerLink="/proteccion" class="block px-2 py-2 rounded text-sm hover:bg-slate-800 transition-colors" data-cy="nav-proteccion">
+      <a routerLink="/proteccion" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-proteccion">
+        <lucide-icon name="Shield" class="w-5 h-5 text-slate-400"></lucide-icon>
         Protección
       </a>
     </nav>

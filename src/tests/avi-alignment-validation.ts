@@ -124,8 +124,8 @@ export class AVIAlignmentValidator {
    * Execute validation comparing MAIN vs LAB algorithms
    */
   async executeValidation(): Promise<any> {
-    console.log('🔍 AVI ALIGNMENT VALIDATION SUITE');
-    console.log('========================================');
+// removed by clean-audit
+// removed by clean-audit
 
     const testCases = this.generateTestCases();
     let totalTests = 0;
@@ -153,7 +153,7 @@ export class AVIAlignmentValidator {
         thresholdAligned: isThresholdAligned
       });
 
-      console.log(`Test ${totalTests} [${testCase.profile}]: MAIN=${mainResult.score}, LAB=${labResult.score}, Match=${isIdentical ? '✅' : '❌'}`);
+// removed by clean-audit
     }
 
     return this.generateValidationReport(totalTests, identicalResults, thresholdAlignment);
@@ -266,14 +266,14 @@ export class AVIAlignmentValidator {
     const identicalPercentage = ((identicalResults / totalTests) * 100).toFixed(1);
     const thresholdPercentage = ((thresholdAlignment / totalTests) * 100).toFixed(1);
 
-    console.log('\n📊 VALIDATION RESULTS SUMMARY');
-    console.log('=====================================');
-    console.log(`Total Tests: ${totalTests}`);
-    console.log(`Identical Results: ${identicalResults}/${totalTests} (${identicalPercentage}%)`);
-    console.log(`Threshold Alignment: ${thresholdAlignment}/${totalTests} (${thresholdPercentage}%)`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
 
     const status = identicalResults >= totalTests * 0.95 ? '✅ ALIGNED' : '❌ MISALIGNED';
-    console.log(`\nAlignment Status: ${status}`);
+// removed by clean-audit
 
     return {
       totalTests,
@@ -286,3 +286,4 @@ export class AVIAlignmentValidator {
     };
   }
 }
+// removed by clean-audit

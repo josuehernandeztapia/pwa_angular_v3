@@ -134,7 +134,7 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/ngsw-worker.js')
-          .catch(err => console.log('SW registration failed'));
+// removed by clean-audit
       });
     }
   </script>
@@ -174,3 +174,5 @@
   </script>
 </body>
 </html>
+
+// removed by clean-audit

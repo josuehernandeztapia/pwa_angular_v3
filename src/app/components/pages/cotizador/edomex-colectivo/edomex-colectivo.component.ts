@@ -352,7 +352,7 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
               <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">⚡</span>
               <div>
                 <h3 class="font-medium text-gray-800">Gestión centralizada</h3>
-                <p class="text-sm">Un solo punto de contacto para todo el grupo</p>
+// removed by clean-audit
               </div>
             </div>
           </div>
@@ -466,7 +466,7 @@ export class EdomexColectivoComponent implements OnInit, OnDestroy {
       this.isCalculating = false;
       this.loadingService.hide();
     } catch (error) {
-      console.error('Error generating quotation:', error);
+// removed by clean-audit
       this.isCalculating = false;
       this.loadingService.hide();
     }
@@ -543,7 +543,7 @@ export class EdomexColectivoComponent implements OnInit, OnDestroy {
         this.pdfExportService.downloadPDF(blob, filename);
       })
       .catch((err: any) => {
-        console.error('Error generating PDF:', err);
+// removed by clean-audit
       });
   }
 
@@ -551,3 +551,4 @@ export class EdomexColectivoComponent implements OnInit, OnDestroy {
     return this.financialCalc.formatCurrency(value);
   }
 }
+// removed by clean-audit

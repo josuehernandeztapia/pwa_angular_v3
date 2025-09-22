@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface TestResult {
@@ -19,397 +19,177 @@ interface StorageStatistics {
 }
 
 @Component({
-  selector: 'app-integration-demo',
+// removed by clean-audit
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="integration-demo">
+    <section class="ui-card">
       <!-- Header -->
-      <div class="demo-header">
-        <h1 class="demo-title">🔧 Enterprise Integration Demo</h1>
-        <p class="demo-description">
-          Demonstrating Angular PWA's complete integration testing capabilities
+      <div class="mb-6">
+        <h2 class="text-sm font-semibold mb-2 text-slate-900 dark:text-slate-100">
+          🔗 Integraciones Externas
+        </h2>
+        <p class="text-xs text-slate-600 dark:text-slate-400">
+          Panel de monitoreo y gestión de servicios externos e APIs
         </p>
       </div>
 
-      <!-- Services Status -->
-      <div class="status-grid">
-        <div class="status-card">
-          <h3 class="status-title">📦 Services Status</h3>
-          <div class="status-details">
-            <div>Initialized: {{ getStatusIcon(serviceStatus.initialized) }}</div>
-            <div>Loading: {{ serviceStatus.loading ? '⏳' : '✅' }}</div>
-            <div>Error: {{ serviceStatus.error ? '❌' : '✅' }}</div>
+      <!-- API Status Cards -->
+      <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Services Status -->
+        <div class="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">📦 Services</h3>
+            <div class="w-2 h-2 rounded-full" [class.bg-green-500]="serviceStatus.initialized" [class.bg-red-500]="!serviceStatus.initialized"></div>
           </div>
-        </div>
-
-        <div class="status-card">
-          <h3 class="status-title">🔗 API Status</h3>
-          <div class="status-details">
-            <div>Authenticated: {{ getStatusIcon(apiStatus.authenticated) }}</div>
-            <div>Loading: {{ apiStatus.loading ? '⏳' : '✅' }}</div>
-            <div>Session: {{ apiStatus.session || 'N/A' }}</div>
-          </div>
-        </div>
-
-        <div class="status-card">
-          <h3 class="status-title">🔄 Data Sync</h3>
-          <div class="status-details">
-            <div>Online: {{ getStatusIcon(syncStatus.online) }}</div>
-            <div>Pending: {{ syncStatus.pendingItems }}</div>
-            <div>Syncing: {{ syncStatus.syncing ? '⏳' : '✅' }}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Test Results -->
-      <div class="test-results-section">
-        <h3 class="section-title">🧪 Integration Tests</h3>
-        
-        <div class="tests-grid">
-          <div *ngFor="let test of testCategories" class="test-card">
-            <div class="test-info">
-              <span class="test-icon">{{ getTestIcon(test.key) }}</span>
-              <span class="test-name">{{ test.name }}</span>
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between">
+              <span class="text-slate-600 dark:text-slate-400">Initialized:</span>
+              <span class="font-mono" [class.text-green-600]="serviceStatus.initialized" [class.text-red-600]="!serviceStatus.initialized">
+                {{ serviceStatus.initialized ? 'Active' : 'Offline' }}
+              </span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600 dark:text-slate-400">Status:</span>
+              <span class="font-mono" [class.text-yellow-600]="serviceStatus.loading" [class.text-green-600]="!serviceStatus.loading">
+                {{ serviceStatus.loading ? 'Loading' : 'Ready' }}
+              </span>
             </div>
           </div>
         </div>
 
-        <button
-          (click)="runAllTests()"
-          [disabled]="serviceStatus.loading"
-          class="run-tests-btn"
-        >
-          {{ serviceStatus.loading ? 'Initializing...' : 'Run Tests Again' }}
-        </button>
-      </div>
+        <!-- API Status -->
+        <div class="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">🚀 APIs</h3>
+            <div class="w-2 h-2 rounded-full" [class.bg-green-500]="apiStatus.authenticated" [class.bg-red-500]="!apiStatus.authenticated"></div>
+          </div>
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between">
+              <span class="text-slate-600 dark:text-slate-400">Auth:</span>
+              <span class="font-mono" [class.text-green-600]="apiStatus.authenticated" [class.text-red-600]="!apiStatus.authenticated">
+                {{ apiStatus.authenticated ? 'Connected' : 'Disconnected' }}
+              </span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600 dark:text-slate-400">Session:</span>
+              <span class="font-mono text-slate-900 dark:text-slate-100">{{ apiStatus.session || 'N/A' }}</span>
+            </div>
+          </div>
+        </div>
 
-      <!-- Storage Statistics -->
-      <div *ngIf="storageStats" class="storage-stats-section">
-        <h3 class="section-title">📊 Storage Statistics</h3>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <div class="stat-value">{{ storageStats.totalClients }}</div>
-            <div class="stat-label">Clients</div>
+        <!-- Sync Status -->
+        <div class="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">🔄 Sync</h3>
+            <div class="w-2 h-2 rounded-full" [class.bg-green-500]="syncStatus.online" [class.bg-red-500]="!syncStatus.online"></div>
           </div>
-          <div class="stat-item">
-            <div class="stat-value">{{ storageStats.totalDocuments }}</div>
-            <div class="stat-label">Documents</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value">{{ (storageStats.totalSize / 1024 / 1024).toFixed(2) }} MB</div>
-            <div class="stat-label">Storage Used</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value">{{ storageStats.syncQueueSize }}</div>
-            <div class="stat-label">Sync Queue</div>
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between">
+              <span class="text-slate-600 dark:text-slate-400">Online:</span>
+              <span class="font-mono" [class.text-green-600]="syncStatus.online" [class.text-red-600]="!syncStatus.online">
+                {{ syncStatus.online ? 'Connected' : 'Offline' }}
+              </span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600 dark:text-slate-400">Pending:</span>
+              <span class="font-mono text-slate-900 dark:text-slate-100">{{ syncStatus.pendingItems }}</span>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- Integration Tests Section -->
+      <div class="mb-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">🧪 Integration Tests</h3>
+          <button (click)="runAllTests()" [disabled]="isRunning()" class="ui-btn ui-btn-secondary text-xs">
+            {{ isRunning() ? '⏳ Running...' : '▶️ Run Tests' }}
+          </button>
+        </div>
+
+        <!-- Test Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+          <div *ngFor="let test of testCategories; trackBy: trackByTest" class="p-3 bg-white dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="text-lg">{{ getTestIcon(test.key) }}</span>
+                <span class="text-xs font-medium text-slate-900 dark:text-slate-100">{{ test.name }}</span>
+              </div>
+              <span class="text-xs px-2 py-1 rounded"
+                   [class.bg-green-100]="testResults()[test.key] === 'success'"
+                   [class.text-green-700]="testResults()[test.key] === 'success'"
+                   [class.dark:bg-green-900/30]="testResults()[test.key] === 'success'"
+                   [class.dark:text-green-400]="testResults()[test.key] === 'success'"
+                   [class.bg-red-100]="testResults()[test.key] === 'error'"
+                   [class.text-red-700]="testResults()[test.key] === 'error'"
+                   [class.dark:bg-red-900/30]="testResults()[test.key] === 'error'"
+                   [class.dark:text-red-400]="testResults()[test.key] === 'error'"
+                   [class.bg-yellow-100]="testResults()[test.key] === 'pending'"
+                   [class.text-yellow-700]="testResults()[test.key] === 'pending'"
+                   [class.dark:bg-yellow-900/30]="testResults()[test.key] === 'pending'"
+                   [class.dark:text-yellow-400]="testResults()[test.key] === 'pending'"
+                   [class.bg-slate-100]="!testResults()[test.key]"
+                   [class.text-slate-600]="!testResults()[test.key]"
+                   [class.dark:bg-slate-800]="!testResults()[test.key]"
+                   [class.dark:text-slate-400]="!testResults()[test.key]">
+                {{ getStatusText(testResults()[test.key]) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Storage Statistics -->
+      <div *ngIf="storageStats" class="mb-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+        <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-4">📊 Storage Statistics</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ storageStats.totalClients }}</div>
+            <div class="text-xs text-slate-600 dark:text-slate-400">Clients</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ storageStats.totalDocuments }}</div>
+            <div class="text-xs text-slate-600 dark:text-slate-400">Documents</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ (storageStats.totalSize / 1024 / 1024) | number:'1.1-1' }}MB</div>
+            <div class="text-xs text-slate-600 dark:text-slate-400">Storage</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ storageStats.syncQueueSize }}</div>
+            <div class="text-xs text-slate-600 dark:text-slate-400">Queue</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isRunning()" class="mb-6 animate-pulse">
+        <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded mb-2"></div>
+        <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+      </div>
+
       <!-- Live Logs -->
-      <div class="logs-section">
-        <h3 class="section-title">📝 Live Integration Logs</h3>
-        <div class="logs-container">
-          <div *ngIf="logs.length === 0" class="no-logs">
+      <div class="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+        <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">📝 Live Logs</h3>
+        <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-3 font-mono text-xs text-green-400 max-h-48 overflow-y-auto">
+          <div *ngIf="logs().length === 0" class="text-slate-500 dark:text-slate-600">
             Waiting for test execution...
           </div>
-          <div *ngFor="let log of logs" class="log-entry">
+          <div *ngFor="let log of logs(); trackBy: trackByLog" class="mb-1 border-b border-slate-800 dark:border-slate-700 pb-1 last:border-b-0">
             {{ log }}
           </div>
         </div>
       </div>
-
-      <!-- Success Summary -->
-      <div class="success-summary">
-        <h2 class="summary-title">
-          🎯 Mission Accomplished: Complete Integration Testing
-        </h2>
-        <div class="summary-grid">
-          <div class="summary-section">
-            <h3 class="summary-section-title">✅ Angular PWA Features Tested:</h3>
-            <ul class="summary-list">
-              <li>• Advanced financial algorithms and simulations</li>
-              <li>• Real-time data processing with reactive patterns</li>
-              <li>• Modern component architecture and performance</li>
-              <li>• Enterprise-grade developer experience</li>
-            </ul>
-          </div>
-          <div class="summary-section">
-            <h3 class="summary-section-title">🚀 Integration Capabilities Verified:</h3>
-            <ul class="summary-list">
-              <li>• IndexedDB offline storage with full CRUD operations</li>
-              <li>• Complete API integration testing suite</li>
-              <li>• Payment processing simulation capabilities</li>
-              <li>• Document management with e-signature workflow</li>
-              <li>• Advanced PWA service worker functionality</li>
-              <li>• Comprehensive data synchronization services</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+    </section>
   `,
-  styles: [`
-    .integration-demo {
-      max-width: 1024px;
-      margin: 0 auto;
-      padding: 24px;
-      background: #111827;
-      color: white;
-    }
-
-    .demo-header {
-      margin-bottom: 32px;
-    }
-
-    .demo-title {
-      font-size: 48px;
-      font-weight: 700;
-      color: #06d6a0;
-      margin-bottom: 16px;
-    }
-
-    .demo-description {
-      color: #9ca3af;
-    }
-
-    .status-grid {
-      display: grid;
-      grid-template-columns: repeat(1, 1fr);
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    @media (min-width: 768px) {
-      .status-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .status-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .status-card {
-      background: #1f2937;
-      padding: 16px;
-      border-radius: 8px;
-      border: 1px solid #374151;
-    }
-
-    .status-title {
-      font-weight: 600;
-      color: #06d6a0;
-      margin-bottom: 8px;
-    }
-
-    .status-details {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 14px;
-    }
-
-    .test-results-section {
-      background: #1f2937;
-      padding: 24px;
-      border-radius: 8px;
-      border: 1px solid #374151;
-      margin-bottom: 24px;
-    }
-
-    .section-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: #06d6a0;
-      margin-bottom: 16px;
-    }
-
-    .tests-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    @media (min-width: 768px) {
-      .tests-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .test-card {
-      background: #374151;
-      padding: 12px;
-      border-radius: 6px;
-      border: 1px solid #4b5563;
-    }
-
-    .test-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .test-icon {
-      font-size: 20px;
-    }
-
-    .test-name {
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .run-tests-btn {
-      padding: 8px 16px;
-      background: #06d6a0;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background-color 0.2s;
-    }
-
-    .run-tests-btn:hover:not(:disabled) {
-      background: #059669;
-    }
-
-    .run-tests-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .storage-stats-section {
-      background: #1f2937;
-      padding: 24px;
-      border-radius: 8px;
-      border: 1px solid #374151;
-      margin-bottom: 24px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-
-    @media (min-width: 768px) {
-      .stats-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-value {
-      font-size: 32px;
-      font-weight: 700;
-      color: #06d6a0;
-    }
-
-    .stat-label {
-      font-size: 14px;
-      color: #6b7280;
-    }
-
-    .logs-section {
-      background: #1f2937;
-      padding: 24px;
-      border-radius: 8px;
-      border: 1px solid #374151;
-      margin-bottom: 24px;
-    }
-
-    .logs-container {
-      background: #111827;
-      padding: 16px;
-      border-radius: 6px;
-      border: 1px solid #374151;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      max-height: 256px;
-      overflow-y: auto;
-    }
-
-    .no-logs {
-      color: #6b7280;
-    }
-
-    .log-entry {
-      padding: 4px 0;
-      border-bottom: 1px solid rgba(55, 65, 81, 0.3);
-    }
-
-    .log-entry:last-child {
-      border-bottom: none;
-    }
-
-    .success-summary {
-      margin-top: 32px;
-      padding: 24px;
-      background: linear-gradient(to right, #064e3b, #1e3a8a);
-      border-radius: 8px;
-    }
-
-    .summary-title {
-      font-size: 32px;
-      font-weight: 700;
-      color: white;
-      margin-bottom: 16px;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-
-    @media (min-width: 768px) {
-      .summary-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    .summary-section {
-      color: white;
-    }
-
-    .summary-section-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .summary-section-title:first-child {
-      color: #10b981;
-    }
-
-    .summary-section-title:last-child {
-      color: #06d6a0;
-    }
-
-    .summary-list {
-      margin: 0;
-      padding-left: 0;
-      list-style: none;
-    }
-
-    .summary-list li {
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-  `]
+  styles: []
 })
 export class IntegrationDemoComponent implements OnInit, OnDestroy {
-  // Port exacto de state desde React líneas 8-9
-  testResults: TestResult = {};
-  logs: string[] = [];
+  testResults = signal<TestResult>({});
+  logs = signal<string[]>([]);
+  isRunning = signal(false);
 
   // Service status tracking
   serviceStatus: ServiceStatus = {
@@ -450,15 +230,30 @@ export class IntegrationDemoComponent implements OnInit, OnDestroy {
     // Cleanup if needed
   }
 
-  // Port exacto de addLog desde React líneas 43-45
   addLog(message: string): void {
     const timestamp = new Date().toLocaleTimeString();
-    this.logs = [...this.logs.slice(-9), `${timestamp}: ${message}`];
+    this.logs.set([...this.logs().slice(-9), `${timestamp}: ${message}`]);
   }
 
-  // Port exacto de updateTestResult desde React líneas 47-49
   updateTestResult(test: string, result: 'success' | 'error'): void {
-    this.testResults = { ...this.testResults, [test]: result };
+    this.testResults.set({ ...this.testResults(), [test]: result });
+  }
+
+  getStatusText(status?: string): string {
+    switch (status) {
+      case 'success': return 'Passed';
+      case 'error': return 'Failed';
+      case 'pending': return 'Running';
+      default: return 'Pending';
+    }
+  }
+
+  trackByTest(_: number, test: any) {
+    return test.key;
+  }
+
+  trackByLog(_: number, log: string) {
+    return log;
   }
 
   // Initialize services simulation
@@ -483,8 +278,8 @@ export class IntegrationDemoComponent implements OnInit, OnDestroy {
       // Simulate storage operations
       const testClient = {
         id: 'test_001',
-        name: 'Cliente Demo',
-        email: 'demo@example.com',
+// removed by clean-audit
+// removed by clean-audit
         phone: '5555555555',
         rfc: 'XAXX010101000',
         curp: 'XAXX010101HDFXXX01',
@@ -610,25 +405,25 @@ export class IntegrationDemoComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Port exacto de runAllTests desde React líneas 260-273
   async runAllTests(): Promise<void> {
-    this.testResults = {};
-    this.logs = [];
+    this.isRunning.set(true);
+    this.testResults.set({});
+    this.logs.set([]);
     this.addLog('🚀 Starting integration tests...');
-    
+
     await this.testStorage();
     await this.testOdooApi();
     await this.testPayments();
     await this.testSignatures();
     await this.testServiceWorker();
     await this.testDataSync();
-    
+
     this.addLog('✨ Integration tests completed!');
+    this.isRunning.set(false);
   }
 
-  // Port exacto de getTestIcon desde React líneas 283-291
   getTestIcon(test: string): string {
-    const result = this.testResults[test];
+    const result = this.testResults()[test];
     switch (result) {
       case 'success': return '✅';
       case 'error': return '❌';
@@ -645,3 +440,4 @@ export class IntegrationDemoComponent implements OnInit, OnDestroy {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
+// removed by clean-audit

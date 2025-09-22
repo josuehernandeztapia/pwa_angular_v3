@@ -272,10 +272,10 @@ export class AVICalibratedEngineService {
     
     // Corrección conservadora: CRITICAL → HIGH solo si hay evidencia fuerte (lowered threshold)
     if (avgPatternStrength > 0.55 && significantPatterns.length >= 1) {
-      console.log(`🧠 CORRECCIÓN DE RISK LEVEL: CRITICAL → HIGH`);
-      console.log(`   Pattern strength promedio: ${avgPatternStrength.toFixed(3)}`);
-      console.log(`   Patterns significativos: ${significantPatterns.length}`);
-      console.log(`   Razón: Nerviosismo con admisión parcial detectado`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
       
       return 'HIGH';
     }
@@ -403,3 +403,4 @@ export class AVICalibratedEngineService {
     };
   }
 }
+// removed by clean-audit

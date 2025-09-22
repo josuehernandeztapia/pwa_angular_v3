@@ -98,7 +98,7 @@ describe('BackendApiService', () => {
     httpClientSpy = TestBed.inject(HttpClient) as jasmine.SpyObj<HttpClient>;
     storageServiceSpy = TestBed.inject(StorageService) as jasmine.SpyObj<StorageService>;
 
-    // Mock navigator.onLine
+// removed by clean-audit
     Object.defineProperty(navigator, 'onLine', {
       writable: true,
       value: true
@@ -404,7 +404,7 @@ describe('BackendApiService', () => {
       });
     });
 
-    it('should return mock data when getting ecosystems fails', (done) => {
+// removed by clean-audit
       httpClientSpy.get.and.returnValue(throwError(() => new Error('Network error')));
 
       service.getEcosystems('AGS').subscribe(ecosystems => {
@@ -628,8 +628,8 @@ describe('BackendApiService', () => {
     });
   });
 
-  describe('Mock Data Generation', () => {
-    it('should generate mock ecosystems for AGS market', (done) => {
+// removed by clean-audit
+// removed by clean-audit
       httpClientSpy.get.and.returnValue(throwError(() => new Error('Network error')));
 
       service.getEcosystems('AGS').subscribe(ecosystems => {
@@ -641,7 +641,7 @@ describe('BackendApiService', () => {
       });
     });
 
-    it('should generate mock ecosystems for EDOMEX market', (done) => {
+// removed by clean-audit
       httpClientSpy.get.and.returnValue(throwError(() => new Error('Network error')));
 
       service.getEcosystems('EDOMEX').subscribe(ecosystems => {
@@ -653,7 +653,7 @@ describe('BackendApiService', () => {
       });
     });
 
-    it('should generate all mock ecosystems when no market filter', (done) => {
+// removed by clean-audit
       httpClientSpy.get.and.returnValue(throwError(() => new Error('Network error')));
 
       service.getEcosystems().subscribe(ecosystems => {
@@ -711,3 +711,4 @@ describe('BackendApiService', () => {
     });
   });
 });
+// removed by clean-audit

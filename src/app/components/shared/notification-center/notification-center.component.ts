@@ -539,7 +539,7 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
         this.showPermissionBanner = false;
       }
     } catch (error) {
-      console.error('Failed to request notification permission:', error);
+// removed by clean-audit
     }
   }
 
@@ -552,7 +552,7 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
     try {
       await this.notificationService.sendTestNotification();
     } catch (error) {
-      console.error('Failed to send test notification:', error);
+// removed by clean-audit
     }
   }
 
@@ -561,7 +561,7 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
   }
 
   clearAll(): void {
-    if (confirm('¿Estás seguro de que quieres limpiar todo el historial de notificaciones?')) {
+// removed by clean-audit
       this.notificationService.clearNotificationHistory();
     }
   }
@@ -692,3 +692,4 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
     return notification.id;
   }
 }
+// removed by clean-audit

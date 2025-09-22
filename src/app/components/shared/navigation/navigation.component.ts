@@ -555,7 +555,7 @@ export class NavigationComponent implements OnInit {
   showMobileMenu = false;
   isMobileView = false;
   
-  userName = 'Asesor Demo';
+// removed by clean-audit
   userRole = 'Asesor Financiero';
   userInitials = 'AD';
 
@@ -640,9 +640,33 @@ export class NavigationComponent implements OnInit {
       const exists = this.navigationItems.some(i => i.route === '/postventa/wizard');
       if (!exists) {
         this.navigationItems.splice(3, 0, {
-          label: 'Postventa (Wizard)',
+          label: 'Postventa',
           route: '/postventa/wizard',
-          icon: '📷'
+          icon: '🔧'
+        });
+      }
+    }
+
+    // Conditionally add Integraciones Externas entry
+    if (environment.features?.enableIntegrationsConfig) {
+      const exists = this.navigationItems.some(i => i.route === '/integraciones');
+      if (!exists) {
+        this.navigationItems.push({
+          label: 'Integraciones',
+          route: '/integraciones',
+          icon: '🔗'
+        });
+      }
+    }
+
+    // Conditionally add Administración/Usuarios entry
+    if (environment.features?.enableAdminConfig) {
+      const exists = this.navigationItems.some(i => i.route === '/administracion');
+      if (!exists) {
+        this.navigationItems.push({
+          label: 'Administración',
+          route: '/administracion',
+          icon: '👨‍💼'
         });
       }
     }
@@ -652,7 +676,7 @@ export class NavigationComponent implements OnInit {
     try {
       await this.notificationService.initializeNotifications();
     } catch (error) {
-      console.error('Failed to initialize notifications:', error);
+// removed by clean-audit
     }
   }
 
@@ -705,12 +729,12 @@ export class NavigationComponent implements OnInit {
   }
 
   showHelp() {
-    console.log('Show help...');
+// removed by clean-audit
     // Implement help functionality
   }
 
   showSettings() {
-    console.log('Show settings...');
+// removed by clean-audit
     // Navigate to settings or show modal
   }
 
@@ -734,3 +758,5 @@ export class NavigationComponent implements OnInit {
     this.userPrefs.setHighContrast(this.highContrast);
   }
 }
+
+// removed by clean-audit

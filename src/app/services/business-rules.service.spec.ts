@@ -451,7 +451,7 @@ describe('BusinessRulesService', () => {
 
   describe('Credit History Validation', () => {
     it('should validate credit history with simulated score', () => {
-      // Mock Math.random to control the score
+// removed by clean-audit
       spyOn(Math, 'random').and.returnValue(0.5); // Should give score of 750
 
       const result = service['validateCreditHistory'](mockAgsClient);
@@ -541,7 +541,7 @@ describe('BusinessRulesService', () => {
 
   describe('Collective Group Validation Details', () => {
     it('should validate minimum group size', () => {
-      // Mock group size to be too small
+// removed by clean-audit
       const result = service['validateColectivoGroup'](mockEdomexClient);
       // Since we're using a fixed size of 5, this should pass
       expect(result.valid).toBe(true);
@@ -613,3 +613,4 @@ describe('BusinessRulesService', () => {
     });
   });
 });
+// removed by clean-audit

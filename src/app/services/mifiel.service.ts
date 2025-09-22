@@ -393,7 +393,7 @@ export class MifielService {
     const completedSignatures = documents.filter(d => d.status === 'signed').length;
     const expiredDocuments = documents.filter(d => d.status === 'expired' || d.expiresAt < new Date()).length;
     
-    // Calculate average signing time (mock calculation)
+// removed by clean-audit
     const signedDocs = documents.filter(d => d.status === 'signed' && d.signedAt);
     const averageSigningTime = signedDocs.length > 0 
       ? signedDocs.reduce((acc, doc) => {
@@ -458,3 +458,4 @@ export class MifielService {
     }).pipe(delay(300));
   }
 }
+// removed by clean-audit

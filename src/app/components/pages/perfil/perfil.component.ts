@@ -622,44 +622,45 @@ export class PerfilComponent implements OnInit {
   }
 
   saveProfile(): void {
-    console.log('Guardando perfil:', this.userProfile);
+// removed by clean-audit
     this.isEditing = false;
     this.originalProfile = { ...this.userProfile };
     // Here you would typically save to a service
   }
 
   changeAvatar(): void {
-    console.log('Cambiar avatar del usuario');
+// removed by clean-audit
     // Here you would implement file upload logic
   }
 
   changePassword(): void {
-    console.log('Cambiar contraseña');
+// removed by clean-audit
     // Here you would open a password change dialog
   }
 
   setup2FA(): void {
-    console.log('Configurar autenticación de dos factores');
+// removed by clean-audit
     // Here you would open 2FA setup wizard
   }
 
   viewSessions(): void {
-    console.log('Ver sesiones activas');
+// removed by clean-audit
     // Here you would show active sessions list
   }
 
   exportData(): void {
-    console.log('Exportar datos del usuario');
+// removed by clean-audit
     // Here you would trigger data export
   }
 
   deleteAccount(): void {
-    console.log('Eliminar cuenta - requiere confirmación');
+// removed by clean-audit
     // Here you would show confirmation dialog
   }
 
   private loadUserProfile(): void {
     // Here you would load user profile from a service
-    console.log('Cargando perfil del usuario');
+// removed by clean-audit
   }
 }
+// removed by clean-audit

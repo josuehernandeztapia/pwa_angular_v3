@@ -62,7 +62,7 @@ export class VisionOCRRetryService {
           tap(() => this.retryStats.attempts++),
           mergeMap((error, retryCount) => {
             if (retryCount >= finalConfig.maxRetries) {
-              console.warn(`🔄 OCR max retries (${finalConfig.maxRetries}) reached for ${documentType}`);
+// removed by clean-audit
               return throwError(error);
             }
 
@@ -71,7 +71,7 @@ export class VisionOCRRetryService {
               finalConfig.maxDelay
             );
 
-            console.log(`🔄 OCR retry ${retryCount + 1}/${finalConfig.maxRetries} for ${documentType} in ${delay}ms`);
+// removed by clean-audit
             return timer(delay);
           })
         )
@@ -92,7 +92,7 @@ export class VisionOCRRetryService {
 
         // Low confidence - trigger fallback if enabled
         if (finalConfig.enableFallback) {
-          console.log(`⚠️ OCR low confidence (${(result.confidence * 100).toFixed(1)}%) for ${documentType}, triggering fallback`);
+// removed by clean-audit
           this.retryStats.fallbacks++;
 
           return of({
@@ -110,7 +110,7 @@ export class VisionOCRRetryService {
       // Final fallback for errors
       catchError(error => {
         const processingTime = Date.now() - startTime;
-        console.error(`❌ OCR failed completely for ${documentType}:`, error);
+// removed by clean-audit
 
         if (finalConfig.enableFallback) {
           this.retryStats.fallbacks++;
@@ -133,7 +133,7 @@ export class VisionOCRRetryService {
   }
 
   /**
-   * Mock OCR implementation - replace with actual vision service
+// removed by clean-audit
    */
   private performOCR(imageUrl: string, documentType: string): Observable<OCRResult> {
     return new Observable(observer => {
@@ -217,3 +217,4 @@ export class VisionOCRRetryService {
     };
   }
 }
+// removed by clean-audit

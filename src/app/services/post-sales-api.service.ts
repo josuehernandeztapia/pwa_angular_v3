@@ -39,7 +39,7 @@ export class PostSalesApiService {
 
   /**
    * POST /events/vehicle-delivered
-   * Endpoint principal que dispara todo el sistema post-venta
+// removed by clean-audit
    */
   sendVehicleDeliveredEvent(event: VehicleDeliveredEvent): Observable<{
     success: boolean;
@@ -659,7 +659,7 @@ export class PostSalesApiService {
 
   private handleError<T>(operation = 'operation') {
     return (error: any): Observable<T> => {
-      console.error(`PostSalesApiService.${operation} failed:`, error);
+// removed by clean-audit
       
       let userMessage = 'Error en el sistema de post-venta';
       
@@ -683,3 +683,4 @@ export class PostSalesApiService {
     };
   }
 }
+// removed by clean-audit

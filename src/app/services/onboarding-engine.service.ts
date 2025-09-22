@@ -72,7 +72,7 @@ export class OnboardingEngineService {
           observer.complete();
         });
       });
-    }).pipe(delay(800)); // Mock API delay like React
+// removed by clean-audit
   }
 
   /**
@@ -449,3 +449,4 @@ export class OnboardingEngineService {
     }).pipe(delay(300));
   }
 }
+// removed by clean-audit

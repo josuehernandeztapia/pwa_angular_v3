@@ -50,9 +50,9 @@ export const EVASIVE_CALCULATED: LexiconEntry[] = [
   { token: 'mi negocio es transparente', weight: 0.85, category: 'evasive_calculated', description: 'Declaración defensiva' },
   { token: 'no tengo nada que ocultar', weight: 0.8, category: 'evasive_calculated', description: 'Protesta de inocencia' },
   { token: 'siempre he sido legal', weight: 0.75, category: 'evasive_calculated', description: 'Énfasis en legalidad' },
-  { token: 'todo está en regla', weight: 0.7, category: 'evasive_calculated', description: 'Declaración de conformidad' },
+// removed by clean-audit
   { token: 'no me meto en problemas', weight: 0.7, category: 'evasive_calculated', description: 'Distanciamiento de conflictos' },
-  { token: 'yo cumplo con todo', weight: 0.75, category: 'evasive_calculated', description: 'Declaración de cumplimiento total' }
+// removed by clean-audit
 ];
 
 // === MARCADORES DE HONESTIDAD (Reducen sospecha) ===
@@ -172,3 +172,4 @@ export class LexiconUtils {
     return 'neutral';
   }
 }
+// removed by clean-audit

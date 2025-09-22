@@ -239,7 +239,7 @@ export class ProtectionStateService {
             }
           }),
           catchError(error => {
-            console.error('Health event trigger failed:', error);
+// removed by clean-audit
             return EMPTY;
           })
         )
@@ -501,3 +501,4 @@ export class ProtectionStateService {
     this._lastAction.set(null);
   }
 }
+// removed by clean-audit

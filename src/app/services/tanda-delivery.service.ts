@@ -42,11 +42,11 @@ export class TandaDeliveryService {
   }
 
   /**
-   * Initialize demo tanda data for testing
+// removed by clean-audit
    */
   private initializeDemoData(): void {
     const demoTanda: TandaGroupDelivery = {
-      id: 'tanda-demo-001',
+// removed by clean-audit
       name: 'Tanda Ruta Centro EdoMex',
       totalMembers: 12,
       capacity: 12, // Maximum members capacity
@@ -976,3 +976,5 @@ export class TandaDeliveryService {
     );
   }
 }
+
+// removed by clean-audit

@@ -409,14 +409,14 @@ export function spikeTest() {
 
 // Setup function - runs once at the start
 export function setup() {
-  console.log('🚀 Starting Conductores PWA Load Tests');
-  console.log(`📊 Base URL: ${BASE_URL}`);
-  console.log(`🔌 API URL: ${API_BASE_URL}`);
-  console.log('📈 Test scenarios: smoke, load, stress, spike');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   
   // Warm-up request to ensure services are ready
   const warmupResponse = http.get(`${BASE_URL}/`);
-  console.log(`🔥 Warmup response: ${warmupResponse.status}`);
+// removed by clean-audit
   
   return { 
     startTime: new Date(),
@@ -429,6 +429,7 @@ export function setup() {
 export function teardown(data) {
   const endTime = new Date();
   const duration = (endTime - data.startTime) / 1000;
-  console.log(`✅ Load tests completed in ${duration.toFixed(2)} seconds`);
-  console.log('📊 Check the results above for performance metrics');
+// removed by clean-audit
+// removed by clean-audit
 }
+// removed by clean-audit

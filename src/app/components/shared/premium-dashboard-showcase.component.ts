@@ -1,5 +1,5 @@
 /**
- * 🎨 Premium Dashboard Showcase - UX/UI Integration Demo
+// removed by clean-audit
  * Demonstrates world-class iconography, microcopy, and animations in action
  */
 
@@ -111,7 +111,7 @@ interface SystemStatus {
       </section>
 
       <!-- Interactive Success Demonstrations -->
-      <section class="demo-section premium-container">
+// removed by clean-audit
         <div class="section-header">
           <h2 class="section-title text-gradient-primary">
             <app-premium-icon iconName="integration-active" size="lg" theme="primary"></app-premium-icon>
@@ -119,9 +119,9 @@ interface SystemStatus {
           </h2>
         </div>
 
-        <div class="demo-grid">
-          <!-- Payment Success Demo -->
-          <div class="demo-card premium-card card-premium-interact">
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
             <h3>
               <app-premium-icon iconName="payment-processing" size="md" theme="success"></app-premium-icon>
               Procesamiento de Pagos
@@ -134,7 +134,7 @@ interface SystemStatus {
             </app-human-message>
 
             <button 
-              class="demo-button btn-premium-hover btn-primary gpu-accelerated"
+// removed by clean-audit
               (click)="triggerPaymentSuccess()"
               [class.animate-payment-success]="paymentSuccessTriggered()">
               <app-premium-icon iconName="action-save" size="sm"></app-premium-icon>
@@ -142,8 +142,8 @@ interface SystemStatus {
             </button>
           </div>
 
-          <!-- Contract Signing Demo -->
-          <div class="demo-card premium-card card-premium-interact">
+// removed by clean-audit
+// removed by clean-audit
             <h3>
               <app-premium-icon iconName="protection-shield" size="md" theme="info"></app-premium-icon>
               Firma Digital
@@ -156,7 +156,7 @@ interface SystemStatus {
             </app-human-message>
 
             <button 
-              class="demo-button btn-premium-hover btn-accent gpu-accelerated"
+// removed by clean-audit
               (click)="triggerContractSigning()"
               [class.animate-contract-signed]="contractSignedTriggered()">
               <app-premium-icon iconName="customer-verification" size="sm"></app-premium-icon>
@@ -164,8 +164,8 @@ interface SystemStatus {
             </button>
           </div>
 
-          <!-- KYC Verification Demo -->
-          <div class="demo-card premium-card card-premium-interact">
+// removed by clean-audit
+// removed by clean-audit
             <h3>
               <app-premium-icon iconName="customer-verification" size="md" theme="success"></app-premium-icon>
               Verificación KYC
@@ -178,7 +178,7 @@ interface SystemStatus {
             </app-human-message>
 
             <button 
-              class="demo-button btn-premium-hover btn-secondary gpu-accelerated"
+// removed by clean-audit
               (click)="triggerKYCVerification()"
               [class.animate-success-pulse]="kycVerifiedTriggered()">
               <app-premium-icon iconName="system-healthy" size="sm"></app-premium-icon>
@@ -188,8 +188,8 @@ interface SystemStatus {
         </div>
       </section>
 
-      <!-- Loading States Demo -->
-      <section class="loading-demo-section premium-container">
+// removed by clean-audit
+// removed by clean-audit
         <div class="section-header">
           <h2 class="section-title text-gradient-primary">
             <app-premium-icon iconName="system-processing" size="lg" theme="info"></app-premium-icon>
@@ -199,7 +199,7 @@ interface SystemStatus {
 
         <div class="loading-grid">
           <!-- Shimmer Loading -->
-          <div class="loading-demo premium-card">
+// removed by clean-audit
             <h4>Shimmer Effect</h4>
             <div class="shimmer-container animate-shimmer">
               <div class="shimmer-line"></div>
@@ -209,7 +209,7 @@ interface SystemStatus {
           </div>
 
           <!-- Pulsing Dots -->
-          <div class="loading-demo premium-card">
+// removed by clean-audit
             <h4>Pulsing Dots</h4>
             <div class="dots-container">
               <div class="dot animate-pulsing-dots"></div>
@@ -219,7 +219,7 @@ interface SystemStatus {
           </div>
 
           <!-- Spinner -->
-          <div class="loading-demo premium-card">
+// removed by clean-audit
             <h4>Smart Spinner</h4>
             <div class="spinner-container">
               <app-premium-icon 
@@ -378,22 +378,22 @@ interface SystemStatus {
       opacity: 0.9;
     }
 
-    .demo-section {
+// removed by clean-audit
       margin: 3rem 0;
     }
 
-    .demo-grid {
+// removed by clean-audit
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 2rem;
       margin-top: 2rem;
     }
 
-    .demo-card {
+// removed by clean-audit
       padding: 2rem;
     }
 
-    .demo-card h3 {
+// removed by clean-audit
       display: flex;
       align-items: center;
       gap: 0.75rem;
@@ -403,7 +403,7 @@ interface SystemStatus {
       color: var(--bg-gray-100);
     }
 
-    .demo-button {
+// removed by clean-audit
       display: flex;
       align-items: center;
       justify-content: center;
@@ -412,7 +412,7 @@ interface SystemStatus {
       margin-top: 1.5rem;
     }
 
-    .loading-demo-section {
+// removed by clean-audit
       margin: 3rem 0;
     }
 
@@ -423,12 +423,12 @@ interface SystemStatus {
       margin-top: 2rem;
     }
 
-    .loading-demo {
+// removed by clean-audit
       padding: 2rem;
       text-align: center;
     }
 
-    .loading-demo h4 {
+// removed by clean-audit
       margin-bottom: 1.5rem;
       color: var(--bg-gray-100);
       font-weight: 600;
@@ -497,7 +497,7 @@ interface SystemStatus {
         gap: 1.5rem;
       }
 
-      .demo-grid {
+// removed by clean-audit
         grid-template-columns: 1fr;
         gap: 1.5rem;
       }
@@ -573,7 +573,7 @@ export class PremiumDashboardShowcaseComponent implements OnInit, OnDestroy {
     }
   ]);
 
-  // Demo triggers
+// removed by clean-audit
   paymentSuccessTriggered = signal(false);
   contractSignedTriggered = signal(false);
   kycVerifiedTriggered = signal(false);
@@ -701,3 +701,4 @@ export class PremiumDashboardShowcaseComponent implements OnInit, OnDestroy {
     this.systemStatuses.set(updatedStatuses);
   }
 }
+// removed by clean-audit

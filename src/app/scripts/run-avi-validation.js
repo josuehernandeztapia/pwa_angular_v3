@@ -1,7 +1,7 @@
 // Script para ejecutar validación del sistema AVI
 
-console.log('🧪 EJECUTANDO VALIDACIÓN SISTEMA AVI');
-console.log('=====================================\n');
+// removed by clean-audit
+// removed by clean-audit
 
 // Simulador de AVITestDataGenerator
 class TestDataGenerator {
@@ -355,24 +355,24 @@ class TestDataGenerator {
 class AVIValidationRunner {
   
   async runBasicValidation() {
-    console.log('📋 1. VALIDACIÓN BÁSICA DE DATOS');
-    console.log('  ✅ Generador de datos de prueba: OK');
-    console.log('  ✅ Perfiles de riesgo disponibles: LOW_RISK, HIGH_RISK, INCONSISTENT, NERVOUS_TRUTHFUL');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
     // Generar datos de prueba
     const lowRiskData = TestDataGenerator.generateTestResponses('LOW_RISK');
     const highRiskData = TestDataGenerator.generateTestResponses('HIGH_RISK');
     const inconsistentData = TestDataGenerator.generateTestResponses('INCONSISTENT');
     
-    console.log(`  ✅ Datos LOW_RISK generados: ${lowRiskData.length} respuestas`);
-    console.log(`  ✅ Datos HIGH_RISK generados: ${highRiskData.length} respuestas`);
-    console.log(`  ✅ Datos INCONSISTENT generados: ${inconsistentData.length} respuestas`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
     return true;
   }
   
   async runDataQualityValidation() {
-    console.log('\n📊 2. VALIDACIÓN CALIDAD DE DATOS');
+// removed by clean-audit
     
     const profiles = ['LOW_RISK', 'HIGH_RISK', 'INCONSISTENT', 'NERVOUS_TRUTHFUL'];
     let validationsPassed = 0;
@@ -390,10 +390,10 @@ class AVIValidationRunner {
       );
       
       if (hasValidStructure) {
-        console.log(`  ✅ Perfil ${profile}: Estructura válida`);
+// removed by clean-audit
         validationsPassed++;
       } else {
-        console.log(`  ❌ Perfil ${profile}: Estructura inválida`);
+// removed by clean-audit
       }
       
       // Validar coherencia del perfil
@@ -412,9 +412,9 @@ class AVIValidationRunner {
       }
       
       if (coherenceCheck) {
-        console.log(`  ✅ Perfil ${profile}: Coherencia correcta`);
+// removed by clean-audit
       } else {
-        console.log(`  ⚠️  Perfil ${profile}: Coherencia cuestionable`);
+// removed by clean-audit
       }
     }
     
@@ -422,7 +422,7 @@ class AVIValidationRunner {
   }
   
   async runMathematicalConsistencyValidation() {
-    console.log('\n🧮 3. VALIDACIÓN CONSISTENCIA MATEMÁTICA');
+// removed by clean-audit
     
     const inconsistentData = TestDataGenerator.generateTestResponses('INCONSISTENT');
     
@@ -445,37 +445,37 @@ class AVIValidationRunner {
       const diferencia = Math.abs(ingresosVal - ingresoTeorico);
       const porcentajeDiferencia = (diferencia / ingresosVal) * 100;
       
-      console.log(`  📊 Ingreso declarado: $${ingresosVal}`);
-      console.log(`  📊 Ingreso calculado: $${ingresoTeorico} (${pasajerosVal} × $${tarifaVal} × ${vueltasVal})`);
-      console.log(`  📊 Diferencia: $${diferencia} (${porcentajeDiferencia.toFixed(1)}%)`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
       
       // Ratio gasolina/ingreso
       const ratioGasolina = (gasolinaVal / ingresosVal) * 100;
-      console.log(`  ⛽ Ratio gasolina/ingreso: ${ratioGasolina.toFixed(1)}%`);
+// removed by clean-audit
       
       // Validaciones
       if (porcentajeDiferencia > 20) {
-        console.log('  🚨 INCONSISTENCIA DETECTADA: Gran diferencia entre ingreso declarado y calculado');
+// removed by clean-audit
       }
       
       if (ratioGasolina > 70) {
-        console.log('  🚨 RED FLAG: Gasto de gasolina demasiado alto vs ingresos');
+// removed by clean-audit
       }
       
-      console.log('  ✅ Detección de inconsistencias: FUNCIONAL');
+// removed by clean-audit
       return true;
     }
     
-    console.log('  ⚠️  No se encontraron suficientes datos financieros para validar');
+// removed by clean-audit
     return false;
   }
   
   async runCalibrationDataValidation() {
-    console.log('\n⚙️ 4. VALIDACIÓN DATOS DE CALIBRACIÓN');
+// removed by clean-audit
     
     const calibrationSamples = TestDataGenerator.generateCalibrationSamples(10);
     
-    console.log(`  ✅ Muestras de calibración generadas: ${calibrationSamples.length}`);
+// removed by clean-audit
     
     // Validar estructura de muestras
     let validSamples = 0;
@@ -489,7 +489,7 @@ class AVIValidationRunner {
       }
     });
     
-    console.log(`  ✅ Muestras válidas: ${validSamples}/${calibrationSamples.length}`);
+// removed by clean-audit
     
     // Validar distribución de outcomes
     const outcomes = calibrationSamples.map(s => s.actualOutcome);
@@ -499,13 +499,13 @@ class AVIValidationRunner {
       BAD: outcomes.filter(o => o === 'BAD').length
     };
     
-    console.log(`  📈 Distribución outcomes: GOOD=${outcomeCount.GOOD}, ACCEPTABLE=${outcomeCount.ACCEPTABLE}, BAD=${outcomeCount.BAD}`);
+// removed by clean-audit
     
     return validSamples === calibrationSamples.length;
   }
   
   async runPerformanceSimulation() {
-    console.log('\n⚡ 5. SIMULACIÓN DE RENDIMIENTO');
+// removed by clean-audit
     
     const startTime = Date.now();
     
@@ -528,15 +528,15 @@ class AVIValidationRunner {
     const duration = endTime - startTime;
     const responsesPerSecond = (totalResponses / (duration / 1000)).toFixed(1);
     
-    console.log(`  ⏱️  Tiempo total: ${duration}ms`);
-    console.log(`  📊 Respuestas procesadas: ${totalResponses}`);
-    console.log(`  🚀 Rendimiento: ${responsesPerSecond} respuestas/segundo`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
     return duration < 10000; // Menos de 10 segundos
   }
   
   async runCompleteValidation() {
-    console.log('🎯 INICIANDO VALIDACIÓN COMPLETA\n');
+// removed by clean-audit
     
     const results = {
       basicValidation: await this.runBasicValidation(),
@@ -546,8 +546,8 @@ class AVIValidationRunner {
       performance: await this.runPerformanceSimulation()
     };
     
-    console.log('\n🏆 RESUMEN DE VALIDACIÓN');
-    console.log('========================');
+// removed by clean-audit
+// removed by clean-audit
     
     let passedTests = 0;
     let totalTests = Object.keys(results).length;
@@ -555,31 +555,31 @@ class AVIValidationRunner {
     Object.entries(results).forEach(([test, passed]) => {
       const icon = passed ? '✅' : '❌';
       const status = passed ? 'PASÓ' : 'FALLÓ';
-      console.log(`${icon} ${test}: ${status}`);
+// removed by clean-audit
       if (passed) passedTests++;
     });
     
     const successRate = (passedTests / totalTests * 100).toFixed(1);
-    console.log(`\n📊 TASA DE ÉXITO: ${successRate}% (${passedTests}/${totalTests})`);
+// removed by clean-audit
     
     if (passedTests === totalTests) {
-      console.log('\n🎉 ¡SISTEMA AVI COMPLETAMENTE VALIDADO!');
-      console.log('   ✅ Generación de datos de prueba: FUNCIONAL');
-      console.log('   ✅ Detección de inconsistencias matemáticas: FUNCIONAL');
-      console.log('   ✅ Sistema de calibración: FUNCIONAL');
-      console.log('   ✅ Rendimiento del sistema: OPTIMAL');
-      console.log('\n🚀 SISTEMA LISTO PARA IMPLEMENTACIÓN EN PRODUCCIÓN');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
       
-      console.log('\n📋 FUNCIONALIDADES VERIFICADAS:');
-      console.log('   🔬 Engine Científico: Algoritmos matemáticos avanzados');
-      console.log('   🎯 Engine Heurístico: Reglas de negocio optimizadas');
-      console.log('   🤖 Coordinador Dual: Consenso inteligente');
-      console.log('   ⚙️ Sistema de Calibración: Auto-optimización');
-      console.log('   🎤 Análisis de Voz: Detección de estrés');
-      console.log('   📊 55 Preguntas: Científicamente ponderadas');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
       
     } else {
-      console.log('\n⚠️  VALIDACIÓN PARCIAL - Revisar tests fallidos');
+// removed by clean-audit
     }
     
     return results;
@@ -593,16 +593,17 @@ async function main() {
   try {
     await runner.runCompleteValidation();
   } catch (error) {
-    console.error('\n🔥 ERROR EN VALIDACIÓN:', error);
+// removed by clean-audit
   }
   
-  console.log('\n🏁 Validación completada');
-  console.log('\n💡 PRÓXIMOS PASOS:');
-  console.log('   1. Integrar con sistema de grabación de voz real');
-  console.log('   2. Conectar con base de datos para almacenamiento');
-  console.log('   3. Implementar exportación de reportes');
-  console.log('   4. Configurar dashboard de métricas en tiempo real');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
 }
 
 // Ejecutar
 main();
+// removed by clean-audit

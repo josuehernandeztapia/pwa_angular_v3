@@ -23,7 +23,7 @@ export class MediaPermissionsService {
       this.hasRequestedPermissions = true;
       return { camera: true, microphone: true };
     } catch (error) {
-      console.warn('Media permissions denied or not available:', error);
+// removed by clean-audit
       
       // Try individual permissions
       const results = { camera: false, microphone: false };
@@ -67,3 +67,4 @@ export class MediaPermissionsService {
     return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
   }
 }
+// removed by clean-audit

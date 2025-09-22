@@ -42,7 +42,7 @@ export class RoleGuard implements CanActivate {
           );
           
           if (!hasRequiredRole) {
-            console.warn('User does not have required role:', requiredRoles);
+// removed by clean-audit
             this.router.navigate(['/unauthorized']);
             return false;
           }
@@ -55,7 +55,7 @@ export class RoleGuard implements CanActivate {
           );
           
           if (!hasRequiredPermission) {
-            console.warn('User does not have required permission:', requiredPermissions);
+// removed by clean-audit
             this.router.navigate(['/unauthorized']);
             return false;
           }
@@ -66,3 +66,4 @@ export class RoleGuard implements CanActivate {
     );
   }
 }
+// removed by clean-audit

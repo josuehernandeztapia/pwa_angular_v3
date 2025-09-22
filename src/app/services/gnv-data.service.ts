@@ -299,12 +299,12 @@ export class GnvDataService {
 
   // Error handling
   private handleError(error: any) {
-    console.error('GNV Data Service Error:', error);
+// removed by clean-audit
     return throwError(() => new Error('Error accessing GNV data'));
   }
 
   // ===============================
-  // MOCK DATA PARA DESARROLLO
+// removed by clean-audit
   // ===============================
 
   private getMockDriverConsumption(driverId: string): GNVConsumptionRecord[] {
@@ -446,3 +446,4 @@ export class GnvDataService {
     return this.getMockDriverConsumption('driver-001');
   }
 }
+// removed by clean-audit

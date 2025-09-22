@@ -77,7 +77,7 @@ export class IndexedDBTestStateManager {
             db.close();
           }
         } catch (error) {
-          console.warn('Error closing database:', error);
+// removed by clean-audit
         }
         resolve();
       });
@@ -126,18 +126,18 @@ export class IndexedDBTestStateManager {
         };
 
         deleteRequest.onerror = () => {
-          console.warn(`Failed to delete database ${dbName}:`, deleteRequest.error);
+// removed by clean-audit
           resolve(); // Resolve anyway to prevent blocking
         };
 
         deleteRequest.onblocked = () => {
-          console.warn(`Database deletion blocked for ${dbName}`);
+// removed by clean-audit
           // Try to resolve after timeout
           setTimeout(() => resolve(), 1000);
         };
 
       } catch (error) {
-        console.warn(`Error initiating database deletion for ${dbName}:`, error);
+// removed by clean-audit
         resolve();
       }
     });
@@ -196,11 +196,11 @@ export class IndexedDBTestStateManager {
   }
 
   /**
-   * Mock IndexedDB for testing environments that don't support it
+// removed by clean-audit
    */
   static mockIndexedDB(): void {
     if (typeof globalThis.indexedDB === 'undefined') {
-      // Simple IndexedDB mock for testing
+// removed by clean-audit
       const mockIndexedDB = {
         open: () => ({
           onsuccess: null,
@@ -208,7 +208,7 @@ export class IndexedDBTestStateManager {
           onupgradeneeded: null,
           result: {
             close: () => {},
-            name: 'mock-db',
+// removed by clean-audit
             readyState: 'done'
           }
         }),
@@ -284,3 +284,4 @@ export const testHelpers = {
     return manager.getMemoryStats();
   }
 };
+// removed by clean-audit

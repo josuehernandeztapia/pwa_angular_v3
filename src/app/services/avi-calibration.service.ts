@@ -57,7 +57,7 @@ export class AVICalibrationService {
       this.calibrationProgress.set(report.completionPercentage);
       this.isFullyCalibrated.set(report.calibrationStatus === 'SUFFICIENT' || report.calibrationStatus === 'EXCELLENT');
 
-      console.log(`🎙️ AVI Calibration Progress: ${report.totalSamples}/${this.TARGET_AUDIO_SAMPLES} samples (${report.completionPercentage}%)`);
+// removed by clean-audit
     });
   }
 
@@ -92,7 +92,7 @@ export class AVICalibrationService {
 
     return this.confusionMatrixService.addCalibrationSample(calibrationSample).pipe(
       tap(sample => {
-        console.log(`✅ Audio sample recorded for calibration: ${sample.id}`);
+// removed by clean-audit
 
         // Update legacy calibration data for backwards compatibility
         const currentData = this.calibrationData$.value;
@@ -145,15 +145,15 @@ export class AVICalibrationService {
   }
 
   /**
-   * 🎲 Generate mock calibration samples for testing (DEV ONLY)
+// removed by clean-audit
    */
   generateMockCalibrationSamples(count: number = 35): Observable<boolean> {
     if (count < 1 || count > 100) {
-      console.warn('⚠️ Invalid sample count. Using default: 35');
+// removed by clean-audit
       count = 35;
     }
 
-    console.log(`🎲 Generating ${count} mock calibration samples...`);
+// removed by clean-audit
 
     const mockSamples: Array<Omit<CalibrationSample, 'id' | 'timestamp'>> = [];
 
@@ -189,7 +189,7 @@ export class AVICalibrationService {
         predictedRisk,
         actualOutcome,
         validationSource: Math.random() > 0.5 ? 'MANUAL' : 'BEHAVIORAL',
-        notes: `Mock sample ${i + 1} for calibration testing`
+// removed by clean-audit
       };
 
       mockSamples.push(mockSample);
@@ -199,11 +199,11 @@ export class AVICalibrationService {
     return this.addMockSamplesSequentially(mockSamples, 0);
   }
 
-  // Private helper methods for mock data
+// removed by clean-audit
 
   private addMockSamplesSequentially(samples: Array<Omit<CalibrationSample, 'id' | 'timestamp'>>, index: number): Observable<boolean> {
     if (index >= samples.length) {
-      console.log(`✅ Generated ${samples.length} mock calibration samples`);
+// removed by clean-audit
       return of(true);
     }
 
@@ -221,7 +221,7 @@ export class AVICalibrationService {
     return [
       {
         questionId: 'q1',
-        answer: 'Mock response',
+// removed by clean-audit
         responseTime: 2000 + Math.random() * 3000,
         stressIndicators: Math.random() > 0.7 ? ['hesitation'] : []
       }
@@ -292,7 +292,7 @@ export class AVICalibrationService {
    * Ejecuta calibración automática basada en resultados históricos
    */
   performAutoCalibration(historicalResults: CalibrationSample[]): Observable<CalibrationResult> {
-    console.log('Iniciando calibración automática con', historicalResults.length, 'muestras');
+// removed by clean-audit
     
     return of(null).pipe(
       map(() => {
@@ -338,7 +338,7 @@ export class AVICalibrationService {
         return calibrationResult;
       }),
       tap(result => {
-        console.log('Calibración completada:', result);
+// removed by clean-audit
       })
     );
   }
@@ -653,7 +653,7 @@ export class AVICalibrationService {
 
     // En producción, esto se guardaría en base de datos
     // Por ahora, simular almacenamiento
-    console.log('Registrado resultado para calibración:', sample.interviewId, actualOutcome);
+// removed by clean-audit
   }
 
   // Helper methods
@@ -761,3 +761,4 @@ export interface ErrorPatternAnalysis {
 
 export type OutcomeType = 'GOOD' | 'ACCEPTABLE' | 'BAD';
 export type PredictionType = 'GOOD' | 'ACCEPTABLE' | 'QUESTIONABLE' | 'BAD';
+// removed by clean-audit

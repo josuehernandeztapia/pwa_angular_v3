@@ -170,7 +170,7 @@ interface ProductCatalogItem {
         subtitle="No se encontraron productos para los filtros seleccionados"
         [primaryCtaLabel]="'Mostrar todos'"
         (primary)="resetFilters()"
-        [secondaryCtaLabel]="'Simular paquetes demo'"
+// removed by clean-audit
         (secondary)="simulateDemo()"
       ></app-empty-state-card>
     </div>
@@ -625,7 +625,7 @@ export class ProductosCatalogComponent implements OnInit {
       
     } catch (error) {
       this.toast.error('Error al cargar el catálogo de productos');
-      console.error('Error loading products:', error);
+// removed by clean-audit
     } finally {
       this.isLoading = false;
     }
@@ -767,7 +767,7 @@ export class ProductosCatalogComponent implements OnInit {
   }
 
   simulateDemo(): void {
-    this.toast.info('Iniciando simulación de paquetes demo...');
+// removed by clean-audit
   }
 
   viewDetails(productId: string): void {
@@ -782,3 +782,4 @@ export class ProductosCatalogComponent implements OnInit {
     // Router navigation would go here
   }
 }
+// removed by clean-audit

@@ -38,8 +38,14 @@ npm run test:mutation               # Mutation testing con Stryker (~45 min)
 npm run test:performance            # Performance tests con k6
 ```
 
-### Coverage y Reportes
+### QA Visual y Reportes Automatizados
 ```bash
+# QA Visual Final (PR#13) - Screenshots y Accessibility
+npm run test:qa-visual              # QA Visual suite completa (local)
+npm run test:qa-visual:all          # QA Visual en todos los browsers
+npm run test:qa-visual:report       # Ver reportes y abrir QA-REPORT.md
+
+# Coverage y Quality Gates
 npm run coverage:generate           # Generar dashboard de coverage
 npm run coverage:serve             # Servir reportes en http://localhost:8080
 npm run quality:gates              # Ejecutar quality gates

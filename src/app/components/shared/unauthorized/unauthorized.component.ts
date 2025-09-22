@@ -403,19 +403,19 @@ export class UnauthorizedComponent {
   }
 
   contactSupervisor(): void {
-    console.log('Contacting supervisor...');
+// removed by clean-audit
     // This would typically open a contact form or send an email
     window.open('mailto:supervisor@conductores.com?subject=Solicitud de Permisos', '_blank');
   }
 
   viewPermissions(): void {
-    console.log('Viewing permissions...');
+// removed by clean-audit
     // This would show a modal with detailed permissions
     alert('Tus permisos actuales:\n' + this.currentUser?.permissions.join('\n'));
   }
 
   requestAccess(): void {
-    console.log('Requesting access...');
+// removed by clean-audit
     // This would open a form to request additional access
     this.router.navigate(['/solicitar-acceso']);
   }
@@ -425,3 +425,4 @@ export class UnauthorizedComponent {
     this.router.navigate(['/login']);
   }
 }
+// removed by clean-audit

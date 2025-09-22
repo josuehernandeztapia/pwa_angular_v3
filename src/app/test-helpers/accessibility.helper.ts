@@ -57,8 +57,8 @@ function configureAxe(config: any) {
 /**
  * Test accessibility of a component
  */
-export async function testAccessibility(fixture: ComponentFixture<any>): Promise<void> {
-  const element = fixture.nativeElement;
+// removed by clean-audit
+// removed by clean-audit
   const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
   if (results.violations.length > 0) {
     const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
@@ -83,10 +83,10 @@ export async function testElementAccessibility(element: HTMLElement): Promise<vo
  * Test accessibility with custom axe configuration
  */
 export async function testAccessibilityWithConfig(
-  fixture: ComponentFixture<any>,
+// removed by clean-audit
   config: any
 ): Promise<void> {
-  const element = fixture.nativeElement;
+// removed by clean-audit
   const results = await axeCore.run(element, config) as unknown as AxeResults;
   if (results.violations.length > 0) {
     const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
@@ -98,8 +98,8 @@ export async function testAccessibilityWithConfig(
 /**
  * Get accessibility violations without throwing
  */
-export async function getAccessibilityViolations(fixture: ComponentFixture<any>): Promise<AxeViolation[]> {
-  const element = fixture.nativeElement;
+// removed by clean-audit
+// removed by clean-audit
   const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
   return results.violations;
 }
@@ -111,7 +111,7 @@ export const AccessibilityTestPatterns = {
   /**
    * Test form accessibility
    */
-  async testFormAccessibility(fixture: ComponentFixture<any>): Promise<void> {
+// removed by clean-audit
     const formConfig = {
       rules: {
         'label': { enabled: true },
@@ -120,13 +120,13 @@ export const AccessibilityTestPatterns = {
         'aria-valid-attr-value': { enabled: true }
       }
     };
-    await testAccessibilityWithConfig(fixture, formConfig);
+// removed by clean-audit
   },
 
   /**
    * Test navigation accessibility
    */
-  async testNavigationAccessibility(fixture: ComponentFixture<any>): Promise<void> {
+// removed by clean-audit
     const navConfig = {
       rules: {
         'bypass': { enabled: true },
@@ -135,13 +135,13 @@ export const AccessibilityTestPatterns = {
         'aria-expanded': { enabled: true }
       }
     };
-    await testAccessibilityWithConfig(fixture, navConfig);
+// removed by clean-audit
   },
 
   /**
    * Test modal/dialog accessibility
    */
-  async testModalAccessibility(fixture: ComponentFixture<any>): Promise<void> {
+// removed by clean-audit
     const modalConfig = {
       rules: {
         'aria-dialog-name': { enabled: true },
@@ -149,13 +149,13 @@ export const AccessibilityTestPatterns = {
         'aria-hidden-focus': { enabled: true }
       }
     };
-    await testAccessibilityWithConfig(fixture, modalConfig);
+// removed by clean-audit
   },
 
   /**
    * Test table accessibility
    */
-  async testTableAccessibility(fixture: ComponentFixture<any>): Promise<void> {
+// removed by clean-audit
     const tableConfig = {
       rules: {
         'td-headers-attr': { enabled: true },
@@ -163,7 +163,7 @@ export const AccessibilityTestPatterns = {
         'scope-attr-valid': { enabled: true }
       }
     };
-    await testAccessibilityWithConfig(fixture, tableConfig);
+// removed by clean-audit
   }
 };
 
@@ -237,17 +237,17 @@ export class AccessibilityChecker {
  */
 export function createAccessibilityTestSuite(componentName: string) {
   return {
-    [`${componentName} should be accessible`]: async (fixture: ComponentFixture<any>) => {
-      await testAccessibility(fixture);
+// removed by clean-audit
+// removed by clean-audit
     },
 
-    [`${componentName} should have no accessibility violations`]: async (fixture: ComponentFixture<any>) => {
-      const violations = await getAccessibilityViolations(fixture);
+// removed by clean-audit
+// removed by clean-audit
       expect(violations.length).toBe(0);
     },
 
-    [`${componentName} interactive elements should be keyboard accessible`]: (fixture: ComponentFixture<any>) => {
-      const interactiveElements = fixture.nativeElement.querySelectorAll(
+// removed by clean-audit
+// removed by clean-audit
         'button, input, select, textarea, a, [role="button"], [role="link"], [tabindex]'
       );
 
@@ -256,8 +256,8 @@ export function createAccessibilityTestSuite(componentName: string) {
       });
     },
 
-    [`${componentName} form controls should have labels`]: (fixture: ComponentFixture<any>) => {
-      const formControls = fixture.nativeElement.querySelectorAll(
+// removed by clean-audit
+// removed by clean-audit
         'input:not([type="hidden"]), select, textarea'
       );
 
@@ -267,3 +267,4 @@ export function createAccessibilityTestSuite(componentName: string) {
     }
   };
 }
+// removed by clean-audit

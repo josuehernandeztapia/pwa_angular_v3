@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
 import { BottomNavBarComponent } from './components/shared/bottom-nav-bar/bottom-nav-bar.component';
 import { NavigationComponent } from './components/shared/navigation/navigation.component';
 import { UpdateBannerComponent } from './components/shared/update-banner/update-banner.component';
@@ -10,7 +11,7 @@ import { theme } from './styles/design-tokens';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavigationComponent, BottomNavBarComponent, UpdateBannerComponent],
+  imports: [RouterOutlet, NavigationComponent, BottomNavBarComponent, UpdateBannerComponent, LucideAngularModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

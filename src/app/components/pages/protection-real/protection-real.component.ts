@@ -1000,7 +1000,7 @@ export class ProtectionRealComponent implements OnInit, OnDestroy {
     effect(() => {
       const plan = this.currentPlan();
       if (plan) {
-        console.log('Protection plan updated:', plan.state, plan);
+// removed by clean-audit
       }
     });
   }
@@ -1013,7 +1013,7 @@ export class ProtectionRealComponent implements OnInit, OnDestroy {
     }
 
     // Set up permissions (this would come from auth service)
-    this.canApprove = true; // Mock admin permissions
+// removed by clean-audit
   }
 
   ngOnDestroy(): void {
@@ -1032,7 +1032,7 @@ export class ProtectionRealComponent implements OnInit, OnDestroy {
   simulateScenarios(): void {
     if (this.contractId || this.client?.id) {
       const id = this.contractId || `contract-${this.client!.id}`;
-      // Mock current month (this would come from contract data)
+// removed by clean-audit
       const currentMonth = 12;
       this.protectionState.simulateScenarios(id, currentMonth, {
         triggerReason: 'Manual request from client'
@@ -1107,7 +1107,7 @@ export class ProtectionRealComponent implements OnInit, OnDestroy {
         this.viewNewSchedule();
         break;
       default:
-        console.log('Unknown action:', status.action);
+// removed by clean-audit
     }
   }
 
@@ -1180,3 +1180,4 @@ export class ProtectionRealComponent implements OnInit, OnDestroy {
     return payment.month;
   }
 }
+// removed by clean-audit

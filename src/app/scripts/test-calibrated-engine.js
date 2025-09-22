@@ -1,7 +1,7 @@
 // Test del engine calibrado con quick-fix conservador
 
-console.log('🔬 TESTING ENGINE CALIBRADO - QUICK-FIX QUIRÚRGICO');
-console.log('==================================================\n');
+// removed by clean-audit
+// removed by clean-audit
 
 // Configuración calibrada (simular environment)
 const CALIBRATED_CONFIG = {
@@ -260,26 +260,26 @@ const TEST_CASES = {
 
 // Ejecutar tests calibrados
 async function runCalibratedTests() {
-  console.log('🧪 EJECUTANDO TESTS CON ENGINE CALIBRADO\n');
+// removed by clean-audit
   
   let testsPassed = 0;
   let totalTests = Object.keys(TEST_CASES).length;
   
   for (const [testName, testCase] of Object.entries(TEST_CASES)) {
-    console.log(`📋 Test: ${testCase.description.toUpperCase()}`);
-    console.log('─'.repeat(70));
+// removed by clean-audit
+// removed by clean-audit
     
     const result = CalibratedAVIEngine.calculateCalibratedScore(testCase.responses, testName);
     
-    console.log(`   🎯 Score calibrado: ${result.totalScore}/1000`);
-    console.log(`   📈 Nivel de riesgo: ${result.riskLevel}`);
-    console.log(`   🔧 Perfil: ${result.calibrationDetails.profile.toUpperCase()}`);
-    console.log(`   🎚️ Thresholds: GO≥${(result.calibrationDetails.thresholds.GO_MIN*100).toFixed(0)}%, NO-GO≤${(result.calibrationDetails.thresholds.NOGO_MAX*100).toFixed(0)}%`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
     if (result.redFlags.length > 0) {
-      console.log(`   🚨 Red flags: ${result.redFlags.length}`);
+// removed by clean-audit
       result.redFlags.forEach(flag => {
-        console.log(`      - ${flag.type}: ${flag.reason}`);
+// removed by clean-audit
       });
     }
     
@@ -287,32 +287,32 @@ async function runCalibratedTests() {
     const testPassed = result.riskLevel === testCase.expected || 
                       (testCase.expected === 'HIGH' && ['HIGH', 'CRITICAL'].includes(result.riskLevel));
     
-    console.log(`   ${testPassed ? '✅' : '❌'} Esperado: ${testCase.expected}, Obtenido: ${result.riskLevel}`);
+// removed by clean-audit
     
     if (testPassed) testsPassed++;
-    console.log('');
+// removed by clean-audit
   }
   
   // Resumen calibrado
-  console.log('🏆 RESUMEN ENGINE CALIBRADO');
-  console.log('═'.repeat(50));
-  console.log(`📊 Tests pasados: ${testsPassed}/${totalTests}`);
-  console.log(`📊 Precisión: ${(testsPassed/totalTests*100).toFixed(1)}%`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   
   if (testsPassed === totalTests) {
-    console.log('\n🎉 ¡ENGINE CALIBRADO PERFECTAMENTE FUNCIONAL!');
-    console.log('✅ DISCURSO_CLARO → LOW (thresholds más estrictos)');
-    console.log('✅ DISCURSO_NERVIOSO → HIGH (σ más permisivo)');
-    console.log('✅ DISCURSO_EVASIVO → HIGH/CRITICAL (LR boost x1.5)');
-    console.log('\n🔬 CALIBRACIÓN QUIRÚRGICA EXITOSA:');
-    console.log('   • GO_MIN: 78% (↑3%)');
-    console.log('   • NO-GO_MAX: 55% (↑1%)');
-    console.log('   • Peso léxico γ: 25% (↑10%) en preguntas críticas');
-    console.log('   • σ timing: 45% (↑10%) - menos penalización por reflexión');
-    console.log('   • LR boost: x1.5 para tokens evasivos');
-    console.log('\n🚀 LISTO PARA CALIBRACIÓN CON AUDIOS REALES');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   } else {
-    console.log('\n⚠️ Algunos casos necesitan ajuste adicional');
+// removed by clean-audit
   }
   
   return testsPassed === totalTests;
@@ -321,11 +321,12 @@ async function runCalibratedTests() {
 // Ejecutar
 if (require.main === module) {
   runCalibratedTests().then(success => {
-    console.log('\n🏁 Tests de calibración completados');
+// removed by clean-audit
     if (success) {
-      console.log('🎯 Engine calibrado listo para producción');
+// removed by clean-audit
     }
   });
 }
 
 module.exports = { CalibratedAVIEngine, CALIBRATED_CONFIG };
+// removed by clean-audit

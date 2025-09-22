@@ -34,17 +34,17 @@ export class AuthInterceptor implements HttpInterceptor {
 
     // Add request logging only in development (no sensitive data)
     if (!environment.production && !request.url.includes('assets/') && typeof window !== 'undefined' && (window as any).ng && (window as any).ng.probe) {
-      console.log(`🌐 HTTP ${request.method} ${request.url}`);
+// removed by clean-audit
     }
 
     return next.handle(authRequest).pipe(
       tap((event: HttpEvent<unknown>) => {
         if (!environment.production && event instanceof HttpResponse && !request.url.includes('assets/') && typeof window !== 'undefined' && (window as any).ng && (window as any).ng.probe) {
-          console.log(`✅ HTTP ${request.method} ${request.url} - ${event.status}`);
+// removed by clean-audit
         }
       }),
       catchError((error: HttpErrorResponse) => {
-        console.error(`❌ HTTP ${request.method} ${request.url} - ${error.status}`, error);
+// removed by clean-audit
 
         if (error.status === 401) {
           return this.handle401Error(authRequest, next);
@@ -141,7 +141,7 @@ export class AuthInterceptor implements HttpInterceptor {
     const userMessage = 'Server error. Please try again later.';
     
     // Log detailed error for debugging
-    console.error('Server Error Details:', {
+// removed by clean-audit
       status: error.status,
       statusText: error.statusText,
       url: error.url,
@@ -159,7 +159,7 @@ export class AuthInterceptor implements HttpInterceptor {
     // Network/connectivity error
     const userMessage = 'Network error. Please check your internet connection.';
     
-    console.error('Network Error: No internet connection or server unreachable');
+// removed by clean-audit
     this.showErrorToast(userMessage);
 
     return throwError(() => new Error(userMessage));
@@ -167,7 +167,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private showErrorToast(message: string): void {
     // This would typically integrate with a toast/notification service
-    console.warn('Error Toast:', message);
+// removed by clean-audit
     
     // Simple fallback notification
     if ('Notification' in window && Notification.permission === 'granted') {
@@ -178,3 +178,4 @@ export class AuthInterceptor implements HttpInterceptor {
     }
   }
 }
+// removed by clean-audit

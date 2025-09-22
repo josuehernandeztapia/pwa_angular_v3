@@ -126,7 +126,7 @@ export class PushNotificationService {
         return savedSub;
       }
     } catch (error) {
-      console.error('Failed to subscribe to notifications:', error);
+// removed by clean-audit
       throw error;
     }
     
@@ -149,7 +149,7 @@ export class PushNotificationService {
       
       return true;
     } catch (error) {
-      console.error('Failed to unsubscribe from notifications:', error);
+// removed by clean-audit
       return false;
     }
   }
@@ -292,7 +292,7 @@ export class PushNotificationService {
 
   private showInAppNotification(payload: NotificationPayload): void {
     // This would integrate with your existing toast/notification system
-    console.log('In-app notification:', payload);
+// removed by clean-audit
     
     // You could emit an event or call a toast service here
     // Example: this.toastService.show(payload.title, payload.body, payload.type);
@@ -383,9 +383,9 @@ export class PushNotificationService {
         headers: { 'Authorization': `Bearer ${this.getAuthToken()}` }
       }).toPromise();
       
-      console.log('Test notification sent successfully');
+// removed by clean-audit
     } catch (error) {
-      console.error('Failed to send test notification:', error);
+// removed by clean-audit
       
       // Fallback: show local notification
       this.showNotification(testPayload);
@@ -443,7 +443,7 @@ export class PushNotificationService {
 
   async initializeNotifications(): Promise<boolean> {
     if (!this.isSupported) {
-      console.warn('Push notifications not supported');
+// removed by clean-audit
       return false;
     }
 
@@ -460,7 +460,7 @@ export class PushNotificationService {
         }
       }
     } catch (error) {
-      console.error('Failed to initialize notifications:', error);
+// removed by clean-audit
     }
 
     return false;
@@ -487,3 +487,5 @@ export class PushNotificationService {
     };
   }
 }
+
+// removed by clean-audit

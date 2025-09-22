@@ -33,95 +33,113 @@ interface AmortizationRow {
   imports: [CommonModule, FormsModule, SavingsProjectionChartComponent, TandaTimelineComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="cotizador-container command-container">
+    <!-- Skip Link for Accessibility -->
+    <a class="skip-link" href="#cotizador-content">Saltar al contenido del cotizador</a>
+
+    <div class="ui-container ui-section">
       <!-- Header Section -->
-      <div class="cotizador-header">
-        <h2 class="cotizador-title command-title">
-          🧮 {{ client ? 'Simulador para ' + client.name : 'Simulador de Soluciones' }}
-        </h2>
+      <div class="mb-8">
+        <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+          {{ client ? 'Cotizador para ' + client.name : 'Cotizador de Soluciones' }}
+        </h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400">
+          Configuración de paquetes y simulaciones financieras
+        </p>
       </div>
 
-      <!-- Sticky Finance Summary -->
-      <div *ngIf="pkg" class="sticky-summary" role="region" aria-label="Resumen financiero" data-cy="cotizador-summary">
-        <div class="summary-grid">
-          <div class="summary-item">
-            <div class="label">Precio</div>
-            <div class="value" title="Precio total del paquete" data-cy="sum-precio">{{ formatCurrency(totalPrice) }}</div>
+      <!-- Financial Summary Cards -->
+      <div *ngIf="pkg" class="ui-grid-metrics mb-8" role="region" aria-label="Resumen financiero" data-cy="cotizador-summary">
+        <div class="ui-metric-card">
+          <div class="ui-metric-label">Precio Total</div>
+          <div class="ui-metric-value" data-cy="sum-precio">{{ formatCurrency(totalPrice) }}</div>
+        </div>
+        <div class="ui-metric-card">
+          <div class="ui-metric-label">Enganche</div>
+          <div class="ui-metric-value" data-cy="sum-enganche">{{ formatCurrency(downPayment) }}</div>
+          <div class="text-xs text-slate-500 dark:text-slate-400">
+            {{ (downPayment/Math.max(totalPrice,1) * 100) | number:'1.0-0' }}%
           </div>
-          <div class="summary-item">
-            <div class="label">Enganche</div>
-            <div class="value" title="Enganche estimado" data-cy="sum-enganche">{{ formatCurrency(downPayment) }} ({{ (downPayment/Math.max(totalPrice,1) * 100) | number:'1.0-0' }}%)</div>
+        </div>
+        <div class="ui-metric-card">
+          <div class="ui-metric-label">A Financiar</div>
+          <div class="ui-metric-value text-sky-600 dark:text-sky-400" data-cy="sum-financiar">{{ formatCurrency(amountToFinance) }}</div>
+        </div>
+        <div class="ui-metric-card">
+          <div class="ui-metric-label">PMT Mensual</div>
+          <div class="ui-metric-value text-sky-600 dark:text-sky-400" data-cy="sum-pmt">{{ formatCurrency(monthlyPayment) }}</div>
+          <div class="text-xs text-slate-500 dark:text-slate-400">
+            {{ term }} meses
           </div>
-          <div class="summary-item">
-            <div class="label">A Financiar</div>
-            <div class="value primary" title="Monto a financiar" data-cy="sum-financiar">{{ formatCurrency(amountToFinance) }}</div>
-          </div>
-          <div class="summary-item">
-            <div class="label">PMT</div>
-            <div class="value accent" title="Pago mensual estimado (PMT)" data-cy="sum-pmt">{{ formatCurrency(monthlyPayment) }}</div>
-          </div>
-          <div class="summary-item">
-            <div class="label">Plazo</div>
-            <div class="value" title="Plazo en meses" data-cy="sum-plazo">{{ term }} meses</div>
-          </div>
-          <div class="summary-item insurance" *ngIf="!isVentaDirecta">
-            <div class="row">
-              <label class="toggle">
-                <input type="checkbox" [(ngModel)]="includeInsurance" data-cy="toggle-insurance" />
-                <span>Incluir seguros</span>
-              </label>
-              <input 
-                *ngIf="includeInsurance"
-                class="insurance-input"
-                type="number"
-                min="0"
-                [placeholder]="'Monto de seguros'"
-                [(ngModel)]="insuranceAmount" data-cy="insurance-amount"
-              />
+        </div>
+      </div>
+
+      <!-- Insurance Configuration -->
+      <div *ngIf="!isVentaDirecta && pkg" class="ui-card mb-6">
+        <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-4">Configuración de Seguros</h3>
+        <div class="space-y-4">
+          <label class="flex items-center text-sm text-slate-600 dark:text-slate-400">
+            <input type="checkbox" [(ngModel)]="includeInsurance" class="h-4 w-4 text-sky-600 focus:ring-sky-500 border-slate-300 rounded mr-2" data-cy="toggle-insurance" />
+            Incluir seguros en la cotización
+          </label>
+          <div *ngIf="includeInsurance" class="space-y-3 pl-6">
+            <div>
+              <label class="ui-label">Monto de Seguros</label>
+              <input type="number" min="0" [(ngModel)]="insuranceAmount" class="ui-input" placeholder="Ej: 15000" data-cy="insurance-amount" />
             </div>
-            <div class="row" *ngIf="includeInsurance">
-              <label class="toggle small">
-                <input type="radio" name="insMode" value="financiado" [(ngModel)]="insuranceMode" data-cy="ins-financiado" />
-                <span>Financiado (sumar a F)</span>
+            <div class="space-y-2">
+              <label class="flex items-center text-sm text-slate-600 dark:text-slate-400">
+                <input type="radio" name="insMode" value="financiado" [(ngModel)]="insuranceMode" class="h-4 w-4 text-sky-600 focus:ring-sky-500 border-slate-300 mr-2" data-cy="ins-financiado" />
+                Financiado (sumar al monto a financiar)
               </label>
-              <label class="toggle small">
-                <input type="radio" name="insMode" value="contado" [(ngModel)]="insuranceMode" data-cy="ins-contado" />
-                <span>Contado (cargo aparte)</span>
+              <label class="flex items-center text-sm text-slate-600 dark:text-slate-400">
+                <input type="radio" name="insMode" value="contado" [(ngModel)]="insuranceMode" class="h-4 w-4 text-sky-600 focus:ring-sky-500 border-slate-300 mr-2" data-cy="ins-contado" />
+                Contado (pago por separado)
               </label>
             </div>
           </div>
         </div>
-        
-        <!-- First payment breakdown -->
-        <div *ngIf="!isVentaDirecta && amountToFinance>0 && term>0" class="first-payment">
-          <div class="fp-label">Primer pago:</div>
-          <div class="fp-item"><span>I₁</span> <strong>{{ formatCurrency(firstInterest) }}</strong></div>
-          <div class="fp-item"><span>K₁</span> <strong class="capital">{{ formatCurrency(firstPrincipal) }}</strong></div>
-          <div class="fp-item"><span>S₁</span> <strong class="balance">{{ formatCurrency(firstBalance) }}</strong></div>
+      </div>
+
+      <!-- First Payment Breakdown -->
+      <div *ngIf="!isVentaDirecta && amountToFinance>0 && term>0" class="ui-card mb-6">
+        <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">Desglose Primer Pago</h3>
+        <div class="grid grid-cols-3 gap-4 text-sm">
+          <div>
+            <div class="text-slate-500 dark:text-slate-400">Interés (I₁)</div>
+            <div class="font-medium">{{ formatCurrency(firstInterest) }}</div>
+          </div>
+          <div>
+            <div class="text-slate-500 dark:text-slate-400">Capital (K₁)</div>
+            <div class="font-medium text-green-600 dark:text-green-400">{{ formatCurrency(firstPrincipal) }}</div>
+          </div>
+          <div>
+            <div class="text-slate-500 dark:text-slate-400">Saldo (S₁)</div>
+            <div class="font-medium">{{ formatCurrency(firstBalance) }}</div>
+          </div>
         </div>
       </div>
 
       <!-- Main Content -->
-      <div [class]="initialMode === 'acquisition' ? 'acquisition-layout' : 'savings-layout'">
-        
+      <div id="cotizador-content" class="grid gap-8 lg:grid-cols-5">
+
         <!-- Left Panel: Configuration -->
-        <div class="config-panel">
-          <!-- Context Selectors (only if no client) -->
-          <div *ngIf="!client" class="context-section">
-            <h4 class="section-title primary">1. Contexto</h4>
-            <div class="context-grid">
-              <div class="form-group">
-                <label for="market">Mercado</label>
-                <select id="market" [(ngModel)]="market" (change)="onMarketChange()" class="premium-select">
-                  <option value="">-- Elige --</option>
+        <div class="lg:col-span-2">
+          <!-- Context Configuration -->
+          <div *ngIf="!client" class="ui-card mb-6">
+            <h3 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">1. Contexto del Cliente</h3>
+            <div class="space-y-4">
+              <div>
+                <label for="market" class="ui-label">Mercado</label>
+                <select id="market" [(ngModel)]="market" (change)="onMarketChange()" class="ui-select">
+                  <option value="">-- Seleccionar mercado --</option>
                   <option value="aguascalientes">Aguascalientes</option>
                   <option value="edomex">Estado de México</option>
                 </select>
               </div>
-              <div class="form-group">
-                <label for="clientType">Tipo de Cliente</label>
-                <select id="clientType" [(ngModel)]="clientType" (change)="onClientTypeChange()" [disabled]="!market" class="premium-select">
-                  <option value="">-- Elige --</option>
+              <div>
+                <label for="clientType" class="ui-label">Tipo de Cliente</label>
+                <select id="clientType" [(ngModel)]="clientType" (change)="onClientTypeChange()" [disabled]="!market" class="ui-select">
+                  <option value="">-- Seleccionar tipo --</option>
                   <option value="individual">Individual</option>
                   <option value="colectivo" *ngIf="market === 'edomex'">Crédito Colectivo</option>
                 </select>
@@ -130,77 +148,81 @@ interface AmortizationRow {
           </div>
 
           <!-- Loading State -->
-          <div *ngIf="isLoading" class="loading-state premium-card">
-            <div class="loading-spinner"></div>
-            <p>Cargando paquete...</p>
+          <div *ngIf="isLoading" class="ui-card text-center py-8">
+            <div class="ui-spinner ui-spinner-lg mx-auto mb-4"></div>
+            <p class="text-slate-600 dark:text-slate-400">Cargando paquete...</p>
           </div>
 
           <!-- Package Components -->
-          <div *ngIf="pkg" class="package-section premium-card">
-            <h4 class="section-title primary">2. Paquete de Producto</h4>
-            <div class="components-list">
-              <div *ngFor="let comp of pkg.components" class="component-item">
-                <div class="component-info">
-                  <div class="component-checkbox">
-                    <input 
-                      *ngIf="comp.isOptional" 
-                      type="checkbox" 
+          <div *ngIf="pkg" class="ui-card mb-6">
+            <h3 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">2. Paquete de Producto</h3>
+            <div class="space-y-3">
+              <div *ngFor="let comp of pkg.components" class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <div class="flex items-center space-x-3">
+                  <div class="flex-shrink-0">
+                    <input
+                      *ngIf="comp.isOptional"
+                      type="checkbox"
                       [id]="comp.id"
                       [checked]="selectedOptions[comp.id]"
                       (change)="toggleComponent(comp.id)"
+                      class="h-4 w-4 text-sky-600 focus:ring-sky-500 border-slate-300 rounded"
                     />
-                    <div *ngIf="!comp.isOptional" class="required-dot"></div>
+                    <div *ngIf="!comp.isOptional" class="h-2 w-2 bg-sky-600 rounded-full" title="Componente requerido"></div>
                   </div>
-                  <label [for]="comp.id" class="component-name">{{ comp.name }}</label>
+                  <label [for]="comp.id" class="text-sm font-medium text-slate-900 dark:text-slate-100 cursor-pointer">
+                    {{ comp.name }}
+                    <span *ngIf="!comp.isOptional" class="text-xs text-slate-500 dark:text-slate-400 ml-1">(requerido)</span>
+                  </label>
                 </div>
-                <span class="component-price">{{ formatCurrency(comp.price) }}</span>
+                <span class="text-sm font-mono text-slate-600 dark:text-slate-400">{{ formatCurrency(comp.price) }}</span>
               </div>
             </div>
           </div>
 
-          <!-- Financial Structure -->
-          <div *ngIf="pkg" class="financial-section">
+          <!-- Financial Configuration -->
+          <div *ngIf="pkg" class="ui-card mb-6">
             <!-- Acquisition Mode Controls -->
             <div *ngIf="initialMode === 'acquisition'">
               <div *ngIf="isVentaDirecta">
-                <h4 class="section-title primary">3. Estructura de Pago</h4>
-                <div class="form-group">
-                  <label for="downPaymentAmount">Pago Inicial</label>
-                  <input 
-                    type="number" 
-                    id="downPaymentAmount" 
+                <h3 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">3. Estructura de Pago</h3>
+                <div>
+                  <label for="downPaymentAmount" class="ui-label ui-label-required">Pago Inicial</label>
+                  <input
+                    type="number"
+                    id="downPaymentAmount"
                     [(ngModel)]="downPaymentAmountDirect"
                     (input)="onDownPaymentDirectChange()"
-                    class="premium-input"
-                    placeholder="Ej: 400000"
+                    class="ui-input"
+                    placeholder="Ej: 400,000"
                   />
                 </div>
               </div>
-              
+
               <div *ngIf="!isVentaDirecta">
-                <h4 class="section-title primary">3. Estructura Financiera</h4>
-                <div class="financial-controls premium-card">
-                  <div class="form-group">
-                    <label for="downPayment">Enganche ({{ downPaymentPercentage }}%)</label>
-                    <input 
-                      type="range" 
+                <h3 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">3. Estructura Financiera</h3>
+                <div class="space-y-4">
+                  <div>
+                    <label for="downPayment" class="ui-label">Enganche: {{ downPaymentPercentage }}%</label>
+                    <input
+                      type="range"
                       id="downPayment"
                       [min]="pkg.minDownPaymentPercentage * 100"
                       max="90"
                       [(ngModel)]="downPaymentPercentage"
                       (input)="onDownPaymentSliderChange()"
-                      class="form-range premium-input"
+                      class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer slider"
                       [attr.aria-describedby]="'dp-note'"
                       [attr.title]="'Ajusta el % de enganche. Mínimo según política y paquete'"
                     />
-                    <div class="range-note" id="dp-note">
+                    <div class="ui-help-text" id="dp-note">
                       Mínimo: {{ pkg.minDownPaymentPercentage * 100 }}% ({{ formatCurrency(minDownPaymentRequired) }})
                     </div>
                   </div>
-                  
-                  <div class="form-group">
-                    <label for="term">Plazo (meses)</label>
-                    <select id="term" [(ngModel)]="term" (change)="onTermChange()" class="premium-select" title="Selecciona el plazo del financiamiento en meses">
+
+                  <div>
+                    <label for="term" class="ui-label ui-label-required">Plazo</label>
+                    <select id="term" [(ngModel)]="term" (change)="onTermChange()" class="ui-select" title="Selecciona el plazo del financiamiento en meses">
                       <option *ngFor="let t of pkg.terms" [value]="t">{{ t }} meses</option>
                     </select>
                   </div>
@@ -210,97 +232,100 @@ interface AmortizationRow {
 
             <!-- Savings Mode Controls -->
             <div *ngIf="initialMode === 'savings'">
-              <h4 class="section-title amber">2. Simulación de Ahorro</h4>
-              
+              <h3 class="text-lg font-medium text-amber-600 dark:text-amber-400 mb-4">2. Simulación de Ahorro</h3>
+
               <!-- Aguascalientes Individual -->
-              <div *ngIf="market === 'aguascalientes' && clientType === 'individual'" class="savings-controls">
-                <div class="form-group">
-                  <label for="initialDown">Enganche Inicial (Aportación Fuerte)</label>
-                  <input 
-                    type="number" 
+              <div *ngIf="market === 'aguascalientes' && clientType === 'individual'" class="space-y-4">
+                <div>
+                  <label for="initialDown" class="ui-label">Enganche Inicial (Aportación Fuerte)</label>
+                  <input
+                    type="number"
                     id="initialDown"
                     [(ngModel)]="initialDownPayment"
                     (input)="onSavingsConfigChange()"
-                    class="premium-input" title="Monto de enganche disponible al inicio"
-                    placeholder="Ej: 400000"
+                    class="ui-input" title="Monto de enganche disponible al inicio"
+                    placeholder="Ej: 400,000"
                   />
                 </div>
-                <div class="form-group">
-                  <label for="deliveryTerm">Fecha de Entrega Estimada ({{ deliveryTerm }} meses)</label>
-                  <input 
-                    type="range" 
+                <div>
+                  <label for="deliveryTerm" class="ui-label">Fecha de Entrega Estimada: {{ deliveryTerm }} meses</label>
+                  <input
+                    type="range"
                     id="deliveryTerm"
-                    min="3" 
+                    min="3"
                     max="6"
                     [(ngModel)]="deliveryTerm"
                     (input)="onSavingsConfigChange()"
-                    class="form-range premium-input" title="Mes estimado de entrega"
+                    class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer slider" title="Mes estimado de entrega"
                   />
                 </div>
               </div>
 
               <!-- EdoMex Colectivo -->
-              <div *ngIf="market === 'edomex' && clientType === 'colectivo'" class="savings-controls">
-                <div class="form-group">
-                  <label for="tandaMembers">Número de Integrantes ({{ tandaMembers }})</label>
-                  <input 
-                    type="range" 
+              <div *ngIf="market === 'edomex' && clientType === 'colectivo'" class="space-y-4">
+                <div>
+                  <label for="tandaMembers" class="ui-label">Número de Integrantes: {{ tandaMembers }}</label>
+                  <input
+                    type="range"
                     id="tandaMembers"
-                    min="2" 
+                    min="2"
                     max="20"
                     [(ngModel)]="tandaMembers"
                     (input)="onTandaMembersChange()"
-                    class="form-range premium-input" title="Número de integrantes del grupo"
+                    class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer slider" title="Número de integrantes del grupo"
                   />
                 </div>
               </div>
 
               <!-- Default Savings -->
-              <div *ngIf="!(market === 'aguascalientes' && clientType === 'individual') && !(market === 'edomex' && clientType === 'colectivo')" class="savings-controls">
-                <div class="form-group">
-                  <label for="voluntary">Aportación Voluntaria Mensual ({{ formatCurrency(toNumber(voluntaryContribution) || 0) }})</label>
-                  <input 
+              <div *ngIf="!(market === 'aguascalientes' && clientType === 'individual') && !(market === 'edomex' && clientType === 'colectivo')" class="space-y-4">
+                <div>
+                  <label for="voluntary" class="ui-label">Aportación Voluntaria Mensual</label>
+                  <input
                     type="range"
                     min="0"
                     max="10000"
                     step="500"
                     [(ngModel)]="voluntaryContribution"
                     (input)="onSavingsConfigChange()"
-                    class="form-range premium-input" title="Aportación voluntaria mensual"
+                    class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer slider mb-2" title="Aportación voluntaria mensual"
                   />
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     id="voluntary"
                     [(ngModel)]="voluntaryContribution"
                     (input)="onSavingsConfigChange()"
-                    class="premium-input"
+                    class="ui-input"
+                    placeholder="Monto mensual voluntario"
                   />
+                  <div class="ui-help-text">Actual: {{ formatCurrency(toNumber(voluntaryContribution) || 0) }}</div>
                 </div>
               </div>
 
               <!-- Collection Configuration -->
-              <div class="collection-section">
-                <h5 class="collection-title">Configurador de Recaudación</h5>
-                <div class="collection-units">
-                  <div *ngFor="let unit of collectionUnits" class="collection-unit">
-                    <input 
-                      type="number" 
+              <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
+                <h4 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">Configurador de Recaudación</h4>
+                <div class="space-y-3">
+                  <div *ngFor="let unit of collectionUnits" class="grid grid-cols-2 gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                    <input
+                      type="number"
                       [placeholder]="'Consumo (L) - Unidad ' + unit.id"
                       [(ngModel)]="unit.consumption"
                       (input)="onSavingsConfigChange()"
-                      class="collection-input"
+                      class="ui-input"
                     />
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       [placeholder]="'Sobreprecio ($) - Unidad ' + unit.id"
                       [(ngModel)]="unit.overprice"
                       (input)="onSavingsConfigChange()"
-                      class="collection-input"
+                      class="ui-input"
                     />
                   </div>
                 </div>
-                <button class="btn-add-unit" (click)="addCollectionUnit()">
-                  [+] Agregar Unidad a Recaudar
+                <button class="ui-btn ui-btn-secondary mt-3 w-full" (click)="addCollectionUnit()">
+                  <span class="text-lg mr-2">+</span>
+                  Agregar Unidad a Recaudar
                 </button>
               </div>
             </div>
@@ -308,96 +333,115 @@ interface AmortizationRow {
         </div>
 
         <!-- Right Panel: Results -->
-        <div class="results-panel">
+        <div class="lg:col-span-3">
           <div *ngIf="pkg">
             <!-- Acquisition Mode Results -->
             <div *ngIf="initialMode === 'acquisition'">
-              <h3 class="results-title">Resultados y Amortización</h3>
-              
-              <!-- Pricing Summary -->
-              <div class="pricing-summary">
-                <div class="price-row">
-                  <span>Precio Total:</span>
-                  <span class="price-value">{{ formatCurrency(totalPrice) }}</span>
+              <div class="ui-card mb-6">
+                <h2 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">Resumen Financiero</h2>
+
+                <!-- Skeleton loader -->
+                <div *ngIf="isLoading" class="animate-pulse space-y-3">
+                  <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                  <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                  <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
                 </div>
-                
-                <div *ngIf="isVentaDirecta">
-                  <div class="price-row">
-                    <span>Pago Inicial:</span>
-                    <span class="price-value">{{ formatCurrency(downPayment) }}</span>
+
+                <!-- Results Cards -->
+                <div *ngIf="!isLoading" class="space-y-4">
+                  <!-- Pricing Summary for Direct Sale -->
+                  <div *ngIf="isVentaDirecta" class="grid gap-3 md:grid-cols-3">
+                    <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+                      <div class="text-xs text-slate-500 dark:text-slate-400">Precio Total</div>
+                      <div class="text-xl font-semibold">{{ formatCurrency(totalPrice) }}</div>
+                    </div>
+                    <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+                      <div class="text-xs text-slate-500 dark:text-slate-400">Pago Inicial</div>
+                      <div class="text-xl font-semibold">{{ formatCurrency(downPayment) }}</div>
+                    </div>
+                    <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+                      <div class="text-xs text-slate-500 dark:text-slate-400">Remanente</div>
+                      <div class="text-xl font-semibold text-sky-600 dark:text-sky-400">{{ formatCurrency(amountToFinance) }}</div>
+                    </div>
                   </div>
-                  <hr class="price-divider">
-                  <div class="price-row total-row">
-                    <span>Remanente a Liquidar:</span>
-                    <span class="price-value primary">{{ formatCurrency(amountToFinance) }}</span>
+
+                  <!-- Pricing Summary for Financing -->
+                  <div *ngIf="!isVentaDirecta" class="grid gap-3 md:grid-cols-4">
+                    <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+                      <div class="text-xs text-slate-500 dark:text-slate-400">Tasa Anual</div>
+                      <div class="text-xl font-semibold" data-cy="rate-display">{{ ((pkg.rate || 0) * 100).toFixed(1) }}%</div>
+                    </div>
+                    <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+                      <div class="text-xs text-slate-500 dark:text-slate-400">Enganche</div>
+                      <div class="text-xl font-semibold">{{ formatCurrency(downPayment) }}</div>
+                    </div>
+                    <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+                      <div class="text-xs text-slate-500 dark:text-slate-400">Monto a Financiar</div>
+                      <div class="text-xl font-semibold" data-cy="sum-financiar">{{ formatCurrency(amountToFinance) }}</div>
+                    </div>
+                    <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+                      <div class="text-xs text-slate-500 dark:text-slate-400">PMT Mensual</div>
+                      <div class="text-xl font-semibold text-sky-600 dark:text-sky-400" data-cy="sum-pmt">{{ formatCurrency(monthlyPayment) }}</div>
+                    </div>
                   </div>
-                </div>
-                
-                <div *ngIf="!isVentaDirecta">
-                  <div class="price-row">
-                    <span>Enganche:</span>
-                    <span class="price-value">{{ formatCurrency(downPayment) }}</span>
-                  </div>
-                  <div class="price-row">
-                    <span>Monto a Financiar:</span>
-                    <span class="price-value">{{ formatCurrency(amountToFinance) }}</span>
-                  </div>
-                  <div class="price-row" *ngIf="includeInsurance && insuranceMode==='contado'">
-                    <span>Seguro (contado):</span>
-                    <span class="price-value">{{ formatCurrency(toNumber(insuranceAmount) || 0) }}</span>
-                  </div>
-                  <hr class="price-divider">
-                  <div class="price-row total-row">
-                    <span>Pago Mensual (Est.):</span>
-                    <span class="price-value primary">{{ formatCurrency(monthlyPayment) }}</span>
+
+                  <!-- Insurance info if applicable -->
+                  <div *ngIf="includeInsurance && insuranceMode==='contado'" class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                    <div class="text-sm text-blue-800 dark:text-blue-200">
+                      <strong>Seguro (pago por separado):</strong> {{ formatCurrency(toNumber(insuranceAmount) || 0) }}
+                    </div>
                   </div>
                 </div>
               </div>
 
               <!-- Amortization Button -->
-              <button 
-                *ngIf="!isVentaDirecta" 
-                (click)="calculateAmortization()" 
-                class="btn-amortization" data-cy="calc-amort" title="Calcula la tabla de amortización para el monto a financiar"
-              >
-                Calcular y Ver Amortización
-              </button>
+              <div *ngIf="!isVentaDirecta" class="ui-card mb-6">
+                <button
+                  (click)="calculateAmortization()"
+                  class="ui-btn ui-btn-primary w-full" data-cy="calc-amort" title="Calcula la tabla de amortización para el monto a financiar"
+                >
+                  Calcular Tabla de Amortización
+                </button>
+              </div>
 
               <!-- Amortization Table -->
-              <div *ngIf="amortizationTable.length > 0 && !isVentaDirecta" class="amortization-table">
-                <div class="table-container">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th># Pago</th>
-                        <th>Pago Mensual</th>
-                        <th>Capital</th>
-                        <th>Interés</th>
-                        <th>Saldo Insoluto</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let row of amortizationTable">
-                        <td>{{ row.paymentNumber }}</td>
-                        <td>{{ formatCurrency(row.monthlyPayment) }}</td>
-                        <td class="capital">{{ formatCurrency(row.principal) }}</td>
-                        <td class="interest">{{ formatCurrency(row.interest) }}</td>
-                        <td class="balance">{{ formatCurrency(row.balance) }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+              <div *ngIf="amortizationTable.length > 0 && !isVentaDirecta" class="ui-card mb-6">
+                <h3 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">Tabla de Amortización</h3>
+                <div class="overflow-x-auto">
+                  <div class="max-h-96 overflow-y-auto">
+                    <table class="min-w-full text-sm">
+                      <thead class="bg-slate-50 dark:bg-slate-800 sticky top-0">
+                        <tr>
+                          <th class="px-3 py-2 text-left font-medium text-slate-600 dark:text-slate-400"># Pago</th>
+                          <th class="px-3 py-2 text-left font-medium text-slate-600 dark:text-slate-400">Pago Mensual</th>
+                          <th class="px-3 py-2 text-left font-medium text-slate-600 dark:text-slate-400">Capital</th>
+                          <th class="px-3 py-2 text-left font-medium text-slate-600 dark:text-slate-400">Interés</th>
+                          <th class="px-3 py-2 text-left font-medium text-slate-600 dark:text-slate-400">Saldo</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                        <tr *ngFor="let row of amortizationTable" class="hover:bg-slate-50 dark:hover:bg-slate-800">
+                          <td class="px-3 py-2 font-mono">{{ row.paymentNumber }}</td>
+                          <td class="px-3 py-2 font-mono">{{ formatCurrency(row.monthlyPayment) }}</td>
+                          <td class="px-3 py-2 font-mono text-green-600 dark:text-green-400">{{ formatCurrency(row.principal) }}</td>
+                          <td class="px-3 py-2 font-mono text-amber-600 dark:text-amber-400">{{ formatCurrency(row.interest) }}</td>
+                          <td class="px-3 py-2 font-mono font-semibold">{{ formatCurrency(row.balance) }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
 
-              <!-- Protection Demo -->
-              <div *ngIf="monthlyPayment > 0 && !isVentaDirecta" class="protection-demo">
-                <div class="protection-content">
-                  <div class="protection-icon">🛡️</div>
-                  <div class="protection-info">
-                    <h4>Demostración de Protección Conductores</h4>
-                    <p>Muestra al cliente cómo puede proteger sus pagos en caso de imprevistos. Un diferenciador clave de nuestra oferta.</p>
-                    <button class="btn-protection" (click)="openProtectionDemo()">
-                      Ver cómo funciona
+// removed by clean-audit
+              <div *ngIf="monthlyPayment > 0 && !isVentaDirecta" class="ui-alert ui-alert-info">
+                <div class="flex items-start space-x-3">
+                  <div class="flex-shrink-0 text-2xl">🛡️</div>
+                  <div class="flex-1">
+                    <h4 class="font-medium mb-2">Protección Conductores</h4>
+                    <p class="text-sm mb-3">Muestra al cliente cómo puede proteger sus pagos en caso de imprevistos. Un diferenciador clave de nuestra oferta.</p>
+                    <button class="ui-btn ui-btn-secondary ui-btn-sm" (click)="openProtectionDemo()">
+                      Ver simulador de protección
                     </button>
                   </div>
                 </div>
@@ -406,79 +450,138 @@ interface AmortizationRow {
 
             <!-- Savings Mode Results -->
             <div *ngIf="initialMode === 'savings'">
-              <h3 class="results-title">Proyección de Ahorro</h3>
-              
-              <!-- Aguascalientes Individual: Remainder Bar -->
-              <div *ngIf="market === 'aguascalientes' && clientType === 'individual'" class="remainder-bar">
-                <div class="remainder-header">
-                  <span>Total del Paquete:</span>
-                  <span class="remainder-total">{{ formatCurrency(totalPrice) }}</span>
-                </div>
-                <div class="remainder-visual">
-                  <div 
-                    class="bar-segment bar-down" 
-                    [style.width.%]="getDownPaymentPercentage()"
-                    [title]="'Enganche: ' + formatCurrency(toNumber(initialDownPayment) || 0)"
-                  ></div>
-                  <div 
-                    class="bar-segment bar-saved" 
-                    [style.width.%]="getSavedPercentage()"
-                    [title]="'Ahorro: ' + formatCurrency(projectedCollectionSavings)"
-                  ></div>
-                </div>
-                <div class="remainder-footer">
-                  <span>Remanente a Liquidar:</span>
-                  <span class="remainder-amount">{{ formatCurrency(totalPrice - (toNumber(initialDownPayment) || 0) - projectedCollectionSavings) }}</span>
-                </div>
-              </div>
+              <div class="ui-card mb-6">
+                <h2 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">Proyección de Ahorro</h2>
 
-              <!-- EdoMex Individual: Savings Projection -->
-              <div *ngIf="market === 'edomex' && clientType === 'individual'" class="savings-projection">
-                <div class="projection-summary">
-                  <div class="projection-row total-row">
-                    <span>Meta de Enganche:</span>
-                    <span class="projection-value">{{ formatCurrency(downPayment) }}</span>
+                <!-- Aguascalientes Individual: Remainder Progress -->
+                <div *ngIf="market === 'aguascalientes' && clientType === 'individual'" class="space-y-4">
+                  <div class="flex justify-between items-center text-sm">
+                    <span class="text-slate-600 dark:text-slate-400">Total del Paquete:</span>
+                    <span class="font-semibold text-sky-600 dark:text-sky-400">{{ formatCurrency(totalPrice) }}</span>
                   </div>
-                  <div class="projection-row">
-                    <span>Ahorro Mensual Proyectado:</span>
-                    <span class="projection-value">{{ formatCurrency(monthlySavings) }}</span>
-                  </div>
-                  <hr class="projection-divider">
-                  <div class="time-estimate">
-                    <p>Tiempo Estimado para Alcanzar el Enganche</p>
-                    <p class="time-value">{{ timeToGoal > 0 ? timeToGoal.toFixed(1) + ' meses' : 'N/A' }}</p>
-                  </div>
-                </div>
-                <app-savings-projection-chart [goal]="downPayment" [monthlySavings]="monthlySavings"></app-savings-projection-chart>
-              </div>
 
-              <!-- EdoMex Colectivo: Tanda Timeline -->
-              <div *ngIf="market === 'edomex' && clientType === 'colectivo'" class="tanda-timeline">
-                <div class="tanda-header">
-                  <div class="tanda-icon">👥</div>
-                  <h4>Línea de Tiempo de Tanda ({{ tandaMembers }} Miembros)</h4>
+                  <!-- Progress Bar -->
+                  <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-8 overflow-hidden">
+                    <div class="h-full flex">
+                      <div
+                        class="bg-green-500 flex items-center justify-center text-white text-xs font-semibold"
+                        [style.width.%]="getDownPaymentPercentage()"
+                        [title]="'Enganche: ' + formatCurrency(toNumber(initialDownPayment) || 0)"
+                      >
+                        Enganche
+                      </div>
+                      <div
+                        class="bg-blue-500 flex items-center justify-center text-white text-xs font-semibold"
+                        [style.width.%]="getSavedPercentage()"
+                        [title]="'Ahorro: ' + formatCurrency(projectedCollectionSavings)"
+                      >
+                        Ahorro
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex justify-between items-center text-sm pt-2 border-t border-slate-200 dark:border-slate-700">
+                    <span class="text-slate-600 dark:text-slate-400">Remanente a Liquidar:</span>
+                    <span class="font-semibold text-amber-600 dark:text-amber-400">{{ formatCurrency(totalPrice - (toNumber(initialDownPayment) || 0) - projectedCollectionSavings) }}</span>
+                  </div>
                 </div>
-                <p class="tanda-subtitle">Proyección del "efecto bola de nieve" para la entrega de unidades.</p>
-                <app-tanda-timeline [milestones]="tandaTimeline"></app-tanda-timeline>
+
+                <!-- EdoMex Individual: Savings KPIs -->
+                <div *ngIf="market === 'edomex' && clientType === 'individual'" class="space-y-4">
+                  <div class="grid gap-4 md:grid-cols-3">
+                    <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+                      <div class="text-xs text-slate-500 dark:text-slate-400">Meta de Enganche</div>
+                      <div class="text-xl font-semibold text-amber-600 dark:text-amber-400">{{ formatCurrency(downPayment) }}</div>
+                    </div>
+                    <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+                      <div class="text-xs text-slate-500 dark:text-slate-400">Ahorro Mensual</div>
+                      <div class="text-xl font-semibold">{{ formatCurrency(monthlySavings) }}</div>
+                    </div>
+                    <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+                      <div class="text-xs text-slate-500 dark:text-slate-400">Tiempo Estimado</div>
+                      <div class="text-xl font-semibold text-sky-600 dark:text-sky-400">{{ timeToGoal > 0 ? timeToGoal.toFixed(1) + ' meses' : 'N/A' }}</div>
+                    </div>
+                  </div>
+                  <app-savings-projection-chart [goal]="downPayment" [monthlySavings]="monthlySavings"></app-savings-projection-chart>
+                </div>
+
+                <!-- EdoMex Colectivo: Tanda Overview -->
+                <div *ngIf="market === 'edomex' && clientType === 'colectivo'" class="space-y-4">
+                  <div class="flex items-center space-x-3">
+                    <div class="text-2xl">👥</div>
+                    <div>
+                      <h3 class="font-medium">Tanda Colectiva - {{ tandaMembers }} Miembros</h3>
+                      <p class="text-sm text-slate-600 dark:text-slate-400">Proyección del "efecto bola de nieve" para la entrega de unidades</p>
+                    </div>
+                  </div>
+                  <app-tanda-timeline [milestones]="tandaTimeline"></app-tanda-timeline>
+                </div>
               </div>
             </div>
           </div>
           
           <!-- Empty State -->
-          <div *ngIf="!pkg && !isLoading" class="empty-results">
-            <p>Selecciona el contexto para continuar.</p>
+          <div *ngIf="!pkg && !isLoading" class="ui-card text-center py-12">
+            <div class="text-slate-400 dark:text-slate-600 text-4xl mb-4">📋</div>
+            <p class="text-slate-600 dark:text-slate-400">Selecciona el contexto para continuar con la cotización.</p>
           </div>
 
           <!-- Action Buttons -->
-          <div *ngIf="pkg" class="action-section">
-            <button class="btn-secondary" (click)="generateOnePagePDF()" data-cy="cotizador-pdf">Generar Propuesta en PDF</button>
-            <button class="btn-primary" (click)="handleFormalizeClick()">
-              Formalizar y Continuar Proceso
+          <div *ngIf="pkg" class="flex flex-col sm:flex-row gap-3 mt-6">
+            <button class="ui-btn ui-btn-secondary" (click)="generateOnePagePDF()" data-cy="cotizador-pdf">
+              <span class="mr-2">📄</span>
+              Generar Propuesta PDF
+            </button>
+            <button class="ui-btn ui-btn-primary" (click)="handleFormalizeClick()">
+              <span class="mr-2">✓</span>
+              Formalizar y Continuar
             </button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Skip Link Styles -->
+    <style>
+      .skip-link {
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      }
+      .skip-link:focus {
+        position: static;
+        width: auto;
+        height: auto;
+        padding: 8px 12px;
+        background: #0EA5E9;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 9999;
+      }
+      /* Slider styles */
+      .slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #0EA5E9;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: #0EA5E9;
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+      }
+    </style>
   `,
   styleUrl: './cotizador-main.component.scss',
 })
@@ -845,7 +948,7 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
   openProtectionDemo(): void {
     this.isProtectionDemoOpen = true;
     // Would open modal with ProtectionDemoSimulator
-    console.log('Opening protection demo with:', {
+// removed by clean-audit
       amountToFinance: this.amountToFinance,
       monthlyPayment: this.monthlyPayment,
       term: this.term
@@ -893,3 +996,5 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
     }
   }
 }
+
+// removed by clean-audit

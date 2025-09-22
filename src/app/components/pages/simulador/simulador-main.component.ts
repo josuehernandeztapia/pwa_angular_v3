@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ViewChild, AfterViewChecked, HostListener } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, ElementRef, ViewChild, AfterViewChecked, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Chart } from 'chart.js/auto';
 
 interface SimulatorScenario {
   id: string;
@@ -38,164 +39,218 @@ interface SavedSimulation {
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './simulador-main.component.scss',
   template: `
-    <div class="simulator-hub" *ngIf="!isRedirecting">
+    <!-- Skip Link for Accessibility -->
+    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+
+    <div class="ui-container ui-section" *ngIf="!isRedirecting">
       <!-- Header -->
-      <div class="hub-header">
-        <button (click)="goBack()" class="back-btn">← Dashboard</button>
-        <h1>🧠 Hub de Simuladores</h1>
-        <p>Cerebro de orquestación para escenarios de valor</p>
+      <div class="mb-8">
+        <button (click)="goBack()" class="ui-btn ui-btn-ghost mb-4">← Dashboard</button>
+        <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">Hub de Simuladores</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400">Herramientas de simulación financiera para diferentes escenarios</p>
       </div>
 
-      <!-- Visual Selector - 3 Strategic Cards -->
-      <div class="scenarios-grid">
-        <div 
-          *ngFor="let scenario of availableScenarios" 
-          class="scenario-card"
-          [class]="scenario.gradient"
+      <!-- Hub de escenarios -->
+      <div id="main-content" class="grid gap-4 md:grid-cols-3 mb-8">
+        <div
+          *ngFor="let scenario of availableScenarios"
+          class="ui-card hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+          [attr.data-cy]="'sim-' + scenario.id.replace('_', '-').toLowerCase()"
           (click)="selectScenario(scenario)"
         >
-          <div class="scenario-icon">{{ scenario.icon }}</div>
-          <div class="scenario-content">
-            <h3>{{ scenario.title }}</h3>
-            <p class="scenario-subtitle">{{ scenario.subtitle }}</p>
-            <p class="scenario-description">{{ scenario.description }}</p>
-          </div>
-          <div class="scenario-arrow">→</div>
+          <div class="text-2xl mb-3">{{ scenario.icon }}</div>
+          <h3 class="text-sm font-semibold mb-2">{{ scenario.title }}</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">{{ scenario.subtitle }}</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300">{{ scenario.description }}</p>
         </div>
       </div>
 
-      <!-- Quick Context Info -->
-      <div class="context-info" *ngIf="smartContext.hasContext">
-        <div class="context-banner">
-          <span class="context-icon">⚡</span>
-          <div class="context-text">
-            <strong>Contexto detectado:</strong> 
-            {{ smartContext.market }} • {{ smartContext.clientType }} 
+      <!-- Context Info -->
+      <div *ngIf="smartContext.hasContext" class="ui-alert ui-alert-info mb-6">
+        <div class="flex items-center space-x-2">
+          <span class="text-lg">⚡</span>
+          <div>
+            <strong>Contexto detectado:</strong>
+            {{ smartContext.market }} • {{ smartContext.clientType }}
             <span *ngIf="smartContext.clientName"> • {{ smartContext.clientName }}</span>
           </div>
         </div>
       </div>
 
-      <!-- FASE 2: Dashboard de Simulaciones Previas -->
-      <div class="saved-simulations" *ngIf="savedSimulations.length > 0">
-        <div class="section-header">
-          <h2>💾 Simulaciones Recientes (Borradores)</h2>
-          <p>Continúa donde lo dejaste</p>
+// removed by clean-audit
+      <section class="ui-card mb-6" *ngIf="simulationResults.selectedScenario">
+        <h2 class="text-sm font-semibold mb-3">Resultado de Simulación</h2>
+
+        <!-- Skeleton loader -->
+        <div *ngIf="simulationResults.loading" class="animate-pulse space-y-3">
+          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
         </div>
-        
-        <div class="simulations-grid">
-          <div 
-            *ngFor="let simulation of savedSimulations.slice(0, 5)" 
-            class="simulation-card"
-            [class.draft]="simulation.summary.status === 'draft'"
-            [class.completed]="simulation.summary.status === 'completed'"
-            [class.comparison-mode]="comparisonMode"
-            [class.selected-for-comparison]="selectedForComparison.has(simulation.id)"
+
+        <!-- KPIs -->
+        <div *ngIf="!simulationResults.loading" class="grid gap-3 md:grid-cols-3">
+          <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+            <div class="text-xs text-slate-500 dark:text-slate-400">Ahorro</div>
+            <div class="text-xl font-semibold" data-cy="sim-ahorro">
+              {{ formatCurrency(simulationResults.data.ahorro) }}
+            </div>
+          </div>
+          <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+            <div class="text-xs text-slate-500 dark:text-slate-400">Plazo</div>
+            <div class="text-xl font-semibold" data-cy="sim-plazo">
+              {{ simulationResults.data.plazo }} meses
+            </div>
+          </div>
+          <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+            <div class="text-xs text-slate-500 dark:text-slate-400">PMT Proyectado</div>
+            <div class="text-xl font-semibold" data-cy="sim-pmt">
+              {{ formatCurrency(simulationResults.data.pmt) }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Charts -->
+      <div class="grid gap-4 md:grid-cols-2 mb-6" *ngIf="simulationResults.selectedScenario && !simulationResults.loading">
+        <div class="ui-card">
+          <h2 class="text-sm font-semibold mb-3">Ahorro acumulado</h2>
+          <canvas id="chartAhorro" data-cy="chart-ahorro"></canvas>
+        </div>
+        <div class="ui-card">
+          <h2 class="text-sm font-semibold mb-3">PMT mensual</h2>
+          <canvas id="chartPMT" data-cy="chart-pmt"></canvas>
+        </div>
+      </div>
+
+      <!-- Simulaciones Guardadas -->
+      <section class="mb-8" *ngIf="savedSimulations.length > 0">
+        <div class="mb-6">
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">💾 Simulaciones Recientes</h2>
+          <p class="text-sm text-slate-600 dark:text-slate-400">Continúa donde lo dejaste</p>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div
+            *ngFor="let simulation of savedSimulations.slice(0, 5)"
+            class="ui-card relative"
+            [class.ring-2]="selectedForComparison.has(simulation.id)"
+            [class.ring-sky-500]="selectedForComparison.has(simulation.id)"
           >
-            <!-- FASE 3: Comparison Checkbox -->
-            <div class="comparison-checkbox" *ngIf="comparisonMode">
-              <input 
-                type="checkbox" 
+            <!-- Comparison Checkbox -->
+            <div class="absolute top-3 left-3" *ngIf="comparisonMode">
+              <input
+                type="checkbox"
                 [id]="'compare-' + simulation.id"
                 [checked]="selectedForComparison.has(simulation.id)"
                 [disabled]="!selectedForComparison.has(simulation.id) && selectedForComparison.size >= 3"
                 (change)="toggleSimulationSelection(simulation.id)"
+                class="h-4 w-4 text-sky-600 focus:ring-sky-500 border-slate-300 rounded"
               />
-              <label [for]="'compare-' + simulation.id" class="checkbox-label"></label>
             </div>
 
-            <div class="simulation-header">
-              <div class="simulation-meta">
-                <h4>{{ simulation.clientName || 'Cliente sin nombre' }}</h4>
-                <span class="simulation-type">{{ simulation.scenarioTitle }}</span>
+            <div class="flex items-start justify-between mb-3" [class.ml-8]="comparisonMode">
+              <div class="flex-1">
+                <h4 class="font-medium text-slate-900 dark:text-slate-100">{{ simulation.clientName || 'Cliente sin nombre' }}</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">{{ simulation.scenarioTitle }}</p>
               </div>
-              <div class="simulation-actions" *ngIf="!comparisonMode">
-                <button (click)="continueSimulation(simulation)" class="continue-btn">
-                  📂 Continuar
+              <div class="flex space-x-2" *ngIf="!comparisonMode">
+                <button
+                  (click)="continueSimulation(simulation)"
+                  class="ui-btn ui-btn-ghost ui-btn-xs"
+                >
+                  Continuar
                 </button>
-                <button (click)="deleteSimulation(simulation.id)" class="delete-btn">
+                <button
+                  (click)="deleteSimulation(simulation.id)"
+                  class="text-slate-400 hover:text-red-500 text-xs"
+                >
                   🗑️
                 </button>
               </div>
             </div>
 
-            <div class="simulation-details">
-              <div class="detail-row">
-                <span class="detail-label">Mercado:</span>
-                <span class="detail-value">{{ getMarketLabel(simulation.market) }}</span>
+            <div class="space-y-2 mb-3">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-500 dark:text-slate-400">Mercado:</span>
+                <span class="text-slate-700 dark:text-slate-300">{{ getMarketLabel(simulation.market) }}</span>
               </div>
-              <div class="detail-row">
-                <span class="detail-label">Tipo:</span>
-                <span class="detail-value">{{ simulation.clientType }}</span>
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-500 dark:text-slate-400">Tipo:</span>
+                <span class="text-slate-700 dark:text-slate-300">{{ simulation.clientType }}</span>
               </div>
-              <div class="detail-row" *ngIf="simulation.summary.targetAmount">
-                <span class="detail-label">Meta:</span>
-                <span class="detail-value">{{ simulation.summary.targetAmount | currency:'MXN':'symbol':'1.0-0' }}</span>
+              <div class="flex justify-between text-xs" *ngIf="simulation.summary.targetAmount">
+                <span class="text-slate-500 dark:text-slate-400">Meta:</span>
+                <span class="text-slate-700 dark:text-slate-300 font-medium">{{ formatCurrency(simulation.summary.targetAmount) }}</span>
               </div>
-              <div class="detail-row" *ngIf="simulation.summary.monthlyContribution">
-                <span class="detail-label">Mensual:</span>
-                <span class="detail-value">{{ simulation.summary.monthlyContribution | currency:'MXN':'symbol':'1.0-0' }}</span>
+              <div class="flex justify-between text-xs" *ngIf="simulation.summary.monthlyContribution">
+                <span class="text-slate-500 dark:text-slate-400">Mensual:</span>
+                <span class="text-slate-700 dark:text-slate-300 font-medium">{{ formatCurrency(simulation.summary.monthlyContribution) }}</span>
               </div>
             </div>
 
-            <div class="simulation-footer">
-              <span class="last-modified">
+            <div class="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-700">
+              <span class="text-xs text-slate-500 dark:text-slate-400">
                 {{ formatLastModified(simulation.lastModified) }}
               </span>
-              <span class="simulation-status" [class]="simulation.summary.status">
-                {{ simulation.summary.status === 'draft' ? '📝 Borrador' : '✅ Completado' }}
+              <span class="text-xs px-2 py-1 rounded"
+                    [class]="simulation.summary.status === 'draft' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'">
+                {{ simulation.summary.status === 'draft' ? 'Borrador' : 'Completado' }}
               </span>
             </div>
           </div>
         </div>
 
-        <!-- FASE 3: Comparison Controls -->
-          <div class="comparison-controls" *ngIf="savedSimulations.length > 1" data-cy="comparison-controls">
-            <div class="comparison-header">
-              <button 
-                (click)="toggleComparisonMode()" 
-                [class.active]="comparisonMode"
-              class="comparison-toggle-btn" data-cy="toggle-compare">
-                {{ comparisonMode ? '✅ Modo Comparación' : '📊 Comparar Escenarios' }}
-              </button>
-            
-            <div class="comparison-counter" *ngIf="comparisonMode">
-              <span class="counter-text">
+        <!-- Comparison Controls -->
+        <div class="mt-6" *ngIf="savedSimulations.length > 1" data-cy="comparison-controls">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <button
+              (click)="toggleComparisonMode()"
+              class="ui-btn ui-btn-secondary"
+              [class.ui-btn-primary]="comparisonMode"
+              data-cy="toggle-compare"
+            >
+              {{ comparisonMode ? '✅ Modo Comparación' : '📊 Comparar Escenarios' }}
+            </button>
+
+            <div class="flex items-center space-x-3" *ngIf="comparisonMode">
+              <span class="text-sm text-slate-600 dark:text-slate-400">
                 {{ selectedForComparison.size }}/3 seleccionados
               </span>
-              <button 
-                (click)="clearSelection()" 
+              <button
+                (click)="clearSelection()"
                 *ngIf="selectedForComparison.size > 0"
-                class="clear-selection-btn">
+                class="ui-btn ui-btn-ghost ui-btn-sm"
+              >
                 Limpiar
               </button>
             </div>
           </div>
 
-          <div class="comparison-actions" *ngIf="comparisonMode && selectedForComparison.size > 1">
-            <button 
-              (click)="compareSelectedSimulations()" 
+          <div class="mt-4" *ngIf="comparisonMode && selectedForComparison.size > 1">
+            <button
+              (click)="compareSelectedSimulations()"
               [disabled]="selectedForComparison.size < 2"
-              class="compare-btn" data-cy="open-comparison">
+              class="ui-btn ui-btn-primary"
+              data-cy="open-comparison"
+            >
               🔬 Comparar {{ selectedForComparison.size }} Escenarios
             </button>
           </div>
         </div>
+      </section>
 
-        <div class="simulations-actions" *ngIf="savedSimulations.length > 5">
-          <button (click)="showAllSimulations()" class="show-all-btn">
-            Ver todas las simulaciones ({{ savedSimulations.length }})
-          </button>
-        </div>
+      <div class="text-center" *ngIf="savedSimulations.length > 5">
+        <button (click)="showAllSimulations()" class="ui-btn ui-btn-ghost">
+          Ver todas las simulaciones ({{ savedSimulations.length }})
+        </button>
       </div>
 
-      <!-- Empty State for No Simulations -->
-      <div class="empty-simulations" *ngIf="savedSimulations.length === 0 && !smartContext.hasContext">
-        <div class="empty-content">
-          <div class="empty-icon">📊</div>
-          <h3>Primera vez en el Hub de Simuladores</h3>
-          <p>Selecciona un escenario arriba para comenzar tu primera simulación. Tus borradores aparecerán aquí para continuar más tarde.</p>
-        </div>
+      <!-- Empty State -->
+      <div class="text-center py-12" *ngIf="savedSimulations.length === 0 && !smartContext.hasContext">
+        <div class="text-4xl mb-4">📊</div>
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">Primera vez en el Hub de Simuladores</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">Selecciona un escenario arriba para comenzar tu primera simulación. Tus borradores aparecerán aquí para continuar más tarde.</p>
       </div>
     </div>
 
@@ -208,121 +263,146 @@ interface SavedSimulation {
       </div>
     </div>
 
-    <!-- FASE 3: Comparison Modal -->
-    <div class="comparison-modal" *ngIf="showComparisonModal" data-cy="comparison-modal">
-      <div class="modal-overlay" (click)="closeComparisonModal()"></div>
-      <div class="comparison-modal-content" role="dialog" aria-modal="true" aria-labelledby="cmp-title" tabindex="-1" #cmpDialog>
-        <div class="comparison-modal-header">
-          <h2 id="cmp-title">📊 Comparación de Escenarios</h2>
-          <button (click)="closeComparisonModal()" class="modal-close-btn" #cmpClose aria-label="Cerrar">×</button>
-        </div>
+    <!-- Comparison Modal -->
+    <div class="fixed inset-0 z-50 overflow-y-auto" *ngIf="showComparisonModal" data-cy="comparison-modal">
+      <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-slate-900/50 transition-opacity" (click)="closeComparisonModal()"></div>
 
-        <div class="comparison-table-container">
-          <table class="comparison-table table-lg">
-            <thead>
-              <tr>
-                <th class="metric-column">Métrica</th>
-                <th *ngFor="let sim of getSelectedSimulations()" class="scenario-column">
-                  <div class="scenario-header">
-                    <div class="scenario-name">{{ sim.clientName }}</div>
-                    <div class="scenario-type">{{ sim.scenarioTitle }}</div>
-                    <div class="scenario-market">{{ getMarketLabel(sim.market) }}</div>
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="metric-row">
-                <td class="metric-label">🎯 Meta Total</td>
-                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value num">
-                  {{ sim.summary.targetAmount ? (sim.summary.targetAmount | currency:'MXN':'symbol':'1.0-0') : 'N/D' }}
-                </td>
-              </tr>
-              <tr class="metric-row">
-                <td class="metric-label">💰 Aportación Mensual</td>
-                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value num">
-                  {{ sim.summary.monthlyContribution ? (sim.summary.monthlyContribution | currency:'MXN':'symbol':'1.0-0') : 'N/D' }}
-                </td>
-              </tr>
-              <tr class="metric-row">
-                <td class="metric-label">⏱️ Tiempo a la Meta</td>
-                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value num">
-                  {{ sim.summary.timeToTarget ? (sim.summary.timeToTarget + ' meses') : 'N/D' }}
-                </td>
-              </tr>
-              <tr class="metric-row">
-                <td class="metric-label">📊 Tipo de Cliente</td>
-                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value">
-                  {{ sim.clientType }}
-                </td>
-              </tr>
-              <tr class="metric-row">
-                <td class="metric-label">📅 Estado</td>
-                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value">
-                  <span class="status-badge" [class]="sim.summary.status">
-                    {{ sim.summary.status === 'draft' ? '📝 Borrador' : '✅ Completado' }}
-                  </span>
-                </td>
-              </tr>
-              <tr class="metric-row highlight-row">
-                <td class="metric-label">🎯 Eficiencia</td>
-                <td *ngFor="let sim of getSelectedSimulations()" class="metric-value">
-                  <div class="efficiency-score" [class]="getEfficiencyClass(sim)">
-                    {{ getEfficiencyScore(sim) }}
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="inline-block align-bottom bg-white dark:bg-slate-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full" role="dialog" aria-modal="true" aria-labelledby="cmp-title" tabindex="-1" #cmpDialog>
+          <!-- Header -->
+          <div class="px-4 py-5 sm:px-6 border-b border-slate-200 dark:border-slate-700">
+            <div class="flex items-center justify-between">
+              <h2 id="cmp-title" class="text-lg font-semibold text-slate-900 dark:text-slate-100">📊 Comparación de Escenarios</h2>
+              <button (click)="closeComparisonModal()" class="ui-btn ui-btn-ghost ui-btn-sm" #cmpClose aria-label="Cerrar">×</button>
+            </div>
+          </div>
 
-        <div class="comparison-insights">
-          <h3>💡 Insights Automáticos</h3>
-          <div class="insights-grid">
-            <div class="insight-card">
-              <div class="insight-icon">👑</div>
-              <div class="insight-content">
-                <h4>Mejor Opción</h4>
-                <p>{{ getBestOption() }}</p>
-              </div>
+          <!-- Table -->
+          <div class="px-4 py-5 sm:p-6">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+                <thead>
+                  <tr>
+                    <th class="px-3 py-3 bg-slate-50 dark:bg-slate-800 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Métrica</th>
+                    <th *ngFor="let sim of getSelectedSimulations()" class="px-3 py-3 bg-slate-50 dark:bg-slate-800 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                      <div>
+                        <div class="font-semibold text-slate-900 dark:text-slate-100">{{ sim.clientName }}</div>
+                        <div class="text-xs">{{ sim.scenarioTitle }}</div>
+                        <div class="text-xs">{{ getMarketLabel(sim.market) }}</div>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-slate-900 divide-y divide-slate-200 dark:divide-slate-700">
+                  <tr>
+                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">🎯 Meta Total</td>
+                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
+                      {{ sim.summary.targetAmount ? formatCurrency(sim.summary.targetAmount) : 'N/D' }}
+                    </td>
+                  </tr>
+                  <tr class="bg-slate-50 dark:bg-slate-800">
+                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">💰 Aportación Mensual</td>
+                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
+                      {{ sim.summary.monthlyContribution ? formatCurrency(sim.summary.monthlyContribution) : 'N/D' }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">⏱️ Tiempo a la Meta</td>
+                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
+                      {{ sim.summary.timeToTarget ? (sim.summary.timeToTarget + ' meses') : 'N/D' }}
+                    </td>
+                  </tr>
+                  <tr class="bg-slate-50 dark:bg-slate-800">
+                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">📊 Tipo de Cliente</td>
+                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">
+                      {{ sim.clientType }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">📅 Estado</td>
+                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm">
+                      <span class="text-xs px-2 py-1 rounded"
+                            [class]="sim.summary.status === 'draft' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'">
+                        {{ sim.summary.status === 'draft' ? 'Borrador' : 'Completado' }}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr class="bg-slate-50 dark:bg-slate-800">
+                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">🎯 Eficiencia</td>
+                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm">
+                      <span class="text-xs px-2 py-1 rounded font-medium"
+                            [class]="getEfficiencyClass(sim) === 'excellent' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                                    getEfficiencyClass(sim) === 'good' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                                    getEfficiencyClass(sim) === 'fair' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                                    'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'">
+                        {{ getEfficiencyScore(sim) }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <div class="insight-card">
-              <div class="insight-icon">⚡</div>
-              <div class="insight-content">
-                <h4>Más Rápido</h4>
-                <p>{{ getFastestOption() }}</p>
+          </div>
+
+          <!-- Insights -->
+          <div class="px-4 py-5 sm:px-6 border-t border-slate-200 dark:border-slate-700">
+            <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-4">💡 Insights Automáticos</h3>
+            <div class="grid gap-4 md:grid-cols-3">
+              <div class="ui-card">
+                <div class="text-lg mb-2">👑</div>
+                <div class="text-xs font-medium text-slate-900 dark:text-slate-100 mb-1">Mejor Opción</div>
+                <div class="text-xs text-slate-600 dark:text-slate-400">{{ getBestOption() }}</div>
               </div>
-            </div>
-            <div class="insight-card">
-              <div class="insight-icon">💰</div>
-              <div class="insight-content">
-                <h4>Menor Aportación</h4>
-                <p>{{ getLowestContributionOption() }}</p>
+              <div class="ui-card">
+                <div class="text-lg mb-2">⚡</div>
+                <div class="text-xs font-medium text-slate-900 dark:text-slate-100 mb-1">Más Rápido</div>
+                <div class="text-xs text-slate-600 dark:text-slate-400">{{ getFastestOption() }}</div>
+              </div>
+              <div class="ui-card">
+                <div class="text-lg mb-2">💰</div>
+                <div class="text-xs font-medium text-slate-900 dark:text-slate-100 mb-1">Menor Aportación</div>
+                <div class="text-xs text-slate-600 dark:text-slate-400">{{ getLowestContributionOption() }}</div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="comparison-modal-actions">
-          <button (click)="exportComparison()" class="export-btn">
-            📋 Exportar Comparación
-          </button>
-          <button (click)="shareComparison()" class="share-btn">
-            📱 Compartir WhatsApp
-          </button>
-          <button (click)="closeComparisonModal()" class="close-modal-btn">
-            Cerrar
-          </button>
+          <!-- Actions -->
+          <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-200 dark:border-slate-700">
+            <button (click)="closeComparisonModal()" class="ui-btn ui-btn-primary sm:ml-3">
+              Cerrar
+            </button>
+            <button (click)="shareComparison()" class="ui-btn ui-btn-secondary sm:mr-3 mb-2 sm:mb-0">
+              📱 Compartir WhatsApp
+            </button>
+            <button (click)="exportComparison()" class="ui-btn ui-btn-ghost">
+              📋 Exportar
+            </button>
+          </div>
         </div>
       </div>
     </div>
   `
 })
-export class SimuladorMainComponent implements OnInit, AfterViewChecked {
+export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild('cmpDialog') cmpDialog?: ElementRef<HTMLDivElement>;
   @ViewChild('cmpClose') cmpClose?: ElementRef<HTMLButtonElement>;
   isRedirecting = false;
   redirectMessage = '';
+
+  // PR#6: Chart.js integration for minimalista charts
+  private ahorroChart?: Chart;
+  private pmtChart?: Chart;
+
+// removed by clean-audit
+  simulationResults = {
+    loading: false,
+    selectedScenario: null as string | null,
+    data: {
+      ahorro: 15000,
+      plazo: 24,
+      pmt: 3250
+    }
+  };
   
   smartContext = {
     hasContext: false,
@@ -459,6 +539,16 @@ export class SimuladorMainComponent implements OnInit, AfterViewChecked {
   }
 
   selectScenario(scenario: SimulatorScenario): void {
+// removed by clean-audit
+    this.simulationResults.selectedScenario = scenario.id;
+    this.simulationResults.loading = true;
+
+    // Simulate API call
+    setTimeout(() => {
+      this.simulationResults.loading = false;
+      this.initializeCharts();
+    }, 2000);
+
     // Navigate to Nueva Oportunidad with pre-selected context for full onboarding
     this.router.navigate(['/nueva-oportunidad'], {
       queryParams: {
@@ -508,7 +598,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewChecked {
           this.savedSimulations.push(simulation);
         }
       } catch (error) {
-        console.warn(`Error parsing draft ${key}:`, error);
+// removed by clean-audit
       }
     });
 
@@ -598,7 +688,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewChecked {
         }
       });
     } else {
-      console.error('Scenario not found:', simulation.scenarioType);
+// removed by clean-audit
     }
   }
 
@@ -611,7 +701,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewChecked {
 
   showAllSimulations(): void {
     // Future implementation: navigate to a full simulations management page
-    console.log('Show all simulations - Future implementation');
+// removed by clean-audit
   }
 
   getMarketLabel(market: string): string {
@@ -852,4 +942,120 @@ export class SimuladorMainComponent implements OnInit, AfterViewChecked {
   closeComparisonModal(): void {
     this.showComparisonModal = false;
   }
+
+  ngAfterViewInit(): void {
+    // Initialize charts after view is ready
+    if (this.simulationResults.selectedScenario && !this.simulationResults.loading) {
+      this.initializeCharts();
+    }
+  }
+
+  private initializeCharts(): void {
+    setTimeout(() => {
+      this.createAhorroChart();
+      this.createPMTChart();
+    }, 100);
+  }
+
+  private createAhorroChart(): void {
+    const canvas = document.getElementById('chartAhorro') as HTMLCanvasElement;
+    if (!canvas) return;
+
+    if (this.ahorroChart) {
+      this.ahorroChart.destroy();
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    this.ahorroChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Mes 1', 'Mes 6', 'Mes 12', 'Mes 18', 'Mes 24'],
+        datasets: [{
+          label: 'Ahorro Acumulado',
+          data: [3250, 19500, 39000, 58500, 78000],
+          borderColor: '#0EA5E9',
+          backgroundColor: '#0EA5E9/10',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return '$' + value.toLocaleString('es-MX');
+              }
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+  }
+
+  private createPMTChart(): void {
+    const canvas = document.getElementById('chartPMT') as HTMLCanvasElement;
+    if (!canvas) return;
+
+    if (this.pmtChart) {
+      this.pmtChart.destroy();
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    this.pmtChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Año 1', 'Año 2', 'Promedio'],
+        datasets: [{
+          label: 'PMT Mensual',
+          data: [3250, 3250, 3250],
+          backgroundColor: ['#0EA5E9', '#0EA5E9', '#10B981'],
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return '$' + value.toLocaleString('es-MX');
+              }
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+  }
+
+  formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('es-MX', {
+      style: 'currency',
+      currency: 'MXN',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
+  }
 }
+
+// removed by clean-audit

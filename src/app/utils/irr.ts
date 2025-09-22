@@ -78,7 +78,7 @@ export function calculateEffectiveRate(
     try {
       return irrBisection(cashflows, -0.99, 5.0, 1e-6, 1000);
     } catch (bisectionError) {
-      console.warn('IRR calculation failed (Newton-Raphson and Bisection):', error);
+// removed by clean-audit
       return approximateIRR(cashflows);
     }
     return NaN;
@@ -179,3 +179,4 @@ export function approximateIRR(cashflows: number[]): number {
 
   return Math.pow(totalReturn, 1 / periods) - 1;
 }
+// removed by clean-audit

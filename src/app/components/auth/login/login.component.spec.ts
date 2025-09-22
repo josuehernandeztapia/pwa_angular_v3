@@ -7,7 +7,7 @@ import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
+// removed by clean-audit
   let mockRouter: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
@@ -20,10 +20,10 @@ describe('LoginComponent', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LoginComponent);
-    component = fixture.componentInstance;
+// removed by clean-audit
+// removed by clean-audit
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-    fixture.detectChanges();
+// removed by clean-audit
   });
 
   it('should create', () => {
@@ -39,7 +39,7 @@ describe('LoginComponent', () => {
     // Trigger validation by marking fields as touched
     component.loginForm.get('email')?.markAsTouched();
     component.loginForm.get('password')?.markAsTouched();
-    fixture.detectChanges();
+// removed by clean-audit
 
     expect(component.isFieldInvalid('email')).toBe(true);
     expect(component.isFieldInvalid('password')).toBe(true);
@@ -49,7 +49,7 @@ describe('LoginComponent', () => {
     const emailControl = component.loginForm.get('email');
     emailControl?.setValue('invalid-email');
     emailControl?.markAsTouched();
-    fixture.detectChanges();
+// removed by clean-audit
 
     expect(component.isFieldInvalid('email')).toBe(true);
     expect(emailControl?.errors?.['email']).toBeTruthy();
@@ -59,7 +59,7 @@ describe('LoginComponent', () => {
     const passwordControl = component.loginForm.get('password');
     passwordControl?.setValue('123'); // Too short
     passwordControl?.markAsTouched();
-    fixture.detectChanges();
+// removed by clean-audit
 
     expect(component.isFieldInvalid('password')).toBe(true);
     expect(passwordControl?.errors?.['minlength']).toBeTruthy();
@@ -118,7 +118,7 @@ describe('LoginComponent', () => {
 
   it('should handle login loading state', () => {
     component.isLoading = true;
-    fixture.detectChanges();
+// removed by clean-audit
 
     expect(component.isLoading).toBe(true);
     // Form should be disabled during loading
@@ -138,8 +138,8 @@ describe('LoginComponent', () => {
   });
 
   it('should handle keyboard navigation', () => {
-    const emailInput = fixture.nativeElement.querySelector('input[type="email"]');
-    const passwordInput = fixture.nativeElement.querySelector('input[type="password"]');
+// removed by clean-audit
+// removed by clean-audit
 
     // Focus should move from email to password on Tab
     emailInput.focus();
@@ -300,3 +300,4 @@ describe('LoginComponent Integration Tests', () => {
     expect(screen.getByText('El Copiloto Estratégico para el Asesor Moderno')).toBeTruthy();
   });
 });
+// removed by clean-audit

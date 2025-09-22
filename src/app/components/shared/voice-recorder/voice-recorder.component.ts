@@ -793,7 +793,7 @@ export class VoiceRecorderComponent implements OnInit, OnDestroy {
       this.validationResult = null;
       
     } catch (error) {
-      console.error('Failed to start recording:', error);
+// removed by clean-audit
       this.state.error = 'No se pudo iniciar la grabación. Verifique permisos del micrófono.';
       this.errorOccurred.emit(this.state.error);
     }
@@ -907,7 +907,7 @@ export class VoiceRecorderComponent implements OnInit, OnDestroy {
 
   viewDetailedResults(): void {
     // Emit event or navigate to detailed results page
-    console.log('Viewing detailed results:', this.validationResult);
+// removed by clean-audit
   }
 
   approveInterview(): void {
@@ -923,3 +923,4 @@ export class VoiceRecorderComponent implements OnInit, OnDestroy {
     this.resetRecording();
   }
 }
+// removed by clean-audit

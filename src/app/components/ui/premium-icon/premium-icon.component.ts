@@ -353,7 +353,7 @@ export class PremiumIconComponent implements OnInit {
   ngOnInit() {
     this.iconConfig = PREMIUM_ICONS_SYSTEM.find(icon => icon.name === this.iconName);
     if (!this.iconConfig) {
-      console.warn(`🎨 Premium Icon: Icon "${this.iconName}" not found in PREMIUM_ICONS_SYSTEM`);
+// removed by clean-audit
     }
 
     // Apply design token stroke width
@@ -487,3 +487,4 @@ export class PremiumIconComponent implements OnInit {
     return 300; // fallback
   }
 }
+// removed by clean-audit

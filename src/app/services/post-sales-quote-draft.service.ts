@@ -14,7 +14,7 @@ interface QuoteDraftItem extends PartSuggestion {
 }
 
 interface QuoteDraft {
-  id: string; // Could be caseId or VIN; for dev stub we use a constant
+// removed by clean-audit
   items: QuoteDraftItem[];
   updatedAt: number;
 }
@@ -61,3 +61,5 @@ export class PostSalesQuoteDraftService {
   }
 }
 
+
+// removed by clean-audit

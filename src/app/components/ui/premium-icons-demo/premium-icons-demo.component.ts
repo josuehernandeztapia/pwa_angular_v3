@@ -1,5 +1,5 @@
 /**
- * 🎨 Premium Icons Demo Component - Conductores PWA
+// removed by clean-audit
  * Showcase of premium iconography system with micro-interactions
  */
 
@@ -25,36 +25,36 @@ interface DemoSection {
 }
 
 @Component({
-  selector: 'app-premium-icons-demo',
+// removed by clean-audit
   standalone: true,
   imports: [CommonModule, PremiumIconComponent],
   template: `
-    <div class="premium-icons-demo">
+// removed by clean-audit
       <!-- Header -->
-      <header class="demo-header">
-        <h1 class="demo-title">
+// removed by clean-audit
+// removed by clean-audit
           <app-premium-icon
             iconName="cotizador"
             size="lg"
             [showLabel]="false"
-            ariaLabel="Premium Icons Demo">
+// removed by clean-audit
           </app-premium-icon>
           Sistema Premium de Iconografía
         </h1>
-        <p class="demo-subtitle">
+// removed by clean-audit
           Quirúrgico end-to-end UX/UI con microinteracciones
         </p>
       </header>
 
-      <!-- Demo Sections -->
-      <main class="demo-main">
+// removed by clean-audit
+// removed by clean-audit
         <!-- Size Variations -->
-        <section class="demo-section">
+// removed by clean-audit
           <h2 class="section-title">Variaciones de Tamaño</h2>
-          <div class="size-demo-grid">
+// removed by clean-audit
             <div
               *ngFor="let size of sizes"
-              class="size-demo-item"
+// removed by clean-audit
               [attr.data-size]="size">
               <app-premium-icon
                 iconName="simulador"
@@ -69,7 +69,7 @@ interface DemoSection {
         <!-- Icons Showcase -->
         <section
           *ngFor="let section of demoSections"
-          class="demo-section">
+// removed by clean-audit
           <h2 class="section-title">{{ section.title }}</h2>
           <p class="section-description">{{ section.description }}</p>
 
@@ -79,7 +79,7 @@ interface DemoSection {
               class="icon-showcase-item"
               (click)="onIconClick(icon)">
 
-              <div class="icon-demo-container">
+// removed by clean-audit
                 <app-premium-icon
                   [iconName]="icon.name"
                   size="xl"
@@ -110,13 +110,13 @@ interface DemoSection {
           </div>
         </section>
 
-        <!-- States Demo -->
-        <section class="demo-section">
+// removed by clean-audit
+// removed by clean-audit
           <h2 class="section-title">Estados Interactivos</h2>
-          <div class="states-demo-grid">
+// removed by clean-audit
             <div
               *ngFor="let state of interactiveStates"
-              class="state-demo-item">
+// removed by clean-audit
               <h3 class="state-title">{{ state.title }}</h3>
               <div class="state-icons">
                 <app-premium-icon
@@ -136,7 +136,7 @@ interface DemoSection {
         </section>
 
         <!-- Usage Examples -->
-        <section class="demo-section">
+// removed by clean-audit
           <h2 class="section-title">Ejemplos de Uso en Contexto</h2>
           <div class="usage-examples">
 
@@ -181,7 +181,7 @@ interface DemoSection {
         </section>
 
         <!-- Technical Specs -->
-        <section class="demo-section">
+// removed by clean-audit
           <h2 class="section-title">Especificaciones Técnicas</h2>
           <div class="tech-specs">
             <div class="spec-item">
@@ -217,7 +217,7 @@ interface DemoSection {
     </div>
   `,
   styles: [`
-    .premium-icons-demo {
+// removed by clean-audit
       min-height: 100vh;
       background: var(--bg, #0B1220);
       color: var(--ink, #E6ECFF);
@@ -225,12 +225,12 @@ interface DemoSection {
     }
 
     /* Header */
-    .demo-header {
+// removed by clean-audit
       text-align: center;
       margin-bottom: 48px;
     }
 
-    .demo-title {
+// removed by clean-audit
       font-size: 2.5rem;
       font-weight: 800;
       color: var(--acc, #3AA6FF);
@@ -241,19 +241,19 @@ interface DemoSection {
       gap: 20px;
     }
 
-    .demo-subtitle {
+// removed by clean-audit
       font-size: 1.2rem;
       color: var(--muted, #A8B3CF);
       font-style: italic;
     }
 
     /* Main Layout */
-    .demo-main {
+// removed by clean-audit
       max-width: 1400px;
       margin: 0 auto;
     }
 
-    .demo-section {
+// removed by clean-audit
       margin-bottom: 64px;
       background: var(--card, #101826);
       border-radius: var(--radius, 16px);
@@ -277,15 +277,15 @@ interface DemoSection {
       font-size: 1.1rem;
     }
 
-    /* Size Demo */
-    .size-demo-grid {
+// removed by clean-audit
+// removed by clean-audit
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 24px;
       margin-top: 24px;
     }
 
-    .size-demo-item {
+// removed by clean-audit
       text-align: center;
       padding: 20px;
       background: rgba(255,255,255,0.05);
@@ -316,7 +316,7 @@ interface DemoSection {
       border-color: var(--acc, #3AA6FF);
     }
 
-    .icon-demo-container {
+// removed by clean-audit
       margin-bottom: 20px;
     }
 
@@ -359,14 +359,14 @@ interface DemoSection {
       box-shadow: 0 4px 12px rgba(58,166,255,0.3);
     }
 
-    /* States Demo */
-    .states-demo-grid {
+// removed by clean-audit
+// removed by clean-audit
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
     }
 
-    .state-demo-item {
+// removed by clean-audit
       text-align: center;
       padding: 20px;
       background: rgba(255,255,255,0.03);
@@ -497,11 +497,11 @@ interface DemoSection {
 
     /* Responsive */
     @media (max-width: 768px) {
-      .premium-icons-demo {
+// removed by clean-audit
         padding: 16px;
       }
 
-      .demo-title {
+// removed by clean-audit
         font-size: 2rem;
         flex-direction: column;
         gap: 12px;
@@ -511,7 +511,7 @@ interface DemoSection {
         grid-template-columns: 1fr;
       }
 
-      .size-demo-grid {
+// removed by clean-audit
         grid-template-columns: repeat(3, 1fr);
       }
     }
@@ -660,12 +660,12 @@ export class PremiumIconsDemoComponent {
   ];
 
   onIconClick(icon: any): void {
-    console.log('🎨 Icon clicked:', icon);
+// removed by clean-audit
   }
 
   triggerAnimation(event: Event, iconName: IconName): void {
     event.stopPropagation();
-    console.log('✨ Triggering animation for:', iconName);
+// removed by clean-audit
 
     // Find the icon component and trigger its animation
     const iconElement = (event.target as HTMLElement).closest('.icon-showcase-item')?.querySelector('app-premium-icon');
@@ -675,3 +675,4 @@ export class PremiumIconsDemoComponent {
     }
   }
 }
+// removed by clean-audit

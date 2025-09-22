@@ -113,7 +113,7 @@ export const getToken = (path: string): string => {
   for (const key of keys) {
     value = value[key];
     if (value === undefined) {
-      console.warn(`Token not found: ${path}`);
+// removed by clean-audit
       return '';
     }
   }
@@ -145,3 +145,4 @@ export const theme = {
     }
   }
 };
+// removed by clean-audit

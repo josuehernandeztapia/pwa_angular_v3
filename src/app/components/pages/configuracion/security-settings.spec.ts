@@ -16,9 +16,9 @@ describe('Security settings validation', () => {
   });
 
   it('should persist 2FA and encryption toggles and session timeout', () => {
-    const fixture = TestBed.createComponent(ConfiguracionComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
 
     component.onSettingChange('twoFactorAuth', true);
     component.onSettingChange('dataEncryption', true);
@@ -31,3 +31,5 @@ describe('Security settings validation', () => {
   });
 });
 
+
+// removed by clean-audit

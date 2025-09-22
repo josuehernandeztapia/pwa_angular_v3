@@ -56,7 +56,7 @@ export class ConfigurationService {
         this.configurationSubject.next(config);
       },
       error: (error) => {
-        console.warn('Failed to load configuration from API, using defaults:', error);
+// removed by clean-audit
         const config = this.getDefaultConfiguration();
         this.configurationSubject.next(config);
       }
@@ -1132,3 +1132,4 @@ export class ConfigurationService {
     };
   }
 }
+// removed by clean-audit

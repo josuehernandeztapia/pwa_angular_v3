@@ -638,14 +638,15 @@ export class HumanActivityFeedComponent implements OnInit {
 
   executeSuggestedAction(activity: ActivityItem): void {
     if (activity.suggestedAction) {
-      console.log('Executing suggested action:', activity.suggestedAction);
+// removed by clean-audit
       // Here you would implement the actual action execution
       // this.actionService.execute(activity.suggestedAction.action, activity.suggestedAction.params);
     }
   }
 
   loadMoreActivities(): void {
-    console.log('Loading more activities...');
+// removed by clean-audit
     // Here you would implement loading more activities from the service
   }
 }
+// removed by clean-audit

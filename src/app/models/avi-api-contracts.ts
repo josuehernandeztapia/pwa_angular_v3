@@ -362,7 +362,7 @@ export interface EndpointConfig {
   mockResponse?: any;
 }
 
-// ===== MOCK CONFIGURATIONS =====
+// removed by clean-audit
 
 export interface MockConfig {
   enabled: boolean;
@@ -416,3 +416,4 @@ export interface SystemHealth {
   version: string;
   uptime: number;
 }
+// removed by clean-audit

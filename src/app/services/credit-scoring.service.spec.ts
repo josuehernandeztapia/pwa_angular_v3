@@ -262,7 +262,7 @@ describe('CreditScoringService', () => {
         }
       };
 
-      // Mock Math.random to return high value for consistent high score
+// removed by clean-audit
       spyOn(Math, 'random').and.returnValue(0.8);
 
       const result = service['simulateScoring'](goodClientRequest, 'test-id');
@@ -289,7 +289,7 @@ describe('CreditScoringService', () => {
         }
       };
 
-      // Mock Math.random to return low value for consistent low score
+// removed by clean-audit
       spyOn(Math, 'random').and.returnValue(0.1);
 
       const result = service['simulateScoring'](riskyClientRequest, 'test-id');
@@ -348,7 +348,7 @@ describe('CreditScoringService', () => {
         }
       };
 
-      // Mock to get conditional score (650-699 range)
+// removed by clean-audit
       spyOn(Math, 'random').and.returnValue(0.2);
 
       const result = service['simulateScoring'](conditionalRequest, 'conditional-id');
@@ -375,7 +375,7 @@ describe('CreditScoringService', () => {
         }
       };
 
-      // Mock to get rejected score
+// removed by clean-audit
       spyOn(Math, 'random').and.returnValue(-0.9);
 
       const result = service['simulateScoring'](rejectedRequest, 'rejected-id');
@@ -579,3 +579,5 @@ describe('CreditScoringService', () => {
     });
   });
 });
+
+// removed by clean-audit

@@ -7,8 +7,8 @@ const path = require('path');
 const OPENAI_API_KEY = process.env['OPENAI_API_KEY'] || 'YOUR_OPENAI_API_KEY_HERE';
 const WHISPER_URL = 'https://api.openai.com/v1/audio/transcriptions';
 
-console.log('🎤 TESTING REAL WHISPER API PARA SISTEMA AVI');
-console.log('============================================\n');
+// removed by clean-audit
+// removed by clean-audit
 
 // Función para simular archivos de audio con diferentes perfiles
 async function createTestAudioFile(profile, filename) {
@@ -41,7 +41,7 @@ async function transcribeWithWhisper(audioData, options = {}) {
   // Para este test, simularemos la respuesta de Whisper basada en el contenido
   // En producción, esto sería una llamada real con FormData y archivo de audio
   
-  console.log(`   🔄 Simulando llamada a Whisper API...`);
+// removed by clean-audit
   
   // Simular respuesta de Whisper basada en el perfil
   await new Promise(resolve => setTimeout(resolve, 1000)); // Simular latencia
@@ -129,9 +129,9 @@ class RealAVIAnalyzer {
     const words = whisperResponse.words || [];
     const text = whisperResponse.text.toLowerCase();
     
-    console.log(`   📝 Transcripción: "${whisperResponse.text}"`);
-    console.log(`   📊 Tokens usados: ${whisperResponse.usage?.total_tokens || 'N/A'}`);
-    console.log(`   💰 Costo estimado: $${((whisperResponse.usage?.total_tokens || 0) * 0.0001).toFixed(4)}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
     // Analizar métricas de voz más precisas
     const voiceMetrics = this.calculateVoiceMetrics(words);
@@ -292,7 +292,7 @@ class RealAVIAnalyzer {
 
 // Ejecutar tests con API real (simulada por seguridad)
 async function runRealWhisperTests() {
-  console.log('🔬 EJECUTANDO TESTS CON WHISPER API REAL (SIMULADA)\n');
+// removed by clean-audit
   
   const testCases = [
     { profile: 'clear_response', expected: 'LOW', description: 'Cliente confiable con respuesta clara' },
@@ -304,13 +304,13 @@ async function runRealWhisperTests() {
   let totalCost = 0;
   
   for (const testCase of testCases) {
-    console.log(`🎯 Test: ${testCase.description.toUpperCase()}`);
-    console.log('─'.repeat(60));
+// removed by clean-audit
+// removed by clean-audit
     
     try {
       // Crear datos de audio simulados
       const audioData = await createTestAudioFile(testCase.profile, `test_${testCase.profile}.wav`);
-      console.log(`   🎵 Audio simulado: ${audioData.text}`);
+// removed by clean-audit
       
       // Transcribir con Whisper (simulado)
       const whisperResponse = await transcribeWithWhisper(audioData);
@@ -318,20 +318,20 @@ async function runRealWhisperTests() {
       // Analizar con AVI
       const aviAnalysis = RealAVIAnalyzer.analyzeWhisperForAVI(whisperResponse, testCase.profile);
       
-      console.log(`   🧠 Indicadores detectados: [${aviAnalysis.stressIndicators.join(', ')}]`);
-      console.log(`   📊 Métricas de voz:`);
-      console.log(`      - Confianza: ${(aviAnalysis.voiceMetrics.confidence_level * 100).toFixed(1)}%`);
-      console.log(`      - Pausas: ${(aviAnalysis.voiceMetrics.pause_frequency * 100).toFixed(1)}%`);
-      console.log(`      - Variación pitch: ${(aviAnalysis.voiceMetrics.pitch_variance * 100).toFixed(1)}%`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
       
-      console.log(`   🎯 Score credibilidad: ${aviAnalysis.credibilityScore}/1000`);
-      console.log(`   📈 Nivel de riesgo: ${aviAnalysis.riskAssessment}`);
+// removed by clean-audit
+// removed by clean-audit
       
       // Validar resultado
       const testPassed = aviAnalysis.riskAssessment === testCase.expected ||
                          (testCase.expected === 'MEDIUM' && ['LOW', 'HIGH'].includes(aviAnalysis.riskAssessment));
       
-      console.log(`   ${testPassed ? '✅' : '❌'} Resultado: ${testPassed ? 'CORRECTO' : 'INCORRECTO'}`);
+// removed by clean-audit
       
       testResults.push({
         profile: testCase.profile,
@@ -344,7 +344,7 @@ async function runRealWhisperTests() {
       totalCost += (whisperResponse.usage?.total_tokens || 0) * 0.0001;
       
     } catch (error) {
-      console.log(`   ❌ ERROR: ${error.message}`);
+// removed by clean-audit
       testResults.push({
         profile: testCase.profile,
         expected: testCase.expected,
@@ -354,39 +354,39 @@ async function runRealWhisperTests() {
       });
     }
     
-    console.log('');
+// removed by clean-audit
   }
   
   // Resumen final
-  console.log('🏆 RESUMEN DE TESTS CON WHISPER API');
-  console.log('═'.repeat(50));
+// removed by clean-audit
+// removed by clean-audit
   
   const passedTests = testResults.filter(r => r.passed).length;
   const totalTests = testResults.length;
   
-  console.log(`📊 Tests pasados: ${passedTests}/${totalTests}`);
-  console.log(`📊 Tasa de éxito: ${(passedTests/totalTests*100).toFixed(1)}%`);
-  console.log(`💰 Costo total simulado: $${totalCost.toFixed(4)}`);
-  console.log(`💰 Costo por entrevista promedio: $${(totalCost/totalTests).toFixed(4)}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   
   if (passedTests === totalTests) {
-    console.log('\n🎉 ¡SISTEMA AVI + WHISPER PERFECTAMENTE CALIBRADO!');
-    console.log('✅ Transcripción en tiempo real: FUNCIONAL');
-    console.log('✅ Detección avanzada de estrés: FUNCIONAL');
-    console.log('✅ Análisis de credibilidad: PRECISO');
-    console.log('✅ Clasificación de riesgo: CORRECTA');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
-    console.log('\n🚀 LISTO PARA PRODUCCIÓN');
-    console.log('💡 Estimación de costos reales:');
-    console.log('   - Por entrevista de 45 min: ~$0.27');
-    console.log('   - Por 100 entrevistas/mes: ~$27');
-    console.log('   - Por 1000 entrevistas/mes: ~$270');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
   } else {
-    console.log('\n⚠️ ALGUNOS TESTS FALLARON');
+// removed by clean-audit
     testResults.forEach(result => {
       if (!result.passed) {
-        console.log(`   ❌ ${result.profile}: Esperado ${result.expected}, obtenido ${result.actual}`);
+// removed by clean-audit
       }
     });
   }
@@ -398,16 +398,17 @@ async function runRealWhisperTests() {
 if (require.main === module) {
   runRealWhisperTests()
     .then(success => {
-      console.log('\n🏁 Tests completados');
+// removed by clean-audit
       if (success) {
-        console.log('🌟 Sistema 100% funcional para implementación');
+// removed by clean-audit
       } else {
-        console.log('🔧 Requiere ajustes adicionales');
+// removed by clean-audit
       }
     })
     .catch(error => {
-      console.error('💥 Error ejecutando tests:', error);
+// removed by clean-audit
     });
 }
 
 module.exports = { RealAVIAnalyzer, transcribeWithWhisper };
+// removed by clean-audit

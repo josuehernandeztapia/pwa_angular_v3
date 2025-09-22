@@ -104,7 +104,7 @@ export class AVIConfusionMatrixService {
     this.saveCalibrationData();
     this.updateCalibrationReport();
 
-    console.log(`✅ Calibration sample added: ${newSample.id} (Total: ${updatedSamples.length}/${this.TARGET_SAMPLES})`);
+// removed by clean-audit
 
     return of(newSample);
   }
@@ -262,7 +262,7 @@ export class AVIConfusionMatrixService {
 
     localStorage.removeItem(this.LOCAL_STORAGE_KEY);
 
-    console.log('🧹 AVI calibration data cleared');
+// removed by clean-audit
     return of(true);
   }
 
@@ -273,7 +273,7 @@ export class AVIConfusionMatrixService {
     const validSamples = samples.filter(this.validateSample);
 
     if (validSamples.length === 0) {
-      console.warn('⚠️ No valid samples to import');
+// removed by clean-audit
       return of(false);
     }
 
@@ -281,7 +281,7 @@ export class AVIConfusionMatrixService {
     this.saveCalibrationData();
     this.updateCalibrationReport();
 
-    console.log(`📥 Imported ${validSamples.length} calibration samples`);
+// removed by clean-audit
     return of(true);
   }
 
@@ -447,7 +447,7 @@ export class AVIConfusionMatrixService {
       };
       localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
-      console.warn('⚠️ Failed to save calibration data:', error);
+// removed by clean-audit
     }
   }
 
@@ -461,7 +461,7 @@ export class AVIConfusionMatrixService {
         }
       }
     } catch (error) {
-      console.warn('⚠️ Failed to load calibration data:', error);
+// removed by clean-audit
     }
   }
 
@@ -511,3 +511,4 @@ export class AVIConfusionMatrixService {
     };
   }
 }
+// removed by clean-audit

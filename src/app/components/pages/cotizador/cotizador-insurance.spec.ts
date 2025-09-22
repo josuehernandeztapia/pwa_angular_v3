@@ -13,8 +13,8 @@ describe('CotizadorMainComponent – Insurance toggle', () => {
       ]
     }).compileComponents();
 
-    const fixture = TestBed.createComponent(CotizadorMainComponent);
-    component = fixture.componentInstance;
+// removed by clean-audit
+// removed by clean-audit
     // Set minimal package
     (component as any).pkg = {
       rate: 0.24, // 24% anual
@@ -27,7 +27,7 @@ describe('CotizadorMainComponent – Insurance toggle', () => {
     (component as any).selectedOptions = { vehiculo: true };
     (component as any).term = 24;
     // Ensure not venta directa
-    (component as any).client = { id: 'c1', name: 'Demo', flow: 1 } as any;
+// removed by clean-audit
   });
 
   it('adds insurance to amountToFinance when financed', () => {
@@ -49,3 +49,5 @@ describe('CotizadorMainComponent – Insurance toggle', () => {
   });
 });
 
+
+// removed by clean-audit

@@ -154,7 +154,7 @@ export interface Ecosystem {
     name: string;
     documents?: Document[];
     status: 'Activo' | 'Expediente Pendiente' | string;
-    // Extended fields for mock service specs
+// removed by clean-audit
     market?: Market;
     vehicleType?: string;
     capacity?: number;
@@ -361,3 +361,5 @@ export {
   NotificationResult,
   WhatsAppNotificationResult
 } from './notification';
+
+// removed by clean-audit

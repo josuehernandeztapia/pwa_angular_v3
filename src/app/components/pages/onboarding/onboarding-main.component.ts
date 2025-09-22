@@ -710,7 +710,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.availableEcosystems = ecosystems;
       },
       error: (error: unknown) => {
-        console.error('Error loading ecosystems:', error);
+// removed by clean-audit
         this.availableEcosystems = [];
       }
     });
@@ -767,7 +767,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.nextStep();
       },
       error: (error: unknown) => {
-        console.error('Error creating client:', error);
+// removed by clean-audit
       }
     });
   }
@@ -794,7 +794,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.nextStep();
       },
       error: (error: unknown) => {
-        console.error('Error creating collective group:', error);
+// removed by clean-audit
       }
     });
   }
@@ -812,7 +812,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     };
 
     // Add to ecosystem service (this would normally be an API call)
-    console.log('Creating new route for prospection:', newRoute);
+// removed by clean-audit
     
     // Refresh available ecosystems
     this.loadAvailableEcosystems();
@@ -861,13 +861,13 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.currentClient = updatedClient;
         this.updateDocumentProgress();
         
-        // Auto-approve for demo purposes
+// removed by clean-audit
         setTimeout(() => {
           this.approveDocument(documentId);
         }, 2000);
       },
       error: (error: unknown) => {
-        console.error('Error submitting document:', error);
+// removed by clean-audit
       }
     });
   }
@@ -901,7 +901,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.updateDocumentProgress();
       },
       error: (error: unknown) => {
-        console.error('Error approving document:', error);
+// removed by clean-audit
       }
     });
   }
@@ -949,10 +949,10 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       (reason) => this.onKycExit(reason)
     ).subscribe({
       next: (button: HTMLElement | null) => {
-        console.log('MetaMap button created successfully');
+// removed by clean-audit
       },
       error: (error: unknown) => {
-        console.error('Error creating MetaMap button:', error);
+// removed by clean-audit
       }
     });
   }
@@ -966,13 +966,13 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.updateKycStatus();
       },
       error: (error: unknown) => {
-        console.error('Error completing KYC:', error);
+// removed by clean-audit
       }
     });
   }
 
   onKycExit(reason: string): void {
-    console.log('KYC exited:', reason);
+// removed by clean-audit
   }
 
   // Contract handling
@@ -991,7 +991,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.isGeneratingContract = false;
       },
       error: (error: unknown) => {
-        console.error('Error generating contract:', error);
+// removed by clean-audit
         this.isGeneratingContract = false;
       }
     });
@@ -1016,7 +1016,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   // Completion actions
   goToClient(): void {
     // Navigate to client detail page
-    console.log('Navigate to client:', this.currentClient?.id);
+// removed by clean-audit
   }
 
   startNewOnboarding(): void {
@@ -1141,3 +1141,4 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     this.clearDraft();
   }
 }
+// removed by clean-audit

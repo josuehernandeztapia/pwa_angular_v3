@@ -1,14 +1,14 @@
 // Test específico para el pattern "nervioso con admisión parcial"
 // Validar que CRITICAL → HIGH cuando se detecta este pattern
 
-console.log('🧠 TESTING PATTERN "NERVIOSO CON ADMISIÓN PARCIAL"');
-console.log('================================================\n');
+// removed by clean-audit
+// removed by clean-audit
 
 // Simulador del engine calibrado con pattern avanzado
 class AdvancedAVIEngine {
   
   static calculateAdvancedScore(responses, testProfile) {
-    console.log(`🔬 Analizando perfil: ${testProfile}`);
+// removed by clean-audit
     
     let totalScore = 0;
     let totalWeight = 0;
@@ -24,16 +24,16 @@ class AdvancedAVIEngine {
       totalScore += subscore.finalScore * question.weight;
       totalWeight += question.weight;
       
-      console.log(`   📝 Pregunta: ${response.questionId}`);
-      console.log(`      Transcripción: "${response.transcription}"`);
-      console.log(`      Pattern detectado: ${subscore.patternAnalysis.patternDetected ? 'SÍ' : 'NO'}`);
-      console.log(`      🎯 Nervioso: ${subscore.patternAnalysis.isNervous}, Admisión: ${subscore.patternAnalysis.hasAdmission}, Negación: ${subscore.patternAnalysis.hasStrongNegation}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
       
       if (subscore.patternAnalysis.patternDetected) {
-        console.log(`      📊 Nerviosismo: ${(subscore.patternAnalysis.nervousnessScore * 100).toFixed(1)}%`);
-        console.log(`      📊 Admisión: ${(subscore.patternAnalysis.admissionScore * 100).toFixed(1)}%`);
-        console.log(`      🧠 Cap aplicado: ${subscore.capApplied ? 'SÍ' : 'NO'}`);
-        console.log(`      ⚖️ Base score: ${subscore.baseScore.toFixed(3)} → Final: ${subscore.finalScore.toFixed(3)}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
         
         nervousAdmissionPatterns.push({
           questionId: response.questionId,
@@ -45,8 +45,8 @@ class AdvancedAVIEngine {
         });
       }
       
-      console.log(`      💯 Subscore: ${subscore.finalScore.toFixed(3)}`);
-      console.log('');
+// removed by clean-audit
+// removed by clean-audit
       
       // Red flags básicas - más sensible para evasión tajante
       if (subscore.finalScore < 0.55 && question.weight >= 8) {
@@ -73,14 +73,14 @@ class AdvancedAVIEngine {
     
     // Calcular risk level inicial
     let riskLevel = this.calculateInitialRiskLevel(finalScore, redFlags);
-    console.log(`📈 Score inicial: ${finalScore.toFixed(0)}/1000 → ${riskLevel}`);
+// removed by clean-audit
     
     // APLICAR CORRECCIÓN por pattern "nervioso con admisión"
     const originalRisk = riskLevel;
     riskLevel = this.applyNervousAdmissionCorrection(riskLevel, nervousAdmissionPatterns);
     
     if (originalRisk !== riskLevel) {
-      console.log(`🧠 CORRECCIÓN APLICADA: ${originalRisk} → ${riskLevel}`);
+// removed by clean-audit
     }
     
     return {
@@ -386,58 +386,59 @@ const PATTERN_TEST_CASES = {
 
 // EJECUTAR TESTS
 async function runPatternTests() {
-  console.log('🧪 EJECUTANDO TESTS DE PATTERN AVANZADO\n');
+// removed by clean-audit
   
   let testsPassed = 0;
   let totalTests = Object.keys(PATTERN_TEST_CASES).length;
   
   for (const [testName, testCase] of Object.entries(PATTERN_TEST_CASES)) {
-    console.log(`📋 Test: ${testCase.description.toUpperCase()}`);
-    console.log('─'.repeat(80));
+// removed by clean-audit
+// removed by clean-audit
     
     const result = AdvancedAVIEngine.calculateAdvancedScore(testCase.responses, testName);
     
-    console.log(`   🎯 Score final: ${result.totalScore}/1000`);
-    console.log(`   📈 Risk level: ${result.riskLevel}`);
+// removed by clean-audit
+// removed by clean-audit
     
     if (result.correctionApplied) {
-      console.log(`   🧠 Corrección aplicada: ${result.originalRisk} → ${result.riskLevel}`);
-      console.log(`   🔬 Patterns detectados: ${result.nervousAdmissionPatterns.length}`);
+// removed by clean-audit
+// removed by clean-audit
       
       result.nervousAdmissionPatterns.forEach(pattern => {
-        console.log(`      - Pregunta: ${pattern.questionId}`);
-        console.log(`      - Strength: ${(pattern.patternStrength * 100).toFixed(1)}%`);
-        console.log(`      - Cap aplicado: ${pattern.capApplied ? 'SÍ' : 'NO'}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
       });
     }
     
     if (result.redFlags.length > 0) {
-      console.log(`   🚨 Red flags: ${result.redFlags.length}`);
+// removed by clean-audit
     }
     
     // Validar resultado
     const testPassed = result.riskLevel === testCase.expected;
-    console.log(`   ${testPassed ? '✅' : '❌'} Esperado: ${testCase.expected}, Obtenido: ${result.riskLevel}`);
+// removed by clean-audit
     
     if (testPassed) testsPassed++;
-    console.log('\n' + '='.repeat(80) + '\n');
+// removed by clean-audit
   }
   
   // Resumen final
-  console.log('🏆 RESUMEN PATTERN "NERVIOSO CON ADMISIÓN PARCIAL"');
-  console.log('═'.repeat(60));
-  console.log(`📊 Tests pasados: ${testsPassed}/${totalTests}`);
-  console.log(`🎯 Éxito: ${((testsPassed/totalTests)*100).toFixed(1)}%`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   
   if (testsPassed === totalTests) {
-    console.log('✅ TODOS LOS TESTS PASARON - PATTERN IMPLEMENTADO CORRECTAMENTE');
-    console.log('🎉 El refinamiento quirúrgico está funcionando como se esperaba');
+// removed by clean-audit
+// removed by clean-audit
   } else {
-    console.log('❌ ALGUNOS TESTS FALLARON - REVISAR IMPLEMENTACIÓN');
+// removed by clean-audit
   }
   
-  console.log('\n🔬 CALIBRACIÓN AVI COMPLETADA CON REFINAMIENTO AVANZADO');
+// removed by clean-audit
 }
 
 // Ejecutar tests
 runPatternTests().catch(console.error);
+// removed by clean-audit

@@ -104,11 +104,8 @@ jobs:
           echo "  - Resolution: 1280x720"
           echo "  - Trace: ON"
 
-          # Run the comprehensive login flow test with video recording
-          npx playwright test tests/e2e/login-flow.spec.ts \
-            --project=${{ matrix.browser }} \
-            --reporter=html,json \
-            --output=test-results-demo
+          # Run all E2E tests with video recording
+          npm run test:e2e
         env:
           CI: true
           PLAYWRIGHT_VIDEO: 'on'
@@ -120,8 +117,8 @@ jobs:
         run: |
           echo "🎯 E2E Demo Test Results:"
           echo "========================="
-          if [ -d "test-results-demo" ]; then
-            find test-results-demo -name "*.webm" | head -10 | while read video; do
+          if [ -d "test-results" ]; then
+            find test-results -name "*.webm" | head -10 | while read video; do
               echo "📹 Video found: $video"
               if command -v ffprobe >/dev/null 2>&1; then
                 duration=$(ffprobe -v quiet -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$video" 2>/dev/null | cut -d. -f1)
@@ -146,22 +143,7 @@ jobs:
           chmod +x scripts/concat-videos.sh
 
           # Run video concatenation
-          bash scripts/concat-videos.sh || {
-            echo "❌ Video concatenation failed, attempting manual processing..."
-
-            # Manual fallback - find and copy the longest video
-            LONGEST_VIDEO=$(find test-results* -name "*.webm" -exec wc -c {} + 2>/dev/null | sort -n | tail -1 | awk '{print $2}')
-            if [ -n "$LONGEST_VIDEO" ] && [ -f "$LONGEST_VIDEO" ]; then
-              echo "📼 Using longest video as demo: $LONGEST_VIDEO"
-              mkdir -p reports/videos
-              cp "$LONGEST_VIDEO" reports/videos/pwa-e2e-demo.webm
-
-              # Convert to MP4 if possible
-              if command -v ffmpeg >/dev/null 2>&1; then
-                ffmpeg -i reports/videos/pwa-e2e-demo.webm -c:v libx264 -c:a aac -preset fast -crf 18 reports/videos/pwa-e2e-demo.mp4 || true
-              fi
-            fi
-          }
+          bash scripts/concat-videos.sh
 
           # Verify output
           echo "📊 Final demo video(s):"
@@ -267,7 +249,7 @@ jobs:
           path: |
             reports/videos/
             VIDEO-DEMO-REPORT.md
-            test-results*/
+            test-results/
           retention-days: 30
           if-no-files-found: warn
           compression-level: 6
@@ -279,7 +261,7 @@ jobs:
           name: playwright-report-${{ matrix.browser }}-${{ github.run_number }}
           path: |
             playwright-report/
-            test-results*/
+            test-results/
           retention-days: 14
           if-no-files-found: warn
 

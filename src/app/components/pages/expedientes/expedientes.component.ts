@@ -385,14 +385,15 @@ export class ExpedientesComponent implements OnInit {
   }
 
   newExpediente(): void {
-    console.log('Crear nuevo expediente');
+// removed by clean-audit
   }
 
   viewExpediente(id: string): void {
-    console.log('Ver expediente:', id);
+// removed by clean-audit
   }
 
   uploadDocument(expedienteId: string): void {
-    console.log('Subir documento para expediente:', expedienteId);
+// removed by clean-audit
   }
 }
+// removed by clean-audit

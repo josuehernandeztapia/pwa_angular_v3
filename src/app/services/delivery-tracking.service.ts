@@ -104,7 +104,7 @@ export class DeliveryTrackingService {
       tap(commitment => {
         this.addCommitmentToState(commitment);
         this.persistCommitment(commitment);
-        console.log(`✅ Delivery commitment created: ${commitment.trackingCode}`);
+// removed by clean-audit
       }),
       catchError(error => {
         this.monitoringService.captureWarning(
@@ -137,7 +137,7 @@ export class DeliveryTrackingService {
         this.persistETAUpdate(update);
         this.lastETASync.set(new Date().toISOString());
 
-        console.log(`📍 ETA updated for ${commitmentId}: ${update.estimatedArrival} (${Math.round(update.confidence * 100)}% confidence)`);
+// removed by clean-audit
       }),
       catchError(error => {
         this.monitoringService.captureWarning(
@@ -245,7 +245,7 @@ export class DeliveryTrackingService {
         // Calculate ETA accuracy
         const etaAccuracy = this.calculateETAAccuracy(delivered);
 
-        // Mock metrics for other values (in real app, these would come from customer feedback/timing data)
+// removed by clean-audit
         const avgDeliveryTime = 35; // minutes
         const customerSatisfaction = 4.2; // 1-5 scale
         const rescheduleRate = commitments.length > 0 ? (rescheduled.length / commitments.length) * 100 : 0;
@@ -277,7 +277,7 @@ export class DeliveryTrackingService {
     ).subscribe({
       next: (activeDeliveries) => {
         if (activeDeliveries.length > 0) {
-          console.log(`📡 Monitoring ${activeDeliveries.length} active deliveries`);
+// removed by clean-audit
 
           // Calculate tracking reliability based on sync success
           const reliability = this.calculateTrackingReliability();
@@ -321,7 +321,7 @@ export class DeliveryTrackingService {
         this.etaUpdates$.next(updates);
       }
 
-      console.log('📂 Delivery data loaded from persistence');
+// removed by clean-audit
     } catch (error) {
       this.monitoringService.captureError(
         'DeliveryTrackingService',
@@ -420,7 +420,7 @@ export class DeliveryTrackingService {
 
   private syncCommitmentWithBFF(commitment: DeliveryCommitment): Observable<DeliveryCommitment> {
     if (!(environment.features as any)?.enableDeliveryBff) {
-      return of(commitment); // Mock mode
+// removed by clean-audit
     }
 
     return this.http.post<DeliveryCommitment>(`${this.BFF_BASE_URL}/commitments`, commitment).pipe(
@@ -431,7 +431,7 @@ export class DeliveryTrackingService {
 
   private syncETAWithBFF(eta: ETAUpdate): Observable<ETAUpdate> {
     if (!(environment.features as any)?.enableDeliveryBff) {
-      return of(eta); // Mock mode
+// removed by clean-audit
     }
 
     return this.http.post<ETAUpdate>(`${this.BFF_BASE_URL}/eta-updates`, eta).pipe(
@@ -490,7 +490,7 @@ export class DeliveryTrackingService {
 
   private getRecentSyncAttempts(): Array<{ success: boolean; timestamp: string }> {
     // In a real implementation, this would track actual sync attempts
-    // For now, we'll mock some data based on current state
+// removed by clean-audit
     const now = new Date();
     const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
 
@@ -515,3 +515,4 @@ export class DeliveryTrackingService {
     return this.etaUpdates$.asObservable();
   }
 }
+// removed by clean-audit

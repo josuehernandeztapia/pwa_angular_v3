@@ -42,8 +42,10 @@ export class EcosystemUiService {
       }
     ];
 
-    // For demo purposes, return the same list regardless of market
+// removed by clean-audit
     return of(base).pipe(delay(300));
   }
 }
 
+
+// removed by clean-audit

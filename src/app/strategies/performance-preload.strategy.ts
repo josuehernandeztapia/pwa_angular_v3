@@ -52,14 +52,14 @@ export class PerformancePreloadStrategy implements PreloadingStrategy {
     // Determine preload delay based on priority
     const delay = this.getPreloadDelay(route);
 
-    console.log(`🚀 Preloading route: ${routePath} (delay: ${delay}ms)`);
+// removed by clean-audit
 
     return timer(delay).pipe(
       mergeMap(() => {
         try {
           return fn();
         } catch (error) {
-          console.warn(`⚠️ Failed to preload route: ${routePath}`, error);
+// removed by clean-audit
           return of(null);
         }
       })
@@ -149,7 +149,7 @@ export class PerformancePreloadStrategy implements PreloadingStrategy {
   preloadRoute(routePath: string): void {
     // This would require access to router configuration
     // Implementation would depend on specific use case
-    console.log(`🎯 Manual preload triggered for: ${routePath}`);
+// removed by clean-audit
   }
 
   /**
@@ -169,3 +169,4 @@ export class PerformancePreloadStrategy implements PreloadingStrategy {
     this.preloadedRoutes.clear();
   }
 }
+// removed by clean-audit

@@ -109,7 +109,7 @@ export class StockService {
    */
   private handleError(operation: string) {
     return (error: any): Observable<never> => {
-      console.error(`StockService.${operation} failed:`, error);
+// removed by clean-audit
       
       let userMessage = 'Error en el servicio de inventario';
       
@@ -132,3 +132,4 @@ export class StockService {
     };
   }
 }
+// removed by clean-audit

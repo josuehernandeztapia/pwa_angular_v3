@@ -1,0 +1,185 @@
+<!-- Skip Link for Accessibility -->
+<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+
+<div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+  <!-- Header -->
+  <header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-6 py-4">
+      <div class="flex items-center gap-4">
+        <div>
+          <h1 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Sistema de Protección</h1>
+          <p class="text-sm text-slate-600 dark:text-slate-400">Análisis de riesgo y protección financiera para transportistas</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="max-w-6xl mx-auto px-6 py-8">
+    <!-- Protección KPIs -->
+    <section class="ui-card">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Protección</h2>
+
+      <!-- Skeleton Loader -->
+      <div *ngIf="loading" class="animate-pulse space-y-3">
+        <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+        <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+        <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div *ngIf="!loading" class="grid gap-3 md:grid-cols-3">
+        <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+          <div class="text-xs text-slate-500 dark:text-slate-400">Health Score</div>
+          <div class="text-2xl font-semibold text-slate-900 dark:text-slate-100" data-cy="health-score">{{ healthScore }}</div>
+        </div>
+        <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
+          <div class="text-xs text-slate-500 dark:text-slate-400">Cobertura</div>
+          <div class="text-2xl font-semibold text-slate-900 dark:text-slate-100" data-cy="coverage">{{ cobertura }}</div>
+        </div>
+        <div class="rounded border border-slate-200 dark:border-slate-700 p-3 flex items-center justify-center">
+          <button data-cy="apply-protection"
+                  (click)="aplicarProteccion()"
+                  [disabled]="loading"
+                  class="ui-btn ui-btn-primary w-full">
+            {{ loading ? 'Aplicando...' : 'Aplicar' }}
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Análisis de Riesgo -->
+    <section class="ui-card mt-6">
+      <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Análisis de Riesgo</h3>
+      <div class="grid gap-4 md:grid-cols-3">
+        <div class="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+          <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ highRiskClients }}</div>
+          <div class="text-sm text-red-700 dark:text-red-300">Alto Riesgo</div>
+          <div class="text-xs text-red-600 dark:text-red-400 mt-1">Atención inmediata</div>
+        </div>
+        <div class="text-center p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+          <div class="text-2xl font-bold text-amber-600 dark:text-amber-400">{{ mediumRiskClients }}</div>
+          <div class="text-sm text-amber-700 dark:text-amber-300">Riesgo Medio</div>
+          <div class="text-xs text-amber-600 dark:text-amber-400 mt-1">Monitoreo recomendado</div>
+        </div>
+        <div class="text-center p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
+          <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{{ lowRiskClients }}</div>
+          <div class="text-sm text-emerald-700 dark:text-emerald-300">Bajo Riesgo</div>
+          <div class="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Situación estable</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Herramientas -->
+    <section class="ui-card mt-6">
+      <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Herramientas de Protección</h3>
+      <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+        <button class="ui-btn ui-btn-ghost justify-start" (click)="openTool('savings')">
+          💰 Simulador de Ahorro
+        </button>
+        <button class="ui-btn ui-btn-ghost justify-start" (click)="openTool('cashflow')">
+          📈 Análisis de Flujo
+        </button>
+        <button class="ui-btn ui-btn-ghost justify-start" (click)="openTool('contingency')">
+          🎯 Plan de Contingencia
+        </button>
+        <button class="ui-btn ui-btn-ghost justify-start" (click)="openTool('report')">
+          📋 Reporte de Riesgo
+        </button>
+        <button class="ui-btn ui-btn-ghost justify-start" (click)="generateProtectionReport()">
+          📄 Generar Reporte PDF
+        </button>
+      </div>
+    </section>
+
+    <!-- Escenarios de Reestructura -->
+    <section class="ui-card mt-6" *ngIf="scenarios && scenarios.length">
+      <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Escenarios de Reestructura</h3>
+
+      <div class="space-y-4">
+        <div *ngFor="let s of scenarios"
+             class="border border-slate-200 dark:border-slate-700 rounded-lg p-4"
+             [ngClass]="{
+               'bg-red-50 dark:bg-red-900/20': !isScenarioEligible(s)
+             }">
+
+          <div class="flex justify-between items-center mb-3">
+            <h4 class="font-medium text-slate-900 dark:text-slate-100">{{ s.title }}</h4>
+            <span class="px-2 py-1 text-xs rounded"
+                  [ngClass]="{
+                    'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200': isScenarioEligible(s),
+                    'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200': !isScenarioEligible(s)
+                  }">
+              {{ isScenarioEligible(s) ? 'Elegible' : 'No Elegible' }}
+            </span>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-3 text-sm">
+            <div>
+              <div class="text-slate-500 dark:text-slate-400">PMT′</div>
+              <div class="font-medium text-slate-900 dark:text-slate-100">{{ formatCurrency(getNewMonthlyPayment(s)) }}</div>
+            </div>
+            <div>
+              <div class="text-slate-500 dark:text-slate-400">n′</div>
+              <div class="font-medium text-slate-900 dark:text-slate-100">{{ getNewTerm(s) }} meses</div>
+            </div>
+            <div>
+              <div class="text-slate-500 dark:text-slate-400">TIR post</div>
+              <div class="font-medium"
+                   [class.text-emerald-600]="isTirOk(s)"
+                   [class.dark:text-emerald-400]="isTirOk(s)"
+                   [class.text-red-600]="!isTirOk(s)"
+                   [class.dark:text-red-400]="!isTirOk(s)">
+                {{ getIrrPct(s) | number:'1.0-2' }}%
+              </div>
+            </div>
+          </div>
+
+          <!-- Warnings -->
+          <div *ngIf="hasRejectionReasons(s)" class="mt-3 p-2 bg-red-50 dark:bg-red-900/20 rounded text-xs text-red-700 dark:text-red-300">
+            <div *ngIf="!isTirOk(s)">Motivo: IRRpost < IRRmin</div>
+            <div *ngIf="isBelowMinPayment(s)">Motivo: PMT′ < PMTmin</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Configuración de Contrato -->
+    <section class="ui-card mt-6">
+      <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Configuración de Contrato</h3>
+      <form [formGroup]="contractForm" class="space-y-4">
+        <div class="grid gap-4 md:grid-cols-2">
+          <label class="text-sm">
+            Saldo Actual
+            <input type="number" formControlName="currentBalance" placeholder="320000"
+                   class="mt-1 w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+          </label>
+          <label class="text-sm">
+            Pago Mensual Actual (PMT)
+            <input type="number" formControlName="originalPayment" placeholder="10500"
+                   class="mt-1 w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+          </label>
+          <label class="text-sm">
+            Plazo Remanente (meses)
+            <input type="number" formControlName="remainingTerm" placeholder="36"
+                   class="mt-1 w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+          </label>
+          <label class="text-sm">
+            Mercado
+            <select formControlName="market"
+                    class="mt-1 w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+              <option value="aguascalientes">Aguascalientes</option>
+              <option value="edomex">Estado de México</option>
+            </select>
+          </label>
+        </div>
+        <div class="pt-4">
+          <button type="button" class="ui-btn ui-btn-primary"
+                  (click)="computeScenarios()"
+                  [disabled]="!contractForm.valid">
+            Calcular Escenarios
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>

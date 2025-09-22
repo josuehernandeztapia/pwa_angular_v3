@@ -195,7 +195,7 @@ export class AviQuestionGeneratorService {
       
       return false;
     } catch (error) {
-      console.error('Error refreshing questions from LLM:', error);
+// removed by clean-audit
       return false;
     }
   }
@@ -205,7 +205,7 @@ export class AviQuestionGeneratorService {
     const prompt = this.buildLLMPrompt(municipality);
     
     try {
-      // Mock implementation - replace with actual LLM API call
+// removed by clean-audit
       const response = await fetch('/api/generate-micro-local-questions', {
         method: 'POST',
         headers: {
@@ -226,7 +226,7 @@ export class AviQuestionGeneratorService {
       const data = await response.json();
       return this.parseLLMResponse(data.questions, municipality);
     } catch (error) {
-      console.error('LLM API error:', error);
+// removed by clean-audit
       return [];
     }
   }
@@ -302,7 +302,7 @@ EJEMPLOS del estilo deseado:
     try {
       localStorage.setItem(`avi_questions_${municipality}`, JSON.stringify(pool));
     } catch (error) {
-      console.error('Error saving question pool to storage:', error);
+// removed by clean-audit
     }
   }
 
@@ -311,7 +311,7 @@ EJEMPLOS del estilo deseado:
       const stored = localStorage.getItem(`avi_questions_${municipality}`);
       return stored ? JSON.parse(stored) : null;
     } catch (error) {
-      console.error('Error loading question pool from storage:', error);
+// removed by clean-audit
       return null;
     }
   }
@@ -329,3 +329,4 @@ EJEMPLOS del estilo deseado:
     });
   }
 }
+// removed by clean-audit

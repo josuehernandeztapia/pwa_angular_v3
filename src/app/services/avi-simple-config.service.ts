@@ -362,7 +362,7 @@ export class AviSimpleConfigService {
       }
       return false;
     } catch (error) {
-      console.error('Error importing AVI config:', error);
+// removed by clean-audit
       return false;
     }
   }
@@ -379,7 +379,7 @@ export class AviSimpleConfigService {
     try {
       localStorage.setItem('avi_config', JSON.stringify(this.configSubject.value));
     } catch (error) {
-      console.warn('Could not save AVI config to localStorage:', error);
+// removed by clean-audit
     }
   }
 
@@ -391,7 +391,7 @@ export class AviSimpleConfigService {
         this.configSubject.next(config);
       }
     } catch (error) {
-      console.warn('Could not load AVI config from localStorage:', error);
+// removed by clean-audit
     }
   }
 
@@ -416,3 +416,4 @@ export class AviSimpleConfigService {
     };
   }
 }
+// removed by clean-audit

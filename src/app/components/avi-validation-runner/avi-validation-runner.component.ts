@@ -566,10 +566,10 @@ export class AVIValidationRunnerComponent implements OnInit {
         this.validationReport = report;
         this.isRunning = false;
         this.currentTestMessage = '';
-        console.log('🎯 Validación completada:', report);
+// removed by clean-audit
       },
       error: (error) => {
-        console.error('❌ Error en validación:', error);
+// removed by clean-audit
         this.isRunning = false;
         this.currentTestMessage = 'Error en validación';
       }
@@ -661,3 +661,4 @@ export class AVIValidationRunnerComponent implements OnInit {
     window.URL.revokeObjectURL(url);
   }
 }
+// removed by clean-audit

@@ -1,0 +1,185 @@
+<section class="ui-card">
+  <!-- Header -->
+  <div class="mb-6">
+    <h2 class="text-sm font-semibold mb-2 text-slate-900 dark:text-slate-100">
+      ⛽ GNV - Salud de Estaciones
+    </h2>
+    <p class="text-xs text-slate-600 dark:text-slate-400">
+      Estado de la ingesta del día anterior por estación
+    </p>
+  </div>
+
+  <!-- CSV Upload Section -->
+  <div class="mb-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">
+        Carga de Datos CSV
+      </h3>
+      <div class="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400">
+        <div class="w-2 h-2 rounded-full"
+             [class.bg-green-500]="uploadStatus === 'success'"
+             [class.bg-yellow-500]="uploadStatus === 'processing'"
+             [class.bg-slate-400]="uploadStatus === 'idle'"></div>
+        <span>{{ getUploadStatusText() }}</span>
+      </div>
+    </div>
+
+    <!-- File Upload -->
+    <div class="mb-3">
+      <label class="ui-btn ui-btn-secondary text-xs cursor-pointer mr-3">
+        <input type="file"
+               accept=".csv"
+               (change)="onFileSelected($event)"
+               [disabled]="uploadStatus === 'processing'"
+               class="sr-only" />
+        📄 Seleccionar CSV
+      </label>
+
+      <button *ngIf="selectedFile"
+              (click)="uploadCSV()"
+              [disabled]="uploadStatus === 'processing'"
+              class="ui-btn ui-btn-primary text-xs">
+        {{ uploadStatus === 'processing' ? '⏳ Procesando...' : '📤 Subir Archivo' }}
+      </button>
+    </div>
+
+    <!-- Selected File Info -->
+    <div *ngIf="selectedFile" class="text-xs text-slate-600 dark:text-slate-400 mb-3">
+      Archivo seleccionado: <strong>{{ selectedFile.name }}</strong> ({{ (selectedFile.size / 1024) | number:'1.0-0' }} KB)
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="flex flex-wrap gap-2">
+      <a href="assets/gnv/template.csv"
+         download
+         class="ui-btn ui-btn-secondary text-xs"
+         data-cy="dl-template">
+        📄 Plantilla CSV
+      </a>
+      <a href="assets/gnv/gnv_guide.pdf"
+         target="_blank"
+         rel="noopener"
+         class="ui-btn ui-btn-secondary text-xs"
+         data-cy="dl-guide">
+        📘 Guía PDF
+      </a>
+      <a href="assets/gnv/ingesta_yesterday.csv"
+         download
+         class="ui-btn ui-btn-secondary text-xs"
+         data-cy="dl-latest">
+        ⬇️ Última Ingesta
+      </a>
+    </div>
+  </div>
+
+  <!-- Station Health Grid -->
+  <div *ngIf="rows().length > 0; else emptyTpl">
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+        <div class="text-xl font-semibold text-slate-900 dark:text-slate-100">{{ getTotalStations() }}</div>
+        <div class="text-xs text-slate-600 dark:text-slate-400">Estaciones</div>
+      </div>
+      <div class="p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+        <div class="text-xl font-semibold text-green-700 dark:text-green-400">{{ getHealthyStations() }}</div>
+        <div class="text-xs text-green-600 dark:text-green-500">Saludables</div>
+      </div>
+      <div class="p-3 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+        <div class="text-xl font-semibold text-yellow-700 dark:text-yellow-400">{{ getWarningStations() }}</div>
+        <div class="text-xs text-yellow-600 dark:text-yellow-500">Con Avisos</div>
+      </div>
+      <div class="p-3 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800">
+        <div class="text-xl font-semibold text-red-700 dark:text-red-400">{{ getCriticalStations() }}</div>
+        <div class="text-xs text-red-600 dark:text-red-500">Críticas</div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="space-y-3">
+      <div *ngFor="let i of [1,2,3]" class="animate-pulse">
+        <div class="h-20 bg-slate-200 dark:bg-slate-700 rounded-lg"></div>
+      </div>
+    </div>
+
+    <!-- Station Cards -->
+    <div *ngIf="!isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div *ngFor="let r of rows(); trackBy: trackByStation"
+           class="border border-slate-200 dark:border-slate-700 rounded-lg p-4 hover:shadow-sm transition-shadow"
+           [ngClass]="{
+             'bg-green-50 dark:bg-green-950/20': r.status === 'green',
+             'bg-yellow-50 dark:bg-yellow-950/20': r.status === 'yellow',
+             'bg-red-50 dark:bg-red-950/20': r.status === 'red'
+           }">
+
+        <!-- Station Header -->
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center space-x-2">
+            <div class="w-3 h-3 rounded-full"
+                 [class.bg-green-500]="r.status === 'green'"
+                 [class.bg-yellow-500]="r.status === 'yellow'"
+                 [class.bg-red-500]="r.status === 'red'"
+                 [attr.data-cy]="'status-' + r.status"
+                 [title]="r.status | titlecase"></div>
+            <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">
+              {{ r.stationName }}
+            </h3>
+          </div>
+          <span class="text-xs px-2 py-1 rounded"
+                [ngClass]="{
+                  'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400': r.status === 'green',
+                  'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400': r.status === 'yellow',
+                  'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400': r.status === 'red'
+                }">
+            {{ getStatusText(r.status) }}
+          </span>
+        </div>
+
+        <!-- Station Stats -->
+        <div class="space-y-2">
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-600 dark:text-slate-400">Archivo:</span>
+            <span class="text-slate-900 dark:text-slate-100 font-medium">{{ r.fileName || '—' }}</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-600 dark:text-slate-400">Total:</span>
+            <span class="text-slate-900 dark:text-slate-100 font-mono">{{ r.rowsTotal | number }}</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-600 dark:text-slate-400">Aceptadas:</span>
+            <span class="text-green-600 dark:text-green-400 font-mono">{{ r.rowsAccepted | number }}</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-600 dark:text-slate-400">Rechazadas:</span>
+            <span class="text-red-600 dark:text-red-400 font-mono">{{ r.rowsRejected | number }}</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-600 dark:text-slate-400">Warnings:</span>
+            <span class="text-yellow-600 dark:text-yellow-400 font-mono">{{ r.warnings | number }}</span>
+          </div>
+        </div>
+
+        <!-- Station Actions -->
+        <div class="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
+          <button class="ui-btn ui-btn-secondary text-xs w-full">
+            📊 Ver Detalles
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <ng-template #emptyTpl>
+    <div class="text-center py-12">
+      <div class="w-16 h-16 mx-auto mb-4 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center">
+        <span class="text-2xl">⛽</span>
+      </div>
+      <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-1">
+        Sin datos de ingesta
+      </h3>
+      <p class="text-xs text-slate-600 dark:text-slate-400">
+        No hay datos de ingesta disponibles para mostrar
+      </p>
+    </div>
+  </ng-template>
+</section>

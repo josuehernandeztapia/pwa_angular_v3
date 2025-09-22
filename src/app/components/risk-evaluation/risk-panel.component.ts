@@ -626,22 +626,22 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
 
   onAddGuarantor() {
     // Navigate to guarantor form or trigger guarantor flow
-    console.log('Adding guarantor...');
+// removed by clean-audit
   }
 
   onReduceTerm() {
     // Navigate to cotizador with reduced term
-    console.log('Reducing term...');
+// removed by clean-audit
   }
 
   onUploadDocuments() {
     // Open document upload modal
-    console.log('Uploading documents...');
+// removed by clean-audit
   }
 
   onRetryEvaluation() {
     // Emit retry event or call evaluation service again
-    console.log('Retrying evaluation...');
+// removed by clean-audit
   }
 
   // Financial helper methods for cleaner template
@@ -683,3 +683,4 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
     };
   }
 }
+// removed by clean-audit

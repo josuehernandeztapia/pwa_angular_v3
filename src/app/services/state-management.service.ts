@@ -12,7 +12,7 @@ import {
 import { ClientDataService } from './data/client-data.service';
 import { EcosystemDataService } from './data/ecosystem-data.service';
 import { CollectiveGroupDataService } from './data/collective-group-data.service';
-import { MockApiService } from './mock-api.service';
+// removed by clean-audit
 
 @Injectable({
   providedIn: 'root'
@@ -147,7 +147,7 @@ export class StateManagementService {
         return data;
       }),
       catchError(error => {
-        console.error("Failed to fetch clients:", error);
+// removed by clean-audit
         this.isLoadingSubject.next(false);
         throw error;
       })
@@ -389,3 +389,4 @@ export class StateManagementService {
     this.navigationContextSubject.next(null);
   }
 }
+// removed by clean-audit

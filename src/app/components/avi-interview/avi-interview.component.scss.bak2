@@ -1,0 +1,408 @@
+/**
+ * 🎤 AVI Interview - Minimalista Enterprise
+ * Clean professional styling following OpenAI dashboard patterns
+ * NO pitch deck gradients - pure enterprise design
+ */
+
+// Skip link for accessibility
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: theme('colors.slate.900');
+  color: theme('colors.white');
+  padding: 8px;
+  text-decoration: none;
+  z-index: 1000;
+  border-radius: 4px;
+  font-size: 14px;
+
+  &:focus {
+    top: 6px;
+  }
+}
+
+// Animation for skeleton loader
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+// AVI Interview Container
+.avi-interview-container {
+  min-height: 100vh;
+  @apply bg-slate-50 dark:bg-slate-950;
+
+  &.is-recording {
+    .voice-btn.recording {
+      @apply bg-red-500 text-white;
+    }
+  }
+
+  &.is-processing {
+    pointer-events: none;
+  }
+}
+
+// Interview Header and Progress
+.interview-header {
+  @apply border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur;
+
+  .progress-section {
+    @apply max-w-6xl mx-auto px-6 py-4;
+
+    .progress-bar {
+      @apply w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 mb-2;
+
+      .progress-fill {
+        @apply bg-sky-500 h-2 rounded-full transition-all duration-300;
+      }
+    }
+
+    .progress-info {
+      @apply flex justify-between text-sm text-slate-600 dark:text-slate-400;
+    }
+  }
+}
+
+// Interview Start State
+.interview-start {
+  @apply max-w-2xl mx-auto px-6 py-12;
+
+  .start-card {
+    @apply bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-8 text-center;
+
+    .avi-logo {
+      @apply mb-6;
+
+      .logo-icon {
+        @apply text-4xl mb-3;
+      }
+
+      h1 {
+        @apply text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2;
+      }
+
+      .subtitle {
+        @apply text-slate-600 dark:text-slate-400;
+      }
+    }
+
+    .interview-info {
+      @apply space-y-3 mb-6 text-left;
+
+      .info-item {
+        @apply flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400;
+
+        .icon {
+          @apply text-base;
+        }
+      }
+    }
+
+    .start-btn {
+      @apply w-full bg-sky-500 hover:bg-sky-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200;
+
+      &.secondary {
+        @apply bg-slate-500 hover:bg-slate-600 mt-3 text-sm;
+      }
+    }
+  }
+}
+
+// Interview Active State
+.interview-active {
+  @apply max-w-4xl mx-auto px-6 py-8;
+
+  .question-card {
+    @apply bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-6;
+
+    .question-header {
+      @apply mb-6 pb-4 border-b border-slate-200 dark:border-slate-700;
+
+      .question-meta {
+        @apply flex flex-wrap gap-3 text-xs;
+
+        .category {
+          @apply bg-sky-100 dark:bg-sky-900/50 text-sky-800 dark:text-sky-200 px-2 py-1 rounded;
+        }
+
+        .weight {
+          @apply bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-1 rounded;
+
+          &.critical {
+            @apply bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200;
+          }
+        }
+
+        .stress-level {
+          @apply bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200 px-2 py-1 rounded;
+        }
+
+        .audio-indicator {
+          @apply text-slate-500 dark:text-slate-400 px-2 py-1 rounded;
+
+          &.ready {
+            @apply bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200;
+          }
+        }
+      }
+    }
+
+    .question-text {
+      @apply mb-6;
+
+      h2 {
+        @apply text-xl font-medium text-slate-900 dark:text-slate-100 mb-3;
+      }
+
+      .question-time {
+        @apply text-sm text-slate-500 dark:text-slate-400 mb-2;
+      }
+
+      .question-hint {
+        @apply text-sm text-slate-600 dark:text-slate-400 italic;
+      }
+
+      .pill-feedback {
+        @apply mt-4 flex items-center gap-2;
+
+        .pill {
+          @apply text-xs px-2 py-1 rounded-full font-medium;
+
+          &.clear {
+            @apply bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200;
+          }
+
+          &.review {
+            @apply bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200;
+          }
+
+          &.evasive {
+            @apply bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200;
+          }
+        }
+
+        .pill-reason {
+          @apply text-xs text-slate-500 dark:text-slate-400;
+        }
+      }
+    }
+
+    .response-area {
+      .state-announcer {
+        @apply mb-4;
+
+        .badge {
+          @apply inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full;
+
+          &.idle {
+            @apply bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400;
+          }
+
+          &.recording {
+            @apply bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200;
+          }
+
+          &.processing {
+            @apply bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200;
+          }
+
+          &.saved {
+            @apply bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200;
+          }
+        }
+      }
+
+      .input-container {
+        @apply relative;
+
+        .response-input {
+          @apply w-full border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 resize-vertical min-h-[100px];
+
+          &:focus {
+            @apply outline-none ring-2 ring-sky-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900 border-sky-300 dark:border-sky-600;
+          }
+
+          &:disabled {
+            @apply opacity-50 cursor-not-allowed;
+          }
+        }
+
+        .voice-controls {
+          @apply flex gap-2 mt-3;
+
+          .voice-btn {
+            @apply flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors duration-200;
+
+            &.recording {
+              @apply bg-red-500 text-white hover:bg-red-600;
+            }
+
+            &.stop {
+              @apply bg-red-500 text-white hover:bg-red-600;
+            }
+
+            &:disabled {
+              @apply opacity-50 cursor-not-allowed;
+            }
+          }
+        }
+      }
+
+      .stress-indicators {
+        @apply mt-4;
+
+        .indicator-list {
+          @apply flex flex-wrap gap-2;
+
+          .indicator-label {
+            @apply text-xs text-slate-600 dark:text-slate-400 font-medium;
+          }
+
+          .indicator {
+            @apply text-xs bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200 px-2 py-1 rounded;
+          }
+        }
+      }
+
+      .action-buttons {
+        @apply flex gap-3 mt-6 justify-end;
+
+        .skip-btn {
+          @apply px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors duration-200;
+        }
+
+        .submit-btn {
+          @apply px-6 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-lg transition-colors duration-200;
+        }
+      }
+
+      .processing-overlay {
+        @apply absolute inset-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm flex items-center justify-center rounded-lg;
+
+        .processing-content {
+          @apply text-slate-600 dark:text-slate-400 font-medium;
+        }
+      }
+
+      .follow-up-questions {
+        @apply mt-6 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg;
+
+        .follow-up-header {
+          @apply text-sm font-medium text-slate-700 dark:text-slate-300 mb-2;
+        }
+
+        .follow-up-list {
+          @apply space-y-1;
+
+          li {
+            @apply text-sm text-slate-600 dark:text-slate-400;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Analyzing State (already updated in HTML)
+.analyzing-state {
+  @apply max-w-2xl mx-auto px-6 py-8;
+}
+
+// Results State
+.results-state {
+  @apply max-w-6xl mx-auto px-6 py-8;
+
+  .results-container {
+    @apply space-y-6;
+  }
+}
+
+// Custom scrollbar
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  @apply bg-slate-100 dark:bg-slate-800;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  @apply bg-slate-400 dark:bg-slate-600 rounded-full;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-500 dark:bg-slate-500;
+}
+
+// Focus states for better accessibility
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  @apply outline-none ring-2 ring-sky-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900;
+}
+
+// Print styles for PDF generation
+@media print {
+  .voice-controls,
+  .action-buttons,
+  .skip-link {
+    display: none !important;
+  }
+
+  .ui-card {
+    @apply !border !border-slate-300;
+    box-shadow: none !important;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .ui-card {
+    @apply border-2 border-slate-900 dark:border-slate-100;
+  }
+
+  .text-slate-500 {
+    @apply text-slate-900 dark:text-slate-100;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse {
+    animation: none;
+  }
+
+  * {
+    transition: none !important;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .interview-active {
+    @apply px-4 py-6;
+
+    .question-card {
+      @apply p-4;
+
+      .question-header .question-meta {
+        @apply flex-col gap-2;
+      }
+    }
+  }
+
+  .results-state {
+    @apply px-4;
+  }
+}

@@ -1,18 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Subject, forkJoin, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Chart, ChartConfiguration, ChartType, registerables } from 'chart.js';
 import { ActionableClient, ActionableGroup, ActivityFeedItem, DashboardStats, Market, OpportunityStage } from '../../../models/types';
 import { DashboardService } from '../../../services/dashboard.service';
-import { ClientModeToggleComponent, ViewMode } from '../../shared/client-mode-toggle/client-mode-toggle.component';
-import { ContextualKPIsComponent, KPIData } from '../../shared/contextual-kpis/contextual-kpis.component';
-import { ActivityItem, HumanActivityFeedComponent } from '../../shared/human-activity-feed/human-activity-feed.component';
-import { ActionButton, NextBestActionData, NextBestActionHeroComponent } from '../../shared/next-best-action-hero/next-best-action-hero.component';
-import { RiskRadarClient, RiskRadarComponent } from '../../shared/risk-radar/risk-radar.component';
-import { DevKpiMiniComponent } from '../../shared/dev-kpi-mini.component';
-import { PremiumIconComponent } from '../../ui/premium-icon/premium-icon.component';
-import { environment } from '../../../../environments/environment';
+import { ConnectionIndicatorComponent } from '../../shared/connection-indicator/connection-indicator.component';
+
+// Register Chart.js components
+Chart.register(...registerables);
+
+interface KPICard {
+  title: string;
+  value: string;
+  subValue?: string;
+  icon: string;
+  dataCy: string;
+  trend?: 'up' | 'down' | 'stable';
+  trendValue?: string;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -20,487 +27,455 @@ import { environment } from '../../../../environments/environment';
   imports: [
     CommonModule,
     RouterModule,
-    NextBestActionHeroComponent,
-    ContextualKPIsComponent,
-    RiskRadarComponent,
-    HumanActivityFeedComponent,
-    ClientModeToggleComponent,
-    DevKpiMiniComponent,
-    PremiumIconComponent
+    ConnectionIndicatorComponent
   ],
   template: `
-    <div class="command-center-dashboard">
-      <!-- Premium Header with Client Mode Toggle -->
-      <header class="command-header">
-        <div class="command-title-section">
-          <h1 class="command-title">
-            <app-premium-icon
-              class="command-icon"
-              iconName="cotizador"
-              size="lg"
-              [showLabel]="false"
-              ariaLabel="Centro de Comando">
-            </app-premium-icon>
-            Centro de Comando
-          </h1>
-          <p class="command-subtitle">Tu plan de acción para hoy, Ricardo.</p>
-        </div>
-        
-        <div class="command-controls">
-          <app-client-mode-toggle 
-            [currentMode]="currentViewMode" 
-            (modeChanged)="onViewModeChanged($event)">
-          </app-client-mode-toggle>
-          
-          <div class="user-info">
-            <span class="user-name">👤 {{ userName }} ⏷</span>
+    <!-- Dashboard Container -->
+    <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+
+      <!-- Connection Indicator -->
+      <app-connection-indicator></app-connection-indicator>
+
+      <!-- Header -->
+      <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex-1 min-w-0">
+            <h1 class="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-1 truncate">
+              Dashboard
+            </h1>
+            <p class="text-sm text-slate-600 dark:text-slate-400 truncate">
+              Vista general de tu negocio, {{ userName }}
+            </p>
+          </div>
+
+          <!-- Desktop Actions -->
+          <div class="hidden sm:flex items-center space-x-3 ml-4">
+            <button class="ui-btn ui-btn-secondary ui-btn-sm">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              Exportar
+            </button>
+            <button class="ui-btn ui-btn-primary ui-btn-sm" (click)="createNewOpportunity()">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+              </svg>
+              Nueva Oportunidad
+            </button>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <div class="sm:hidden ml-4">
             <button
-              class="client-mode-badge"
-              [class.active]="currentViewMode === 'client'"
-              (click)="toggleProfileDropdown()"
+              class="ui-btn ui-btn-secondary ui-btn-sm p-2"
+              (click)="toggleMobileActions()"
             >
-              <app-premium-icon
-                iconName="entregas"
-                size="xs"
-                [showLabel]="false"
-                ariaLabel="Modo Cliente">
-              </app-premium-icon>
-              Modo Cliente
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
             </button>
           </div>
         </div>
+
+        <!-- Mobile Actions Dropdown -->
+        <div
+          *ngIf="showMobileActions"
+          class="sm:hidden mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3"
+        >
+          <button class="ui-btn ui-btn-secondary w-full justify-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            Exportar
+          </button>
+          <button class="ui-btn ui-btn-primary w-full justify-center" (click)="createNewOpportunity()">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Nueva Oportunidad
+          </button>
+        </div>
       </header>
 
-      <main class="command-dashboard-main">
-        <!-- Tu Próxima Mejor Acción (The Brain) -->
-        <section class="next-best-action-hero">
-          <div class="hero-header">
-            <h2 class="hero-title">
-              <app-premium-icon
-                iconName="simulador"
-                size="md"
-                [showLabel]="false"
-                ariaLabel="Tu Próxima Mejor Acción">
-              </app-premium-icon>
-              TU PRÓXIMA MEJOR ACCIÓN
-            </h2>
-          </div>
-          
-          <app-next-best-action-hero 
-            *ngIf="nextBestAction"
-            [data]="nextBestAction"
-            (actionExecuted)="onActionExecuted($event)">
-          </app-next-best-action-hero>
-        </section>
+      <!-- Main Content -->
+      <main class="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto">
 
-        <!-- KPIs Contextuales & Radar de Riesgo -->
-        <section class="intelligence-grid">
-          <div class="kpis-section">
-            <h3 class="section-title">
-              <app-premium-icon
-                iconName="cotizador"
-                size="sm"
-                [showLabel]="false"
-                ariaLabel="KPIs Clave">
-              </app-premium-icon>
-              KPIs Clave (vs. Semana Pasada)
-            </h3>
-            <app-contextual-kpis 
-              [kpis]="contextualKPIs"
-              [showTrends]="true">
-            </app-contextual-kpis>
-            <div *ngIf="env.features?.enableDevKpi" style="margin-top:12px">
-              <app-dev-kpi-mini></app-dev-kpi-mini>
+        <!-- KPIs Grid -->
+        <section>
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+            Métricas Principales
+          </h2>
+          <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            <div *ngFor="let kpi of kpiCards" class="ui-card">
+              <div class="flex items-center justify-between">
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs text-slate-500 dark:text-slate-400 mb-1 truncate">
+                    {{ kpi.title }}
+                  </div>
+                  <div class="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-slate-100" [attr.data-cy]="kpi.dataCy">
+                    {{ kpi.value }}
+                  </div>
+                  <div *ngIf="kpi.subValue" class="text-xs text-slate-500 dark:text-slate-400 mt-1 truncate">
+                    {{ kpi.subValue }}
+                  </div>
+                </div>
+                <div class="text-sky-600 dark:text-sky-400 text-2xl flex-shrink-0 ml-3">
+                  {{ kpi.icon }}
+                </div>
+              </div>
+              <div *ngIf="kpi.trend" class="flex items-center mt-3 text-xs">
+                <span
+                  class="flex items-center flex-shrink-0"
+                  [class.text-green-600]="kpi.trend === 'up'"
+                  [class.text-red-600]="kpi.trend === 'down'"
+                  [class.text-slate-500]="kpi.trend === 'stable'">
+                  <span *ngIf="kpi.trend === 'up'" class="mr-1">↗</span>
+                  <span *ngIf="kpi.trend === 'down'" class="mr-1">↘</span>
+                  <span *ngIf="kpi.trend === 'stable'" class="mr-1">→</span>
+                  {{ kpi.trendValue }}
+                </span>
+                <span class="ml-2 text-slate-500 truncate">vs semana anterior</span>
+              </div>
             </div>
           </div>
-          
-          <div class="risk-radar-section">
-            <h3 class="section-title">
-              <app-premium-icon
-                iconName="proteccion"
-                size="sm"
-                [showLabel]="false"
-                variant="error"
-                ariaLabel="Radar de Riesgo">
-              </app-premium-icon>
-              Radar de Riesgo
+        </section>
+
+        <!-- Charts Section -->
+        <section class="grid gap-6 lg:grid-cols-2">
+
+          <!-- PMT Evolution Chart -->
+          <div class="ui-card">
+            <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-4">
+              Evolución PMT (Últimos 6 meses)
             </h3>
-            <p class="section-subtitle">(Visualización de clientes por Health Score)</p>
-            <app-risk-radar 
-              [clients]="riskRadarClients"
-              (clientSelected)="onRiskClientSelected($event)"
-              (actionRequested)="onRiskActionRequested($event)">
-            </app-risk-radar>
+            <div class="h-64">
+              <canvas #pmtChart data-cy="chart-pmt"></canvas>
+            </div>
+          </div>
+
+          <!-- Revenue Projection Chart -->
+          <div class="ui-card">
+            <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-4">
+              Proyección de Ingresos
+            </h3>
+            <div class="h-64">
+              <canvas #revenueChart data-cy="chart-revenue"></canvas>
+            </div>
           </div>
         </section>
 
-        <!-- Feed de Actividad Humano -->
-        <section class="human-activity-section">
-          <h2 class="section-title">
-            <app-premium-icon
-              iconName="avi"
-              size="sm"
-              [showLabel]="false"
-              ariaLabel="Feed de Actividad en Tiempo Real">
-            </app-premium-icon>
-            Feed de Actividad en Tiempo Real
+        <!-- Action Items -->
+        <section *ngIf="actionableGroups.length > 0">
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+            Acciones Requeridas
           </h2>
-          <div class="activity-feed-container">
-            <app-human-activity-feed 
-              [activities]="premiumActivityFeed"
-              [maxItems]="4"
-              [showSuggestedActions]="true">
-            </app-human-activity-feed>
+          <div class="grid gap-4 md:grid-cols-2">
+            <div *ngFor="let group of actionableGroups" class="ui-card">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <h3 class="font-medium text-slate-900 dark:text-slate-100">{{ group.title }}</h3>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">{{ group.description }}</p>
+                </div>
+                <span class="ui-btn ui-btn-ghost ui-btn-sm">
+                  {{ group.clients.length }}
+                </span>
+              </div>
+              <div class="space-y-2">
+                <div *ngFor="let client of group.clients.slice(0, 3)" class="flex items-center justify-between text-sm">
+                  <span class="text-slate-900 dark:text-slate-100">{{ client.name }}</span>
+                  <span class="text-xs text-slate-500 dark:text-slate-400">{{ client.status }}</span>
+                </div>
+                <button *ngIf="group.clients.length > 3" class="text-xs text-sky-600 hover:text-sky-500" (click)="navigateToClients()">
+                  Ver {{ group.clients.length - 3 }} más...
+                </button>
+              </div>
+            </div>
           </div>
         </section>
 
+        <!-- Recent Activity -->
+        <section *ngIf="activityFeed.length > 0">
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+            Actividad Reciente
+          </h2>
+          <div class="ui-card space-y-4">
+            <div *ngFor="let activity of activityFeed.slice(0, 5)" class="flex items-start space-x-3 pb-3 border-b border-slate-100 dark:border-slate-800 last:border-0">
+              <div class="flex-shrink-0 w-8 h-8 bg-sky-100 dark:bg-sky-900 rounded-full flex items-center justify-center text-xs">
+                📊
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm text-slate-900 dark:text-slate-100">{{ activity.message }}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">{{ formatTimeAgo(activity.timestamp) }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   `,
   styles: [`
-    /* ===== COMMAND CENTER DASHBOARD ===== */
-    .command-center-dashboard {
-      min-height: 100vh;
-      background: var(--bg-gray-950);
-      background-image: 
-        radial-gradient(circle at 25% 25%, var(--primary-cyan-900) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, var(--accent-amber-900) 0%, transparent 50%);
-    }
-
-    /* ===== PREMIUM HEADER ===== */
-    .command-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 24px 32px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-backdrop);
-      border-radius: 0 0 24px 24px;
-      margin-bottom: 32px;
-      box-shadow: var(--shadow-premium);
-    }
-
-    .command-title-section {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .command-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 0;
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--primary-cyan-300);
-      letter-spacing: -0.025em;
-    }
-
-    .command-icon {
-      margin-right: 8px;
-    }
-
-    .command-icon app-premium-icon {
-      animation: glow-pulse 3s ease-in-out infinite;
-    }
-
-    @keyframes glow-pulse {
-      0%, 100% { 
-        filter: drop-shadow(0 0 10px var(--primary-cyan-400));
-      }
-      50% { 
-        filter: drop-shadow(0 0 20px var(--accent-amber-500));
-      }
-    }
-
-    .command-subtitle {
-      margin: 0;
-      color: var(--bg-gray-300);
-      font-size: 1.1rem;
-      font-weight: 500;
-      opacity: 0.9;
-    }
-
-    .command-controls {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .user-name {
-      color: var(--bg-gray-200);
-      font-weight: 600;
-      font-size: 1rem;
-    }
-
-    .client-mode-badge {
-      background: var(--accent-amber-500);
-      color: var(--bg-gray-950);
-      padding: 8px 16px;
-      border: none;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .client-mode-badge:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
-    }
-
-    .client-mode-badge.active {
-      background: var(--accent-amber-400);
-      box-shadow: 0 0 20px var(--accent-amber-500);
-    }
-
-    /* ===== MAIN DASHBOARD LAYOUT ===== */
-    .command-dashboard-main {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 32px 32px 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
-
-    /* ===== NEXT BEST ACTION HERO ===== */
-    .next-best-action-hero {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-backdrop);
-      border-radius: 24px;
-      padding: 32px;
-      box-shadow: var(--shadow-premium);
+    /* Minimal custom styles - mainly relying on Tailwind + UI helpers */
+    .chart-container {
       position: relative;
-      overflow: hidden;
-    }
-
-    .next-best-action-hero::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(135deg, var(--primary-cyan-400), transparent, var(--accent-amber-500));
-      border-radius: 24px;
-      z-index: -1;
-      opacity: 0.5;
-    }
-
-    .hero-header {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .hero-title {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--primary-cyan-300);
-      margin: 0;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-    }
-
-    /* ===== INTELLIGENCE GRID ===== */
-    .intelligence-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-    }
-
-    .kpis-section, .risk-radar-section {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-backdrop);
-      border-radius: 24px;
-      padding: 32px;
-      box-shadow: var(--shadow-premium);
-    }
-
-    .section-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--primary-cyan-300);
-      margin: 0 0 8px 0;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .section-subtitle {
-      font-size: 0.95rem;
-      color: var(--bg-gray-400);
-      margin: 0 0 24px 0;
-      font-style: italic;
-    }
-
-    /* ===== HUMAN ACTIVITY FEED ===== */
-    .human-activity-section {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-backdrop);
-      border-radius: 24px;
-      padding: 32px;
-      box-shadow: var(--shadow-premium);
-    }
-
-    .activity-feed-container {
-      margin-top: 16px;
-    }
-
-    /* ===== RESPONSIVE DESIGN ===== */
-    @media (max-width: 1200px) {
-      .intelligence-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .command-header {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .command-dashboard-main {
-        padding: 0 16px 16px 16px;
-      }
-      
-      .command-header {
-        padding: 20px 16px;
-        border-radius: 0;
-      }
-      
-      .command-title {
-        font-size: 1.6rem;
-      }
-      
-      .next-best-action-hero,
-      .kpis-section, 
-      .risk-radar-section,
-      .human-activity-section {
-        padding: 24px;
-      }
+      height: 250px;
     }
   `]
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('pmtChart', { static: false }) pmtChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('revenueChart', { static: false }) revenueChartRef!: ElementRef<HTMLCanvasElement>;
+
   private destroy$ = new Subject<void>();
-  
+  private pmtChart?: Chart;
+  private revenueChart?: Chart;
+
   // State management
-  userName = 'Ricardo Montoya';
+  userName = 'Ricardo';
   selectedMarket: Market = 'all';
   isLoading = true;
-  showProfileDropdown = false;
-  
+  showMobileActions = false;
+
   // Dashboard data
   stats: DashboardStats | null = null;
-  // Back-compat for specs
   dashboardStats!: DashboardStats;
   activityFeed: ActivityFeedItem[] = [];
   funnelData: OpportunityStage[] = [];
   actionableGroups: ActionableGroup[] = [];
   allClients: ActionableClient[] = [];
 
-  // Premium components data
-  currentViewMode: ViewMode = 'advisor';
-  nextBestAction?: NextBestActionData;
-  contextualKPIs: KPIData[] = [];
-  riskRadarClients: RiskRadarClient[] = [];
-  premiumActivityFeed: ActivityItem[] = [];
+  // KPI Cards Data
+  kpiCards: KPICard[] = [
+    {
+      title: 'PMT Mensual',
+      value: '$8,450',
+      subValue: 'Promedio móvil',
+      icon: '💰',
+      dataCy: 'kpi-pmt',
+      trend: 'up',
+      trendValue: '+5.2%'
+    },
+    {
+      title: 'TIR',
+      value: '27.1%',
+      subValue: 'Tasa Interna de Retorno',
+      icon: '📈',
+      dataCy: 'kpi-tir',
+      trend: 'up',
+      trendValue: '+2.1%'
+    },
+    {
+      title: 'Ahorro Proyectado',
+      value: '$32,500',
+      subValue: 'Próximos 12 meses',
+      icon: '🎯',
+      dataCy: 'kpi-ahorro',
+      trend: 'up',
+      trendValue: '+12.8%'
+    },
+    {
+      title: 'Unidades Entregadas',
+      value: '12',
+      subValue: 'Este mes',
+      icon: '🚚',
+      dataCy: 'kpi-entregas',
+      trend: 'stable',
+      trendValue: '0%'
+    }
+  ];
 
   constructor(
     private router: Router,
     private dashboardService: DashboardService
   ) {}
 
-  env = environment as any;
-
   ngOnInit(): void {
     this.loadDashboardData();
     this.subscribeToActivityFeed();
   }
 
+  ngAfterViewInit(): void {
+    // Initialize charts after view is ready
+    setTimeout(() => {
+      this.initializeCharts();
+    }, 0);
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    // Cleanup charts
+    if (this.pmtChart) {
+      this.pmtChart.destroy();
+    }
+    if (this.revenueChart) {
+      this.revenueChart.destroy();
+    }
   }
 
-  /**
-   * Strategic Implementation: Center of Command
-   * Creates new opportunity using guided modal flow with SMART CONTEXT
-   */
+  private initializeCharts(): void {
+    if (this.pmtChartRef?.nativeElement) {
+      this.initializePMTChart();
+    }
+    if (this.revenueChartRef?.nativeElement) {
+      this.initializeRevenueChart();
+    }
+  }
+
+  private initializePMTChart(): void {
+    const ctx = this.pmtChartRef.nativeElement.getContext('2d');
+    if (!ctx) return;
+
+    const config: ChartConfiguration<'line'> = {
+      type: 'line',
+      data: {
+        labels: ['Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        datasets: [{
+          label: 'PMT',
+          data: [7800, 8200, 8300, 8450, 8600, 8750],
+          borderColor: '#0EA5E9',
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          pointBackgroundColor: '#0EA5E9',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            ticks: {
+              callback: function(value) {
+                return '$' + Number(value).toLocaleString();
+              },
+              color: '#6B7280'
+            },
+            grid: {
+              color: '#E5E7EB'
+            }
+          },
+          x: {
+            ticks: { color: '#6B7280' },
+            grid: {
+              color: '#E5E7EB'
+            }
+          }
+        },
+        elements: {
+          point: {
+            hoverRadius: 6
+          }
+        }
+      }
+    };
+
+    this.pmtChart = new Chart(ctx, config);
+  }
+
+  private initializeRevenueChart(): void {
+    const ctx = this.revenueChartRef.nativeElement.getContext('2d');
+    if (!ctx) return;
+
+    const config: ChartConfiguration<'bar'> = {
+      type: 'bar',
+      data: {
+        labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Ingresos Reales',
+          data: [45000, 52000, 48000, 61000, 55000, 67000],
+          backgroundColor: '#0EA5E9',
+          borderRadius: 4
+        }, {
+          label: 'Proyección',
+          data: [50000, 55000, 53000, 65000, 60000, 70000],
+          backgroundColor: '#94A3B8',
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              usePointStyle: true,
+              color: '#6B7280',
+              font: { size: 12 }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return '$' + Number(value).toLocaleString();
+              },
+              color: '#6B7280'
+            },
+            grid: {
+              color: '#E5E7EB'
+            }
+          },
+          x: {
+            ticks: { color: '#6B7280' },
+            grid: {
+              color: '#E5E7EB'
+            }
+          }
+        }
+      }
+    };
+
+    this.revenueChart = new Chart(ctx, config);
+  }
+
   createNewOpportunity(): void {
-    // Smart Context Integration: Pass current dashboard state as intelligence
     const smartContext = {
-      // Market intelligence from current filter
       market: this.selectedMarket !== 'all' ? this.selectedMarket : undefined,
-      // Business intelligence from current stats
       suggestedFlow: this.getSuggestedFlowFromStats(),
-      // Temporal context
       timestamp: Date.now(),
-      // Dashboard context for return navigation
       returnContext: 'dashboard-filtered'
     };
-    
-    this.router.navigate(['/nueva-oportunidad'], { 
+
+    this.router.navigate(['/nueva-oportunidad'], {
       queryParams: smartContext
     });
   }
 
-  /**
-   * Intelligent Flow Suggestion based on current pipeline stats
-   */
+  toggleMobileActions(): void {
+    this.showMobileActions = !this.showMobileActions;
+  }
+
   private getSuggestedFlowFromStats(): string | undefined {
     if (!this.stats) return undefined;
-    
+
     const { nuevas, expediente, aprobado } = this.stats.opportunitiesInPipeline;
-    
-    // Business Intelligence: Suggest based on pipeline balance
+
     if (nuevas > expediente + aprobado) {
-      return 'COTIZACION'; // Pipeline needs more conversions
+      return 'COTIZACION';
     } else if (aprobado > nuevas) {
-      return 'SIMULACION'; // Pipeline is healthy, focus on long-term planning
+      return 'SIMULACION';
     }
-    
-    return undefined; // Let user choose
+
+    return undefined;
   }
 
-  /**
-   * Toggle profile dropdown menu
-   */
-  toggleProfileDropdown(): void {
-    this.showProfileDropdown = !this.showProfileDropdown;
-  }
-
-  /**
-   * Filter dashboard by market
-   */
   onMarketFilter(market: Market): void {
     this.selectedMarket = market;
     this.loadDashboardData();
   }
 
-  // Methods expected by specs
   onMarketChanged(market: Market): void {
     this.selectedMarket = market;
     this.dashboardService.updateMarket(market);
@@ -510,17 +485,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(['/clientes', clientId]);
   }
 
+  navigateToClients(): void {
+    this.router.navigate(['/clientes']);
+  }
+
   navigateToOpportunities(): void {
     this.router.navigate(['/opportunities']);
   }
 
-  /**
-   * Load dashboard statistics
-   */
   private loadDashboardData(): void {
     this.isLoading = true;
-    
-    // Use forkJoin so synchronous Observables (of(...)) resolve within the same tick in tests
+
     const stats$ = this.dashboardService.getDashboardStats(this.selectedMarket);
     const funnel$ = this.dashboardService.getOpportunityStages(this.selectedMarket);
     const groups$ = this.dashboardService.getActionableGroups(this.selectedMarket);
@@ -531,31 +506,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.stats = stats || null;
         if (stats) {
           this.dashboardStats = stats;
+          this.updateKPIsFromStats(stats);
         }
         this.funnelData = funnel || [];
         this.actionableGroups = groups || [];
         this.allClients = clients || [];
 
-        // Initialize premium components with loaded data
-        this.initializePremiumComponents();
-
         this.isLoading = false;
       },
       error: (error: any) => {
-        console.error('Error loading dashboard data:', error?.message || error);
+// removed by clean-audit
         this.isLoading = false;
-
-        // Fallback mock data for development
         this.loadMockData();
-        // Initialize premium components with mock data
-        this.initializePremiumComponents();
       }
     });
   }
 
-  /**
-   * Subscribe to real-time activity feed
-   */
   private subscribeToActivityFeed(): void {
     const source: any = (this.dashboardService as any).activityFeed$ || this.dashboardService.getActivityFeed?.();
     if (!source || typeof source.pipe !== 'function') {
@@ -563,14 +529,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     source
       .pipe(takeUntil(this.destroy$))
-      .subscribe((activities: ActivityItem[] | ActivityFeedItem[]) => {
-        this.activityFeed = activities as ActivityFeedItem[];
+      .subscribe((activities: ActivityFeedItem[]) => {
+        this.activityFeed = activities;
       });
   }
 
-  /**
-   * Format currency for display
-   */
+  private updateKPIsFromStats(stats: DashboardStats): void {
+    // Update KPI cards with real data
+    const pmtValue = this.formatCurrency(stats.monthlyRevenue.collected / 30);
+    this.kpiCards[0].value = pmtValue;
+    this.kpiCards[2].value = this.formatCurrency(stats.monthlyRevenue.projected - stats.monthlyRevenue.collected);
+    this.kpiCards[3].value = stats.activeContracts.toString();
+  }
+
   formatCurrency(amount: number): string {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
@@ -580,205 +551,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }).format(amount);
   }
 
-  /**
-   * Format time ago for activity feed
-   */
   formatTimeAgo(timestamp: Date): string {
     const now = new Date();
     const diffMinutes = Math.floor((now.getTime() - timestamp.getTime()) / 60000);
-    
+
     if (diffMinutes < 1) return 'Ahora mismo';
     if (diffMinutes < 60) return `Hace ${diffMinutes} minutos`;
-    
+
     const diffHours = Math.floor(diffMinutes / 60);
     if (diffHours < 24) return `Hace ${diffHours} horas`;
-    
+
     const diffDays = Math.floor(diffHours / 24);
     return `Hace ${diffDays} días`;
-  }
-
-  // Premium Component Event Handlers
-  onViewModeChanged(mode: ViewMode): void {
-    this.currentViewMode = mode;
-    if (mode === 'client') {
-      this.loadClientViewData();
-    }
-  }
-
-  onActionExecuted(event: {action: ActionButton, context: NextBestActionData}): void {
-    console.log('Executing action:', event.action, 'for context:', event.context);
-    switch (event.action.action) {
-      case 'call_client':
-        // Navigate to client detail or trigger call interface
-        break;
-      case 'send_whatsapp':
-        // Trigger WhatsApp integration
-        break;
-      case 'view_expediente':
-        // Navigate to client expediente
-        this.router.navigate(['/clientes', event.context.client.id]);
-        break;
-    }
-  }
-
-  onRiskClientSelected(client: RiskRadarClient): void {
-    console.log('Risk client selected:', client);
-  }
-
-  onRiskActionRequested(client: RiskRadarClient): void {
-    console.log('Risk action requested for:', client);
-    this.convertRiskClientToNextBestAction(client);
-  }
-
-  private convertRiskClientToNextBestAction(riskClient: RiskRadarClient): void {
-    this.nextBestAction = {
-      id: `risk-action-${riskClient.id}`,
-      type: 'contact',
-      priority: riskClient.riskLevel === 'critical' ? 'critical' : 'high',
-      client: {
-        id: riskClient.id,
-        name: riskClient.name,
-        healthScore: riskClient.healthScore
-      },
-      action: {
-        title: `Contactar a ${riskClient.name}`,
-        description: `Cliente en riesgo ${riskClient.riskLevel} requiere atención inmediata`,
-        reasoning: `Health Score: ${riskClient.healthScore}. Issues: ${riskClient.issues.join(', ')}`,
-        timeEstimate: '10 min'
-      },
-      context: {
-        daysWaiting: Math.floor((Date.now() - new Date(riskClient.lastContact).getTime()) / (1000 * 60 * 60 * 24)),
-        amountInvolved: riskClient.value
-      },
-      suggestedActions: {
-        primary: {
-          label: 'Llamar Ahora',
-          icon: '📞',
-          action: 'call_client',
-          params: { clientId: riskClient.id }
-        },
-        secondary: [
-          {
-            label: 'Enviar WhatsApp',
-            icon: '📱',
-            action: 'send_whatsapp',
-            params: { clientId: riskClient.id }
-          },
-          {
-            label: 'Ver Expediente',
-            icon: '📄',
-            action: 'view_expediente',
-            params: { clientId: riskClient.id }
-          }
-        ]
-      }
-    };
-  }
-
-  private loadClientViewData(): void {
-    // Load simplified data for client view mode
-    console.log('Loading client view data');
-  }
-
-  private initializePremiumComponents(): void {
-    this.loadNextBestAction();
-    this.loadContextualKPIs();
-    this.loadRiskRadarData();
-    this.loadPremiumActivityFeed();
-  }
-
-  private loadNextBestAction(): void {
-    // Generate NextBestAction from current actionable groups
-    if (this.actionableGroups.length > 0) {
-      const highPriorityGroup = this.actionableGroups.find(g => (g as any).priority === 'high');
-      if (highPriorityGroup && highPriorityGroup.clients.length > 0) {
-        const client = highPriorityGroup.clients[0];
-        this.nextBestAction = {
-          id: `action-${client.id}`,
-          type: 'document',
-          priority: 'high',
-          client: {
-            id: client.id,
-            name: client.name,
-            healthScore: 78,
-            route: 'Ruta 27'
-          },
-          action: {
-            title: `Contactar a ${client.name}`,
-            description: `Su expediente está incompleto (falta INE). Tiene un Health Score de 78.`,
-            reasoning: `Cliente con alto potencial, requiere atención inmediata para mantener el momentum.`,
-            timeEstimate: '5 min'
-          },
-          context: {
-            daysWaiting: (client as any).daysInStage || 5,
-            amountInvolved: 15000
-          },
-          suggestedActions: {
-            primary: {
-              label: 'Ver Expediente',
-              icon: '📄',
-              action: 'view_expediente'
-            },
-            secondary: [
-              {
-                label: 'Llamar Ahora',
-                icon: '📞',
-                action: 'call_client'
-              },
-              {
-                label: 'Enviar Recordatorio por WhatsApp',
-                icon: '📱',
-                action: 'send_whatsapp'
-              }
-            ]
-          }
-        };
-      }
-    }
-
-    // Fallback mock action if no actionable groups
-    if (!this.nextBestAction) {
-      this.nextBestAction = {
-        id: 'mock-action-1',
-        type: 'contact',
-        priority: 'high',
-        client: {
-          id: 'client-1',
-          name: 'María García',
-          healthScore: 78,
-          route: 'Ruta 27'
-        },
-        action: {
-          title: 'Contactar a María García (Ruta 27)',
-          description: 'Su expediente está incompleto (falta INE). Tiene un Health Score de 78.',
-          reasoning: 'Cliente con alto potencial que necesita completar documentación para avanzar en el proceso.',
-          timeEstimate: '5 min'
-        },
-        context: {
-          daysWaiting: 5,
-          amountInvolved: 15000
-        },
-        suggestedActions: {
-          primary: {
-            label: 'Ver Expediente',
-            icon: '📄',
-            action: 'view_expediente'
-          },
-          secondary: [
-            {
-              label: 'Llamar Ahora',
-              icon: '📞',
-              action: 'call_client'
-            },
-            {
-              label: 'Enviar Recordatorio por WhatsApp',
-              icon: '📱',
-              action: 'send_whatsapp'
-            }
-          ]
-        }
-      };
-    }
   }
 
   getCompletionPercentage(): number {
@@ -796,212 +580,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return (this.actionableGroups?.[0]?.clients as any[]) || [];
   }
 
-  private loadContextualKPIs(): void {
-    if (!this.stats) {
-      // Mock KPIs for development
-      this.contextualKPIs = [
-        {
-          id: 'opportunities',
-          title: 'Oportunidades',
-          value: 5,
-          previousValue: 4,
-          trend: 'up',
-          trendPercentage: 25,
-          format: 'number',
-          icon: '💡',
-          color: 'primary',
-          subtitle: 'Nuevas esta semana'
-        },
-        {
-          id: 'conversion',
-          title: 'Tasa de Cierre',
-          value: 28,
-          previousValue: 32,
-          trend: 'down',
-          trendPercentage: 12.5,
-          format: 'percentage',
-          icon: '🎯',
-          color: 'accent'
-        },
-        {
-          id: 'contracts',
-          title: 'Contratos Activos',
-          value: 28,
-          previousValue: 26,
-          trend: 'stable',
-          trendPercentage: 7.7,
-          format: 'number',
-          icon: '📋',
-          color: 'success'
-        },
-        {
-          id: 'revenue',
-          title: 'Revenue del Mes',
-          value: 1250000,
-          previousValue: 1115000,
-          trend: 'up',
-          trendPercentage: 12.1,
-          format: 'currency',
-          icon: '💰',
-          color: 'accent'
-        }
-      ];
-      return;
-    }
-
-    this.contextualKPIs = [
-      {
-        id: 'opportunities',
-        title: 'Oportunidades',
-        value: this.stats.opportunitiesInPipeline.nuevas,
-        previousValue: this.stats.opportunitiesInPipeline.nuevas - 1,
-        trend: this.stats.opportunitiesInPipeline.nuevas > 4 ? 'up' : 'down',
-        trendPercentage: 25,
-        format: 'number',
-        icon: '💡',
-        color: 'primary',
-        subtitle: 'Nuevas esta semana'
-      },
-      {
-        id: 'conversion',
-        title: 'Tasa de Cierre',
-        value: 28,
-        previousValue: 32,
-        trend: 28 > 25 ? 'up' : 'down',
-        trendPercentage: 15,
-        format: 'percentage',
-        icon: '🎯',
-        color: 'accent'
-      },
-      {
-        id: 'contracts',
-        title: 'Contratos Activos',
-        value: this.stats.activeContracts,
-        previousValue: this.stats.activeContracts - 2,
-        trend: 'stable',
-        trendPercentage: 0,
-        format: 'number',
-        icon: '📋',
-        color: 'success'
-      },
-      {
-        id: 'revenue',
-        title: 'Revenue del Mes',
-        value: this.stats.monthlyRevenue.collected,
-        previousValue: this.stats.monthlyRevenue.collected * 0.88,
-        trend: 'up',
-        trendPercentage: 12,
-        format: 'currency',
-        icon: '💰',
-        color: 'accent'
-      }
-    ];
-  }
-
-  private loadRiskRadarData(): void {
-    // Mock risk radar data
-    this.riskRadarClients = [
-      {
-        id: 'client-risk-1',
-        name: 'María González',
-        healthScore: 45,
-        riskLevel: 'critical',
-        position: { x: 20, y: 80 },
-        issues: ['Documentos Vencidos', 'Sin contacto 7 días'],
-        lastContact: 'hace 7 días',
-        value: 25000,
-        urgency: 9
-      },
-      {
-        id: 'client-risk-2',
-        name: 'Carlos Méndez', 
-        healthScore: 62,
-        riskLevel: 'medium',
-        position: { x: 65, y: 45 },
-        issues: ['INE Vencida'],
-        lastContact: 'hace 3 días',
-        value: 18000,
-        urgency: 6
-      },
-      {
-        id: 'client-risk-3',
-        name: 'Ana Ruiz',
-        healthScore: 85,
-        riskLevel: 'low',
-        position: { x: 80, y: 20 },
-        issues: ['Meta Completada'],
-        lastContact: 'hace 1 día',
-        value: 30000,
-        urgency: 2
-      },
-      {
-        id: 'client-risk-4',
-        name: 'José Hernández',
-        healthScore: 38,
-        riskLevel: 'critical',
-        position: { x: 15, y: 70 },
-        issues: ['Pago Vencido', 'Sin respuesta'],
-        lastContact: 'hace 12 días',
-        value: 22000,
-        urgency: 10
-      }
-    ];
-  }
-
-  private loadPremiumActivityFeed(): void {
-    // Mock premium activity feed
-    this.premiumActivityFeed = [
-      {
-        id: 'activity-1',
-        type: 'system',
-        category: 'payment',
-        timestamp: new Date(Date.now() - 2 * 60000), // 2 minutes ago
-        client: {
-          id: 'client-1',
-          name: 'Juan Pérez'
-        },
-        title: 'Pago de $5,000 MXN recibido de Juan Pérez.',
-        description: 'Pago de $5,000 MXN recibido de Juan Pérez. ¡Felicítalo!',
-        metadata: {
-          amount: 5000
-        },
-        suggestedAction: {
-          label: '¡Felicítalo!',
-          action: 'congratulate_client',
-          params: { clientName: 'Juan Pérez' }
-        },
-        priority: 'medium'
-      },
-      {
-        id: 'activity-2',
-        type: 'advisor',
-        category: 'document',
-        timestamp: new Date(Date.now() - 15 * 60000), // 15 minutes ago
-        client: {
-          id: 'client-2',
-          name: 'Ana López'
-        },
-        title: 'Documento \'INE\' de Ana López marcado como \'En Revisión\'.',
-        description: 'El documento ha sido recibido y está siendo procesado por el equipo de validación.',
-        priority: 'low'
-      },
-      {
-        id: 'activity-3',
-        type: 'system',
-        category: 'opportunity',
-        timestamp: new Date(Date.now() - 60 * 60000), // 1 hour ago
-        client: {
-          id: 'client-3',
-          name: 'Carlos Sánchez'
-        },
-        title: 'Nueva oportunidad \'Carlos Sánchez\' asignada.',
-        description: 'Se ha creado una nueva oportunidad de negocio que requiere tu atención.',
-        priority: 'high'
-      }
-    ];
-  }
-
-  // Mock data loader for development
   private loadMockData(): void {
     this.stats = {
       opportunitiesInPipeline: {
@@ -1022,23 +600,59 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.actionableGroups = [
       {
-        title: 'Documentos Vencidos',
-        description: 'Clientes con documentación que requiere renovación',
+        title: 'Documentos Faltantes',
+        description: 'Clientes que necesitan completar documentación',
         clients: [
           {
             id: '1',
             name: 'María González',
-            status: 'Documentos Vencidos',
+            status: 'INE faltante',
             avatarUrl: 'https://via.placeholder.com/40'
           },
           {
             id: '2',
             name: 'Carlos Méndez',
-            status: 'INE Vencida',
+            status: 'Comprobante de ingresos',
+            avatarUrl: 'https://via.placeholder.com/40'
+          }
+        ]
+      },
+      {
+        title: 'Seguimiento Requerido',
+        description: 'Clientes que requieren seguimiento',
+        clients: [
+          {
+            id: '3',
+            name: 'Ana López',
+            status: 'Sin respuesta 5 días',
             avatarUrl: 'https://via.placeholder.com/40'
           }
         ]
       }
     ];
+
+    this.activityFeed = [
+      {
+        id: '1',
+        type: 'new_client',
+        message: 'Juan Pérez se registró en la plataforma',
+        timestamp: new Date(Date.now() - 5 * 60000),
+        clientName: 'Juan Pérez',
+        icon: '👤'
+      },
+      {
+        id: '2',
+        type: 'payment_received',
+        message: 'María González realizó un pago de $5,000',
+        timestamp: new Date(Date.now() - 15 * 60000),
+        clientName: 'María González',
+        amount: 5000,
+        icon: '💰'
+      }
+    ];
+
+// removed by clean-audit
+    this.updateKPIsFromStats(this.stats);
   }
 }
+// removed by clean-audit

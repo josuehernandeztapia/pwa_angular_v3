@@ -131,7 +131,7 @@ import { Client, BusinessFlow } from '../../../models/types';
               class="select-all-checkbox"
             >
             <span class="select-all-label">
-              {{ selectedClientes.size === 0 ? 'Seleccionar todo' : selectedClientes.size + ' seleccionado' + (selectedClientes.size !== 1 ? 's' : '') }}
+// removed by clean-audit
             </span>
           </label>
         </div>
@@ -700,3 +700,4 @@ export class ClientesListComponent implements OnInit {
     // Navigation handled by routerLink
   }
 }
+// removed by clean-audit

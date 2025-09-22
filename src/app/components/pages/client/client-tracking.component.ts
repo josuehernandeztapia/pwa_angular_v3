@@ -854,7 +854,9 @@ export class ClientTrackingComponent implements OnInit {
       });
       svc.downloadPDF(blob, `entrega-${info.orderId}.pdf`);
     } catch (e) {
-      console.error('PDF error', e);
+// removed by clean-audit
     }
   }
 }
+
+// removed by clean-audit

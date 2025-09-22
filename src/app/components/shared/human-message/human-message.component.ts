@@ -426,11 +426,12 @@ export class HumanMessageComponent implements OnInit {
 
   onActionClick(): void {
     // Emit action event or handle navigation
-    console.log(`Action clicked: ${this.microcopy?.actionText}`);
+// removed by clean-audit
   }
 
   onDismiss(): void {
     // Emit dismiss event
-    console.log(`Message dismissed: ${this.microcopy?.id}`);
+// removed by clean-audit
   }
 }
+// removed by clean-audit

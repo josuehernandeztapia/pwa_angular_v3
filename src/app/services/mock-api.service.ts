@@ -59,7 +59,7 @@ export class MockApiService {
     }).pipe(
       delay(delayMs),
       catchError(error => {
-        console.error('MockApi Error:', error);
+// removed by clean-audit
         return throwError(() => error);
       })
     );
@@ -498,3 +498,4 @@ export class MockApiService {
     });
   }
 }
+// removed by clean-audit

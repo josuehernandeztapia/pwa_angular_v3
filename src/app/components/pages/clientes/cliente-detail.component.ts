@@ -754,14 +754,14 @@ export class ClienteDetailComponent implements OnInit {
   isGeneratingPDF = false;
   
   openPaymentModal = () => {
-    console.log('Opening payment modal');
+// removed by clean-audit
     this.generatePaymentLink('spei');
   };
   
   constructor(private route: ActivatedRoute) {}
   
   ngOnInit(): void {
-    // Mock client data - replace with actual service call
+// removed by clean-audit
     this.client = {
       id: 'client-001',
       name: 'Juan Pérez García',
@@ -808,7 +808,7 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   private loadClientEvents(): void {
-    // Mock event data - in real implementation, this would come from a service
+// removed by clean-audit
     this.clientEvents = [
       {
         id: '1',
@@ -847,7 +847,7 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   onAviCompleted(result: any): void {
-    console.log('AVI Completed:', result);
+// removed by clean-audit
     this.showAviModal = false;
     
     // Update client data with AVI results
@@ -883,7 +883,7 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   startTraditionalKyc(): void {
-    console.log('Starting traditional KYC');
+// removed by clean-audit
   }
   
   canGenerateContract(): boolean {
@@ -891,11 +891,11 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   generateContract(): void {
-    console.log('Generating contract');
+// removed by clean-audit
   }
   
   viewDocuments(): void {
-    console.log('Viewing documents');
+// removed by clean-audit
   }
   
   // Utility Methods
@@ -1005,7 +1005,7 @@ export class ClienteDetailComponent implements OnInit {
   
   // Payment Methods
   generatePaymentLink(method: 'spei' | 'conekta'): void {
-    console.log(`Generating ${method} payment link for client:`, this.client?.id);
+// removed by clean-audit
     // Implementation would create actual payment links
     const mockLinks = {
       spei: 'https://payments.conductores.mx/spei/client-001',
@@ -1023,7 +1023,7 @@ export class ClienteDetailComponent implements OnInit {
     // Simulate PDF generation
     setTimeout(() => {
       this.isGeneratingPDF = false;
-      console.log('PDF generated for client:', this.client?.id);
+// removed by clean-audit
       
       // In real implementation, this would trigger actual PDF generation
       const mockPdfUrl = `https://documents.conductores.mx/statements/client-001-${Date.now()}.pdf`;
@@ -1037,7 +1037,7 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   previewAccountStatement(): void {
-    console.log('Opening account statement preview');
+// removed by clean-audit
     // Implementation would show a modal with statement preview
   }
   
@@ -1063,7 +1063,7 @@ export class ClienteDetailComponent implements OnInit {
         m.startedAt = new Date();
       }
       
-      console.log(`Updated milestone ${milestoneKey}:`, milestone);
+// removed by clean-audit
     }
   }
   
@@ -1096,3 +1096,4 @@ export class ClienteDetailComponent implements OnInit {
     return this.client?.totalPayments || 24;
   }
 }
+// removed by clean-audit

@@ -263,12 +263,12 @@ const commonBeforeWildcard: Routes = [
     title: 'Flow Builder - Conductores PWA'
   },
 
-  // Premium Icons Demo (for development/showcase)
+// removed by clean-audit
   {
-    path: 'premium-icons-demo',
-    loadComponent: () => import('./components/ui/premium-icons-demo/premium-icons-demo.component').then(c => c.PremiumIconsDemoComponent),
+// removed by clean-audit
+// removed by clean-audit
     canActivate: [AuthGuard],
-    title: 'Premium Icons Demo - Conductores PWA'
+// removed by clean-audit
   },
 
   {
@@ -323,6 +323,26 @@ const postSalesWizardRoutes: Routes = [
   }
 ];
 
+// Rutas Integraciones Externas (condicional por feature flag)
+const integrationsRoutes: Routes = [
+  {
+    path: 'integraciones',
+// removed by clean-audit
+    canActivate: [AuthGuard],
+    title: 'Integraciones Externas'
+  }
+];
+
+// Rutas Administración/Usuarios (condicional por feature flag)
+const adminRoutes: Routes = [
+  {
+    path: 'administracion',
+    loadComponent: () => import('./components/pages/admin/admin-panel.component').then(c => c.AdminPanelComponent),
+    canActivate: [AuthGuard],
+    title: 'Panel de Administración'
+  }
+];
+
 // Cola (wildcard) - siempre al final
 const tailRoutes: Routes = [
   {
@@ -339,9 +359,21 @@ const withWizard = environment.features.enablePostSalesWizard
   ? [...postSalesWizardRoutes]
   : [];
 
+const withIntegrations = environment.features.enableIntegrationsConfig
+  ? [...integrationsRoutes]
+  : [];
+
+const withAdmin = environment.features.enableAdminConfig
+  ? [...adminRoutes]
+  : [];
+
 export const routes: Routes = [
   ...commonBeforeWildcard,
   ...withLab,
   ...withWizard,
+  ...withIntegrations,
+  ...withAdmin,
   ...tailRoutes
 ];
+
+// removed by clean-audit

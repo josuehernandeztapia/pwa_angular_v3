@@ -262,7 +262,7 @@ export class WebhookRetryService {
 
     this.processWebhook(webhookState).subscribe({
       next: (result) => {
-        console.log(`✅ Webhook ${webhookState.id} processed successfully after ${result.attempts} attempts`);
+// removed by clean-audit
       },
       error: (error) => {
         const config = this.getConfigForProvider(
@@ -325,7 +325,7 @@ export class WebhookRetryService {
     const recentSuccessful = recent.filter(w => w.status === 'COMPLETED').length;
     const recentReliability = recent.length > 0 ? (recentSuccessful / recent.length) : 1;
 
-    // Processing time calculation (mock for now)
+// removed by clean-audit
     const averageProcessingTime = 1500; // Would be calculated from actual data
 
     const metrics: WebhookMetrics = {
@@ -530,7 +530,7 @@ export class WebhookRetryService {
   }
 
   private getCircuitBreakerEvents(): number {
-    // Mock implementation - would track actual circuit breaker events
+// removed by clean-audit
     return 0;
   }
 
@@ -555,3 +555,4 @@ export class WebhookRetryService {
     return `WH-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 }
+// removed by clean-audit

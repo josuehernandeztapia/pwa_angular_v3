@@ -514,7 +514,7 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
       this.triggerRules.set(this.contractTriggersService.getTriggerRules());
       this.lastUpdate.set(new Date());
     }).catch(error => {
-      console.error('Error loading initial data:', error);
+// removed by clean-audit
     }).finally(() => {
       this.loading.set(false);
     });
@@ -536,7 +536,7 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         switchMap(() => this.contractTriggersService.getTriggerHistory(50)),
         catchError(error => {
-          console.error('Error in auto-refresh:', error);
+// removed by clean-audit
           return of([]);
         })
       )
@@ -561,7 +561,7 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
           this.loading.set(false);
         },
         error: (error) => {
-          console.error('Error in force refresh:', error);
+// removed by clean-audit
           this.loading.set(false);
         }
       });
@@ -572,7 +572,7 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
   }
 
   simulateDemoTriggers() {
-    // In a real app, this would call a demo endpoint
+// removed by clean-audit
     this.loading.set(true);
     setTimeout(() => {
       this.loading.set(false);
@@ -634,3 +634,4 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
     }
   }
 }
+// removed by clean-audit

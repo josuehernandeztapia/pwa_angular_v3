@@ -104,7 +104,7 @@ export class ApiConfigService {
     }
   };
   
-  // ===== MOCK CONFIGURATION FOR DEVELOPMENT =====
+// removed by clean-audit
   
   private readonly MOCK_CONFIG: MockConfig = {
     enabled: true, // Set to false when backend is ready
@@ -167,7 +167,7 @@ export class ApiConfigService {
     const config = this.loadConfigFromEnvironment();
     this.configSubject.next(config);
     
-    console.log(`🔧 API Config initialized:`, {
+// removed by clean-audit
       baseUrl: config.baseUrl,
       mockMode: this.MOCK_CONFIG.enabled,
       endpoints: Object.keys(this.ENDPOINTS).length
@@ -214,14 +214,14 @@ export class ApiConfigService {
   }
   
   /**
-   * Check if mock mode is enabled
+// removed by clean-audit
    */
   isMockMode(): boolean {
     return this.MOCK_CONFIG.enabled;
   }
   
   /**
-   * Get mock response for endpoint
+// removed by clean-audit
    */
   getMockResponse(endpointName: string): any {
     return this.MOCK_CONFIG.responses[endpointName] || null;
@@ -236,7 +236,7 @@ export class ApiConfigService {
       return throwError(() => new Error(`Endpoint ${endpointName} not configured`));
     }
     
-    // Mock mode bypass
+// removed by clean-audit
     if (this.isMockMode()) {
       return this.getMockRequest<T>(endpointName, data);
     }
@@ -317,7 +317,7 @@ export class ApiConfigService {
     return this.request<GeographicRiskConfigResponse>('GEOGRAPHIC_RISK');
   }
   
-  // ===== MOCK IMPLEMENTATIONS =====
+// removed by clean-audit
   
   private getMockRequest<T>(endpointName: string, data?: any): Observable<T> {
     const mockResponse = this.getMockResponse(endpointName);
@@ -325,12 +325,12 @@ export class ApiConfigService {
     
     // Simulate occasional errors
     if (Math.random() < this.MOCK_CONFIG.errorRate) {
-      return throwError(() => new Error(`Mock error for ${endpointName}`)).pipe(
+// removed by clean-audit
         timeout(delay)
       );
     }
     
-    console.log(`🎭 Mock response for ${endpointName}:`, mockResponse);
+// removed by clean-audit
     
     return of(mockResponse as T).pipe(
       timeout(delay),
@@ -349,7 +349,7 @@ export class ApiConfigService {
       this.getSystemHealth().subscribe({
         next: (health) => this.healthSubject.next(health),
         error: (error) => {
-          console.warn('Health check failed:', error);
+// removed by clean-audit
           this.healthSubject.next({
             status: 'DOWN',
             services: {},
@@ -432,22 +432,23 @@ export class ApiConfigService {
     
     this.configSubject.next(updatedConfig);
     
-    console.log(`🔧 API Config updated:`, updatedConfig);
+// removed by clean-audit
   }
   
   /**
-   * Toggle mock mode
+// removed by clean-audit
    */
   toggleMockMode(enabled: boolean): void {
     this.MOCK_CONFIG.enabled = enabled;
-    console.log(`🎭 Mock mode ${enabled ? 'enabled' : 'disabled'}`);
+// removed by clean-audit
   }
   
   /**
-   * Add or update mock response
+// removed by clean-audit
    */
   setMockResponse(endpointName: string, response: any): void {
     this.MOCK_CONFIG.responses[endpointName] = response;
-    console.log(`🎭 Mock response updated for ${endpointName}`);
+// removed by clean-audit
   }
 }
+// removed by clean-audit

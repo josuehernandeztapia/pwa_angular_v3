@@ -62,7 +62,7 @@ declare global {
  * Initialize memory leak prevention globally
  */
 const initializeGlobalTestSetup = async () => {
-  // Mock IndexedDB if not available
+// removed by clean-audit
   IndexedDBTestStateManager.mockIndexedDB();
   
   // Make manager available globally
@@ -77,15 +77,15 @@ const initializeGlobalTestSetup = async () => {
   // Set up global memory leak prevention
   setupMemoryLeakPrevention();
   
-  console.log('🧹 Memory leak prevention initialized');
+// removed by clean-audit
 };
 
 // Initialize immediately
 initializeGlobalTestSetup().catch(error => {
-  console.error('Failed to initialize test setup:', error);
+// removed by clean-audit
 });
 
-// Guard document.hidden redefinition in tests that stub visibility
+// removed by clean-audit
 try {
   const desc = Object.getOwnPropertyDescriptor(Document.prototype, 'hidden');
   if (desc && desc.configurable === false) {
@@ -97,7 +97,7 @@ try {
  * Global error handler for unhandled promise rejections
  */
 window.addEventListener('unhandledrejection', (event) => {
-  console.warn('Unhandled promise rejection in tests:', event.reason);
+// removed by clean-audit
   // Don't fail the test for memory cleanup issues
   if (event.reason && typeof event.reason === 'string' && 
       event.reason.includes('Database')) {
@@ -118,7 +118,7 @@ if (typeof jasmine !== 'undefined') {
     if (Math.random() < 0.1) { // 10% of the time
       const stats = testHelpers.getMemoryUsage();
       if (stats.usedJSHeapSize) {
-        console.debug(`Memory: ${(stats.usedJSHeapSize / 1024 / 1024).toFixed(1)}MB used`);
+// removed by clean-audit
       }
     }
   });
@@ -155,3 +155,4 @@ console.log = (...args) => {
 };
 
 export { setupMemoryLeakPrevention, testHelpers, IndexedDBTestStateManager };
+// removed by clean-audit

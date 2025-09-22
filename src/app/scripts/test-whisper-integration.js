@@ -1,8 +1,8 @@
 // Script para probar integración con OpenAI Whisper
 // Simular llamadas API sin hacer requests reales
 
-console.log('🎤 TESTING INTEGRACIÓN WHISPER CON SISTEMA AVI');
-console.log('===============================================\n');
+// removed by clean-audit
+// removed by clean-audit
 
 // Simulador de respuesta de Whisper API
 class WhisperAPISimulator {
@@ -209,7 +209,7 @@ class AVIWhisperAnalyzer {
 
 // Ejecutar tests
 async function runWhisperIntegrationTests() {
-  console.log('🧪 TESTING PERFILES DE VOZ\n');
+// removed by clean-audit
   
   const profiles = [
     { name: 'DISCURSO_CLARO', profile: 'clear_speech', expected: 'LOW_RISK' },
@@ -220,30 +220,30 @@ async function runWhisperIntegrationTests() {
   let testsPassed = 0;
   
   for (const test of profiles) {
-    console.log(`📝 Test: ${test.name}`);
-    console.log('─'.repeat(40));
+// removed by clean-audit
+// removed by clean-audit
     
     // 1. Simular respuesta de Whisper
     const whisperResponse = WhisperAPISimulator.simulateTranscription(test.profile);
-    console.log(`   Transcripción: "${whisperResponse.text}"`);
-    console.log(`   Palabras detectadas: ${whisperResponse.words?.length || 0}`);
-    console.log(`   Confianza promedio: ${whisperResponse.words ? 
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
       (whisperResponse.words.reduce((sum, w) => sum + w.confidence, 0) / whisperResponse.words.length * 100).toFixed(1) : 'N/A'}%`);
     
     // 2. Analizar métricas de voz
     const voiceMetrics = AVIWhisperAnalyzer.analyzeVoiceForAVI(whisperResponse, test.profile);
-    console.log(`   📊 Variación pitch: ${(voiceMetrics.pitch_variance * 100).toFixed(1)}%`);
-    console.log(`   📊 Frecuencia pausas: ${(voiceMetrics.pause_frequency * 100).toFixed(1)}%`);
-    console.log(`   📊 Nivel confianza: ${(voiceMetrics.confidence_level * 100).toFixed(1)}%`);
-    console.log(`   📊 Tremor de voz: ${(voiceMetrics.voice_tremor * 100).toFixed(1)}%`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
     // 3. Detectar indicadores de estrés
     const stressIndicators = AVIWhisperAnalyzer.detectStressIndicators(whisperResponse, voiceMetrics);
-    console.log(`   🚨 Indicadores estrés: [${stressIndicators.join(', ')}]`);
+// removed by clean-audit
     
     // 4. Generar score AVI
     const aviScore = AVIWhisperAnalyzer.generateAVIScore(stressIndicators, voiceMetrics, whisperResponse.text);
-    console.log(`   🎯 Score AVI: ${aviScore}/1000`);
+// removed by clean-audit
     
     // 5. Determinar nivel de riesgo
     let riskLevel;
@@ -252,7 +252,7 @@ async function runWhisperIntegrationTests() {
     else if (aviScore >= 450) riskLevel = 'HIGH';
     else riskLevel = 'CRITICAL';
     
-    console.log(`   📈 Nivel riesgo: ${riskLevel}_RISK`);
+// removed by clean-audit
     
     // 6. Validar resultado
     const expectedCategory = test.expected.split('_')[0];
@@ -261,41 +261,41 @@ async function runWhisperIntegrationTests() {
                       (expectedCategory === 'MEDIUM' && (actualCategory === 'HIGH' || actualCategory === 'LOW'));
     
     if (testPassed) {
-      console.log(`   ✅ TEST PASADO: Detección correcta`);
+// removed by clean-audit
       testsPassed++;
     } else {
-      console.log(`   ❌ TEST FALLIDO: Esperado ${test.expected}, obtenido ${riskLevel}_RISK`);
+// removed by clean-audit
     }
     
-    console.log('');
+// removed by clean-audit
   }
   
-  console.log('🏆 RESUMEN DE TESTS WHISPER');
-  console.log('═'.repeat(40));
-  console.log(`   Tests pasados: ${testsPassed}/${profiles.length}`);
-  console.log(`   Tasa de éxito: ${(testsPassed/profiles.length*100).toFixed(1)}%`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   
   if (testsPassed === profiles.length) {
-    console.log('\n🎉 ¡INTEGRACIÓN WHISPER COMPLETAMENTE VALIDADA!');
-    console.log('   ✅ Transcripción de audio: FUNCIONAL');
-    console.log('   ✅ Análisis de métricas de voz: FUNCIONAL');  
-    console.log('   ✅ Detección de indicadores de estrés: FUNCIONAL');
-    console.log('   ✅ Generación de scores AVI: FUNCIONAL');
-    console.log('\n🚀 SISTEMA LISTO PARA USAR WHISPER API EN PRODUCCIÓN');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
-    console.log('\n📋 CONFIGURACIÓN REQUERIDA:');
-    console.log('   1. Obtener API Key de OpenAI');
-    console.log('   2. Configurar environment.services.openai.apiKey');
-    console.log('   3. Testear con audio real en dispositivo');
-    console.log('   4. Ajustar thresholds basado en datos reales');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
-    console.log('\n💰 ESTIMACIÓN DE COSTOS:');
-    console.log('   - Modelo gpt-4o-transcribe: ~$0.006/min audio');
-    console.log('   - Entrevista 45min: ~$0.27 por entrevista');
-    console.log('   - 1000 entrevistas/mes: ~$270 USD/mes');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
   } else {
-    console.log('\n⚠️  ALGUNOS TESTS FALLARON - Revisar algoritmos de detección');
+// removed by clean-audit
   }
   
   return testsPassed === profiles.length;
@@ -303,8 +303,9 @@ async function runWhisperIntegrationTests() {
 
 // Ejecutar
 runWhisperIntegrationTests().then(success => {
-  console.log('\n🏁 Tests de integración Whisper completados');
+// removed by clean-audit
   if (success) {
-    console.log('✨ Sistema AVI + Whisper 100% funcional');
+// removed by clean-audit
   }
 });
+// removed by clean-audit

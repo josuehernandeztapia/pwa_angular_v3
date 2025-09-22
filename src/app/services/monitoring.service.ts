@@ -74,7 +74,7 @@ export class MonitoringService {
 
     // Log to console in development only
     if (!this.isProduction()) {
-      console.error(`🚨 [${service}] ${operation}:`, error);
+// removed by clean-audit
     }
 
     return event.id;
@@ -100,7 +100,7 @@ export class MonitoringService {
 
     // Log to console in development only
     if (!this.isProduction()) {
-      console.warn(`⚠️ [${service}] ${operation}: ${message}`);
+// removed by clean-audit
     }
 
     return event.id;
@@ -308,3 +308,4 @@ export class MonitoringService {
            !window.location.hostname.includes('dev');
   }
 }
+// removed by clean-audit

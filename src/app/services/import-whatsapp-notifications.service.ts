@@ -110,7 +110,7 @@ export class ImportWhatsAppNotificationsService {
     clientData?: Partial<Client>
   ): Observable<WhatsAppNotificationResult> {
     
-    console.log(`📱 Enviando notificación de milestone ${milestone} (${status}) para cliente ${clientId}`);
+// removed by clean-audit
 
     return this.getNotificationSettings(clientId).pipe(
       map(settings => {
@@ -163,7 +163,7 @@ export class ImportWhatsAppNotificationsService {
         return result;
       }),
       catchError(error => {
-        console.error(`❌ Error enviando notificación de milestone:`, error);
+// removed by clean-audit
         
         const result: WhatsAppNotificationResult = {
           messageId: 'failed',
@@ -192,7 +192,7 @@ export class ImportWhatsAppNotificationsService {
     metadata?: any
   ): Observable<WhatsAppNotificationResult> {
     
-    console.log(`📦 Enviando notificación de delivery ${updateType} para cliente ${clientId}`);
+// removed by clean-audit
 
     return this.getNotificationSettings(clientId).pipe(
       map(settings => {
@@ -256,7 +256,7 @@ export class ImportWhatsAppNotificationsService {
         return result;
       }),
       catchError(error => {
-        console.error(`❌ Error enviando notificación de delivery:`, error);
+// removed by clean-audit
         
         return of({
           messageId: 'failed',
@@ -286,7 +286,7 @@ export class ImportWhatsAppNotificationsService {
       settings
     ).pipe(
       tap(updatedSettings => {
-        console.log(`⚙️ Configuración de notificaciones actualizada para cliente ${clientId}`);
+// removed by clean-audit
       }),
       catchError(() => of(this.getDefaultNotificationSettings(clientId)))
     );
@@ -331,7 +331,7 @@ export class ImportWhatsAppNotificationsService {
     status: 'in_progress' | 'completed' | 'delayed'
   ): Observable<WhatsAppNotificationResult[]> {
     
-    console.log(`📢 Enviando notificaciones masivas de ${milestone} (${status}) a ${clientIds.length} clientes`);
+// removed by clean-audit
 
     const notificationPromises = clientIds.map(clientId => 
       this.sendMilestoneNotification(clientId, milestone, status, {} as any).toPromise()
@@ -342,10 +342,10 @@ export class ImportWhatsAppNotificationsService {
       tap(results => {
         const successful = results.filter(r => r.success).length;
         const failed = results.length - successful;
-        console.log(`📊 Notificaciones masivas completadas: ${successful} exitosas, ${failed} fallidas`);
+// removed by clean-audit
       }),
       catchError(error => {
-        console.error('Error en notificaciones masivas:', error);
+// removed by clean-audit
         return of([]);
       })
     );
@@ -496,7 +496,7 @@ export class ImportWhatsAppNotificationsService {
 
   private handleError<T>(operation = 'operation') {
     return (error: any): Observable<T> => {
-      console.error(`ImportWhatsAppNotificationsService.${operation} failed:`, error);
+// removed by clean-audit
       
       let userMessage = 'Error en el sistema de notificaciones de importación';
       
@@ -519,3 +519,4 @@ export class ImportWhatsAppNotificationsService {
     };
   }
 }
+// removed by clean-audit

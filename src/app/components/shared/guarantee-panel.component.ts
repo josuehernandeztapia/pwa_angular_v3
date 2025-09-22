@@ -334,17 +334,18 @@ export class GuaranteePanelComponent {
   }
 
   viewDocument(document: Document): void {
-    console.log('Viewing document:', document);
+// removed by clean-audit
     // Implement document viewing logic
   }
 
   generateGuaranteeReport(): void {
-    console.log('Generating guarantee report');
+// removed by clean-audit
     // Implement report generation logic
   }
 
   requestLegalReview(): void {
-    console.log('Requesting legal review');
+// removed by clean-audit
     // Implement legal review request logic
   }
 }
+// removed by clean-audit

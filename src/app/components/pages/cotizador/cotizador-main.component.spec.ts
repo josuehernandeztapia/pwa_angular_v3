@@ -13,8 +13,8 @@ describe('CotizadorMainComponent – PMT and Amortization', () => {
       ]
     }).compileComponents();
 
-    const fixture = TestBed.createComponent(CotizadorMainComponent);
-    component = fixture.componentInstance;
+// removed by clean-audit
+// removed by clean-audit
     // Minimal pkg to compute prices
     (component as any).pkg = {
       rate: 0.255, // 25.5% anual
@@ -77,3 +77,5 @@ describe('CotizadorMainComponent – PMT and Amortization', () => {
   });
 });
 
+
+// removed by clean-audit

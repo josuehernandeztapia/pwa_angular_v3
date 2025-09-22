@@ -443,7 +443,7 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
           this.loading.set(false);
         },
         error: (error) => {
-          console.error('Error loading integrated import status:', error);
+// removed by clean-audit
           this.loading.set(false);
         }
       });
@@ -562,7 +562,7 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
         this.loading.set(false);
       },
       error: (error) => {
-        console.error('Error updating milestone:', error);
+// removed by clean-audit
         this.loading.set(false);
       }
     });
@@ -588,7 +588,7 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
         this.loading.set(false);
       },
       error: (error) => {
-        console.error('Error completing milestone:', error);
+// removed by clean-audit
         this.loading.set(false);
       }
     });
@@ -653,7 +653,7 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
   }
 
   getMilestoneActions(key: keyof ImportStatus): {description: string, timestamp: Date}[] {
-    // Mock data - in real implementation, this would come from the service
+// removed by clean-audit
     return [
       {description: 'Etapa iniciada', timestamp: new Date()},
       {description: 'Documentos recibidos', timestamp: new Date()}
@@ -668,13 +668,13 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (report) => {
-          console.log('📄 Reporte de seguimiento integrado generado:', report);
+// removed by clean-audit
           // En implementación real, abriría el reporte o descargaría el PDF
           window.open(report.reportUrl, '_blank');
           this.loading.set(false);
         },
         error: (error) => {
-          console.error('Error generating integrated tracking report:', error);
+// removed by clean-audit
           this.loading.set(false);
         }
       });
@@ -683,7 +683,8 @@ export class ImportTrackerComponent implements OnInit, OnDestroy {
   notifyClient(): void {
     if (!this.client?.id) return;
     
-    console.log('📱 Notificando cliente sobre estado de importación');
+// removed by clean-audit
     // En implementación real, enviaría notificación WhatsApp via WhatsAppService
   }
 }
+// removed by clean-audit

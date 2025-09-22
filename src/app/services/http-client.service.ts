@@ -277,7 +277,7 @@ export class HttpClientService {
    */
   private handleSuccess<T>(response: ApiResponse<T>): void {
     if (response.success && response.message) {
-      console.log('API Success:', response.message);
+// removed by clean-audit
     }
   }
 
@@ -338,7 +338,7 @@ export class HttpClientService {
       url: error.url || undefined
     };
 
-    console.error('API Error:', apiError);
+// removed by clean-audit
 
     if (showError) {
       this.toast.error(errorMessage);
@@ -370,3 +370,5 @@ export class HttpClientService {
     return this.connectionSubject.value && navigator.onLine;
   }
 }
+
+// removed by clean-audit

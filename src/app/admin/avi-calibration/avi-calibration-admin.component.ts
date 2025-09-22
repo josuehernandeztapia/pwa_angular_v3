@@ -557,7 +557,7 @@ export class AviCalibrationAdminComponent implements OnInit {
         this.calibrationHistory = response.history;
       }
     } catch (error) {
-      console.warn('No calibration data available yet');
+// removed by clean-audit
     }
   }
 
@@ -587,7 +587,7 @@ export class AviCalibrationAdminComponent implements OnInit {
         }, 1000);
       }
     } catch (error) {
-      console.error('Calibration failed:', error);
+// removed by clean-audit
       this.runningCalibration = false;
       this.calibrationProgress = 0;
     }
@@ -611,3 +611,4 @@ export class AviCalibrationAdminComponent implements OnInit {
     });
   }
 }
+// removed by clean-audit

@@ -27,7 +27,7 @@ export function adjustLogLRForAdmission(
   // 1. Verificar si hay negación tajante - NO aplicar relief
   const hasStrongNegation = LexiconUtils.hasStrongEvasion(text);
   if (hasStrongNegation) {
-    console.log(`🚨 Negación tajante detectada - NO relief aplicado`);
+// removed by clean-audit
     return logLR; // Sin relief para evasión fuerte
   }
   
@@ -58,12 +58,12 @@ export function adjustLogLRForAdmission(
   
   // Log para debugging
   if (tokensFound.length > 0) {
-    console.log(`📝 Relief por admisión aplicado:`);
-    console.log(`   Tokens encontrados: ${tokensFound.join(', ')}`);
-    console.log(`   Relief semántico: ${admissionRelief.toFixed(3)}`);
-    console.log(`   Relief cuantitativo: ${reliefAmount.toFixed(3)}`);
-    console.log(`   LogLR: ${logLR.toFixed(3)} → ${adjustedLogLR.toFixed(3)}`);
-    console.log(`   Contexto: ${questionContext} (x${contextMultiplier})`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   }
   
   return adjustedLogLR;
@@ -150,10 +150,10 @@ export function applyNervousAdmissionCap(
   const cappedSubscore = Math.max(baseSubscore, dynamicCap);
   
   if (cappedSubscore > baseSubscore) {
-    console.log(`🧠 Cap nervioso+admisión aplicado:`);
-    console.log(`   Pattern strength: ${patternStrength.toFixed(3)}`);
-    console.log(`   Dynamic cap: ${dynamicCap.toFixed(3)}`);
-    console.log(`   Subscore: ${baseSubscore.toFixed(3)} → ${cappedSubscore.toFixed(3)}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   }
   
   return cappedSubscore;
@@ -243,3 +243,4 @@ export function sigmoid(x: number): number {
 export function clamp01(value: number): number {
   return Math.max(0, Math.min(1, value));
 }
+// removed by clean-audit

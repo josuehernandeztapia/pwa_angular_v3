@@ -38,21 +38,21 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     return this.authService.isAuthenticated$.pipe(
       tap(isAuthenticated => {
         if (!isAuthenticated) {
-          console.log('User not authenticated, redirecting to login');
+// removed by clean-audit
           this.handleUnauthenticatedUser(url);
         }
       }),
       map(isAuthenticated => {
         // Additional check for token expiration
         if (isAuthenticated && this.authService.isTokenExpired()) {
-          console.log('Token expired, attempting refresh');
+// removed by clean-audit
           this.attemptTokenRefresh();
           return false;
         }
         return isAuthenticated;
       }),
       catchError(error => {
-        console.error('Auth guard error:', error);
+// removed by clean-audit
         this.handleUnauthenticatedUser(url);
         return of(false);
       })
@@ -72,14 +72,15 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   private attemptTokenRefresh(): void {
     this.authService.refreshToken().subscribe({
       next: () => {
-        console.log('Token refreshed successfully');
+// removed by clean-audit
         // Token refresh successful, user can continue
       },
       error: (error) => {
-        console.error('Token refresh failed:', error);
+// removed by clean-audit
         // Token refresh failed, redirect to login
         this.router.navigate(['/login']);
       }
     });
   }
 }
+// removed by clean-audit

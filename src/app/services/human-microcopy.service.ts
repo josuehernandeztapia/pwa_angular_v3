@@ -540,7 +540,7 @@ export class HumanMicrocopyService {
    */
   private evaluateCondition(condition: string, userState: any): boolean {
     // In production, use a proper expression evaluator like jsonata or similar
-    // This is a simplified implementation for demo purposes
+// removed by clean-audit
     
     if (condition.includes('user.quotes.length === 0')) {
       return userState.user?.quotes?.length === 0;
@@ -580,3 +580,4 @@ export class HumanMicrocopyService {
     return id in this.microcopyRegistry;
   }
 }
+// removed by clean-audit

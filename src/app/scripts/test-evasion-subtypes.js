@@ -1,7 +1,7 @@
 // Test para distinguir tipos de evasión en sistema AVI + Whisper
 
-console.log('🕵️ TESTING SUBTIPOS DE EVASIÓN EN SISTEMA AVI');
-console.log('=============================================\n');
+// removed by clean-audit
+// removed by clean-audit
 
 // Simulador de respuestas con diferentes tipos de evasión
 const EvasionProfiles = {
@@ -261,7 +261,7 @@ class AdvancedEvasionAnalyzer {
   static detectCalculatedLanguage(text, words) {
     const calculated = [
       'honestamente', 'transparente', 'legalmente', 'oficialmente',
-      'trabajo serio', 'negocio limpio', 'todo en regla'
+// removed by clean-audit
     ];
     
     let calculatedCount = 0;
@@ -433,55 +433,55 @@ class AdvancedEvasionAnalyzer {
 
 // Ejecutar tests con subtipos
 async function runEvasionSubtypeTests() {
-  console.log('🔍 ANALIZANDO SUBTIPOS DE EVASIÓN\n');
+// removed by clean-audit
   
   let testsPassed = 0;
   let totalTests = 0;
   
   for (const [profileName, profileData] of Object.entries(EvasionProfiles)) {
     totalTests++;
-    console.log(`📋 Test: ${profileData.description.toUpperCase()}`);
-    console.log('─'.repeat(70));
+// removed by clean-audit
+// removed by clean-audit
     
     const analysis = AdvancedEvasionAnalyzer.analyzeEvasionSubtype(
       profileData.whisperResponse,
       profileData.audioProfile
     );
     
-    console.log(`   🎯 Subtipo detectado: ${analysis.evasionSubtype.type}`);
-    console.log(`   🎭 Descripción: ${analysis.evasionSubtype.description}`);
-    console.log(`   📊 Confianza promedio: ${(analysis.avgConfidence * 100).toFixed(1)}%`);
-    console.log(`   🧠 Score ajustado: ${analysis.adjustedScore}/1000`);
-    console.log(`   📈 Nivel de riesgo: ${analysis.riskLevel}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
-    console.log(`   🔍 Razonamiento:`);
+// removed by clean-audit
     analysis.reasoning.forEach(reason => {
-      console.log(`      ${reason}`);
+// removed by clean-audit
     });
     
     // Validar resultado
     const testPassed = analysis.riskLevel === profileData.expectedRisk;
-    console.log(`   ${testPassed ? '✅' : '❌'} Esperado: ${profileData.expectedRisk}, Obtenido: ${analysis.riskLevel}`);
+// removed by clean-audit
     
     if (testPassed) testsPassed++;
-    console.log('');
+// removed by clean-audit
   }
   
   // Resumen
-  console.log('🏆 RESUMEN ANÁLISIS DE SUBTIPOS');
-  console.log('═'.repeat(50));
-  console.log(`📊 Tests correctos: ${testsPassed}/${totalTests}`);
-  console.log(`📊 Precisión: ${(testsPassed/totalTests*100).toFixed(1)}%`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   
   if (testsPassed === totalTests) {
-    console.log('\n🎉 ¡ANÁLISIS DE SUBTIPOS PERFECTAMENTE CALIBRADO!');
-    console.log('✅ EVASIVO TAJANTE → CRITICAL');
-    console.log('✅ EVASIVO NERVIOSO → HIGH');  
-    console.log('✅ EVASIVO CALCULADO → CRITICAL');
-    console.log('✅ HONESTO NERVIOSO → MEDIUM');
-    console.log('\n🚀 Sistema listo para detectar matices de evasión');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   } else {
-    console.log('\n⚠️ Algunos subtipos necesitan ajuste');
+// removed by clean-audit
   }
   
   return testsPassed === totalTests;
@@ -490,11 +490,12 @@ async function runEvasionSubtypeTests() {
 // Ejecutar
 if (require.main === module) {
   runEvasionSubtypeTests().then(success => {
-    console.log('\n🏁 Análisis de subtipos completado');
+// removed by clean-audit
     if (success) {
-      console.log('🌟 Sistema de detección de evasión altamente sofisticado');
+// removed by clean-audit
     }
   });
 }
 
 module.exports = { AdvancedEvasionAnalyzer, EvasionProfiles };
+// removed by clean-audit

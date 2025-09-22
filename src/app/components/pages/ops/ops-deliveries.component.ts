@@ -974,7 +974,7 @@ export class OpsDeliveriesComponent implements OnInit {
         this.stockPositions.set(allPositions);
       })
       .catch(error => {
-        console.error('Error loading stock positions:', error);
+// removed by clean-audit
       });
 
     // Load stock alerts
@@ -985,7 +985,7 @@ export class OpsDeliveriesComponent implements OnInit {
           this.stockAlerts.set(alerts);
         },
         error: (error) => {
-          console.error('Error loading stock alerts:', error);
+// removed by clean-audit
         }
       });
   }
@@ -998,7 +998,7 @@ export class OpsDeliveriesComponent implements OnInit {
             this.availableRoutes.set(routes);
           },
           error: (error) => {
-            console.error('Error loading routes:', error);
+// removed by clean-audit
           }
         });
     }
@@ -1167,3 +1167,4 @@ export class OpsDeliveriesComponent implements OnInit {
     return this.stockAlerts().filter(alert => alert.market === market && !alert.resolved);
   }
 }
+// removed by clean-audit

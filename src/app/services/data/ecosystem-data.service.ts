@@ -234,7 +234,7 @@ export class EcosystemDataService {
    * Get ecosystem members (clients in ecosystem)
    */
   getEcosystemMembers(ecosystemId: string, clientDataService: any): Observable<Client[]> {
-    // This would typically be injected, but for demo purposes we'll return mock data
+// removed by clean-audit
     return of([]).pipe(delay(300));
   }
 
@@ -294,3 +294,4 @@ export class EcosystemDataService {
     }).pipe(delay(250));
   }
 }
+// removed by clean-audit

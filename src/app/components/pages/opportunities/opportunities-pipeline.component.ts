@@ -710,7 +710,7 @@ export class OpportunitiesPipelineComponent implements OnInit {
       this.calculateStats();
       
     } catch (error) {
-      console.error('Error loading pipeline data:', error);
+// removed by clean-audit
       this.toast.error('Error al cargar datos del pipeline');
     } finally {
       this.isLoading = false;
@@ -1017,3 +1017,4 @@ export class OpportunitiesPipelineComponent implements OnInit {
     return opportunity.id;
   }
 }
+// removed by clean-audit

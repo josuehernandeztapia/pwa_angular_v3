@@ -110,7 +110,7 @@ export class RiskEvaluationService {
       retry({
         count: this.MAX_RETRIES,
         delay: (error, retryCount) => {
-          console.log(`Risk evaluation attempt ${retryCount} failed:`, error);
+// removed by clean-audit
           return timer(Math.pow(2, retryCount) * 1000); // Exponential backoff
         }
       }),
@@ -125,8 +125,8 @@ export class RiskEvaluationService {
           evaluation,
           { requestData: request, processingTime: Date.now() - startTime }
         ).subscribe({
-          next: (result) => console.log(`✅ Risk evaluation persisted: ${result.id}`),
-          error: (err) => console.warn('⚠️ Failed to persist evaluation:', err)
+// removed by clean-audit
+// removed by clean-audit
         });
 
         // Track successful evaluation for analytics
@@ -152,7 +152,7 @@ export class RiskEvaluationService {
     return this.riskPersistenceService.getEvaluationHistory(clientId).pipe(
       map(storedEvaluations => storedEvaluations.map(stored => stored.evaluation)),
       catchError(error => {
-        console.error('Failed to fetch evaluation history:', error);
+// removed by clean-audit
         // Fallback to direct API call
         return this.http.get<RiskEvaluationResponse[]>(`${this.BFF_BASE_URL}/evaluations/${clientId}`).pipe(
           map(responses => responses.map(response =>
@@ -176,7 +176,7 @@ export class RiskEvaluationService {
 
     return this.http.get(`${this.BFF_BASE_URL}/analytics`, { params }).pipe(
       catchError(error => {
-        console.error('Failed to fetch risk analytics:', error);
+// removed by clean-audit
         return throwError(() => error);
       })
     );
@@ -205,7 +205,7 @@ export class RiskEvaluationService {
         summary: response.batchStats
       })),
       catchError(error => {
-        console.error('Batch evaluation failed:', error);
+// removed by clean-audit
         return throwError(() => error);
       })
     );
@@ -751,7 +751,7 @@ export class RiskEvaluationService {
     };
     
     // Send to analytics service or log for monitoring
-    console.log('Risk Evaluation Event:', eventData);
+// removed by clean-audit
   }
 
   /**
@@ -768,3 +768,4 @@ export class RiskEvaluationService {
     return `BATCH-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 }
+// removed by clean-audit

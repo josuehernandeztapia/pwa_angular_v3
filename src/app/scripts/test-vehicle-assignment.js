@@ -1,14 +1,14 @@
 // Test de asignación de vehículos en tracking de importación
 // Valida el flujo completo desde "unidadFabricada" hasta asignación exitosa
 
-console.log('🚛 TESTING VEHICLE ASSIGNMENT IN IMPORT TRACKING');
-console.log('================================================\n');
+// removed by clean-audit
+// removed by clean-audit
 
 // Simulador de los servicios para testing
 class VehicleAssignmentTestEngine {
   
   static testCompleteAssignmentFlow() {
-    console.log('🧪 EJECUTANDO TESTS DE ASIGNACIÓN DE VEHÍCULOS\n');
+// removed by clean-audit
     
     const testCases = [
       {
@@ -76,49 +76,49 @@ class VehicleAssignmentTestEngine {
     const totalTests = testCases.length;
 
     testCases.forEach((testCase, index) => {
-      console.log(`📋 Test ${index + 1}: ${testCase.name}`);
-      console.log('────────────────────────────────────────────────────────────────────────────────');
+// removed by clean-audit
+// removed by clean-audit
       
       const result = this.executeAssignmentTest(testCase);
       
       if (result.success && result.actualResult === testCase.expectedResult) {
-        console.log(`✅ PASÓ - Resultado esperado: ${testCase.expectedResult}`);
+// removed by clean-audit
         passedTests++;
       } else {
-        console.log(`❌ FALLÓ - Esperado: ${testCase.expectedResult}, Obtenido: ${result.actualResult}`);
-        console.log(`   Error: ${result.error || 'Sin error específico'}`);
+// removed by clean-audit
+// removed by clean-audit
       }
       
-      console.log('\n================================================================================\n');
+// removed by clean-audit
     });
 
     // Resumen final
-    console.log('🏆 RESUMEN DE VEHICLE ASSIGNMENT TESTING');
-    console.log('════════════════════════════════════════════════════════════════');
-    console.log(`📊 Tests pasados: ${passedTests}/${totalTests}`);
-    console.log(`🎯 Éxito: ${((passedTests/totalTests) * 100).toFixed(1)}%`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
     if (passedTests === totalTests) {
-      console.log('✅ TODOS LOS TESTS PASARON - SISTEMA DE ASIGNACIÓN FUNCIONAL');
+// removed by clean-audit
     } else {
-      console.log('❌ ALGUNOS TESTS FALLARON - REVISAR IMPLEMENTACIÓN');
+// removed by clean-audit
     }
     
-    console.log('\n🚛 VEHICLE ASSIGNMENT TESTING COMPLETADO');
+// removed by clean-audit
   }
 
   static executeAssignmentTest(testCase) {
     try {
-      console.log(`🔬 Procesando asignación para: ${testCase.clientName}`);
-      console.log(`   Cliente ID: ${testCase.clientId}`);
-      console.log(`   Import Status: ${testCase.importStatus}`);
-      console.log(`   VIN: ${testCase.vehicleData.vin}`);
-      console.log(`   Modelo: ${testCase.vehicleData.modelo} ${testCase.vehicleData.year}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
       
       // 1. Validar estado del cliente
       const statusValidation = this.validateClientImportStatus(testCase.clientId, testCase.importStatus);
       if (!statusValidation.valid) {
-        console.log(`   🚨 Cliente no está en milestone correcto: ${statusValidation.reason}`);
+// removed by clean-audit
         return { 
           success: true, 
           actualResult: 'ERROR_INVALID_STATUS',
@@ -129,7 +129,7 @@ class VehicleAssignmentTestEngine {
       // 2. Validar duplicados de VIN
       const duplicateCheck = this.checkVINDuplicate(testCase.vehicleData.vin);
       if (duplicateCheck.isDuplicate) {
-        console.log(`   🚨 VIN duplicado encontrado: Asignado a cliente ${duplicateCheck.existingClientId}`);
+// removed by clean-audit
         return { 
           success: true, 
           actualResult: 'ERROR_VIN_DUPLICATE',
@@ -140,7 +140,7 @@ class VehicleAssignmentTestEngine {
       // 3. Validar datos del vehículo
       const dataValidation = this.validateVehicleData(testCase.vehicleData);
       if (!dataValidation.valid) {
-        console.log(`   🚨 Datos de vehículo inválidos: ${dataValidation.errors.join(', ')}`);
+// removed by clean-audit
         return { 
           success: true, 
           actualResult: 'ERROR_VALIDATION',
@@ -152,11 +152,11 @@ class VehicleAssignmentTestEngine {
       const assignmentResult = this.processVehicleAssignment(testCase.clientId, testCase.vehicleData);
       
       if (assignmentResult.success) {
-        console.log(`   ✅ Asignación exitosa:`);
-        console.log(`      Unit ID: ${assignmentResult.assignedUnit.id}`);
-        console.log(`      Asignado: ${assignmentResult.assignedUnit.assignedAt.toLocaleString()}`);
-        console.log(`      Color: ${assignmentResult.assignedUnit.color}`);
-        console.log(`      Combustible: ${assignmentResult.assignedUnit.fuelType}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
         
         // Simular actualización de import status
         this.updateImportStatusWithAssignment(testCase.clientId, assignmentResult.assignedUnit);
@@ -170,7 +170,7 @@ class VehicleAssignmentTestEngine {
           assignedUnit: assignmentResult.assignedUnit
         };
       } else {
-        console.log(`   ❌ Asignación falló: ${assignmentResult.error}`);
+// removed by clean-audit
         return { 
           success: true, 
           actualResult: 'ERROR_ASSIGNMENT',
@@ -179,7 +179,7 @@ class VehicleAssignmentTestEngine {
       }
       
     } catch (error) {
-      console.log(`   💥 Error inesperado: ${error.message}`);
+// removed by clean-audit
       return { 
         success: false, 
         actualResult: 'ERROR_UNEXPECTED',
@@ -288,15 +288,15 @@ class VehicleAssignmentTestEngine {
   }
 
   static updateImportStatusWithAssignment(clientId, assignedUnit) {
-    console.log(`   📝 Import status actualizado para cliente ${clientId}`);
-    console.log(`      Unidad asignada: ${assignedUnit.vin}`);
+// removed by clean-audit
+// removed by clean-audit
   }
 
   static sendAssignmentNotification(clientId, assignedUnit) {
-    console.log(`   📧 Notificación enviada:`);
-    console.log(`      Cliente: ${clientId}`);
-    console.log(`      Mensaje: "Unidad ${assignedUnit.modelo} ${assignedUnit.year} asignada exitosamente"`);
-    console.log(`      VIN: ${assignedUnit.vin}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   }
 
   // Métodos auxiliares
@@ -313,10 +313,11 @@ class VehicleAssignmentTestEngine {
     // Registrar VIN como asignado
     this.assignedVINsDatabase[assignedUnit.vin] = clientId;
     
-    console.log(`   💾 Asignación guardada: Cliente ${clientId} → Unidad ${assignedUnit.id}`);
-    console.log(`   🔐 VIN ${assignedUnit.vin} registrado como asignado`);
+// removed by clean-audit
+// removed by clean-audit
   }
 }
 
 // Ejecutar los tests
 VehicleAssignmentTestEngine.testCompleteAssignmentFlow();
+// removed by clean-audit

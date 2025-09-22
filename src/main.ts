@@ -14,4 +14,6 @@ if (!isDevMode()) {
 
 bootstrapApplication(AppComponent, appConfig)
   .then(() => {})
-  .catch((err) => console.error(err));
+// removed by clean-audit
+
+// removed by clean-audit

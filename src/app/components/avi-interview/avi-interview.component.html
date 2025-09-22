@@ -185,33 +185,45 @@
 
   <!-- Estado: Analizando -->
   <div class="analyzing-state" *ngIf="isAnalyzing">
-    <div class="analyzing-card">
-      <div class="spinner"></div>
-      <h2>Analizando respuestas...</h2>
-      <p>Ejecutando motores científico y heurístico</p>
-      <div class="analysis-steps">
-        <div class="step">🔬 Análisis matemático avanzado</div>
-        <div class="step">🎯 Validación de patrones de negocio</div>
-        <div class="step">🤖 Consolidación dual engine</div>
+    <section class="ui-card">
+      <h2 class="text-sm font-semibold mb-3 text-slate-900 dark:text-slate-100">Resultado AVI</h2>
+
+      <!-- Skeleton Loader -->
+      <div class="animate-pulse space-y-3">
+        <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+        <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+        <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
       </div>
-    </div>
+
+      <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">Analizando respuestas...</p>
+    </section>
   </div>
 
   <!-- Estado: Resultados -->
   <div class="results-state" *ngIf="showResults && dualEngineResult">
     <div class="results-container">
-      <!-- Resumen GO/REVIEW/NO-GO -->
-      <div class="final-summary" *ngIf="finalDecision as fd">
-        <div class="decision" [class.go]="fd==='GO'" [class.review]="fd==='REVIEW'" [class.nogo]="fd==='NO-GO'">
-          <span class="label">{{ fd }}</span>
-          <span class="action" *ngIf="fd==='GO'">Acción: Continuar</span>
-          <span class="action" *ngIf="fd==='REVIEW'">Acción: Revisión / Evidencia extra</span>
-          <span class="action" *ngIf="fd==='NO-GO'">Acción: No continuar</span>
+      <!-- Resultado AVI Minimalista -->
+      <section class="ui-card">
+        <h2 class="text-sm font-semibold mb-3 text-slate-900 dark:text-slate-100">Resultado AVI</h2>
+
+        <!-- Loader -->
+        <div *ngIf="isAnalyzing" class="animate-pulse space-y-3">
+          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
         </div>
-        <div class="flags" *ngIf="finalFlags.length > 0">
-          <span class="flag" *ngFor="let f of finalFlags">{{ f }}</span>
+
+        <!-- Resultados -->
+        <div *ngIf="!isAnalyzing">
+          <div class="text-2xl font-semibold mb-2 text-slate-900 dark:text-slate-100" data-cy="avi-decision">
+            {{ finalDecision }}
+          </div>
+          <ul class="list-disc pl-4 space-y-1" *ngIf="finalFlags.length > 0">
+            <li *ngFor="let flag of finalFlags" class="text-sm text-slate-500 dark:text-slate-400" data-cy="avi-flag">
+              {{ flag }}
+            </li>
+          </ul>
         </div>
-      </div>
+      </section>
       
       <!-- Score principal -->
       <div class="main-score-card">

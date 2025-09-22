@@ -161,7 +161,7 @@ export class BackendApiService {
                 updatedAt: Date.now()
               });
             } catch (storageError) {
-              console.error('Storage error during client creation:', storageError);
+// removed by clean-audit
             }
             observer.error(error);
           })();
@@ -173,7 +173,7 @@ export class BackendApiService {
   updateClient(clientId: string, clientData: Partial<ClientRecord>): Observable<ClientRecord> {
     const url = `${environment.apiUrl}${environment.endpoints.clients}/${clientId}`;
     // Debug: ensure correct call shape during tests
-    // console.log('updateClient url:', url, 'data:', clientData);
+// removed by clean-audit
     
     return this.http.put<ClientRecord>(url, clientData, { headers: this.getAuthHeaders() }).pipe(
       tap((response) => {
@@ -191,7 +191,7 @@ export class BackendApiService {
           // Fire-and-forget to satisfy test expectations synchronously
           void this.storage.saveClient(cacheRecord);
         } catch (e) {
-          console.error('Storage error during client update:', e);
+// removed by clean-audit
         }
       }),
       catchError((error) => {
@@ -205,7 +205,7 @@ export class BackendApiService {
                 retryCount: 0
               });
             } catch (storageError) {
-              console.error('Storage error during client update:', storageError);
+// removed by clean-audit
             }
             observer.error(error);
           })();
@@ -244,7 +244,7 @@ export class BackendApiService {
     
     return this.http.get<ClientRecord[]>(url, options).pipe(
       catchError((error) => {
-        console.error('Error fetching clients:', error);
+// removed by clean-audit
         // Return empty array for offline mode
         return of([]);
       })
@@ -288,7 +288,7 @@ export class BackendApiService {
                 status: 'draft'
               });
             } catch (storageError) {
-              console.error('Storage error during contract creation:', storageError);
+// removed by clean-audit
             }
             observer.error(error);
           })();
@@ -345,8 +345,8 @@ export class BackendApiService {
     
     return this.http.get<EcosystemRecord[]>(url, options).pipe(
       catchError((error) => {
-        console.error('Error fetching ecosystems:', error);
-        // Return mock data for offline mode
+// removed by clean-audit
+// removed by clean-audit
         return this.getMockEcosystems(market);
       })
     );
@@ -357,7 +357,7 @@ export class BackendApiService {
     
     return this.http.get<EcosystemRecord>(url, { headers: this.getAuthHeaders() }).pipe(
       catchError((error) => {
-        console.error('Error fetching ecosystem:', error);
+// removed by clean-audit
         return throwError(() => error);
       })
     );
@@ -368,7 +368,7 @@ export class BackendApiService {
     
     return this.http.patch<EcosystemRecord>(url, { available_spots: availableSpots }, { headers: this.getAuthHeaders() }).pipe(
       catchError((error) => {
-        console.error('Error updating ecosystem capacity:', error);
+// removed by clean-audit
         return throwError(() => error);
       })
     );
@@ -388,7 +388,7 @@ export class BackendApiService {
         lastUpdated: data.lastUpdated || new Date().toISOString()
       })),
       catchError(async (error) => {
-        console.error('Error fetching dashboard data:', error);
+// removed by clean-audit
         
         // Try to get cached stats
         const stats = await this.storage.getStorageStats();
@@ -432,7 +432,7 @@ export class BackendApiService {
                 retryCount: 0
               });
             } catch (storageError) {
-              console.error('Storage error during document upload:', storageError);
+// removed by clean-audit
             }
             observer.error(error);
           })();
@@ -451,14 +451,14 @@ export class BackendApiService {
         try {
           await this.executeAction(action);
           await this.storage.removeCompletedAction(action.id);
-          console.log('Synced action:', action.type);
+// removed by clean-audit
         } catch (error) {
-          console.error('Failed to sync action:', action.type, error);
+// removed by clean-audit
           // Could implement exponential backoff here
         }
       }
     } catch (error) {
-      console.error('Failed to sync pending data:', error);
+// removed by clean-audit
     }
   }
 
@@ -475,14 +475,14 @@ export class BackendApiService {
         break;
       case 'UPLOAD_DOCUMENT':
         // Would need to re-implement file upload from cached data
-        console.warn('Document upload sync not implemented yet');
+// removed by clean-audit
         break;
       default:
-        console.warn('Unknown action type:', action.type);
+// removed by clean-audit
     }
   }
 
-  // Mock data for development/offline mode
+// removed by clean-audit
   private getMockEcosystems(market?: 'AGS' | 'EDOMEX'): Observable<EcosystemRecord[]> {
     const mockData: EcosystemRecord[] = [
       {
@@ -581,3 +581,5 @@ export class BackendApiService {
     );
   }
 }
+
+// removed by clean-audit

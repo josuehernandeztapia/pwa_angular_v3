@@ -246,14 +246,15 @@ export class NotFoundComponent {
 
   openHelp(): void {
     // Open help documentation or modal
-    console.log('Opening help documentation...');
+// removed by clean-audit
     // This would typically open a help modal or navigate to help section
   }
 
   contactSupport(): void {
     // Open support contact form or redirect to support
-    console.log('Contacting support...');
+// removed by clean-audit
     // This would typically open a support chat or contact form
     window.open('mailto:soporte@conductores.com?subject=Ayuda con navegación', '_blank');
   }
 }
+// removed by clean-audit

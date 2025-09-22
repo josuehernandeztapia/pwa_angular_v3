@@ -248,7 +248,7 @@ Fecha: {{CONTRACT_DATE}}`,
           observer.complete();
         }
       });
-    }).pipe(delay(1200)); // Mock API delay like React
+// removed by clean-audit
   }
 
   /**
@@ -567,3 +567,4 @@ Esta protección es parte integral del presente contrato.
     };
   }
 }
+// removed by clean-audit

@@ -369,7 +369,7 @@ export class PdfExportService {
             text: `Compartir ${title}`
           });
         } catch (error) {
-          console.log('Error sharing:', error);
+// removed by clean-audit
           // Fallback to download
           this.downloadPDF(blob, filename);
         }
@@ -1035,3 +1035,5 @@ export class PdfExportService {
     }
   }
 }
+
+// removed by clean-audit

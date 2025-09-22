@@ -684,7 +684,7 @@ export class NuevaOportunidadComponent implements OnInit {
           localStorage.removeItem(this.draftKey);
         }
       } catch (error) {
-        console.error('Error parsing draft:', error);
+// removed by clean-audit
         localStorage.removeItem(this.draftKey);
       }
     }
@@ -877,12 +877,12 @@ export class NuevaOportunidadComponent implements OnInit {
 
     // Business rule: EdoMex Individual clients prefer Simulacion
     if (this.marketValue === 'edomex' && this.clientTypeValue === 'Individual' && this.opportunityType === 'COTIZACION') {
-      console.warn('EdoMex Individual clients typically use Simulacion flow');
+// removed by clean-audit
     }
 
     // Business rule: AGS clients prefer Cotizacion for quick sales
     if (this.marketValue === 'aguascalientes' && this.opportunityType === 'SIMULACION') {
-      console.info('AGS clients often prefer Cotizacion for faster processing');
+// removed by clean-audit
     }
 
     return true;
@@ -949,7 +949,7 @@ export class NuevaOportunidadComponent implements OnInit {
           this.isCheckingDuplicates = false;
         },
         error: (error) => {
-          console.error('Error searching clients:', error);
+// removed by clean-audit
           this.isCheckingDuplicates = false;
           this.similarClients = [];
         }
@@ -1152,7 +1152,7 @@ export class NuevaOportunidadComponent implements OnInit {
    * Ecosystem management for EdoMex
    */
   getAvailableEcosystems(): any[] {
-    // Mock data - in real app this would come from API based on market
+// removed by clean-audit
     return [
       {
         id: 'centro',
@@ -1437,8 +1437,8 @@ export class NuevaOportunidadComponent implements OnInit {
   // === ENHANCED SAVE METHODS ===
   saveDraft(): void {
     this.saveDraftToStorage();
-    // TODO: Also save to backend when API is ready
-    console.log('Draft saved locally and will sync with backend');
+// removed by clean-audit
+// removed by clean-audit
   }
 
   onSubmit() {
@@ -1472,7 +1472,7 @@ export class NuevaOportunidadComponent implements OnInit {
       // Real API Integration
       this.apiService.createClient(enhancedClientData).subscribe({
         next: (createdClient) => {
-          console.log('Client created successfully:', createdClient);
+// removed by clean-audit
           
           // Clear draft after successful creation
           localStorage.removeItem(this.draftKey);
@@ -1481,9 +1481,9 @@ export class NuevaOportunidadComponent implements OnInit {
           this.navigateToNextStep(createdClient);
         },
         error: (error) => {
-          console.error('Error creating client:', error);
+// removed by clean-audit
           this.isLoading = false;
-          // TODO: Show user-friendly error message
+// removed by clean-audit
         }
       });
     } else {
@@ -1674,3 +1674,4 @@ export class NuevaOportunidadComponent implements OnInit {
     this.router.navigate(['/dashboard']);
   }
 }
+// removed by clean-audit

@@ -29,7 +29,7 @@ const mockClient: Client = {
 
 describe('ClienteFormComponent', () => {
   let component: ClienteFormComponent;
-  let fixture: ComponentFixture<ClienteFormComponent>;
+// removed by clean-audit
   let mockRouter: jasmine.SpyObj<Router>;
   let mockActivatedRoute: any;
   let mockToastService: jasmine.SpyObj<ToastService>;
@@ -58,13 +58,13 @@ describe('ClienteFormComponent', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ClienteFormComponent);
-    component = fixture.componentInstance;
+// removed by clean-audit
+// removed by clean-audit
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     mockToastService = TestBed.inject(ToastService) as jasmine.SpyObj<ToastService>;
     mockApiService = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
 
-    fixture.detectChanges();
+// removed by clean-audit
   });
 
   it('should create', () => {
@@ -422,3 +422,5 @@ describe('ClienteFormComponent Integration Tests', () => {
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/clientes']);
   });
 });
+
+// removed by clean-audit

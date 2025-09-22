@@ -2,14 +2,14 @@
 // Valida: Fase 6 → Fase 7 → Fase 8 → vehicle.delivered → Post-Sales activo
 // Identificación: VIN + PLACA (sistema robusto)
 
-console.log('🚀 TESTING COMPLETE POST-SALES FLOW (VIN + PLACA)');
-console.log('==================================================\n');
+// removed by clean-audit
+// removed by clean-audit
 
 // Simulador completo del flujo post-venta
 class PostSalesFlowTestEngine {
   
   static testCompletePostSalesFlow() {
-    console.log('🧪 EJECUTANDO TEST COMPLETO POST-VENTA END-TO-END\n');
+// removed by clean-audit
     
     const testCases = [
       {
@@ -187,59 +187,59 @@ class PostSalesFlowTestEngine {
     const totalTests = testCases.length;
 
     testCases.forEach((testCase, index) => {
-      console.log(`📋 Test ${index + 1}: ${testCase.name}`);
-      console.log('────────────────────────────────────────────────────────────────────────────────');
+// removed by clean-audit
+// removed by clean-audit
       
       const result = this.executePostSalesFlow(testCase);
       
       if (result.success && result.actualResult === testCase.expectedResult) {
-        console.log(`✅ PASÓ - Flujo post-venta completo exitoso`);
-        console.log(`   🔑 Identificador: ${result.uniqueIdentifier}`);
-        console.log(`   📊 Expediente: ${result.postSalesRecordId}`);
-        console.log(`   📅 Próximo mantenimiento: ${result.nextMaintenanceDate}`);
-        console.log(`   🚀 Event enviado: ${result.vehicleDeliveredEventSent ? 'Sí' : 'No'}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
         passedTests++;
       } else {
-        console.log(`❌ FALLÓ - Esperado: ${testCase.expectedResult}, Obtenido: ${result.actualResult}`);
-        console.log(`   Error: ${result.error || 'Sin error específico'}`);
+// removed by clean-audit
+// removed by clean-audit
         if (result.failedPhase) {
-          console.log(`   Fase fallida: ${result.failedPhase}`);
+// removed by clean-audit
         }
       }
       
-      console.log('\\n================================================================================\\n');
+// removed by clean-audit
     });
 
     // Resumen final
-    console.log('🏆 RESUMEN DE POST-SALES FLOW TESTING');
-    console.log('═══════════════════════════════════════════════════════════════');
-    console.log(`📊 Tests pasados: ${passedTests}/${totalTests}`);
-    console.log(`🎯 Éxito: ${((passedTests/totalTests) * 100).toFixed(1)}%`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
     if (passedTests === totalTests) {
-      console.log('✅ TODOS LOS TESTS PASARON - SISTEMA POST-VENTA COMPLETAMENTE OPERACIONAL');
-      console.log('🎉 El flujo completo Fase 6 → 7 → 8 → vehicle.delivered → Post-Sales está funcionando');
-      console.log('🔑 Identificación VIN + PLACA implementada correctamente');
-      console.log('🚀 Sistema listo para producción');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     } else {
-      console.log('❌ ALGUNOS TESTS FALLARON - REVISAR IMPLEMENTACIÓN POST-VENTA');
+// removed by clean-audit
     }
     
-    console.log('\\n🔗 POST-SALES FLOW TESTING COMPLETADO');
+// removed by clean-audit
   }
 
   static executePostSalesFlow(testCase) {
     try {
-      console.log(`🔬 Ejecutando flujo post-venta completo para: ${testCase.clientName}`);
-      console.log(`   Cliente ID: ${testCase.clientId}`);
-      console.log(`   VIN: ${testCase.vehicleData.vin}`);
-      console.log(`   Placa: ${testCase.platesData.numeroPlacas}`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
 
       const uniqueIdentifier = `${testCase.vehicleData.vin}+${testCase.platesData.numeroPlacas}`;
-      console.log(`   🔑 Identificador único: ${uniqueIdentifier}`);
+// removed by clean-audit
 
       // FASE 6: ENTREGA
-      console.log('\\n   📦 FASE 6: Ejecutando entrega del vehículo...');
+// removed by clean-audit
       const deliveryResult = this.executeDeliveryPhase(testCase.clientId, testCase.deliveryData);
       if (!deliveryResult.success) {
         return {
@@ -249,10 +249,10 @@ class PostSalesFlowTestEngine {
           failedPhase: 'Fase 6 - Entrega'
         };
       }
-      console.log('   ✅ Fase 6 completada - Vehículo entregado');
+// removed by clean-audit
 
       // FASE 7: DOCUMENTOS
-      console.log('\\n   📋 FASE 7: Ejecutando transferencia de documentos...');
+// removed by clean-audit
       const documentsResult = this.executeDocumentsPhase(testCase.clientId, testCase.legalDocuments);
       if (!documentsResult.success) {
         return {
@@ -262,10 +262,10 @@ class PostSalesFlowTestEngine {
           failedPhase: 'Fase 7 - Documentos'
         };
       }
-      console.log('   ✅ Fase 7 completada - Documentos transferidos');
+// removed by clean-audit
 
       // FASE 8: PLACAS (CRÍTICA - DISPARA HANDOVER)
-      console.log('\\n   🚗 FASE 8: Ejecutando entrega de placas (HANDOVER CRÍTICO)...');
+// removed by clean-audit
       const platesResult = this.executePlatesPhase(testCase.clientId, testCase.platesData);
       if (!platesResult.success) {
         return {
@@ -275,10 +275,10 @@ class PostSalesFlowTestEngine {
           failedPhase: 'Fase 8 - Placas'
         };
       }
-      console.log('   ✅ Fase 8 completada - Placas entregadas');
+// removed by clean-audit
 
       // EVENTO vehicle.delivered
-      console.log('\\n   🚀 HANDOVER: Disparando evento vehicle.delivered...');
+// removed by clean-audit
       const eventResult = this.triggerVehicleDeliveredEvent(testCase);
       if (!eventResult.success) {
         return {
@@ -288,31 +288,31 @@ class PostSalesFlowTestEngine {
           failedPhase: 'Vehicle Delivered Event'
         };
       }
-      console.log('   ✅ Evento vehicle.delivered enviado exitosamente');
+// removed by clean-audit
 
       // POST-SALES RECORD CREATION
-      console.log('\\n   📊 POST-SALES: Creando expediente post-venta...');
+// removed by clean-audit
       const postSalesRecord = this.createPostSalesRecord(uniqueIdentifier, testCase);
-      console.log(`   ✅ Expediente creado: ${postSalesRecord.id}`);
+// removed by clean-audit
 
       // RECORDATORIOS Y INTEGRACIONES
-      console.log('\\n   📅 INTEGRATIONS: Configurando recordatorios y integraciones...');
+// removed by clean-audit
       const integrationsResult = this.setupPostSalesIntegrations(postSalesRecord);
-      console.log('   ✅ Recordatorios programados');
-      console.log('   ✅ Make/n8n notificado');
-      console.log('   ✅ Odoo integration activada');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
 
       // VALIDACIÓN FINAL
-      console.log('\\n   🔍 VALIDATION: Validando consistencia final...');
+// removed by clean-audit
       const finalValidation = this.validateCompleteFlow(testCase, postSalesRecord);
       
       if (!finalValidation.consistent) {
-        console.log('   ⚠️ Issues de consistencia detectados:');
+// removed by clean-audit
         finalValidation.issues.forEach(issue => {
-          console.log(`      - ${issue}`);
+// removed by clean-audit
         });
       } else {
-        console.log('   ✅ Validación completa - Todos los datos consistentes');
+// removed by clean-audit
       }
 
       // Determinar resultado final
@@ -332,7 +332,7 @@ class PostSalesFlowTestEngine {
       };
 
     } catch (error) {
-      console.log(`   💥 Error inesperado en flujo post-venta: ${error.message}`);
+// removed by clean-audit
       return {
         success: false,
         actualResult: 'ERROR_UNEXPECTED',
@@ -344,8 +344,8 @@ class PostSalesFlowTestEngine {
   // Métodos de ejecución de fases
 
   static executeDeliveryPhase(clientId, deliveryData) {
-    console.log(`     📦 Procesando entrega - Odómetro: ${deliveryData.odometroEntrega} km`);
-    console.log(`     📦 Fotos: ${deliveryData.fotosVehiculo.length}, Firma: ${deliveryData.firmaDigitalCliente ? 'Sí' : 'No'}`);
+// removed by clean-audit
+// removed by clean-audit
     
     // Simular validaciones de entrega
     if (deliveryData.odometroEntrega < 0 || deliveryData.odometroEntrega > 999999) {
@@ -360,8 +360,8 @@ class PostSalesFlowTestEngine {
   }
 
   static executeDocumentsPhase(clientId, legalDocuments) {
-    console.log(`     📋 Procesando documentos - Proveedor: ${legalDocuments.proveedorSeguro}`);
-    console.log(`     📋 Contratos: ${legalDocuments.contratos.length}, Endosos: ${legalDocuments.endosos?.length || 0}`);
+// removed by clean-audit
+// removed by clean-audit
     
     // Simular validaciones documentales
     if (!legalDocuments.factura || !legalDocuments.polizaSeguro) {
@@ -376,8 +376,8 @@ class PostSalesFlowTestEngine {
   }
 
   static executePlatesPhase(clientId, platesData) {
-    console.log(`     🚗 Procesando placas - Número: ${platesData.numeroPlacas}`);
-    console.log(`     🚗 Estado: ${platesData.estado}, Hologramas: ${platesData.hologramas ? 'Sí' : 'No'}`);
+// removed by clean-audit
+// removed by clean-audit
     
     // Simular validaciones de placas
     const placaPattern = /^[A-Z]{3}-\d{3}-[A-Z]+$/;
@@ -389,7 +389,7 @@ class PostSalesFlowTestEngine {
       return { success: false, error: 'Tarjeta de circulación requerida' };
     }
 
-    console.log('     🎯 ¡FASE CRÍTICA COMPLETADA - DISPARANDO HANDOVER!');
+// removed by clean-audit
     return { success: true, triggersHandover: true };
   }
 
@@ -427,7 +427,7 @@ class PostSalesFlowTestEngine {
       }
     };
 
-    console.log(`     🚀 Event payload creado - VIN: ${event.payload.vehicle.vin}, Placa: ${event.payload.vehicle.placas}`);
+// removed by clean-audit
     
     // Simular envío a API
     return { 
@@ -455,18 +455,18 @@ class PostSalesFlowTestEngine {
       warrantyEnd: new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)
     };
 
-    console.log(`     📊 Post-sales record creado: ${record.id}`);
-    console.log(`     📊 Identificador único: ${record.uniqueIdentifier}`);
+// removed by clean-audit
+// removed by clean-audit
     
     return record;
   }
 
   static setupPostSalesIntegrations(postSalesRecord) {
     // Simular setup de integraciones
-    console.log(`     📅 Recordatorio programado para: ${postSalesRecord.nextMaintenanceDate.toLocaleDateString('es-ES')}`);
-    console.log(`     📱 WhatsApp opt-in configurado`);
-    console.log(`     🔗 Make/n8n scenario activado`);
-    console.log(`     🏢 Odoo customer/vehicle creado`);
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
     
     return { success: true };
   }
@@ -508,3 +508,4 @@ class PostSalesFlowTestEngine {
 
 // Ejecutar los tests de flujo completo post-venta
 PostSalesFlowTestEngine.testCompletePostSalesFlow();
+// removed by clean-audit

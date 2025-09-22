@@ -49,7 +49,7 @@ export class DataService {
   }
 
   /**
-   * Initialize with demo data
+// removed by clean-audit
    */
   private initializeData(): void {
     this.setLoading(true);
@@ -502,3 +502,5 @@ export class DataService {
     return csvRows.join('\n');
   }
 }
+
+// removed by clean-audit

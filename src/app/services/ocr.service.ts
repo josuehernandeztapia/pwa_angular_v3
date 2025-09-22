@@ -80,7 +80,7 @@ export class OCRService {
       
       this.worker = await this.createWorkerFn('spa+eng', 1, {
         logger: (m: any) => {
-          console.log('OCR Logger:', m);
+// removed by clean-audit
           this.progressSubject.next({
             status: m.status,
             progress: m.progress || 0,
@@ -99,7 +99,7 @@ export class OCRService {
       this.progressSubject.next({ status: 'ready', progress: 100, message: 'OCR listo' });
       
     } catch (error) {
-      console.error('Error initializing OCR worker:', error);
+// removed by clean-audit
       this.progressSubject.next({ status: 'error', progress: 0, message: 'Error inicializando OCR' });
       throw error;
     }
@@ -141,7 +141,7 @@ export class OCRService {
         needsManualEntry: true
       };
     } catch (error) {
-      console.warn('VIN extraction failed, requiring manual entry:', error);
+// removed by clean-audit
       return {
         vin: '',
         confidence: 0,
@@ -173,7 +173,7 @@ export class OCRService {
         needsManualEntry: true
       };
     } catch (error) {
-      console.warn('Odometer extraction failed, requiring manual entry:', error);
+// removed by clean-audit
       return {
         odometer: null,
         confidence: 0,
@@ -253,7 +253,7 @@ export class OCRService {
         return result;
       } catch (error) {
         lastError = error as Error;
-        console.warn(`${operationName} attempt ${attempt} failed:`, error);
+// removed by clean-audit
         
         // If this was the last attempt, break and throw
         if (attempt > this.retryConfig.maxRetries) {
@@ -288,7 +288,7 @@ export class OCRService {
           }
           await this.initializeWorker();
         } catch (reinitError) {
-          console.warn('Worker reinitialization failed:', reinitError);
+// removed by clean-audit
         }
       }
     }
@@ -362,7 +362,7 @@ export class OCRService {
         img.src = URL.createObjectURL(imageFile);
       });
     } catch (error) {
-      console.warn('Image preprocessing failed, using original:', error);
+// removed by clean-audit
       return imageFile;
     }
   }
@@ -490,7 +490,7 @@ export class OCRService {
       return ocrResult;
 
     } catch (error) {
-      console.error('Error during OCR processing:', error);
+// removed by clean-audit
       throw error;
     }
   }
@@ -768,3 +768,5 @@ export class OCRService {
     };
   }
 }
+
+// removed by clean-audit

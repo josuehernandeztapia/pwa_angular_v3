@@ -581,14 +581,14 @@ export function concurrentUsersTest() {
 
 // Setup function
 export function setup() {
-  console.log('🚀 Starting API Performance Tests');
-  console.log(`🔌 API Base URL: ${BASE_URL}`);
-  console.log('📊 Test scenarios: api_performance, database_stress, concurrent_users');
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
   
   // Verify API is accessible
   const healthResponse = http.get(`${BASE_URL}/health`);
   if (healthResponse.status !== 200) {
-    console.warn('⚠️  Health check failed, API might not be ready');
+// removed by clean-audit
   }
   
   return { 
@@ -601,6 +601,7 @@ export function setup() {
 export function teardown(data) {
   const endTime = new Date();
   const duration = (endTime - data.startTime) / 1000;
-  console.log(`✅ API performance tests completed in ${duration.toFixed(2)} seconds`);
-  console.log('📈 Check the detailed metrics above for API performance analysis');
+// removed by clean-audit
+// removed by clean-audit
 }
+// removed by clean-audit

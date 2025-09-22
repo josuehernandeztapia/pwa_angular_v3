@@ -77,13 +77,13 @@ export class WebhookRetryService {
 
             // Check if we should retry this error
             if (!WebhookRetryService.shouldRetryError(error, finalConfig)) {
-              console.error('🚨 Non-retryable error:', error);
+// removed by clean-audit
               return throwError(() => error);
             }
 
             // Check max attempts
             if (attemptNumber > finalConfig.maxAttempts) {
-              console.error(`🚨 Max retry attempts (${finalConfig.maxAttempts}) exceeded`);
+// removed by clean-audit
               return throwError(() => new Error(`Max retry attempts exceeded after ${attemptNumber - 1} attempts`));
             }
 
@@ -99,7 +99,7 @@ export class WebhookRetryService {
               error
             };
 
-            console.warn(`🔄 Webhook retry attempt ${attemptNumber}/${finalConfig.maxAttempts}`, {
+// removed by clean-audit
               delay: `${delayMs.toFixed(0)}ms`,
               elapsed: `${elapsedTime}ms`,
               error: error.message || error.status
@@ -173,7 +173,7 @@ export class WebhookRetryService {
         if (now - state.lastFailureTime > this.recoveryTimeout) {
           state.state = 'HALF_OPEN';
           state.successCount = 0;
-          console.log(`🔄 Circuit breaker for ${endpointId} moving to HALF_OPEN`);
+// removed by clean-audit
         }
         return state.state !== 'OPEN';
 
@@ -199,7 +199,7 @@ export class WebhookRetryService {
 
     if (state.state === 'HALF_OPEN' && state.successCount >= 3) {
       state.state = 'CLOSED';
-      console.log(`✅ Circuit breaker for ${endpointId} CLOSED (recovered)`);
+// removed by clean-audit
     }
   }
 
@@ -216,10 +216,10 @@ export class WebhookRetryService {
 
     if (state.state === 'CLOSED' && state.failureCount >= this.failureThreshold) {
       state.state = 'OPEN';
-      console.error(`🚨 Circuit breaker for ${endpointId} OPEN (too many failures)`);
+// removed by clean-audit
     } else if (state.state === 'HALF_OPEN') {
       state.state = 'OPEN';
-      console.error(`🚨 Circuit breaker for ${endpointId} back to OPEN (test failed)`);
+// removed by clean-audit
     }
   }
 
@@ -235,7 +235,7 @@ export class WebhookRetryService {
    */
   resetCircuitBreaker(endpointId: string): void {
     this.circuitBreakerStates.delete(endpointId);
-    console.log(`🔄 Circuit breaker for ${endpointId} reset`);
+// removed by clean-audit
   }
 }
 
@@ -318,7 +318,7 @@ export class WebhookDeadLetterQueue {
       attempts
     });
 
-    console.error(`💀 Webhook added to dead letter queue: ${id}`, {
+// removed by clean-audit
       endpoint,
       attempts,
       error: error.message
@@ -336,6 +336,7 @@ export class WebhookDeadLetterQueue {
 
   clearDeadLetterQueue(): void {
     this.failedWebhooks = [];
-    console.log('💀 Dead letter queue cleared');
+// removed by clean-audit
   }
 }
+// removed by clean-audit

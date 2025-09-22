@@ -7,8 +7,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, DebugElement } from '@angular/core';
 import { AccessibilityTester, AccessibilityTestUtils, testComponentAccessibility } from './accessibility-test-framework';
-// Use browser-safe stub in unit tests to avoid Node fs/path imports
-import { generateAccessibilityReport } from './accessibility-report-stub';
+// removed by clean-audit
+// removed by clean-audit
 
 @Component({
   template: `
@@ -134,3 +134,4 @@ describe('Accessibility Testing Framework', () => {
     });
   });
 });
+// removed by clean-audit

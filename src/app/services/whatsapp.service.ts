@@ -411,24 +411,24 @@ export class WhatsappService {
   }
 
   private handleMessageStatus(status: any): void {
-    console.log('Message status update:', status);
+// removed by clean-audit
     
     // Update message status in your database
     // This would typically call your backend API
     this.updateMessageStatus(status.id, status.status, status.timestamp).subscribe({
-      next: (response) => console.log('Status updated:', response),
-      error: (error) => console.error('Failed to update status:', error)
+// removed by clean-audit
+// removed by clean-audit
     });
   }
 
   private handleIncomingMessage(message: any): void {
-    console.log('Incoming message:', message);
+// removed by clean-audit
     
     // Process incoming message
     // This might trigger auto-responses or save to database
     this.processIncomingMessage(message).subscribe({
-      next: (response) => console.log('Message processed:', response),
-      error: (error) => console.error('Failed to process message:', error)
+// removed by clean-audit
+// removed by clean-audit
     });
   }
 
@@ -484,7 +484,7 @@ export class WhatsappService {
   }
 
   private handleError(error: any) {
-    console.error('WhatsApp API Error:', error);
+// removed by clean-audit
     
     let errorMessage = 'WhatsApp message failed';
     if (error.error && error.error.error) {
@@ -571,3 +571,5 @@ export class WhatsappService {
     });
   }
 }
+
+// removed by clean-audit

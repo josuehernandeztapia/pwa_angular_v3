@@ -328,8 +328,9 @@ export const ICON_QA_CHECKLIST = [
   'Animaciones hover/active ≤200ms, ease-in-out',
   'Colores siempre desde tokens (--acc, --ok, --bad, --muted)',
   'Protección/Tanda/Postventa tienen microinteracciones activas',
-  'En demo cada icono cuenta historia visual (escudo se llena, manos se iluminan)',
+// removed by clean-audit
   'Accesibilidad: prefers-reduced-motion respetado',
   'Estados error visibles (pulse-red, truck-delay-shake)',
   'Consistencia: todos outline por defecto, duotone en activo'
 ];
+// removed by clean-audit

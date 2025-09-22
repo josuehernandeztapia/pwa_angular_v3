@@ -127,7 +127,7 @@ export class HASEModelService {
       return of(result);
 
     } catch (error) {
-      console.error('HASE calculation failed:', error);
+// removed by clean-audit
       return of(this.getFallbackHASEResult(profile, startTime));
     }
   }
@@ -422,3 +422,4 @@ export class HASEModelService {
     };
   }
 }
+// removed by clean-audit

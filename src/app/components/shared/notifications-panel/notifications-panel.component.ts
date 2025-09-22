@@ -108,7 +108,7 @@ import { ToastService } from '../../../services/toast.service';
           <div class="empty-icon">
             {{ showUnreadOnly ? '📪' : '🎉' }}
           </div>
-          <h4>{{ showUnreadOnly ? 'Sin notificaciones nuevas' : 'Todo al día' }}</h4>
+// removed by clean-audit
           <p>{{ showUnreadOnly ? 'No hay notificaciones sin leer' : 'No hay notificaciones pendientes' }}</p>
         </div>
       </div>
@@ -541,7 +541,7 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
       this.filterNotifications();
       
     } catch (error) {
-      console.error('Error loading notification data:', error);
+// removed by clean-audit
       this.toast.error('Error al cargar notificaciones');
     } finally {
       this.isLoading = false;
@@ -709,7 +709,7 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
 
     if (notification.actionUrl) {
       // Navigate to action URL
-      console.log('Navigate to:', notification.actionUrl);
+// removed by clean-audit
       this.closePanel();
     }
   }
@@ -764,3 +764,4 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
     return notification.id;
   }
 }
+// removed by clean-audit

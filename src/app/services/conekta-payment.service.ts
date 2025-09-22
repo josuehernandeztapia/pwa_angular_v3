@@ -122,7 +122,7 @@ export class ConektaPaymentService {
 
   private async loadConektaSDK(): Promise<void> {
     if (this.isLoaded) return;
-    // If a mock or real SDK is already available, use it without injecting script
+// removed by clean-audit
     const sdk = getConekta();
     if (typeof sdk !== 'undefined' && sdk?.Token?.create) {
       try {
@@ -436,7 +436,7 @@ export class ConektaPaymentService {
       // keep default
     }
     
-    console.error('Conekta Payment Error:', error);
+// removed by clean-audit
     return throwError(() => new Error(errorMessage));
   }
 
@@ -450,7 +450,7 @@ export class ConektaPaymentService {
       }
       return false;
     } catch (e) {
-      console.error('Webhook validation error:', e as any);
+// removed by clean-audit
       return false;
     }
   }
@@ -474,3 +474,4 @@ export class ConektaPaymentService {
     });
   }
 }
+// removed by clean-audit

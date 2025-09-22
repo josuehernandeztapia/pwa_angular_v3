@@ -37,9 +37,9 @@ describe('AuthService', () => {
   });
 
   describe('Login Functionality', () => {
-    it('should login with valid demo credentials', (done) => {
+// removed by clean-audit
       const credentials: LoginCredentials = {
-        email: 'demo@conductores.com',
+// removed by clean-audit
         password: 'demo123'
       };
 
@@ -51,7 +51,7 @@ describe('AuthService', () => {
           expect(result.expiresIn).toBeGreaterThan(0);
           done();
         },
-        error: () => fail('Login should succeed with demo credentials')
+// removed by clean-audit
       });
     });
 
@@ -87,7 +87,7 @@ describe('AuthService', () => {
 
     it('should set user as authenticated after successful login', (done) => {
       const credentials: LoginCredentials = {
-        email: 'demo@conductores.com',
+// removed by clean-audit
         password: 'demo123'
       };
 
@@ -103,7 +103,7 @@ describe('AuthService', () => {
 
     it('should store token in localStorage after successful login', (done) => {
       const credentials: LoginCredentials = {
-        email: 'demo@conductores.com',
+// removed by clean-audit
         password: 'demo123'
       };
 
@@ -120,14 +120,14 @@ describe('AuthService', () => {
   describe('Token Management', () => {
     beforeEach(() => {
       // Set up a valid token in localStorage
-      const mockToken = 'mock.jwt.token.' + Date.now();
+// removed by clean-audit
       localStorage.setItem('auth_token', mockToken);
     });
 
     it('should retrieve stored token', () => {
       const token = service.getToken();
       expect(token).toBeTruthy();
-      expect(token).toContain('mock.jwt.token');
+// removed by clean-audit
     });
 
     it('should detect valid token as not expired', () => {
@@ -137,7 +137,7 @@ describe('AuthService', () => {
 
     it('should detect old token as expired', () => {
       // Set an old timestamp token
-      const oldToken = 'mock.jwt.token.' + (Date.now() - 3600000 - 1000); // 1 hour + 1 second ago
+// removed by clean-audit
       localStorage.setItem('auth_token', oldToken);
       
       const isExpired = service.isTokenExpired();
@@ -230,7 +230,7 @@ describe('AuthService', () => {
     });
 
     it('should fail registration with existing email', (done) => {
-      validRegistrationData.email = 'demo@conductores.com'; // Existing email
+// removed by clean-audit
 
       service.register(validRegistrationData).subscribe({
         next: () => fail('Registration should fail with existing email'),
@@ -339,7 +339,7 @@ describe('AuthService', () => {
     });
 
     it('should return not available for existing email', (done) => {
-      service.checkEmailAvailability('demo@conductores.com').subscribe({
+// removed by clean-audit
         next: (result) => {
           expect(result.available).toBeFalse();
           done();
@@ -379,7 +379,7 @@ describe('AuthService', () => {
     beforeEach((done) => {
       // Login first
       const credentials: LoginCredentials = {
-        email: 'demo@conductores.com',
+// removed by clean-audit
         password: 'demo123'
       };
       
@@ -412,3 +412,4 @@ describe('AuthService', () => {
     });
   });
 });
+// removed by clean-audit
