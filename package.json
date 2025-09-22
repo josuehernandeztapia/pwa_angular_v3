@@ -107,6 +107,8 @@
     "test:quality:gates:all": "npm run build:prod && npm run test:coverage && mkdir -p coverage/merged && cp coverage/conductores-pwa/lcov.info coverage/merged/lcov.info && npm run test:a11y && MINIMUM_COVERAGE=98 MAX_LIGHTHOUSE_SCORE=95 MAX_ACCESSIBILITY_VIOLATIONS=0 MAX_BUNDLE_SIZE=2621440 node scripts/quality-gates.js",
     "quality:report": "node coverage-report-generator.js",
     "quality:badge": "node scripts/quality-badge.js",
+    "prebuild:qa": "npm run lint && npm run test:unit && npm run test:services && npm run test:e2e:chrome && npm run test:accessibility && npm run test:mutation:quick && npm run quality:gates",
+    "prebuild:qa:full": "npm run lint && npm run test:coverage && npm run test:visual && npm run test:e2e:chrome && npm run test:a11y && npm run test:mutation && npm run quality:report",
     "mock:api": "json-server --watch db.json --port 3000",
     "test:e2e-demo": "playwright test tests/e2e/login-flow.spec.ts --project=chromium --reporter=html,json",
     "test:all": "npm run test:unit && npm run test:accessibility && npm run test:visual && npm run test:e2e:chrome && npm run test:mutation:quick && npm run coverage:generate",
