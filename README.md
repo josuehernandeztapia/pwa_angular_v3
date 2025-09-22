@@ -4,6 +4,7 @@
 ![Tests](reports/quality/tests-badge.svg)
 ![Build](reports/quality/build-badge.svg)
 ![Docs](https://img.shields.io/badge/docs-centralized-blue)
+![Docs Status](https://img.shields.io/badge/docs-optimized-brightgreen)
 
 Conductores es una **Progressive Web Application (PWA)** para la gestión integral de conductores y post-ventas automotriz.
 Construida con **Angular 17+** y un stack de calidad enterprise.
