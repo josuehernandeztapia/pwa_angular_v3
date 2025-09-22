@@ -561,9 +561,7 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
   }
 
   clearAll(): void {
-// removed by clean-audit
-      this.notificationService.clearNotificationHistory();
-    }
+    this.notificationService.clearNotificationHistory();
   }
 
   handleNotificationClick(notification: NotificationHistory): void {

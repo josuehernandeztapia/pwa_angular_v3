@@ -80,13 +80,12 @@ describe('ApiService', () => {
     });
   });
 
-// removed by clean-audit
+  describe('Client Operations - Mock API Mode', () => {
     beforeEach(() => {
-// removed by clean-audit
       (environment as any).features = { enableMockData: true };
     });
 
-// removed by clean-audit
+    it('should get clients from mock dataset', (done) => {
       service.getClients().subscribe(clients => {
         expect(clients.length).toBeGreaterThan(0);
         expect(clients[0]).toEqual(jasmine.objectContaining({
@@ -116,8 +115,7 @@ describe('ApiService', () => {
       });
     });
 
-// removed by clean-audit
-// removed by clean-audit
+    it('should get client by ID after loading mock dataset', (done) => {
       service.getClients().subscribe(() => {
         service.getClientById('1').subscribe(client => {
           expect(client).toBeTruthy();
@@ -134,7 +132,7 @@ describe('ApiService', () => {
       });
     });
 
-// removed by clean-audit
+    it('should create client in mock mode with generated documents', (done) => {
       const newClientData = {
         name: 'Test Client',
         email: 'test@test.com',
@@ -152,10 +150,9 @@ describe('ApiService', () => {
       });
     });
 
-// removed by clean-audit
+    it('should update client data in mock mode', (done) => {
       const updateData = { name: 'Updated Name' };
 
-      // First create a client
       service.createClient(mockClient).subscribe(createdClient => {
         service.updateClient(createdClient.id, updateData).subscribe(updatedClient => {
           expect(updatedClient.name).toBe(updateData.name);
@@ -165,8 +162,7 @@ describe('ApiService', () => {
       });
     });
 
-// removed by clean-audit
-      // First create a client
+    it('should delete client in mock mode', (done) => {
       service.createClient(mockClient).subscribe(createdClient => {
         service.deleteClient(createdClient.id).subscribe(success => {
           expect(success).toBe(true);
@@ -269,8 +265,11 @@ describe('ApiService', () => {
   });
 
   describe('Quote Operations', () => {
-// removed by clean-audit
+    beforeEach(() => {
       (environment as any).features = { enableMockData: true };
+    });
+
+    it('should create quote using mock data', (done) => {
       const quoteData = mockQuote;
 
       service.createQuote(quoteData).subscribe(quote => {
@@ -300,7 +299,7 @@ describe('ApiService', () => {
       });
     });
 
-// removed by clean-audit
+    it('should get client quotes from mock data', (done) => {
       (environment as any).features = { enableMockData: true };
 
       service.getClientQuotes('1').subscribe(quotes => {
@@ -326,13 +325,16 @@ describe('ApiService', () => {
   });
 
   describe('Document Operations', () => {
-// removed by clean-audit
+    beforeEach(() => {
       (environment as any).features = { enableMockData: true };
+    });
+
+    it('should upload document using mock flow', (done) => {
       const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
 
       service.uploadDocument('1', 'doc1', file).subscribe(document => {
         expect(document.id).toBe('doc1');
-        expect(document.name).toBe('INE Vigente'); // Using expected Document name
+        expect(document.name).toBe('INE Vigente');
         expect(document.status).toBe(DocumentStatus.EnRevision);
         done();
       });
@@ -358,9 +360,7 @@ describe('ApiService', () => {
       });
     });
 
-// removed by clean-audit
-      (environment as any).features = { enableMockData: true };
-
+    it('should get client documents using mock flow', (done) => {
       service.getClientDocuments('1').subscribe(documents => {
         expect(documents).toEqual(jasmine.any(Array));
         done();
@@ -384,8 +384,11 @@ describe('ApiService', () => {
   });
 
   describe('Event Operations', () => {
-// removed by clean-audit
+    beforeEach(() => {
       (environment as any).features = { enableMockData: true };
+    });
+
+    it('should add client event using mock flow', (done) => {
       const eventData = {
         message: 'Test event',
         actor: Actor.Asesor,
@@ -618,4 +621,3 @@ describe('ApiService', () => {
     });
   });
 });
-// removed by clean-audit

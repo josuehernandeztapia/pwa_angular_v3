@@ -12,6 +12,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../services/auth.service';
+import { MonitoringService } from '../services/monitoring.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -20,7 +21,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private monitoringService: MonitoringService
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -33,18 +35,32 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     // Add request logging only in development (no sensitive data)
-    if (!environment.production && !request.url.includes('assets/') && typeof window !== 'undefined' && (window as any).ng && (window as any).ng.probe) {
-// removed by clean-audit
+    if (!environment.production && !request.url.includes('assets/')) {
+      this.monitoringService.captureInfo('AuthInterceptor', 'request_intercepted', 'Intercepted outgoing HTTP request', {
+        method: authRequest.method,
+        url: authRequest.urlWithParams,
+        hasAuthHeader: authRequest.headers.has('Authorization')
+      });
     }
 
     return next.handle(authRequest).pipe(
       tap((event: HttpEvent<unknown>) => {
-        if (!environment.production && event instanceof HttpResponse && !request.url.includes('assets/') && typeof window !== 'undefined' && (window as any).ng && (window as any).ng.probe) {
-// removed by clean-audit
+        if (!environment.production && event instanceof HttpResponse && !request.url.includes('assets/')) {
+          this.monitoringService.captureInfo('AuthInterceptor', 'response_received', 'Received HTTP response', {
+            method: authRequest.method,
+            url: authRequest.urlWithParams,
+            status: event.status,
+            ok: event.ok
+          });
         }
       }),
       catchError((error: HttpErrorResponse) => {
-// removed by clean-audit
+        this.monitoringService.captureError('AuthInterceptor', 'http_error', error, {
+          method: authRequest.method,
+          url: authRequest.urlWithParams,
+          status: error.status,
+          statusText: error.statusText
+        }, 'high');
 
         if (error.status === 401) {
           return this.handle401Error(authRequest, next);
@@ -140,14 +156,13 @@ export class AuthInterceptor implements HttpInterceptor {
     // Server error
     const userMessage = 'Server error. Please try again later.';
     
-    // Log detailed error for debugging
-// removed by clean-audit
+    this.monitoringService.captureError('AuthInterceptor', 'server_error', error, {
       status: error.status,
       statusText: error.statusText,
       url: error.url,
       message: error.message,
-      error: error.error
-    });
+      responseBody: error.error
+    }, 'high');
 
     // Show user-friendly message
     this.showErrorToast(userMessage);
@@ -159,7 +174,7 @@ export class AuthInterceptor implements HttpInterceptor {
     // Network/connectivity error
     const userMessage = 'Network error. Please check your internet connection.';
     
-// removed by clean-audit
+    this.monitoringService.captureWarning('AuthInterceptor', 'network_error', userMessage);
     this.showErrorToast(userMessage);
 
     return throwError(() => new Error(userMessage));

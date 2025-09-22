@@ -37,9 +37,9 @@ describe('AuthService', () => {
   });
 
   describe('Login Functionality', () => {
-// removed by clean-audit
+    it('should login successfully with valid credentials', (done) => {
       const credentials: LoginCredentials = {
-// removed by clean-audit
+        email: 'asesor@conductores.com',
         password: 'demo123'
       };
 
@@ -51,7 +51,7 @@ describe('AuthService', () => {
           expect(result.expiresIn).toBeGreaterThan(0);
           done();
         },
-// removed by clean-audit
+        error: () => fail('Login should succeed with valid credentials')
       });
     });
 
@@ -87,7 +87,7 @@ describe('AuthService', () => {
 
     it('should set user as authenticated after successful login', (done) => {
       const credentials: LoginCredentials = {
-// removed by clean-audit
+        email: 'asesor@conductores.com',
         password: 'demo123'
       };
 
@@ -103,7 +103,7 @@ describe('AuthService', () => {
 
     it('should store token in localStorage after successful login', (done) => {
       const credentials: LoginCredentials = {
-// removed by clean-audit
+        email: 'asesor@conductores.com',
         password: 'demo123'
       };
 
@@ -120,14 +120,25 @@ describe('AuthService', () => {
   describe('Token Management', () => {
     beforeEach(() => {
       // Set up a valid token in localStorage
-// removed by clean-audit
+      const mockToken = `demo_jwt_token_${Date.now()}`;
+      const mockRefresh = `demo_refresh_token_${Date.now()}`;
+      const mockUser: User = {
+        id: '1',
+        name: 'Ana Torres',
+        email: 'asesor@conductores.com',
+        role: 'asesor',
+        permissions: ['read:clients']
+      };
+
       localStorage.setItem('auth_token', mockToken);
+      localStorage.setItem('refresh_token', mockRefresh);
+      localStorage.setItem('current_user', JSON.stringify(mockUser));
     });
 
     it('should retrieve stored token', () => {
       const token = service.getToken();
       expect(token).toBeTruthy();
-// removed by clean-audit
+      expect(token).toContain('demo_jwt_token_');
     });
 
     it('should detect valid token as not expired', () => {
@@ -137,7 +148,7 @@ describe('AuthService', () => {
 
     it('should detect old token as expired', () => {
       // Set an old timestamp token
-// removed by clean-audit
+      const oldToken = 'demo_jwt_token_' + (Date.now() - (2 * 60 * 60 * 1000));
       localStorage.setItem('auth_token', oldToken);
       
       const isExpired = service.isTokenExpired();
@@ -230,7 +241,7 @@ describe('AuthService', () => {
     });
 
     it('should fail registration with existing email', (done) => {
-// removed by clean-audit
+      validRegistrationData.email = 'asesor@conductores.com';
 
       service.register(validRegistrationData).subscribe({
         next: () => fail('Registration should fail with existing email'),
@@ -339,7 +350,7 @@ describe('AuthService', () => {
     });
 
     it('should return not available for existing email', (done) => {
-// removed by clean-audit
+      service.checkEmailAvailability('asesor@conductores.com').subscribe({
         next: (result) => {
           expect(result.available).toBeFalse();
           done();
@@ -379,7 +390,7 @@ describe('AuthService', () => {
     beforeEach((done) => {
       // Login first
       const credentials: LoginCredentials = {
-// removed by clean-audit
+        email: 'asesor@conductores.com',
         password: 'demo123'
       };
       
@@ -412,4 +423,3 @@ describe('AuthService', () => {
     });
   });
 });
-// removed by clean-audit

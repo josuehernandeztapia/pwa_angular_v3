@@ -9,6 +9,7 @@ describe('BackendApiService', () => {
   let service: BackendApiService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   let storageServiceSpy: jasmine.SpyObj<StorageService>;
+  let originalNavigatorOnLine: PropertyDescriptor | undefined;
 
   const mockClientRecord = {
     id: '1',
@@ -98,11 +99,18 @@ describe('BackendApiService', () => {
     httpClientSpy = TestBed.inject(HttpClient) as jasmine.SpyObj<HttpClient>;
     storageServiceSpy = TestBed.inject(StorageService) as jasmine.SpyObj<StorageService>;
 
-// removed by clean-audit
-    Object.defineProperty(navigator, 'onLine', {
+    originalNavigatorOnLine = Object.getOwnPropertyDescriptor(window.navigator, 'onLine');
+    Object.defineProperty(window.navigator, 'onLine', {
+      configurable: true,
       writable: true,
       value: true
     });
+  });
+
+  afterEach(() => {
+    if (originalNavigatorOnLine) {
+      Object.defineProperty(window.navigator, 'onLine', originalNavigatorOnLine);
+    }
   });
 
   describe('Service Initialization', () => {
@@ -404,12 +412,33 @@ describe('BackendApiService', () => {
       });
     });
 
-// removed by clean-audit
+    it('should fallback to mock ecosystems for AGS when API fails', (done) => {
       httpClientSpy.get.and.returnValue(throwError(() => new Error('Network error')));
 
       service.getEcosystems('AGS').subscribe(ecosystems => {
         expect(ecosystems.length).toBeGreaterThan(0);
         expect(ecosystems.every(eco => eco.market === 'AGS')).toBe(true);
+        done();
+      });
+    });
+
+    it('should fallback to mock ecosystems for EDOMEX when API fails', (done) => {
+      httpClientSpy.get.and.returnValue(throwError(() => new Error('Network error')));
+
+      service.getEcosystems('EDOMEX').subscribe(ecosystems => {
+        expect(ecosystems.length).toBeGreaterThan(0);
+        expect(ecosystems.every(eco => eco.market === 'EDOMEX')).toBe(true);
+        done();
+      });
+    });
+
+    it('should combine fallback ecosystems when API fails without market filter', (done) => {
+      httpClientSpy.get.and.returnValue(throwError(() => new Error('Network error')));
+
+      service.getEcosystems().subscribe(ecosystems => {
+        expect(ecosystems.length).toBeGreaterThan(0);
+        expect(ecosystems.some(eco => eco.market === 'AGS')).toBeTrue();
+        expect(ecosystems.some(eco => eco.market === 'EDOMEX')).toBeTrue();
         done();
       });
     });
@@ -628,45 +657,6 @@ describe('BackendApiService', () => {
     });
   });
 
-// removed by clean-audit
-// removed by clean-audit
-      httpClientSpy.get.and.returnValue(throwError(() => new Error('Network error')));
-
-      service.getEcosystems('AGS').subscribe(ecosystems => {
-        expect(ecosystems.length).toBeGreaterThan(0);
-        const agsEcosystems = ecosystems.filter(eco => eco.market === 'AGS');
-        expect(agsEcosystems.length).toBeGreaterThan(0);
-        expect(agsEcosystems.every(eco => eco.market === 'AGS')).toBe(true);
-        done();
-      });
-    });
-
-// removed by clean-audit
-      httpClientSpy.get.and.returnValue(throwError(() => new Error('Network error')));
-
-      service.getEcosystems('EDOMEX').subscribe(ecosystems => {
-        expect(ecosystems.length).toBeGreaterThan(0);
-        const edomexEcosystems = ecosystems.filter(eco => eco.market === 'EDOMEX');
-        expect(edomexEcosystems.length).toBeGreaterThan(0);
-        expect(edomexEcosystems.every(eco => eco.market === 'EDOMEX')).toBe(true);
-        done();
-      });
-    });
-
-// removed by clean-audit
-      httpClientSpy.get.and.returnValue(throwError(() => new Error('Network error')));
-
-      service.getEcosystems().subscribe(ecosystems => {
-        expect(ecosystems.length).toBeGreaterThan(0);
-        const hasAGS = ecosystems.some(eco => eco.market === 'AGS');
-        const hasEDOMEX = ecosystems.some(eco => eco.market === 'EDOMEX');
-        expect(hasAGS).toBe(true);
-        expect(hasEDOMEX).toBe(true);
-        done();
-      });
-    });
-  });
-
   describe('Error Handling Edge Cases', () => {
     it('should handle null client data from local storage', (done) => {
       httpClientSpy.get.and.returnValue(throwError(() => new Error('Network error')));
@@ -711,4 +701,3 @@ describe('BackendApiService', () => {
     });
   });
 });
-// removed by clean-audit

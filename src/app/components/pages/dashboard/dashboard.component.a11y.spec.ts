@@ -4,16 +4,16 @@ import { of } from 'rxjs';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardService } from '../../../services/dashboard.service';
 import { DashboardStats, ActivityFeedItem, OpportunityStage, ActionableGroup } from '../../../models/types';
-import { 
-  testAccessibility, 
-  AccessibilityTestPatterns, 
-  AccessibilityChecker, 
-  createAccessibilityTestSuite 
+import {
+  testAccessibility,
+  AccessibilityTestPatterns,
+  AccessibilityChecker,
+  createAccessibilityTestSuite
 } from '../../../test-helpers/accessibility.helper';
 
 describe('DashboardComponent Accessibility Tests', () => {
   let component: DashboardComponent;
-// removed by clean-audit
+  let fixture: ComponentFixture<DashboardComponent>;
   let mockDashboardService: jasmine.SpyObj<DashboardService>;
   let mockRouter: jasmine.SpyObj<Router>;
 
@@ -87,41 +87,41 @@ describe('DashboardComponent Accessibility Tests', () => {
       ]
     }).compileComponents();
 
-// removed by clean-audit
-// removed by clean-audit
+    fixture = TestBed.createComponent(DashboardComponent);
+    component = fixture.componentInstance;
     mockDashboardService = TestBed.inject(DashboardService) as jasmine.SpyObj<DashboardService>;
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
 
-// removed by clean-audit
+    // Setup service mocks
     mockDashboardService.getDashboardStats.and.returnValue(of(mockDashboardStats));
     mockDashboardService.getActivityFeed.and.returnValue(of(mockActivityFeed));
     mockDashboardService.getOpportunityStages.and.returnValue(of(mockOpportunityStages));
     mockDashboardService.getActionableGroups.and.returnValue(of(mockActionableGroups));
 
     component.ngOnInit();
-// removed by clean-audit
+    fixture.detectChanges();
   });
 
   describe('Basic Accessibility Compliance', () => {
     it('should pass automated accessibility tests', async () => {
-// removed by clean-audit
+      await testAccessibility(fixture);
     });
 
     it('should have proper document structure', () => {
-// removed by clean-audit
+      const mainElement = fixture.nativeElement.querySelector('.command-center-dashboard');
       expect(mainElement).toBeTruthy();
       expect(mainElement.tagName.toLowerCase()).toBe('div');
     });
 
     it('should have proper heading hierarchy', () => {
-// removed by clean-audit
+      const h1 = fixture.nativeElement.querySelector('h1');
       expect(h1).toBeTruthy();
       expect(h1.textContent).toContain('Centro de Comando');
-      
+
       // Check that there are no skipped heading levels
-// removed by clean-audit
+      const headings = fixture.nativeElement.querySelectorAll('h1, h2, h3, h4, h5, h6');
       let previousLevel = 0;
-      
+
       headings.forEach((heading: HTMLElement) => {
         const currentLevel = parseInt(heading.tagName.charAt(1));
         expect(currentLevel).toBeLessThanOrEqual(previousLevel + 1);
@@ -130,142 +130,94 @@ describe('DashboardComponent Accessibility Tests', () => {
     });
   });
 
-  describe('Navigation Accessibility', () => {
-    it('should pass navigation accessibility tests', async () => {
-// removed by clean-audit
-    });
+  describe('Visual Accessibility', () => {
+    it('should provide accessible stats summary', () => {
+      const statsCards = fixture.nativeElement.querySelectorAll('.stats-card');
+      expect(statsCards.length).toBeGreaterThan(0);
 
-    it('should have accessible navigation buttons', () => {
-// removed by clean-audit
-      
-      buttons.forEach((button: HTMLButtonElement) => {
-        // Each button should have accessible name
-        expect(AccessibilityChecker.hasAriaLabel(button) || button.textContent?.trim()).toBeTruthy();
-        
-        // Should be keyboard accessible
-        expect(AccessibilityChecker.isKeyboardAccessible(button)).toBe(true);
+      statsCards.forEach((card: HTMLElement) => {
+        expect(AccessibilityChecker.hasAriaLabel(card) || card.querySelector('h2')).toBeTruthy();
       });
     });
 
-    it('should have proper ARIA attributes for interactive elements', () => {
-// removed by clean-audit
-      if (clientModeToggle) {
-        expect(clientModeToggle.getAttribute('role')).toBeTruthy();
+    it('should have accessible charts and data visualizations', () => {
+      const charts = fixture.nativeElement.querySelectorAll('.chart-container, canvas, svg');
+
+      charts.forEach((chart: HTMLElement) => {
+        const hasDescription =
+          chart.getAttribute('role') === 'img' ||
+          chart.getAttribute('aria-label') !== null ||
+          chart.querySelector('figcaption') !== null;
+
+        expect(hasDescription).toBe(true);
+      });
+    });
+
+    it('should have high contrast for key metrics', async () => {
+      const metricElements = fixture.nativeElement.querySelectorAll('.metric-value, .metric-label');
+
+      for (const element of Array.from(metricElements)) {
+        if (element.textContent?.trim()) {
+          const hasAdequateContrast = await AccessibilityChecker.checkColorContrast(element);
+          expect(hasAdequateContrast).toBe(true);
+        }
       }
     });
   });
 
-  describe('Content Accessibility', () => {
-    it('should have accessible KPI cards', () => {
-      // KPI cards should be announced properly by screen readers
-// removed by clean-audit
-      
-      kpiCards.forEach((card: HTMLElement) => {
-        // Cards should have accessible text content or ARIA labels
-        const hasText = card.textContent?.trim();
-        const hasAriaLabel = AccessibilityChecker.hasAriaLabel(card);
-        expect(hasText || hasAriaLabel).toBeTruthy();
+  describe('Interaction Accessibility', () => {
+    it('should provide accessible navigation to sections', () => {
+      const quickLinks = fixture.nativeElement.querySelectorAll('.quick-link, .nav-link, a');
+
+      quickLinks.forEach((link: HTMLElement) => {
+        expect(AccessibilityChecker.isKeyboardAccessible(link)).toBe(true);
+        expect(AccessibilityChecker.hasAccessibleName(link)).toBe(true);
       });
     });
 
-    it('should have accessible activity feed', () => {
-// removed by clean-audit
-      
-      activityItems.forEach((item: HTMLElement) => {
-        // Activity items should be properly labeled
-        expect(item.textContent?.trim()).toBeTruthy();
-      });
-    });
+    it('should provide expandable sections with proper ARIA attributes', () => {
+      const expandableSections = fixture.nativeElement.querySelectorAll('[aria-expanded]');
 
-    it('should use semantic HTML for content structure', () => {
-// removed by clean-audit
-      expect(header).toBeTruthy();
-
-// removed by clean-audit
-      // Main content should be identifiable
-// removed by clean-audit
-      expect(hasMainContent).toBeTruthy();
-    });
-  });
-
-  describe('Form and Input Accessibility', () => {
-    it('should have accessible form controls if any', () => {
-// removed by clean-audit
-      
-      formControls.forEach((control: HTMLInputElement) => {
-        expect(AccessibilityChecker.hasAssociatedLabel(control)).toBe(true);
-      });
-    });
-
-    it('should handle form validation accessibly', () => {
-// removed by clean-audit
-      
-      errorMessages.forEach((error: HTMLElement) => {
-        // Error messages should be associated with their inputs
-        const ariaDescribedBy = error.getAttribute('id');
-        if (ariaDescribedBy) {
-// removed by clean-audit
-          expect(associatedInput).toBeTruthy();
-        }
+      expandableSections.forEach((section: HTMLElement) => {
+        expect(section.getAttribute('aria-controls')).toBeTruthy();
       });
     });
   });
 
-  describe('Visual and Interaction Accessibility', () => {
-    it('should not rely solely on color to convey information', () => {
-      // Check for status indicators that might use color only
-// removed by clean-audit
-      
-      statusElements.forEach((element: HTMLElement) => {
-        // Status should be conveyed through text, icons, or ARIA attributes
-        const hasTextContent = element.textContent?.trim();
-        const hasAriaLabel = AccessibilityChecker.hasAriaLabel(element);
-        const hasIconOrSymbol = element.innerHTML.includes('icon') || /[📊📈📉✅❌⚠️]/.test(element.innerHTML);
-        
-        expect(hasTextContent || hasAriaLabel || hasIconOrSymbol).toBeTruthy();
-      });
-    });
+  describe('Data Tables Accessibility', () => {
+    it('should provide accessible tables', () => {
+      const tables = fixture.nativeElement.querySelectorAll('table');
 
-    it('should have sufficient focus indicators', () => {
-// removed by clean-audit
-        'button, input, select, textarea, a, [tabindex]:not([tabindex="-1"])'
-      );
-      
-      focusableElements.forEach((element: HTMLElement) => {
-        // Element should be visually focusable
-        element.focus();
-        const computedStyle = window.getComputedStyle(element);
-        const hasFocusStyle = computedStyle.outline !== 'none' || 
-                             computedStyle.boxShadow !== 'none' ||
-                             computedStyle.border !== element.style.border;
-        
-        expect(hasFocusStyle).toBeTruthy();
+      tables.forEach((table: HTMLTableElement) => {
+        expect(table.querySelector('thead')).toBeTruthy();
+        expect(table.querySelector('tbody')).toBeTruthy();
+
+        const headers = table.querySelectorAll('th');
+        headers.forEach(header => {
+          expect(header.scope === 'col' || header.scope === 'row').toBe(true);
+        });
       });
     });
   });
 
   describe('Screen Reader Support', () => {
     it('should provide meaningful page title and headings', () => {
-// removed by clean-audit
+      const pageTitle = fixture.nativeElement.querySelector('h1');
       expect(pageTitle?.textContent).toContain('Centro de Comando');
     });
 
     it('should have proper landmark regions', () => {
-      // Check for semantic HTML or ARIA landmarks
-// removed by clean-audit
+      const landmarks = fixture.nativeElement.querySelectorAll(
         'header, nav, main, section, aside, footer, [role="banner"], [role="navigation"], [role="main"], [role="complementary"]'
       );
-      
+
       expect(landmarks.length).toBeGreaterThan(0);
     });
 
     it('should provide context for dynamic content', () => {
-      // Check for ARIA live regions for dynamic updates
-// removed by clean-audit
-      
-      // If there are dynamic updates, there should be live regions
+      const liveRegions = fixture.nativeElement.querySelectorAll('[aria-live], [role="status"], [role="alert"]');
+
       if (component.dashboardStats.opportunitiesInPipeline.nuevas > 0) {
-        // Dynamic content should be announced
         expect(liveRegions.length >= 0).toBe(true);
       }
     });
@@ -273,25 +225,24 @@ describe('DashboardComponent Accessibility Tests', () => {
 
   describe('Keyboard Navigation', () => {
     it('should support keyboard navigation', () => {
-// removed by clean-audit
+      const focusableElements = fixture.nativeElement.querySelectorAll(
         'button, input, select, textarea, a:not([href=""]), [tabindex]:not([tabindex="-1"])'
       );
-      
+
       expect(focusableElements.length).toBeGreaterThan(0);
-      
+
       focusableElements.forEach((element: HTMLElement) => {
         expect(AccessibilityChecker.isKeyboardAccessible(element)).toBe(true);
       });
     });
 
     it('should have logical tab order', () => {
-// removed by clean-audit
+      const focusableElements = Array.from(fixture.nativeElement.querySelectorAll(
         'button, input, select, textarea, a:not([href=""]), [tabindex]:not([tabindex="-1"])'
       )) as HTMLElement[];
-      
-      // Elements should be in logical DOM order unless explicitly overridden with tabindex
+
       let lastTabIndex = -Infinity;
-      
+
       focusableElements.forEach((element: HTMLElement) => {
         const tabIndex = parseInt(element.getAttribute('tabindex') || '0');
         if (tabIndex >= 0) {
@@ -300,69 +251,43 @@ describe('DashboardComponent Accessibility Tests', () => {
         }
       });
     });
-
-    it('should handle keyboard interactions properly', () => {
-// removed by clean-audit
-      
-      buttons.forEach((button: HTMLButtonElement) => {
-        spyOn(button, 'click');
-        
-        // Simulate Enter key press
-        const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-        button.dispatchEvent(enterEvent);
-        
-        // Simulate Space key press
-        const spaceEvent = new KeyboardEvent('keydown', { key: ' ' });
-        button.dispatchEvent(spaceEvent);
-        
-        // These should trigger click events or handle appropriately
-      });
-    });
   });
 
   describe('Mobile and Touch Accessibility', () => {
     it('should have adequate touch target sizes', () => {
-// removed by clean-audit
-      
+      const touchTargets = fixture.nativeElement.querySelectorAll('button, a, input[type="checkbox"], input[type="radio"]');
+
       touchTargets.forEach((target: HTMLElement) => {
         const rect = target.getBoundingClientRect();
         const minSize = 44; // 44px minimum recommended touch target size
-        
-        // Either the element itself or its padding should provide adequate touch area
         expect(rect.width >= minSize || rect.height >= minSize).toBeTruthy();
       });
     });
 
     it('should be responsive to viewport changes', () => {
-      // Test different viewport sizes
       const viewports = [
-        { width: 320, height: 568 }, // Mobile
-        { width: 768, height: 1024 }, // Tablet
-        { width: 1200, height: 800 }  // Desktop
+        { width: 320, height: 568 },
+        { width: 768, height: 1024 },
+        { width: 1200, height: 800 }
       ];
-      
+
       viewports.forEach(viewport => {
-        // Simulate viewport change
         Object.defineProperty(window, 'innerWidth', { value: viewport.width, writable: true });
         Object.defineProperty(window, 'innerHeight', { value: viewport.height, writable: true });
-        
+
         window.dispatchEvent(new Event('resize'));
-// removed by clean-audit
-        
-        // Component should remain accessible across viewport changes
-// removed by clean-audit
+        fixture.detectChanges();
+
+        const focusableElements = fixture.nativeElement.querySelectorAll('button, input, a');
         expect(focusableElements.length).toBeGreaterThan(0);
       });
     });
   });
 
-  // Apply common accessibility test patterns
   const accessibilityTestSuite = createAccessibilityTestSuite('DashboardComponent');
-  
   Object.entries(accessibilityTestSuite).forEach(([testName, testFunction]) => {
     it(testName, async () => {
-// removed by clean-audit
+      await (testFunction as any)(fixture);
     });
   });
 });
-// removed by clean-audit

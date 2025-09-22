@@ -75,7 +75,7 @@ export class AuthService {
         this.currentUserSubject.next(user);
         this.isAuthenticatedSubject.next(true);
       } catch (error) {
-// removed by clean-audit
+        console.warn('[AuthService] Failed to restore persisted session', error);
         this.logout();
       }
     }
@@ -85,18 +85,20 @@ export class AuthService {
    * Login with email and password
    */
   login(credentials: LoginCredentials): Observable<AuthResponse> {
-// removed by clean-audit
+    if (!credentials.email.endsWith('@conductores.com')) {
+      return throwError(() => new Error('Credenciales incorrectas'));
+    }
     const demoUsers = [
       {
-// removed by clean-audit
+        email: 'asesor@conductores.com',
         password: 'demo123',
         user: {
           id: '1',
-// removed by clean-audit
-// removed by clean-audit
+          name: 'Ana Torres',
+          email: 'asesor@conductores.com',
           role: 'asesor' as const,
           permissions: ['read:clients', 'write:quotes', 'read:reports'],
-// removed by clean-audit
+          avatarUrl: 'https://picsum.photos/seed/asesor/100/100'
         }
       },
       {
@@ -104,11 +106,23 @@ export class AuthService {
         password: 'super123',
         user: {
           id: '2',
-// removed by clean-audit
+          name: 'Laura Martínez',
           email: 'supervisor@conductores.com',
           role: 'supervisor' as const,
           permissions: ['read:clients', 'write:quotes', 'read:reports', 'approve:quotes', 'manage:team'],
           avatarUrl: 'https://picsum.photos/seed/supervisor/100/100'
+        }
+      },
+      {
+        email: 'admin@conductores.com',
+        password: 'admin123',
+        user: {
+          id: '3',
+          name: 'Carlos Flores',
+          email: 'admin@conductores.com',
+          role: 'admin' as const,
+          permissions: ['*'],
+          avatarUrl: 'https://picsum.photos/seed/admin/100/100'
         }
       }
     ];
@@ -136,7 +150,7 @@ export class AuthService {
         return authResponse;
       }),
       catchError(error => {
-// removed by clean-audit
+        console.warn('[AuthService] Login failed', { email: credentials.email, error });
         return throwError(() => new Error('Credenciales incorrectas'));
       })
     );
@@ -224,7 +238,7 @@ export class AuthService {
         return authResponse;
       }),
       catchError(error => {
-// removed by clean-audit
+        console.warn('[AuthService] Refresh token failed', error);
         this.logout();
         return throwError(() => new Error('Token refresh failed'));
       })
@@ -252,7 +266,7 @@ export class AuthService {
         return updatedUser;
       }),
       catchError(error => {
-// removed by clean-audit
+        console.error('[AuthService] Profile update failed', error);
         return throwError(() => new Error('Failed to update profile'));
       })
     );
@@ -273,7 +287,7 @@ export class AuthService {
         throw new Error('Invalid current password or new password too short');
       }),
       catchError(error => {
-// removed by clean-audit
+        console.warn('[AuthService] Change password failed', error);
         return throwError(() => new Error('Failed to change password'));
       })
     );
@@ -287,7 +301,13 @@ export class AuthService {
       delay(2000),
       map(() => {
         // Simulate sending password reset email
-// removed by clean-audit
+        const resetRequests = JSON.parse(localStorage.getItem('passwordResetRequests') || '[]');
+        resetRequests.push({
+          email,
+          requestedAt: new Date().toISOString()
+        });
+        localStorage.setItem('passwordResetRequests', JSON.stringify(resetRequests));
+        console.info('[AuthService] Password reset email simulated', { email });
         return true;
       })
     );
@@ -316,7 +336,6 @@ export class AuthService {
     const token = this.getToken();
     if (!token) return true;
     // In a real app, decode JWT and check exp.
-// removed by clean-audit
     let tokenCreated = 0;
     const digitMatch = token.match(/(\d{10,})/g);
     if (digitMatch && digitMatch.length) {
@@ -357,9 +376,8 @@ export class AuthService {
     return of(null).pipe(
       delay(2000), // Simulate network delay
       map(() => {
-// removed by clean-audit
         const existingEmails = [
-// removed by clean-audit
+          'asesor@conductores.com',
           'supervisor@conductores.com',
           'admin@conductores.com',
           'test@conductores.com'
@@ -377,7 +395,6 @@ export class AuthService {
           approvalRequired: !!registrationData.supervisor
         };
 
-// removed by clean-audit
         const pendingRegistration = {
           ...registrationData,
           userId: response.userId,
@@ -386,21 +403,20 @@ export class AuthService {
           verificationToken: 'verify_' + Date.now()
         };
 
-// removed by clean-audit
         const pendingRegistrations = JSON.parse(
           localStorage.getItem('pendingRegistrations') || '[]'
         );
         pendingRegistrations.push(pendingRegistration);
         localStorage.setItem('pendingRegistrations', JSON.stringify(pendingRegistrations));
 
-// removed by clean-audit
+        console.info('[AuthService] Verification email simulated', {
           to: registrationData.email,
           subject: 'Verificar tu cuenta - Conductores PWA',
           verificationLink: `${window.location.origin}/verify-email?token=${pendingRegistration.verificationToken}`
         });
 
         if (registrationData.supervisor) {
-// removed by clean-audit
+          console.info('[AuthService] Supervisor notification simulated', {
             to: registrationData.supervisor,
             subject: 'Nueva solicitud de registro - Conductores PWA',
             newUser: `${registrationData.firstName} ${registrationData.lastName}`
@@ -410,14 +426,14 @@ export class AuthService {
         return response;
       }),
       catchError(error => {
-// removed by clean-audit
+        console.error('[AuthService] Registration failed', error);
         return throwError(() => error);
       })
     );
   }
 
   /**
-// removed by clean-audit
+   * Verify email token and promote pending registrations when appropriate.
    */
   verifyEmail(token: string): Observable<{ message: string; success: boolean }> {
     return of(null).pipe(
@@ -458,7 +474,7 @@ export class AuthService {
         return { message, success: true };
       }),
       catchError(error => {
-// removed by clean-audit
+        console.error('[AuthService] Email verification failed', error);
         return throwError(() => error);
       })
     );
@@ -472,7 +488,7 @@ export class AuthService {
       delay(500),
       map(() => {
         const existingEmails = [
-// removed by clean-audit
+          'asesor@conductores.com',
           'supervisor@conductores.com',
           'admin@conductores.com',
           'test@conductores.com'
@@ -490,5 +506,3 @@ export class AuthService {
     );
   }
 }
-
-// removed by clean-audit

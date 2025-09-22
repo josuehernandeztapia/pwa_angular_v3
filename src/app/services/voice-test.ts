@@ -1,7 +1,6 @@
 // ✅ TESTING: Voice Evaluation System
 // Run this in browser console to test voice evaluation logic
 
-// removed by clean-audit
 function createMockAudioBlob(duration: number = 10): Blob {
   const sampleRate = 16000;
   const arrayBuffer = new ArrayBuffer(sampleRate * duration * 2); // 16-bit
@@ -38,7 +37,7 @@ const testScenarios = {
 
 // Test function (call from browser console)
 async function testVoiceEvaluation(voiceValidationService: any) {
-// removed by clean-audit
+  console.info('[VoiceTest] Starting voice evaluation smoke test');
   
   // Clear previous evaluations
   voiceValidationService.clearVoiceEvaluations();
@@ -46,7 +45,7 @@ async function testVoiceEvaluation(voiceValidationService: any) {
   // Test each scenario
   for (const [scenarioName, scenario] of Object.entries(testScenarios)) {
     try {
-// removed by clean-audit
+      console.groupCollapsed(`[VoiceTest] Scenario: ${scenarioName}`);
       
       const result = await voiceValidationService.evaluateAudio(
         scenario.audioBlob,
@@ -55,24 +54,26 @@ async function testVoiceEvaluation(voiceValidationService: any) {
         scenario.municipality
       );
       
-// removed by clean-audit
+      console.log('[VoiceTest] Voice evaluation result', {
         decision: result.decision,
         score: result.voiceScore,
         flags: result.flags,
         fallback: result.fallback
       });
+      console.groupEnd();
       
     } catch (error) {
-// removed by clean-audit
+      console.error(`[VoiceTest] Scenario ${scenarioName} failed`, error);
     }
   }
   
   // Test aggregation
-// removed by clean-audit
   const summary = voiceValidationService.aggregateResilience();
-// removed by clean-audit
+  console.info('[VoiceTest] Aggregated voice resilience summary', summary);
   
-// removed by clean-audit
+  if (summary?.categoryBreakdown) {
+    console.table(summary.categoryBreakdown);
+  }
   
   return {
     evaluations: voiceValidationService.getVoiceEvaluations(),
@@ -84,6 +85,5 @@ async function testVoiceEvaluation(voiceValidationService: any) {
 if (typeof window !== 'undefined') {
   (window as any).testVoiceEvaluation = testVoiceEvaluation;
   (window as any).createMockAudioBlob = createMockAudioBlob;
-// removed by clean-audit
+  console.info('%c[VoiceTest] Voice evaluation helpers attached to window', 'color:#10b981');
 }
-// removed by clean-audit

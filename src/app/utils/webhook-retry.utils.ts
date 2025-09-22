@@ -77,13 +77,16 @@ export class WebhookRetryService {
 
             // Check if we should retry this error
             if (!WebhookRetryService.shouldRetryError(error, finalConfig)) {
-// removed by clean-audit
-              return throwError(() => error);
+            console.error('[WebhookRetry] Non-retryable error encountered', error);
+            return throwError(() => error);
             }
 
             // Check max attempts
             if (attemptNumber > finalConfig.maxAttempts) {
-// removed by clean-audit
+              console.error('[WebhookRetry] Max retry attempts exceeded', {
+                attempts: attemptNumber - 1,
+                url: request.url
+              });
               return throwError(() => new Error(`Max retry attempts exceeded after ${attemptNumber - 1} attempts`));
             }
 
@@ -99,7 +102,8 @@ export class WebhookRetryService {
               error
             };
 
-// removed by clean-audit
+            console.warn('[WebhookRetry] Scheduling retry', {
+              attempt: attemptNumber,
               delay: `${delayMs.toFixed(0)}ms`,
               elapsed: `${elapsedTime}ms`,
               error: error.message || error.status
@@ -318,10 +322,10 @@ export class WebhookDeadLetterQueue {
       attempts
     });
 
-// removed by clean-audit
+    console.warn('[WebhookRetry] Stored failed webhook event', {
       endpoint,
       attempts,
-      error: error.message
+      message: error.message
     });
 
     // Keep only last 100 failed webhooks

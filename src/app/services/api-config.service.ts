@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { catchError, map, retry, timeout } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError, timer } from 'rxjs';
+import { catchError, map, retry, timeout, switchMap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 import { 
   APIClientConfig, 
   EndpointConfig, 
@@ -166,8 +167,8 @@ export class ApiConfigService {
     // Load configuration from environment or remote config
     const config = this.loadConfigFromEnvironment();
     this.configSubject.next(config);
-    
-// removed by clean-audit
+
+    this.logDebug('API configuration initialized', {
       baseUrl: config.baseUrl,
       mockMode: this.MOCK_CONFIG.enabled,
       endpoints: Object.keys(this.ENDPOINTS).length
@@ -214,14 +215,14 @@ export class ApiConfigService {
   }
   
   /**
-// removed by clean-audit
+   * Determine if mock mode is enabled for outgoing requests.
    */
   isMockMode(): boolean {
     return this.MOCK_CONFIG.enabled;
   }
   
   /**
-// removed by clean-audit
+   * Retrieve a configured mock response for the provided endpoint name.
    */
   getMockResponse(endpointName: string): any {
     return this.MOCK_CONFIG.responses[endpointName] || null;
@@ -235,9 +236,11 @@ export class ApiConfigService {
     if (!endpoint) {
       return throwError(() => new Error(`Endpoint ${endpointName} not configured`));
     }
-    
-// removed by clean-audit
-    if (this.isMockMode()) {
+
+    const useMockMode = this.isMockMode();
+    this.logDebug('Processing request', { endpoint: endpointName, mockMode: useMockMode });
+
+    if (useMockMode) {
       return this.getMockRequest<T>(endpointName, data);
     }
     
@@ -317,20 +320,29 @@ export class ApiConfigService {
     return this.request<GeographicRiskConfigResponse>('GEOGRAPHIC_RISK');
   }
   
-// removed by clean-audit
-  
+  /**
+   * Resolve the mock request stream with optional error simulation.
+   */
   private getMockRequest<T>(endpointName: string, data?: any): Observable<T> {
     const mockResponse = this.getMockResponse(endpointName);
     const delay = this.MOCK_CONFIG.delay + Math.random() * 200; // Add jitter
+
+    if (!mockResponse) {
+      this.logWarn('Missing mock response configuration', { endpoint: endpointName });
+      return throwError(() => new Error(`No mock response configured for endpoint ${endpointName}`));
+    }
+    
+    this.logDebug('Serving mock response', { endpoint: endpointName, delay, payloadPreview: this.getPayloadPreview(mockResponse) });
     
     // Simulate occasional errors
     if (Math.random() < this.MOCK_CONFIG.errorRate) {
-// removed by clean-audit
-        timeout(delay)
+      this.logWarn('Mock error triggered', { endpoint: endpointName, delay });
+      this.recordMetrics(endpointName, delay, false, 500);
+
+      return timer(delay).pipe(
+        switchMap(() => throwError(() => new Error(`Mock error triggered for endpoint ${endpointName}`)))
       );
     }
-    
-// removed by clean-audit
     
     return of(mockResponse as T).pipe(
       timeout(delay),
@@ -349,7 +361,7 @@ export class ApiConfigService {
       this.getSystemHealth().subscribe({
         next: (health) => this.healthSubject.next(health),
         error: (error) => {
-// removed by clean-audit
+          this.logError('Health check failed', error);
           this.healthSubject.next({
             status: 'DOWN',
             services: {},
@@ -431,24 +443,57 @@ export class ApiConfigService {
     const updatedConfig = { ...currentConfig, ...newConfig };
     
     this.configSubject.next(updatedConfig);
-    
-// removed by clean-audit
+
+    this.logDebug('API configuration updated', { updatedFields: Object.keys(newConfig) });
   }
   
   /**
-// removed by clean-audit
+   * Enable or disable mock mode at runtime.
    */
   toggleMockMode(enabled: boolean): void {
     this.MOCK_CONFIG.enabled = enabled;
-// removed by clean-audit
+    this.logDebug('Mock mode updated', { enabled });
   }
   
   /**
-// removed by clean-audit
+   * Override the mock response for a specific endpoint.
    */
   setMockResponse(endpointName: string, response: any): void {
     this.MOCK_CONFIG.responses[endpointName] = response;
-// removed by clean-audit
+    this.logDebug('Mock response set', { endpoint: endpointName });
+  }
+
+  private getPayloadPreview(payload: unknown): unknown {
+    if (!payload || typeof payload !== 'object') {
+      return payload;
+    }
+
+    const keys = Object.keys(payload as Record<string, unknown>);
+    if (keys.length <= 5) {
+      return payload;
+    }
+
+    return keys.slice(0, 5).reduce((acc, key) => {
+      acc[key] = (payload as Record<string, unknown>)[key];
+      return acc;
+    }, {} as Record<string, unknown>);
+  }
+
+  private logDebug(message: string, context?: Record<string, unknown>): void {
+    if (!environment.production) {
+      console.debug(`[ApiConfigService] ${message}`, context ?? {});
+    }
+  }
+
+  private logWarn(message: string, context?: Record<string, unknown>): void {
+    if (!environment.production) {
+      console.warn(`[ApiConfigService] ${message}`, context ?? {});
+    }
+  }
+
+  private logError(message: string, error: unknown): void {
+    if (!environment.production) {
+      console.error(`[ApiConfigService] ${message}`, error);
+    }
   }
 }
-// removed by clean-audit

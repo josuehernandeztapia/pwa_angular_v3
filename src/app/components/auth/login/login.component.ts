@@ -232,8 +232,7 @@ export class LoginComponent implements OnDestroy {
     // Simulate API call
     const loginSub = new Promise<boolean>((resolve) => {
       setTimeout(() => {
-// removed by clean-audit
-// removed by clean-audit
+        if (credentials.email === 'demo@conductores.com' && credentials.password === 'demo123') {
           resolve(true);
         } else {
           resolve(false);
