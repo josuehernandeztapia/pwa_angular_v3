@@ -49,181 +49,174 @@ const axeConfig = {
   }
 };
 
-// Create configureAxe function for compatibility
-function configureAxe(config: any) {
-  return (element: HTMLElement) => axeCore.run(element, config);
-}
+type AccessibilityTarget =
+  | ComponentFixture<any>
+  | HTMLElement
+  | {
+      nativeElement?: HTMLElement;
+      debugElement?: { nativeElement?: HTMLElement };
+      elementRef?: { nativeElement?: HTMLElement };
+    }
+  | null
+  | undefined;
 
-/**
- * Test accessibility of a component
- */
-export async function testComponentAccessibility(element: HTMLElement): Promise<void> {
-  const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
-  if (results.violations.length > 0) {
+const isFixture = (target: any): target is ComponentFixture<any> =>
+  !!target && typeof target === 'object' && 'nativeElement' in target && 'detectChanges' in target;
+
+const resolveElement = (target: AccessibilityTarget): HTMLElement => {
+  if (!target) {
+    throw new Error('Target element or fixture is required for accessibility assertions');
+  }
+
+  if (target instanceof HTMLElement) {
+    return target;
+  }
+
+  if (isFixture(target)) {
+    return target.nativeElement as HTMLElement;
+  }
+
+  const possible =
+    (target as any).nativeElement ||
+    (target as any).debugElement?.nativeElement ||
+    (target as any).elementRef?.nativeElement;
+
+  if (possible instanceof HTMLElement) {
+    return possible;
+  }
+
+  throw new Error('Unable to resolve HTMLElement from target');
+};
+
+const runAxe = async (element: HTMLElement, config: any = axeConfig): Promise<AxeResults> => {
+  return (await axeCore.run(element, config)) as unknown as AxeResults;
+};
+
+export async function testComponentAccessibility(target: AccessibilityTarget): Promise<void> {
+  const element = resolveElement(target);
+  const results = await runAxe(element);
+  if (results.violations.length) {
     const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
     throw new Error(`Accessibility violations found: ${violations}`);
   }
   expect(results.violations.length).toBe(0);
 }
 
-/**
- * Test accessibility of a component fixture (alias for backwards compatibility)
- */
-export async function testAccessibility(fixture: any): Promise<void> {
-  const element = fixture.nativeElement || fixture.debugElement.nativeElement;
-  await testComponentAccessibility(element);
+export async function testAccessibility(target: AccessibilityTarget): Promise<void> {
+  await testComponentAccessibility(target);
 }
 
-/**
- * Test accessibility of a specific element
- */
-export async function testElementAccessibility(element: HTMLElement): Promise<void> {
-  const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
-  if (results.violations.length > 0) {
+export async function testElementAccessibility(target: AccessibilityTarget): Promise<void> {
+  await testComponentAccessibility(target);
+}
+
+export async function testAccessibilityWithConfig(target: AccessibilityTarget, config: any): Promise<void> {
+  const element = resolveElement(target);
+  const mergedConfig = { ...axeConfig, ...config };
+  const results = await runAxe(element, mergedConfig);
+  if (results.violations.length) {
     const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
     throw new Error(`Accessibility violations found: ${violations}`);
   }
   expect(results.violations.length).toBe(0);
 }
 
-/**
- * Test accessibility with custom axe configuration
- */
-export async function testAccessibilityWithConfig(
-  element: HTMLElement,
-  config: any
-): Promise<void> {
-  const mergedConfig = {
-    ...axeConfig,
-    ...config
-  };
-  const results = await axeCore.run(element, mergedConfig) as unknown as AxeResults;
-  if (results.violations.length > 0) {
-    const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
-    throw new Error(`Accessibility violations found: ${violations}`);
-  }
-  expect(results.violations.length).toBe(0);
-}
-
-/**
- * Get accessibility violations without throwing
- */
-export async function getAccessibilityViolations(element: HTMLElement): Promise<AxeResults['violations']> {
-  const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
+export async function getAccessibilityViolations(target: AccessibilityTarget): Promise<AxeResults['violations']> {
+  const element = resolveElement(target);
+  const results = await runAxe(element);
   return results.violations;
 }
 
-/**
- * Common accessibility test patterns
- */
-export const AccessibilityTestPatterns = {
-  /**
-   * Test form accessibility
-   */
-  async testForm(element: HTMLElement): Promise<void> {
-    const formConfig = {
+const AccessibilityTestPatternsCore = {
+  async testForm(target: AccessibilityTarget): Promise<void> {
+    await testAccessibilityWithConfig(target, {
       rules: {
         'label': { enabled: true },
         'form-field-multiple-labels': { enabled: true },
         'aria-required-attr': { enabled: true },
         'aria-valid-attr-value': { enabled: true }
       }
-    };
-    await testAccessibilityWithConfig(element, formConfig);
+    });
   },
 
-  /**
-   * Test form accessibility (alias for backwards compatibility)
-   */
-  async testFormAccessibility(fixture: any): Promise<void> {
-    const element = fixture.nativeElement || fixture.debugElement.nativeElement;
-    await this.testForm(element);
-  },
-
-  /**
-   * Test navigation accessibility
-   */
-  async testNavigation(element: HTMLElement): Promise<void> {
-    const navConfig = {
+  async testNavigation(target: AccessibilityTarget): Promise<void> {
+    await testAccessibilityWithConfig(target, {
       rules: {
         'bypass': { enabled: true },
         'link-name': { enabled: true },
         'button-name': { enabled: true },
         'aria-expanded': { enabled: true }
       }
-    };
-    await testAccessibilityWithConfig(element, navConfig);
+    });
   },
 
-  /**
-   * Test modal/dialog accessibility
-   */
-  async testModal(element: HTMLElement): Promise<void> {
-    const modalConfig = {
+  async testModal(target: AccessibilityTarget): Promise<void> {
+    await testAccessibilityWithConfig(target, {
       rules: {
         'aria-dialog-name': { enabled: true },
         'focus-order-semantics': { enabled: true },
         'aria-hidden-focus': { enabled: true }
       }
-    };
-    await testAccessibilityWithConfig(element, modalConfig);
+    });
   },
 
-  /**
-   * Test table accessibility
-   */
-  async testTable(element: HTMLElement): Promise<void> {
-    const tableConfig = {
+  async testTable(target: AccessibilityTarget): Promise<void> {
+    await testAccessibilityWithConfig(target, {
       rules: {
         'td-headers-attr': { enabled: true },
         'th-has-data-cells': { enabled: true },
         'scope-attr-valid': { enabled: true }
       }
-    };
-    await testAccessibilityWithConfig(element, tableConfig);
+    });
   }
 };
 
-/**
- * Utility to check specific accessibility features
- */
+export const AccessibilityTestPatterns = {
+  ...AccessibilityTestPatternsCore,
+  async testFormAccessibility(target: AccessibilityTarget): Promise<void> {
+    await AccessibilityTestPatternsCore.testForm(target);
+  },
+  async testNavigationAccessibility(target: AccessibilityTarget): Promise<void> {
+    await AccessibilityTestPatternsCore.testNavigation(target);
+  },
+  async testModalAccessibility(target: AccessibilityTarget): Promise<void> {
+    await AccessibilityTestPatternsCore.testModal(target);
+  },
+  async testTableAccessibility(target: AccessibilityTarget): Promise<void> {
+    await AccessibilityTestPatternsCore.testTable(target);
+  }
+};
+
 export class AccessibilityChecker {
-  /**
-   * Check if element has proper ARIA labels
-   */
-  static hasAriaLabel(element: HTMLElement): boolean {
-    return element.hasAttribute('aria-label') || 
-           element.hasAttribute('aria-labelledby') ||
-           element.hasAttribute('aria-describedby');
+  static hasAriaLabel(target: AccessibilityTarget): boolean {
+    const element = resolveElement(target);
+    return (
+      element.hasAttribute('aria-label') ||
+      element.hasAttribute('aria-labelledby') ||
+      element.hasAttribute('aria-describedby')
+    );
   }
 
-  /**
-   * Check if form control has associated label
-   */
-  static hasAssociatedLabel(input: HTMLInputElement): boolean {
-    // Check for explicit label association
-    if (input.labels && input.labels.length > 0) {
+  static hasAssociatedLabel(target: AccessibilityTarget | HTMLInputElement): boolean {
+    const element = target instanceof HTMLElement ? target : resolveElement(target);
+
+    if (element instanceof HTMLInputElement && element.labels && element.labels.length > 0) {
       return true;
     }
 
-    // Check for aria-label or aria-labelledby
-    return this.hasAriaLabel(input);
+    return AccessibilityChecker.hasAriaLabel(element);
   }
 
-  /**
-   * Check if interactive elements are keyboard accessible
-   */
-  static isKeyboardAccessible(element: HTMLElement): boolean {
+  static isKeyboardAccessible(target: AccessibilityTarget): boolean {
+    const element = resolveElement(target);
     const tagName = element.tagName.toLowerCase();
     const role = element.getAttribute('role');
     const tabIndex = element.getAttribute('tabindex');
 
-    // Native interactive elements
     if (['button', 'input', 'select', 'textarea', 'a'].includes(tagName)) {
       return tabIndex !== '-1';
     }
 
-    // Elements with interactive roles
     if (['button', 'link', 'tab', 'menuitem'].includes(role || '')) {
       return tabIndex !== '-1';
     }
@@ -231,56 +224,104 @@ export class AccessibilityChecker {
     return false;
   }
 
-  /**
-   * Check if element has sufficient color contrast
-   * Note: This is a basic check, use axe-core for comprehensive testing
-   */
-  static async checkColorContrast(element: HTMLElement): Promise<boolean> {
+  static async checkColorContrast(target: AccessibilityTarget): Promise<boolean> {
+    const element = resolveElement(target);
     try {
-      const results = await axeCore.run(element, {
+      const results = await runAxe(element, {
         rules: {
           'color-contrast': { enabled: true }
         }
-      }) as unknown as AxeResults;
+      });
       return results.violations.length === 0;
     } catch {
-      return true; // Assume pass if unable to test
+      return true;
     }
   }
 }
 
-/**
- * Accessibility test suite for common component patterns
- */
-export function createAccessibilityTestSuite(componentName: string) {
-  return {
-    async basic(element: HTMLElement): Promise<void> {
-      await testComponentAccessibility(element);
-    },
+type AccessibilitySuite = {
+  basic(target: AccessibilityTarget): Promise<void>;
+  assertNoViolations(target: AccessibilityTarget): Promise<void>;
+  assertKeyboardNavigation(target: AccessibilityTarget): void;
+  assertFormLabels(target: AccessibilityTarget): void;
+};
 
-    async assertNoViolations(element: HTMLElement): Promise<void> {
-      const violations = await getAccessibilityViolations(element);
-      expect(violations.length).toBe(0);
-    },
+type AccessibilitySuiteOptions = {
+  componentName: string;
+  factory: () => Promise<AccessibilityTarget>;
+};
 
-    assertKeyboardNavigation(container: HTMLElement): void {
-      const interactiveElements = container.querySelectorAll<HTMLElement>(
-        'button, input, select, textarea, a, [role="button"], [role="link"], [tabindex]'
-      );
+const buildSuite = (): AccessibilitySuite => ({
+  async basic(target) {
+    await testAccessibility(target);
+  },
+  async assertNoViolations(target) {
+    const violations = await getAccessibilityViolations(target);
+    expect(violations.length).toBe(0);
+  },
+  assertKeyboardNavigation(target) {
+    const container = resolveElement(target);
+    const interactiveElements = container.querySelectorAll<HTMLElement>(
+      'button, input, select, textarea, a, [role="button"], [role="link"], [tabindex]'
+    );
 
-      interactiveElements.forEach((element: HTMLElement) => {
-        expect(AccessibilityChecker.isKeyboardAccessible(element)).toBe(true);
-      });
-    },
+    interactiveElements.forEach(element => {
+      expect(AccessibilityChecker.isKeyboardAccessible(element)).toBe(true);
+    });
+  },
+  assertFormLabels(target) {
+    const container = resolveElement(target);
+    const formControls = container.querySelectorAll<HTMLInputElement>(
+      'input:not([type="hidden"]), select, textarea'
+    );
 
-    assertFormLabels(container: HTMLElement): void {
-      const formControls = container.querySelectorAll<HTMLInputElement>(
-        'input:not([type="hidden"]), select, textarea'
-      );
+    formControls.forEach(control => {
+      expect(AccessibilityChecker.hasAssociatedLabel(control)).toBe(true);
+    });
+  }
+});
 
-      formControls.forEach((control: HTMLInputElement) => {
-        expect(AccessibilityChecker.hasAssociatedLabel(control)).toBe(true);
-      });
-    }
-  };
+export function createAccessibilityTestSuite(options: string | AccessibilitySuiteOptions): AccessibilitySuite {
+  const suite = buildSuite();
+
+  if (typeof options === 'string') {
+    return suite;
+  }
+
+  const { componentName, factory } = options;
+
+  describe(`${componentName} Accessibility Suite`, () => {
+    let target: AccessibilityTarget;
+
+    beforeAll(async () => {
+      target = await factory();
+      if (isFixture(target)) {
+        target.detectChanges();
+      }
+    });
+
+    afterAll(() => {
+      if (target && isFixture(target) && typeof target.destroy === 'function') {
+        target.destroy();
+      }
+    });
+
+    it('passes basic accessibility scan', async () => {
+      await suite.basic(target);
+    });
+
+    it('has no axe-core violations', async () => {
+      await suite.assertNoViolations(target);
+    });
+
+    it('supports keyboard navigation', () => {
+      suite.assertKeyboardNavigation(target);
+    });
+
+    it('ensures form controls have associated labels', () => {
+      suite.assertFormLabels(target);
+    });
+  });
+
+  return suite;
 }

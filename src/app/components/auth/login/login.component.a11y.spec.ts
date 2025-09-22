@@ -32,11 +32,11 @@ describe('LoginComponent Accessibility Tests', () => {
 
   describe('Form Accessibility', () => {
     it('should pass automated accessibility tests', async () => {
-      await testAccessibility(fixture);
+      await testAccessibility(fixture); // FIXED: helper now acepta fixture directamente
     });
 
     it('should pass form-specific accessibility tests', async () => {
-      await AccessibilityTestPatterns.testFormAccessibility(fixture);
+      await AccessibilityTestPatterns.testFormAccessibility(fixture); // FIXED
     });
 
     it('should have properly labeled form controls', () => {
@@ -110,7 +110,7 @@ describe('LoginComponent Accessibility Tests', () => {
 
   describe('Visual and Interaction Accessibility', () => {
     it('should have accessible password visibility toggle', () => {
-      const passwordToggle = fixture.nativeElement.querySelector('.password-toggle, [aria-label*="password"], button[type="button"]');
+      const passwordToggle = fixture.nativeElement.querySelector('.password-toggle, [aria-label*="contraseña"], button[data-cy="password-toggle"]');
 
       if (passwordToggle) {
         // Toggle should be keyboard accessible
@@ -214,25 +214,47 @@ describe('LoginComponent Accessibility Tests', () => {
         expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard']);
       }
     });
+
+    it('should display error alert with aria semantics when login fails', () => {
+      component.errorMessage = 'Credenciales inválidas';
+      fixture.detectChanges();
+
+      const alertEl = fixture.nativeElement.querySelector('[role="alert"]');
+      expect(alertEl).toBeTruthy();
+      expect(alertEl.textContent.trim()).toContain('Credenciales inválidas');
+    });
+
+    it('should submit the form when Enter key is pressed on password field', () => {
+      const passwordInput: HTMLInputElement = fixture.nativeElement.querySelector('#password');
+      component.loginForm.get('email')?.setValue('test@example.com');
+      component.loginForm.get('password')?.setValue('password123');
+      fixture.detectChanges();
+
+      passwordInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      fixture.detectChanges();
+
+      component.onSubmit();
+      expect(component.isLoading).toBeTrue();
+    });
   });
 
   describe('Accessibility Test Suite', () => {
     const accessibilityTestSuite = createAccessibilityTestSuite('LoginComponent');
 
     it('should pass basic accessibility tests', async () => {
-      await accessibilityTestSuite.basic(fixture.nativeElement);
+      await accessibilityTestSuite.basic(fixture); // FIXED
     });
 
     it('should have no accessibility violations', async () => {
-      await accessibilityTestSuite.assertNoViolations(fixture.nativeElement);
+      await accessibilityTestSuite.assertNoViolations(fixture); // FIXED
     });
 
     it('should support keyboard navigation', () => {
-      accessibilityTestSuite.assertKeyboardNavigation(fixture.nativeElement);
+      accessibilityTestSuite.assertKeyboardNavigation(fixture); // FIXED
     });
 
     it('should have proper form labels', () => {
-      accessibilityTestSuite.assertFormLabels(fixture.nativeElement);
+      accessibilityTestSuite.assertFormLabels(fixture); // FIXED
     });
   });
 });
