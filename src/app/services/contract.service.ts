@@ -14,7 +14,7 @@ export interface ContractTemplate {
   requiredFields: ContractField[];
   version: string;
   effectiveDate: Date;
-// removed by clean-audit
+  metadata?: Record<string, unknown>;
 }
 
 export interface ContractField {
@@ -512,7 +512,7 @@ export class ContractService {
 
     if (contractType === 'contrato_venta_plazo_colectivo') {
       notes.push('Todos los miembros del grupo son solidariamente responsables');
-// removed by clean-audit
+      notes.push('Se requiere validar firmas de todos los integrantes del colectivo');
     }
 
     notes.push('Este contrato se rige por las leyes mexicanas');
@@ -582,15 +582,14 @@ export class ContractService {
   }
 
   /**
-// removed by clean-audit
-   * Se ejecuta cuando se asigna una unidad al cliente en el import tracking
+   * Asigna una unidad física a un contrato existente y actualiza los datos dependientes.
+   * Se ejecuta cuando se asigna una unidad al cliente en el import tracking.
    */
   assignVehicleToContract(
     contractId: string,
     assignedVehicle: VehicleUnit
   ): Observable<{ success: boolean; contract?: Contract; error?: string }> {
-    
-// removed by clean-audit
+    console.debug('[ContractService] assignVehicleToContract invoked', {
       contractId,
       vin: assignedVehicle.vin,
       modelo: assignedVehicle.modelo,
@@ -636,8 +635,8 @@ export class ContractService {
       this.saveUpdatedContract(updatedContract);
 
       // 4. Log de asignación exitosa
-// removed by clean-audit
-        contractId: contractId,
+      console.info('[ContractService] Vehicle assigned to contract', {
+        contractId,
         vehicleId: assignedVehicle.id,
         vin: assignedVehicle.vin,
         assignedAt: updatedContract.vehicleAssignedDate
@@ -649,7 +648,7 @@ export class ContractService {
       });
 
     } catch (error: any) {
-// removed by clean-audit
+      console.error('[ContractService] Failed to assign vehicle to contract', error);
       return of({
         success: false,
         error: `Error interno: ${error.message}`
@@ -658,7 +657,7 @@ export class ContractService {
   }
 
   /**
-// removed by clean-audit
+   * Recupera un contrato simulado; en producción se reemplaza por llamada al backend.
    */
   private getContractById(contractId: string): Contract {
     // Simular obtención de contrato de base de datos
@@ -699,11 +698,11 @@ export class ContractService {
   }
 
   /**
-// removed by clean-audit
+   * Persiste en almacenamiento temporal la representación del contrato actualizado.
    */
   private saveUpdatedContract(contract: Contract): void {
     // Simular guardado en base de datos
-// removed by clean-audit
+    console.debug('[ContractService] Contract persisted (simulated)', {
       id: contract.id,
       assignedVehicle: contract.assignedVehicle?.vin,
       vehicleAssignedDate: contract.vehicleAssignedDate
@@ -714,12 +713,12 @@ export class ContractService {
   }
 
   /**
-// removed by clean-audit
+   * Obtiene la lista de contratos con unidades asignadas (simulado).
    */
   getContractsWithAssignedVehicles(): Observable<Contract[]> {
     // Simular obtención de contratos con vehículos asignados
-// removed by clean-audit
-    
+    console.debug('[ContractService] Fetching contracts with assigned vehicles (mock)');
+
     // En producción, esto sería una API call con filtro
     const contractsWithVehicles: Contract[] = [];
     
@@ -727,13 +726,12 @@ export class ContractService {
   }
 
   /**
-// removed by clean-audit
+   * Recupera la unidad asignada a un contrato específico.
    */
   getVehicleFromContract(contractId: string): Observable<VehicleUnit | null> {
-// removed by clean-audit
+    console.debug('[ContractService] Retrieving vehicle for contract', { contractId });
     
     const contract = this.getContractById(contractId);
     return of(contract.assignedVehicle || null).pipe(delay(100));
   }
 }
-// removed by clean-audit

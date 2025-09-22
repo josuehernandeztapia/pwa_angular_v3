@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface ActivityItem {
@@ -495,7 +495,7 @@ export interface ActivityItem {
     }
   `]
 })
-export class HumanActivityFeedComponent implements OnInit {
+export class HumanActivityFeedComponent implements OnInit, OnChanges {
   @Input() activities: ActivityItem[] = [];
   @Input() maxItems: number = 10;
   @Input() showSuggestedActions: boolean = false;

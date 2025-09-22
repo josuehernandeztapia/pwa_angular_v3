@@ -17,7 +17,7 @@ describe('DataService', () => {
       expect(service).toBeTruthy();
     });
 
-// removed by clean-audit
+    it('should load initial data state', (done) => {
       service.dataState$.subscribe(state => {
         if (!state.loading) {
           expect(state.clients.length).toBeGreaterThan(0);
@@ -469,4 +469,3 @@ describe('DataService', () => {
     });
   });
 });
-// removed by clean-audit

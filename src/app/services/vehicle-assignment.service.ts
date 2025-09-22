@@ -41,7 +41,12 @@ export class VehicleAssignmentService {
    * Se ejecuta cuando se completa el milestone "unidadFabricada"
    */
   assignVehicleToClient(request: VehicleAssignmentRequest): Observable<VehicleAssignmentResult> {
-// removed by clean-audit
+    console.info('[VehicleAssignmentService] assignVehicleToClient invoked', {
+      clientId: request.clientId,
+      vin: request.vin,
+      modelo: request.modelo,
+      year: request.year
+    });
     
     try {
       // Crear la unidad con datos específicos
@@ -72,7 +77,7 @@ export class VehicleAssignmentService {
       // Notificar a subscribers
       this.assignmentUpdatesSubject.next(result);
       
-// removed by clean-audit
+      console.debug('[VehicleAssignmentService] Vehicle assigned successfully', {
         clientId: request.clientId,
         vin: assignedUnit.vin,
         serie: assignedUnit.serie,
@@ -87,7 +92,7 @@ export class VehicleAssignmentService {
         error: `Error asignando unidad: ${error}`
       };
       
-// removed by clean-audit
+      console.error('[VehicleAssignmentService] Failed to assign vehicle', error);
       this.assignmentUpdatesSubject.next(errorResult);
       
       return of(errorResult);
@@ -99,9 +104,7 @@ export class VehicleAssignmentService {
    */
   getAssignedVehicle(clientId: string): Observable<VehicleUnit | null> {
     // En producción, esto sería una API call
-// removed by clean-audit
-    
-// removed by clean-audit
+    console.debug('[VehicleAssignmentService] Retrieving assigned vehicle', { clientId });
     
     try {
       const storedAssignments = localStorage.getItem('vehicle_assignments');
@@ -110,16 +113,19 @@ export class VehicleAssignmentService {
         const clientAssignment = assignments[clientId];
         
         if (clientAssignment) {
-// removed by clean-audit
+          console.debug('[VehicleAssignmentService] Found assignment', {
+            clientId,
+            vin: clientAssignment.vin
+          });
           return of(clientAssignment);
         }
       }
       
-// removed by clean-audit
+      console.warn('[VehicleAssignmentService] No assigned vehicle found', { clientId });
       return of(null);
       
     } catch (error) {
-// removed by clean-audit
+      console.error('[VehicleAssignmentService] Failed to retrieve assigned vehicle', error);
       return of(null);
     }
   }
@@ -132,11 +138,13 @@ export class VehicleAssignmentService {
       const storedAssignments = localStorage.getItem('vehicle_assignments');
       const assignments = storedAssignments ? JSON.parse(storedAssignments) : {};
       
-// removed by clean-audit
+      console.debug('[VehicleAssignmentService] Loaded assignments from storage', {
+        total: Object.keys(assignments).length
+      });
       return of(assignments);
       
     } catch (error) {
-// removed by clean-audit
+      console.error('[VehicleAssignmentService] Failed to load assignments', error);
       return of({});
     }
   }
@@ -222,7 +230,8 @@ export class VehicleAssignmentService {
       // Simular objeto cliente actualizado
       const mockClient: Client = {
         id: clientId,
-// removed by clean-audit
+        name: 'Cliente Asignado',
+        email: `${clientId}@example.com`,
         avatarUrl: '',
         flow: 'VentaPlazo' as any,
         status: 'Activo',
@@ -244,9 +253,8 @@ export class VehicleAssignmentService {
       return mockClient;
       
     } catch (error) {
-// removed by clean-audit
+      console.error('[VehicleAssignmentService] Failed to update client with assigned unit', error);
       throw error;
     }
   }
 }
-// removed by clean-audit

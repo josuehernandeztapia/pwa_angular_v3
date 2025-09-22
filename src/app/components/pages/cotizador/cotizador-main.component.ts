@@ -947,12 +947,6 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
 
   openProtectionDemo(): void {
     this.isProtectionDemoOpen = true;
-    // Would open modal with ProtectionDemoSimulator
-// removed by clean-audit
-      amountToFinance: this.amountToFinance,
-      monthlyPayment: this.monthlyPayment,
-      term: this.term
-    });
   }
 
   // Utility methods for savings mode calculations

@@ -703,10 +703,15 @@ export class IntegratedImportTrackerService {
       notes?: string;
     }
   ): void {
-// removed by clean-audit
-    
+    console.info('[IntegratedImportTracker] Trigger vehicle assignment flow', {
+      clientId,
+      estimatedDate: metadata?.estimatedDate,
+      actualDate: metadata?.actualDate,
+      documents: metadata?.documents?.length || 0
+    });
+
     // Log del evento para debugging
-// removed by clean-audit
+    console.debug('[IntegratedImportTracker] Vehicle fabrication milestone reached', {
       clientId,
       completedAt: metadata?.actualDate || new Date(),
       notes: metadata?.notes
@@ -812,7 +817,11 @@ export class IntegratedImportTrackerService {
         this.vehicleAssignmentService.assignVehicleToClient(assignmentRequest).subscribe({
           next: (result) => {
             if (result.success && result.assignedUnit) {
-// removed by clean-audit
+              console.info('[IntegratedImportTracker] Vehicle assignment succeeded', {
+                clientId,
+                unitId: result.assignedUnit.id,
+                vin: result.assignedUnit.vin
+              });
               
               // Actualizar el import status con la unidad asignada
               this.updateImportStatusWithAssignedUnit(clientId, result.assignedUnit);
@@ -824,17 +833,21 @@ export class IntegratedImportTrackerService {
               this.sendVehicleAssignmentNotification(clientId, result.assignedUnit);
               
             } else {
-// removed by clean-audit
+              console.warn('[IntegratedImportTracker] Vehicle assignment returned no unit', {
+                clientId,
+                success: result.success,
+                error: result.error
+              });
             }
           },
           error: (error) => {
-// removed by clean-audit
+            console.error('[IntegratedImportTracker] assignVehicleToClient emitted error', error);
           }
         });
       }),
       map(() => ({ success: true })),
       catchError((error) => {
-// removed by clean-audit
+        console.error('[IntegratedImportTracker] Vehicle assignment flow failed', error);
         return of({ success: false, error: error.message });
       })
     );
@@ -845,7 +858,7 @@ export class IntegratedImportTrackerService {
    */
   private updateImportStatusWithAssignedUnit(clientId: string, assignedUnit: VehicleUnit): void {
     // En producción, esto sería una API call para actualizar el import status
-// removed by clean-audit
+    console.debug('[IntegratedImportTracker] Updating import status with assigned unit', {
       clientId,
       unitId: assignedUnit.id,
       vin: assignedUnit.vin
@@ -867,7 +880,10 @@ export class IntegratedImportTrackerService {
       currentCache.set(clientId, updatedStatus);
       this.importStatusCache$.next(currentCache);
       
-// removed by clean-audit
+      console.info('[IntegratedImportTracker] Import status updated with assigned unit', {
+        clientId,
+        vin: assignedUnit.vin
+      });
     }
   }
 
@@ -889,7 +905,10 @@ export class IntegratedImportTrackerService {
       timestamp: new Date()
     };
 
-// removed by clean-audit
+    console.info('[IntegratedImportTracker] Prepared vehicle assignment notification', {
+      clientId,
+      vin: assignedUnit.vin
+    });
     
     // Opcional: integrar con WhatsApp para notificar al cliente
     // this.importWhatsAppService.sendNotification(clientId, 'VEHICLE_ASSIGNED', notificationData);
@@ -900,7 +919,7 @@ export class IntegratedImportTrackerService {
    * Propaga la información de la unidad específica a los contratos del cliente
    */
   private updateContractWithAssignedVehicle(clientId: string, assignedUnit: VehicleUnit): void {
-// removed by clean-audit
+    console.info('[IntegratedImportTracker] Propagating assigned unit to contracts', {
       clientId,
       vin: assignedUnit.vin,
       modelo: assignedUnit.modelo
@@ -910,11 +929,9 @@ export class IntegratedImportTrackerService {
     this.contractService.getClientContracts(clientId).subscribe({
       next: (contracts) => {
         if (contracts.length === 0) {
-// removed by clean-audit
+          console.warn('[IntegratedImportTracker] No contracts found for client', { clientId });
           return;
         }
-
-// removed by clean-audit
 
         // Actualizar cada contrato con la unidad asignada
         contracts.forEach(contract => {

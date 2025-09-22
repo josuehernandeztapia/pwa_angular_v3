@@ -57,8 +57,7 @@ function configureAxe(config: any) {
 /**
  * Test accessibility of a component
  */
-// removed by clean-audit
-// removed by clean-audit
+export async function testComponentAccessibility(element: HTMLElement): Promise<void> {
   const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
   if (results.violations.length > 0) {
     const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
@@ -83,11 +82,14 @@ export async function testElementAccessibility(element: HTMLElement): Promise<vo
  * Test accessibility with custom axe configuration
  */
 export async function testAccessibilityWithConfig(
-// removed by clean-audit
+  element: HTMLElement,
   config: any
 ): Promise<void> {
-// removed by clean-audit
-  const results = await axeCore.run(element, config) as unknown as AxeResults;
+  const mergedConfig = {
+    ...axeConfig,
+    ...config
+  };
+  const results = await axeCore.run(element, mergedConfig) as unknown as AxeResults;
   if (results.violations.length > 0) {
     const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
     throw new Error(`Accessibility violations found: ${violations}`);
@@ -98,8 +100,7 @@ export async function testAccessibilityWithConfig(
 /**
  * Get accessibility violations without throwing
  */
-// removed by clean-audit
-// removed by clean-audit
+export async function getAccessibilityViolations(element: HTMLElement): Promise<AxeResults['violations']> {
   const results = await axeCore.run(element, axeConfig) as unknown as AxeResults;
   return results.violations;
 }
@@ -111,7 +112,7 @@ export const AccessibilityTestPatterns = {
   /**
    * Test form accessibility
    */
-// removed by clean-audit
+  async testForm(element: HTMLElement): Promise<void> {
     const formConfig = {
       rules: {
         'label': { enabled: true },
@@ -120,13 +121,13 @@ export const AccessibilityTestPatterns = {
         'aria-valid-attr-value': { enabled: true }
       }
     };
-// removed by clean-audit
+    await testAccessibilityWithConfig(element, formConfig);
   },
 
   /**
    * Test navigation accessibility
    */
-// removed by clean-audit
+  async testNavigation(element: HTMLElement): Promise<void> {
     const navConfig = {
       rules: {
         'bypass': { enabled: true },
@@ -135,13 +136,13 @@ export const AccessibilityTestPatterns = {
         'aria-expanded': { enabled: true }
       }
     };
-// removed by clean-audit
+    await testAccessibilityWithConfig(element, navConfig);
   },
 
   /**
    * Test modal/dialog accessibility
    */
-// removed by clean-audit
+  async testModal(element: HTMLElement): Promise<void> {
     const modalConfig = {
       rules: {
         'aria-dialog-name': { enabled: true },
@@ -149,13 +150,13 @@ export const AccessibilityTestPatterns = {
         'aria-hidden-focus': { enabled: true }
       }
     };
-// removed by clean-audit
+    await testAccessibilityWithConfig(element, modalConfig);
   },
 
   /**
    * Test table accessibility
    */
-// removed by clean-audit
+  async testTable(element: HTMLElement): Promise<void> {
     const tableConfig = {
       rules: {
         'td-headers-attr': { enabled: true },
@@ -163,7 +164,7 @@ export const AccessibilityTestPatterns = {
         'scope-attr-valid': { enabled: true }
       }
     };
-// removed by clean-audit
+    await testAccessibilityWithConfig(element, tableConfig);
   }
 };
 
@@ -237,17 +238,17 @@ export class AccessibilityChecker {
  */
 export function createAccessibilityTestSuite(componentName: string) {
   return {
-// removed by clean-audit
-// removed by clean-audit
+    async basic(element: HTMLElement): Promise<void> {
+      await testComponentAccessibility(element);
     },
 
-// removed by clean-audit
-// removed by clean-audit
+    async assertNoViolations(element: HTMLElement): Promise<void> {
+      const violations = await getAccessibilityViolations(element);
       expect(violations.length).toBe(0);
     },
 
-// removed by clean-audit
-// removed by clean-audit
+    assertKeyboardNavigation(container: HTMLElement): void {
+      const interactiveElements = container.querySelectorAll<HTMLElement>(
         'button, input, select, textarea, a, [role="button"], [role="link"], [tabindex]'
       );
 
@@ -256,8 +257,8 @@ export function createAccessibilityTestSuite(componentName: string) {
       });
     },
 
-// removed by clean-audit
-// removed by clean-audit
+    assertFormLabels(container: HTMLElement): void {
+      const formControls = container.querySelectorAll<HTMLInputElement>(
         'input:not([type="hidden"]), select, textarea'
       );
 
@@ -267,4 +268,3 @@ export function createAccessibilityTestSuite(componentName: string) {
     }
   };
 }
-// removed by clean-audit

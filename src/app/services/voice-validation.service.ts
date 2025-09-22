@@ -337,6 +337,31 @@ export class VoiceValidationService {
   // ✅ NUEVO: Voice evaluation storage
   private voiceEvaluations: VoiceEvaluationStore[] = [];
   private requestIdCounter = 0;
+  private readonly logPrefix = '[VoiceValidationService]';
+
+  private logDebug(message: string, context?: unknown): void {
+    if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
+      console.debug(`${this.logPrefix} ${message}`, context ?? {});
+    }
+  }
+
+  private logInfo(message: string, context?: unknown): void {
+    if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
+      console.info(`${this.logPrefix} ${message}`, context ?? {});
+    }
+  }
+
+  private logWarn(message: string, context?: unknown): void {
+    if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
+      console.warn(`${this.logPrefix} ${message}`, context ?? {});
+    }
+  }
+
+  private logError(message: string, error: unknown): void {
+    if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
+      console.error(`${this.logPrefix} ${message}`, error);
+    }
+  }
 
   // Municipal configurations
   private municipalityQuestions: { [key: string]: MunicipalityQuestions } = {
@@ -416,7 +441,7 @@ export class VoiceValidationService {
         },
         {
           id: 'collective_guarantee',
-// removed by clean-audit
+          text: '¿Cuenta el grupo con una garantía colectiva para respaldar el crédito?',
           category: 'legal',
           mandatory: true,
           expected_answer_type: 'yes_no'
@@ -452,14 +477,14 @@ export class VoiceValidationService {
     // Subscribe to API configuration changes
     this.apiConfig.config$.subscribe(config => {
       if (config) {
-// removed by clean-audit
+        this.logDebug('API configuration received', {
           baseUrl: config.baseUrl,
           mockMode: this.apiConfig.isMockMode()
         });
       }
     });
 
-// removed by clean-audit
+    this.logInfo('Initializing AVI configuration', { usingMock: this.apiConfig.isMockMode() });
     if (!this.apiConfig.isMockMode()) {
       this.loadAVIConfiguration();
     }
@@ -473,12 +498,14 @@ export class VoiceValidationService {
     this.apiConfig.loadAVIQuestions().subscribe({
       next: (response) => {
         if (response.success && response.data.questions.length > 0) {
-          // Update AVI questions from API
-// removed by clean-audit
+          this.logInfo('AVI questions configuration loaded', {
+            count: response.data.questions.length,
+            version: response.data.version
+          });
         }
       },
       error: (error) => {
-// removed by clean-audit
+        this.logWarn('Failed to load AVI questions configuration', error);
       }
     });
 
@@ -486,11 +513,14 @@ export class VoiceValidationService {
     this.apiConfig.loadRiskThresholds().subscribe({
       next: (response) => {
         if (response.success) {
-// removed by clean-audit
+          this.logInfo('AVI risk thresholds loaded', {
+            version: response.data.version,
+            thresholds: response.data.thresholds
+          });
         }
       },
       error: (error) => {
-// removed by clean-audit
+        this.logWarn('Failed to load risk thresholds configuration', error);
       }
     });
 
@@ -498,11 +528,14 @@ export class VoiceValidationService {
     this.apiConfig.loadGeographicRisk().subscribe({
       next: (response) => {
         if (response.success) {
-// removed by clean-audit
+          this.logInfo('Geographic risk configuration loaded', {
+            records: Object.keys(response.data.matrix || {}).length,
+            version: response.data.version
+          });
         }
       },
       error: (error) => {
-// removed by clean-audit
+        this.logWarn('Failed to load geographic risk configuration', error);
       }
     });
   }
@@ -514,7 +547,7 @@ export class VoiceValidationService {
   private checkBrowserSupport(): boolean {
     const isSupported = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
     if (!isSupported) {
-// removed by clean-audit
+      this.logWarn('Browser does not support required media APIs');
     }
     return isSupported;
   }
@@ -537,7 +570,7 @@ export class VoiceValidationService {
       this.setupRecorderHandlers();
       return true;
     } catch (error) {
-// removed by clean-audit
+      this.logError('Failed to initialize audio recording', error);
       this.recordingError$.next('No se pudo acceder al micrófono. Verifique permisos.');
       return false;
     }
@@ -557,7 +590,7 @@ export class VoiceValidationService {
     };
 
     this.mediaRecorder.onerror = (event) => {
-// removed by clean-audit
+      this.logError('MediaRecorder emitted error event', event);
       this.recordingError$.next('Error durante la grabación');
     };
   }
@@ -647,7 +680,7 @@ export class VoiceValidationService {
     try {
       await this.uploadAndProcessAudio(audioBlob, currentSession);
     } catch (error) {
-// removed by clean-audit
+      this.logError('Failed to process recorded audio', error);
       this.recordingError$.next('Error al procesar la grabación');
       
       if (currentSession) {
@@ -696,7 +729,7 @@ export class VoiceValidationService {
           this.handleProcessingFailed(result.error, sessionId);
         }
       } catch (error) {
-// removed by clean-audit
+        this.logError('Polling processing result failed', error);
         clearInterval(pollInterval);
       }
     }, 2000);
@@ -1158,7 +1191,7 @@ export class VoiceValidationService {
   ];
 
   // AVI THRESHOLDS (Conservative - API configurable)
-  private readonly AVI_THRESHOLDS = {
+  private AVI_THRESHOLDS = {
     GO_MIN: 780,      // Minimum threshold for approval
     NOGO_MAX: 550,    // Maximum threshold for rejection  
     REVIEW_MIN: 551,  // Review range start
@@ -1177,8 +1210,8 @@ export class VoiceValidationService {
     RISK_THRESHOLDS: '/api/v1/config/avi-thresholds',
     GEOGRAPHIC_RISK: '/api/v1/config/geographic-risk',
     
-// removed by clean-audit
-    MOCK_MODE: true // Set to false when APIs are ready
+    MOCK_MODE: true, // Set to false when APIs are ready
+    LOGGING_ENABLED: true
   };
 
   // ✅ COMPLEMENTO: Tu Cuestionario de Resiliencia (12 preguntas) - LEGACY SUPPORT
@@ -1454,7 +1487,7 @@ export class VoiceValidationService {
     
     return this.http.get<AVIQuestion[]>(this.API_CONFIG.AVI_QUESTIONS).pipe(
       catchError(error => {
-// removed by clean-audit
+        this.logWarn('Failed to fetch AVI questions from API, using default set', error);
         return of(this.AVI_55_QUESTIONS);
       })
     );
@@ -1468,7 +1501,7 @@ export class VoiceValidationService {
     audioBlob: Blob, 
     contextData?: any
   ): Observable<AVIScoreResult> {
-// removed by clean-audit
+    this.logDebug('Analyzing voice response via AVI', { questionId, mockMode: this.apiConfig.isMockMode() });
     if (this.apiConfig.isMockMode()) {
       return this.mockAVIVoiceAnalysis(questionId, audioBlob, contextData);
     }
@@ -1503,7 +1536,7 @@ export class VoiceValidationService {
         return this.convertBFFResponseToAVIScore(response, questionId, contextData);
       }),
       catchError(error => {
-// removed by clean-audit
+        this.logError('Voice analysis API failed, falling back to mock', error);
         return this.mockAVIVoiceAnalysis(questionId, audioBlob, contextData);
       })
     );
@@ -1627,7 +1660,7 @@ export class VoiceValidationService {
 
     return this.http.post<ConsolidatedAVIResult>(this.API_CONFIG.AVI_EVALUATE, formData).pipe(
       catchError(error => {
-// removed by clean-audit
+        this.logError('AVI evaluation failed, using mock response', error);
         return this.mockCompleteAVIProcessing(responses, contextData);
       })
     );
@@ -1682,7 +1715,7 @@ export class VoiceValidationService {
   }
 
   // ============================================================================
-// removed by clean-audit
+  // MOCK IMPLEMENTATIONS
   // ============================================================================
 
   private mockAVIVoiceAnalysis(
@@ -1696,7 +1729,6 @@ export class VoiceValidationService {
       return throwError(() => new Error(`Question ${questionId} not found`));
     }
 
-// removed by clean-audit
     const mockTranscription = this.generateMockTranscription(question);
     const mockFeatures = this.generateMockVoiceFeatures(question);
     
@@ -1827,7 +1859,7 @@ export class VoiceValidationService {
     const requestId = this.generateRequestId();
     
     try {
-// removed by clean-audit
+      this.logInfo('Evaluating audio sample', { requestId, questionId, contextId });
       
       // Use BFF endpoint for full evaluation (Whisper + Analysis)
       const formData = new FormData();
@@ -1853,12 +1885,16 @@ export class VoiceValidationService {
       // ✅ Store result locally
       this.storeVoiceEvaluationResult(response);
       
-// removed by clean-audit
+      this.logInfo('Voice evaluation completed', {
+        requestId,
+        questionId,
+        decision: response.decision
+      });
       
       return response;
       
     } catch (error) {
-// removed by clean-audit
+      this.logError('Voice evaluation pipeline failed, invoking heuristic fallback', error);
       
       // ✅ FALLBACK: Apply heuristic analysis + mark as REVIEW
       const fallbackResult = this.applyHeuristicFallback(audioBlob, questionId);
@@ -1895,7 +1931,10 @@ export class VoiceValidationService {
 
   // ✅ NUEVO: Heuristic Fallback Implementation
   private applyHeuristicFallback(audioBlob: Blob, questionId: string): VoiceEvaluationResult {
-// removed by clean-audit
+    this.logWarn('Applying heuristic fallback scoring', {
+      questionId,
+      size: audioBlob.size
+    });
     
     // Basic heuristics based on audio properties
     const duration = Math.max(0.001, audioBlob.size / 16000); // Rough estimate (16kHz) with floor to avoid 0
@@ -1955,7 +1994,11 @@ export class VoiceValidationService {
       fallback: evaluation.fallback
     });
     
-// removed by clean-audit
+    this.logDebug('Voice evaluation stored', {
+      questionId: evaluation.questionId,
+      decision: evaluation.decision,
+      fallback: evaluation.fallback
+    });
   }
 
   // ✅ NUEVO: Generate unique request ID
@@ -1978,7 +2021,9 @@ export class VoiceValidationService {
 
   // ✅ NUEVO: Aggregate Resilience Scoring
   aggregateResilience(): ResilienceSummary {
-// removed by clean-audit
+    this.logDebug('Aggregating resilience metrics', {
+      evaluationCount: this.voiceEvaluations.length
+    });
     
     if (this.voiceEvaluations.length === 0) {
       return {
@@ -2058,7 +2103,7 @@ export class VoiceValidationService {
       criticalFlags
     };
     
-// removed by clean-audit
+    this.logInfo('Resilience summary generated', summary);
     
     return summary;
   }
@@ -2117,7 +2162,7 @@ export class VoiceValidationService {
 
   // ✅ NUEVO: Clear Voice Evaluations (for new sessions)
   clearVoiceEvaluations(): void {
-// removed by clean-audit
+    this.logDebug('Clearing stored voice evaluations');
     this.voiceEvaluations = [];
   }
 
@@ -2143,13 +2188,13 @@ export class VoiceValidationService {
   }
 
   // =================================
-// removed by clean-audit
+  // MOCK DATA GENERATION
   // =================================
 
   generateMockValidationResult(sessionId: string): VoiceValidationResult {
     return {
       session_id: sessionId,
-// removed by clean-audit
+      transcript: 'Mock transcript generated por el sistema de prueba.',
       compliance_score: 85,
       questions_asked: ['years_driving', 'route_ownership', 'vehicle_gnv'],
       questions_missing: ['previous_credits'],
@@ -2201,7 +2246,7 @@ export class VoiceValidationService {
 
       return response!;
     } catch (error) {
-// removed by clean-audit
+      this.logError('Voice analysis request failed, using fallback', error);
       return this.fallbackVoiceAnalysis(request);
     }
   }
@@ -2228,7 +2273,7 @@ export class VoiceValidationService {
 
       return response!;
     } catch (error) {
-// removed by clean-audit
+      this.logError('evaluateAudioComplete request failed', error);
       throw error;
     }
   }
@@ -2291,7 +2336,7 @@ export class VoiceValidationService {
       };
 
     } catch (error) {
-// removed by clean-audit
+      this.logError('Failed to process resilience question', error);
       throw error;
     }
   }
@@ -2414,9 +2459,8 @@ export class VoiceValidationService {
       decision,
       metrics: {
         latencyIndex: Math.min(1, request.latencySec / 5),
-// removed by clean-audit
+        energyStability: Math.max(0, 1 - (disfluencyCount / Math.max(1, request.words.length))),
         disfluencyRate: disfluencyCount / Math.max(1, request.words.length),
-// removed by clean-audit
         honestyLexicon: 1 - (riskCount / Math.max(1, request.words.length))
       },
       flags,
@@ -2481,7 +2525,5 @@ export class VoiceValidationService {
     return stored ? JSON.parse(stored) : [];
   }
 
-  // getAuthToken is defined earlier in this service
+// getAuthToken is defined earlier in this service
 }
-
-// removed by clean-audit

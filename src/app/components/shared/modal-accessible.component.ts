@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild, OnChanges } from '@angular/core';
 import { FocusTrapService } from '../../services/focus-trap.service';
 
 @Component({
@@ -46,7 +46,7 @@ import { FocusTrapService } from '../../services/focus-trap.service';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModalAccessibleComponent implements OnInit, OnDestroy {
+export class ModalAccessibleComponent implements OnInit, OnDestroy, OnChanges {
   @Input() open: boolean = false;
   @Input() title: string = '';
   @Input() ariaLabelledby?: string;
