@@ -7,8 +7,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@
 import { CommonModule } from '@angular/common';
 import { Subject, interval, takeUntil } from 'rxjs';
 
-import { PremiumIconComponent } from './premium-icon/premium-icon.component';
-import { HumanMessageComponent } from './human-message/human-message.component';
+import { PremiumIconComponent } from '../ui/premium-icon/premium-icon.component';
+import { HumanMessageComponent } from './human-message/human-message.component'; // Path verified: exists
 import { PremiumIconsService } from '../../services/premium-icons.service';
 import { HumanMicrocopyService } from '../../services/human-microcopy.service';
 

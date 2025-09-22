@@ -98,6 +98,7 @@ import { RiskService } from '../../../services/risk.service';
 })
 export class TandaConsensusPanelComponent {
 // removed by clean-audit
+  tandaId = '';  // Phase 4 cleanup: missing property used in template
   fromMemberId = '';
   toMemberId = '';
   reason = '';

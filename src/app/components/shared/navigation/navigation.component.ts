@@ -556,6 +556,7 @@ export class NavigationComponent implements OnInit {
   isMobileView = false;
   
 // removed by clean-audit
+  userName = 'Asesor Demo';  // Phase 4 cleanup: missing property used in template
   userRole = 'Asesor Financiero';
   userInitials = 'AD';
 

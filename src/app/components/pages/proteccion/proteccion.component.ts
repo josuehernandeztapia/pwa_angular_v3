@@ -98,7 +98,7 @@ export class ProteccionComponent implements OnInit {
   }
 
   isScenarioEligible(scenario: ProtectionScenario): boolean {
-    return scenario.eligible;
+    return scenario.eligible ?? false;
   }
 
   getNewMonthlyPayment(scenario: ProtectionScenario): number {

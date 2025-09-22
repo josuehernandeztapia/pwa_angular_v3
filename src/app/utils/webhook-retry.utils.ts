@@ -85,7 +85,7 @@ export class WebhookRetryService {
             if (attemptNumber > finalConfig.maxAttempts) {
               console.error('[WebhookRetry] Max retry attempts exceeded', {
                 attempts: attemptNumber - 1,
-                url: request.url
+                url: (error as any)?.url || 'unknown'
               });
               return throwError(() => new Error(`Max retry attempts exceeded after ${attemptNumber - 1} attempts`));
             }

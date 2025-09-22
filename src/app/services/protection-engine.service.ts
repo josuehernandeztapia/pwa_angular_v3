@@ -361,4 +361,19 @@ export class ProtectionEngineService {
 
     return { canUse: true };
   }
+
+  // Phase 4 cleanup: Add missing generateScenarios method
+  generateScenarios(params: {
+    currentBalance: number;
+    originalPayment: number;
+    remainingTerm: number;
+    market: Market;
+  }): ProtectionScenario[] {
+    return this.generateProtectionScenarios(
+      params.currentBalance,
+      params.originalPayment,
+      params.remainingTerm,
+      params.market
+    );
+  }
 }

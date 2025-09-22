@@ -14,7 +14,7 @@ interface QuoteDraftItem extends PartSuggestion {
 }
 
 interface QuoteDraft {
-// removed by clean-audit
+  id: string; // Phase 4 cleanup: add missing id property
   items: QuoteDraftItem[];
   updatedAt: number;
 }
