@@ -67,36 +67,45 @@ describe('VoiceValidationService', () => {
 
   const buildAviResult = (score: number, protection = true): ConsolidatedAVIResult => ({
     final_score: score,
-    risk_level: 'LOW',
+    risk_level: score >= 80 ? 'LOW' : score >= 65 ? 'MEDIUM' : 'HIGH',
     scientific_engine_score: score,
     heuristic_engine_score: score,
     consensus_weight: 0.8,
     protection_eligible: protection,
-    decision: score >= 780 ? 'GO' : score >= 551 ? 'REVIEW' : 'NO-GO',
+    decision: score >= 80 ? 'GO' : score >= 65 ? 'REVIEW' : 'NO-GO',
     detailed_breakdown: [],
     red_flags: [],
     recommendations: []
   });
 
-  it('should classify scores >= 780 as GO when protection eligible', () => {
-    const result = service.calculateHASEWithAVI(90, 80, buildAviResult(800, true));
+  it('should classify scores >= 80 as GO when protection eligible', () => {
+    const result = service.calculateHASEWithAVI(85, 80, buildAviResult(85, true));
     expect(result.decision).toBe('GO');
     expect(result.protection_eligible).toBeTrue();
-    expect(result.final_score).toBeGreaterThanOrEqual(780);
+    expect(result.final_score).toBeGreaterThanOrEqual(80);
   });
 
-  it('should classify scores between 551-779 as REVIEW or GO without protection', () => {
-    const review = service.calculateHASEWithAVI(70, 60, buildAviResult(700, true));
+  it('should classify scores between 65-79 as REVIEW', () => {
+    const review = service.calculateHASEWithAVI(70, 65, buildAviResult(70, true));
     expect(review.decision).toBe('REVIEW');
+    expect(review.final_score).toBeGreaterThanOrEqual(65);
+    expect(review.final_score).toBeLessThan(80);
 
-    const downgraded = service.calculateHASEWithAVI(85, 80, buildAviResult(820, false));
+    const borderReview = service.calculateHASEWithAVI(79, 75, buildAviResult(79, true));
+    expect(borderReview.decision).toBe('REVIEW');
+  });
+
+  it('should classify scores below 65 as NO-GO', () => {
+    const noGo = service.calculateHASEWithAVI(50, 40, buildAviResult(50, false));
+    expect(noGo.decision).toBe('NO-GO');
+    expect(noGo.final_score).toBeLessThan(65);
+  });
+
+  it('should downgrade GO to REVIEW when protection not eligible', () => {
+    const downgraded = service.calculateHASEWithAVI(85, 80, buildAviResult(85, false));
     expect(downgraded.decision).toBe('REVIEW');
     expect(downgraded.protection_eligible).toBeFalse();
-  });
-
-  it('should classify scores below 551 as NO-GO', () => {
-    const noGo = service.calculateHASEWithAVI(10, 20, buildAviResult(400, false));
-    expect(noGo.decision).toBe('NO-GO');
+    expect(downgraded.final_score).toBeGreaterThanOrEqual(80);
   });
 
   it('should flag long responses in heuristic fallback', () => {
