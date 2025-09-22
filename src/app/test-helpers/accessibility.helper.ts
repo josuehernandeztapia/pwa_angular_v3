@@ -67,6 +67,14 @@ export async function testComponentAccessibility(element: HTMLElement): Promise<
 }
 
 /**
+ * Test accessibility of a component fixture (alias for backwards compatibility)
+ */
+export async function testAccessibility(fixture: any): Promise<void> {
+  const element = fixture.nativeElement || fixture.debugElement.nativeElement;
+  await testComponentAccessibility(element);
+}
+
+/**
  * Test accessibility of a specific element
  */
 export async function testElementAccessibility(element: HTMLElement): Promise<void> {
@@ -122,6 +130,14 @@ export const AccessibilityTestPatterns = {
       }
     };
     await testAccessibilityWithConfig(element, formConfig);
+  },
+
+  /**
+   * Test form accessibility (alias for backwards compatibility)
+   */
+  async testFormAccessibility(fixture: any): Promise<void> {
+    const element = fixture.nativeElement || fixture.debugElement.nativeElement;
+    await this.testForm(element);
   },
 
   /**
