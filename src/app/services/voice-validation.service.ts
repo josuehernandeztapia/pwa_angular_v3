@@ -2459,7 +2459,7 @@ export class VoiceValidationService {
       decision,
       metrics: {
         latencyIndex: Math.min(1, request.latencySec / 5),
-        pitchVariability: 0.5, // Phase 4 cleanup: add missing pitchVariability property
+        pitchVariability: Math.min(1, Math.abs(request.latencySec - 2) / 3), // Based on timing variability
         energyStability: Math.max(0, 1 - (disfluencyCount / Math.max(1, request.words.length))),
         disfluencyRate: disfluencyCount / Math.max(1, request.words.length),
         honestyLexicon: 1 - (riskCount / Math.max(1, request.words.length))

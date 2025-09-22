@@ -14,7 +14,7 @@ export interface ContractTemplate {
   requiredFields: ContractField[];
   version: string;
   effectiveDate: Date;
-  status?: string; // Phase 4 cleanup: add missing status property
+  status?: 'active' | 'inactive';
   metadata?: Record<string, unknown>;
 }
 

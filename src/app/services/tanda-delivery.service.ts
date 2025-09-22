@@ -46,7 +46,7 @@ export class TandaDeliveryService {
    */
   private initializeDemoData(): void {
     const demoTanda: TandaGroupDelivery = {
-      id: 'demo-tanda-001', // Phase 4 cleanup: add missing id property
+      id: 'ruta-centro-edomex',
       name: 'Tanda Ruta Centro EdoMex',
       totalMembers: 12,
       capacity: 12, // Maximum members capacity

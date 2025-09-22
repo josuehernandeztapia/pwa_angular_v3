@@ -362,7 +362,6 @@ export class ProtectionEngineService {
     return { canUse: true };
   }
 
-  // Phase 4 cleanup: Add missing generateScenarios method
   generateScenarios(params: {
     currentBalance: number;
     originalPayment: number;
