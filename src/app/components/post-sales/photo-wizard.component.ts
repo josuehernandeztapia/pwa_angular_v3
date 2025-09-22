@@ -48,11 +48,6 @@ interface StepState {
       <div class="space-y-4">
         <div *ngFor="let step of steps; let i = index"
              class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden"
-             [class.ring-2]="currentIndex === i"
-             [class.ring-slate-300]="currentIndex === i"
-             [class.dark:ring-slate-600]="currentIndex === i"
-             [class.bg-green-50]="step.done && (step.confidence || 0) >= threshold"
-             [class.dark:bg-green-950/20]="step.done && (step.confidence || 0) >= threshold"
              data-cy="step-card">
 
           <!-- Step Header -->

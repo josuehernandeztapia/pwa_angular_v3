@@ -361,4 +361,18 @@ export class ProtectionEngineService {
 
     return { canUse: true };
   }
+
+  generateScenarios(params: {
+    currentBalance: number;
+    originalPayment: number;
+    remainingTerm: number;
+    market: Market;
+  }): ProtectionScenario[] {
+    return this.generateProtectionScenarios(
+      params.currentBalance,
+      params.originalPayment,
+      params.remainingTerm,
+      params.market
+    );
+  }
 }

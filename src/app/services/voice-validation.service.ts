@@ -529,7 +529,7 @@ export class VoiceValidationService {
       next: (response) => {
         if (response.success) {
           this.logInfo('Geographic risk configuration loaded', {
-            records: Object.keys(response.data.matrix || {}).length,
+            records: Object.keys(response.data.riskMatrix || {}).length,
             version: response.data.version
           });
         }
@@ -2459,6 +2459,7 @@ export class VoiceValidationService {
       decision,
       metrics: {
         latencyIndex: Math.min(1, request.latencySec / 5),
+        pitchVariability: Math.min(1, Math.abs(request.latencySec - 2) / 3), // Based on timing variability
         energyStability: Math.max(0, 1 - (disfluencyCount / Math.max(1, request.words.length))),
         disfluencyRate: disfluencyCount / Math.max(1, request.words.length),
         honestyLexicon: 1 - (riskCount / Math.max(1, request.words.length))

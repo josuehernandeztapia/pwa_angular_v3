@@ -170,9 +170,8 @@ interface ProductCatalogItem {
         subtitle="No se encontraron productos para los filtros seleccionados"
         [primaryCtaLabel]="'Mostrar todos'"
         (primary)="resetFilters()"
-// removed by clean-audit
-        (secondary)="simulateDemo()"
-      ></app-empty-state-card>
+        (secondary)="simulateDemo()">
+      </app-empty-state-card>
     </div>
   `,
   styles: [`

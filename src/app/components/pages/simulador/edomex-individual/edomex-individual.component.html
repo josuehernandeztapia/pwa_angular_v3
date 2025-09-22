@@ -222,7 +222,7 @@
       </div>
 
       <!-- Timeline -->
-      <div class="mb-6" *ngIf="scenario.timeline?.length > 0">
+      <div class="mb-6" *ngIf="scenario && scenario.timeline && scenario.timeline.length > 0">
         <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">Cronograma de Hitos</h3>
         <div class="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 space-y-3">
           <div *ngFor="let event of scenario.timeline.slice(0, 6)"
@@ -333,4 +333,3 @@
       [actions]="asideActions"
     ></app-summary-panel>
   </div>
-</div>

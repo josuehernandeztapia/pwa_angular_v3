@@ -554,8 +554,8 @@ export class NavigationComponent implements OnInit {
   isCollapsed = false;
   showMobileMenu = false;
   isMobileView = false;
-  
-// removed by clean-audit
+
+  userName = 'Ana Domínguez';
   userRole = 'Asesor Financiero';
   userInitials = 'AD';
 
