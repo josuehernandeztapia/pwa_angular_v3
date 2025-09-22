@@ -19,6 +19,10 @@ npm ci
 
 # Servir en local
 ng serve
+
+# Acceso demo (http://localhost:4200)
+# Usuario: demo@conductores.com
+# Password: demo123
 ```
 
 ---
