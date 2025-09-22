@@ -1,7 +1,6 @@
 import { ComponentFixture } from '@angular/core/testing';
 import * as axeCore from 'axe-core';
 
-// Type definitions for axe-core results
 interface AxeViolation {
   id: string;
   description: string;
@@ -15,12 +14,9 @@ interface AxeResults {
   inapplicable: any[];
 }
 
-// Configure axe for Angular applications
 const axeConfig = {
   rules: {
-    // Disable color-contrast rule for development as it can be flaky
     'color-contrast': { enabled: false },
-    // Focus on critical accessibility issues
     'aria-allowed-attr': { enabled: true },
     'aria-required-children': { enabled: true },
     'aria-required-parent': { enabled: true },
@@ -60,32 +56,35 @@ type AccessibilityTarget =
   | null
   | undefined;
 
-const isFixture = (target: any): target is ComponentFixture<any> =>
+const isComponentFixture = (target: any): target is ComponentFixture<any> =>
   !!target && typeof target === 'object' && 'nativeElement' in target && 'detectChanges' in target;
 
 const resolveElement = (target: AccessibilityTarget): HTMLElement => {
   if (!target) {
-    throw new Error('Target element or fixture is required for accessibility assertions');
+    throw new Error('A target element or fixture is required for accessibility testing');
   }
 
   if (target instanceof HTMLElement) {
     return target;
   }
 
-  if (isFixture(target)) {
+  if (isComponentFixture(target)) {
     return target.nativeElement as HTMLElement;
   }
 
-  const possible =
-    (target as any).nativeElement ||
-    (target as any).debugElement?.nativeElement ||
-    (target as any).elementRef?.nativeElement;
-
-  if (possible instanceof HTMLElement) {
-    return possible;
+  if ((target as any).nativeElement instanceof HTMLElement) {
+    return (target as any).nativeElement as HTMLElement;
   }
 
-  throw new Error('Unable to resolve HTMLElement from target');
+  if ((target as any).debugElement?.nativeElement instanceof HTMLElement) {
+    return (target as any).debugElement.nativeElement as HTMLElement;
+  }
+
+  if ((target as any).elementRef?.nativeElement instanceof HTMLElement) {
+    return (target as any).elementRef.nativeElement as HTMLElement;
+  }
+
+  throw new Error('Unable to resolve HTMLElement from provided target');
 };
 
 const runAxe = async (element: HTMLElement, config: any = axeConfig): Promise<AxeResults> => {
@@ -95,7 +94,7 @@ const runAxe = async (element: HTMLElement, config: any = axeConfig): Promise<Ax
 export async function testComponentAccessibility(target: AccessibilityTarget): Promise<void> {
   const element = resolveElement(target);
   const results = await runAxe(element);
-  if (results.violations.length) {
+  if (results.violations.length > 0) {
     const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
     throw new Error(`Accessibility violations found: ${violations}`);
   }
@@ -112,9 +111,12 @@ export async function testElementAccessibility(target: AccessibilityTarget): Pro
 
 export async function testAccessibilityWithConfig(target: AccessibilityTarget, config: any): Promise<void> {
   const element = resolveElement(target);
-  const mergedConfig = { ...axeConfig, ...config };
+  const mergedConfig = {
+    ...axeConfig,
+    ...config
+  };
   const results = await runAxe(element, mergedConfig);
-  if (results.violations.length) {
+  if (results.violations.length > 0) {
     const violations = results.violations.map(v => `${v.id}: ${v.description}`).join('; ');
     throw new Error(`Accessibility violations found: ${violations}`);
   }
@@ -127,7 +129,7 @@ export async function getAccessibilityViolations(target: AccessibilityTarget): P
   return results.violations;
 }
 
-const AccessibilityTestPatternsCore = {
+export const AccessibilityTestPatterns = {
   async testForm(target: AccessibilityTarget): Promise<void> {
     await testAccessibilityWithConfig(target, {
       rules: {
@@ -137,6 +139,10 @@ const AccessibilityTestPatternsCore = {
         'aria-valid-attr-value': { enabled: true }
       }
     });
+  },
+
+  async testFormAccessibility(target: AccessibilityTarget): Promise<void> {
+    await AccessibilityTestPatterns.testForm(target);
   },
 
   async testNavigation(target: AccessibilityTarget): Promise<void> {
@@ -150,6 +156,10 @@ const AccessibilityTestPatternsCore = {
     });
   },
 
+  async testNavigationAccessibility(target: AccessibilityTarget): Promise<void> {
+    await AccessibilityTestPatterns.testNavigation(target);
+  },
+
   async testModal(target: AccessibilityTarget): Promise<void> {
     await testAccessibilityWithConfig(target, {
       rules: {
@@ -160,6 +170,10 @@ const AccessibilityTestPatternsCore = {
     });
   },
 
+  async testModalAccessibility(target: AccessibilityTarget): Promise<void> {
+    await AccessibilityTestPatterns.testModal(target);
+  },
+
   async testTable(target: AccessibilityTarget): Promise<void> {
     await testAccessibilityWithConfig(target, {
       rules: {
@@ -168,22 +182,10 @@ const AccessibilityTestPatternsCore = {
         'scope-attr-valid': { enabled: true }
       }
     });
-  }
-};
+  },
 
-export const AccessibilityTestPatterns = {
-  ...AccessibilityTestPatternsCore,
-  async testFormAccessibility(target: AccessibilityTarget): Promise<void> {
-    await AccessibilityTestPatternsCore.testForm(target);
-  },
-  async testNavigationAccessibility(target: AccessibilityTarget): Promise<void> {
-    await AccessibilityTestPatternsCore.testNavigation(target);
-  },
-  async testModalAccessibility(target: AccessibilityTarget): Promise<void> {
-    await AccessibilityTestPatternsCore.testModal(target);
-  },
   async testTableAccessibility(target: AccessibilityTarget): Promise<void> {
-    await AccessibilityTestPatternsCore.testTable(target);
+    await AccessibilityTestPatterns.testTable(target);
   }
 };
 
@@ -264,7 +266,6 @@ const buildSuite = (): AccessibilitySuite => ({
     const interactiveElements = container.querySelectorAll<HTMLElement>(
       'button, input, select, textarea, a, [role="button"], [role="link"], [tabindex]'
     );
-
     interactiveElements.forEach(element => {
       expect(AccessibilityChecker.isKeyboardAccessible(element)).toBe(true);
     });
@@ -274,7 +275,6 @@ const buildSuite = (): AccessibilitySuite => ({
     const formControls = container.querySelectorAll<HTMLInputElement>(
       'input:not([type="hidden"]), select, textarea'
     );
-
     formControls.forEach(control => {
       expect(AccessibilityChecker.hasAssociatedLabel(control)).toBe(true);
     });
@@ -295,13 +295,13 @@ export function createAccessibilityTestSuite(options: string | AccessibilitySuit
 
     beforeAll(async () => {
       target = await factory();
-      if (isFixture(target)) {
+      if (isComponentFixture(target)) {
         target.detectChanges();
       }
     });
 
     afterAll(() => {
-      if (target && isFixture(target) && typeof target.destroy === 'function') {
+      if (target && isComponentFixture(target) && typeof target.destroy === 'function') {
         target.destroy();
       }
     });
