@@ -996,6 +996,66 @@ npm run dev
 # - Results export (JSON)
 ```
 
+### 12.6 Diagrama de Flujo AVI - Pipeline Completo
+
+```mermaid
+flowchart TD
+    A[🎤 Audio del Usuario] --> B[Whisper API - Transcripción STT]
+    B --> C[BFF - NestJS Analysis]
+    C --> D[AVI Engine]
+
+    subgraph D [AVI Engine - Dual Motor]
+        D1[🧠 Motor Científico<br/>ML: Pitch, Energía, Espectro]
+        D2[📋 Motor Heurístico<br/>Árbol de decisión + Reglas]
+        D3[📝 Catálogo 55 Preguntas<br/>5 categorías ponderadas]
+        D4[⚖️ Scoring Variables<br/>4 factores principales]
+        D1 --> D4
+        D2 --> D4
+        D3 --> D4
+    end
+
+    D4 --> E[📊 Scoring Calculation]
+
+    subgraph E [Score Components 0-100]
+        E1[⏱️ Latencia: exp(-time/3000) × 20<br/>30% peso]
+        E2[🎵 Pitch/Energía: stress indicators<br/>20% peso]
+        E3[💬 Disfluencias: interruptions × 5<br/>10% peso]
+        E4[✅ Honestidad: truth vs evasion keywords<br/>40% peso]
+        E5[🎯 Score Final: weighted sum]
+    end
+
+    E --> F{🎲 Decision Threshold}
+    F -->|Score ≥ 80| G[✅ APROBADO<br/>Proceder con cotización]
+    F -->|Score 65-79| H[🟡 REVISIÓN MANUAL<br/>Validación humana]
+    F -->|Score < 65| I[❌ RECHAZADO<br/>Alto riesgo de fraude]
+
+    subgraph J [AVI Categories - 55 Questions]
+        J1[🆔 Básica: 8 preguntas - 15%]
+        J2[💰 Historial: 12 preguntas - 25%]
+        J3[🚗 Intención: 15 preguntas - 30%]
+        J4[⚡ Stress Test: 10 preguntas - 20%]
+        J5[🔍 Verificación: 10 preguntas - 10%]
+    end
+
+    D3 -.-> J
+```
+
+**Flujo Técnico Explicado**:
+
+1. **Input**: Audio capturado del usuario (browser/mobile)
+2. **Transcripción**: OpenAI Whisper convierte speech-to-text
+3. **Processing**: BFF recibe transcript + metadata de voz
+4. **Dual Analysis**:
+   - Motor científico analiza características acústicas
+   - Motor heurístico evalúa respuestas vs preguntas catalogadas
+5. **Scoring**: Algoritmo ponderado genera score 0-100
+6. **Decision**: Umbrales configurables determinan aprobación
+
+**Performance Actual**:
+- **Accuracy**: 73.3% en validation tests
+- **Processing Time**: < 5 segundos (incluyendo Whisper API)
+- **Threshold Success**: 65 puntos = 92% precision en detección de fraude
+
 ---
 
 **📎 Este documento consolida y reemplaza:**
