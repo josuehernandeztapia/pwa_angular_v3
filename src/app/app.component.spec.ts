@@ -1,66 +1,123 @@
-import { TestBed } from '@angular/core/testing';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { of } from 'rxjs';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BehaviorSubject } from 'rxjs';
 import { AppComponent } from './app.component';
-import { PushNotificationService } from './services/push-notification.service';
+import { MediaPermissionsService } from './services/media-permissions.service';
+import { SwUpdateService } from './services/sw-update.service';
+import * as designTokens from './styles/design-tokens';
+
+const theme = designTokens.theme;
+
+@Component({
+  standalone: true,
+  selector: 'app-dummy',
+  template: '<p data-testid="dummy">Dummy</p>'
+})
+class DummyComponent {}
+
+class MediaPermissionsStub {
+  isSupported(): boolean {
+    return true;
+  }
+}
+
+class SwUpdateServiceStub {
+  updateAvailable$ = new BehaviorSubject<boolean>(false);
+}
 
 describe('AppComponent', () => {
-  let mockPushNotificationService: jasmine.SpyObj<PushNotificationService>;
+  let router: Router;
 
   beforeEach(async () => {
-    // Create comprehensive spy object for PushNotificationService
-    mockPushNotificationService = jasmine.createSpyObj('PushNotificationService', [
-      'initialize',
-      'requestPermission',
-      'getNotificationStatus',
-      'getUnreadCount',
-      'markAsRead',
-      'clearAll'
-    ]);
-
-    // Set up return values for spied methods
-    mockPushNotificationService.getUnreadCount.and.returnValue(of(0));
-    mockPushNotificationService.getNotificationStatus.and.returnValue({
-      supported: true,
-      permission: 'granted',
-      subscribed: false
-    });
-
     await TestBed.configureTestingModule({
       imports: [
         AppComponent,
-        ServiceWorkerModule.register('ngsw-worker.js', {
-          enabled: false // Disable service worker for tests
-        })
+        RouterTestingModule.withRoutes([
+          { path: '', component: DummyComponent },
+          { path: 'dashboard', component: DummyComponent }
+        ]),
+        DummyComponent
       ],
       providers: [
-        { provide: PushNotificationService, useValue: mockPushNotificationService }
-      ]
-    }).overrideComponent(AppComponent, {
-      set: {
-        template: `<div><h1>Hello, conductores-pwa</h1></div>` // Simplified template for testing
-      }
+        { provide: MediaPermissionsService, useClass: MediaPermissionsStub },
+        { provide: SwUpdateService, useClass: SwUpdateServiceStub }
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
+
+    router = TestBed.inject(Router);
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+  it('should create the app and initialize dark mode', () => {
+    const initSpy = spyOn(theme, 'initFromStorage');
+    spyOn(theme, 'isDark').and.returnValue(false);
 
-  it(`should have the 'conductores-pwa' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('conductores-pwa');
-  });
-
-  it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, conductores-pwa');
-  });
-});
 
-// removed by clean-audit
+    expect(fixture.componentInstance).toBeTruthy();
+    expect(initSpy).toHaveBeenCalled();
+    expect(fixture.componentInstance.isDarkMode).toBeFalse();
+  });
+
+  it('should toggle dark mode using design tokens API', () => {
+    spyOn(theme, 'initFromStorage');
+    spyOn(theme, 'setDark');
+    const toggleSpy = spyOn(theme, 'toggle');
+    spyOn(theme, 'isDark').and.returnValues(false, true);
+
+    const fixture = TestBed.createComponent(AppComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.toggleDarkMode();
+
+    expect(toggleSpy).toHaveBeenCalled();
+    expect(component.isDarkMode).toBeTrue();
+  });
+
+  it('should allow explicit dark mode setting', () => {
+    spyOn(theme, 'initFromStorage');
+    const setDarkSpy = spyOn(theme, 'setDark');
+    spyOn(theme, 'isDark').and.returnValue(false);
+
+    const fixture = TestBed.createComponent(AppComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.setDarkMode(true);
+
+    expect(setDarkSpy).toHaveBeenCalledWith(true);
+    expect(component.isDarkMode).toBeTrue();
+  });
+
+  it('should render accessibility landmarks', () => {
+    spyOn(theme, 'initFromStorage');
+    spyOn(theme, 'isDark').and.returnValue(false);
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('a.skip-link')).withContext('Skip link missing').toBeTruthy();
+    expect(compiled.querySelector('main[role="main"]')).withContext('Main landmark missing').toBeTruthy();
+    expect(compiled.querySelector('aside nav')).withContext('Sidebar nav missing').toBeTruthy();
+  });
+
+  it('should render router content inside router-outlet', fakeAsync(() => {
+    spyOn(theme, 'initFromStorage');
+    spyOn(theme, 'isDark').and.returnValue(false);
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    router.navigateByUrl('dashboard');
+    tick();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('[data-testid="dummy"]')?.textContent).toContain('Dummy');
+  }));
+});

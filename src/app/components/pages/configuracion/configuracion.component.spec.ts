@@ -1,63 +1,114 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ConfiguracionComponent } from './configuracion.component';
-import { Router } from '@angular/router';
 
-class RouterStub {
-  navigate(commands: any[]): Promise<boolean> { return Promise.resolve(true); }
-}
+const createInputEvent = (value: string | number, type: 'number' | 'text' = 'number'): Event => {
+  const input = document.createElement('input');
+  input.type = type;
+  input.value = `${value}`;
+  return { target: input } as unknown as Event;
+};
+
+const createSelectEvent = (value: string): Event => {
+  const select = document.createElement('select');
+  select.value = value;
+  return { target: select } as unknown as Event;
+};
 
 describe('ConfiguracionComponent', () => {
   beforeEach(async () => {
-    localStorage.clear();
     await TestBed.configureTestingModule({
-      imports: [ConfiguracionComponent],
-      providers: [{ provide: Router, useClass: RouterStub }]
+      imports: [ConfiguracionComponent]
     }).compileComponents();
   });
 
-  it('should save and load configuration from localStorage', () => {
+  it('should create component with initial configuration', () => {
     const fixture = TestBed.createComponent(ConfiguracionComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
 
-    component.onSettingChange('language', 'en');
-
-    const saved = JSON.parse(localStorage.getItem('app-configuration') || '{}');
-    expect(saved.language).toBe('en');
-
-    // Reload component to verify loadConfiguration populates values
-    const fixture2 = TestBed.createComponent(ConfiguracionComponent);
-    const component2 = fixture2.componentInstance;
-    fixture2.detectChanges();
-    const general = component2.configSections.find(s => s.id === 'general');
-    const langSetting = general?.settings.find(s => s.key === 'language');
-    expect(langSetting?.value).toBe('en');
+    expect(component).toBeTruthy();
+    expect(component.config().mode).toBe('cotizador');
+    expect(component.config().precio).toBe(250000);
+    expect(component.productPackages.length).toBeGreaterThan(0);
   });
 
-  it('should apply theme switching by setting data-theme on :root', () => {
+  it('should update mode and trigger recalculation', fakeAsync(() => {
     const fixture = TestBed.createComponent(ConfiguracionComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
 
-    component.onSettingChange('theme', 'light');
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    component.setMode('simulador');
+    expect(component.config().mode).toBe('simulador');
+    expect(component.config().isCalculating).toBeTrue();
 
-    component.onSettingChange('theme', 'dark');
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
-  });
+    tick(800);
+    expect(component.config().isCalculating).toBeFalse();
+  }));
 
-  it('should open Flow Builder modal when enabled', () => {
+  it('should validate precio field and register errors when invalid', fakeAsync(() => {
     const fixture = TestBed.createComponent(ConfiguracionComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.isFlowBuilderEnabled).toBeTrue();
-    component.openFlowBuilder();
-    expect(component.showFlowBuilderModal).toBeTrue();
-    component.closeFlowBuilderModal();
-    expect(component.showFlowBuilderModal).toBeFalse();
-  });
+    component.updateConfig('precio', createInputEvent(0));
+    expect(component.config().errors['precio']).toBe('El precio debe ser mayor a 0');
+
+    component.updateConfig('precio', createInputEvent(500000));
+    tick(800);
+    expect(component.config().errors['precio']).toBeUndefined();
+    expect(component.config().precio).toBe(500000);
+  }));
+
+  it('should update select-based configuration fields correctly', fakeAsync(() => {
+    const fixture = TestBed.createComponent(ConfiguracionComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.updateConfigFromSelect('plazo', createSelectEvent('48'));
+    expect(component.config().plazo).toBe(48);
+
+    component.updateConfigFromSelect('tipoCliente', createSelectEvent('vip'));
+    expect(component.config().tipoCliente).toBe('vip');
+
+    tick(800);
+    expect(component.config().isCalculating).toBeFalse();
+  }));
+
+  it('should select package and update financial results', fakeAsync(() => {
+    const fixture = TestBed.createComponent(ConfiguracionComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.selectPackage('premium');
+    expect(component.config().selectedPackage).toBe('premium');
+
+    tick(800);
+    const results = component.financialResults();
+    expect(results).toBeTruthy();
+    expect(results?.total).toBeGreaterThan(0);
+  }));
+
+  it('should compute consistent financial results for valid configuration', fakeAsync(() => {
+    const fixture = TestBed.createComponent(ConfiguracionComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.updateConfig('precio', createInputEvent(300000));
+    component.updateConfig('enganche', createInputEvent(25));
+    component.updateConfigFromSelect('plazo', createSelectEvent('24'));
+
+    tick(800);
+    const results = component.financialResults();
+
+    expect(results).toEqual(jasmine.objectContaining({
+      pmt: jasmine.any(Number),
+      tasa: jasmine.any(Number),
+      ahorro: jasmine.any(Number),
+      total: jasmine.any(Number)
+    }));
+
+    // Ensure results are within expected ranges
+    expect(results!.pmt).toBeGreaterThan(0);
+    expect(results!.total).toBeGreaterThan(results!.ahorro);
+  }));
 });
-
-
-// removed by clean-audit
