@@ -16,9 +16,9 @@ describe('ConfiguracionComponent', () => {
   });
 
   it('should save and load configuration from localStorage', () => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
+    const fixture = TestBed.createComponent(ConfiguracionComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
 
     component.onSettingChange('language', 'en');
 
@@ -35,9 +35,9 @@ describe('ConfiguracionComponent', () => {
   });
 
   it('should apply theme switching by setting data-theme on :root', () => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
+    const fixture = TestBed.createComponent(ConfiguracionComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
 
     component.onSettingChange('theme', 'light');
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
@@ -47,9 +47,9 @@ describe('ConfiguracionComponent', () => {
   });
 
   it('should open Flow Builder modal when enabled', () => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
+    const fixture = TestBed.createComponent(ConfiguracionComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
 
     expect(component.isFlowBuilderEnabled).toBeTrue();
     component.openFlowBuilder();

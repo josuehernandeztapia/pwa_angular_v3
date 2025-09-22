@@ -7,7 +7,7 @@ import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
-// removed by clean-audit
+  let fixture: ComponentFixture<LoginComponent>;
   let mockRouter: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
@@ -20,10 +20,10 @@ describe('LoginComponent', () => {
       ]
     }).compileComponents();
 
-// removed by clean-audit
-// removed by clean-audit
+    fixture = TestBed.createComponent(LoginComponent);
+    component = fixture.componentInstance;
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-// removed by clean-audit
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -127,24 +127,24 @@ describe('LoginComponent', () => {
 
   it('should toggle password visibility', () => {
     expect(component.showPassword).toBe(false);
-    
-    component.togglePasswordVisibility();
-    
+
+    component.togglePassword();
+
     expect(component.showPassword).toBe(true);
-    
-    component.togglePasswordVisibility();
-    
+
+    component.togglePassword();
+
     expect(component.showPassword).toBe(false);
   });
 
   it('should handle keyboard navigation', () => {
-// removed by clean-audit
-// removed by clean-audit
+    const emailInput = fixture.nativeElement.querySelector('#email');
+    const passwordInput = fixture.nativeElement.querySelector('#password');
 
     // Focus should move from email to password on Tab
     emailInput.focus();
     expect(document.activeElement).toBe(emailInput);
-    
+
     // Simulate Tab key press
     const tabEvent = new KeyboardEvent('keydown', { key: 'Tab' });
     emailInput.dispatchEvent(tabEvent);

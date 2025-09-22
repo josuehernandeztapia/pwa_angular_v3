@@ -49,6 +49,8 @@ export class AVIAlignmentValidator {
           confidence_level: 0.95,
           latency_seconds: 1.8,
           pitch_variance: 0.15,
+          speech_rate_change: 0.10,
+          pause_frequency: 0.05,
           voice_tremor: 0.08,
           recognition_accuracy: 0.97
         },
@@ -63,6 +65,8 @@ export class AVIAlignmentValidator {
           confidence_level: 0.92,
           latency_seconds: 2.1,
           pitch_variance: 0.20,
+          speech_rate_change: 0.08,
+          pause_frequency: 0.06,
           voice_tremor: 0.12,
           recognition_accuracy: 0.94
         },
@@ -79,6 +83,8 @@ export class AVIAlignmentValidator {
           confidence_level: 0.78,
           latency_seconds: 4.2,
           pitch_variance: 0.55,
+          speech_rate_change: 0.45,
+          pause_frequency: 0.38,
           voice_tremor: 0.35,
           recognition_accuracy: 0.82
         },
@@ -95,6 +101,8 @@ export class AVIAlignmentValidator {
           confidence_level: 0.45,
           latency_seconds: 0.8,
           pitch_variance: 0.75,
+          speech_rate_change: 0.70,
+          pause_frequency: 0.65,
           voice_tremor: 0.68,
           recognition_accuracy: 0.58
         },
@@ -111,6 +119,8 @@ export class AVIAlignmentValidator {
           confidence_level: 0.32,
           latency_seconds: 0.5,
           pitch_variance: 0.85,
+          speech_rate_change: 0.80,
+          pause_frequency: 0.75,
           voice_tremor: 0.72,
           recognition_accuracy: 0.41
         },

@@ -102,7 +102,7 @@ describe('LoginComponent Accessibility Tests', () => {
       const statusRegions = fixture.nativeElement.querySelectorAll('[aria-live], [role="status"], [role="alert"]');
 
       // If there are status updates, they should be announced
-      if (component.isLoading || component.loginError) {
+      if (component.isLoading || component.errorMessage) {
         expect(statusRegions.length).toBeGreaterThan(0);
       }
     });
@@ -216,20 +216,23 @@ describe('LoginComponent Accessibility Tests', () => {
     });
   });
 
-  createAccessibilityTestSuite({
-    componentName: 'LoginComponent',
-    factory: async () => {
-      const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+  describe('Accessibility Test Suite', () => {
+    const accessibilityTestSuite = createAccessibilityTestSuite('LoginComponent');
 
-      await TestBed.configureTestingModule({
-        imports: [LoginComponent, ReactiveFormsModule],
-        providers: [
-          { provide: Router, useValue: routerSpy }
-        ]
-      }).compileComponents();
+    it('should pass basic accessibility tests', async () => {
+      await accessibilityTestSuite.basic(fixture.nativeElement);
+    });
 
-      const loginFixture = TestBed.createComponent(LoginComponent);
-      return loginFixture.componentInstance;
-    }
+    it('should have no accessibility violations', async () => {
+      await accessibilityTestSuite.assertNoViolations(fixture.nativeElement);
+    });
+
+    it('should support keyboard navigation', () => {
+      accessibilityTestSuite.assertKeyboardNavigation(fixture.nativeElement);
+    });
+
+    it('should have proper form labels', () => {
+      accessibilityTestSuite.assertFormLabels(fixture.nativeElement);
+    });
   });
 });

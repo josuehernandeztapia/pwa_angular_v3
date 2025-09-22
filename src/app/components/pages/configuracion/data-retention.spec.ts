@@ -16,9 +16,9 @@ describe('Data retention policy', () => {
   });
 
   it('should persist data retention days and validate positive numbers', () => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
+    const fixture = TestBed.createComponent(ConfiguracionComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
 
     const dataSection = component.configSections.find(s => s.id === 'data');
     const retention = dataSection?.settings.find(s => s.key === 'dataRetention');
