@@ -13,6 +13,7 @@
 9. [Monitoreo & Observabilidad](#monitoreo--observabilidad)
 10. [Troubleshooting](#troubleshooting)
 11. [Apéndices](#apéndices)
+12. [Apéndice Matemático-Técnico](#apéndice-matemático-técnico)
 
 ---
 
@@ -685,6 +686,315 @@ kubectl logs -f deployment/conductores-bff --tail=100
 - Database indexing strategies
 - Auto-scaling policies
 - Resource allocation optimization
+
+---
+
+## 12. Apéndice Matemático-Técnico
+
+### 12.1 Engines Financieros - Fórmulas y Algoritmos
+
+#### PMT (Pago Mensual) - Implementación Core
+```typescript
+// Fórmula: PMT = P × [r(1+r)^n] / [(1+r)^n - 1]
+function calculatePMT(principal: number, rate: number, term: number): number {
+  const monthlyRate = rate / 12;
+  const factor = Math.pow(1 + monthlyRate, term);
+  return principal * (monthlyRate * factor) / (factor - 1);
+}
+
+// Tolerancia de validación: ±0.5% o ±$25 MXN
+// Ubicación: src/app/services/financial-calculator.service.ts
+```
+
+#### TIR/IRR (Tasa Interna de Retorno) - Newton-Raphson
+```typescript
+// Implementación actual con mejoras recomendadas
+function calculateIRR(cashflows: number[], guess = 0.02): number {
+  let r = guess;
+  const maxIterations = 50;
+  const tolerance = 1e-9;
+
+  for (let i = 0; i < maxIterations; i++) {
+    let f = 0;
+    let df = 0;
+
+    // Función objetivo y derivada
+    for (let t = 0; t < cashflows.length; t++) {
+      const cf = cashflows[t];
+      const dr = Math.pow(1 + r, t);
+      f += cf / dr;                    // NPV = 0
+      df += -t * cf / (dr * (1 + r));  // Derivada
+    }
+
+    // Newton-Raphson: r(n+1) = r(n) - f(r)/f'(r)
+    const newR = r - f / df;
+
+    if (Math.abs(newR - r) < tolerance) return newR;
+    r = newR;
+  }
+
+  throw new Error('IRR convergence failed');
+}
+
+// Estado actual: 58.3% success rate (109/187 test cases)
+// Ubicación: src/app/utils/irr.ts, src/app/services/financial-calculator.service.ts
+```
+
+#### NPV (Valor Presente Neto)
+```typescript
+function calculateNPV(cashFlows: number[], discountRate: number): number {
+  return cashFlows.reduce((npv, cashFlow, period) => {
+    return npv + cashFlow / Math.pow(1 + discountRate, period);
+  }, 0);
+}
+
+// Performance: 100% accuracy en validation tests
+// Ubicación: src/app/services/simulator.service.ts
+```
+
+### 12.2 AVI Engine - Sistema de Scoring de Voz
+
+#### Arquitectura del Pipeline
+```
+Audio Input → Whisper API → BFF Analysis → AVI Engine → Fraud Score
+```
+
+#### Algoritmo de Scoring Principal
+```typescript
+interface AVIScore {
+  honesty: number;        // 0-100 (ponderación de keywords + pitch)
+  latency: number;        // Penalización por tiempo de respuesta
+  stress: number;         // Indicadores de estrés vocal
+  disfluency: number;     // Interrupciones y hesitación
+  final_score: number;    // Score compuesto 0-100
+}
+
+function calculateAVIScore(analysis: VoiceAnalysis): AVIScore {
+  // 1. Análisis de keywords de verdad vs evasión
+  const honestyBase = analyzeKeywords(analysis.transcript);
+
+  // 2. Penalización por latencia (función exponencial)
+  const latencyPenalty = Math.exp(-analysis.responseTime / 3000) * 20;
+
+  // 3. Análisis de características vocales
+  const stressScore = calculateStressIndicators(analysis.pitch, analysis.energy);
+
+  // 4. Detección de disfluencias
+  const disfluencyCount = analysis.interruptions + analysis.hesitations;
+
+  // Score final ponderado
+  const finalScore = (
+    honestyBase * 0.4 +           // 40% keywords
+    (100 - latencyPenalty) * 0.3 + // 30% tiempo respuesta
+    (100 - stressScore) * 0.2 +    // 20% estrés
+    (100 - disfluencyCount * 5) * 0.1  // 10% fluidez
+  );
+
+  return {
+    honesty: honestyBase,
+    latency: latencyPenalty,
+    stress: stressScore,
+    disfluency: disfluencyCount,
+    final_score: Math.max(0, Math.min(100, finalScore))
+  };
+}
+
+// Performance actual: 73.3% accuracy en validation tests
+// Umbral de fraude: < 65 puntos (configurable por mercado)
+```
+
+#### Catálogo de Preguntas AVI (55 preguntas)
+```typescript
+// Categorías principales:
+const AVI_CATEGORIES = {
+  BASIC_INFO: {
+    questions: 8,
+    weight: 0.15,
+    examples: [
+      "¿Cuál es su nombre completo?",
+      "¿En qué ciudad vive actualmente?",
+      "¿Cuál es su ocupación?"
+    ]
+  },
+  FINANCIAL_HISTORY: {
+    questions: 12,
+    weight: 0.25,
+    examples: [
+      "¿Ha tenido créditos anteriores?",
+      "¿Cuáles son sus ingresos mensuales aproximados?",
+      "¿Tiene algún adeudo pendiente?"
+    ]
+  },
+  VEHICLE_INTENT: {
+    questions: 15,
+    weight: 0.30,
+    examples: [
+      "¿Para qué necesita el vehículo?",
+      "¿Qué características busca en el auto?",
+      "¿Ha considerado otras opciones de financiamiento?"
+    ]
+  },
+  STRESS_TEST: {
+    questions: 10,
+    weight: 0.20,
+    examples: [
+      "¿Estaría dispuesto a proporcionar referencias?",
+      "¿Qué pasaría si no puede pagar una mensualidad?",
+      "¿Ha declarado todos sus ingresos?"
+    ]
+  },
+  VERIFICATION: {
+    questions: 10,
+    weight: 0.10,
+    examples: [
+      "Repita su número de teléfono",
+      "Confirme su fecha de nacimiento",
+      "¿En qué calle vive exactamente?"
+    ]
+  }
+};
+
+// Keywords de detección:
+const TRUTH_KEYWORDS = ['sí', 'correcto', 'exacto', 'claro', 'por supuesto'];
+const EVASION_KEYWORDS = ['no sé', 'tal vez', 'creo que', 'no recuerdo', 'no estoy seguro'];
+
+// Ubicación: src/app/data/avi-questions.data.ts, avi-lab/avi-questions-complete.js
+```
+
+### 12.3 Motores de Negocio Complementarios
+
+#### Cotizador Engine - Reglas por Mercado
+```typescript
+interface MarketRules {
+  AGS: {
+    minDownPayment: 0.10,    // 10% mínimo
+    maxTerm: 60,             // 60 meses máximo
+    baseRate: 0.255          // 25.5% anual
+  },
+  EDOMEX: {
+    minDownPayment: 0.15,    // 15% mínimo
+    maxTerm: 48,             // 48 meses máximo
+    baseRate: 0.299          // 29.9% anual
+  }
+}
+
+// Cálculo de enganche dinámico
+function calculateMinDownPayment(vehicleValue: number, market: string): number {
+  const rules = MarketRules[market];
+  return vehicleValue * rules.minDownPayment;
+}
+```
+
+#### Protección Engine - Cobertura Actuarial
+```typescript
+interface ProtectionCalculation {
+  basePremium: number;      // Prima base según valor vehicular
+  riskMultiplier: number;   // Factor de riesgo por perfil
+  coverageLevel: string;    // 'BASIC' | 'EXTENDED' | 'PREMIUM'
+  stepDownRate: number;     // TIR post-protección
+}
+
+// Fórmula de prima de riesgo
+function calculateProtectionPremium(
+  vehicleValue: number,
+  riskProfile: RiskProfile
+): ProtectionCalculation {
+
+  const basePremium = vehicleValue * 0.03; // 3% base
+  const riskMultiplier = calculateRiskMultiplier(riskProfile);
+
+  return {
+    basePremium,
+    riskMultiplier,
+    coverageLevel: determineCoverageLevel(riskProfile),
+    stepDownRate: calculateStepDownTIR(basePremium, riskMultiplier)
+  };
+}
+
+// Estado actual: Elementos DOM de "TIR post" requieren corrección
+// Issue identificado en validation tests
+```
+
+### 12.4 Validaciones Matemáticas y Quality Gates
+
+#### Test Coverage por Engine
+```typescript
+const MATH_VALIDATION_RESULTS = {
+  PMT_CALCULATIONS: {
+    totalTests: 187,
+    passed: 109,
+    failed: 78,
+    successRate: '58.3%',
+    tolerance: '±0.5% or ±$25 MXN',
+    status: 'NEEDS_IMPROVEMENT'
+  },
+  IRR_NEWTON_RAPHSON: {
+    convergenceIssues: 'Systematic accuracy problems',
+    recommendedFix: 'Improve initial guess and boundary conditions',
+    priority: 'CRITICAL'
+  },
+  NPV_CALCULATIONS: {
+    accuracy: '100%',
+    performance: 'EXCELLENT',
+    status: 'PRODUCTION_READY'
+  },
+  AVI_VOICE_ANALYSIS: {
+    accuracy: '73.3%',
+    confusionMatrix: '30 audio samples analyzed',
+    recommendedThreshold: '< 65 points for fraud detection',
+    status: 'CALIBRATION_NEEDED'
+  }
+};
+```
+
+#### Performance Benchmarks
+```typescript
+// Targets de rendimiento por módulo
+const PERFORMANCE_TARGETS = {
+  PMT_CALCULATION: '< 50ms',
+  IRR_CALCULATION: '< 200ms (50 iterations max)',
+  NPV_CALCULATION: '< 30ms',
+  AVI_ANALYSIS: '< 5000ms (including Whisper API)',
+  FULL_QUOTE_GENERATION: '< 2000ms'
+};
+```
+
+### 12.5 Referencias de Implementación
+
+#### Archivos Core de Algoritmos
+```
+Financial Engines:
+├── src/app/services/financial-calculator.service.ts
+├── src/app/utils/irr.ts
+├── src/app/utils/irr-calculator.ts
+├── src/app/services/simulator.service.ts
+└── src/app/services/cotizador-engine.service.ts
+
+AVI Implementation:
+├── src/app/utils/avi-engine.util.ts
+├── src/app/data/avi-questions.data.ts
+├── src/app/interfaces/avi.ts
+└── avi-lab/avi-questions-complete.js
+
+Testing & Validation:
+├── MATH-VALIDATION-REPORT.md
+├── src/tests/financial/
+└── cypress/e2e/*financial*.cy.ts
+```
+
+#### Laboratorio AVI Independiente
+```bash
+# Entorno de experimentación separado
+cd avi-lab/
+npm run dev
+
+# Features:
+# - Voice recording/upload
+# - Whisper integration
+# - Real-time scoring
+# - Benchmark comparison
+# - Results export (JSON)
+```
 
 ---
 
