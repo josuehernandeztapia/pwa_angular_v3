@@ -6,8 +6,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { PremiumIconComponent } from '../../components/premium-icon/premium-icon.component';
-import { HumanMessageComponent } from '../../components/human-message/human-message.component';
+import { PremiumIconComponent } from '../../components/shared/premium-icon/premium-icon.component';
+import { HumanMessageComponent } from '../../components/shared/human-message/human-message.component';
 
 interface CalibrationResult {
   id: string;

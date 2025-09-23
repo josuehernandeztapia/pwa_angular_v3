@@ -113,7 +113,7 @@ describe('MockApiService', () => {
 
   describe('Service Initialization', () => {
     it('should be created', () => {
-      expect(service).toBeTruthy();
+      (expect(service) as any).toBeTruthy();
     });
 
     it('should initialize data on construction', () => {
@@ -123,12 +123,12 @@ describe('MockApiService', () => {
       // Recreate service to trigger initialization
       service = new MockApiService(clientDataSpy, ecosystemDataSpy, collectiveGroupDataSpy);
 
-      expect(clientDataSpy.getClients).toHaveBeenCalled();
-      expect(collectiveGroupDataSpy.initializeCollectiveGroups).toHaveBeenCalledWith([mockClient]);
+      (expect(clientDataSpy.getClients) as any).toHaveBeenCalled();
+      (expect(collectiveGroupDataSpy.initializeCollectiveGroups) as any).toHaveBeenCalledWith([mockClient]);
     });
 
     it('should have correct network simulation configuration', () => {
-      expect(service['NETWORK_SIMULATION']).toEqual({
+      (expect(service['NETWORK_SIMULATION']) as any).toEqual({
         fast: 200,
         normal: 500,
         slow: 1200,
@@ -137,7 +137,7 @@ describe('MockApiService', () => {
     });
 
     it('should have correct default delay', () => {
-      expect(service['DEFAULT_DELAY']).toBe(500);
+      (expect(service['DEFAULT_DELAY']) as any).toBe(500);
     });
   });
 
@@ -148,9 +148,9 @@ describe('MockApiService', () => {
       const startTime = Date.now();
       service.getClients().subscribe(clients => {
         const endTime = Date.now();
-        expect(clients).toEqual([mockClient]);
-        expect(endTime - startTime).toBeGreaterThan(100); // Should have some delay
-        expect(clientDataSpy.getClients).toHaveBeenCalled();
+        (expect(clients) as any).toEqual([mockClient]);
+        (expect(endTime - startTime) as any).toBeGreaterThan(100); // Should have some delay
+        (expect(clientDataSpy.getClients) as any).toHaveBeenCalled();
         done();
       });
     });
@@ -159,8 +159,8 @@ describe('MockApiService', () => {
       clientDataSpy.getClientById.and.returnValue(of(mockClient));
 
       service.getClientById('1').subscribe(client => {
-        expect(client).toEqual(mockClient);
-        expect(clientDataSpy.getClientById).toHaveBeenCalledWith('1');
+        (expect(client) as any).toEqual(mockClient);
+        (expect(clientDataSpy.getClientById) as any).toHaveBeenCalledWith('1');
         done();
       });
     });
@@ -169,7 +169,7 @@ describe('MockApiService', () => {
       clientDataSpy.getClientById.and.returnValue(of(null));
 
       service.getClientById('non-existent').subscribe(client => {
-        expect(client).toBeNull();
+        (expect(client) as any).toBeNull();
         done();
       });
     });
@@ -182,9 +182,9 @@ describe('MockApiService', () => {
       const startTime = Date.now();
       service.createClient(newClient).subscribe(client => {
         const endTime = Date.now();
-        expect(client).toEqual(mockClient);
-        expect(endTime - startTime).toBeGreaterThan(1000); // Should use slow delay
-        expect(clientDataSpy.createClient).toHaveBeenCalledWith(newClient);
+        (expect(client) as any).toEqual(mockClient);
+        (expect(endTime - startTime) as any).toBeGreaterThan(1000); // Should use slow delay
+        (expect(clientDataSpy.createClient) as any).toHaveBeenCalledWith(newClient);
         done();
       });
     });
@@ -195,8 +195,8 @@ describe('MockApiService', () => {
       clientDataSpy.updateClient.and.returnValue(of(updatedClient));
 
       service.updateClient('1', updates).subscribe(client => {
-        expect(client).toEqual(updatedClient);
-        expect(clientDataSpy.updateClient).toHaveBeenCalledWith('1', updates);
+        (expect(client) as any).toEqual(updatedClient);
+        (expect(clientDataSpy.updateClient) as any).toHaveBeenCalledWith('1', updates);
         done();
       });
     });
@@ -207,8 +207,8 @@ describe('MockApiService', () => {
       clientDataSpy.addClientEvent.and.returnValue(of(updatedClient));
 
       service.addClientEvent('1', eventData).subscribe(client => {
-        expect(client).toEqual(updatedClient);
-        expect(clientDataSpy.addClientEvent).toHaveBeenCalledWith('1', eventData);
+        (expect(client) as any).toEqual(updatedClient);
+        (expect(clientDataSpy.addClientEvent) as any).toHaveBeenCalledWith('1', eventData);
         done();
       });
     });
@@ -218,8 +218,8 @@ describe('MockApiService', () => {
       clientDataSpy.updateDocumentStatus.and.returnValue(of(updatedClient));
 
       service.updateDocumentStatus('1', 'doc1', 'Aprobado' as any).subscribe(client => {
-        expect(client).toEqual(updatedClient);
-        expect(clientDataSpy.updateDocumentStatus).toHaveBeenCalledWith('1', 'doc1', 'Aprobado' as any);
+        (expect(client) as any).toEqual(updatedClient);
+        (expect(clientDataSpy.updateDocumentStatus) as any).toHaveBeenCalledWith('1', 'doc1', 'Aprobado' as any);
         done();
       });
     });
@@ -230,8 +230,8 @@ describe('MockApiService', () => {
       ecosystemDataSpy.getEcosystems.and.returnValue(of([mockEcosystem]));
 
       service.getEcosystems().subscribe(ecosystems => {
-        expect(ecosystems).toEqual([mockEcosystem]);
-        expect(ecosystemDataSpy.getEcosystems).toHaveBeenCalled();
+        (expect(ecosystems) as any).toEqual([mockEcosystem]);
+        (expect(ecosystemDataSpy.getEcosystems) as any).toHaveBeenCalled();
         done();
       });
     });
@@ -240,8 +240,8 @@ describe('MockApiService', () => {
       ecosystemDataSpy.getEcosystemById.and.returnValue(of(mockEcosystem));
 
       service.getEcosystemById('eco1').subscribe(ecosystem => {
-        expect(ecosystem).toEqual(mockEcosystem);
-        expect(ecosystemDataSpy.getEcosystemById).toHaveBeenCalledWith('eco1');
+        (expect(ecosystem) as any).toEqual(mockEcosystem);
+        (expect(ecosystemDataSpy.getEcosystemById) as any).toHaveBeenCalledWith('eco1');
         done();
       });
     });
@@ -250,7 +250,7 @@ describe('MockApiService', () => {
       ecosystemDataSpy.getEcosystemById.and.returnValue(of(null));
 
       service.getEcosystemById('non-existent').subscribe(ecosystem => {
-        expect(ecosystem).toBeNull();
+        (expect(ecosystem) as any).toBeNull();
         done();
       });
     });
@@ -263,9 +263,9 @@ describe('MockApiService', () => {
       const startTime = Date.now();
       service.createEcosystem(newEcosystem).subscribe(ecosystem => {
         const endTime = Date.now();
-        expect(ecosystem).toEqual(mockEcosystem);
-        expect(endTime - startTime).toBeGreaterThan(1000); // Should use slow delay
-        expect(ecosystemDataSpy.createEcosystem).toHaveBeenCalledWith(newEcosystem);
+        (expect(ecosystem) as any).toEqual(mockEcosystem);
+        (expect(endTime - startTime) as any).toBeGreaterThan(1000); // Should use slow delay
+        (expect(ecosystemDataSpy.createEcosystem) as any).toHaveBeenCalledWith(newEcosystem);
         done();
       });
     });
@@ -275,8 +275,8 @@ describe('MockApiService', () => {
       ecosystemDataSpy.updateEcosystemDocumentStatus.and.returnValue(of(updatedEcosystem));
 
       service.updateEcosystemDocument('eco1', 'doc1', 'Aprobado' as any).subscribe(ecosystem => {
-        expect(ecosystem).toEqual(updatedEcosystem);
-        expect(ecosystemDataSpy.updateEcosystemDocumentStatus).toHaveBeenCalledWith('eco1', 'doc1', 'Aprobado' as any);
+        (expect(ecosystem) as any).toEqual(updatedEcosystem);
+        (expect(ecosystemDataSpy.updateEcosystemDocumentStatus) as any).toHaveBeenCalledWith('eco1', 'doc1', 'Aprobado' as any);
         done();
       });
     });
@@ -287,8 +287,8 @@ describe('MockApiService', () => {
       collectiveGroupDataSpy.getCollectiveGroups.and.returnValue(of([mockCollectiveGroup]));
 
       service.getCollectiveGroups().subscribe(groups => {
-        expect(groups).toEqual([mockCollectiveGroup]);
-        expect(collectiveGroupDataSpy.getCollectiveGroups).toHaveBeenCalled();
+        (expect(groups) as any).toEqual([mockCollectiveGroup]);
+        (expect(collectiveGroupDataSpy.getCollectiveGroups) as any).toHaveBeenCalled();
         done();
       });
     });
@@ -297,8 +297,8 @@ describe('MockApiService', () => {
       collectiveGroupDataSpy.getCollectiveGroupById.and.returnValue(of(mockCollectiveGroup));
 
       service.getCollectiveGroupById('cc1').subscribe(group => {
-        expect(group).toEqual(mockCollectiveGroup);
-        expect(collectiveGroupDataSpy.getCollectiveGroupById).toHaveBeenCalledWith('cc1');
+        (expect(group) as any).toEqual(mockCollectiveGroup);
+        (expect(collectiveGroupDataSpy.getCollectiveGroupById) as any).toHaveBeenCalledWith('cc1');
         done();
       });
     });
@@ -317,8 +317,8 @@ describe('MockApiService', () => {
       collectiveGroupDataSpy.addMemberToGroup.and.returnValue(of(updatedGroup));
 
       service.addMemberToGroup('cc1', member).subscribe(group => {
-        expect(group).toEqual(updatedGroup);
-        expect(collectiveGroupDataSpy.addMemberToGroup).toHaveBeenCalledWith('cc1', member);
+        (expect(group) as any).toEqual(updatedGroup);
+        (expect(collectiveGroupDataSpy.addMemberToGroup) as any).toHaveBeenCalledWith('cc1', member);
         done();
       });
     });
@@ -330,9 +330,9 @@ describe('MockApiService', () => {
       const startTime = Date.now();
       service.deliverUnitToGroup('cc1').subscribe(group => {
         const endTime = Date.now();
-        expect(group).toEqual(updatedGroup);
-        expect(endTime - startTime).toBeGreaterThan(1000); // Should use slow delay
-        expect(collectiveGroupDataSpy.deliverUnitToGroup).toHaveBeenCalledWith('cc1');
+        (expect(group) as any).toEqual(updatedGroup);
+        (expect(endTime - startTime) as any).toBeGreaterThan(1000); // Should use slow delay
+        (expect(collectiveGroupDataSpy.deliverUnitToGroup) as any).toHaveBeenCalledWith('cc1');
         done();
       });
     });
@@ -350,15 +350,15 @@ describe('MockApiService', () => {
       service.createCotizacionScenario(scenarioData).subscribe(scenario => {
         const endTime = Date.now();
         
-        expect(scenario.clientName).toBe('Juan Pérez');
-        expect(scenario.flow).toBe(BusinessFlow.VentaPlazo);
-        expect(scenario.market).toBe('aguascalientes');
-        expect(scenario.stage).toBe('COTIZACION');
-        expect(scenario.seniorSummary.title).toBe('Cotización para Juan Pérez');
-        expect(scenario.seniorSummary.keyMetrics.length).toBe(3);
-        expect(scenario.seniorSummary.timeline.length).toBe(2);
-        expect(scenario.seniorSummary.whatsAppMessage).toContain('cotización');
-        expect(endTime - startTime).toBeGreaterThan(1000); // Should use slow delay
+        (expect(scenario.clientName) as any).toBe('Juan Pérez');
+        (expect(scenario.flow) as any).toBe(BusinessFlow.VentaPlazo);
+        (expect(scenario.market) as any).toBe('aguascalientes');
+        (expect(scenario.stage) as any).toBe('COTIZACION');
+        (expect(scenario.seniorSummary.title) as any).toBe('Cotización para Juan Pérez');
+        (expect(scenario.seniorSummary.keyMetrics.length) as any).toBe(3);
+        (expect(scenario.seniorSummary.timeline.length) as any).toBe(2);
+        (expect(scenario.seniorSummary.whatsAppMessage) as any).toContain('cotización');
+        (expect(endTime - startTime) as any).toBeGreaterThan(1000); // Should use slow delay
         done();
       });
     });
@@ -371,14 +371,14 @@ describe('MockApiService', () => {
       };
 
       service.createSimulacionScenario(scenarioData).subscribe(scenario => {
-        expect(scenario.clientName).toBe('María López');
-        expect(scenario.flow).toBe(BusinessFlow.AhorroProgramado);
-        expect(scenario.market).toBe('edomex');
-        expect(scenario.stage).toBe('SIMULACION');
-        expect(scenario.seniorSummary.title).toBe('Simulación para María López');
-        expect(scenario.seniorSummary.keyMetrics.length).toBe(3);
-        expect(scenario.seniorSummary.timeline.length).toBe(2);
-        expect(scenario.seniorSummary.whatsAppMessage).toContain('plan de ahorro');
+        (expect(scenario.clientName) as any).toBe('María López');
+        (expect(scenario.flow) as any).toBe(BusinessFlow.AhorroProgramado);
+        (expect(scenario.market) as any).toBe('edomex');
+        (expect(scenario.stage) as any).toBe('SIMULACION');
+        (expect(scenario.seniorSummary.title) as any).toBe('Simulación para María López');
+        (expect(scenario.seniorSummary.keyMetrics.length) as any).toBe(3);
+        (expect(scenario.seniorSummary.timeline.length) as any).toBe(2);
+        (expect(scenario.seniorSummary.whatsAppMessage) as any).toContain('plan de ahorro');
         done();
       });
     });
@@ -387,7 +387,7 @@ describe('MockApiService', () => {
   describe('Search and Analytics', () => {
     it('should perform global search with results structure', (done) => {
       service.globalSearch('test').subscribe(results => {
-        expect(results).toEqual({
+        (expect(results) as any).toEqual({
           clients: [],
           ecosystems: [],
           groups: [],
@@ -399,23 +399,23 @@ describe('MockApiService', () => {
 
     it('should get dashboard stats with complete data', (done) => {
       service.getDashboardStats().subscribe(stats => {
-        expect(stats.clients).toEqual({
+        (expect(stats.clients) as any).toEqual({
           total: 25,
           active: 18,
           new_this_month: 5
         });
-        expect(stats.ecosystems).toEqual({
+        (expect(stats.ecosystems) as any).toEqual({
           total: 2,
           active: 1,
           pending: 1
         });
-        expect(stats.groups).toEqual({
+        (expect(stats.groups) as any).toEqual({
           total: 4,
           active: 3,
           units_delivered: 6
         });
-        expect(stats.recentActivity.length).toBe(3);
-        expect(stats.recentActivity[0]).toEqual(jasmine.objectContaining({
+        (expect(stats.recentActivity.length) as any).toBe(3);
+        (expect(stats.recentActivity[0]) as any).toEqual(jasmine.objectContaining({
           type: jasmine.any(String),
           message: jasmine.any(String),
           timestamp: jasmine.any(Date)
@@ -429,7 +429,7 @@ describe('MockApiService', () => {
     it('should simulate network error', (done) => {
       service.simulateError('network').subscribe({
         error: (error) => {
-          expect(error.message).toBe('Network error - no internet connection');
+          (expect(error.message) as any).toBe('Network error - no internet connection');
           expect((error as any).status).toBe(0);
           done();
         }
@@ -439,7 +439,7 @@ describe('MockApiService', () => {
     it('should simulate server error', (done) => {
       service.simulateError('server').subscribe({
         error: (error) => {
-          expect(error.message).toBe('Internal server error');
+          (expect(error.message) as any).toBe('Internal server error');
           expect((error as any).status).toBe(500);
           done();
         }
@@ -449,7 +449,7 @@ describe('MockApiService', () => {
     it('should simulate validation error', (done) => {
       service.simulateError('validation').subscribe({
         error: (error) => {
-          expect(error.message).toBe('Validation error - invalid data provided');
+          (expect(error.message) as any).toBe('Validation error - invalid data provided');
           expect((error as any).status).toBe(422);
           done();
         }
@@ -461,8 +461,8 @@ describe('MockApiService', () => {
       service.simulateError('timeout').subscribe({
         error: (error) => {
           const elapsedTime = Date.now() - startTime;
-          expect(error.message).toBe('Request timeout');
-          expect(elapsedTime).toBeGreaterThan(7000); // Should take at least 8 seconds
+          (expect(error.message) as any).toBe('Request timeout');
+          (expect(elapsedTime) as any).toBeGreaterThan(7000); // Should take at least 8 seconds
           done();
         }
       });
@@ -471,7 +471,7 @@ describe('MockApiService', () => {
     it('should simulate unknown error by default', (done) => {
       service.simulateError('unknown_type' as any).subscribe({
         error: (error) => {
-          expect(error.message).toBe('Unknown error occurred');
+          (expect(error.message) as any).toBe('Unknown error occurred');
           expect((error as any).status).toBe(500);
           done();
         }
@@ -482,16 +482,16 @@ describe('MockApiService', () => {
   describe('Utility Methods', () => {
     it('should perform health check', (done) => {
       service.healthCheck().subscribe(health => {
-        expect(health.status).toBe('healthy');
-        expect(health.timestamp).toBeInstanceOf(Date);
-        expect(health.version).toBe('1.0.0');
+        (expect(health.status) as any).toBe('healthy');
+        (expect(health.timestamp) as any).toBeInstanceOf(Date);
+        (expect(health.version) as any).toBe('1.0.0');
         done();
       });
     });
 
     it('should get server time', (done) => {
       service.getServerTime().subscribe(time => {
-        expect(time.timestamp).toBeInstanceOf(Date);
+        (expect(time.timestamp) as any).toBeInstanceOf(Date);
         done();
       });
     });
@@ -500,26 +500,26 @@ describe('MockApiService', () => {
       const file = new File(['test content'], 'test.txt', { type: 'text/plain' });
 
       service.uploadFile(file).subscribe(result => {
-        expect(result.url).toContain('conductores.com/uploads');
-        expect(result.url).toContain('test.txt');
-        expect(result.size).toBe(file.size);
-        expect(result.type).toBe('text/plain');
+        (expect(result.url) as any).toContain('conductores.com/uploads');
+        (expect(result.url) as any).toContain('test.txt');
+        (expect(result.size) as any).toBe(file.size);
+        (expect(result.type) as any).toBe('text/plain');
         done();
       });
     });
 
     it('should export data as JSON', (done) => {
       service.exportData('clients', 'json').subscribe(blob => {
-        expect(blob).toBeInstanceOf(Blob);
-        expect(blob.type).toBe('application/json');
+        (expect(blob) as any).toBeInstanceOf(Blob);
+        (expect(blob.type) as any).toBe('application/json');
         
         const reader = new FileReader();
         reader.onload = () => {
           const content = reader.result as string;
           const data = JSON.parse(content);
-          expect(data.exported).toBe(true);
-          expect(data.type).toBe('clients');
-          expect(data.format).toBe('json');
+          (expect(data.exported) as any).toBe(true);
+          (expect(data.type) as any).toBe('clients');
+          (expect(data.format) as any).toBe('json');
           done();
         };
         reader.readAsText(blob);
@@ -528,14 +528,14 @@ describe('MockApiService', () => {
 
     it('should export data as CSV', (done) => {
       service.exportData('ecosystems', 'csv').subscribe(blob => {
-        expect(blob).toBeInstanceOf(Blob);
-        expect(blob.type).toBe('text/csv');
+        (expect(blob) as any).toBeInstanceOf(Blob);
+        (expect(blob.type) as any).toBe('text/csv');
         
         const reader = new FileReader();
         reader.onload = () => {
           const content = reader.result as string;
-          expect(content).toContain('exported,true');
-          expect(content).toContain('type,ecosystems');
+          (expect(content) as any).toContain('exported,true');
+          (expect(content) as any).toContain('type,ecosystems');
           done();
         };
         reader.readAsText(blob);
@@ -544,7 +544,7 @@ describe('MockApiService', () => {
 
     it('should use default JSON format for export', (done) => {
       service.exportData('groups').subscribe(blob => {
-        expect(blob.type).toBe('application/json');
+        (expect(blob.type) as any).toBe('application/json');
         done();
       });
     });
@@ -557,12 +557,12 @@ describe('MockApiService', () => {
       for (let i = 0; i < 10; i++) {
         const delay = service['getNetworkDelay']();
         delays.push(delay);
-        expect([200, 500, 1200]).toContain(delay);
+        (expect([200, 500, 1200]) as any).toContain(delay);
       }
       
       // Should have some variation (not all the same)
       const uniqueDelays = new Set(delays);
-      expect(uniqueDelays.size).toBeGreaterThan(1);
+      (expect(uniqueDelays.size) as any).toBeGreaterThan(1);
     });
 
     it('should clone data deeply in mockApi', (done) => {
@@ -572,7 +572,7 @@ describe('MockApiService', () => {
       };
 
       service['mockApi'](originalData, 0).subscribe(result => {
-        expect(result).toEqual(originalData);
+        (expect(result) as any).toEqual(originalData);
         expect(result).not.toBe(originalData); // Should be different object
         expect(result.nested).not.toBe(originalData.nested); // Deep clone
         done();
@@ -590,8 +590,8 @@ describe('MockApiService', () => {
 
       service['mockApi']('test data', 0).subscribe({
         error: (error) => {
-          expect(console.error).toHaveBeenCalledWith('MockApi Error:', jasmine.any(Error));
-          expect(error.message).toBe('Parse error');
+          (expect(console.error) as any).toHaveBeenCalledWith('MockApi Error:', jasmine.any(Error));
+          (expect(error.message) as any).toBe('Parse error');
           // Restore original method
           (service as any).deepCloneWithDates = originalMethod;
           done();
@@ -608,8 +608,8 @@ describe('MockApiService', () => {
       const result = await service.delay(testData, 100);
       const endTime = Date.now();
       
-      expect(result).toEqual(testData);
-      expect(endTime - startTime).toBeGreaterThanOrEqual(100);
+      (expect(result) as any).toEqual(testData);
+      (expect(endTime - startTime) as any).toBeGreaterThanOrEqual(100);
     });
 
     it('should use default delay if not specified', async () => {
@@ -619,8 +619,8 @@ describe('MockApiService', () => {
       const result = await service.delay(testData);
       const endTime = Date.now();
       
-      expect(result).toEqual(testData);
-      expect(endTime - startTime).toBeGreaterThanOrEqual(500); // DEFAULT_DELAY
+      (expect(result) as any).toEqual(testData);
+      (expect(endTime - startTime) as any).toBeGreaterThanOrEqual(500); // DEFAULT_DELAY
     });
   });
 
@@ -630,7 +630,7 @@ describe('MockApiService', () => {
 
       service.getClients().subscribe({
         error: (error) => {
-          expect(error.message).toBe('Client service error');
+          (expect(error.message) as any).toBe('Client service error');
           done();
         }
       });
@@ -641,7 +641,7 @@ describe('MockApiService', () => {
 
       service.getEcosystems().subscribe({
         error: (error) => {
-          expect(error.message).toBe('Ecosystem service error');
+          (expect(error.message) as any).toBe('Ecosystem service error');
           done();
         }
       });
@@ -652,7 +652,7 @@ describe('MockApiService', () => {
 
       service.getCollectiveGroups().subscribe({
         error: (error) => {
-          expect(error.message).toBe('Group service error');
+          (expect(error.message) as any).toBe('Group service error');
           done();
         }
       });
@@ -670,8 +670,8 @@ describe('MockApiService', () => {
       service.createCotizacionScenario(scenarioData).subscribe(scenario1 => {
         service.createCotizacionScenario(scenarioData).subscribe(scenario2 => {
           expect(scenario1.id).not.toBe(scenario2.id);
-          expect(scenario1.id).toMatch(/^scenario-\d+$/);
-          expect(scenario2.id).toMatch(/^scenario-\d+$/);
+          (expect(scenario1.id) as any).toMatch(/^scenario-\d+$/);
+          (expect(scenario2.id) as any).toMatch(/^scenario-\d+$/);
           done();
         });
       });
@@ -685,18 +685,18 @@ describe('MockApiService', () => {
       };
 
       service.createSimulacionScenario(scenarioData).subscribe(scenario => {
-        expect(scenario.clientName).toBe(scenarioData.clientName);
-        expect(scenario.flow).toBe(scenarioData.flow);
-        expect(scenario.market).toBe(scenarioData.market);
-        expect(scenario.stage).toBe('SIMULACION');
+        (expect(scenario.clientName) as any).toBe(scenarioData.clientName);
+        (expect(scenario.flow) as any).toBe(scenarioData.flow);
+        (expect(scenario.market) as any).toBe(scenarioData.market);
+        (expect(scenario.stage) as any).toBe('SIMULACION');
         
         // Verify senior summary structure
-        expect(scenario.seniorSummary).toBeDefined();
-        expect(scenario.seniorSummary.title).toBeTruthy();
-        expect(scenario.seniorSummary.description).toBeInstanceOf(Array);
-        expect(scenario.seniorSummary.keyMetrics).toBeInstanceOf(Array);
-        expect(scenario.seniorSummary.timeline).toBeInstanceOf(Array);
-        expect(scenario.seniorSummary.whatsAppMessage).toBeTruthy();
+        (expect(scenario.seniorSummary) as any).toBeDefined();
+        (expect(scenario.seniorSummary.title) as any).toBeTruthy();
+        (expect(scenario.seniorSummary.description) as any).toBeInstanceOf(Array);
+        (expect(scenario.seniorSummary.keyMetrics) as any).toBeInstanceOf(Array);
+        (expect(scenario.seniorSummary.timeline) as any).toBeInstanceOf(Array);
+        (expect(scenario.seniorSummary.whatsAppMessage) as any).toBeTruthy();
         
         done();
       });

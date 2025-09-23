@@ -57,9 +57,9 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
 
-    expect(fixture.componentInstance).toBeTruthy();
-    expect(initSpy).toHaveBeenCalled();
-    expect(fixture.componentInstance.isDarkMode).toBeFalse();
+    (expect(fixture.componentInstance) as any).toBeTruthy();
+    (expect(initSpy) as any).toHaveBeenCalled();
+    (expect(fixture.componentInstance.isDarkMode) as any).toBe(false);
   });
 
   it('should toggle dark mode using design tokens API', () => {
@@ -74,8 +74,8 @@ describe('AppComponent', () => {
 
     component.toggleDarkMode();
 
-    expect(toggleSpy).toHaveBeenCalled();
-    expect(component.isDarkMode).toBeTrue();
+    (expect(toggleSpy) as any).toHaveBeenCalled();
+    (expect(component.isDarkMode) as any).toBe(true);
   });
 
   it('should allow explicit dark mode setting', () => {
@@ -89,8 +89,8 @@ describe('AppComponent', () => {
 
     component.setDarkMode(true);
 
-    expect(setDarkSpy).toHaveBeenCalledWith(true);
-    expect(component.isDarkMode).toBeTrue();
+    (expect(setDarkSpy) as any).toHaveBeenCalledWith(true);
+    (expect(component.isDarkMode) as any).toBe(true);
   });
 
   it('should render accessibility landmarks', () => {
@@ -101,9 +101,9 @@ describe('AppComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('a.skip-link')).withContext('Skip link missing').toBeTruthy();
-    expect(compiled.querySelector('main[role="main"]')).withContext('Main landmark missing').toBeTruthy();
-    expect(compiled.querySelector('aside nav')).withContext('Sidebar nav missing').toBeTruthy();
+    (expect(compiled.querySelector('a.skip-link')) as any).toBeTruthy();
+    (expect(compiled.querySelector('main[role="main"]')) as any).toBeTruthy();
+    (expect(compiled.querySelector('aside nav')) as any).toBeTruthy();
   });
 
   it('should render router content inside router-outlet', fakeAsync(() => {
@@ -118,6 +118,6 @@ describe('AppComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('[data-testid="dummy"]')?.textContent).toContain('Dummy');
+    (expect(compiled.querySelector('[data-testid="dummy"]')?.textContent) as any).toContain('Dummy');
   }));
 });

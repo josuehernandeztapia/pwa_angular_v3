@@ -4,6 +4,8 @@ import { LucideAngularModule } from 'lucide-angular';
 import { BottomNavBarComponent } from './components/shared/bottom-nav-bar/bottom-nav-bar.component';
 import { NavigationComponent } from './components/shared/navigation/navigation.component';
 import { UpdateBannerComponent } from './components/shared/update-banner/update-banner.component';
+import { OfflineIndicatorComponent } from './components/shared/offline-indicator/offline-indicator.component';
+import { PwaInstallPromptComponent } from './components/shared/pwa-install-prompt/pwa-install-prompt.component';
 import { MediaPermissionsService } from './services/media-permissions.service';
 import { SwUpdateService } from './services/sw-update.service';
 import { theme } from './styles/design-tokens';
@@ -11,7 +13,7 @@ import { theme } from './styles/design-tokens';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavigationComponent, BottomNavBarComponent, UpdateBannerComponent, LucideAngularModule],
+  imports: [RouterOutlet, NavigationComponent, BottomNavBarComponent, UpdateBannerComponent, OfflineIndicatorComponent, PwaInstallPromptComponent, LucideAngularModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

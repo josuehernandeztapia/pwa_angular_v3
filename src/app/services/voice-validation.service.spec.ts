@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { ApiConfigService } from './api-config.service';
 import { VoiceValidationService } from './voice-validation.service';
 import { ConsolidatedAVIResult } from './voice-validation.service';
+import { AVI_THRESHOLDS, ThresholdHelpers } from './voice-validation.config';
 
 class ApiConfigServiceStub {
   config$ = of(null);
@@ -65,84 +66,90 @@ describe('VoiceValidationService', () => {
     service = TestBed.inject(VoiceValidationService);
   });
 
-  // FIXED: Use correct thresholds from TECHNICAL_GUIDE.md (<65, 65-79, ≥80)
+  // Use shared configuration for single source of truth
   const buildAviResult = (score: number, protection = true): ConsolidatedAVIResult => ({
     final_score: score,
-    risk_level: score >= 80 ? 'LOW' : score >= 65 ? 'MEDIUM' : 'HIGH',
+    risk_level: ThresholdHelpers.getRiskLevel(score),
     scientific_engine_score: score,
     heuristic_engine_score: score,
     consensus_weight: 0.8,
     protection_eligible: protection,
-    decision: score >= 80 ? 'GO' : score >= 65 ? 'REVIEW' : 'NO-GO',
+    decision: ThresholdHelpers.getDecision(score),
     detailed_breakdown: [],
     red_flags: [],
     recommendations: []
   });
 
-  // FIXED: Test NO-GO case (score < 65)
-  it('should classify scores below 65 as NO-GO', () => {
-    const noGo = service.calculateHASEWithAVI(60, 55, buildAviResult(60, false));
-    expect(noGo.decision).toBe('NO-GO');
-    expect(noGo.final_score).toBeLessThan(65);
+  // Test NO-GO case (score ≤ 550)
+  it('should classify scores ≤ 550 as NO-GO', () => {
+    const noGo = service.calculateHASEWithAVI(500, 450, buildAviResult(500, false));
+    (expect(noGo.decision) as any).toBe('NO-GO');
+    (expect(noGo.final_score) as any).toBeLessThanOrEqual(AVI_THRESHOLDS.NOGO_MAX);
   });
 
-  // FIXED: Test boundary case (exactly 64 → NO-GO)
-  it('should classify score 64 as NO-GO (boundary)', () => {
-    const boundary = service.calculateHASEWithAVI(64, 60, buildAviResult(64, true));
-    expect(boundary.decision).toBe('NO-GO');
-    expect(boundary.final_score).toBe(64);
+  // Test boundary case (exactly 550 → NO-GO)
+  it('should classify score 550 as NO-GO (boundary)', () => {
+    const boundary = service.calculateHASEWithAVI(550, 500, buildAviResult(550, true));
+    (expect(boundary.decision) as any).toBe('NO-GO');
+    (expect(boundary.final_score) as any).toBe(550);
   });
 
-  // FIXED: Test REVIEW range (65-79)
-  it('should classify scores between 65-79 as REVIEW', () => {
-    const review65 = service.calculateHASEWithAVI(65, 60, buildAviResult(65, true));
-    expect(review65.decision).toBe('REVIEW');
-    expect(review65.final_score).toBe(65);
+  // Test REVIEW range (551-779)
+  it('should classify scores between 551-779 as REVIEW', () => {
+    const review551 = service.calculateHASEWithAVI(551, 500, buildAviResult(551, true));
+    (expect(review551.decision) as any).toBe('REVIEW');
+    (expect(review551.final_score) as any).toBe(551);
 
-    const review70 = service.calculateHASEWithAVI(70, 68, buildAviResult(70, true));
-    expect(review70.decision).toBe('REVIEW');
-    expect(review70.final_score).toBe(70);
+    const review650 = service.calculateHASEWithAVI(650, 600, buildAviResult(650, true));
+    (expect(review650.decision) as any).toBe('REVIEW');
+    (expect(review650.final_score) as any).toBe(650);
 
-    const review79 = service.calculateHASEWithAVI(79, 75, buildAviResult(79, true));
-    expect(review79.decision).toBe('REVIEW');
-    expect(review79.final_score).toBe(79);
+    const review779 = service.calculateHASEWithAVI(779, 750, buildAviResult(779, true));
+    (expect(review779.decision) as any).toBe('REVIEW');
+    (expect(review779.final_score) as any).toBe(779);
   });
 
-  // FIXED: Test GO case (score ≥ 80)
-  it('should classify scores >= 80 as GO when protection eligible', () => {
-    const go80 = service.calculateHASEWithAVI(80, 78, buildAviResult(80, true));
-    expect(go80.decision).toBe('GO');
-    expect(go80.protection_eligible).toBeTrue();
-    expect(go80.final_score).toBe(80);
+  // Test GO case (score ≥ 780)
+  it('should classify scores >= 780 as GO when protection eligible', () => {
+    const go780 = service.calculateHASEWithAVI(780, 750, buildAviResult(780, true));
+    (expect(go780.decision) as any).toBe('GO');
+    (expect(go780.protection_eligible) as any).toBeTrue();
+    (expect(go780.final_score) as any).toBe(780);
 
-    const go85 = service.calculateHASEWithAVI(85, 82, buildAviResult(85, true));
-    expect(go85.decision).toBe('GO');
-    expect(go85.protection_eligible).toBeTrue();
-    expect(go85.final_score).toBe(85);
+    const go850 = service.calculateHASEWithAVI(850, 820, buildAviResult(850, true));
+    (expect(go850.decision) as any).toBe('GO');
+    (expect(go850.protection_eligible) as any).toBeTrue();
+    (expect(go850.final_score) as any).toBe(850);
   });
 
-  // FIXED: Test protection eligibility downgrade
+  // Test protection eligibility downgrade
   it('should downgrade GO to REVIEW when protection not eligible', () => {
-    const downgraded = service.calculateHASEWithAVI(85, 82, buildAviResult(85, false));
-    expect(downgraded.decision).toBe('REVIEW');
-    expect(downgraded.protection_eligible).toBeFalse();
-    expect(downgraded.final_score).toBe(85);
+    const downgraded = service.calculateHASEWithAVI(850, 820, buildAviResult(850, false));
+    (expect(downgraded.decision) as any).toBe('REVIEW');
+    (expect(downgraded.protection_eligible) as any).toBeFalse();
+    (expect(downgraded.final_score) as any).toBe(850);
+  });
+
+  it('should have consistent thresholds (NO-GO < REVIEW < GO)', () => {
+    (expect(AVI_THRESHOLDS.NOGO_MAX) as any).toBeLessThan(AVI_THRESHOLDS.REVIEW_MIN);
+    (expect(AVI_THRESHOLDS.REVIEW_MAX) as any).toBeLessThan(AVI_THRESHOLDS.GO_MIN);
+    (expect(AVI_THRESHOLDS.REVIEW_MIN) as any).toBe(AVI_THRESHOLDS.NOGO_MAX + 1);
   });
 
   it('should flag long responses in heuristic fallback', () => {
     const longAudio = new Blob([new Uint8Array(16000 * 6)]); // ~6s duration
     const fallback = (service as any).applyHeuristicFallback(longAudio, 'test-question');
 
-    expect(fallback.decision).toBe('REVIEW');
-    expect(fallback.fallback).toBeTrue();
-    expect(fallback.flags).toContain('response_too_long');
+    (expect(fallback.decision) as any).toBe('REVIEW');
+    (expect(fallback.fallback) as any).toBeTrue();
+    (expect(fallback.flags) as any).toContain('response_too_long');
   });
 
   it('should flag suspiciously short responses in heuristic fallback', () => {
     const shortAudio = new Blob([new Uint8Array(1000)]); // <2s duration
     const fallback = (service as any).applyHeuristicFallback(shortAudio, 'test-question');
 
-    expect(fallback.flags).toContain('response_too_short');
-    expect(fallback.decision).toBe('REVIEW');
+    (expect(fallback.flags) as any).toContain('response_too_short');
+    (expect(fallback.decision) as any).toBe('REVIEW');
   });
 });
