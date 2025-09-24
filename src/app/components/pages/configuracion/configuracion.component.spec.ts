@@ -22,9 +22,6 @@ describe('ConfiguracionComponent', () => {
   });
 
   it('should create component with initial configuration', () => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     expect(component).toBeTruthy();
     expect(component.config().mode).toBe('cotizador');
@@ -33,9 +30,6 @@ describe('ConfiguracionComponent', () => {
   });
 
   it('should update mode and trigger recalculation', fakeAsync(() => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     component.setMode('simulador');
     expect(component.config().mode).toBe('simulador');
@@ -46,9 +40,6 @@ describe('ConfiguracionComponent', () => {
   }));
 
   it('should validate precio field and register errors when invalid', fakeAsync(() => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     component.updateConfig('precio', createInputEvent(0));
     expect(component.config().errors['precio']).toBe('El precio debe ser mayor a 0');
@@ -60,9 +51,6 @@ describe('ConfiguracionComponent', () => {
   }));
 
   it('should update select-based configuration fields correctly', fakeAsync(() => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     component.updateConfigFromSelect('plazo', createSelectEvent('48'));
     expect(component.config().plazo).toBe(48);
@@ -75,9 +63,6 @@ describe('ConfiguracionComponent', () => {
   }));
 
   it('should select package and update financial results', fakeAsync(() => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     component.selectPackage('premium');
     expect(component.config().selectedPackage).toBe('premium');
@@ -89,9 +74,6 @@ describe('ConfiguracionComponent', () => {
   }));
 
   it('should compute consistent financial results for valid configuration', fakeAsync(() => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     component.updateConfig('precio', createInputEvent(300000));
     component.updateConfig('enganche', createInputEvent(25));
@@ -113,4 +95,3 @@ describe('ConfiguracionComponent', () => {
   }));
 });
 
-// removed by clean-audit

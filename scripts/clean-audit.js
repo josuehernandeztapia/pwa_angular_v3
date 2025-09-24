@@ -3,7 +3,6 @@
   Clean Audit Script for Conductores PWA
   - Scans src/ for TODO, FIXME, HACK, DEPRECATED, console.log, mock/demo refs
   - Lists files > 500KB under src/
-  - With --fix: removes matching lines (replaces with // removed by clean-audit)
   - Emits Markdown report to stdout
   - Exit codes: 0 if clean or fixed with --fix, 1 if issues found without --fix
 */
@@ -84,14 +83,11 @@ function applyFixes(filePath, lines, findings) {
     const lineNumber = idx + 1;
     if (linesToReplace.has(lineNumber)) {
       modified = true;
-      return '// removed by clean-audit';
     }
     return line;
   });
   if (modified) {
     // Ensure a trailing audit comment trail (once per file)
-    if (newLines.length === 0 || !/removed by clean-audit/.test(newLines[newLines.length - 1])) {
-      newLines.push('// removed by clean-audit');
     }
     fs.writeFileSync(filePath, newLines.join('\n'), 'utf8');
   }

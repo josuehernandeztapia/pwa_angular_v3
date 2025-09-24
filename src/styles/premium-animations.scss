@@ -72,19 +72,18 @@
 @keyframes paymentSuccess {
   0% {
     transform: scale(1) rotateY(0deg);
-    background: var(--glass-bg);
   }
   30% {
     transform: scale(1.1) rotateY(180deg);
-    background: linear-gradient(135deg, #22c55e, #16a34a);
+    background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   }
   70% {
     transform: scale(1.05) rotateY(360deg);
-    background: linear-gradient(135deg, #22c55e, #16a34a);
+    background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   }
   100% {
     transform: scale(1) rotateY(360deg);
-    background: linear-gradient(135deg, #22c55e, #16a34a);
+    background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   }
 }
 

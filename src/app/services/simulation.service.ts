@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { Client, EventLog, PaymentLinkDetails, Actor, EventType, Document } from '../models/types';
-// removed by clean-audit
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,6 @@ export class SimulationService {
 
   // Port exacto de generatePaymentLink desde React líneas 431-450
   generatePaymentLink(clientId: string, amount: number): Promise<PaymentLinkDetails> {
-// removed by clean-audit
     
     if (amount <= 20000) {
       return this.mockApi.delay({
@@ -116,7 +114,6 @@ export class SimulationService {
   async simulateProtectionDemo(baseQuote: { amountToFinance: number; monthlyPayment: number; term: number }, monthsToSimulate: number): Promise<any[]> {
     const { amountToFinance: P, monthlyPayment: M, term: originalTerm } = baseQuote;
     
-// removed by clean-audit
     const r = 0.255 / 12; 
     
     // Simulate what protection looks like 1 year (12 months) into the loan
@@ -196,4 +193,3 @@ export class SimulationService {
     return P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
   }
 }
-// removed by clean-audit

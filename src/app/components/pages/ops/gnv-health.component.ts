@@ -74,7 +74,6 @@ export class GnvHealthComponent implements OnInit {
       this.uploadStatus = 'idle';
     } else {
       this.selectedFile = null;
-// removed by clean-audit
     }
   }
 
@@ -86,7 +85,6 @@ export class GnvHealthComponent implements OnInit {
     // Simular procesamiento de CSV
     setTimeout(() => {
       this.uploadStatus = 'success';
-// removed by clean-audit
 
       // Reset después de 3 segundos
       setTimeout(() => {
@@ -100,4 +98,3 @@ export class GnvHealthComponent implements OnInit {
   }
 }
 
-// removed by clean-audit

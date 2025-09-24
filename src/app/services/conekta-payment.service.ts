@@ -122,7 +122,6 @@ export class ConektaPaymentService {
 
   private async loadConektaSDK(): Promise<void> {
     if (this.isLoaded) return;
-// removed by clean-audit
     const sdk = getConekta();
     if (typeof sdk !== 'undefined' && sdk?.Token?.create) {
       try {
@@ -436,7 +435,6 @@ export class ConektaPaymentService {
       // keep default
     }
     
-// removed by clean-audit
     return throwError(() => new Error(errorMessage));
   }
 
@@ -450,7 +448,6 @@ export class ConektaPaymentService {
       }
       return false;
     } catch (e) {
-// removed by clean-audit
       return false;
     }
   }
@@ -474,4 +471,3 @@ export class ConektaPaymentService {
     });
   }
 }
-// removed by clean-audit

@@ -58,7 +58,7 @@ import { RouterModule, Router } from '@angular/router';
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       padding: 20px;
     }
 
@@ -139,12 +139,12 @@ import { RouterModule, Router } from '@angular/router';
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #4299e1, #3182ce);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #3182ce, #2c5282);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(66, 153, 225, 0.3);
     }
@@ -246,15 +246,12 @@ export class NotFoundComponent {
 
   openHelp(): void {
     // Open help documentation or modal
-// removed by clean-audit
     // This would typically open a help modal or navigate to help section
   }
 
   contactSupport(): void {
     // Open support contact form or redirect to support
-// removed by clean-audit
     // This would typically open a support chat or contact form
     window.open('mailto:soporte@conductores.com?subject=Ayuda con navegación', '_blank');
   }
 }
-// removed by clean-audit

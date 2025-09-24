@@ -37,10 +37,8 @@ describe('WhatsappService', () => {
     service = TestBed.inject(WhatsappService);
     httpMock = TestBed.inject(HttpTestingController);
     
-// removed by clean-audit
     spyOnProperty(environment, 'apiUrl', 'get').and.returnValue(mockEnvironment.apiUrl);
     
-// removed by clean-audit
     (globalThis as any).process = {
       env: {
         'WHATSAPP_PHONE_NUMBER_ID': mockPhoneNumberId,
@@ -49,13 +47,11 @@ describe('WhatsappService', () => {
       }
     };
     
-// removed by clean-audit
     spyOn(localStorage, 'getItem').and.returnValue('test-auth-token');
   });
 
   afterEach(() => {
     httpMock.verify();
-// removed by clean-audit
     delete (globalThis as any).process;
   });
 
@@ -714,4 +710,3 @@ describe('WhatsappService', () => {
   });
 });
 
-// removed by clean-audit

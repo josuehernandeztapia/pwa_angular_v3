@@ -56,7 +56,6 @@ export class ConfigurationService {
         this.configurationSubject.next(config);
       },
       error: (error) => {
-// removed by clean-audit
         const config = this.getDefaultConfiguration();
         this.configurationSubject.next(config);
       }
@@ -1132,4 +1131,3 @@ export class ConfigurationService {
     };
   }
 }
-// removed by clean-audit

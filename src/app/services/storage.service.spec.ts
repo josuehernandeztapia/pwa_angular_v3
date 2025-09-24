@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { StorageService } from './storage.service';
 
-// removed by clean-audit
 const mockIDBDatabase = {
   createObjectStore: jasmine.createSpy('createObjectStore').and.returnValue({
     createIndex: jasmine.createSpy('createIndex')
@@ -38,11 +37,9 @@ describe('StorageService', () => {
   let offlineHandler: any;
 
   beforeEach(async () => {
-// removed by clean-audit
     if ((globalThis as any).indexedDB && typeof (globalThis as any).indexedDB.open === 'function') {
       mockIndexedDB = spyOn((globalThis as any).indexedDB, 'open').and.returnValue(mockIDBRequest as any);
     } else {
-// removed by clean-audit
       mockIndexedDB = jasmine.createSpy('indexedDB.open').and.returnValue(mockIDBRequest as any);
       try {
         Object.defineProperty(globalThis as any, 'indexedDB', {
@@ -54,13 +51,11 @@ describe('StorageService', () => {
       }
     }
     
-// removed by clean-audit
     Object.defineProperty(navigator, 'onLine', {
       writable: true,
       value: true
     });
     
-// removed by clean-audit
     spyOn(window, 'addEventListener').and.callFake(((event: any, listener: any) => {
       if (event === 'online') {
         onlineHandler = listener;
@@ -646,4 +641,3 @@ describe('StorageService', () => {
   });
 });
 
-// removed by clean-audit

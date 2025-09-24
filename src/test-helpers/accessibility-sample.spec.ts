@@ -7,8 +7,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, DebugElement } from '@angular/core';
 import { AccessibilityTester, AccessibilityTestUtils, testComponentAccessibility } from './accessibility-test-framework';
-// removed by clean-audit
-// removed by clean-audit
 
 @Component({
   template: `
@@ -134,4 +132,3 @@ describe('Accessibility Testing Framework', () => {
     });
   });
 });
-// removed by clean-audit

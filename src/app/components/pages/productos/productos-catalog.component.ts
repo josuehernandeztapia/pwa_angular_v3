@@ -319,7 +319,7 @@ interface ProductCatalogItem {
       position: absolute;
       top: 16px;
       right: 16px;
-      background: linear-gradient(135deg, #f6ad55, #ed8936);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
       padding: 6px 12px;
       border-radius: 20px;
@@ -505,12 +505,12 @@ interface ProductCatalogItem {
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #48bb78, #38a169);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #38a169, #2f855a);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       transform: translateY(-1px);
     }
 
@@ -624,7 +624,6 @@ export class ProductosCatalogComponent implements OnInit {
       
     } catch (error) {
       this.toast.error('Error al cargar el catálogo de productos');
-// removed by clean-audit
     } finally {
       this.isLoading = false;
     }
@@ -766,7 +765,6 @@ export class ProductosCatalogComponent implements OnInit {
   }
 
   simulateDemo(): void {
-// removed by clean-audit
   }
 
   viewDetails(productId: string): void {
@@ -781,4 +779,3 @@ export class ProductosCatalogComponent implements OnInit {
     // Router navigation would go here
   }
 }
-// removed by clean-audit

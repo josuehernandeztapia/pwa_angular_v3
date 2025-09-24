@@ -147,7 +147,6 @@ interface EventGroup {
                       <div class="details-grid grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Payment Details -->
                         <div *ngIf="event.details?.paymentMethod" class="detail-item">
-// removed by clean-audit
                           <span class="detail-value text-white text-sm font-medium">{{ event.details?.paymentMethod }}</span>
                         </div>
                         
@@ -684,19 +683,15 @@ export class EventLogComponent implements OnInit {
   }
 
   viewEventDetails(event: EventLog): void {
-// removed by clean-audit
   }
 
   downloadReceipt(event: EventLog): void {
-// removed by clean-audit
   }
 
   reverseAction(event: EventLog): void {
-// removed by clean-audit
   }
 
   showEventActions(event: EventLog): void {
-// removed by clean-audit
   }
 
   loadMoreEvents(): void {
@@ -708,4 +703,3 @@ export class EventLogComponent implements OnInit {
     }, 1000);
   }
 }
-// removed by clean-audit

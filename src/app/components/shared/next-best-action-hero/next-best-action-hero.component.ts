@@ -130,10 +130,8 @@ export interface ActionButton {
   `,
   styles: [`
     .next-best-action-hero {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-backdrop);
-      -webkit-backdrop-filter: var(--glass-backdrop);
+      background: var(--flat-surface-bg); // FIXED (verify-ux)
+      border: 1px solid var(--neutral-800); // FIXED (verify-ux)
       border-radius: 20px;
       padding: 32px;
       margin-bottom: 32px;
@@ -217,7 +215,7 @@ export interface ActionButton {
     }
 
     .hero-subtitle {
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       font-size: 0.95rem;
       margin: 0;
       opacity: 0.9;
@@ -274,7 +272,7 @@ export interface ActionButton {
       font-size: 1.2rem;
       background-size: cover;
       background-position: center;
-      border: 3px solid var(--glass-border);
+      border: 3px solid var(--neutral-800); // FIXED (verify-ux)
     }
 
     .health-score {
@@ -289,12 +287,12 @@ export interface ActionButton {
       justify-content: center;
       font-size: 0.75rem;
       font-weight: 700;
-      border: 2px solid var(--bg-gray-950);
+      border: 2px solid var(--neutral-950);
     }
 
     .health-excellent { background: var(--success-500); color: white; }
     .health-good { background: var(--primary-cyan-400); color: white; }
-    .health-warning { background: var(--accent-amber-500); color: var(--bg-gray-950); }
+    .health-warning { background: var(--accent-amber-500); color: var(--neutral-950); }
     .health-critical { background: var(--error-500); color: white; }
 
     .client-details {
@@ -302,7 +300,7 @@ export interface ActionButton {
     }
 
     .client-name {
-      color: var(--bg-gray-100);
+      color: var(--neutral-100);
       font-size: 1.3rem;
       font-weight: 700;
       margin: 0 0 8px 0;
@@ -322,7 +320,7 @@ export interface ActionButton {
     }
 
     .action-description {
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       font-size: 1rem;
       line-height: 1.5;
       margin: 0;
@@ -354,7 +352,7 @@ export interface ActionButton {
     }
 
     .reasoning-text {
-      color: var(--bg-gray-200);
+      color: var(--neutral-200);
       font-size: 0.95rem;
       line-height: 1.6;
       margin: 0 0 16px 0;
@@ -386,7 +384,7 @@ export interface ActionButton {
     }
 
     .metric-label {
-      color: var(--bg-gray-400);
+      color: var(--neutral-400);
       font-size: 0.8rem;
     }
 

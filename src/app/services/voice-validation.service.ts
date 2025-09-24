@@ -341,25 +341,21 @@ export class VoiceValidationService {
 
   private logDebug(message: string, context?: unknown): void {
     if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
-// removed by clean-audit
     }
   }
 
   private logInfo(message: string, context?: unknown): void {
     if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
-// removed by clean-audit
     }
   }
 
   private logWarn(message: string, context?: unknown): void {
     if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
-// removed by clean-audit
     }
   }
 
   private logError(message: string, error: unknown): void {
     if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
-// removed by clean-audit
     }
   }
 
@@ -1536,7 +1532,6 @@ export class VoiceValidationService {
         return this.convertBFFResponseToAVIScore(response, questionId, contextData);
       }),
       catchError(error => {
-// removed by clean-audit
         return this.mockAVIVoiceAnalysis(questionId, audioBlob, contextData);
       })
     );
@@ -1660,7 +1655,6 @@ export class VoiceValidationService {
 
     return this.http.post<ConsolidatedAVIResult>(this.API_CONFIG.AVI_EVALUATE, formData).pipe(
       catchError(error => {
-// removed by clean-audit
         return this.mockCompleteAVIProcessing(responses, contextData);
       })
     );
@@ -1715,7 +1709,6 @@ export class VoiceValidationService {
   }
 
   // ============================================================================
-// removed by clean-audit
   // ============================================================================
 
   private mockAVIVoiceAnalysis(
@@ -2188,7 +2181,6 @@ export class VoiceValidationService {
   }
 
   // =================================
-// removed by clean-audit
   // =================================
 
   generateMockValidationResult(sessionId: string): VoiceValidationResult {
@@ -2529,4 +2521,3 @@ export class VoiceValidationService {
 // getAuthToken is defined earlier in this service
 }
 
-// removed by clean-audit

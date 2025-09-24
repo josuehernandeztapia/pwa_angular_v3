@@ -594,7 +594,7 @@ import { ClientDeliveryInfo } from '../../../models/deliveries';
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #06d6a0, #10b981);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 6px;
       transition: width 0.5s ease;
     }

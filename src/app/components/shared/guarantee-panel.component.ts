@@ -95,12 +95,12 @@ import { Document, DocumentStatus } from '../../models/types';
           <div *ngIf="document.name === 'Convenio de Dación en Pago'" class="mt-4 pt-4 border-t border-gray-700/50">
             <div class="progress-info">
               <div class="flex justify-between text-sm mb-2">
-                <span class="text-gray-400">Progreso del Convenio</span>
+                <span class="text-neutral-100">Progreso del Convenio</span>
                 <span class="text-primary-cyan-400 font-medium">{{ getConvenioProgress() }}%</span>
               </div>
               <div class="progress-bar w-full bg-gray-700 rounded-full h-2">
                 <div 
-                  class="progress-fill bg-gradient-to-r from-primary-cyan-500 to-emerald-500 h-2 rounded-full transition-all duration-300"
+                  class="progress-fill bg-neutral-900 h-2 rounded-full transition-all duration-300"
                   [style.width.%]="getConvenioProgress()"
                 ></div>
               </div>
@@ -113,7 +113,7 @@ import { Document, DocumentStatus } from '../../models/types';
       </div>
 
       <!-- Summary Card -->
-      <div class="summary-card mt-6 p-4 bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-lg border border-gray-600/50">
+      <div class="summary-card mt-6 p-4 bg-neutral-900 rounded-lg border border-gray-600/50">
         <div class="flex items-center justify-between">
           <div>
             <h4 class="font-semibold text-white text-sm">Resumen de Garantías</h4>
@@ -127,12 +127,12 @@ import { Document, DocumentStatus } from '../../models/types';
         
         <div class="progress-overview mt-4">
           <div class="flex justify-between text-sm mb-2">
-            <span class="text-gray-400">Completado</span>
+            <span class="text-neutral-100">Completado</span>
             <span class="text-white font-medium">{{ getOverallProgress() }}%</span>
           </div>
           <div class="progress-bar w-full bg-gray-700 rounded-full h-3">
             <div 
-              class="progress-fill bg-gradient-to-r from-emerald-500 to-primary-cyan-500 h-3 rounded-full transition-all duration-500"
+              class="progress-fill bg-neutral-900 h-3 rounded-full transition-all duration-500"
               [style.width.%]="getOverallProgress()"
             ></div>
           </div>
@@ -184,7 +184,7 @@ import { Document, DocumentStatus } from '../../models/types';
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, #0891b2, #10b981);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .icon-container {
@@ -334,18 +334,14 @@ export class GuaranteePanelComponent {
   }
 
   viewDocument(document: Document): void {
-// removed by clean-audit
     // Implement document viewing logic
   }
 
   generateGuaranteeReport(): void {
-// removed by clean-audit
     // Implement report generation logic
   }
 
   requestLegalReview(): void {
-// removed by clean-audit
     // Implement legal review request logic
   }
 }
-// removed by clean-audit

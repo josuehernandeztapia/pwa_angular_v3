@@ -69,14 +69,14 @@ export interface KPIData {
     }
 
     .kpis-title {
-      color: var(--bg-gray-100);
+      color: var(--neutral-100);
       font-size: 1.5rem;
       font-weight: 700;
       margin: 0;
     }
 
     .kpis-subtitle {
-      color: var(--bg-gray-400);
+      color: var(--neutral-400);
       font-size: 0.9rem;
       margin: 0;
       font-weight: 500;
@@ -89,10 +89,8 @@ export interface KPIData {
     }
 
     .kpi-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-backdrop);
-      -webkit-backdrop-filter: var(--glass-backdrop);
+ background: var(--flat-surface-bg); // FIXED (verify-ux)
+ border: 1px solid var(--neutral-800); // FIXED (verify-ux)
       border-radius: 16px;
       padding: 24px;
       position: relative;
@@ -157,8 +155,8 @@ export interface KPIData {
 
     .trend-stable {
       background: rgba(156, 163, 175, 0.1);
-      border: 1px solid var(--bg-gray-500);
-      color: var(--bg-gray-400);
+      border: 1px solid var(--neutral-500);
+      color: var(--neutral-400);
     }
 
     .trend-icon {
@@ -174,7 +172,7 @@ export interface KPIData {
       font-weight: 800;
       line-height: 1;
       margin-bottom: 8px;
-      background: linear-gradient(135deg, var(--bg-gray-100), var(--bg-gray-300));
+      background: linear-gradient(135deg, var(--neutral-100), var(--neutral-300));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -195,14 +193,14 @@ export interface KPIData {
     }
 
     .kpi-title-text {
-      color: var(--bg-gray-200);
+      color: var(--neutral-200);
       font-size: 1rem;
       font-weight: 600;
       margin-bottom: 4px;
     }
 
     .kpi-subtitle {
-      color: var(--bg-gray-400);
+      color: var(--neutral-400);
       font-size: 0.85rem;
     }
 
@@ -231,7 +229,7 @@ export interface KPIData {
     }
 
     .trend-fill-stable {
-      background: linear-gradient(90deg, var(--bg-gray-500), var(--bg-gray-400));
+      background: linear-gradient(90deg, var(--neutral-500), var(--neutral-400));
     }
 
     @media (max-width: 768px) {

@@ -148,11 +148,9 @@ import { Subscription } from 'rxjs';
             </a>
           </div>
 
-// removed by clean-audit
           <div class="ui-alert ui-alert-info text-sm">
             <div class="font-medium mb-1">Credenciales de prueba:</div>
             <div class="space-y-1 text-xs">
-// removed by clean-audit
               <div><span class="font-medium">Contraseña:</span> demo123</div>
             </div>
           </div>
@@ -248,7 +246,6 @@ export class LoginComponent implements OnDestroy {
         localStorage.setItem('isLoggedIn', 'true');
         this.router.navigate(['/dashboard']);
       } else {
-// removed by clean-audit
       }
     }).catch(() => {
       this.isLoading = false;
@@ -263,4 +260,3 @@ export class LoginComponent implements OnDestroy {
     this.onSubmit();
   }
 }
-// removed by clean-audit

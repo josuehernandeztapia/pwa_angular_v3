@@ -208,7 +208,7 @@ import { NotificationHistory } from '../../../models/notification';
 
     .permission-banner {
       padding: 16px 20px;
-      background: linear-gradient(135deg, #06d6a0, #059669);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
@@ -539,7 +539,6 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
         this.showPermissionBanner = false;
       }
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -552,7 +551,6 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
     try {
       await this.notificationService.sendTestNotification();
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -690,4 +688,3 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
     return notification.id;
   }
 }
-// removed by clean-audit

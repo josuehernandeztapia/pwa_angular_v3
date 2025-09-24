@@ -127,7 +127,6 @@ export class AVIService {
     // Use BFF for AVI calculation
     return this.calculateScoreWithBFF(responses).pipe(
       catchError(error => {
-// removed by clean-audit
         return this.calculateScoreLocal(responses);
       })
     );
@@ -397,7 +396,6 @@ export class AVIService {
         
         if (ingreso < gasto * 1.5) {
           // Flag: Income too low compared to fuel costs
-// removed by clean-audit
         }
       }
     }
@@ -412,7 +410,6 @@ export class AVIService {
     // Combine multiple voice analyses from BFF
     return of(analysisObservables).pipe(
       map(observables => {
-// removed by clean-audit
         return {
           totalScore: 750,
           riskLevel: 'MEDIUM' as const,
@@ -433,7 +430,6 @@ export class AVIService {
   }
 
   private extractPitchFromVoice(voiceAnalysis?: VoiceAnalysis): number[] {
-// removed by clean-audit
     
     // Convert voice analysis to pitch series
     const basePitch = 110;
@@ -442,7 +438,6 @@ export class AVIService {
   }
 
   private extractEnergyFromVoice(voiceAnalysis?: VoiceAnalysis): number[] {
-// removed by clean-audit
     
     // Convert voice analysis to energy series
     const baseEnergy = 0.65;
@@ -457,4 +452,3 @@ export class AVIService {
       .filter(Boolean);
   }
 }
-// removed by clean-audit

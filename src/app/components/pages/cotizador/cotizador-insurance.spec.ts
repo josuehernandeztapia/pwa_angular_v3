@@ -13,8 +13,6 @@ describe('CotizadorMainComponent – Insurance toggle', () => {
       ]
     }).compileComponents();
 
-// removed by clean-audit
-// removed by clean-audit
     // Set minimal package
     (component as any).pkg = {
       rate: 0.24, // 24% anual
@@ -27,7 +25,6 @@ describe('CotizadorMainComponent – Insurance toggle', () => {
     (component as any).selectedOptions = { vehiculo: true };
     (component as any).term = 24;
     // Ensure not venta directa
-// removed by clean-audit
   });
 
   it('adds insurance to amountToFinance when financed', () => {
@@ -50,4 +47,3 @@ describe('CotizadorMainComponent – Insurance toggle', () => {
 });
 
 
-// removed by clean-audit

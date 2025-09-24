@@ -126,7 +126,6 @@ export class GnvVehicleService {
       map(response => response.data),
       retry(2),
       catchError(() => {
-// removed by clean-audit
         return of(this.getMockVehicleModels(filters));
       })
     );
@@ -138,7 +137,6 @@ export class GnvVehicleService {
     }).pipe(
       retry(2),
       catchError(() => {
-// removed by clean-audit
         const mockModels = this.getMockVehicleModels();
         const found = mockModels.find(v => v.id === vehicleId);
         return of(found || mockModels[0]);
@@ -289,7 +287,6 @@ export class GnvVehicleService {
     );
   }
 
-// removed by clean-audit
   private getMockVehicleModels(filters?: any): VehicleModel[] {
     const mockModels: VehicleModel[] = [
       {
@@ -491,4 +488,3 @@ export class GnvVehicleService {
     return location ? availabilities.filter(a => a.location.includes(location)) : availabilities;
   }
 }
-// removed by clean-audit

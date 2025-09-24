@@ -25,7 +25,7 @@ interface ProtectionScenarioUI extends ProtectionScenario {
   template: `
     <div class="protection-simulator bg-white rounded-xl shadow-lg border border-gray-200">
       <!-- Header -->
-      <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-t-xl p-6">
+      <div class="bg-neutral-900 text-white rounded-t-xl p-6">
         <div class="flex justify-between items-start">
           <div>
             <h2 class="text-2xl font-bold mb-2">🛡️ Protección para Conductores</h2>
@@ -102,7 +102,7 @@ interface ProtectionScenarioUI extends ProtectionScenario {
                       ⭐ RECOMENDADO
                     </span>
                   </h4>
-                  <p class="text-gray-600 text-sm">{{ scenario.description }}</p>
+                  <p class="text-neutral-100 text-sm">{{ scenario.description }}</p>
                 </div>
                 <div class="text-right">
                   <div class="text-2xl font-bold text-green-600">{{ formatCurrency(scenario.savings) }}</div>

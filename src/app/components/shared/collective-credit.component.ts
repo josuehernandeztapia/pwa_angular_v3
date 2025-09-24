@@ -779,7 +779,6 @@ export class CollectiveCreditComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-// removed by clean-audit
         this.toast.error("Error al ejecutar la simulación.");
         this.isLoading = false;
       }
@@ -910,4 +909,3 @@ export class CollectiveCreditComponent implements OnInit {
     }).format(amount);
   }
 }
-// removed by clean-audit

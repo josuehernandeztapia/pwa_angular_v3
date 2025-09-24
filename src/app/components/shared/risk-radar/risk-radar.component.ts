@@ -121,10 +121,8 @@ export interface RiskRadarClient {
   `,
   styles: [`
     .risk-radar-container {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-backdrop);
-      -webkit-backdrop-filter: var(--glass-backdrop);
+      background: var(--flat-surface-bg); // FIXED (verify-ux)
+      border: 1px solid var(--neutral-800); // FIXED (verify-ux)
       border-radius: 20px;
       padding: 28px;
       margin-bottom: 32px;
@@ -140,14 +138,14 @@ export interface RiskRadarClient {
     }
 
     .radar-title {
-      color: var(--bg-gray-100);
+      color: var(--neutral-100);
       font-size: 1.5rem;
       font-weight: 700;
       margin: 0 0 4px 0;
     }
 
     .radar-subtitle {
-      color: var(--bg-gray-400);
+      color: var(--neutral-400);
       font-size: 0.9rem;
       margin: 0;
     }
@@ -171,7 +169,7 @@ export interface RiskRadarClient {
     }
 
     .legend-text {
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       font-size: 0.85rem;
       font-weight: 500;
     }
@@ -200,7 +198,7 @@ export interface RiskRadarClient {
         rgba(239, 68, 68, 0.1) 100%
       );
       border-radius: 50%;
-      border: 1px solid var(--glass-border);
+      border: 1px solid var(--neutral-800); // FIXED (verify-ux)
       overflow: visible;
     }
 
@@ -342,7 +340,7 @@ export interface RiskRadarClient {
     }
 
     .client-info-name {
-      color: var(--bg-gray-100);
+      color: var(--neutral-100);
       font-size: 1.2rem;
       font-weight: 700;
       margin: 0;
@@ -351,7 +349,7 @@ export interface RiskRadarClient {
     .close-info {
       background: none;
       border: none;
-      color: var(--bg-gray-400);
+      color: var(--neutral-400);
       font-size: 1.5rem;
       cursor: pointer;
       padding: 4px;
@@ -361,7 +359,7 @@ export interface RiskRadarClient {
 
     .close-info:hover {
       background: rgba(255, 255, 255, 0.1);
-      color: var(--bg-gray-200);
+      color: var(--neutral-200);
     }
 
     .health-score-display {
@@ -375,7 +373,7 @@ export interface RiskRadarClient {
     }
 
     .health-label {
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       font-weight: 600;
     }
 
@@ -400,7 +398,7 @@ export interface RiskRadarClient {
       display: flex;
       align-items: center;
       gap: 10px;
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       font-size: 0.9rem;
     }
 
@@ -428,7 +426,7 @@ export interface RiskRadarClient {
     }
 
     .issues-list li {
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       font-size: 0.85rem;
       padding: 4px 0;
       padding-left: 16px;
@@ -473,7 +471,7 @@ export interface RiskRadarClient {
     }
 
     .stat-label {
-      color: var(--bg-gray-400);
+      color: var(--neutral-400);
       font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;

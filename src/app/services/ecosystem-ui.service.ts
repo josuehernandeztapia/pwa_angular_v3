@@ -42,10 +42,8 @@ export class EcosystemUiService {
       }
     ];
 
-// removed by clean-audit
     return of(base).pipe(delay(300));
   }
 }
 
 
-// removed by clean-audit

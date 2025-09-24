@@ -273,7 +273,7 @@ import { ImportStatus } from '../../../models/postventa';
         
         <!-- Account Statement -->
         <div class="account-statement-section">
-          <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+          <div class="bg-neutral-50 p-6 rounded-xl border border-gray-200">
             <div class="flex justify-between items-center">
               <div>
                 <h3 class="font-semibold text-gray-800">📄 Estado de Cuenta</h3>
@@ -491,7 +491,7 @@ import { ImportStatus } from '../../../models/postventa';
       align-items: center;
       gap: 20px;
       padding: 24px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
       border: none;
       border-radius: 16px;
@@ -716,14 +716,12 @@ export class ClienteDetailComponent implements OnInit {
   isGeneratingPDF = false;
   
   openPaymentModal = () => {
-// removed by clean-audit
     this.generatePaymentLink('spei');
   };
   
   constructor(private route: ActivatedRoute) {}
 
   async ngOnInit(): Promise<void> {
-// removed by clean-audit
     this.client = {
       id: 'client-001',
       name: 'Juan Pérez García',
@@ -770,7 +768,6 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   private loadClientEvents(): void {
-// removed by clean-audit
     this.clientEvents = [
       {
         id: '1',
@@ -817,7 +814,6 @@ export class ClienteDetailComponent implements OnInit {
         await this.loadAviModal();
       }
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -837,7 +833,7 @@ export class ClienteDetailComponent implements OnInit {
 
     if (savingsContainer) {
       savingsContainer.innerHTML = `
-        <div class="bg-gray-100 rounded-lg p-4">
+        <div class="bg-neutral-100 rounded-lg p-4">
           <div class="flex justify-between mb-2">
             <span class="text-sm text-gray-600">Progreso del ahorro</span>
             <span class="text-sm font-medium">${this.getSavingsProgress()}%</span>
@@ -851,7 +847,7 @@ export class ClienteDetailComponent implements OnInit {
 
     if (paymentContainer) {
       paymentContainer.innerHTML = `
-        <div class="bg-gray-100 rounded-lg p-4">
+        <div class="bg-neutral-100 rounded-lg p-4">
           <div class="flex justify-between mb-2">
             <span class="text-sm text-gray-600">Progreso de pagos</span>
             <span class="text-sm font-medium">${this.getPaymentProgress()}%</span>
@@ -897,7 +893,7 @@ export class ClienteDetailComponent implements OnInit {
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div class="bg-white rounded-lg p-6 max-w-md w-full m-4">
             <h3 class="text-lg font-semibold mb-4">🎤 Verificación AVI</h3>
-            <p class="text-gray-600 mb-4">Cargando componente de verificación...</p>
+            <p class="text-neutral-100 mb-4">Cargando componente de verificación...</p>
             <button onclick="this.parentElement.parentElement.parentElement.style.display='none'"
                     class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
               Cerrar
@@ -911,7 +907,6 @@ export class ClienteDetailComponent implements OnInit {
         const { AviVerificationModalComponent } = await import('../../shared/avi-verification-modal/avi-verification-modal.component');
         // Component would be created here with proper inputs and event handlers
       } catch (error) {
-// removed by clean-audit
       }
     }
   }
@@ -926,7 +921,6 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   onAviCompleted(result: any): void {
-// removed by clean-audit
     this.showAviModal = false;
     
     // Update client data with AVI results
@@ -962,7 +956,6 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   startTraditionalKyc(): void {
-// removed by clean-audit
   }
   
   canGenerateContract(): boolean {
@@ -970,11 +963,9 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   generateContract(): void {
-// removed by clean-audit
   }
   
   viewDocuments(): void {
-// removed by clean-audit
   }
   
   // Utility Methods
@@ -1004,7 +995,7 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   getScoreClass(score: number | undefined): string {
-    if (!score) return 'text-gray-400';
+    if (!score) return 'text-neutral-100';
     if (score >= 80) return 'text-green-600';
     if (score >= 60) return 'text-yellow-600';
     return 'text-red-600';
@@ -1084,7 +1075,6 @@ export class ClienteDetailComponent implements OnInit {
   
   // Payment Methods
   generatePaymentLink(method: 'spei' | 'conekta'): void {
-// removed by clean-audit
     // Implementation would create actual payment links
     const mockLinks = {
       spei: 'https://payments.conductores.mx/spei/client-001',
@@ -1102,7 +1092,6 @@ export class ClienteDetailComponent implements OnInit {
     // Simulate PDF generation
     setTimeout(() => {
       this.isGeneratingPDF = false;
-// removed by clean-audit
       
       // In real implementation, this would trigger actual PDF generation
       const mockPdfUrl = `https://documents.conductores.mx/statements/client-001-${Date.now()}.pdf`;
@@ -1116,7 +1105,6 @@ export class ClienteDetailComponent implements OnInit {
   }
   
   previewAccountStatement(): void {
-// removed by clean-audit
     // Implementation would show a modal with statement preview
   }
   
@@ -1142,7 +1130,6 @@ export class ClienteDetailComponent implements OnInit {
         m.startedAt = new Date();
       }
       
-// removed by clean-audit
     }
   }
   
@@ -1175,4 +1162,3 @@ export class ClienteDetailComponent implements OnInit {
     return this.client?.totalPayments || 24;
   }
 }
-// removed by clean-audit

@@ -57,7 +57,6 @@ export class AVICalibrationService {
       this.calibrationProgress.set(report.completionPercentage);
       this.isFullyCalibrated.set(report.calibrationStatus === 'SUFFICIENT' || report.calibrationStatus === 'EXCELLENT');
 
-// removed by clean-audit
     });
   }
 
@@ -92,7 +91,6 @@ export class AVICalibrationService {
 
     return this.confusionMatrixService.addCalibrationSample(calibrationSample).pipe(
       tap(sample => {
-// removed by clean-audit
 
         // Update legacy calibration data for backwards compatibility
         const currentData = this.calibrationData$.value;
@@ -145,15 +143,12 @@ export class AVICalibrationService {
   }
 
   /**
-// removed by clean-audit
    */
   generateMockCalibrationSamples(count: number = 35): Observable<boolean> {
     if (count < 1 || count > 100) {
-// removed by clean-audit
       count = 35;
     }
 
-// removed by clean-audit
 
     const mockSamples: Array<Omit<CalibrationSample, 'id' | 'timestamp'>> = [];
 
@@ -189,7 +184,6 @@ export class AVICalibrationService {
         predictedRisk,
         actualOutcome,
         validationSource: Math.random() > 0.5 ? 'MANUAL' : 'BEHAVIORAL',
-// removed by clean-audit
       };
 
       mockSamples.push(mockSample);
@@ -199,11 +193,9 @@ export class AVICalibrationService {
     return this.addMockSamplesSequentially(mockSamples, 0);
   }
 
-// removed by clean-audit
 
   private addMockSamplesSequentially(samples: Array<Omit<CalibrationSample, 'id' | 'timestamp'>>, index: number): Observable<boolean> {
     if (index >= samples.length) {
-// removed by clean-audit
       return of(true);
     }
 
@@ -221,7 +213,6 @@ export class AVICalibrationService {
     return [
       {
         questionId: 'q1',
-// removed by clean-audit
         responseTime: 2000 + Math.random() * 3000,
         stressIndicators: Math.random() > 0.7 ? ['hesitation'] : []
       }
@@ -292,7 +283,6 @@ export class AVICalibrationService {
    * Ejecuta calibración automática basada en resultados históricos
    */
   performAutoCalibration(historicalResults: CalibrationSample[]): Observable<CalibrationResult> {
-// removed by clean-audit
     
     return of(null).pipe(
       map(() => {
@@ -338,7 +328,6 @@ export class AVICalibrationService {
         return calibrationResult;
       }),
       tap(result => {
-// removed by clean-audit
       })
     );
   }
@@ -653,7 +642,6 @@ export class AVICalibrationService {
 
     // En producción, esto se guardaría en base de datos
     // Por ahora, simular almacenamiento
-// removed by clean-audit
   }
 
   // Helper methods
@@ -761,4 +749,3 @@ export interface ErrorPatternAnalysis {
 
 export type OutcomeType = 'GOOD' | 'ACCEPTABLE' | 'BAD';
 export type PredictionType = 'GOOD' | 'ACCEPTABLE' | 'QUESTIONABLE' | 'BAD';
-// removed by clean-audit

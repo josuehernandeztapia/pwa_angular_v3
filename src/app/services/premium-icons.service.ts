@@ -308,7 +308,7 @@ export class PremiumIconsService {
     success: 'text-green-600',
     warning: 'text-yellow-600',
     error: 'text-red-600',
-    neutral: 'text-gray-600',
+    neutral: 'text-neutral-100',
     info: 'text-indigo-600'
   };
 

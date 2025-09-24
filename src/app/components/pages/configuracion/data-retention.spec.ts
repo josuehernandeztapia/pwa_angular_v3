@@ -16,9 +16,6 @@ describe('Data retention policy', () => {
   });
 
   it('should create component and have valid config', () => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     // Test component creation and config initialization
     expect(component).toBeTruthy();
@@ -29,4 +26,3 @@ describe('Data retention policy', () => {
 });
 
 
-// removed by clean-audit

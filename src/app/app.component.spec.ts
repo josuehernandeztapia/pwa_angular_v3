@@ -54,12 +54,8 @@ describe('AppComponent', () => {
     const initSpy = spyOn(theme, 'initFromStorage');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-// removed by clean-audit
-// removed by clean-audit
 
-// removed by clean-audit
     (expect(initSpy) as any).toHaveBeenCalled();
-// removed by clean-audit
   });
 
   it('should toggle dark mode using design tokens API', () => {
@@ -68,9 +64,6 @@ describe('AppComponent', () => {
     const toggleSpy = spyOn(theme, 'toggle');
     spyOn(theme, 'isDark').and.returnValues(false, true);
 
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     component.toggleDarkMode();
 
@@ -83,9 +76,6 @@ describe('AppComponent', () => {
     const setDarkSpy = spyOn(theme, 'setDark');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     component.setDarkMode(true);
 
@@ -97,10 +87,7 @@ describe('AppComponent', () => {
     spyOn(theme, 'initFromStorage');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-// removed by clean-audit
-// removed by clean-audit
 
-// removed by clean-audit
     (expect(compiled.querySelector('a.skip-link')) as any).toBeTruthy();
     (expect(compiled.querySelector('main[role="main"]')) as any).toBeTruthy();
     (expect(compiled.querySelector('aside nav')) as any).toBeTruthy();
@@ -110,16 +97,11 @@ describe('AppComponent', () => {
     spyOn(theme, 'initFromStorage');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-// removed by clean-audit
-// removed by clean-audit
 
     router.navigateByUrl('dashboard');
     tick();
-// removed by clean-audit
 
-// removed by clean-audit
     (expect(compiled.querySelector('[data-testid="dummy"]')?.textContent) as any).toContain('Dummy');
   }));
 });
 
-// removed by clean-audit

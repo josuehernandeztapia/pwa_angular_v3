@@ -59,7 +59,7 @@ import { AuthService } from '../../../services/auth.service';
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       padding: 20px;
     }
 
@@ -135,12 +135,12 @@ import { AuthService } from '../../../services/auth.service';
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #4299e1, #3182ce);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #3182ce, #2c5282);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       transform: translateY(-1px);
       box-shadow: 0 10px 25px rgba(66, 153, 225, 0.3);
     }

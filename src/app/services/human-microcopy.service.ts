@@ -179,7 +179,7 @@ export class HumanMicrocopyService {
       tone: 'professional',
       primaryText: '💡 Tip para maximizar valor',
       secondaryText: 'Considera incluir protección de cristales. El 80% de nuestros clientes lo agradecen.',
-      triggerCondition: 'quote.glassProtection === false'
+      triggerCondition: 'quote.windowProtection === false'
     },
     'customer-communication-suggestion': {
       id: 'customer-communication-suggestion',
@@ -540,7 +540,6 @@ export class HumanMicrocopyService {
    */
   private evaluateCondition(condition: string, userState: any): boolean {
     // In production, use a proper expression evaluator like jsonata or similar
-// removed by clean-audit
     
     if (condition.includes('user.quotes.length === 0')) {
       return userState.user?.quotes?.length === 0;
@@ -554,8 +553,8 @@ export class HumanMicrocopyService {
       return userState.user?.averageRating >= 4.9;
     }
     
-    if (condition.includes('quote.glassProtection === false')) {
-      return userState.quote?.glassProtection === false;
+    if (condition.includes('quote.windowProtection === false')) {
+      return userState.quote?.windowProtection === false;
     }
     
     if (condition.includes('date.month in [6,7,12]')) {
@@ -580,4 +579,3 @@ export class HumanMicrocopyService {
     return id in this.microcopyRegistry;
   }
 }
-// removed by clean-audit

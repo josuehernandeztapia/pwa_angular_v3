@@ -80,7 +80,6 @@ export class OCRService {
       
       this.worker = await this.createWorkerFn('spa+eng', 1, {
         logger: (m: any) => {
-// removed by clean-audit
           this.progressSubject.next({
             status: m.status,
             progress: m.progress || 0,
@@ -99,7 +98,6 @@ export class OCRService {
       this.progressSubject.next({ status: 'ready', progress: 100, message: 'OCR listo' });
       
     } catch (error) {
-// removed by clean-audit
       this.progressSubject.next({ status: 'error', progress: 0, message: 'Error inicializando OCR' });
       throw error;
     }
@@ -141,7 +139,6 @@ export class OCRService {
         needsManualEntry: true
       };
     } catch (error) {
-// removed by clean-audit
       return {
         vin: '',
         confidence: 0,
@@ -173,7 +170,6 @@ export class OCRService {
         needsManualEntry: true
       };
     } catch (error) {
-// removed by clean-audit
       return {
         odometer: null,
         confidence: 0,
@@ -253,7 +249,6 @@ export class OCRService {
         return result;
       } catch (error) {
         lastError = error as Error;
-// removed by clean-audit
         
         // If this was the last attempt, break and throw
         if (attempt > this.retryConfig.maxRetries) {
@@ -288,7 +283,6 @@ export class OCRService {
           }
           await this.initializeWorker();
         } catch (reinitError) {
-// removed by clean-audit
         }
       }
     }
@@ -362,7 +356,6 @@ export class OCRService {
         img.src = URL.createObjectURL(imageFile);
       });
     } catch (error) {
-// removed by clean-audit
       return imageFile;
     }
   }
@@ -490,7 +483,6 @@ export class OCRService {
       return ocrResult;
 
     } catch (error) {
-// removed by clean-audit
       throw error;
     }
   }
@@ -769,4 +761,3 @@ export class OCRService {
   }
 }
 
-// removed by clean-audit

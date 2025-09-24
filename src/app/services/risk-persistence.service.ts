@@ -92,7 +92,6 @@ export class RiskPersistenceService {
         storedEvaluation
       ).pipe(
         tap(response => {
-// removed by clean-audit
         }),
         catchError(error => {
           this.monitoringService.captureWarning(
@@ -472,4 +471,3 @@ export class RiskPersistenceService {
     return 'unknown';
   }
 }
-// removed by clean-audit

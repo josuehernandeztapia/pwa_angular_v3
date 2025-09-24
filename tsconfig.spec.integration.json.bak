@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.spec.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec-integration",
+    "types": [
+      "jasmine",
+      "node"
+    ]
+  },
+  "include": [
+    "src/app/integration/**/*.spec.ts",
+    "src/**/*.d.ts"
+  ]
+}

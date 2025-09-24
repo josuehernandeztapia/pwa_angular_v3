@@ -19,7 +19,6 @@ describe('NavigationService', () => {
       queryParams: of({})
     });
 
-// removed by clean-audit
     Object.defineProperty(mockRouter, 'events', {
       value: of(new NavigationEnd(1, '/dashboard', '/dashboard')),
       writable: true
@@ -100,7 +99,6 @@ describe('NavigationService', () => {
     it('should use browser back when no route history and history exists', () => {
       service['routeHistory'] = [];
       
-// removed by clean-audit
       Object.defineProperty(window, 'history', {
         value: { length: 2 },
         writable: true
@@ -115,7 +113,6 @@ describe('NavigationService', () => {
       service['routeHistory'] = [];
       mockRouter.navigate.and.returnValue(Promise.resolve(true));
       
-// removed by clean-audit
       Object.defineProperty(window, 'history', {
         value: { length: 1 },
         writable: true
@@ -313,7 +310,6 @@ describe('NavigationService', () => {
     it('should execute quick action with custom function', () => {
       const customAction = jasmine.createSpy('customAction');
       
-// removed by clean-audit
       spyOn(service, 'getQuickActions').and.returnValue(of([
         {
           id: 'custom-action',
@@ -452,4 +448,3 @@ describe('NavigationService', () => {
   });
 });
 
-// removed by clean-audit

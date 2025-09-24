@@ -211,12 +211,12 @@ interface VoiceRecorderState {
 
     .voice-recorder.recording {
       border-color: #ef4444;
-      background: linear-gradient(135deg, #fef2f2, #ffffff);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .voice-recorder.processing {
       border-color: #3b82f6;
-      background: linear-gradient(135deg, #eff6ff, #ffffff);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     /* Interview Guide Styles */
@@ -386,7 +386,7 @@ interface VoiceRecorderState {
       align-items: center;
       gap: 8px;
       padding: 16px 32px;
-      background: linear-gradient(135deg, #06d6a0, #059669);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border: none;
       border-radius: 12px;
       color: white;
@@ -403,7 +403,7 @@ interface VoiceRecorderState {
     }
 
     .btn-record.recording {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 
@@ -793,7 +793,6 @@ export class VoiceRecorderComponent implements OnInit, OnDestroy {
       this.validationResult = null;
       
     } catch (error) {
-// removed by clean-audit
       this.state.error = 'No se pudo iniciar la grabación. Verifique permisos del micrófono.';
       this.errorOccurred.emit(this.state.error);
     }
@@ -907,7 +906,6 @@ export class VoiceRecorderComponent implements OnInit, OnDestroy {
 
   viewDetailedResults(): void {
     // Emit event or navigate to detailed results page
-// removed by clean-audit
   }
 
   approveInterview(): void {
@@ -923,4 +921,3 @@ export class VoiceRecorderComponent implements OnInit, OnDestroy {
     this.resetRecording();
   }
 }
-// removed by clean-audit

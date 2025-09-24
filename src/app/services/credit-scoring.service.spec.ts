@@ -262,7 +262,6 @@ describe('CreditScoringService', () => {
         }
       };
 
-// removed by clean-audit
       spyOn(Math, 'random').and.returnValue(0.8);
 
       const result = service['simulateScoring'](goodClientRequest, 'test-id');
@@ -289,7 +288,6 @@ describe('CreditScoringService', () => {
         }
       };
 
-// removed by clean-audit
       spyOn(Math, 'random').and.returnValue(0.1);
 
       const result = service['simulateScoring'](riskyClientRequest, 'test-id');
@@ -348,7 +346,6 @@ describe('CreditScoringService', () => {
         }
       };
 
-// removed by clean-audit
       spyOn(Math, 'random').and.returnValue(0.2);
 
       const result = service['simulateScoring'](conditionalRequest, 'conditional-id');
@@ -375,7 +372,6 @@ describe('CreditScoringService', () => {
         }
       };
 
-// removed by clean-audit
       spyOn(Math, 'random').and.returnValue(-0.9);
 
       const result = service['simulateScoring'](rejectedRequest, 'rejected-id');
@@ -580,4 +576,3 @@ describe('CreditScoringService', () => {
   });
 });
 
-// removed by clean-audit

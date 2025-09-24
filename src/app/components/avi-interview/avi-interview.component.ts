@@ -65,7 +65,6 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   finalDecision: 'GO' | 'REVIEW' | 'NO-GO' | null = null;
   finalFlags: string[] = [];
   
-// removed by clean-audit
   private voiceAnalysisEnabled = true;
   private stressIndicators = new BehaviorSubject<string[]>([]);
 
@@ -250,7 +249,6 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   private startRealVoiceRecording() {
     if (!this.currentQuestion) return;
     
-// removed by clean-audit
     this.isRecording = true;
     this.startRecordingTimer();
     
@@ -272,7 +270,6 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
         if (response.status === 'completed') {
           this.handleVoiceTranscriptionComplete(response);
         } else if (response.status === 'recording') {
-// removed by clean-audit
           // Guardar la función de stop para uso manual
           if (response.stopRecording) {
             this.stopRealVoiceRecording = response.stopRecording;
@@ -284,9 +281,7 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
         }
       },
       error: (error: unknown) => {
-// removed by clean-audit
         this.isRecording = false;
-// removed by clean-audit
         this.startMockVoiceRecording();
       }
     });
@@ -295,7 +290,6 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   private async stopRealVoiceRecording() {
     this.isRecording = false;
     this.stopRecordingTimer();
-// removed by clean-audit
     // La transcripción se maneja automáticamente en el observable
   }
 
@@ -328,7 +322,6 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
    * Fallback: simulación de grabación (para desarrollo)
    */
   private startMockVoiceRecording() {
-// removed by clean-audit
     // Simular captura de voz con timer
     timer(0, 500)
       .pipe(takeUntil(this.destroy$))
@@ -644,4 +637,3 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   }
 }
 
-// removed by clean-audit

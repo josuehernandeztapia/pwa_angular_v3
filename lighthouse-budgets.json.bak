@@ -1,0 +1,18 @@
+[
+  {
+    "path": "/",
+    "resourceSizes": [
+      { "resourceType": "total", "budget": 300 },
+      { "resourceType": "script", "budget": 220 },
+      { "resourceType": "document", "budget": 30 },
+      { "resourceType": "image", "budget": 80 }
+    ],
+    "timings": [
+      { "metric": "interactive", "budget": 4000 },
+      { "metric": "first-contentful-paint", "budget": 2000 },
+      { "metric": "largest-contentful-paint", "budget": 1500 },
+      { "metric": "total-blocking-time", "budget": 150 }
+    ]
+  }
+]
+

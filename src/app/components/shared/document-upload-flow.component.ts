@@ -260,7 +260,6 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
       // Simulate OCR processing
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-// removed by clean-audit
       const isValid = Math.random() > 0.3; // 70% success rate
 
       const document = {
@@ -306,7 +305,6 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
       // Compute quick hash to detect duplicates
       const hash = await this.computeFileHash(file);
       if (this.hashIndex.has(hash)) {
-// removed by clean-audit
         this.addAudit('duplicate_detected', document.name, { hash, size: file.size });
         document.status = DocumentStatus.Aprobado;
         this.updateCompletionStatus();
@@ -329,7 +327,6 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
       }
 
     } catch (error) {
-// removed by clean-audit
       document.status = DocumentStatus.Rechazado;
       this.updateCompletionStatus();
       this.addAudit('upload_error', document.name, { error: String(error) });
@@ -353,10 +350,8 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
       this.showOCRPreview = true;
       this.currentUploadingDoc = document;
 
-// removed by clean-audit
 
     } catch (error) {
-// removed by clean-audit
       // Continue with regular upload even if OCR fails
       await this.finalizeDocumentUpload(document, file);
     }
@@ -402,7 +397,6 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
         (document as any).extractedData = ocrData.extractedData;
       } else {
         document.status = DocumentStatus.EnRevision;
-// removed by clean-audit
       }
     } else {
       // Default approval for non-OCR uploads
@@ -422,7 +416,6 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
   startVoiceRecording() {
     this.isRecording = true;
     
-// removed by clean-audit
     setTimeout(() => {
       this.isRecording = false;
       this.voiceVerified = true;
@@ -441,7 +434,6 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
       fraudRisk: 'UNKNOWN'
     };
 
-// removed by clean-audit
     setTimeout(() => {
       this.aviAnalysis = {
         status: 'completed',
@@ -504,7 +496,6 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
     };
 
     sessionStorage.setItem(`documentProgress_${this.flowContext.clientId}`, JSON.stringify(progressData));
-// removed by clean-audit
   }
 
   goBack() {
@@ -655,4 +646,3 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
     return fieldNames[key] || key.charAt(0).toUpperCase() + key.slice(1);
   }
 }
-// removed by clean-audit

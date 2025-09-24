@@ -272,10 +272,6 @@ export class AVICalibratedEngineService {
     
     // Corrección conservadora: CRITICAL → HIGH solo si hay evidencia fuerte (lowered threshold)
     if (avgPatternStrength > 0.55 && significantPatterns.length >= 1) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
       
       return 'HIGH';
     }
@@ -403,4 +399,3 @@ export class AVICalibratedEngineService {
     };
   }
 }
-// removed by clean-audit

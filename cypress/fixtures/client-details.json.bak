@@ -1,0 +1,83 @@
+{
+  "id": "client-001",
+  "name": "Juan Pérez García",
+  "email": "juan.perez@email.com", 
+  "phone": "5551234567",
+  "rfc": "PEGJ850315ABC",
+  "market": "aguascalientes",
+  "flow": "Venta a Plazo",
+  "status": "Activo",
+  "avatarUrl": "",
+  "createdAt": "2024-01-15T10:30:00Z",
+  "lastModified": "2024-02-01T14:20:00Z",
+  "healthScore": 85,
+  "downPayment": 50000,
+  "remainderAmount": 150000,
+  "documents": [
+    {
+      "id": "doc-001",
+      "name": "INE Vigente",
+      "status": "Aprobado",
+      "uploadedAt": "2024-01-16T09:15:00Z",
+      "fileUrl": "/uploads/client-001/ine.pdf",
+      "fileName": "INE_Juan_Perez.pdf",
+      "fileSize": 2048576
+    },
+    {
+      "id": "doc-002",
+      "name": "Comprobante de domicilio", 
+      "status": "Pendiente",
+      "tooltip": "Recibo de luz, agua o teléfono no mayor a 3 meses"
+    },
+    {
+      "id": "doc-003",
+      "name": "Constancia de situación fiscal",
+      "status": "En Revisión",
+      "uploadedAt": "2024-01-18T14:30:00Z",
+      "fileUrl": "/uploads/client-001/rfc.pdf",
+      "fileName": "RFC_Constancia.pdf", 
+      "fileSize": 1024768
+    }
+  ],
+  "events": [
+    {
+      "id": "event-001",
+      "timestamp": "2024-02-01T14:20:00Z",
+      "message": "Documento INE aprobado por el sistema",
+      "actor": "Sistema",
+      "type": "System"
+    },
+    {
+      "id": "event-002", 
+      "timestamp": "2024-01-25T11:15:00Z",
+      "message": "Cliente contactado para seguimiento",
+      "actor": "Asesor",
+      "type": "AdvisorAction",
+      "details": {
+        "amount": 0,
+        "currency": "MXN"
+      }
+    }
+  ],
+  "savingsPlan": {
+    "progress": 75000,
+    "goal": 200000,
+    "currency": "MXN",
+    "totalValue": 350000,
+    "methods": {
+      "collection": true,
+      "voluntary": false
+    },
+    "collectionDetails": {
+      "plates": ["ABC-123", "DEF-456"],
+      "pricePerLiter": 1.50
+    }
+  },
+  "importStatus": {
+    "pedidoPlanta": "completed",
+    "unidadFabricada": "completed", 
+    "transitoMaritimo": "in_progress",
+    "enAduana": "pending",
+    "liberada": "pending"
+  }
+}

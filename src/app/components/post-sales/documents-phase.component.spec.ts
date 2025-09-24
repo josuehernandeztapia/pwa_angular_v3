@@ -8,7 +8,6 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
 
 describe('DocumentsPhaseComponent', () => {
   let component: DocumentsPhaseComponent;
-// removed by clean-audit
   let mockRouter: jasmine.SpyObj<Router>;
   let mockImportTracker: jasmine.SpyObj<IntegratedImportTrackerService>;
   let mockPostSalesApi: jasmine.SpyObj<PostSalesApiService>;
@@ -30,8 +29,6 @@ describe('DocumentsPhaseComponent', () => {
       ]
     }).compileComponents();
 
-// removed by clean-audit
-// removed by clean-audit
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     mockImportTracker = TestBed.inject(IntegratedImportTrackerService) as jasmine.SpyObj<IntegratedImportTrackerService>;
     mockPostSalesApi = TestBed.inject(PostSalesApiService) as jasmine.SpyObj<PostSalesApiService>;
@@ -167,4 +164,3 @@ describe('DocumentsPhaseComponent', () => {
     expect(console.log).toHaveBeenCalledWith('❌ Cannot complete documents - validation failed');
   });
 });
-// removed by clean-audit

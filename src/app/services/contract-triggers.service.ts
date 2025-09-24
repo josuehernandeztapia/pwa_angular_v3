@@ -233,7 +233,6 @@ export class ContractTriggersService {
   startMonitoring(): void {
     if (this.monitoringActive.value) return;
     
-// removed by clean-audit
     this.monitoringActive.next(true);
     
     // Monitoreo cada 30 segundos
@@ -242,7 +241,6 @@ export class ContractTriggersService {
       switchMap(() => this.processAllTriggers()),
       takeUntil(this.stopMonitoring$),
       catchError((error) => {
-// removed by clean-audit
         return of(null);
       })
     ).subscribe();
@@ -252,7 +250,6 @@ export class ContractTriggersService {
    * Detener monitoreo automático
    */
   stopMonitoringService(): void {
-// removed by clean-audit
     this.monitoringActive.next(false);
     this.stopMonitoring$.next();
   }
@@ -261,7 +258,6 @@ export class ContractTriggersService {
    * Procesar todos los triggers pendientes
    */
   processAllTriggers(): Observable<TriggerEvent[]> {
-// removed by clean-audit
     
     return this.http.get<{
       contractSummaries: ContractPaymentSummary[];
@@ -290,7 +286,6 @@ export class ContractTriggersService {
         map((events: Array<TriggerEvent | null>) => events.filter((e: TriggerEvent | null) => e !== null) as TriggerEvent[]),
         tap(events => {
           if (events.length > 0) {
-// removed by clean-audit
           }
         }),
         catchError(() => of([] as TriggerEvent[]))
@@ -306,7 +301,6 @@ export class ContractTriggersService {
       throw new Error(`No se encontró regla de trigger para ${summary.flow} en ${summary.market}`);
     }
 
-// removed by clean-audit
 
     // Crear orden de entrega
     return this.createDeliveryOrder(summary.clientId, {
@@ -364,7 +358,6 @@ export class ContractTriggersService {
           }
         };
 
-// removed by clean-audit
         return of(triggerEvent);
       })
     );
@@ -379,7 +372,6 @@ export class ContractTriggersService {
       throw new Error('No se encontró regla de trigger para Tandas');
     }
 
-// removed by clean-audit
 
     // Para tandas, creamos la orden para el grupo completo
     return this.createDeliveryOrderForTanda(analysis).pipe(
@@ -430,7 +422,6 @@ export class ContractTriggersService {
           }
         };
 
-// removed by clean-audit
         return of(triggerEvent);
       })
     );
@@ -535,7 +526,6 @@ export class ContractTriggersService {
    * Forzar procesamiento manual de triggers
    */
   forceProcessTriggers(): Observable<{ processed: number; events: TriggerEvent[] }> {
-// removed by clean-audit
     
     return this.processAllTriggers().pipe(
       map(events => ({
@@ -603,7 +593,6 @@ export class ContractTriggersService {
       triggered: triggerEvent.deliveryOrderCreated
     }).pipe(
       catchError(error => {
-// removed by clean-audit
         return of();
       })
     );
@@ -617,7 +606,6 @@ export class ContractTriggersService {
       triggered: triggerEvent.deliveryOrderCreated
     }).pipe(
       catchError(error => {
-// removed by clean-audit
         return of();
       })
     );
@@ -625,7 +613,6 @@ export class ContractTriggersService {
 
   private handleError<T>(operation = 'operation') {
     return (error: any): Observable<T> => {
-// removed by clean-audit
       
       let userMessage = 'Error en el sistema de triggers automáticos';
       
@@ -643,4 +630,3 @@ export class ContractTriggersService {
     };
   }
 }
-// removed by clean-audit

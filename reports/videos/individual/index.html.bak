@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🎬 PWA Conductores - Individual E2E Flow Videos</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #1565C0; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
+        .video-card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .video-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1565C0; }
+        .video-description { font-size: 14px; color: #666; margin-bottom: 15px; }
+        video { width: 100%; border-radius: 4px; }
+        .stats { margin-top: 10px; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 PWA Conductores - Individual E2E Flow Videos</h1>
+            <p>Individual demonstration videos for each business flow</p>
+            <p><strong>Generated:</strong> Tue Sep 16 20:01:51 CST 2025</p>
+            <p><strong>Videos Created:</strong> 7 of 9 flows</p>
+        </div>
+
+        <div class="video-grid">
+            <div class="video-card">
+                <div class="video-title">🚀 Login & Authentication</div>
+                <div class="video-description">Login and authentication flow</div>
+                <video controls>
+                    <source src="login-flow.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="stats">
+                    File: login-flow.mp4 | Size:  16K
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="video-title">💰 Cotizador AGS (25.5%)</div>
+                <div class="video-description">Aguascalientes insurance quotation with 25.5% rate</div>
+                <video controls>
+                    <source src="cotizador-ags.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="stats">
+                    File: cotizador-ags.mp4 | Size: 8.0K
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="video-title">💰 Cotizador EdoMex (29.9%)</div>
+                <div class="video-description">Estado de México individual insurance with 29.9% high-risk rate</div>
+                <video controls>
+                    <source src="cotizador-edomex.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="stats">
+                    File: cotizador-edomex.mp4 | Size: 8.0K
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="video-title">🏢 Cotizador EdoMex Colectivo (32.5%)</div>
+                <div class="video-description">Estado de México collective insurance with 32.5% rate and group benefits</div>
+                <video controls>
+                    <source src="cotizador-edomex-colectivo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="stats">
+                    File: cotizador-edomex-colectivo.mp4 | Size: 8.0K
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="video-title">📊 Simulador AGS</div>
+                <div class="video-description">Aguascalientes simulator with Ahorro and Liquidación scenarios</div>
+                <video controls>
+                    <source src="simulador-ags.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="stats">
+                    File: simulador-ags.mp4 | Size:  20K
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="video-title">⚙️ Configuración Dual-Mode</div>
+                <div class="video-description">Configuration management and dual-mode cotizador setup</div>
+                <video controls>
+                    <source src="configuracion-flujos.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="stats">
+                    File: configuracion-flujos.mp4 | Size:  20K
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="video-title">🎤 AVI Voice Interview</div>
+                <div class="video-description">AVI voice interview process with GO decision</div>
+                <video controls>
+                    <source src="avi-flow.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="stats">
+                    File: avi-flow.mp4 | Size:  20K
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

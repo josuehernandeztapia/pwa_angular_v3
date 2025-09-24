@@ -126,7 +126,6 @@ export class PushNotificationService {
         return savedSub;
       }
     } catch (error) {
-// removed by clean-audit
       throw error;
     }
     
@@ -149,7 +148,6 @@ export class PushNotificationService {
       
       return true;
     } catch (error) {
-// removed by clean-audit
       return false;
     }
   }
@@ -292,7 +290,6 @@ export class PushNotificationService {
 
   private showInAppNotification(payload: NotificationPayload): void {
     // This would integrate with your existing toast/notification system
-// removed by clean-audit
     
     // You could emit an event or call a toast service here
     // Example: this.toastService.show(payload.title, payload.body, payload.type);
@@ -383,9 +380,7 @@ export class PushNotificationService {
         headers: { 'Authorization': `Bearer ${this.getAuthToken()}` }
       }).toPromise();
       
-// removed by clean-audit
     } catch (error) {
-// removed by clean-audit
       
       // Fallback: show local notification
       this.showNotification(testPayload);
@@ -443,7 +438,6 @@ export class PushNotificationService {
 
   async initializeNotifications(): Promise<boolean> {
     if (!this.isSupported) {
-// removed by clean-audit
       return false;
     }
 
@@ -460,7 +454,6 @@ export class PushNotificationService {
         }
       }
     } catch (error) {
-// removed by clean-audit
     }
 
     return false;
@@ -488,4 +481,3 @@ export class PushNotificationService {
   }
 }
 
-// removed by clean-audit

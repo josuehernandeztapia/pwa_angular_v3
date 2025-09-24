@@ -107,7 +107,6 @@ export class DeliveryTrackerComponent {
         this.trackingResult.set(result);
       },
       error: (error) => {
-// removed by clean-audit
         this.trackingResult.set(null);
       }
     });
@@ -127,7 +126,6 @@ export class DeliveryTrackerComponent {
         this.metrics.set(metrics);
       },
       error: (error) => {
-// removed by clean-audit
       }
     });
   }
@@ -140,7 +138,6 @@ export class DeliveryTrackerComponent {
         this.activeDeliveries.set(deliveries);
       },
       error: (error) => {
-// removed by clean-audit
       }
     });
   }
@@ -252,4 +249,3 @@ export class DeliveryTrackerComponent {
     return `Hace ${diffDays} días`;
   }
 }
-// removed by clean-audit

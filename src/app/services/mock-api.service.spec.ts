@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
-// removed by clean-audit
 import { ClientDataService } from './data/client-data.service';
 import { EcosystemDataService } from './data/ecosystem-data.service';
 import { CollectiveGroupDataService } from './data/collective-group-data.service';
@@ -703,4 +702,3 @@ describe('MockApiService', () => {
     });
   });
 });
-// removed by clean-audit

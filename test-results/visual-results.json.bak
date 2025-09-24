@@ -1,0 +1,1991 @@
+{
+  "config": {
+    "configFile": "/Users/josuehernandez/pwa_angular/playwright.config.ts",
+    "rootDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "project": "Conductores PWA",
+      "description": "Visual regression tests for UI components and pages",
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/visual-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages",
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages",
+          "actualWorkers": 4
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages",
+          "actualWorkers": 4
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages",
+          "actualWorkers": 4
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages",
+          "actualWorkers": 4
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages",
+          "actualWorkers": 4
+        },
+        "id": "iPad",
+        "name": "iPad",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "project": "Conductores PWA",
+          "description": "Visual regression tests for UI components and pages",
+          "actualWorkers": 4
+        },
+        "id": "High DPI",
+        "name": "High DPI",
+        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 4,
+    "webServer": {
+      "command": "npm run serve:prod",
+      "url": "http://localhost:4200",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "qa-visual-final.spec.ts",
+      "file": "qa-visual-final.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "QA Visual Final - Screenshots & Accessibility",
+          "file": "qa-visual-final.spec.ts",
+          "line": 56,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Login - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2449,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Login: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:38.874Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--57d42-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--57d42-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-961047d6e1322913196a",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Login - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1290,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:42.887Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--fa80c-ogin---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-d1f9633cedb568e34530",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Dashboard - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2111,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Dashboard: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:44.186Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3f12a-de-Screenshot-Accessibility-chromium/video.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3f12a-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-347c32d71b5559e27020",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Dashboard - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1302,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:46.306Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--ccf26-oard---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-69d9761451a54fbc2edd",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Cotizador AGS - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2051,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Cotizador AGS: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:47.616Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--d17a3-de-Screenshot-Accessibility-chromium/video.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--d17a3-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-ee6fc33672826f100fbd",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Cotizador AGS - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1282,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:49.673Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--ad9de--AGS---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-ca840cca08f292b3d9a0",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Cotizador EdoMex - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2046,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Cotizador EdoMex: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:50.969Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--fcae1-de-Screenshot-Accessibility-chromium/video.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--fcae1-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-6019f2ed6fbff1feabbe",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Cotizador EdoMex - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1233,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:53.024Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--5bd52-oMex---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-c281c4ab13331c1f79f2",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Cotizador Colectivo - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1991,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Cotizador Colectivo: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:54.264Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--e6c4d-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--e6c4d-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-3386da63ace21b3bfb21",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Cotizador Colectivo - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1223,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "📋 QA Report generated: /Users/josuehernandez/pwa_angular/QA-REPORT.md\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:56.262Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--36407-tivo---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-95dff0ab78a22b407d9f",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Simulador AGS - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2429,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Simulador AGS: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:38.876Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--6d5b0-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--6d5b0-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-9fd9aecdca1995a69a6f",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Simulador AGS - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1282,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:42.881Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--c5e96--AGS---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-c9558015f5f2a6a61142",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Simulador EdoMex Individual - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2121,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Simulador EdoMex Individual: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:44.178Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--117de-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--117de-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-a4e46fdd98d512fcdc51",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Simulador EdoMex Individual - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1299,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:46.308Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--6e7a8-dual---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-eab2c0cf1152aa1f9e78",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Simulador EdoMex Colectivo - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2041,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Simulador EdoMex Colectivo: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:47.618Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--62131-de-Screenshot-Accessibility-chromium/video.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--62131-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-8e600f8a9f58f57052d2",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Simulador EdoMex Colectivo - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1272,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:49.670Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--b26e8-tivo---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-819a6789f3a60c22165b",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Protección - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2066,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Protección: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:50.948Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3fd8a-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3fd8a-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-195074b67e982a8577e6",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Protección - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1236,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:53.022Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--e626e-ción---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-123edd02c623bf04c72d",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "AVI - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1975,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in AVI: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:54.263Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--75ede-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--75ede-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-cb4a63307685b9e0f327",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "AVI - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1219,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "📋 QA Report generated: /Users/josuehernandez/pwa_angular/QA-REPORT.md\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:56.245Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--7d7a8--AVI---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-9a7e8703ffa4d5419204",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Documentos - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2469,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Documentos: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:38.870Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--cfea0-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--cfea0-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-cde48c7178b885bd1570",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Documentos - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1328,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:42.873Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--230c0-ntos---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-ca72781edf0025b3bd57",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Entregas - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2090,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Entregas: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:44.208Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3caa5-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3caa5-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-3c3a4c5a0d5afdc0530b",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Entregas - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1288,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:46.307Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--c1157-egas---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-14c3acde997eae00c3b1",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Configuración - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2062,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Configuración: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:47.605Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--82616-de-Screenshot-Accessibility-chromium/video.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--82616-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-483b8e3cec2fcfa41b7d",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Configuración - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1249,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:49.675Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--8bf15-ción---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-d363e08544b9a62edef3",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Postventa - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1999,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Postventa: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:50.932Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--5a004-de-Screenshot-Accessibility-chromium/video.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--5a004-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-a7beb6aa3c2f99bf88c2",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Postventa - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1290,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:52.942Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--da920-enta---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-4a8b7b8b9efab9866a57",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "GNV Salud - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1998,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in GNV Salud: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:54.239Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--76d0f-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--76d0f-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-03330cbc9a325cb30baa",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "GNV Salud - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1242,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "📋 QA Report generated: /Users/josuehernandez/pwa_angular/QA-REPORT.md\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:56.245Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--f70b9-alud---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-26a91f91cf731d7faf0c",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Integraciones - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2460,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Integraciones: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:38.880Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--01d5e-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--01d5e-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-a41f821192ddbac45caf",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Integraciones - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1283,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:42.877Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--a9042-ones---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-240898e023015f788470",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Administración - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2141,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Administración: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:44.171Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--260a9-de-Screenshot-Accessibility-chromium/video.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--260a9-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-ef0187c5a1d115e84141",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Administración - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1289,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:46.318Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--33ca7-ción---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-7c5c8b6bc4f6bfcf8700",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Offline - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2054,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Offline: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:47.616Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--285f6-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--285f6-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-e1a9ebeca8ed8c626e14",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Offline - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1262,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:49.679Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--e9342-line---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-4a2e7165102a195b61a6",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "Usage - Light Mode Screenshot & Accessibility",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2046,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "🚨 Accessibility violations in Usage: [\n  {\n    rule: \u001b[32m'document-title'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure each HTML document contains a non-empty <title> element'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  },\n  {\n    rule: \u001b[32m'html-has-lang'\u001b[39m,\n    impact: \u001b[32m'serious'\u001b[39m,\n    description: \u001b[32m'Ensure every HTML document has a lang attribute'\u001b[39m,\n    nodes: \u001b[33m1\u001b[39m\n  }\n]\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:50.951Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--fddd8-de-Screenshot-Accessibility-chromium/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--fddd8-de-Screenshot-Accessibility-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-56ee1817f0e29f51b2f6",
+              "file": "qa-visual-final.spec.ts",
+              "line": 77,
+              "column": 9
+            },
+            {
+              "title": "Usage - Dark Mode Screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1248,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:53.009Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--9d403-sage---Dark-Mode-Screenshot-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-bdd03a6c85cb5de065fb",
+              "file": "qa-visual-final.spec.ts",
+              "line": 133,
+              "column": 9
+            },
+            {
+              "title": "QA Visual - Mobile Responsive Screenshots",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 6450,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:53:54.264Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--8413d-bile-Responsive-Screenshots-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-1b5a0be692ed53123de6",
+              "file": "qa-visual-final.spec.ts",
+              "line": 186,
+              "column": 7
+            },
+            {
+              "title": "QA Visual - Form Accessibility Validation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2190,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "📋 QA Report generated: /Users/josuehernandez/pwa_angular/QA-REPORT.md\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-17T09:54:00.720Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--424f0-rm-Accessibility-Validation-chromium/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0b662dbc0449cce45d24-b6a67130b9a336034cf3",
+              "file": "qa-visual-final.spec.ts",
+              "line": 210,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-17T09:53:37.376Z",
+    "duration": 25580.906000000003,
+    "expected": 40,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

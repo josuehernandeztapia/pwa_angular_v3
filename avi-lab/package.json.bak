@@ -1,0 +1,21 @@
+{
+  "name": "avi-lab",
+  "version": "1.0.0",
+  "description": "AVI Testing Laboratory - Voice Analysis & Whisper Integration",
+  "main": "app.js",
+  "scripts": {
+    "start": "npx http-server . -p 8080 -o",
+    "dev": "npx live-server --port=8080 --open=/index.html",
+    "test": "echo \"AVI_LAB Testing Suite\" && echo \"✅ Ready to test voice analysis\""
+  },
+  "keywords": ["avi", "voice", "whisper", "testing", "lab"],
+  "author": "Conductores PWA Team",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

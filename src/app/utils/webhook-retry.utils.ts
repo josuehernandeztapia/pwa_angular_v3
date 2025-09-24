@@ -177,7 +177,6 @@ export class WebhookRetryService {
         if (now - state.lastFailureTime > this.recoveryTimeout) {
           state.state = 'HALF_OPEN';
           state.successCount = 0;
-// removed by clean-audit
         }
         return state.state !== 'OPEN';
 
@@ -203,7 +202,6 @@ export class WebhookRetryService {
 
     if (state.state === 'HALF_OPEN' && state.successCount >= 3) {
       state.state = 'CLOSED';
-// removed by clean-audit
     }
   }
 
@@ -220,10 +218,8 @@ export class WebhookRetryService {
 
     if (state.state === 'CLOSED' && state.failureCount >= this.failureThreshold) {
       state.state = 'OPEN';
-// removed by clean-audit
     } else if (state.state === 'HALF_OPEN') {
       state.state = 'OPEN';
-// removed by clean-audit
     }
   }
 
@@ -239,7 +235,6 @@ export class WebhookRetryService {
    */
   resetCircuitBreaker(endpointId: string): void {
     this.circuitBreakerStates.delete(endpointId);
-// removed by clean-audit
   }
 }
 
@@ -340,7 +335,5 @@ export class WebhookDeadLetterQueue {
 
   clearDeadLetterQueue(): void {
     this.failedWebhooks = [];
-// removed by clean-audit
   }
 }
-// removed by clean-audit

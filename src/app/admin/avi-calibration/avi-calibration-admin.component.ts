@@ -206,7 +206,7 @@ interface CalibrationResult {
     }
 
     .admin-header {
-      background: linear-gradient(135deg, #1a2332, #0B1220);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 16px;
       padding: 32px;
       margin-bottom: 24px;
@@ -233,7 +233,7 @@ interface CalibrationResult {
       margin: 0;
       font-size: 32px;
       font-weight: 700;
-      background: linear-gradient(135deg, #3AA6FF, #22D3EE);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -522,7 +522,7 @@ interface CalibrationResult {
 
     .progress-bar {
       height: 100%;
-      background: linear-gradient(90deg, #3AA6FF, #22D3EE);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 8px;
       transition: width 0.3s ease;
     }
@@ -557,7 +557,6 @@ export class AviCalibrationAdminComponent implements OnInit {
         this.calibrationHistory = response.history;
       }
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -587,7 +586,6 @@ export class AviCalibrationAdminComponent implements OnInit {
         }, 1000);
       }
     } catch (error) {
-// removed by clean-audit
       this.runningCalibration = false;
       this.calibrationProgress = 0;
     }
@@ -611,4 +609,3 @@ export class AviCalibrationAdminComponent implements OnInit {
     });
   }
 }
-// removed by clean-audit

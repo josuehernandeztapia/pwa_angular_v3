@@ -49,7 +49,6 @@ export class DataService {
   }
 
   /**
-// removed by clean-audit
    */
   private initializeData(): void {
     this.setLoading(true);
@@ -503,4 +502,3 @@ export class DataService {
   }
 }
 
-// removed by clean-audit

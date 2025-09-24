@@ -39,7 +39,6 @@ describe('LoginComponent', () => {
     // Trigger validation by marking fields as touched
     component.loginForm.get('email')?.markAsTouched();
     component.loginForm.get('password')?.markAsTouched();
-// removed by clean-audit
 
     expect(component.isFieldInvalid('email')).toBe(true);
     expect(component.isFieldInvalid('password')).toBe(true);
@@ -49,7 +48,6 @@ describe('LoginComponent', () => {
     const emailControl = component.loginForm.get('email');
     emailControl?.setValue('invalid-email');
     emailControl?.markAsTouched();
-// removed by clean-audit
 
     expect(component.isFieldInvalid('email')).toBe(true);
     expect(emailControl?.errors?.['email']).toBeTruthy();
@@ -59,7 +57,6 @@ describe('LoginComponent', () => {
     const passwordControl = component.loginForm.get('password');
     passwordControl?.setValue('123'); // Too short
     passwordControl?.markAsTouched();
-// removed by clean-audit
 
     expect(component.isFieldInvalid('password')).toBe(true);
     expect(passwordControl?.errors?.['minlength']).toBeTruthy();
@@ -118,7 +115,6 @@ describe('LoginComponent', () => {
 
   it('should handle login loading state', () => {
     component.isLoading = true;
-// removed by clean-audit
 
     expect(component.isLoading).toBe(true);
     // Form should be disabled during loading
@@ -300,4 +296,3 @@ describe('LoginComponent Integration Tests', () => {
     expect(screen.getByText('El Copiloto Estratégico para el Asesor Moderno')).toBeTruthy();
   });
 });
-// removed by clean-audit

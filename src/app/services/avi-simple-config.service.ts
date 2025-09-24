@@ -362,7 +362,6 @@ export class AviSimpleConfigService {
       }
       return false;
     } catch (error) {
-// removed by clean-audit
       return false;
     }
   }
@@ -379,7 +378,6 @@ export class AviSimpleConfigService {
     try {
       localStorage.setItem('avi_config', JSON.stringify(this.configSubject.value));
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -391,7 +389,6 @@ export class AviSimpleConfigService {
         this.configSubject.next(config);
       }
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -416,4 +413,3 @@ export class AviSimpleConfigService {
     };
   }
 }
-// removed by clean-audit

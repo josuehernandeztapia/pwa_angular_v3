@@ -234,7 +234,6 @@ export class EcosystemDataService {
    * Get ecosystem members (clients in ecosystem)
    */
   getEcosystemMembers(ecosystemId: string, clientDataService: any): Observable<Client[]> {
-// removed by clean-audit
     return of([]).pipe(delay(300));
   }
 
@@ -294,4 +293,3 @@ export class EcosystemDataService {
     }).pipe(delay(250));
   }
 }
-// removed by clean-audit

@@ -61,7 +61,6 @@ const isComponentFixture = (target: any): target is ComponentFixture<any> =>
 
 const resolveElement = (target: AccessibilityTarget): HTMLElement => {
   if (!target) {
-// removed by clean-audit
   }
 
   if (target instanceof HTMLElement) {
@@ -326,4 +325,3 @@ export function createAccessibilityTestSuite(options: string | AccessibilitySuit
   return suite;
 }
 
-// removed by clean-audit

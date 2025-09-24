@@ -654,13 +654,11 @@ export class DocumentsPhaseComponent {
     
     setTimeout(() => {
       this.isSaving.set(false);
-// removed by clean-audit
     }, 1500);
   }
 
   onSubmit(): void {
     if (!this.canCompleteDocuments()) {
-// removed by clean-audit
       return;
     }
 
@@ -680,12 +678,10 @@ export class DocumentsPhaseComponent {
     // Complete documents phase
     this.importTracker.completeDocumentsPhase(this.clientId(), legalDocuments).subscribe({
       next: (result) => {
-// removed by clean-audit
         this.isSubmitting.set(false);
         this.showSuccessModal.set(true);
       },
       error: (error) => {
-// removed by clean-audit
         this.isSubmitting.set(false);
         alert('Error al completar la transferencia de documentos. Intenta nuevamente.');
       }
@@ -748,9 +744,7 @@ export class DocumentsPhaseComponent {
       const blob = await pdf.generatePostSalesOnePager(data);
       pdf.downloadPDF(blob, `postventa-${data.vin || 'expediente'}.pdf`);
     } catch (e) {
-// removed by clean-audit
     }
   }
 }
 
-// removed by clean-audit

@@ -69,7 +69,6 @@ export class GnvHealthService {
           this.lastHealthCheck.set(new Date().toISOString());
         }),
         catchError(error => {
-// removed by clean-audit
           return this.http.get(this.csvPath, { responseType: 'text' }).pipe(
             map(text => this.parseCsv(text))
           );
@@ -98,18 +97,15 @@ export class GnvHealthService {
    */
   triggerT1Sync(stationId: string): Observable<any> {
     if (!(environment.features as any)?.enableGnvBff) {
-// removed by clean-audit
     }
 
     const url = `${this.BFF_BASE_URL}/stations/${stationId}/sync-t1`;
     return this.http.post(url, { timestamp: new Date().toISOString() }).pipe(
       tap(result => {
-// removed by clean-audit
         // Update local station status
         this.updateStationT1Status(stationId, 'synced');
       }),
       catchError(error => {
-// removed by clean-audit
         this.updateStationT1Status(stationId, 'failed');
         return of({ synced: false, stationId, error: error.message });
       })
@@ -129,18 +125,15 @@ export class GnvHealthService {
     ).subscribe({
       next: (healthData) => {
         const metrics = this.calculateSystemMetrics(healthData);
-// removed by clean-audit
 
         if (metrics.overallHealthScore < this.TARGET_HEALTH) {
           this.systemHealthStatus.set('warning');
-// removed by clean-audit
         } else {
           this.systemHealthStatus.set('healthy');
         }
       },
       error: (error) => {
         this.systemHealthStatus.set('critical');
-// removed by clean-audit
       }
     });
   }
@@ -357,4 +350,3 @@ export class GnvHealthService {
   }
 }
 
-// removed by clean-audit

@@ -74,7 +74,6 @@ export class MonitoringService {
 
     // Log to console in development only
     if (!this.isProduction()) {
-// removed by clean-audit
     }
 
     return event.id;
@@ -100,7 +99,6 @@ export class MonitoringService {
 
     // Log to console in development only
     if (!this.isProduction()) {
-// removed by clean-audit
     }
 
     return event.id;
@@ -308,4 +306,3 @@ export class MonitoringService {
            !window.location.hostname.includes('dev');
   }
 }
-// removed by clean-audit

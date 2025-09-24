@@ -30,7 +30,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 24px 32px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
@@ -124,7 +124,7 @@
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border: none;
       cursor: pointer;
       display: flex;
@@ -140,7 +140,7 @@
     }
 
     .mic-button.mic-recording {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       animation: recordingPulse 1.5s infinite;
     }
 
@@ -250,7 +250,7 @@
 
     .progress-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, #10b981, #059669);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       transition: width 0.3s ease;
       border-radius: 4px;
     }
@@ -259,7 +259,7 @@
     .completion-section {
       margin-top: 20px;
       padding: 24px;
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 16px;
       border: 1px solid #bae6fd;
       text-align: center;
@@ -535,17 +535,17 @@
     /* Semáforo Colors */
     .question-result-card.result-go {
       border-color: #10b981;
-      background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .question-result-card.result-nogo {
       border-color: #ef4444;
-      background: linear-gradient(135deg, #fef2f2 0%, #fef7f7 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .question-result-card.result-review {
       border-color: #f59e0b;
-      background: linear-gradient(135deg, #fffbeb 0%, #fefce8 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .semaforo-indicator {
@@ -638,7 +638,7 @@
 
     /* ✅ NUEVO: Resilience Summary Styles */
     .resilience-summary-section {
-      background: linear-gradient(135deg, #f3e8ff 0%, #faf5ff 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       padding: 24px;
       border-radius: 12px;
       border: 1px solid #e9d5ff;

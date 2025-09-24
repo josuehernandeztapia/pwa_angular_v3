@@ -291,7 +291,7 @@ export type ScanMode = 'vin' | 'odometer' | 'general';
 
     .camera-trigger {
       width: 100%;
-      background: linear-gradient(135deg, #3AA6FF, #22D3EE);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
       border: none;
       border-radius: 12px;

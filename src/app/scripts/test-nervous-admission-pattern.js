@@ -1,14 +1,11 @@
 // Test específico para el pattern "nervioso con admisión parcial"
 // Validar que CRITICAL → HIGH cuando se detecta este pattern
 
-// removed by clean-audit
-// removed by clean-audit
 
 // Simulador del engine calibrado con pattern avanzado
 class AdvancedAVIEngine {
   
   static calculateAdvancedScore(responses, testProfile) {
-// removed by clean-audit
     
     let totalScore = 0;
     let totalWeight = 0;
@@ -24,16 +21,8 @@ class AdvancedAVIEngine {
       totalScore += subscore.finalScore * question.weight;
       totalWeight += question.weight;
       
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
       
       if (subscore.patternAnalysis.patternDetected) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
         
         nervousAdmissionPatterns.push({
           questionId: response.questionId,
@@ -45,8 +34,6 @@ class AdvancedAVIEngine {
         });
       }
       
-// removed by clean-audit
-// removed by clean-audit
       
       // Red flags básicas - más sensible para evasión tajante
       if (subscore.finalScore < 0.55 && question.weight >= 8) {
@@ -73,14 +60,12 @@ class AdvancedAVIEngine {
     
     // Calcular risk level inicial
     let riskLevel = this.calculateInitialRiskLevel(finalScore, redFlags);
-// removed by clean-audit
     
     // APLICAR CORRECCIÓN por pattern "nervioso con admisión"
     const originalRisk = riskLevel;
     riskLevel = this.applyNervousAdmissionCorrection(riskLevel, nervousAdmissionPatterns);
     
     if (originalRisk !== riskLevel) {
-// removed by clean-audit
     }
     
     return {
@@ -386,59 +371,37 @@ const PATTERN_TEST_CASES = {
 
 // EJECUTAR TESTS
 async function runPatternTests() {
-// removed by clean-audit
   
   let testsPassed = 0;
   let totalTests = Object.keys(PATTERN_TEST_CASES).length;
   
   for (const [testName, testCase] of Object.entries(PATTERN_TEST_CASES)) {
-// removed by clean-audit
-// removed by clean-audit
     
     const result = AdvancedAVIEngine.calculateAdvancedScore(testCase.responses, testName);
     
-// removed by clean-audit
-// removed by clean-audit
     
     if (result.correctionApplied) {
-// removed by clean-audit
-// removed by clean-audit
       
       result.nervousAdmissionPatterns.forEach(pattern => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
       });
     }
     
     if (result.redFlags.length > 0) {
-// removed by clean-audit
     }
     
     // Validar resultado
     const testPassed = result.riskLevel === testCase.expected;
-// removed by clean-audit
     
     if (testPassed) testsPassed++;
-// removed by clean-audit
   }
   
   // Resumen final
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   
   if (testsPassed === totalTests) {
-// removed by clean-audit
-// removed by clean-audit
   } else {
-// removed by clean-audit
   }
   
-// removed by clean-audit
 }
 
 // Ejecutar tests
 runPatternTests().catch(console.error);
-// removed by clean-audit

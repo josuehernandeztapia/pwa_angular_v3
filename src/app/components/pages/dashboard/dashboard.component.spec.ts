@@ -8,7 +8,6 @@ import { DashboardComponent } from './dashboard.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
-// removed by clean-audit
   let mockDashboardService: jasmine.SpyObj<DashboardService>;
   let mockRouter: jasmine.SpyObj<Router>;
 
@@ -102,8 +101,6 @@ describe('DashboardComponent', () => {
       ]
     }).compileComponents();
 
-// removed by clean-audit
-// removed by clean-audit
     mockDashboardService = TestBed.inject(DashboardService) as jasmine.SpyObj<DashboardService>;
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
 
@@ -130,7 +127,6 @@ describe('DashboardComponent', () => {
 
   it('should display dashboard stats correctly', () => {
     component.ngOnInit();
-// removed by clean-audit
 
     expect(component.dashboardStats).toEqual(mockDashboardStats);
     expect(component.dashboardStats.opportunitiesInPipeline.nuevas).toBe(5);
@@ -139,7 +135,6 @@ describe('DashboardComponent', () => {
 
   it('should handle activity feed data', () => {
     component.ngOnInit();
-// removed by clean-audit
 
     expect(component.activityFeed).toEqual(mockActivityFeed);
     expect(component.activityFeed.length).toBe(2);
@@ -321,4 +316,3 @@ describe('DashboardComponent Integration Tests', () => {
     expect(modeToggle).toBeTruthy();
   });
 });
-// removed by clean-audit

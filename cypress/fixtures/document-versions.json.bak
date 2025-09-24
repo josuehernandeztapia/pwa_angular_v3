@@ -1,0 +1,58 @@
+[
+  {
+    "id": "version-001",
+    "documentId": "doc-004",
+    "version": 1,
+    "status": "rejected",
+    "uploadedAt": "2024-01-20T10:45:00Z",
+    "fileName": "Comprobante_Ingresos_v1.pdf",
+    "fileSize": 1536000,
+    "fileUrl": "/uploads/client-001/ingresos_v1.pdf",
+    "uploadedBy": "Juan Pérez García",
+    "rejectedAt": "2024-01-22T16:30:00Z",
+    "rejectedBy": "María González",
+    "rejectionReason": "illegible",
+    "rejectionNotes": "La imagen está borrosa y no se pueden leer los datos",
+    "isCurrent": false
+  },
+  {
+    "id": "version-002",
+    "documentId": "doc-004",
+    "version": 2,
+    "status": "in_review",
+    "uploadedAt": "2024-01-25T14:20:00Z",
+    "fileName": "Comprobante_Ingresos_v2.pdf",
+    "fileSize": 1789440,
+    "fileUrl": "/uploads/client-001/ingresos_v2.pdf",
+    "uploadedBy": "Juan Pérez García",
+    "uploadNotes": "Documento escaneado con mayor resolución según indicaciones",
+    "isCurrent": true,
+    "changes": [
+      "Mejor calidad de imagen",
+      "Documento completo (3 páginas)",
+      "Información más legible"
+    ],
+    "qualityScore": 92
+  },
+  {
+    "id": "version-003",
+    "documentId": "doc-001",
+    "version": 1,
+    "status": "approved",
+    "uploadedAt": "2024-01-16T09:15:00Z",
+    "fileName": "INE_Juan_Perez.pdf",
+    "fileSize": 2048576,
+    "fileUrl": "/uploads/client-001/ine.pdf",
+    "uploadedBy": "Juan Pérez García",
+    "approvedAt": "2024-02-01T14:20:00Z",
+    "approvedBy": "María González",
+    "isCurrent": true,
+    "extractedData": {
+      "name": "JUAN PEREZ GARCIA",
+      "curp": "PEGJ850315HDFRZN03",
+      "address": "AV INSURGENTES 123, COL CENTRO",
+      "expirationDate": "2029-03-15"
+    },
+    "qualityScore": 95
+  }
+]

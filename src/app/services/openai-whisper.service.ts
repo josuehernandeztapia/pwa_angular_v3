@@ -69,7 +69,6 @@ export class OpenAIWhisperService {
           return this.enhanceResponseWithVoiceMetrics(response, audioBlob);
         }),
         catchError(error => {
-// removed by clean-audit
           throw new Error(`Whisper API Error: ${error.message}`);
         })
       );
@@ -106,7 +105,6 @@ export class OpenAIWhisperService {
         return true;
       }),
       catchError(error => {
-// removed by clean-audit
         throw new Error('No se pudo acceder al micrófono');
       })
     );
@@ -152,7 +150,6 @@ export class OpenAIWhisperService {
       this.startRecording().subscribe({
         next: (success) => {
           if (success) {
-// removed by clean-audit
             
             // Auto-detener después del tiempo esperado + buffer
             const autoStopTimer = setTimeout(async () => {
@@ -483,4 +480,3 @@ export interface AVIVoiceResponse {
   stopRecording?: () => Promise<void>;
   error?: string;
 }
-// removed by clean-audit

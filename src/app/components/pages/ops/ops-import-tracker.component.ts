@@ -14,7 +14,7 @@ import { IntegratedImportTrackerService, ImportTrackerMetrics, IntegratedImportS
       <div class="flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold text-gray-900">Import Tracker</h1>
-          <p class="text-gray-600">Estado de importación, entregas y triggers</p>
+          <p class="text-neutral-100">Estado de importación, entregas y triggers</p>
         </div>
         <div class="flex items-center gap-2">
           <input class="border rounded-lg px-3 py-2 text-sm" [formControl]="clientIdCtrl" placeholder="Buscar por Client ID" />
@@ -25,19 +25,19 @@ import { IntegratedImportTrackerService, ImportTrackerMetrics, IntegratedImportS
       <!-- KPIs -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white rounded-xl shadow p-4">
-          <div class="text-gray-500 text-sm">Importaciones activas</div>
+          <div class="text-neutral-100 text-sm">Importaciones activas</div>
           <div class="text-2xl font-semibold">{{ (metrics$ | async)?.totalActiveImports ?? 0 }}</div>
         </div>
         <div class="bg-white rounded-xl shadow p-4">
-          <div class="text-gray-500 text-sm">On-time rate</div>
+          <div class="text-neutral-100 text-sm">On-time rate</div>
           <div class="text-2xl font-semibold">{{ ((metrics$ | async)?.onTimeDeliveryRate ?? 0) | number:'1.0-0' }}%</div>
         </div>
         <div class="bg-white rounded-xl shadow p-4">
-          <div class="text-gray-500 text-sm">Tiempo medio en tránsito</div>
+          <div class="text-neutral-100 text-sm">Tiempo medio en tránsito</div>
           <div class="text-2xl font-semibold">{{ (metrics$ | async)?.averageTransitTime ?? 0 }} d</div>
         </div>
         <div class="bg-white rounded-xl shadow p-4">
-          <div class="text-gray-500 text-sm">Retrasadas</div>
+          <div class="text-neutral-100 text-sm">Retrasadas</div>
           <div class="text-2xl font-semibold">{{ (metrics$ | async)?.delayedImports ?? 0 }}</div>
         </div>
       </div>
@@ -52,19 +52,19 @@ import { IntegratedImportTrackerService, ImportTrackerMetrics, IntegratedImportS
         <ng-container *ngIf="status; else emptyState">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div class="p-4 border rounded-lg">
-              <div class="text-gray-500 text-sm mb-1">Orden de entrega</div>
+              <div class="text-neutral-100 text-sm mb-1">Orden de entrega</div>
               <div class="font-medium">{{ status.deliveryOrderId || '—' }}</div>
             </div>
             <div class="p-4 border rounded-lg">
-              <div class="text-gray-500 text-sm mb-1">Contrato</div>
+              <div class="text-neutral-100 text-sm mb-1">Contrato</div>
               <div class="font-medium">{{ status.contractId || '—' }}</div>
             </div>
             <div class="p-4 border rounded-lg">
-              <div class="text-gray-500 text-sm mb-1">Entrega estimada</div>
+              <div class="text-neutral-100 text-sm mb-1">Entrega estimada</div>
               <div class="font-medium">{{ status.estimatedDeliveryDate ? (status.estimatedDeliveryDate | date:'mediumDate') : '—' }}</div>
             </div>
             <div class="p-4 border rounded-lg">
-              <div class="text-gray-500 text-sm mb-1">Sync status</div>
+              <div class="text-neutral-100 text-sm mb-1">Sync status</div>
               <div class="font-medium">{{ status.syncStatus || '—' }}</div>
             </div>
           </div>

@@ -574,7 +574,6 @@ export class VehicleAssignmentFormComponent implements OnDestroy {
   onSubmit(): void {
     if (this.assignmentForm.invalid) {
       this.markAllFieldsAsTouched();
-// removed by clean-audit
       return;
     }
 
@@ -635,7 +634,6 @@ export class VehicleAssignmentFormComponent implements OnDestroy {
           success: false,
           error: 'Error interno del sistema. Intenta nuevamente.'
         });
-// removed by clean-audit
         alert('Error de conexión al asignar vehículo. Verifica tu conexión a internet.');
       }
     });
@@ -661,4 +659,3 @@ export class VehicleAssignmentFormComponent implements OnDestroy {
     this.assignmentCancelled.emit();
   }
 }
-// removed by clean-audit

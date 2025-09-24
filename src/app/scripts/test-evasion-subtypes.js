@@ -1,7 +1,5 @@
 // Test para distinguir tipos de evasión en sistema AVI + Whisper
 
-// removed by clean-audit
-// removed by clean-audit
 
 // Simulador de respuestas con diferentes tipos de evasión
 const EvasionProfiles = {
@@ -261,7 +259,6 @@ class AdvancedEvasionAnalyzer {
   static detectCalculatedLanguage(text, words) {
     const calculated = [
       'honestamente', 'transparente', 'legalmente', 'oficialmente',
-// removed by clean-audit
     ];
     
     let calculatedCount = 0;
@@ -433,55 +430,32 @@ class AdvancedEvasionAnalyzer {
 
 // Ejecutar tests con subtipos
 async function runEvasionSubtypeTests() {
-// removed by clean-audit
   
   let testsPassed = 0;
   let totalTests = 0;
   
   for (const [profileName, profileData] of Object.entries(EvasionProfiles)) {
     totalTests++;
-// removed by clean-audit
-// removed by clean-audit
     
     const analysis = AdvancedEvasionAnalyzer.analyzeEvasionSubtype(
       profileData.whisperResponse,
       profileData.audioProfile
     );
     
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
-// removed by clean-audit
     analysis.reasoning.forEach(reason => {
-// removed by clean-audit
     });
     
     // Validar resultado
     const testPassed = analysis.riskLevel === profileData.expectedRisk;
-// removed by clean-audit
     
     if (testPassed) testsPassed++;
-// removed by clean-audit
   }
   
   // Resumen
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   
   if (testsPassed === totalTests) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   } else {
-// removed by clean-audit
   }
   
   return testsPassed === totalTests;
@@ -490,12 +464,9 @@ async function runEvasionSubtypeTests() {
 // Ejecutar
 if (require.main === module) {
   runEvasionSubtypeTests().then(success => {
-// removed by clean-audit
     if (success) {
-// removed by clean-audit
     }
   });
 }
 
 module.exports = { AdvancedEvasionAnalyzer, EvasionProfiles };
-// removed by clean-audit

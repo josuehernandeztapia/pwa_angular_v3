@@ -16,9 +16,6 @@ describe('Security settings validation', () => {
   });
 
   it('should create component and verify security functionality', () => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     // Test component creation and basic security-related functionality
     expect(component).toBeTruthy();
@@ -33,4 +30,3 @@ describe('Security settings validation', () => {
 });
 
 
-// removed by clean-audit

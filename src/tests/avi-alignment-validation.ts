@@ -134,8 +134,6 @@ export class AVIAlignmentValidator {
    * Execute validation comparing MAIN vs LAB algorithms
    */
   async executeValidation(): Promise<any> {
-// removed by clean-audit
-// removed by clean-audit
 
     const testCases = this.generateTestCases();
     let totalTests = 0;
@@ -163,7 +161,6 @@ export class AVIAlignmentValidator {
         thresholdAligned: isThresholdAligned
       });
 
-// removed by clean-audit
     }
 
     return this.generateValidationReport(totalTests, identicalResults, thresholdAlignment);
@@ -276,14 +273,8 @@ export class AVIAlignmentValidator {
     const identicalPercentage = ((identicalResults / totalTests) * 100).toFixed(1);
     const thresholdPercentage = ((thresholdAlignment / totalTests) * 100).toFixed(1);
 
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     const status = identicalResults >= totalTests * 0.95 ? '✅ ALIGNED' : '❌ MISALIGNED';
-// removed by clean-audit
 
     return {
       totalTests,
@@ -296,4 +287,3 @@ export class AVIAlignmentValidator {
     };
   }
 }
-// removed by clean-audit

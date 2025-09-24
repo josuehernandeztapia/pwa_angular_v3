@@ -7,8 +7,6 @@ const path = require('path');
 const OPENAI_API_KEY = process.env['OPENAI_API_KEY'] || 'YOUR_OPENAI_API_KEY_HERE';
 const WHISPER_URL = 'https://api.openai.com/v1/audio/transcriptions';
 
-// removed by clean-audit
-// removed by clean-audit
 
 // Función para simular archivos de audio con diferentes perfiles
 async function createTestAudioFile(profile, filename) {
@@ -41,7 +39,6 @@ async function transcribeWithWhisper(audioData, options = {}) {
   // Para este test, simularemos la respuesta de Whisper basada en el contenido
   // En producción, esto sería una llamada real con FormData y archivo de audio
   
-// removed by clean-audit
   
   // Simular respuesta de Whisper basada en el perfil
   await new Promise(resolve => setTimeout(resolve, 1000)); // Simular latencia
@@ -129,9 +126,6 @@ class RealAVIAnalyzer {
     const words = whisperResponse.words || [];
     const text = whisperResponse.text.toLowerCase();
     
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
     // Analizar métricas de voz más precisas
     const voiceMetrics = this.calculateVoiceMetrics(words);
@@ -292,7 +286,6 @@ class RealAVIAnalyzer {
 
 // Ejecutar tests con API real (simulada por seguridad)
 async function runRealWhisperTests() {
-// removed by clean-audit
   
   const testCases = [
     { profile: 'clear_response', expected: 'LOW', description: 'Cliente confiable con respuesta clara' },
@@ -304,13 +297,10 @@ async function runRealWhisperTests() {
   let totalCost = 0;
   
   for (const testCase of testCases) {
-// removed by clean-audit
-// removed by clean-audit
     
     try {
       // Crear datos de audio simulados
       const audioData = await createTestAudioFile(testCase.profile, `test_${testCase.profile}.wav`);
-// removed by clean-audit
       
       // Transcribir con Whisper (simulado)
       const whisperResponse = await transcribeWithWhisper(audioData);
@@ -318,20 +308,12 @@ async function runRealWhisperTests() {
       // Analizar con AVI
       const aviAnalysis = RealAVIAnalyzer.analyzeWhisperForAVI(whisperResponse, testCase.profile);
       
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
       
-// removed by clean-audit
-// removed by clean-audit
       
       // Validar resultado
       const testPassed = aviAnalysis.riskAssessment === testCase.expected ||
                          (testCase.expected === 'MEDIUM' && ['LOW', 'HIGH'].includes(aviAnalysis.riskAssessment));
       
-// removed by clean-audit
       
       testResults.push({
         profile: testCase.profile,
@@ -344,7 +326,6 @@ async function runRealWhisperTests() {
       totalCost += (whisperResponse.usage?.total_tokens || 0) * 0.0001;
       
     } catch (error) {
-// removed by clean-audit
       testResults.push({
         profile: testCase.profile,
         expected: testCase.expected,
@@ -354,39 +335,20 @@ async function runRealWhisperTests() {
       });
     }
     
-// removed by clean-audit
   }
   
   // Resumen final
-// removed by clean-audit
-// removed by clean-audit
   
   const passedTests = testResults.filter(r => r.passed).length;
   const totalTests = testResults.length;
   
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   
   if (passedTests === totalTests) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
   } else {
-// removed by clean-audit
     testResults.forEach(result => {
       if (!result.passed) {
-// removed by clean-audit
       }
     });
   }
@@ -398,17 +360,12 @@ async function runRealWhisperTests() {
 if (require.main === module) {
   runRealWhisperTests()
     .then(success => {
-// removed by clean-audit
       if (success) {
-// removed by clean-audit
       } else {
-// removed by clean-audit
       }
     })
     .catch(error => {
-// removed by clean-audit
     });
 }
 
 module.exports = { RealAVIAnalyzer, transcribeWithWhisper };
-// removed by clean-audit

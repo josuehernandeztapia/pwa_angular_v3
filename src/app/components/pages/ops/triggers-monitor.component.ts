@@ -20,7 +20,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h1 class="text-2xl font-semibold text-gray-900 mb-1">Monitor de Triggers</h1>
-            <p class="text-gray-600 text-sm">Actividad reciente y pendientes según filtros</p>
+            <p class="text-neutral-100 text-sm">Actividad reciente y pendientes según filtros</p>
           </div>
 
           <div class="flex items-center gap-3 mt-3 lg:mt-0">
@@ -267,7 +267,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
           
           <div *ngIf="filteredEvents().length === 0 && !loading()" class="bg-white p-8 rounded-xl border text-center" style="min-height:160px;display:flex;align-items:center;justify-content:center;">
             <div>
-              <p class="text-gray-600">No hay registros con los filtros seleccionados.</p>
+              <p class="text-neutral-100">No hay registros con los filtros seleccionados.</p>
             </div>
           </div>
         </div>
@@ -364,7 +364,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
           
           <div *ngIf="pendingContracts().length === 0 && pendingTandas().length === 0 && !loading()" class="bg-white p-8 rounded-xl border text-center" style="min-height:160px;display:flex;align-items:center;justify-content:center;">
             <div>
-              <p class="text-gray-600">No hay registros con los filtros seleccionados.</p>
+              <p class="text-neutral-100">No hay registros con los filtros seleccionados.</p>
             </div>
           </div>
         </div>
@@ -412,7 +412,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
     <div *ngIf="showErrorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white p-6 rounded-xl max-w-md w-full mx-4" role="dialog" aria-modal="true" aria-labelledby="trigger-error-title">
         <h3 id="trigger-error-title" class="text-lg font-semibold text-red-900 mb-4">Error en Trigger</h3>
-        <p class="text-gray-700 mb-4">{{ selectedErrorMessage }}</p>
+        <p class="text-neutral-100 mb-4">{{ selectedErrorMessage }}</p>
         <div class="flex justify-end">
           <button
             (click)="showErrorModal = false"
@@ -514,7 +514,6 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
       this.triggerRules.set(this.contractTriggersService.getTriggerRules());
       this.lastUpdate.set(new Date());
     }).catch(error => {
-// removed by clean-audit
     }).finally(() => {
       this.loading.set(false);
     });
@@ -536,7 +535,6 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         switchMap(() => this.contractTriggersService.getTriggerHistory(50)),
         catchError(error => {
-// removed by clean-audit
           return of([]);
         })
       )
@@ -561,7 +559,6 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
           this.loading.set(false);
         },
         error: (error) => {
-// removed by clean-audit
           this.loading.set(false);
         }
       });
@@ -572,7 +569,6 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
   }
 
   simulateDemoTriggers() {
-// removed by clean-audit
     this.loading.set(true);
     setTimeout(() => {
       this.loading.set(false);
@@ -630,8 +626,7 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
       case BusinessFlow.CreditoColectivo:
         return 'bg-orange-100 text-orange-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-neutral-100 text-gray-800';
     }
   }
 }
-// removed by clean-audit

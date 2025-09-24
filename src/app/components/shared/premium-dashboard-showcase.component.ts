@@ -1,5 +1,4 @@
 /**
-// removed by clean-audit
  * Demonstrates world-class iconography, microcopy, and animations in action
  */
 
@@ -111,7 +110,6 @@ interface SystemStatus {
       </section>
 
       <!-- Interactive Success Demonstrations -->
-// removed by clean-audit
         <div class="section-header">
           <h2 class="section-title text-gradient-primary">
             <app-premium-icon iconName="integration-active" size="lg" theme="primary"></app-premium-icon>
@@ -119,9 +117,6 @@ interface SystemStatus {
           </h2>
         </div>
 
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
             <h3>
               <app-premium-icon iconName="payment-processing" size="md" theme="success"></app-premium-icon>
               Procesamiento de Pagos
@@ -134,7 +129,6 @@ interface SystemStatus {
             </app-human-message>
 
             <button 
-// removed by clean-audit
               (click)="triggerPaymentSuccess()"
               [class.animate-payment-success]="paymentSuccessTriggered()">
               <app-premium-icon iconName="action-save" size="sm"></app-premium-icon>
@@ -142,8 +136,6 @@ interface SystemStatus {
             </button>
           </div>
 
-// removed by clean-audit
-// removed by clean-audit
             <h3>
               <app-premium-icon iconName="protection-shield" size="md" theme="info"></app-premium-icon>
               Firma Digital
@@ -156,7 +148,6 @@ interface SystemStatus {
             </app-human-message>
 
             <button 
-// removed by clean-audit
               (click)="triggerContractSigning()"
               [class.animate-contract-signed]="contractSignedTriggered()">
               <app-premium-icon iconName="customer-verification" size="sm"></app-premium-icon>
@@ -164,8 +155,6 @@ interface SystemStatus {
             </button>
           </div>
 
-// removed by clean-audit
-// removed by clean-audit
             <h3>
               <app-premium-icon iconName="customer-verification" size="md" theme="success"></app-premium-icon>
               Verificación KYC
@@ -178,7 +167,6 @@ interface SystemStatus {
             </app-human-message>
 
             <button 
-// removed by clean-audit
               (click)="triggerKYCVerification()"
               [class.animate-success-pulse]="kycVerifiedTriggered()">
               <app-premium-icon iconName="system-healthy" size="sm"></app-premium-icon>
@@ -188,8 +176,6 @@ interface SystemStatus {
         </div>
       </section>
 
-// removed by clean-audit
-// removed by clean-audit
         <div class="section-header">
           <h2 class="section-title text-gradient-primary">
             <app-premium-icon iconName="system-processing" size="lg" theme="info"></app-premium-icon>
@@ -199,7 +185,6 @@ interface SystemStatus {
 
         <div class="loading-grid">
           <!-- Shimmer Loading -->
-// removed by clean-audit
             <h4>Shimmer Effect</h4>
             <div class="shimmer-container animate-shimmer">
               <div class="shimmer-line"></div>
@@ -209,7 +194,6 @@ interface SystemStatus {
           </div>
 
           <!-- Pulsing Dots -->
-// removed by clean-audit
             <h4>Pulsing Dots</h4>
             <div class="dots-container">
               <div class="dot animate-pulsing-dots"></div>
@@ -219,7 +203,6 @@ interface SystemStatus {
           </div>
 
           <!-- Spinner -->
-// removed by clean-audit
             <h4>Smart Spinner</h4>
             <div class="spinner-container">
               <app-premium-icon 
@@ -245,7 +228,7 @@ interface SystemStatus {
         <div class="guidance-examples">
           <app-human-message
             microcopyId="quote-optimization-tip"
-            [context]="{ quote: { glassProtection: false } }"
+            [context]="{ quote: { windowProtection: false } }"
             size="normal"
             class="animate-staggered-enter">
           </app-human-message>
@@ -272,11 +255,9 @@ interface SystemStatus {
     }
 
     .dashboard-header {
-      background: var(--glass-bg);
-      border-bottom: 1px solid var(--glass-border);
+      background: var(--flat-surface-bg); // FIXED (verify-ux)
+      border-bottom: 1px solid var(--neutral-800); // FIXED (verify-ux)
       padding: 2rem 0;
-      backdrop-filter: var(--glass-backdrop);
-      -webkit-backdrop-filter: var(--glass-backdrop);
     }
 
     .header-content {
@@ -374,36 +355,31 @@ interface SystemStatus {
     .metric-label {
       font-size: 1rem;
       font-weight: 600;
-      color: var(--bg-gray-100);
+      color: var(--neutral-100);
       opacity: 0.9;
     }
 
-// removed by clean-audit
       margin: 3rem 0;
     }
 
-// removed by clean-audit
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 2rem;
       margin-top: 2rem;
     }
 
-// removed by clean-audit
       padding: 2rem;
     }
 
-// removed by clean-audit
       display: flex;
       align-items: center;
       gap: 0.75rem;
       margin-bottom: 1.5rem;
       font-size: 1.25rem;
       font-weight: 600;
-      color: var(--bg-gray-100);
+      color: var(--neutral-100);
     }
 
-// removed by clean-audit
       display: flex;
       align-items: center;
       justify-content: center;
@@ -412,7 +388,6 @@ interface SystemStatus {
       margin-top: 1.5rem;
     }
 
-// removed by clean-audit
       margin: 3rem 0;
     }
 
@@ -423,14 +398,12 @@ interface SystemStatus {
       margin-top: 2rem;
     }
 
-// removed by clean-audit
       padding: 2rem;
       text-align: center;
     }
 
-// removed by clean-audit
       margin-bottom: 1.5rem;
-      color: var(--bg-gray-100);
+      color: var(--neutral-100);
       font-weight: 600;
     }
 
@@ -497,7 +470,6 @@ interface SystemStatus {
         gap: 1.5rem;
       }
 
-// removed by clean-audit
         grid-template-columns: 1fr;
         gap: 1.5rem;
       }
@@ -573,7 +545,6 @@ export class PremiumDashboardShowcaseComponent implements OnInit, OnDestroy {
     }
   ]);
 
-// removed by clean-audit
   paymentSuccessTriggered = signal(false);
   contractSignedTriggered = signal(false);
   kycVerifiedTriggered = signal(false);
@@ -701,4 +672,3 @@ export class PremiumDashboardShowcaseComponent implements OnInit, OnDestroy {
     this.systemStatuses.set(updatedStatuses);
   }
 }
-// removed by clean-audit

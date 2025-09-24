@@ -263,12 +263,8 @@ const commonBeforeWildcard: Routes = [
     title: 'Flow Builder - Conductores PWA'
   },
 
-// removed by clean-audit
   {
-// removed by clean-audit
-// removed by clean-audit
     canActivate: [AuthGuard],
-// removed by clean-audit
   },
 
   {
@@ -327,7 +323,6 @@ const postSalesWizardRoutes: Routes = [
 const integrationsRoutes: Routes = [
   {
     path: 'integraciones',
-// removed by clean-audit
     canActivate: [AuthGuard],
     title: 'Integraciones Externas'
   }
@@ -376,4 +371,3 @@ export const routes: Routes = [
   ...tailRoutes
 ];
 
-// removed by clean-audit

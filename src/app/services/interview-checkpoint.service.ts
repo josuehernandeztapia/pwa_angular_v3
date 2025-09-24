@@ -134,7 +134,6 @@ export class InterviewCheckpointService {
     'edomex_colectivo_grupal': [
       '¿Quién es el líder o coordinador de su grupo de transportistas?',
       '¿Cuántos transportistas forman parte de su grupo?',
-// removed by clean-audit
       '¿Su grupo tiene todos los permisos vigentes para operar la ruta?',
       '¿Han trabajado juntos como grupo anteriormente en otros proyectos?'
     ],
@@ -467,7 +466,6 @@ export class InterviewCheckpointService {
         const checkpoints = JSON.parse(stored);
         this.checkpoints$.next(checkpoints);
       } catch (error) {
-// removed by clean-audit
       }
     }
 
@@ -477,7 +475,6 @@ export class InterviewCheckpointService {
         const attempts = JSON.parse(storedAttempts);
         this.documentAttempts$.next(attempts);
       } catch (error) {
-// removed by clean-audit
       }
     }
   }
@@ -536,7 +533,6 @@ export class InterviewCheckpointService {
   }
 
   // =================================
-// removed by clean-audit
   // =================================
 
   createMockCheckpoint(clientId: string, status: InterviewStatus): InterviewCheckpoint {
@@ -556,4 +552,3 @@ export class InterviewCheckpointService {
     return mockCheckpoint;
   }
 }
-// removed by clean-audit

@@ -1,0 +1,16 @@
+{
+  "opportunitiesInPipeline": {
+    "nuevas": 12,
+    "expediente": 8,
+    "aprobado": 5
+  },
+  "pendingActions": {
+    "clientsWithMissingDocs": 6,
+    "clientsWithGoalsReached": 3
+  },
+  "activeContracts": 24,
+  "monthlyRevenue": {
+    "collected": 125000,
+    "projected": 180000
+  }
+}

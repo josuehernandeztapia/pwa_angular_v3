@@ -684,7 +684,6 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
           localStorage.removeItem(this.draftKey);
         }
       } catch (error) {
-// removed by clean-audit
         localStorage.removeItem(this.draftKey);
       }
     }
@@ -877,12 +876,10 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
 
     // Business rule: EdoMex Individual clients prefer Simulacion
     if (this.marketValue === 'edomex' && this.clientTypeValue === 'Individual' && this.opportunityType === 'COTIZACION') {
-// removed by clean-audit
     }
 
     // Business rule: AGS clients prefer Cotizacion for quick sales
     if (this.marketValue === 'aguascalientes' && this.opportunityType === 'SIMULACION') {
-// removed by clean-audit
     }
 
     return true;
@@ -949,7 +946,6 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
           this.isCheckingDuplicates = false;
         },
         error: (error) => {
-// removed by clean-audit
           this.isCheckingDuplicates = false;
           this.similarClients = [];
         }
@@ -1152,7 +1148,6 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
    * Ecosystem management for EdoMex
    */
   getAvailableEcosystems(): any[] {
-// removed by clean-audit
     return [
       {
         id: 'centro',
@@ -1437,8 +1432,6 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
   // === ENHANCED SAVE METHODS ===
   saveDraft(): void {
     this.saveDraftToStorage();
-// removed by clean-audit
-// removed by clean-audit
   }
 
   onSubmit() {
@@ -1472,7 +1465,6 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
       // Real API Integration
       this.apiService.createClient(enhancedClientData).subscribe({
         next: (createdClient) => {
-// removed by clean-audit
           
           // Clear draft after successful creation
           localStorage.removeItem(this.draftKey);
@@ -1481,9 +1473,7 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
           this.navigateToNextStep(createdClient);
         },
         error: (error) => {
-// removed by clean-audit
           this.isLoading = false;
-// removed by clean-audit
         }
       });
     } else {
@@ -1674,4 +1664,3 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
     this.router.navigate(['/dashboard']);
   }
 }
-// removed by clean-audit

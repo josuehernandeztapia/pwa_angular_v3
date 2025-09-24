@@ -1473,7 +1473,6 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     // Check compatibility before creating product nodes
     if (template.type === NodeType.Product && !this.isTemplateCompatible(template)) {
       const marketName = this.getSelectedMarketName();
-// removed by clean-audit
       return;
     }
 
@@ -1744,7 +1743,6 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     
     // Save to localStorage or send to backend
     localStorage.setItem('flow_builder_data', JSON.stringify(flowData));
-// removed by clean-audit
   }
 
   deployFlow() {
@@ -2233,4 +2231,3 @@ export class ${className}Component {
     this.nodeIdCounter = 4;
   }
 }
-// removed by clean-audit

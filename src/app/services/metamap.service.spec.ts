@@ -5,7 +5,6 @@ import { DataService } from './data.service';
 import { Client, DocumentStatus } from '../models/types';
 import { environment } from '../../environments/environment';
 
-// removed by clean-audit
 declare global {
   interface Window {
     Mati?: any;
@@ -65,7 +64,6 @@ describe('MetaMapService', () => {
     // Install spies BEFORE service instantiation to catch deferred init
     spyOn(document, 'createElement').and.callThrough();
     spyOn(document, 'querySelector').and.returnValue(null);
-// removed by clean-audit
 
     // Configure environment for MetaMap test IDs
     (environment as any).services = {
@@ -113,7 +111,6 @@ describe('MetaMapService', () => {
       (document.createElement as jasmine.Spy).calls.reset();
       (document.head.appendChild as jasmine.Spy).calls.reset();
       
-// removed by clean-audit
       (document.querySelector as jasmine.Spy).and.returnValue({} as any);
       
       // Create new service instance
@@ -552,7 +549,6 @@ describe('MetaMapService', () => {
       // Reset window object
       delete (window as any).Mati;
       
-// removed by clean-audit
       Object.defineProperty(document, 'readyState', {
         writable: true,
         value: 'complete'
@@ -569,7 +565,6 @@ describe('MetaMapService', () => {
     });
 
     it('should detect SDK availability when metamap-button exists', async () => {
-// removed by clean-audit
       const mockButton = document.createElement('div');
       mockButton.setAttribute('data-tag', 'METAMAP-BUTTON');
       (document.querySelector as jasmine.Spy).and.returnValue(mockButton);
@@ -700,4 +695,3 @@ describe('MetaMapService', () => {
     });
   });
 });
-// removed by clean-audit

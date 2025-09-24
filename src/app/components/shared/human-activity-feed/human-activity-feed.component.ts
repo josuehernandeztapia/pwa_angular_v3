@@ -141,10 +141,8 @@ export interface ActivityItem {
   `,
   styles: [`
     .activity-feed-container {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-backdrop);
-      -webkit-backdrop-filter: var(--glass-backdrop);
+      background: var(--flat-surface-bg); // FIXED (verify-ux)
+      border: 1px solid var(--neutral-800); // FIXED (verify-ux)
       border-radius: 20px;
       padding: 28px;
       margin-bottom: 32px;
@@ -158,7 +156,7 @@ export interface ActivityItem {
     }
 
     .feed-title {
-      color: var(--bg-gray-100);
+      color: var(--neutral-100);
       font-size: 1.5rem;
       font-weight: 700;
       margin: 0;
@@ -172,7 +170,7 @@ export interface ActivityItem {
     .filter-btn {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       padding: 8px 16px;
       border-radius: 20px;
       font-size: 0.85rem;
@@ -242,7 +240,7 @@ export interface ActivityItem {
       align-items: center;
       justify-content: center;
       font-size: 1.1rem;
-      border: 2px solid var(--glass-border);
+      border: 2px solid var(--neutral-800); // FIXED (verify-ux)
       z-index: 2;
     }
 
@@ -263,7 +261,7 @@ export interface ActivityItem {
 
     .category-opportunity {
       background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
-      color: var(--bg-gray-950);
+      color: var(--neutral-950);
     }
 
     .category-renewal {
@@ -279,7 +277,7 @@ export interface ActivityItem {
     .timeline-line {
       width: 2px;
       height: 40px;
-      background: linear-gradient(to bottom, var(--glass-border), transparent);
+      background: var(--flat-surface-bg); // FIXED (verify-ux)
       margin-top: 8px;
     }
 
@@ -327,11 +325,11 @@ export interface ActivityItem {
 
     .type-automated {
       background: rgba(156, 163, 175, 0.2);
-      color: var(--bg-gray-400);
+      color: var(--neutral-400);
     }
 
     .activity-time {
-      color: var(--bg-gray-400);
+      color: var(--neutral-400);
       font-size: 0.8rem;
     }
 
@@ -340,7 +338,7 @@ export interface ActivityItem {
     }
 
     .activity-title {
-      color: var(--bg-gray-100);
+      color: var(--neutral-100);
       font-size: 1rem;
       font-weight: 600;
       margin: 0 0 6px 0;
@@ -348,7 +346,7 @@ export interface ActivityItem {
     }
 
     .activity-description {
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       font-size: 0.9rem;
       line-height: 1.5;
       margin: 0 0 12px 0;
@@ -376,13 +374,13 @@ export interface ActivityItem {
     }
 
     .metadata-text {
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       font-weight: 500;
     }
 
     .suggested-action-btn {
       background: linear-gradient(135deg, var(--accent-amber-500), var(--accent-amber-600));
-      color: var(--bg-gray-950);
+      color: var(--neutral-950);
       border: none;
       padding: 8px 16px;
       border-radius: 10px;
@@ -415,14 +413,14 @@ export interface ActivityItem {
     }
 
     .empty-title {
-      color: var(--bg-gray-200);
+      color: var(--neutral-200);
       font-size: 1.2rem;
       font-weight: 600;
       margin: 0 0 8px 0;
     }
 
     .empty-description {
-      color: var(--bg-gray-400);
+      color: var(--neutral-400);
       font-size: 0.9rem;
       margin: 0;
     }
@@ -437,7 +435,7 @@ export interface ActivityItem {
     .load-more-btn {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       padding: 12px 24px;
       border-radius: 12px;
       font-size: 0.9rem;
@@ -638,15 +636,12 @@ export class HumanActivityFeedComponent implements OnInit, OnChanges {
 
   executeSuggestedAction(activity: ActivityItem): void {
     if (activity.suggestedAction) {
-// removed by clean-audit
       // Here you would implement the actual action execution
       // this.actionService.execute(activity.suggestedAction.action, activity.suggestedAction.params);
     }
   }
 
   loadMoreActivities(): void {
-// removed by clean-audit
     // Here you would implement loading more activities from the service
   }
 }
-// removed by clean-audit

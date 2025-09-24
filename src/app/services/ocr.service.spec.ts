@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { OCRService } from './ocr.service';
 
-// removed by clean-audit
 const mockTesseractResult = {
   data: {
     text: 'INSTITUTO NACIONAL ELECTORAL\nNOMBRE: JUAN PEREZ GARCIA\nCURP: PEGJ850315HDFRGN09\nFECHA NACIMIENTO: 15/03/1985',
@@ -34,7 +33,6 @@ const mockTesseractWorker = {
 
 const mockCreateWorker = jasmine.createSpy('createWorker').and.returnValue(Promise.resolve(mockTesseractWorker));
 
-// removed by clean-audit
 
 describe('OCRService', () => {
   let service: OCRService;
@@ -47,7 +45,6 @@ describe('OCRService', () => {
     });
     service = TestBed.inject(OCRService);
     
-// removed by clean-audit
     mockCreateWorker.calls.reset();
     mockTesseractWorker.recognize.calls.reset();
     mockTesseractWorker.setParameters.calls.reset();
@@ -499,4 +496,3 @@ describe('OCRService', () => {
   });
 });
 
-// removed by clean-audit

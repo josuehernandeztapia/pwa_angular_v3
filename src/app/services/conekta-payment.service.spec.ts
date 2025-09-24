@@ -3,7 +3,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { ConektaPaymentService } from './conekta-payment.service';
 import { environment } from '../../environments/environment';
 
-// removed by clean-audit
 const mockConekta = {
   setPublicKey: jasmine.createSpy('setPublicKey'),
   setLanguage: jasmine.createSpy('setLanguage'),
@@ -21,7 +20,6 @@ const mockConekta = {
   }
 };
 
-// removed by clean-audit
 (window as any).Conekta = mockConekta;
 
 describe('ConektaPaymentService', () => {
@@ -48,7 +46,6 @@ describe('ConektaPaymentService', () => {
     service = TestBed.inject(ConektaPaymentService);
     httpMock = TestBed.inject(HttpTestingController);
     
-// removed by clean-audit
     (environment as any).services = {
       metamap: { clientId: 'test', flowId: 'test', baseUrl: 'test' },
       conekta: { publicKey: 'key_test_123', baseUrl: 'https://api.conekta.io' },
@@ -56,7 +53,6 @@ describe('ConektaPaymentService', () => {
       openai: { apiKey: 'test', baseUrl: 'https://api.openai.com/v1', models: { transcription: 'gpt-4o-transcribe', fallback: 'whisper-1' } }
     } as any;
     
-// removed by clean-audit
     if (typeof process !== 'undefined') {
       const originalEnv = process.env;
       process.env = {
@@ -695,4 +691,3 @@ describe('ConektaPaymentService', () => {
     });
   });
 });
-// removed by clean-audit

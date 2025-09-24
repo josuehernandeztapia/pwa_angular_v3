@@ -124,7 +124,7 @@ import { OfflineService } from '../../../services/offline.service';
         </div>
 
         <button
-          class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+          class="text-neutral-100 hover:text-gray-600 dark:hover:text-gray-300"
           (click)="dismissToast()"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,7 +176,7 @@ export class ConnectionIndicatorComponent {
       case 'poor':
         return 'bg-orange-100 text-orange-800 border border-orange-200 dark:bg-orange-900/20 dark:text-orange-300 dark:border-orange-800';
       default:
-        return 'bg-gray-100 text-gray-800 border border-gray-200 dark:bg-gray-900/20 dark:text-gray-300 dark:border-gray-800';
+        return 'bg-neutral-100 text-gray-800 border border-gray-200 dark:bg-gray-900/20 dark:text-gray-300 dark:border-gray-800';
     }
   });
 

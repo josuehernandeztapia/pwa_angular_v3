@@ -1,8 +1,6 @@
 // Script para probar integración con OpenAI Whisper
 // Simular llamadas API sin hacer requests reales
 
-// removed by clean-audit
-// removed by clean-audit
 
 // Simulador de respuesta de Whisper API
 class WhisperAPISimulator {
@@ -209,7 +207,6 @@ class AVIWhisperAnalyzer {
 
 // Ejecutar tests
 async function runWhisperIntegrationTests() {
-// removed by clean-audit
   
   const profiles = [
     { name: 'DISCURSO_CLARO', profile: 'clear_speech', expected: 'LOW_RISK' },
@@ -220,30 +217,19 @@ async function runWhisperIntegrationTests() {
   let testsPassed = 0;
   
   for (const test of profiles) {
-// removed by clean-audit
-// removed by clean-audit
     
     // 1. Simular respuesta de Whisper
     const whisperResponse = WhisperAPISimulator.simulateTranscription(test.profile);
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
       (whisperResponse.words.reduce((sum, w) => sum + w.confidence, 0) / whisperResponse.words.length * 100).toFixed(1) : 'N/A'}%`);
     
     // 2. Analizar métricas de voz
     const voiceMetrics = AVIWhisperAnalyzer.analyzeVoiceForAVI(whisperResponse, test.profile);
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
     // 3. Detectar indicadores de estrés
     const stressIndicators = AVIWhisperAnalyzer.detectStressIndicators(whisperResponse, voiceMetrics);
-// removed by clean-audit
     
     // 4. Generar score AVI
     const aviScore = AVIWhisperAnalyzer.generateAVIScore(stressIndicators, voiceMetrics, whisperResponse.text);
-// removed by clean-audit
     
     // 5. Determinar nivel de riesgo
     let riskLevel;
@@ -252,7 +238,6 @@ async function runWhisperIntegrationTests() {
     else if (aviScore >= 450) riskLevel = 'HIGH';
     else riskLevel = 'CRITICAL';
     
-// removed by clean-audit
     
     // 6. Validar resultado
     const expectedCategory = test.expected.split('_')[0];
@@ -261,41 +246,18 @@ async function runWhisperIntegrationTests() {
                       (expectedCategory === 'MEDIUM' && (actualCategory === 'HIGH' || actualCategory === 'LOW'));
     
     if (testPassed) {
-// removed by clean-audit
       testsPassed++;
     } else {
-// removed by clean-audit
     }
     
-// removed by clean-audit
   }
   
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   
   if (testsPassed === profiles.length) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
   } else {
-// removed by clean-audit
   }
   
   return testsPassed === profiles.length;
@@ -303,9 +265,6 @@ async function runWhisperIntegrationTests() {
 
 // Ejecutar
 runWhisperIntegrationTests().then(success => {
-// removed by clean-audit
   if (success) {
-// removed by clean-audit
   }
 });
-// removed by clean-audit

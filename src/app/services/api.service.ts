@@ -26,7 +26,6 @@ export class ApiService {
     status?: string;
     search?: string;
   }): Observable<Client[]> {
-// removed by clean-audit
     if (environment.features.enableMockData) {
       return of(this.getMockClients()).pipe(
         map(clients => this.applyFilters(clients, filters)),
@@ -200,7 +199,6 @@ export class ApiService {
    */
   getClientQuotes(clientId: string): Observable<Quote[]> {
     if (environment.features.enableMockData) {
-// removed by clean-audit
     }
 
     return this.httpClient.get<Quote[]>(`clients/${clientId}/quotes`).pipe(
@@ -426,4 +424,3 @@ export class ApiService {
     this.clientsCache.next([]);
   }
 }
-// removed by clean-audit

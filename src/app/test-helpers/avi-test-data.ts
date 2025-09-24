@@ -373,7 +373,6 @@ export class AVITestDataGenerator {
   }
 
   /**
-// removed by clean-audit
    */
   private static generateMockDualEngineResult(profile: TestProfile): DualEngineResult {
     let baseScore: number;
@@ -495,4 +494,3 @@ export interface ValidationBatch {
   highRiskCases: ValidationCase[];
   edgeCases: ValidationCase[];
 }
-// removed by clean-audit

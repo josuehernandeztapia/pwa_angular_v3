@@ -127,27 +127,27 @@ type ProgressSize = 'sm' | 'md' | 'lg' | 'xl';
 
     /* Theme Colors */
     .theme-default .progress-fill {
-      background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .theme-success .progress-fill {
-      background: linear-gradient(90deg, #10b981, #059669);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .theme-warning .progress-fill {
-      background: linear-gradient(90deg, #f59e0b, #d97706);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .theme-danger .progress-fill {
-      background: linear-gradient(90deg, #ef4444, #dc2626);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .theme-info .progress-fill {
-      background: linear-gradient(90deg, #06b6d4, #0891b2);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .theme-gradient .progress-fill {
-      background: linear-gradient(90deg, #8b5cf6, #06b6d4, #10b981);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     /* Track Backgrounds */

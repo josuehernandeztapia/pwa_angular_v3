@@ -411,24 +411,18 @@ export class WhatsappService {
   }
 
   private handleMessageStatus(status: any): void {
-// removed by clean-audit
     
     // Update message status in your database
     // This would typically call your backend API
     this.updateMessageStatus(status.id, status.status, status.timestamp).subscribe({
-// removed by clean-audit
-// removed by clean-audit
     });
   }
 
   private handleIncomingMessage(message: any): void {
-// removed by clean-audit
     
     // Process incoming message
     // This might trigger auto-responses or save to database
     this.processIncomingMessage(message).subscribe({
-// removed by clean-audit
-// removed by clean-audit
     });
   }
 
@@ -484,7 +478,6 @@ export class WhatsappService {
   }
 
   private handleError(error: any) {
-// removed by clean-audit
     
     let errorMessage = 'WhatsApp message failed';
     if (error.error && error.error.error) {
@@ -572,4 +565,3 @@ export class WhatsappService {
   }
 }
 
-// removed by clean-audit

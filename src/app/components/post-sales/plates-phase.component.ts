@@ -117,7 +117,6 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
               <span class="identifier-code">{{ getUniqueIdentifier() }}</span>
             </div>
             <div class="identifier-note">
-// removed by clean-audit
             </div>
           </div>
         </div>
@@ -691,13 +690,11 @@ export class PlatesPhaseComponent {
     this.isSaving.set(true);
     setTimeout(() => {
       this.isSaving.set(false);
-// removed by clean-audit
     }, 1500);
   }
 
   onSubmit(): void {
     if (!this.canCompleteHandover()) {
-// removed by clean-audit
       this.focusFirstInvalidControl();
       return;
     }
@@ -713,13 +710,11 @@ export class PlatesPhaseComponent {
       hologramas: this.platesForm.get('hologramas')?.value
     };
 
-// removed by clean-audit
 
     // 🎯 CRITICAL: Complete plates phase - triggers vehicle.delivered event
     // Save last focused element and open modal on success with focus trap
     this.importTracker.completePlatesPhase(this.clientId(), platesData).subscribe({
       next: (result: { success: boolean; postSalesRecord?: any }) => {
-// removed by clean-audit
         
         // Simulate post-sales record creation
         this.postSalesRecordId.set(`PSR_${Date.now()}`);
@@ -731,7 +726,6 @@ export class PlatesPhaseComponent {
         setTimeout(() => this.focusFirstElementInModal(), 0);
       },
       error: (error: unknown) => {
-// removed by clean-audit
         this.isSubmitting.set(false);
         alert('Error crítico en el handover. El sistema post-venta NO se activó. Contacta soporte técnico.');
       }
@@ -827,4 +821,3 @@ export class PlatesPhaseComponent {
     }
   }
 }
-// removed by clean-audit

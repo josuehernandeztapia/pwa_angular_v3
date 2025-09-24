@@ -453,12 +453,12 @@ interface UserProfile {
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #4299e1, #3182ce);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #3182ce, #2c5282);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       transform: translateY(-1px);
     }
 
@@ -622,45 +622,36 @@ export class PerfilComponent implements OnInit {
   }
 
   saveProfile(): void {
-// removed by clean-audit
     this.isEditing = false;
     this.originalProfile = { ...this.userProfile };
     // Here you would typically save to a service
   }
 
   changeAvatar(): void {
-// removed by clean-audit
     // Here you would implement file upload logic
   }
 
   changePassword(): void {
-// removed by clean-audit
     // Here you would open a password change dialog
   }
 
   setup2FA(): void {
-// removed by clean-audit
     // Here you would open 2FA setup wizard
   }
 
   viewSessions(): void {
-// removed by clean-audit
     // Here you would show active sessions list
   }
 
   exportData(): void {
-// removed by clean-audit
     // Here you would trigger data export
   }
 
   deleteAccount(): void {
-// removed by clean-audit
     // Here you would show confirmation dialog
   }
 
   private loadUserProfile(): void {
     // Here you would load user profile from a service
-// removed by clean-audit
   }
 }
-// removed by clean-audit

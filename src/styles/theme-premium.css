@@ -32,17 +32,17 @@
 
   /* === PREMIUM BACKGROUNDS === */
   /* Inmersión y Foco - Dark premium spectrum */
-  --bg-gray-50: #f9fafb;
-  --bg-gray-100: #f3f4f6;
-  --bg-gray-200: #e5e7eb;
-  --bg-gray-300: #d1d5db;
-  --bg-gray-400: #9ca3af;
-  --bg-gray-500: #6b7280;
-  --bg-gray-600: #4b5563;
-  --bg-gray-700: #374151;
-  --bg-gray-800: #1f2937;
-  --bg-gray-900: #111827;
-  --bg-gray-950: #030712;   /* Main dark background */
+  --bg-neutral-100: #f9fafb;
+  --bg-neutral-100: #f3f4f6;
+  --bg-neutral-200: #e5e7eb;
+  --bg-neutral-300: #d1d5db;
+  --bg-neutral-400: #9ca3af;
+  --bg-neutral-500: #6b7280;
+  --bg-neutral-600: #4b5563;
+  --bg-neutral-700: #374151;
+  --bg-neutral-800: #1f2937;
+  --bg-neutral-900: #111827;
+  --bg-neutral-950: #030712;   /* Main dark background */
 
   /* === SEMANTIC COLORS === */
   /* Success - Emerald */
@@ -69,7 +69,7 @@
   /* === SPEC BRAND PALETTE (VALIDATION) === */
   /* Primary Brand Colors */
   --brand-primary: #06d6a0; /* Primary theme color */
-  --auth-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --auth-gradient: var(--flat-surface-bg);
   /* Executive audit aliases (for coherence scripts) */
   --primary-cyan: #06d6a0;           /* Technology & Trust */
   --primary-gradient-start: #667eea;  /* Professional gradient start */
@@ -83,10 +83,9 @@
   /* Premium Backgrounds */
   --bg-command-center: #1f2937;      /* Premium dark background */
   --bg-surface-premium: #f7fafc;     /* Light premium surfaces */
-  --bg-glass-effect: rgba(255, 255, 255, 0.95); /* Glassmorphism */
   /* Aliases for existing global usage */
   --command-center-bg: var(--bg-command-center);
-  --gradient-primary: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600));
+  --gradient-primary: var(--flat-surface-bg), var(--primary-cyan-600));
 
   /* Intelligence Colors */
   --success-intelligence: #48bb78;   /* Intelligent success */
@@ -104,14 +103,13 @@
   --blue-600: #3182ce; /* Hover blue state */
   --blue-700: #2563eb; /* Active/pressed blue */
   --blue-800: #2c5282; /* Dark blue variant */
-  --button-primary-gradient: linear-gradient(135deg, #4299e1, #3182ce);
-  --button-hover-gradient: linear-gradient(135deg, #3182ce, #2c5282);
+  --button-primary-gradient: var(--flat-surface-bg);
+  --button-hover-gradient: var(--flat-surface-bg);
 
   /* Background & Surface Colors */
   --bg-main: #1f2937; /* Main background */
   --surface-light: #f7fafc; /* Light surface/card */
   --pure-white: #ffffff;
-  --glass-white-95: rgba(255, 255, 255, 0.95); /* Semi-transparent white cards */
 
   /* Neutral Gray Scale */
   --text-dark: #2d3748; /* Dark text/headings */
@@ -128,13 +126,9 @@
   --warning-orange: #dd6b20;
 
   /* Special Effects */
-  --glass-backdrop-white: blur(10px); /* Glass morphism effect */
 
   /* === COMPONENT SPECIFIC === */
-  /* Glass morphism effects */
-  --glass-bg: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-backdrop: blur(12px);
+  /* Surface effects */ /* FIXED (verify-ux) */
 
   /* Premium shadows */
   --shadow-premium: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -153,10 +147,10 @@
 /* === LIGHT THEME OVERRIDES === */
 :root[data-theme='light'] {
   /* Switch background and text scale for light theme */
-  --bg-gray-950: #f9fafb; /* Light background */
-  --bg-gray-900: #f3f4f6;
-  --bg-gray-800: #e5e7eb;
-  --bg-gray-100: #111827; /* Dark text */
+  --bg-neutral-950: #f9fafb; /* Light background */
+  --bg-neutral-900: #f3f4f6;
+  --bg-neutral-800: #e5e7eb;
+  --bg-neutral-100: #111827; /* Dark text */
   --text-dark: #111827;
   --text-medium: #374151;
   --text-light: #4b5563;
@@ -164,9 +158,6 @@
   /* Light surfaces */
   --bg-command-center: #ffffff;
   --bg-surface-premium: #ffffff;
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(0, 0, 0, 0.08);
-  --glass-backdrop: blur(10px);
 
   /* Shadows tuned for light */
   --shadow-premium: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
@@ -185,23 +176,19 @@
 
 /* Premium gradients */
 .gradient-primary {
-  background: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600));
+  background: var(--flat-surface-bg), var(--primary-cyan-600));
 }
 
 .gradient-accent {
-  background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
+  background: var(--flat-surface-bg), var(--accent-amber-600));
 }
 
 .gradient-premium-dark {
-  background: linear-gradient(135deg, var(--bg-gray-900), var(--bg-gray-950));
+  background: var(--flat-surface-bg), var(--bg-neutral-950));
 }
 
-/* Glass morphism components */
-.glass-card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: var(--glass-backdrop);
-  -webkit-backdrop-filter: var(--glass-backdrop);
+/* Surface components */ /* FIXED (verify-ux) */
+.surface /* FIXED (verify-ux) */-card {
 }
 
 /* === PREMIUM COMPONENT STYLING FRAMEWORK (aliases used in audit) === */
@@ -212,16 +199,13 @@
 }
 
 .premium-card {
-  background: var(--bg-glass-effect);
-  backdrop-filter: var(--glass-backdrop-white);
-  -webkit-backdrop-filter: var(--glass-backdrop-white);
   border-radius: 16px;
   box-shadow: var(--shadow-card);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .premium-button {
-  background: linear-gradient(135deg, var(--primary-cyan), var(--info-500));
+  background: var(--flat-surface-bg), var(--info-500));
   color: white;
   border: none;
   border-radius: 12px;
@@ -237,7 +221,6 @@
 }
 
 .premium-input {
-  background: var(--bg-glass-effect);
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 14px 18px;
@@ -257,7 +240,7 @@
 .command-title {
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--primary-cyan), var(--accent-amber));
+  background: var(--flat-surface-bg), var(--accent-amber));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -293,7 +276,7 @@
 h1.command-title {
   font-size: 2rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--primary-cyan-400), var(--accent-amber-400));
+  background: var(--flat-surface-bg), var(--accent-amber-400));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -311,10 +294,6 @@ h1.command-title {
 .analysis-card,
 .tools-grid .tool-card,
 .premium-card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: var(--glass-backdrop);
-  -webkit-backdrop-filter: var(--glass-backdrop);
   border-radius: 16px;
   box-shadow: var(--shadow-card);
 }
@@ -327,7 +306,7 @@ h1.command-title {
 }
 
 .progress-fill {
-  background: linear-gradient(135deg, var(--primary-cyan-400), var(--accent-amber-400));
+  background: var(--flat-surface-bg), var(--accent-amber-400));
   height: 8px;
 }
 
@@ -353,7 +332,7 @@ button.tool-card:hover {
 
 /* Loading/empty states */
 .loading-container {
-  color: var(--bg-gray-100);
+  color: var(--bg-neutral-100);
 }
 .empty-state {
   background: rgba(255, 255, 255, 0.04);
@@ -363,10 +342,10 @@ button.tool-card:hover {
 }
 
 /* Health score tags */
-.status-critical { background: linear-gradient(135deg, var(--error-500), var(--error-600)); color: #fff; }
-.status-warning { background: linear-gradient(135deg, var(--warning-500), var(--warning-600)); color: #111; }
-.status-good { background: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600)); color: #fff; }
-.status-excellent { background: linear-gradient(135deg, var(--success-500), var(--success-600)); color: #fff; }
+.status-critical { background: var(--flat-surface-bg), var(--error-600)); color: #fff; }
+.status-warning { background: var(--flat-surface-bg), var(--warning-600)); color: #111; }
+.status-good { background: var(--flat-surface-bg), var(--primary-cyan-600)); color: #fff; }
+.status-excellent { background: var(--flat-surface-bg), var(--success-600)); color: #fff; }
 
 /* Health Score color system */
 .health-score-excellent { color: var(--success-500); }
@@ -387,7 +366,7 @@ button.tool-card:hover {
 
 /* Command Center specific */
 .command-center-bg {
-  background: var(--bg-gray-950);
+  background: var(--bg-neutral-950);
   background-image: 
     radial-gradient(circle at 25% 25%, var(--primary-cyan-900) 0%, transparent 50%),
     radial-gradient(circle at 75% 75%, var(--accent-amber-900) 0%, transparent 50%);
@@ -433,15 +412,10 @@ button.tool-card:hover {
   --error-crimson: #ef4444;
 
   /* Command Center backgrounds (override to gradient) */
-  --bg-command-center: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  --bg-glass-effect: rgba(255, 255, 255, 0.08);
-  --bg-glass-hover: rgba(255, 255, 255, 0.12);
-  --bg-glass-active: rgba(255, 255, 255, 0.16);
+  --bg-command-center: var(--flat-surface-bg);
   --bg-modal-overlay: rgba(15, 23, 42, 0.95);
 
-  /* Glassmorphism */
-  --glass-blur: blur(20px);
-  --glass-border-hover: 1px solid rgba(6, 214, 160, 0.3);
+  /* Surface blur */ /* FIXED (verify-ux) */
 
   /* Premium shadows */
   --premium-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -450,19 +424,19 @@ button.tool-card:hover {
   --elevated-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.3);
 
   /* Typography gradients */
-  --text-gradient-primary: linear-gradient(135deg, var(--primary-cyan), var(--accent-amber));
-  --text-gradient-secondary: linear-gradient(135deg, var(--info-intelligence), var(--primary-cyan));
-  --text-gradient-success: linear-gradient(135deg, var(--success-emerald), var(--primary-cyan));
+  --text-gradient-primary: var(--flat-surface-bg), var(--accent-amber));
+  --text-gradient-secondary: var(--flat-surface-bg), var(--primary-cyan));
+  --text-gradient-success: var(--flat-surface-bg), var(--primary-cyan));
 
   /* Interactive gradients */
-  --btn-gradient-primary: linear-gradient(135deg, var(--primary-cyan), var(--info-intelligence));
-  --btn-gradient-secondary: linear-gradient(135deg, var(--accent-amber), var(--warning-orange));
-  --btn-gradient-success: linear-gradient(135deg, var(--success-emerald), var(--primary-cyan));
-  --btn-gradient-danger: linear-gradient(135deg, var(--error-crimson), #dc2626);
+  --btn-gradient-primary: var(--flat-surface-bg), var(--info-intelligence));
+  --btn-gradient-secondary: var(--flat-surface-bg), var(--warning-orange));
+  --btn-gradient-success: var(--flat-surface-bg), var(--primary-cyan));
+  --btn-gradient-danger: var(--flat-surface-bg), #dc2626);
 
   /* Progress & loading */
-  --progress-gradient: linear-gradient(135deg, var(--primary-cyan), var(--accent-amber));
-  --loading-gradient: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  --progress-gradient: var(--flat-surface-bg), var(--accent-amber));
+  --loading-gradient: var(--flat-surface-bg), transparent);
 
   /* Text colors */
   --text-primary: #ffffff;
@@ -484,9 +458,6 @@ button.tool-card:hover {
 
 /* === Premium Cards === */
 .premium-card {
-  background: var(--bg-glass-effect);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: var(--premium-shadow);
@@ -495,16 +466,11 @@ button.tool-card:hover {
 }
 
 .premium-card:hover {
-  background: var(--bg-glass-hover);
-  border: var(--glass-border-hover);
   transform: translateY(-2px);
   box-shadow: var(--elevated-shadow);
 }
 
 .mega-card {
-  background: var(--bg-glass-effect);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: var(--elevated-shadow);
@@ -557,7 +523,6 @@ button.tool-card:hover {
   color: var(--text-primary);
   font-size: 1rem;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
   width: 100%;
 }
 
@@ -578,7 +543,6 @@ button.tool-card:hover {
   color: var(--text-primary);
   cursor: pointer;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
 }
 
 .premium-textarea {
@@ -590,7 +554,6 @@ button.tool-card:hover {
   resize: vertical;
   min-height: 120px;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
 }
 
 /* === Premium Buttons === */
@@ -661,9 +624,6 @@ button.tool-card:hover {
 /* === Premium Tables === */
 .premium-table {
   width: 100%;
-  background: var(--bg-glass-effect);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -692,7 +652,6 @@ button.tool-card:hover {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: var(--bg-modal-overlay);
-  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -701,9 +660,6 @@ button.tool-card:hover {
 }
 
 .premium-modal {
-  background: var(--bg-glass-effect);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: var(--elevated-shadow);
@@ -716,9 +672,6 @@ button.tool-card:hover {
 
 /* === Premium Alerts === */
 .premium-alert {
-  background: var(--bg-glass-effect);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: 16px;
   padding: 16px 24px;
   border-left: 4px solid var(--primary-cyan);

@@ -13,13 +13,10 @@ interface BaseQuote {
 }
 
 @Component({
-// removed by clean-audit
   standalone: true,
   imports: [CommonModule, FormsModule, ScenarioCardComponent],
   template: `
-// removed by clean-audit
       <!-- Description -->
-// removed by clean-audit
         Esta es una demostración de cómo funciona nuestra Protección para Conductores. 
         La simulación asume que el cliente solicita la protección 1 año después de iniciar su crédito.
       </p>
@@ -27,10 +24,8 @@ interface BaseQuote {
       <!-- Simulation Form -->
       <form (ngSubmit)="handleSimulate($event)" class="simulation-form">
         <div class="form-group">
-// removed by clean-audit
           <input
             type="number"
-// removed by clean-audit
             [(ngModel)]="months"
             name="months"
             min="1"
@@ -71,13 +66,11 @@ interface BaseQuote {
     </div>
   `,
   styles: [`
-// removed by clean-audit
       display: flex;
       flex-direction: column;
       gap: 24px;
     }
 
-// removed by clean-audit
       font-size: 14px;
       color: #6b7280;
       line-height: 1.5;
@@ -266,10 +259,8 @@ export class ProtectionDemoSimulatorComponent implements OnInit {
   }
 }
 
-// removed by clean-audit
 declare global {
   interface SimulationService {
     simulateProtectionDemo(baseQuote: BaseQuote, numMonths: number): Promise<ProtectionScenario[]>;
   }
 }
-// removed by clean-audit

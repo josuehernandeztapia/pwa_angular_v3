@@ -15,7 +15,7 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
   template: `
     <div class="command-container p-6 space-y-6">
       <!-- Header -->
-      <div class="bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-xl p-6 shadow-lg">
+      <div class="bg-neutral-900 text-white rounded-xl p-6 shadow-lg">
         <h1 class="text-3xl font-bold mb-2">Cotizador EdoMex Colectivo</h1>
         <p class="text-emerald-100 text-lg">Genera cotizaciones para grupos de transportistas</p>
       </div>
@@ -199,50 +199,50 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
 
           <!-- Group Summary -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 p-4 rounded-lg border border-emerald-200">
+            <div class="bg-neutral-900 p-4 rounded-lg border border-emerald-200">
               <div class="text-emerald-600 text-sm font-medium">Miembros del Grupo</div>
               <div class="text-2xl font-bold text-emerald-800">{{ quotation.memberCount }}</div>
             </div>
-            <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+            <div class="bg-neutral-900 p-4 rounded-lg border border-blue-200">
               <div class="text-blue-600 text-sm font-medium">Inversión Total</div>
               <div class="text-2xl font-bold text-blue-800">{{ formatCurrency(quotation.totalInvestment) }}</div>
             </div>
-            <div class="bg-gradient-to-br from-amber-50 to-amber-100 p-4 rounded-lg border border-amber-200">
+            <div class="bg-neutral-900 p-4 rounded-lg border border-amber-200">
               <div class="text-amber-600 text-sm font-medium">Tiempo a Primera Entrega</div>
               <div class="text-2xl font-bold text-amber-800">{{ quotation.scenario.monthsToFirstAward || 'N/A' }} meses</div>
             </div>
-            <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
+            <div class="bg-neutral-900 p-4 rounded-lg border border-purple-200">
               <div class="text-purple-600 text-sm font-medium">Tiempo a Entrega Total</div>
               <div class="text-2xl font-bold text-purple-800">{{ quotation.scenario.monthsToFullDelivery || 'N/A' }} meses</div>
             </div>
-            <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 p-4 rounded-lg border border-emerald-200">
+            <div class="bg-neutral-900 p-4 rounded-lg border border-emerald-200">
               <div class="text-emerald-600 text-sm font-medium">Tiempo a Meta de Ahorro del Grupo</div>
               <div class="text-2xl font-bold text-emerald-800">{{ quotation.scenario.monthsToTarget || 'N/A' }} meses</div>
             </div>
           </div>
 
           <!-- Individual Member Info -->
-          <div class="bg-gray-50 rounded-lg p-4 mb-6">
+          <div class="bg-neutral-50 rounded-lg p-4 mb-6">
             <h3 class="font-semibold text-gray-800 mb-3">Por Miembro:</h3>
             <div class="grid grid-cols-2 gap-4 text-sm">
               <div class="flex justify-between">
-                <span class="text-gray-600">Precio de unidad:</span>
+                <span class="text-neutral-100">Precio de unidad:</span>
                 <span class="font-medium">{{ formatCurrency(quotation.unitPrice) }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600">Enganche requerido:</span>
+                <span class="text-neutral-100">Enganche requerido:</span>
                 <span class="font-medium">{{ formatCurrency(quotation.downPaymentPerMember) }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600">Meta por miembro:</span>
+                <span class="text-neutral-100">Meta por miembro:</span>
                 <span class="font-medium">{{ formatCurrency(quotation.scenario.targetPerMember || quotation.downPaymentPerMember) }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600">Financiamiento:</span>
+                <span class="text-neutral-100">Financiamiento:</span>
                 <span class="font-medium">{{ formatCurrency(quotation.financingPerMember) }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600">Pago mensual est.:</span>
+                <span class="text-neutral-100">Pago mensual est.:</span>
                 <span class="font-medium">{{ formatCurrency(quotation.monthlyPaymentPerMember) }}</span>
               </div>
             </div>
@@ -277,7 +277,7 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
           <!-- Financing Timeline -->
           <div class="mb-6" *ngIf="quotation.timeline && quotation.timeline.length > 0">
             <h3 class="font-semibold text-gray-800 mb-3">Cronograma de Financiamiento:</h3>
-            <div class="bg-gray-50 rounded-lg p-4 max-h-48 overflow-y-auto">
+            <div class="bg-neutral-50 rounded-lg p-4 max-h-48 overflow-y-auto">
               <div *ngFor="let milestone of quotation.timeline.slice(0, 6)" 
                    class="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
                 <div>
@@ -352,7 +352,6 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
               <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">⚡</span>
               <div>
                 <h3 class="font-medium text-gray-800">Gestión centralizada</h3>
-// removed by clean-audit
               </div>
             </div>
           </div>
@@ -466,7 +465,6 @@ export class EdomexColectivoComponent implements OnInit, OnDestroy {
       this.isCalculating = false;
       this.loadingService.hide();
     } catch (error) {
-// removed by clean-audit
       this.isCalculating = false;
       this.loadingService.hide();
     }
@@ -543,7 +541,6 @@ export class EdomexColectivoComponent implements OnInit, OnDestroy {
         this.pdfExportService.downloadPDF(blob, filename);
       })
       .catch((err: any) => {
-// removed by clean-audit
       });
   }
 
@@ -551,4 +548,3 @@ export class EdomexColectivoComponent implements OnInit, OnDestroy {
     return this.financialCalc.formatCurrency(value);
   }
 }
-// removed by clean-audit

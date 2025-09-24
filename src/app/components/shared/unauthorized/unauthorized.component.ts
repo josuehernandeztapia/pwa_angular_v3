@@ -90,7 +90,7 @@ import { AuthService } from '../../../services/auth.service';
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       padding: 20px;
     }
 
@@ -163,7 +163,7 @@ import { AuthService } from '../../../services/auth.service';
     .user-avatar {
       width: 60px;
       height: 60px;
-      background: linear-gradient(135deg, #4299e1, #3182ce);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -233,12 +233,12 @@ import { AuthService } from '../../../services/auth.service';
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #4299e1, #3182ce);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #3182ce, #2c5282);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(66, 153, 225, 0.3);
     }
@@ -305,7 +305,7 @@ import { AuthService } from '../../../services/auth.service';
     }
 
     .logout-btn {
-      background: linear-gradient(135deg, #e53e3e, #c53030);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
       border: none;
       padding: 10px 20px;
@@ -320,7 +320,7 @@ import { AuthService } from '../../../services/auth.service';
     }
 
     .logout-btn:hover {
-      background: linear-gradient(135deg, #c53030, #9c2626);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       transform: translateY(-1px);
     }
 
@@ -403,19 +403,16 @@ export class UnauthorizedComponent {
   }
 
   contactSupervisor(): void {
-// removed by clean-audit
     // This would typically open a contact form or send an email
     window.open('mailto:supervisor@conductores.com?subject=Solicitud de Permisos', '_blank');
   }
 
   viewPermissions(): void {
-// removed by clean-audit
     // This would show a modal with detailed permissions
     alert('Tus permisos actuales:\n' + this.currentUser?.permissions.join('\n'));
   }
 
   requestAccess(): void {
-// removed by clean-audit
     // This would open a form to request additional access
     this.router.navigate(['/solicitar-acceso']);
   }
@@ -425,4 +422,3 @@ export class UnauthorizedComponent {
     this.router.navigate(['/login']);
   }
 }
-// removed by clean-audit

@@ -340,7 +340,6 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     this.questionGenerator.refreshQuestionsFromLLM(this.municipality)
       .then(refreshed => {
         if (refreshed) {
-// removed by clean-audit
         }
       });
   }
@@ -390,7 +389,6 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
           this.showQuestionResult(voiceEvaluation);
           
         } catch (voiceError) {
-// removed by clean-audit
         }
       }
       
@@ -398,7 +396,6 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
       this.processVoiceResult(result);
       
     } catch (error) {
-// removed by clean-audit
     } finally {
       this.isAnalyzing = false;
     }
@@ -726,7 +723,6 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
   }
 
   private showQuestionResult(evaluation: any): void {
-// removed by clean-audit
     
     this._questionResults[evaluation.questionId] = {
       questionId: evaluation.questionId,
@@ -777,10 +773,8 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
       this.finalSummary = this.voiceValidation.aggregateResilience();
       this.showFinalSummary = true;
       
-// removed by clean-audit
       
     } catch (error) {
-// removed by clean-audit
       this.showFinalSummary = false;
     }
   }
@@ -823,4 +817,3 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     return 'Necesita Mejora';
   }
 }
-// removed by clean-audit

@@ -104,7 +104,7 @@ interface BottomNavItem {
       right: -4px;
       min-width: 16px;
       height: 16px;
-      background: linear-gradient(135deg, #e53e3e, #c53030);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
       border-radius: 8px;
       font-size: 10px;
@@ -147,7 +147,7 @@ interface BottomNavItem {
       transform: translateX(-50%);
       width: 20px;
       height: 3px;
-      background: linear-gradient(90deg, #06d6a0, #04d9ff);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 0 0 2px 2px;
       animation: slide-in 0.3s ease;
     }

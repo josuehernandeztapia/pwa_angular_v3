@@ -377,11 +377,9 @@ export class IntegracionesComponent implements OnInit {
   }
 
   testIntegration(integration: Integration): void {
-// removed by clean-audit
   }
 
   editIntegration(integration: Integration): void {
-// removed by clean-audit
   }
 
   toggleLogExpansion(logId: string): void {
@@ -421,4 +419,3 @@ export class IntegracionesComponent implements OnInit {
     );
   }
 }
-// removed by clean-audit

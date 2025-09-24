@@ -30,7 +30,6 @@ describe('PushNotificationService', () => {
     service = TestBed.inject(PushNotificationService);
     httpMock = TestBed.inject(HttpTestingController);
 
-// removed by clean-audit
     Object.defineProperty(window, 'Notification', {
       writable: true,
       configurable: true,
@@ -40,7 +39,6 @@ describe('PushNotificationService', () => {
       }
     });
 
-// removed by clean-audit
     Object.defineProperty(document, 'hidden', {
       writable: true,
       configurable: true,
@@ -141,7 +139,6 @@ describe('PushNotificationService', () => {
     });
 
     it('should throw error when push notifications not supported', async () => {
-// removed by clean-audit
       const originalNotification = (window as any).Notification;
       const originalDescriptor = Object.getOwnPropertyDescriptor(window, 'Notification');
       delete (window as any).Notification;
@@ -194,7 +191,6 @@ describe('PushNotificationService', () => {
         value: 'granted'
       });
       
-// removed by clean-audit
       localStorage.setItem('currentUser', JSON.stringify({ id: 'user123' }));
       localStorage.setItem('auth_token', 'mock_token');
     });
@@ -459,7 +455,6 @@ describe('PushNotificationService', () => {
         }
       };
 
-// removed by clean-audit
       let canMockAssign = true;
       const originalLocation = window.location;
       const assignSpy = jasmine.createSpy('assign');
@@ -839,7 +834,6 @@ describe('PushNotificationService', () => {
         notificationClicks: of({})
       });
 
-// removed by clean-audit
       const originalNotification = (window as any).Notification;
       const originalDescriptor = Object.getOwnPropertyDescriptor(window, 'Notification');
       delete (window as any).Notification;
@@ -886,4 +880,3 @@ describe('PushNotificationService', () => {
   });
 });
 
-// removed by clean-audit

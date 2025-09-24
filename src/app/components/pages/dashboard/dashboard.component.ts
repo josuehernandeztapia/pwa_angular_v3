@@ -515,7 +515,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isLoading = false;
       },
       error: (error: any) => {
-// removed by clean-audit
         this.isLoading = false;
         this.loadMockData();
       }
@@ -651,8 +650,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     ];
 
-// removed by clean-audit
     this.updateKPIsFromStats(this.stats);
   }
 }
-// removed by clean-audit

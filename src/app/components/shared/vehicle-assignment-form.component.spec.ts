@@ -7,7 +7,6 @@ import { IntegratedImportTrackerService } from '../../services/integrated-import
 
 describe('VehicleAssignmentFormComponent', () => {
   let component: VehicleAssignmentFormComponent;
-// removed by clean-audit
   let mockVehicleService: jasmine.SpyObj<VehicleAssignmentService>;
   let mockImportTracker: jasmine.SpyObj<IntegratedImportTrackerService>;
 
@@ -26,8 +25,6 @@ describe('VehicleAssignmentFormComponent', () => {
       ]
     }).compileComponents();
 
-// removed by clean-audit
-// removed by clean-audit
     mockVehicleService = TestBed.inject(VehicleAssignmentService) as jasmine.SpyObj<VehicleAssignmentService>;
     mockImportTracker = TestBed.inject(IntegratedImportTrackerService) as jasmine.SpyObj<IntegratedImportTrackerService>;
 
@@ -198,4 +195,3 @@ describe('VehicleAssignmentFormComponent', () => {
     expect(yearOptions.length).toBeGreaterThan(5); // Multiple year options
   });
 });
-// removed by clean-audit
