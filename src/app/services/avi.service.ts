@@ -416,7 +416,7 @@ export class AVIService {
         return {
           totalScore: 750,
           riskLevel: 'MEDIUM' as const,
-          categoryScores: {},
+          categoryScores: {} as { [key in AVICategory]: number },
           redFlags: [],
           recommendations: ['Based on BFF analysis - requires review'],
           processingTime: Date.now() - startTime,
@@ -437,7 +437,7 @@ export class AVIService {
     
     // Convert voice analysis to pitch series
     const basePitch = 110;
-    const variance = voiceAnalysis.pitch_variance * 20;
+    const variance = voiceAnalysis?.pitch_variance ? voiceAnalysis.pitch_variance * 20 : 10;
     return Array.from({length: 5}, () => basePitch + (Math.random() - 0.5) * variance);
   }
 
@@ -446,7 +446,7 @@ export class AVIService {
     
     // Convert voice analysis to energy series
     const baseEnergy = 0.65;
-    const variance = (1 - voiceAnalysis.confidence_level) * 0.3;
+    const variance = voiceAnalysis?.confidence_level ? (1 - voiceAnalysis.confidence_level) * 0.3 : 0.2;
     return Array.from({length: 5}, () => baseEnergy + (Math.random() - 0.5) * variance);
   }
 

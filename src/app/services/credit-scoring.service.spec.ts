@@ -203,7 +203,7 @@ describe('CreditScoringService', () => {
       (expect(recommendations.minScore) as any).toBe(700);
       (expect(recommendations.preferredGrades) as any).toEqual(['A+', 'A']);
       (expect(recommendations.maxLoanToValue) as any).toBe(0.50);
-      (expect(recommendations.notes.some(note => note.includes('compra de contado'))).toBe(true);
+      (expect(recommendations.notes.some(note => note.includes('compra de contado'))) as any).toBe(true);
     });
 
     it('should get VentaPlazo recommendations for AGS', () => {
@@ -211,7 +211,7 @@ describe('CreditScoringService', () => {
       
       (expect(recommendations.minScore) as any).toBe(680);
       (expect(recommendations.maxLoanToValue) as any).toBe(0.75);
-      (expect(recommendations.notes.some(note => note.includes('menor riesgo'))).toBe(true);
+      (expect(recommendations.notes.some(note => note.includes('menor riesgo'))) as any).toBe(true);
     });
 
     it('should get VentaPlazo recommendations for EdoMex', () => {
@@ -219,7 +219,7 @@ describe('CreditScoringService', () => {
       
       (expect(recommendations.minScore) as any).toBe(650);
       (expect(recommendations.maxLoanToValue) as any).toBe(0.80);
-      (expect(recommendations.notes.some(note => note.includes('validación de ruta'))).toBe(true);
+      (expect(recommendations.notes.some(note => note.includes('validación de ruta'))) as any).toBe(true);
     });
 
     it('should get CreditoColectivo recommendations', () => {
@@ -228,8 +228,8 @@ describe('CreditScoringService', () => {
       (expect(recommendations.minScore) as any).toBe(620);
       (expect(recommendations.preferredGrades) as any).toContain('B');
       (expect(recommendations.maxLoanToValue) as any).toBe(0.85);
-      (expect(recommendations.notes.some(note => note.includes('grupal'))).toBe(true);
-      (expect(recommendations.notes.some(note => note.includes('5 integrantes'))).toBe(true);
+      (expect(recommendations.notes.some(note => note.includes('grupal'))) as any).toBe(true);
+      (expect(recommendations.notes.some(note => note.includes('5 integrantes'))) as any).toBe(true);
     });
 
     it('should get AhorroProgramado recommendations', () => {
@@ -238,7 +238,7 @@ describe('CreditScoringService', () => {
       (expect(recommendations.minScore) as any).toBe(600);
       (expect(recommendations.preferredGrades) as any).toContain('C+');
       (expect(recommendations.maxLoanToValue) as any).toBe(0.70);
-      (expect(recommendations.notes.some(note => note.includes('menor riesgo'))).toBe(true);
+      (expect(recommendations.notes.some(note => note.includes('menor riesgo'))) as any).toBe(true);
     });
 
     it('should return default recommendations for unknown flow', () => {

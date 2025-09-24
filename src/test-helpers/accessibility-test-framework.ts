@@ -71,7 +71,8 @@ export class AccessibilityTester {
    * Test component accessibility
    */
   static async testComponent<T>(
-// removed by clean-audit
+    element: any,
+    componentName: string,
     options: AccessibilityTestOptions = {}
   ): Promise<AccessibilityTestResult> {
     await this.initialize();
@@ -80,7 +81,7 @@ export class AccessibilityTester {
 // removed by clean-audit
 
     try {
-      const results = await this.axeCore.run(element, {
+      const results = await this.axeCore.run(element as any, {
         runOnly: {
           type: 'tag',
           values: options.tags || ['wcag2a', 'wcag2aa']
@@ -96,11 +97,11 @@ export class AccessibilityTester {
         incomplete: results.incomplete?.length || 0,
         timestamp: new Date().toISOString(),
         url: window.location.href,
-        component: componentName
+        component: componentName || 'unknown'
       };
     } catch (error) {
 // removed by clean-audit
-      return this.createEmptyResult(componentName);
+      return this.createEmptyResult(componentName || 'unknown');
     }
   }
 
@@ -324,6 +325,7 @@ export const testComponentAccessibility = async <T>(
 // removed by clean-audit
   
   // Fail test if critical violations found
+// removed by clean-audit
   if (AccessibilityTestUtils.hasCriticalViolations(result)) {
     fail(`Critical accessibility violations found in ${result.component}`);
   }
@@ -355,6 +357,7 @@ export function AccessibilityTest(options: AccessibilityTestOptions = {}) {
  */
 export const quickAccessibilityTest = async <T>(
 // removed by clean-audit
+  options: AccessibilityTestOptions = {}
 ): Promise<boolean> => {
 // removed by clean-audit
   return !AccessibilityTestUtils.hasCriticalViolations(result);

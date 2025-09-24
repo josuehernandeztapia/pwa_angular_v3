@@ -399,7 +399,7 @@ export class OfflineIndicatorComponent {
       case 'good': return 'Rendimiento óptimo';
       case 'fair': return 'Algunas funciones pueden ser más lentas';
       case 'poor': return 'Recomendamos usar WiFi para mejor experiencia';
-      default: return 'Todo funcionando correctamente';
+      default: return 'Estado de conexión desconocido';
     }
   }
 
@@ -463,3 +463,4 @@ export class OfflineIndicatorComponent {
     this.dismissed.set(true);
   }
 }
+// removed by clean-audit

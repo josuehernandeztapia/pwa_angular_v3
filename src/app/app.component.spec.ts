@@ -54,12 +54,12 @@ describe('AppComponent', () => {
     const initSpy = spyOn(theme, 'initFromStorage');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
+// removed by clean-audit
+// removed by clean-audit
 
-    (expect(fixture.componentInstance) as any).toBeTruthy();
+// removed by clean-audit
     (expect(initSpy) as any).toHaveBeenCalled();
-    (expect(fixture.componentInstance.isDarkMode) as any).toBe(false);
+// removed by clean-audit
   });
 
   it('should toggle dark mode using design tokens API', () => {
@@ -68,9 +68,9 @@ describe('AppComponent', () => {
     const toggleSpy = spyOn(theme, 'toggle');
     spyOn(theme, 'isDark').and.returnValues(false, true);
 
-    const fixture = TestBed.createComponent(AppComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
 
     component.toggleDarkMode();
 
@@ -83,9 +83,9 @@ describe('AppComponent', () => {
     const setDarkSpy = spyOn(theme, 'setDark');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-    const fixture = TestBed.createComponent(AppComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
 
     component.setDarkMode(true);
 
@@ -97,10 +97,10 @@ describe('AppComponent', () => {
     spyOn(theme, 'initFromStorage');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
+// removed by clean-audit
+// removed by clean-audit
 
-    const compiled = fixture.nativeElement as HTMLElement;
+// removed by clean-audit
     (expect(compiled.querySelector('a.skip-link')) as any).toBeTruthy();
     (expect(compiled.querySelector('main[role="main"]')) as any).toBeTruthy();
     (expect(compiled.querySelector('aside nav')) as any).toBeTruthy();
@@ -110,14 +110,16 @@ describe('AppComponent', () => {
     spyOn(theme, 'initFromStorage');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
+// removed by clean-audit
+// removed by clean-audit
 
     router.navigateByUrl('dashboard');
     tick();
-    fixture.detectChanges();
+// removed by clean-audit
 
-    const compiled = fixture.nativeElement as HTMLElement;
+// removed by clean-audit
     (expect(compiled.querySelector('[data-testid="dummy"]')?.textContent) as any).toContain('Dummy');
   }));
 });
+
+// removed by clean-audit

@@ -52,7 +52,7 @@ describe('Accessibility Testing Framework', () => {
 
   describe('AccessibilityTester', () => {
     it('should pass accessibility tests for compliant component', async () => {
-      const result = await AccessibilityTester.testComponent(accessibleFixture);
+      const result = await AccessibilityTester.testComponent(accessibleFixture.nativeElement, 'SampleTestComponent');
       
       expect(result.component).toBe('SampleTestComponent');
       expect(result.violations).toBeDefined();
@@ -61,7 +61,7 @@ describe('Accessibility Testing Framework', () => {
     });
 
     it('should detect violations in non-compliant component', async () => {
-      const result = await AccessibilityTester.testComponent(inaccessibleFixture);
+      const result = await AccessibilityTester.testComponent(inaccessibleFixture.nativeElement, 'InaccessibleTestComponent');
       
       expect(result.component).toBe('InaccessibleTestComponent');
       expect(result.violations).toBeDefined();
@@ -79,14 +79,14 @@ describe('Accessibility Testing Framework', () => {
 
   describe('AccessibilityTestUtils', () => {
     it('should identify critical violations', async () => {
-      const result = await AccessibilityTester.testComponent(inaccessibleFixture);
+      const result = await AccessibilityTester.testComponent(inaccessibleFixture.nativeElement, 'InaccessibleTestComponent');
       const hasCritical = AccessibilityTestUtils.hasCriticalViolations(result);
       
       expect(typeof hasCritical).toBe('boolean');
     });
 
     it('should filter violations by impact level', async () => {
-      const result = await AccessibilityTester.testComponent(inaccessibleFixture);
+      const result = await AccessibilityTester.testComponent(inaccessibleFixture.nativeElement, 'InaccessibleTestComponent');
       const criticalViolations = AccessibilityTestUtils.filterViolationsByImpact(result.violations, 'critical');
       const seriousViolations = AccessibilityTestUtils.filterViolationsByImpact(result.violations, 'serious');
       
@@ -95,7 +95,7 @@ describe('Accessibility Testing Framework', () => {
     });
 
     it('should generate violation summary', async () => {
-      const result = await AccessibilityTester.testComponent(accessibleFixture);
+      const result = await AccessibilityTester.testComponent(accessibleFixture.nativeElement, 'SampleTestComponent');
       const summary = AccessibilityTestUtils.generateViolationSummary(result);
       
       expect(typeof summary).toBe('string');
@@ -106,11 +106,11 @@ describe('Accessibility Testing Framework', () => {
   describe('Report Generation', () => {
     it('should generate comprehensive accessibility report', async () => {
       const results = [
-        await AccessibilityTester.testComponent(accessibleFixture),
-        await AccessibilityTester.testComponent(inaccessibleFixture)
+        await AccessibilityTester.testComponent(accessibleFixture.nativeElement, 'SampleTestComponent'),
+        await AccessibilityTester.testComponent(inaccessibleFixture.nativeElement, 'InaccessibleTestComponent')
       ];
       
-      const report = generateAccessibilityReport(results, {
+      const report = (AccessibilityTester as any).generateAccessibilityReport(results, {
         projectName: 'Test Project',
         includeHtml: true,
         includeJson: true,

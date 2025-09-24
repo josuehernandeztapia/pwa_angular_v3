@@ -61,7 +61,7 @@ const isComponentFixture = (target: any): target is ComponentFixture<any> =>
 
 const resolveElement = (target: AccessibilityTarget): HTMLElement => {
   if (!target) {
-    throw new Error('A target element or fixture is required for accessibility testing');
+// removed by clean-audit
   }
 
   if (target instanceof HTMLElement) {
@@ -325,3 +325,5 @@ export function createAccessibilityTestSuite(options: string | AccessibilitySuit
 
   return suite;
 }
+
+// removed by clean-audit

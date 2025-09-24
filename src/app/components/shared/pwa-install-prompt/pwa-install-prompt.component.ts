@@ -475,17 +475,17 @@ export class PwaInstallPromptComponent {
       const result = await this.pwaInstallService.showInstallPrompt();
 
       if (result.outcome === 'accepted') {
-        console.log('PWA install accepted');
+// removed by clean-audit
         this.dismissed.set(true);
       } else if (result.outcome === 'dismissed') {
-        console.log('PWA install dismissed');
+// removed by clean-audit
         this.dismissed.set(true);
       } else {
         // Unavailable - show manual instructions
         this.showInstallOptions();
       }
     } catch (error) {
-      console.error('Install failed:', error);
+// removed by clean-audit
       this.showInstallOptions();
     } finally {
       this.isInstalling.set(false);
@@ -519,3 +519,4 @@ export class PwaInstallPromptComponent {
     this.pwaInstallService.resetInstallTracking();
   }
 }
+// removed by clean-audit

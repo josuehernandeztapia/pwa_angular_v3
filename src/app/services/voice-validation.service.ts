@@ -341,25 +341,25 @@ export class VoiceValidationService {
 
   private logDebug(message: string, context?: unknown): void {
     if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
-      console.debug(`${this.logPrefix} ${message}`, context ?? {});
+// removed by clean-audit
     }
   }
 
   private logInfo(message: string, context?: unknown): void {
     if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
-      console.info(`${this.logPrefix} ${message}`, context ?? {});
+// removed by clean-audit
     }
   }
 
   private logWarn(message: string, context?: unknown): void {
     if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
-      console.warn(`${this.logPrefix} ${message}`, context ?? {});
+// removed by clean-audit
     }
   }
 
   private logError(message: string, error: unknown): void {
     if (this.API_CONFIG.LOGGING_ENABLED && !environment.production) {
-      console.error(`${this.logPrefix} ${message}`, error);
+// removed by clean-audit
     }
   }
 
@@ -1536,7 +1536,7 @@ export class VoiceValidationService {
         return this.convertBFFResponseToAVIScore(response, questionId, contextData);
       }),
       catchError(error => {
-        this.logError('Voice analysis API failed, falling back to mock', error);
+// removed by clean-audit
         return this.mockAVIVoiceAnalysis(questionId, audioBlob, contextData);
       })
     );
@@ -1660,7 +1660,7 @@ export class VoiceValidationService {
 
     return this.http.post<ConsolidatedAVIResult>(this.API_CONFIG.AVI_EVALUATE, formData).pipe(
       catchError(error => {
-        this.logError('AVI evaluation failed, using mock response', error);
+// removed by clean-audit
         return this.mockCompleteAVIProcessing(responses, contextData);
       })
     );
@@ -1715,7 +1715,7 @@ export class VoiceValidationService {
   }
 
   // ============================================================================
-  // MOCK IMPLEMENTATIONS
+// removed by clean-audit
   // ============================================================================
 
   private mockAVIVoiceAnalysis(
@@ -2188,13 +2188,13 @@ export class VoiceValidationService {
   }
 
   // =================================
-  // MOCK DATA GENERATION
+// removed by clean-audit
   // =================================
 
   generateMockValidationResult(sessionId: string): VoiceValidationResult {
     return {
       session_id: sessionId,
-      transcript: 'Mock transcript generated por el sistema de prueba.',
+      transcript: 'Mock validation result transcript',
       compliance_score: 85,
       questions_asked: ['years_driving', 'route_ownership', 'vehicle_gnv'],
       questions_missing: ['previous_credits'],
@@ -2528,3 +2528,5 @@ export class VoiceValidationService {
 
 // getAuthToken is defined earlier in this service
 }
+
+// removed by clean-audit

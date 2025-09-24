@@ -217,7 +217,7 @@ describe('ProtectionEngineService', () => {
       });
 
       it('should mark scenarios with insufficient TIR as invalid', () => {
-        // Mock low TIR that doesn't meet minimum
+// removed by clean-audit
         mockFinancialCalc.calculateTIR.and.returnValue(0.01); // 1% monthly -> 12% annual < 25.5%
 
         const scenario = service.generateScenarioWithTIR(
@@ -653,3 +653,5 @@ describe('ProtectionEngineService', () => {
     });
   });
 });
+
+// removed by clean-audit
