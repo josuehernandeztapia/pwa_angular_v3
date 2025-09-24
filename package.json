@@ -2,6 +2,7 @@
   "name": "conductores-pwa",
   "version": "0.0.0",
   "scripts": {
+    "verify:ux": "bash scripts/verify-ux.sh",
     "assets:app-icons": "node scripts/generate-app-icons.js",
     "prebuild:prod": "npm run assets:app-icons",
     "ng": "ng",

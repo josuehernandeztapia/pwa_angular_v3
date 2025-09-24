@@ -12,7 +12,7 @@ interface EventGroup {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="event-log bg-gray-900 rounded-xl border border-gray-800 p-6">
+    <div class="event-log bg-neutral-950 rounded-xl border border-neutral-800 p-6">
       <!-- Header -->
       <div class="log-header mb-6">
         <div class="flex items-center justify-between">
@@ -22,7 +22,7 @@ interface EventGroup {
             </div>
             <div>
               <h3 class="text-xl font-bold text-white">Historial de Eventos</h3>
-              <p class="text-sm text-gray-400">Registro cronológico de actividades</p>
+              <p class="text-sm text-neutral-400">Registro cronológico de actividades</p>
             </div>
           </div>
           <div class="log-controls flex items-center gap-3">
@@ -31,46 +31,46 @@ interface EventGroup {
               <button 
                 (click)="setEventFilter('all')"
                 class="filter-btn px-3 py-1 text-xs font-medium rounded-full transition-colors"
-                [class]="eventFilter === 'all' ? 'bg-primary-cyan-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'"
+                [class]="eventFilter === 'all' ? 'bg-primary-cyan-600 text-white' : 'bg-neutral-700 text-neutral-300 hover:bg-neutral-600'"
               >
                 Todos
               </button>
               <button 
                 (click)="setEventFilter('payments')"
                 class="filter-btn px-3 py-1 text-xs font-medium rounded-full transition-colors"
-                [class]="eventFilter === 'payments' ? 'bg-emerald-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'"
+                [class]="eventFilter === 'payments' ? 'bg-emerald-600 text-white' : 'bg-neutral-700 text-neutral-300 hover:bg-neutral-600'"
               >
                 Pagos
               </button>
               <button 
                 (click)="setEventFilter('documents')"
                 class="filter-btn px-3 py-1 text-xs font-medium rounded-full transition-colors"
-                [class]="eventFilter === 'documents' ? 'bg-amber-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'"
+                [class]="eventFilter === 'documents' ? 'bg-amber-600 text-white' : 'bg-neutral-700 text-neutral-300 hover:bg-neutral-600'"
               >
                 Documentos
               </button>
               <button 
                 (click)="setEventFilter('system')"
                 class="filter-btn px-3 py-1 text-xs font-medium rounded-full transition-colors"
-                [class]="eventFilter === 'system' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'"
+                [class]="eventFilter === 'system' ? 'bg-blue-600 text-white' : 'bg-neutral-700 text-neutral-300 hover:bg-neutral-600'"
               >
                 Sistema
               </button>
             </div>
             
             <!-- View Mode Toggle -->
-            <div class="view-toggle flex items-center bg-gray-700 rounded-lg p-1">
+            <div class="view-toggle flex items-center bg-neutral-700 rounded-lg p-1">
               <button 
                 (click)="setViewMode('timeline')"
                 class="toggle-btn px-3 py-1 text-xs font-medium rounded-md transition-colors"
-                [class]="viewMode === 'timeline' ? 'bg-primary-cyan-600 text-white' : 'text-gray-300 hover:text-white'"
+                [class]="viewMode === 'timeline' ? 'bg-primary-cyan-600 text-white' : 'text-neutral-300 hover:text-white'"
               >
                 Timeline
               </button>
               <button 
                 (click)="setViewMode('list')"
                 class="toggle-btn px-3 py-1 text-xs font-medium rounded-md transition-colors"
-                [class]="viewMode === 'list' ? 'bg-primary-cyan-600 text-white' : 'text-gray-300 hover:text-white'"
+                [class]="viewMode === 'list' ? 'bg-primary-cyan-600 text-white' : 'text-neutral-300 hover:text-white'"
               >
                 Lista
               </button>
@@ -83,18 +83,18 @@ interface EventGroup {
       <div class="timeline-view" *ngIf="viewMode === 'timeline' && filteredEvents.length > 0">
         <div class="timeline-container relative">
           <!-- Timeline Line -->
-          <div class="timeline-line absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-cyan-500 via-primary-cyan-600 to-gray-600"></div>
+          <div class="timeline-line absolute left-8 top-0 bottom-0 w-0.5 bg-primary-cyan-600"></div>
           
           <!-- Event Groups by Date -->
           <div class="event-groups space-y-8">
             <div *ngFor="let group of getEventGroups(); trackBy: trackByDate" class="event-group">
               <!-- Date Header -->
-              <div class="date-header sticky top-0 z-10 bg-gray-900/80 backdrop-blur-sm py-3 mb-4">
+              <div class="date-header sticky top-0 z-10 bg-neutral-900/80 backdrop-blur-sm py-3 mb-4">
                 <div class="flex items-center gap-4">
                   <div class="date-marker w-4 h-4 bg-primary-cyan-500 rounded-full relative z-10 flex-shrink-0 ml-6"></div>
                   <h4 class="text-lg font-semibold text-white">{{ group.date }}</h4>
-                  <div class="date-line flex-1 h-px bg-gray-700"></div>
-                  <span class="event-count px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">
+                  <div class="date-line flex-1 h-px bg-neutral-700"></div>
+                  <span class="event-count px-3 py-1 bg-neutral-800 text-neutral-300 rounded-full text-sm">
                     {{ group.events.length }} evento{{ group.events.length !== 1 ? 's' : '' }}
                   </span>
                 </div>
@@ -107,7 +107,7 @@ interface EventGroup {
                   class="event-item relative"
                 >
                   <!-- Event Node -->
-                  <div class="event-node absolute left-4 top-4 w-3 h-3 rounded-full border-2 border-gray-900 z-10"
+                  <div class="event-node absolute left-4 top-4 w-3 h-3 rounded-full border-2 border-neutral-900 z-10"
                        [class]="getEventNodeClass(event)"></div>
                   
                   <!-- Event Card -->
@@ -120,7 +120,7 @@ interface EventGroup {
                         <div class="event-icon text-xl">{{ getEventIcon(event) }}</div>
                         <div class="event-meta">
                           <h5 class="event-title font-semibold text-white text-sm">{{ event.message }}</h5>
-                          <div class="event-details flex items-center gap-2 text-xs text-gray-400 mt-1">
+                          <div class="event-details flex items-center gap-2 text-xs text-neutral-400 mt-1">
                             <span class="actor-badge px-2 py-1 rounded-full font-medium"
                                   [class]="getActorBadgeClass(event.actor)">
                               {{ event.actor }}
@@ -176,7 +176,7 @@ interface EventGroup {
                       <button 
                         *ngIf="canViewDetails(event)"
                         (click)="viewEventDetails(event)"
-                        class="action-btn px-3 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white rounded-md text-xs transition-colors"
+                        class="action-btn px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-300 hover:text-white rounded-md text-xs transition-colors"
                       >
                         Ver Detalles
                       </button>
@@ -208,7 +208,7 @@ interface EventGroup {
       <!-- List View -->
       <div class="list-view" *ngIf="viewMode === 'list' && filteredEvents.length > 0">
         <div class="events-table">
-          <div class="table-header grid grid-cols-12 gap-4 p-3 bg-gray-800 rounded-t-lg text-sm font-medium text-gray-300">
+          <div class="table-header grid grid-cols-12 gap-4 p-3 bg-neutral-800 rounded-t-lg text-sm font-medium text-neutral-300">
             <div class="col-span-1">Tipo</div>
             <div class="col-span-4">Evento</div>
             <div class="col-span-2">Actor</div>
@@ -220,7 +220,7 @@ interface EventGroup {
           <div class="table-body">
             <div 
               *ngFor="let event of filteredEvents; trackBy: trackByEventId" 
-              class="table-row grid grid-cols-12 gap-4 p-3 border-b border-gray-700 hover:bg-gray-800/50 transition-colors"
+              class="table-row grid grid-cols-12 gap-4 p-3 border-b border-neutral-700 hover:bg-neutral-800/50 transition-colors"
             >
               <div class="col-span-1 flex items-center">
                 <span class="event-type-icon text-lg">{{ getEventIcon(event) }}</span>
@@ -241,20 +241,20 @@ interface EventGroup {
                 <span *ngIf="event.details?.amount" class="amount-text font-mono text-sm" [class]="getAmountTextClass(event)">
                   {{ formatCurrency(event.details?.amount || 0) }}
                 </span>
-                <span *ngIf="!event.details?.amount" class="text-gray-500 text-sm">-</span>
+                <span *ngIf="!event.details?.amount" class="text-neutral-500 text-sm">-</span>
               </div>
               
               <div class="col-span-2 flex items-center">
-                <span class="text-gray-300 text-sm">{{ formatDateTime(event.timestamp) }}</span>
+                <span class="text-neutral-300 text-sm">{{ formatDateTime(event.timestamp) }}</span>
               </div>
               
               <div class="col-span-1 flex items-center">
                 <button 
                   *ngIf="hasEventActions(event)"
                   (click)="showEventActions(event)"
-                  class="action-menu-btn p-1 hover:bg-gray-700 rounded-md transition-colors"
+                  class="action-menu-btn p-1 hover:bg-neutral-700 rounded-md transition-colors"
                 >
-                  <span class="text-gray-400 hover:text-white">⋮</span>
+                  <span class="text-neutral-400 hover:text-white">⋮</span>
                 </button>
               </div>
             </div>
@@ -265,8 +265,8 @@ interface EventGroup {
       <!-- Empty State -->
       <div class="empty-state text-center py-12" *ngIf="filteredEvents.length === 0">
         <div class="empty-icon text-6xl mb-4">🗒️</div>
-        <h4 class="text-xl font-semibold text-gray-300 mb-2">No hay eventos</h4>
-        <p class="text-gray-500">{{ getEmptyStateMessage() }}</p>
+        <h4 class="text-xl font-semibold text-neutral-300 mb-2">No hay eventos</h4>
+        <p class="text-neutral-500">{{ getEmptyStateMessage() }}</p>
       </div>
 
       <!-- Load More Button -->
@@ -274,7 +274,7 @@ interface EventGroup {
         <button 
           (click)="loadMoreEvents()"
           [disabled]="isLoadingMore"
-          class="load-more-btn px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+          class="load-more-btn px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
         >
           {{ isLoadingMore ? 'Cargando...' : 'Cargar Más Eventos' }}
         </button>
@@ -293,13 +293,7 @@ interface EventGroup {
       opacity: 0.9;
     }
 
-    .timeline-line {
-      background: linear-gradient(to bottom, 
-        #06b6d4 0%, 
-        #0891b2 50%, 
-        #6b7280 100%
-      );
-    }
+    .timeline-line { background-color: #0891b2; }
 
     .event-node.payment {
       background-color: #10b981;
