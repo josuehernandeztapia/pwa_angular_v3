@@ -117,8 +117,8 @@ import { ImportStatus } from '../../../models/postventa';
       <!-- Protection Section (Financial Products Only) -->
       <div class="protection-section" *ngIf="isFinancialProduct() && client">
         <div class="section-header mb-6">
-          <h2 class="text-xl font-semibold text-gray-800">🛡️ Sistema de Protección</h2>
-          <p class="text-sm text-gray-600 mt-2">
+          <h2 class="text-xl font-semibold text-neutral-100">🛡️ Sistema de Protección</h2>
+          <p class="text-sm text-neutral-300 mt-2">
             Gestión de protección financiera para productos con plazo
           </p>
         </div>
@@ -171,22 +171,22 @@ import { ImportStatus } from '../../../models/postventa';
       <!-- Progress Tracking Section -->
       <div class="progress-tracking-section" *ngIf="client">
         <div class="section-header mb-6">
-          <h2 class="text-xl font-semibold text-gray-800">📈 Progreso Financiero</h2>
+          <h2 class="text-xl font-semibold text-neutral-100">📈 Progreso Financiero</h2>
         </div>
         
         <div class="progress-cards grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <!-- Savings Progress -->
-          <div class="progress-card bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">💰 Plan de Ahorro</h3>
+          <div class="progress-card bg-white p-6 rounded-xl shadow-lg border border-neutral-200">
+            <h3 class="text-lg font-semibold text-neutral-100 mb-4">💰 Plan de Ahorro</h3>
             <!-- Lazy loaded savings progress -->
             <div data-savings-progress></div>
             
-            <div class="savings-details mt-4 pt-4 border-t border-gray-200">
-              <div class="flex justify-between text-sm text-gray-600">
+            <div class="savings-details mt-4 pt-4 border-t border-neutral-200">
+              <div class="flex justify-between text-sm text-neutral-300">
                 <span>Última aportación:</span>
                 <span class="font-medium">{{ getLastContributionDate() }}</span>
               </div>
-              <div class="flex justify-between text-sm text-gray-600 mt-1">
+              <div class="flex justify-between text-sm text-neutral-300 mt-1">
                 <span>Próximo vencimiento:</span>
                 <span class="font-medium text-amber-600">{{ getNextPaymentDue() }}</span>
               </div>
@@ -194,17 +194,17 @@ import { ImportStatus } from '../../../models/postventa';
           </div>
           
           <!-- Payment Progress -->
-          <div class="progress-card bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">💳 Plan de Pagos</h3>
+          <div class="progress-card bg-white p-6 rounded-xl shadow-lg border border-neutral-200">
+            <h3 class="text-lg font-semibold text-neutral-100 mb-4">💳 Plan de Pagos</h3>
             <!-- Lazy loaded payment progress -->
             <div data-payment-progress></div>
             
-            <div class="payment-details mt-4 pt-4 border-t border-gray-200">
-              <div class="flex justify-between text-sm text-gray-600">
+            <div class="payment-details mt-4 pt-4 border-t border-neutral-200">
+              <div class="flex justify-between text-sm text-neutral-300">
                 <span>Pagos restantes:</span>
                 <span class="font-medium">{{ getRemainingPayments() }}</span>
               </div>
-              <div class="flex justify-between text-sm text-gray-600 mt-1">
+              <div class="flex justify-between text-sm text-neutral-300 mt-1">
                 <span>Fecha estimada de liquidación:</span>
                 <span class="font-medium text-emerald-600">{{ getEstimatedCompletion() }}</span>
               </div>
@@ -216,7 +216,7 @@ import { ImportStatus } from '../../../models/postventa';
       <!-- Import Tracker Section -->
       <div class="import-tracker-section" *ngIf="client && client.importStatus">
         <div class="section-header mb-6">
-          <h2 class="text-xl font-semibold text-gray-800">🚢 Seguimiento de Importación</h2>
+          <h2 class="text-xl font-semibold text-neutral-100">🚢 Seguimiento de Importación</h2>
         </div>
         <!-- Lazy loaded import tracker -->
         <div data-import-tracker></div>
@@ -225,7 +225,7 @@ import { ImportStatus } from '../../../models/postventa';
       <!-- Event Log Section -->
       <div class="event-log-section">
         <div class="section-header mb-6">
-          <h2 class="text-xl font-semibold text-gray-800">📜 Historial de Actividad</h2>
+          <h2 class="text-xl font-semibold text-neutral-100">📜 Historial de Actividad</h2>
         </div>
         <!-- Lazy loaded event log -->
         <div data-event-log></div>
@@ -234,21 +234,21 @@ import { ImportStatus } from '../../../models/postventa';
       <!-- Payment Actions Section -->
       <div class="payment-actions-section" *ngIf="client">
         <div class="section-header mb-6">
-          <h2 class="text-xl font-semibold text-gray-800">💳 Opciones de Pago</h2>
+          <h2 class="text-xl font-semibold text-neutral-100">💳 Opciones de Pago</h2>
         </div>
         
         <div class="payment-options grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <button 
             (click)="generatePaymentLink('spei')"
-            class="payment-option-card p-6 bg-white rounded-xl shadow-lg border border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-200 text-left group"
+            class="payment-option-card p-6 bg-white rounded-xl shadow-lg border border-neutral-200 hover:border-blue-400 hover:shadow-xl transition-all duration-200 text-left group"
           >
             <div class="flex items-center space-x-4">
               <div class="payment-icon w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
                 <span class="text-2xl">🏦</span>
               </div>
               <div>
-                <h3 class="font-semibold text-gray-800">Transferencia SPEI</h3>
-                <p class="text-sm text-gray-600">Pago inmediato desde tu banco</p>
+                <h3 class="font-semibold text-neutral-100">Transferencia SPEI</h3>
+                <p class="text-sm text-neutral-300">Pago inmediato desde tu banco</p>
                 <p class="text-xs text-blue-600 mt-1">Sin comisiones adicionales</p>
               </div>
             </div>
@@ -256,15 +256,15 @@ import { ImportStatus } from '../../../models/postventa';
           
           <button 
             (click)="generatePaymentLink('conekta')"
-            class="payment-option-card p-6 bg-white rounded-xl shadow-lg border border-gray-200 hover:border-purple-400 hover:shadow-xl transition-all duration-200 text-left group"
+            class="payment-option-card p-6 bg-white rounded-xl shadow-lg border border-neutral-200 hover:border-purple-400 hover:shadow-xl transition-all duration-200 text-left group"
           >
             <div class="flex items-center space-x-4">
               <div class="payment-icon w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                 <span class="text-2xl">💳</span>
               </div>
               <div>
-                <h3 class="font-semibold text-gray-800">Tarjeta de Crédito/Débito</h3>
-                <p class="text-sm text-gray-600">Pago seguro con Conekta</p>
+                <h3 class="font-semibold text-neutral-100">Tarjeta de Crédito/Débito</h3>
+                <p class="text-sm text-neutral-300">Pago seguro con Conekta</p>
                 <p class="text-xs text-purple-600 mt-1">Meses sin intereses disponibles</p>
               </div>
             </div>
@@ -273,16 +273,16 @@ import { ImportStatus } from '../../../models/postventa';
         
         <!-- Account Statement -->
         <div class="account-statement-section">
-          <div class="bg-neutral-50 p-6 rounded-xl border border-gray-200">
+          <div class="bg-neutral-50 p-6 rounded-xl border border-neutral-200">
             <div class="flex justify-between items-center">
               <div>
-                <h3 class="font-semibold text-gray-800">📄 Estado de Cuenta</h3>
-                <p class="text-sm text-gray-600 mt-1">Genera y descarga tu estado de cuenta actualizado</p>
+                <h3 class="font-semibold text-neutral-100">📄 Estado de Cuenta</h3>
+                <p class="text-sm text-neutral-300 mt-1">Genera y descarga tu estado de cuenta actualizado</p>
               </div>
               <div class="flex space-x-3">
                 <button 
                   (click)="previewAccountStatement()"
-                  class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-2"
+                  class="px-4 py-2 bg-neutral-600 text-white rounded-lg hover:bg-neutral-700 transition-colors flex items-center space-x-2"
                 >
                   <span>👁️</span>
                   <span>Vista Previa</span>
@@ -290,7 +290,7 @@ import { ImportStatus } from '../../../models/postventa';
                 <button 
                   (click)="generatePDF()"
                   [disabled]="isGeneratingPDF"
-                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors flex items-center space-x-2"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-neutral-400 transition-colors flex items-center space-x-2"
                 >
                   <span *ngIf="!isGeneratingPDF">📄</span>
                   <span *ngIf="isGeneratingPDF" class="animate-spin">⏳</span>
@@ -823,7 +823,7 @@ export class ClienteDetailComponent implements OnInit {
       const { ProtectionRealComponent } = await import('../protection-real/protection-real.component');
       // Note: In a real implementation, you'd use ViewContainerRef to dynamically create the component
       // For now, we'll just show a loading state or simplified version
-      container.innerHTML = '<div class="text-center py-4 text-gray-500">Protección disponible - Cargando...</div>';
+      container.innerHTML = '<div class="text-center py-4 text-neutral-400">Protección disponible - Cargando...</div>';
     }
   }
 
@@ -835,10 +835,10 @@ export class ClienteDetailComponent implements OnInit {
       savingsContainer.innerHTML = `
         <div class="bg-neutral-100 rounded-lg p-4">
           <div class="flex justify-between mb-2">
-            <span class="text-sm text-gray-600">Progreso del ahorro</span>
+            <span class="text-sm text-neutral-300">Progreso del ahorro</span>
             <span class="text-sm font-medium">${this.getSavingsProgress()}%</span>
           </div>
-          <div class="w-full bg-gray-200 rounded-full h-2">
+          <div class="w-full bg-neutral-200 rounded-full h-2">
             <div class="bg-green-500 h-2 rounded-full" style="width: ${this.getSavingsProgress()}%"></div>
           </div>
         </div>
@@ -849,10 +849,10 @@ export class ClienteDetailComponent implements OnInit {
       paymentContainer.innerHTML = `
         <div class="bg-neutral-100 rounded-lg p-4">
           <div class="flex justify-between mb-2">
-            <span class="text-sm text-gray-600">Progreso de pagos</span>
+            <span class="text-sm text-neutral-300">Progreso de pagos</span>
             <span class="text-sm font-medium">${this.getPaymentProgress()}%</span>
           </div>
-          <div class="w-full bg-gray-200 rounded-full h-2">
+          <div class="w-full bg-neutral-200 rounded-full h-2">
             <div class="bg-blue-500 h-2 rounded-full" style="width: ${this.getPaymentProgress()}%"></div>
           </div>
         </div>
@@ -863,7 +863,7 @@ export class ClienteDetailComponent implements OnInit {
   private async loadImportTracker(): Promise<void> {
     const container = document.querySelector('[data-import-tracker]') as HTMLElement;
     if (container && this.client?.importStatus) {
-      container.innerHTML = '<div class="text-center py-4 text-gray-500">Seguimiento de importación - Cargando...</div>';
+      container.innerHTML = '<div class="text-center py-4 text-neutral-400">Seguimiento de importación - Cargando...</div>';
     }
   }
 
@@ -871,14 +871,14 @@ export class ClienteDetailComponent implements OnInit {
     const container = document.querySelector('[data-event-log]') as HTMLElement;
     if (container) {
       const eventsHtml = this.clientEvents.slice(0, 5).map(event => `
-        <div class="border-b border-gray-200 py-2">
-          <div class="text-sm font-medium text-gray-900">${event.message}</div>
-          <div class="text-xs text-gray-500">${event.timestamp.toLocaleDateString()}</div>
+        <div class="border-b border-neutral-200 py-2">
+          <div class="text-sm font-medium text-neutral-100">${event.message}</div>
+          <div class="text-xs text-neutral-400">${event.timestamp.toLocaleDateString()}</div>
         </div>
       `).join('');
       container.innerHTML = `
-        <div class="bg-white rounded-lg border border-gray-200 p-4">
-          <h4 class="font-medium text-gray-900 mb-3">Actividad reciente</h4>
+        <div class="bg-white rounded-lg border border-neutral-200 p-4">
+          <h4 class="font-medium text-neutral-100 mb-3">Actividad reciente</h4>
           ${eventsHtml}
         </div>
       `;
@@ -895,7 +895,7 @@ export class ClienteDetailComponent implements OnInit {
             <h3 class="text-lg font-semibold mb-4">🎤 Verificación AVI</h3>
             <p class="text-neutral-100 mb-4">Cargando componente de verificación...</p>
             <button onclick="this.parentElement.parentElement.parentElement.style.display='none'"
-                    class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+                    class="px-4 py-2 bg-neutral-500 text-white rounded hover:bg-neutral-600">
               Cerrar
             </button>
           </div>

@@ -14,12 +14,12 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
   standalone: true,
   imports: [CommonModule, FormsModule, SkeletonCardComponent, EmptyStateCardComponent],
   template: `
-    <div class="premium-container min-h-screen bg-gray-50 p-6">
+    <div class="premium-container min-h-screen bg-neutral-50 p-6">
       <!-- Header (compact) -->
       <div class="mb-4">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 class="text-2xl font-semibold text-gray-900 mb-1">Monitor de Triggers</h1>
+            <h1 class="text-2xl font-semibold text-neutral-100 mb-1">Monitor de Triggers</h1>
             <p class="text-neutral-100 text-sm">Actividad reciente y pendientes según filtros</p>
           </div>
 
@@ -35,7 +35,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
             </div>
             
             <!-- Última actualización -->
-            <div class="text-sm text-gray-500">
+            <div class="text-sm text-neutral-400">
               Última actualización: {{ lastUpdate() | date:'HH:mm:ss' }}
             </div>
             
@@ -60,8 +60,8 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
         <div class="bg-white p-6 rounded-xl shadow-sm border">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-600 mb-1">Total Triggers</p>
-              <p class="text-2xl font-bold text-gray-900">{{ metrics()?.totalTriggers || 0 }}</p>
+              <p class="text-sm text-neutral-300 mb-1">Total Triggers</p>
+              <p class="text-2xl font-bold text-neutral-100">{{ metrics()?.totalTriggers || 0 }}</p>
             </div>
             <div class="p-3 bg-blue-100 rounded-lg">
               <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,7 +74,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
         <div class="bg-white p-6 rounded-xl shadow-sm border">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-600 mb-1">Exitosos</p>
+              <p class="text-sm text-neutral-300 mb-1">Exitosos</p>
               <p class="text-2xl font-bold text-green-600">{{ metrics()?.successfulTriggers || 0 }}</p>
             </div>
             <div class="p-3 bg-green-100 rounded-lg">
@@ -88,7 +88,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
         <div class="bg-white p-6 rounded-xl shadow-sm border">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-600 mb-1">Fallidos</p>
+              <p class="text-sm text-neutral-300 mb-1">Fallidos</p>
               <p class="text-2xl font-bold text-red-600">{{ metrics()?.failedTriggers || 0 }}</p>
             </div>
             <div class="p-3 bg-red-100 rounded-lg">
@@ -102,7 +102,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
         <div class="bg-white p-6 rounded-xl shadow-sm border">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-600 mb-1">Pendientes</p>
+              <p class="text-sm text-neutral-300 mb-1">Pendientes</p>
               <p class="text-2xl font-bold text-orange-600">{{ metrics()?.pendingAnalysis || 0 }}</p>
             </div>
             <div class="p-3 bg-orange-100 rounded-lg">
@@ -118,11 +118,11 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
       <div class="bg-white p-6 rounded-xl shadow-sm border mb-8">
         <div class="flex flex-wrap gap-4">
           <div class="flex items-center gap-2">
-            <label class="text-sm font-medium text-gray-700">Mercado:</label>
+            <label class="text-sm font-medium text-neutral-100">Mercado:</label>
             <select
               [(ngModel)]="selectedMarket"
               (ngModelChange)="applyFilters()"
-              class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Todos</option>
               <option value="aguascalientes">Aguascalientes</option>
@@ -131,11 +131,11 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
           </div>
           
           <div class="flex items-center gap-2">
-            <label class="text-sm font-medium text-gray-700">Flujo:</label>
+            <label class="text-sm font-medium text-neutral-100">Flujo:</label>
             <select
               [(ngModel)]="selectedFlow"
               (ngModelChange)="applyFilters()"
-              class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Todos</option>
               <option value="Venta Directa">Venta Directa</option>
@@ -146,11 +146,11 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
           </div>
           
           <div class="flex items-center gap-2">
-            <label class="text-sm font-medium text-gray-700">Estado:</label>
+            <label class="text-sm font-medium text-neutral-100">Estado:</label>
             <select
               [(ngModel)]="selectedStatus"
               (ngModelChange)="applyFilters()"
-              class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Todos</option>
               <option value="success">Exitoso</option>
@@ -163,22 +163,22 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
 
       <!-- Tabs -->
       <div class="mb-6">
-        <div class="border-b border-gray-200">
+        <div class="border-b border-neutral-200">
           <nav class="-mb-px flex space-x-8">
             <button
               (click)="activeTab = 'recent'"
               [class]="activeTab === 'recent' 
                 ? 'border-blue-500 text-blue-600 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'"
+                : 'border-transparent text-neutral-400 hover:text-neutral-100 hover:border-neutral-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'"
             >
               Triggers Recientes
-              <span class="ml-2 py-0.5 px-2 bg-gray-100 rounded-full text-xs">{{ filteredEvents().length }}</span>
+              <span class="ml-2 py-0.5 px-2 bg-neutral-100 rounded-full text-xs">{{ filteredEvents().length }}</span>
             </button>
             <button
               (click)="activeTab = 'pending'"
               [class]="activeTab === 'pending' 
                 ? 'border-blue-500 text-blue-600 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'"
+                : 'border-transparent text-neutral-400 hover:text-neutral-100 hover:border-neutral-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'"
             >
               Análisis Pendientes
               <span class="ml-2 py-0.5 px-2 bg-orange-100 rounded-full text-xs">{{ pendingContracts().length + pendingTandas().length }}</span>
@@ -187,7 +187,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
               (click)="activeTab = 'rules'"
               [class]="activeTab === 'rules' 
                 ? 'border-blue-500 text-blue-600 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'"
+                : 'border-transparent text-neutral-400 hover:text-neutral-100 hover:border-neutral-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'"
             >
               Reglas de Trigger
               <span class="ml-2 py-0.5 px-2 bg-blue-100 rounded-full text-xs">{{ triggerRules().length }}</span>
@@ -208,7 +208,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
               <div class="flex-1">
                 <div class="flex items-center gap-3 mb-3">
                   <div [class]="getEventStatusClass(event)"></div>
-                  <h3 class="font-semibold text-gray-900">
+                  <h3 class="font-semibold text-neutral-100">
                     {{ getEventTitle(event) }}
                   </h3>
                   <span class="px-2 py-1 text-xs font-medium rounded-full"
@@ -219,25 +219,25 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
-                    <p class="text-sm text-gray-600">Umbral Objetivo</p>
+                    <p class="text-sm text-neutral-300">Umbral Objetivo</p>
                     <p class="font-medium">\${{ event.thresholdAmount | number:'1.2-2' }}</p>
                   </div>
                   <div>
-                    <p class="text-sm text-gray-600">Monto Actual</p>
+                    <p class="text-sm text-neutral-300">Monto Actual</p>
                     <p class="font-medium">\${{ event.actualAmount | number:'1.2-2' }}</p>
                   </div>
                   <div>
-                    <p class="text-sm text-gray-600">Porcentaje</p>
+                    <p class="text-sm text-neutral-300">Porcentaje</p>
                     <p class="font-medium">{{ event.triggerPercentage.toFixed(1) }}%</p>
                   </div>
                 </div>
                 
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-4">
-                    <span class="text-sm text-gray-500">
+                    <span class="text-sm text-neutral-400">
                       {{ event.triggerDate | date:'dd/MM/yyyy HH:mm' }}
                     </span>
-                    <span class="text-sm text-gray-500">
+                    <span class="text-sm text-neutral-400">
                       Procesado: {{ event.processedBy === 'system' ? 'Automático' : 'Manual' }}
                     </span>
                   </div>
@@ -278,36 +278,36 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
           <div *ngFor="let contract of pendingContracts()" class="bg-white p-6 rounded-xl shadow-sm border border-orange-200">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-3 h-3 bg-orange-400 rounded-full animate-pulse"></div>
-              <h3 class="font-semibold text-gray-900">{{ contract.clientName }}</h3>
+              <h3 class="font-semibold text-neutral-100">{{ contract.clientName }}</h3>
               <span class="px-2 py-1 text-xs font-medium rounded-full"
                     [class]="getFlowBadgeClass(contract.flow)">
                 {{ contract.flow }}
               </span>
-              <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+              <span class="px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-100 rounded-full">
                 {{ contract.market }}
               </span>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div>
-                <p class="text-sm text-gray-600">Umbral Requerido</p>
+                <p class="text-sm text-neutral-300">Umbral Requerido</p>
                 <p class="font-medium">\${{ contract.thresholdAmount | number:'1.2-2' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Pagado Actualmente</p>
+                <p class="text-sm text-neutral-300">Pagado Actualmente</p>
                 <p class="font-medium">\${{ contract.currentPaidAmount | number:'1.2-2' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Progreso</p>
+                <p class="text-sm text-neutral-300">Progreso</p>
                 <div class="flex items-center gap-2">
-                  <div class="flex-1 bg-gray-200 rounded-full h-2">
+                  <div class="flex-1 bg-neutral-200 rounded-full h-2">
                     <div class="bg-orange-500 h-2 rounded-full" [style.width.%]="contract.thresholdPercentage"></div>
                   </div>
                   <span class="text-sm font-medium">{{ contract.thresholdPercentage.toFixed(1) }}%</span>
                 </div>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Estado</p>
+                <p class="text-sm text-neutral-300">Estado</p>
                 <p class="font-medium text-orange-600">
                   {{ contract.thresholdReached ? 'Listo para Trigger' : 'Esperando Pagos' }}
                 </p>
@@ -319,7 +319,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
           <div *ngFor="let tanda of pendingTandas()" class="bg-white p-6 rounded-xl shadow-sm border border-purple-200">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-3 h-3 bg-purple-400 rounded-full animate-pulse"></div>
-              <h3 class="font-semibold text-gray-900">{{ tanda.groupName }}</h3>
+              <h3 class="font-semibold text-neutral-100">{{ tanda.groupName }}</h3>
               <span class="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
                 Tanda Colectiva
               </span>
@@ -327,19 +327,19 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
             
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div>
-                <p class="text-sm text-gray-600">Miembros Activos</p>
+                <p class="text-sm text-neutral-300">Miembros Activos</p>
                 <p class="font-medium">{{ tanda.activeMembersCount }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Meses Colectando</p>
+                <p class="text-sm text-neutral-300">Meses Colectando</p>
                 <p class="font-medium">{{ tanda.monthsCollecting }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Total Colectado</p>
+                <p class="text-sm text-neutral-300">Total Colectado</p>
                 <p class="font-medium">\${{ tanda.totalCollected | number:'1.2-2' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Confianza</p>
+                <p class="text-sm text-neutral-300">Confianza</p>
                 <p class="font-medium">{{ (tanda.confidenceLevel * 100).toFixed(1) }}%</p>
               </div>
             </div>
@@ -374,24 +374,24 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
           <div *ngFor="let rule of triggerRules()" class="bg-white p-6 rounded-xl shadow-sm border">
             <div class="flex items-start justify-between mb-4">
               <div>
-                <h3 class="font-semibold text-gray-900 mb-2">{{ rule.description }}</h3>
+                <h3 class="font-semibold text-neutral-100 mb-2">{{ rule.description }}</h3>
                 <div class="flex items-center gap-4 mb-2">
                   <span class="px-2 py-1 text-xs font-medium rounded-full"
                         [class]="getFlowBadgeClass(rule.flow)">
                     {{ rule.flow }}
                   </span>
-                  <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                  <span class="px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-100 rounded-full">
                     {{ rule.market }}
                   </span>
                   <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
                     {{ rule.thresholdPercentage * 100 }}% umbral
                   </span>
                 </div>
-                <p class="text-sm text-gray-600">{{ rule.triggerLogic }}</p>
+                <p class="text-sm text-neutral-300">{{ rule.triggerLogic }}</p>
               </div>
               <div class="text-right">
                 <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-                <span class="text-xs text-gray-500">Activo</span>
+                <span class="text-xs text-neutral-400">Activo</span>
               </div>
             </div>
             
@@ -416,7 +416,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
         <div class="flex justify-end">
           <button
             (click)="showErrorModal = false"
-            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+            class="px-4 py-2 bg-neutral-200 text-neutral-100 rounded-lg hover:bg-neutral-300"
             aria-label="Cerrar"
           >
             Cerrar
@@ -626,7 +626,7 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
       case BusinessFlow.CreditoColectivo:
         return 'bg-orange-100 text-orange-800';
       default:
-        return 'bg-neutral-100 text-gray-800';
+        return 'bg-neutral-100 text-neutral-100';
     }
   }
 }

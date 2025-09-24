@@ -27,24 +27,24 @@ import { Router } from '@angular/router';
 
         <!-- Status Message -->
         <div class="mb-8">
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+          <h1 class="text-2xl font-bold text-neutral-100 dark:text-white mb-3">
             Sin conexión a internet
           </h1>
-          <p class="text-neutral-100 dark:text-gray-400 leading-relaxed">
+          <p class="text-neutral-100 dark:text-neutral-400 leading-relaxed">
             No se pudo establecer conexión con el servidor. Verifica tu conexión a internet e inténtalo de nuevo.
           </p>
         </div>
 
         <!-- Connection Quality & Offline Stats -->
-        <div class="mb-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+        <div class="mb-8 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-xl">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
             <div class="flex items-center justify-center space-x-2">
               <div class="w-2 h-2 bg-red-500 rounded-full"></div>
-              <span class="text-neutral-100 dark:text-gray-400">Estado: Desconectado</span>
+              <span class="text-neutral-100 dark:text-neutral-400">Estado: Desconectado</span>
             </div>
             <div class="flex items-center justify-center space-x-2">
               <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
-              <span class="text-neutral-100 dark:text-gray-400">
+              <span class="text-neutral-100 dark:text-neutral-400">
                 Pendientes: {{ offlineCapabilities().pendingCount }}
               </span>
             </div>
@@ -53,26 +53,26 @@ import { Router } from '@angular/router';
 
         <!-- Offline Features -->
         <div class="mb-8 space-y-3">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <h3 class="text-lg font-semibold text-neutral-100 dark:text-white mb-4">
             Mientras estás offline:
           </h3>
 
           <div class="space-y-3 text-sm text-left">
             <div class="flex items-start space-x-3">
               <div class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-              <span class="text-neutral-100 dark:text-gray-400">
+              <span class="text-neutral-100 dark:text-neutral-400">
                 Los datos se guardan automáticamente en tu dispositivo
               </span>
             </div>
             <div class="flex items-start space-x-3">
               <div class="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-              <span class="text-neutral-100 dark:text-gray-400">
+              <span class="text-neutral-100 dark:text-neutral-400">
                 Las acciones se sincronizarán cuando vuelvas a tener conexión
               </span>
             </div>
             <div class="flex items-start space-x-3">
               <div class="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></div>
-              <span class="text-neutral-100 dark:text-gray-400">
+              <span class="text-neutral-100 dark:text-neutral-400">
                 Puedes seguir navegando con los datos almacenados
               </span>
             </div>

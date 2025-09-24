@@ -152,19 +152,19 @@ interface EventGroup {
                         
                         <!-- Reference Number -->
                         <div *ngIf="event.details?.reference" class="detail-item">
-                          <span class="detail-label text-gray-400 text-xs">Referencia:</span>
+                          <span class="detail-label text-neutral-400 text-xs">Referencia:</span>
                           <span class="detail-value text-white text-sm font-medium font-mono">{{ event.details?.reference }}</span>
                         </div>
                         
                         <!-- Document Name -->
                         <div *ngIf="event.details?.documentName" class="detail-item">
-                          <span class="detail-label text-gray-400 text-xs">Documento:</span>
+                          <span class="detail-label text-neutral-400 text-xs">Documento:</span>
                           <span class="detail-value text-white text-sm font-medium">{{ event.details?.documentName }}</span>
                         </div>
                         
                         <!-- Status -->
                         <div *ngIf="event.details?.status" class="detail-item">
-                          <span class="detail-label text-gray-400 text-xs">Estado:</span>
+                          <span class="detail-label text-neutral-400 text-xs">Estado:</span>
                           <span class="detail-value text-white text-sm font-medium">{{ event.details?.status }}</span>
                         </div>
                       </div>

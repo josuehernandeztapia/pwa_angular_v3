@@ -13,7 +13,7 @@ import { IntegratedImportTrackerService, ImportTrackerMetrics, IntegratedImportS
     <div class="p-6 space-y-6">
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900">Import Tracker</h1>
+          <h1 class="text-2xl font-bold text-neutral-100">Import Tracker</h1>
           <p class="text-neutral-100">Estado de importación, entregas y triggers</p>
         </div>
         <div class="flex items-center gap-2">
@@ -46,7 +46,7 @@ import { IntegratedImportTrackerService, ImportTrackerMetrics, IntegratedImportS
       <div class="bg-white rounded-xl shadow p-6" *ngIf="(status$ | async) as status">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-xl font-semibold">Cliente: {{ currentClientId || '—' }}</h2>
-          <div class="text-sm text-gray-500" *ngIf="status?.lastSyncDate">Última sync: {{ status.lastSyncDate | date:'short' }}</div>
+          <div class="text-sm text-neutral-400" *ngIf="status?.lastSyncDate">Última sync: {{ status.lastSyncDate | date:'short' }}</div>
         </div>
 
         <ng-container *ngIf="status; else emptyState">
@@ -76,11 +76,11 @@ import { IntegratedImportTrackerService, ImportTrackerMetrics, IntegratedImportS
               <ng-container *ngFor="let m of milestoneKeys">
                 <div class="border rounded-lg p-3 flex items-center justify-between">
                   <div>
-                    <div class="text-sm text-gray-600">{{ m }}</div>
+                    <div class="text-sm text-neutral-300">{{ m }}</div>
                     <div class="font-medium">{{ ($any(status)[m]?.status) || 'pending' }}</div>
                   </div>
                   <div class="flex gap-2">
-                    <button class="text-xs px-2 py-1 rounded bg-gray-100" (click)="setMilestone(m, 'in_progress')">En curso</button>
+                    <button class="text-xs px-2 py-1 rounded bg-neutral-100" (click)="setMilestone(m, 'in_progress')">En curso</button>
                     <button class="text-xs px-2 py-1 rounded bg-green-600 text-white" (click)="setMilestone(m, 'completed')">Completar</button>
                   </div>
                 </div>
@@ -94,18 +94,18 @@ import { IntegratedImportTrackerService, ImportTrackerMetrics, IntegratedImportS
             <div class="border rounded-lg p-3" *ngIf="status.triggerHistory?.length; else noTriggers">
               <div class="divide-y">
                 <div class="py-2" *ngFor="let t of status.triggerHistory | slice:0:5">
-                  <div class="text-sm text-gray-600">{{ t.triggerDate | date:'short' }} — {{ t.eventType }}</div>
-                  <div class="text-xs text-gray-500">Umbral: {{ t.triggerPercentage }}% • Orden creada: {{ t.deliveryOrderCreated ? 'Sí' : 'No' }}</div>
+                  <div class="text-sm text-neutral-300">{{ t.triggerDate | date:'short' }} — {{ t.eventType }}</div>
+                  <div class="text-xs text-neutral-400">Umbral: {{ t.triggerPercentage }}% • Orden creada: {{ t.deliveryOrderCreated ? 'Sí' : 'No' }}</div>
                 </div>
               </div>
             </div>
             <ng-template #noTriggers>
-              <div class="text-sm text-gray-500">Sin triggers recientes.</div>
+              <div class="text-sm text-neutral-400">Sin triggers recientes.</div>
             </ng-template>
           </div>
         </ng-container>
         <ng-template #emptyState>
-          <div class="text-sm text-gray-500">Ingresa un Client ID para ver el estado integrado.</div>
+          <div class="text-sm text-neutral-400">Ingresa un Client ID para ver el estado integrado.</div>
         </ng-template>
       </div>
     </div>

@@ -19,7 +19,7 @@ interface ImportMilestone {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="import-tracker bg-gray-900 rounded-xl border border-gray-800 p-6">
+    <div class="import-tracker bg-neutral-900 rounded-xl border border-neutral-800 p-6">
       <!-- Header -->
       <div class="tracker-header mb-6">
         <div class="flex items-center justify-between">
@@ -29,7 +29,7 @@ interface ImportMilestone {
             </div>
             <div>
               <h3 class="text-xl font-bold text-white">Seguimiento de Importación</h3>
-              <p class="text-sm text-gray-400">Unidad: {{ client?.vehicleInfo?.model || 'N/A' }}</p>
+              <p class="text-sm text-neutral-400">Unidad: {{ client?.vehicleInfo?.model || 'N/A' }}</p>
               <p *ngIf="integratedStatus()?.deliveryOrderId" class="text-xs text-blue-400">
                 Orden: {{ integratedStatus()?.deliveryOrderId }}
               </p>
@@ -47,7 +47,7 @@ interface ImportMilestone {
       <!-- Progress Timeline -->
       <div class="timeline-container">
         <div class="timeline-progress-bar mb-8">
-          <div class="progress-track w-full h-2 bg-gray-700 rounded-full relative">
+          <div class="progress-track w-full h-2 bg-neutral-700 rounded-full relative">
             <div 
               class="progress-fill h-2 bg-neutral-900 rounded-full transition-all duration-500"
               [style.width.%]="getOverallProgress()"
@@ -101,7 +101,7 @@ interface ImportMilestone {
                   </div>
                 </div>
                 
-                <p class="text-sm text-gray-400 mb-3">{{ milestone.description }}</p>
+                <p class="text-sm text-neutral-400 mb-3">{{ milestone.description }}</p>
                 
                 <!-- Estimated Timeline -->
                 <div class="timeline-estimate flex items-center gap-4">
@@ -134,18 +134,18 @@ interface ImportMilestone {
             </div>
 
             <!-- Additional Details (expandable) -->
-            <div *ngIf="selectedMilestone === milestone.key" class="milestone-details mt-4 pt-4 border-t border-gray-700">
+            <div *ngIf="selectedMilestone === milestone.key" class="milestone-details mt-4 pt-4 border-t border-neutral-700">
               <div class="details-grid grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="detail-card p-3 bg-gray-800/50 rounded-lg">
+                <div class="detail-card p-3 bg-neutral-800/50 rounded-lg">
                   <h5 class="font-medium text-white text-sm mb-2">Documentos Requeridos</h5>
-                  <ul class="text-sm text-gray-400 space-y-1">
+                  <ul class="text-sm text-neutral-400 space-y-1">
                     <li *ngFor="let doc of getMilestoneDocuments(milestone.key)">{{ doc }}</li>
                   </ul>
                 </div>
                 
-                <div class="detail-card p-3 bg-gray-800/50 rounded-lg">
+                <div class="detail-card p-3 bg-neutral-800/50 rounded-lg">
                   <h5 class="font-medium text-white text-sm mb-2">Contactos Relevantes</h5>
-                  <div class="contacts-list text-sm text-gray-400 space-y-1">
+                  <div class="contacts-list text-sm text-neutral-400 space-y-1">
                     <div *ngFor="let contact of getMilestoneContacts(milestone.key)" class="contact-item">
                       <span class="contact-role font-medium">{{ contact.role }}:</span>
                       <span class="contact-info">{{ contact.name }} - {{ contact.phone }}</span>
@@ -159,7 +159,7 @@ interface ImportMilestone {
                 <h5 class="font-medium text-white text-sm mb-2">Historial de Acciones</h5>
                 <div class="actions-list space-y-2">
                   <div *ngFor="let action of getMilestoneActions(milestone.key)" 
-                       class="action-item p-2 bg-gray-800/30 rounded-lg text-sm">
+                       class="action-item p-2 bg-neutral-800/30 rounded-lg text-sm">
                     <div class="flex items-center justify-between">
                       <span class="text-neutral-100">{{ action.description }}</span>
                       <span class="text-neutral-100 text-xs">{{ action.timestamp | date:'short' }}</span>
@@ -179,7 +179,7 @@ interface ImportMilestone {
             <div class="stat-icon text-2xl">✅</div>
             <div>
               <div class="stat-value text-xl font-bold text-blue-400">{{ getCompletedMilestones() }}</div>
-              <div class="stat-label text-sm text-gray-400">Etapas Completadas</div>
+              <div class="stat-label text-sm text-neutral-400">Etapas Completadas</div>
             </div>
           </div>
         </div>
@@ -189,7 +189,7 @@ interface ImportMilestone {
             <div class="stat-icon text-2xl">⏳</div>
             <div>
               <div class="stat-value text-xl font-bold text-amber-400">{{ getEstimatedDaysRemaining() }}</div>
-              <div class="stat-label text-sm text-gray-400">Días Restantes</div>
+              <div class="stat-label text-sm text-neutral-400">Días Restantes</div>
             </div>
           </div>
         </div>
@@ -199,7 +199,7 @@ interface ImportMilestone {
             <div class="stat-icon text-2xl">📅</div>
             <div>
               <div class="stat-value text-xl font-bold text-emerald-400">{{ getExpectedDeliveryDate() }}</div>
-              <div class="stat-label text-sm text-gray-400">Entrega Estimada</div>
+              <div class="stat-label text-sm text-neutral-400">Entrega Estimada</div>
             </div>
           </div>
         </div>

@@ -20,7 +20,7 @@ type ProgressSize = 'sm' | 'md' | 'lg' | 'xl';
             <span class="progress-percentage text-sm font-medium" [class]="getPercentageColorClass()" *ngIf="showPercentage">
               {{ getPercentage() }}%
             </span>
-            <span class="progress-values text-sm text-gray-400" *ngIf="showValues && currency">
+            <span class="progress-values text-sm text-neutral-400" *ngIf="showValues && currency">
               {{ formatValue(progress) }} / {{ formatValue(goal) }}
             </span>
           </div>
@@ -59,7 +59,7 @@ type ProgressSize = 'sm' | 'md' | 'lg' | 'xl';
           class="goal-marker absolute top-0 w-0.5 h-full bg-white/80 z-10"
           [style.left.%]="(goal / max) * 100"
         >
-          <div class="marker-tooltip absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap">
+          <div class="marker-tooltip absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-neutral-900 text-white text-xs rounded whitespace-nowrap">
             Meta: {{ formatValue(goal) }}
           </div>
         </div>
@@ -67,10 +67,10 @@ type ProgressSize = 'sm' | 'md' | 'lg' | 'xl';
         <!-- Milestone Markers -->
         <div 
           *ngFor="let milestone of milestones" 
-          class="milestone-marker absolute top-0 w-0.5 h-full bg-gray-300 z-10"
+          class="milestone-marker absolute top-0 w-0.5 h-full bg-neutral-300 z-10"
           [style.left.%]="(milestone.value / max) * 100"
         >
-          <div class="milestone-tooltip absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+          <div class="milestone-tooltip absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-neutral-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
             {{ milestone.label }}
           </div>
         </div>
@@ -95,7 +95,7 @@ type ProgressSize = 'sm' | 'md' | 'lg' | 'xl';
           <span class="status-message" [class]="getStatusMessageClass()">
             {{ getStatusMessage() }}
           </span>
-          <span class="remaining-message text-gray-500" *ngIf="showRemaining">
+          <span class="remaining-message text-neutral-400" *ngIf="showRemaining">
             {{ getRemainingMessage() }}
           </span>
         </div>

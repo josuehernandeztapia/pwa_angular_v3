@@ -16,7 +16,7 @@ interface ImportMilestone {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="import-tracker bg-gray-900 rounded-xl border border-gray-800 p-6">
+    <div class="import-tracker bg-neutral-900 rounded-xl border border-neutral-800 p-6">
       <!-- Header -->
       <div class="tracker-header mb-6">
         <div class="flex items-center justify-between">

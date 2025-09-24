@@ -22,7 +22,7 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
 
       <!-- Resumen KPIs -->
       <div class="bg-white rounded-xl shadow-lg p-4">
-        <h2 class="text-lg font-semibold text-gray-800 mb-3">Resumen</h2>
+        <h2 class="text-lg font-semibold text-neutral-100 mb-3">Resumen</h2>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div class="bg-emerald-50 p-3 rounded border border-emerald-100">
             <div class="text-emerald-600 text-xs">Pago mensual por miembro</div>
@@ -42,7 +42,7 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Configuration Panel -->
         <div class="bg-white rounded-xl shadow-lg p-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          <h2 class="text-xl font-semibold text-neutral-100 mb-6 flex items-center">
             <span class="bg-emerald-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
             Unidad
           </h2>
@@ -50,19 +50,19 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
           <form [formGroup]="configForm" class="space-y-6">
             <!-- Member Count -->
             <div class="space-y-2">
-              <label class="block text-sm font-medium text-gray-700">
+              <label class="block text-sm font-medium text-neutral-100">
                 Número de Miembros del Grupo *
               </label>
               <input
                 type="number"
                 formControlName="memberCount"
                 placeholder="10"
-                class="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                class="w-full py-3 px-4 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                 min="5"
                 max="50"
                 step="1"
               />
-              <div class="flex justify-between text-xs text-gray-500">
+              <div class="flex justify-between text-xs text-neutral-400">
                 <span>Mínimo: 5 miembros</span>
                 <span>Máximo: 50 miembros</span>
               </div>
@@ -76,21 +76,21 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
 
             <!-- Unit Price -->
             <div class="space-y-2">
-              <label class="block text-sm font-medium text-gray-700">
+              <label class="block text-sm font-medium text-neutral-100">
                 Precio de Unidad por Miembro *
               </label>
               <div class="relative">
-                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400">$</span>
                 <input
                   type="number"
                   formControlName="unitPrice"
                   placeholder="749000"
-                  class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  class="w-full pl-8 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   min="500000"
                   step="1000"
                 />
               </div>
-              <p class="text-xs text-gray-500">Precio promedio de unidad que cada miembro desea adquirir</p>
+              <p class="text-xs text-neutral-400">Precio promedio de unidad que cada miembro desea adquirir</p>
               <div *ngIf="configForm.get('unitPrice')?.errors?.['required']" 
                    class="text-red-500 text-sm">El precio de unidad es obligatorio</div>
               <div *ngIf="configForm.get('unitPrice')?.errors?.['min']" 
@@ -99,7 +99,7 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
 
             <!-- Average Consumption -->
             <div class="space-y-2">
-              <label class="block text-sm font-medium text-gray-700">
+              <label class="block text-sm font-medium text-neutral-100">
                 Consumo Promedio por Miembro *
               </label>
               <div class="relative">
@@ -107,13 +107,13 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
                   type="number"
                   formControlName="avgConsumption"
                   placeholder="400"
-                  class="w-full pr-16 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  class="w-full pr-16 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   min="200"
                   step="50"
                 />
-                <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">litros/mes</span>
+                <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400">litros/mes</span>
               </div>
-              <p class="text-xs text-gray-500">Consumo mensual promedio de combustible por miembro</p>
+              <p class="text-xs text-neutral-400">Consumo mensual promedio de combustible por miembro</p>
               <div *ngIf="configForm.get('avgConsumption')?.errors?.['required']" 
                    class="text-red-500 text-sm">El consumo promedio es obligatorio</div>
               <div *ngIf="configForm.get('avgConsumption')?.errors?.['min']" 
@@ -122,21 +122,21 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
 
             <!-- Overprice Per Liter -->
             <div class="space-y-2">
-              <label class="block text-sm font-medium text-gray-700">
+              <label class="block text-sm font-medium text-neutral-100">
                 Sobreprecio por Litro *
               </label>
               <div class="relative">
-                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400">$</span>
                 <input
                   type="number"
                   formControlName="overpricePerLiter"
                   placeholder="3.00"
-                  class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  class="w-full pl-8 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   min="1.0"
                   step="0.1"
                 />
               </div>
-              <p class="text-xs text-gray-500">Sobreprecio aplicado para generar el ahorro colectivo</p>
+              <p class="text-xs text-neutral-400">Sobreprecio aplicado para generar el ahorro colectivo</p>
               <div *ngIf="configForm.get('overpricePerLiter')?.errors?.['required']" 
                    class="text-red-500 text-sm">El sobreprecio es obligatorio</div>
               <div *ngIf="configForm.get('overpricePerLiter')?.errors?.['min']" 
@@ -145,21 +145,21 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
 
             <!-- Optional Voluntary Monthly -->
             <div class="space-y-2">
-              <label class="block text-sm font-medium text-gray-700">
+              <label class="block text-sm font-medium text-neutral-100">
                 Aportación Voluntaria Mensual por Miembro (Opcional)
               </label>
               <div class="relative">
-                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400">$</span>
                 <input
                   type="number"
                   formControlName="voluntaryMonthly"
                   placeholder="0"
-                  class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  class="w-full pl-8 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   min="0"
                   step="100"
                 />
               </div>
-              <p class="text-xs text-gray-500">Dinero adicional mensual que cada miembro puede aportar</p>
+              <p class="text-xs text-neutral-400">Dinero adicional mensual que cada miembro puede aportar</p>
             </div>
 
             <!-- Action Buttons -->
@@ -168,7 +168,7 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
                 type="button"
                 (click)="generateQuotation()"
                 [disabled]="!configForm.valid || isCalculating"
-                class="flex-1 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                class="flex-1 bg-emerald-600 hover:bg-emerald-700 disabled:bg-neutral-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center"
               >
                 <span *ngIf="!isCalculating">Generar Cotización</span>
                 <div *ngIf="isCalculating" class="flex items-center">
@@ -182,7 +182,7 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
               <button
                 type="button"
                 (click)="resetForm()"
-                class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                class="px-6 py-3 border border-neutral-300 text-neutral-100 font-medium rounded-lg hover:bg-neutral-50 transition-colors duration-200"
               >
                 Limpiar
               </button>
@@ -192,7 +192,7 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
 
         <!-- Results Panel -->
         <div class="bg-white rounded-xl shadow-lg p-6" *ngIf="quotation">
-          <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          <h2 class="text-xl font-semibold text-neutral-100 mb-6 flex items-center">
             <span class="bg-emerald-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
             Finanzas
           </h2>
@@ -223,7 +223,7 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
 
           <!-- Individual Member Info -->
           <div class="bg-neutral-50 rounded-lg p-4 mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3">Por Miembro:</h3>
+            <h3 class="font-semibold text-neutral-100 mb-3">Por Miembro:</h3>
             <div class="grid grid-cols-2 gap-4 text-sm">
               <div class="flex justify-between">
                 <span class="text-neutral-100">Precio de unidad:</span>
@@ -276,13 +276,13 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
 
           <!-- Financing Timeline -->
           <div class="mb-6" *ngIf="quotation.timeline && quotation.timeline.length > 0">
-            <h3 class="font-semibold text-gray-800 mb-3">Cronograma de Financiamiento:</h3>
+            <h3 class="font-semibold text-neutral-100 mb-3">Cronograma de Financiamiento:</h3>
             <div class="bg-neutral-50 rounded-lg p-4 max-h-48 overflow-y-auto">
               <div *ngFor="let milestone of quotation.timeline.slice(0, 6)" 
-                   class="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                   class="flex justify-between items-center py-2 border-b border-neutral-200 last:border-b-0">
                 <div>
-                  <span class="font-medium text-gray-800">{{ milestone.title }}</span>
-                  <p class="text-sm text-gray-600">{{ milestone.description }}</p>
+                  <span class="font-medium text-neutral-100">{{ milestone.title }}</span>
+                  <p class="text-sm text-neutral-300">{{ milestone.description }}</p>
                 </div>
                 <span class="text-sm font-medium text-emerald-600">
                   {{ milestone.timeframe }}
@@ -313,7 +313,7 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
             </button>
             <button
               (click)="recalculate()"
-              class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200"
+              class="px-6 py-3 border border-neutral-300 text-neutral-100 font-medium rounded-lg hover:bg-neutral-50 transition-colors duration-200"
             >
               Recalcular
             </button>
@@ -322,36 +322,36 @@ import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../se
 
         <!-- Initial Info Panel -->
         <div class="bg-white rounded-xl shadow-lg p-6" *ngIf="!quotation">
-          <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+          <h2 class="text-xl font-semibold text-neutral-100 mb-4 flex items-center">
             <span class="bg-amber-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">💡</span>
             Cotización Colectiva EdoMex
           </h2>
-          <div class="space-y-4 text-gray-600">
+          <div class="space-y-4 text-neutral-300">
             <div class="flex items-start space-x-3">
               <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">👥</span>
               <div>
-                <h3 class="font-medium text-gray-800">Grupos de 5-50 miembros</h3>
+                <h3 class="font-medium text-neutral-100">Grupos de 5-50 miembros</h3>
                 <p class="text-sm">Mejor aprovechamiento con grupos de 10-20 transportistas</p>
               </div>
             </div>
             <div class="flex items-start space-x-3">
               <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">💰</span>
               <div>
-                <h3 class="font-medium text-gray-800">Enganche reducido al 15%</h3>
+                <h3 class="font-medium text-neutral-100">Enganche reducido al 15%</h3>
                 <p class="text-sm">Significativamente menor que la modalidad individual (25%)</p>
               </div>
             </div>
             <div class="flex items-start space-x-3">
               <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">📈</span>
               <div>
-                <h3 class="font-medium text-gray-800">Mejores condiciones</h3>
+                <h3 class="font-medium text-neutral-100">Mejores condiciones</h3>
                 <p class="text-sm">Tasas de interés preferenciales y descuentos por volumen</p>
               </div>
             </div>
             <div class="flex items-start space-x-3">
               <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">⚡</span>
               <div>
-                <h3 class="font-medium text-gray-800">Gestión centralizada</h3>
+                <h3 class="font-medium text-neutral-100">Gestión centralizada</h3>
               </div>
             </div>
           </div>
