@@ -77,51 +77,51 @@ describe('BusinessRulesService', () => {
 
   describe('Service Initialization', () => {
     it('should be created', () => {
-      expect(service).toBeTruthy();
+      (expect(service) as any).toBeTruthy();
     });
 
     it('should initialize validation rules', () => {
-      expect(service['validationRules']).toBeDefined();
-      expect(service['validationRules'].length).toBeGreaterThan(0);
+      (expect(service['validationRules']) as any).toBeDefined();
+      (expect(service['validationRules'].length) as any).toBeGreaterThan(0);
     });
 
     it('should have AGS specific rules', () => {
       const agsRules = service['validationRules'].filter(rule => rule.market === 'aguascalientes');
-      expect(agsRules.length).toBeGreaterThan(0);
-      expect(agsRules.some(rule => rule.id === 'ags-basic-docs')).toBe(true);
-      expect(agsRules.some(rule => rule.id === 'ags-plazo-requirements')).toBe(true);
+      (expect(agsRules.length) as any).toBeGreaterThan(0);
+      (expect(agsRules.some(rule => rule.id === 'ags-basic-docs')) as any).toBe(true);
+      (expect(agsRules.some(rule => rule.id === 'ags-plazo-requirements')) as any).toBe(true);
     });
 
     it('should have EdoMex specific rules', () => {
       const edomexRules = service['validationRules'].filter(rule => rule.market === 'edomex');
-      expect(edomexRules.length).toBeGreaterThan(0);
-      expect(edomexRules.some(rule => rule.id === 'edomex-ecosystem')).toBe(true);
-      expect(edomexRules.some(rule => rule.id === 'edomex-colectivo-group')).toBe(true);
+      (expect(edomexRules.length) as any).toBeGreaterThan(0);
+      (expect(edomexRules.some(rule => rule.id === 'edomex-ecosystem')) as any).toBe(true);
+      (expect(edomexRules.some(rule => rule.id === 'edomex-colectivo-group')) as any).toBe(true);
     });
 
     it('should have universal rules', () => {
       const universalRules = service['validationRules'].filter(rule => rule.type === 'mandatory');
-      expect(universalRules.length).toBeGreaterThan(0);
-      expect(universalRules.some(rule => rule.id === 'age-validation')).toBe(true);
-      expect(universalRules.some(rule => rule.id === 'income-validation')).toBe(true);
+      (expect(universalRules.length) as any).toBeGreaterThan(0);
+      (expect(universalRules.some(rule => rule.id === 'age-validation')) as any).toBe(true);
+      (expect(universalRules.some(rule => rule.id === 'income-validation')) as any).toBe(true);
     });
   });
 
   describe('Client Validation', () => {
     it('should validate AGS client successfully', (done) => {
       service.validateClient(mockAgsClient).subscribe(result => {
-        expect(result).toBeDefined();
-        expect(result.valid).toBe(true);
-        expect(result.errors.length).toBe(0);
+        (expect(result) as any).toBeDefined();
+        (expect(result.valid) as any).toBe(true);
+        (expect(result.errors.length) as any).toBe(0);
         done();
       });
     });
 
     it('should validate EdoMex client successfully', (done) => {
       service.validateClient(mockEdomexClient).subscribe(result => {
-        expect(result).toBeDefined();
-        expect(result.valid).toBe(true);
-        expect(result.errors.length).toBe(0);
+        (expect(result) as any).toBeDefined();
+        (expect(result.valid) as any).toBe(true);
+        (expect(result.errors.length) as any).toBe(0);
         done();
       });
     });
@@ -135,8 +135,8 @@ describe('BusinessRulesService', () => {
       };
 
       service.validateClient(clientWithMissingDocs).subscribe(result => {
-        expect(result.valid).toBe(false);
-        expect(result.errors.length).toBeGreaterThan(0);
+        (expect(result.valid) as any).toBe(false);
+        (expect(result.errors.length) as any).toBeGreaterThan(0);
         expect(result.errors.some(error => error.includes('Falta documento'))).toBe(true);
         done();
       });
@@ -149,7 +149,7 @@ describe('BusinessRulesService', () => {
       };
 
       service.validateClient(underageClient).subscribe(result => {
-        expect(result.valid).toBe(false);
+        (expect(result.valid) as any).toBe(false);
         expect(result.errors.some(error => error.includes('mayor de edad'))).toBe(true);
         done();
       });
@@ -162,7 +162,7 @@ describe('BusinessRulesService', () => {
       };
 
       service.validateClient(overageClient).subscribe(result => {
-        expect(result.valid).toBe(false);
+        (expect(result.valid) as any).toBe(false);
         expect(result.errors.some(error => error.includes('70 años'))).toBe(true);
         done();
       });
@@ -175,7 +175,7 @@ describe('BusinessRulesService', () => {
       };
 
       service.validateClient(clientNoIncome).subscribe(result => {
-        expect(result.valid).toBe(false);
+        (expect(result.valid) as any).toBe(false);
         expect(result.errors.some(error => error.includes('Ingresos mensuales requeridos'))).toBe(true);
         done();
       });
@@ -200,7 +200,7 @@ describe('BusinessRulesService', () => {
 
       service.validateClient(ahorroClient).subscribe(result => {
         // Should not apply credit-specific validations for savings flow
-        expect(result.valid).toBe(true);
+        (expect(result.valid) as any).toBe(true);
         done();
       });
     });
@@ -214,7 +214,7 @@ describe('BusinessRulesService', () => {
       };
 
       const result = service['validateAgsPlazoRequirements'](clientLowDownPayment);
-      expect(result.valid).toBe(false);
+      (expect(result.valid) as any).toBe(false);
       expect(result.errors.some(error => error.includes('60%'))).toBe(true);
     });
 
@@ -225,7 +225,7 @@ describe('BusinessRulesService', () => {
       };
 
       const result = service['validateAgsPlazoRequirements'](clientInvalidTerm);
-      expect(result.valid).toBe(false);
+      (expect(result.valid) as any).toBe(false);
       expect(result.errors.some(error => error.includes('12 o 24 meses'))).toBe(true);
     });
 
@@ -236,13 +236,13 @@ describe('BusinessRulesService', () => {
       };
 
       const result = service['validateAgsPlazoRequirements'](clientLowIncome);
-      expect(result.valid).toBe(false);
+      (expect(result.valid) as any).toBe(false);
       expect(result.errors.some(error => error.includes('$15,000'))).toBe(true);
     });
 
     it('should validate AGS required documents', () => {
       const result = service['validateAgsBasicDocs'](mockAgsClient);
-      expect(result.valid).toBe(true);
+      (expect(result.valid) as any).toBe(true);
     });
   });
 
@@ -254,7 +254,7 @@ describe('BusinessRulesService', () => {
       };
 
       const result = service['validateEdomexEcosystem'](clientNoEcosystem);
-      expect(result.valid).toBe(false);
+      (expect(result.valid) as any).toBe(false);
       expect(result.errors.some(error => error.includes('ecosistema'))).toBe(true);
     });
 
@@ -267,14 +267,14 @@ describe('BusinessRulesService', () => {
       };
 
       const result = service['validateEdomexEcosystem'](clientMissingDocs);
-      expect(result.valid).toBe(false);
+      (expect(result.valid) as any).toBe(false);
       expect(result.errors.some(error => error.includes('Acta Constitutiva'))).toBe(true);
       expect(result.errors.some(error => error.includes('Carta Aval'))).toBe(true);
     });
 
     it('should validate collective group requirements', () => {
       const result = service['validateColectivoGroup'](mockEdomexClient);
-      expect(result.valid).toBe(true);
+      (expect(result.valid) as any).toBe(true);
     });
 
     it('should require group assignment for collective credit', () => {
@@ -284,7 +284,7 @@ describe('BusinessRulesService', () => {
       };
 
       const result = service['validateColectivoGroup'](clientNoGroup);
-      expect(result.valid).toBe(false);
+      (expect(result.valid) as any).toBe(false);
       expect(result.errors.some(error => error.includes('grupo colectivo'))).toBe(true);
     });
 
@@ -296,7 +296,7 @@ describe('BusinessRulesService', () => {
       };
 
       const result = service['validateEdomexPaymentCapacity'](clientLowIncome);
-      expect(result.valid).toBe(false);
+      (expect(result.valid) as any).toBe(false);
       expect(result.errors.some(error => error.includes('$20,000'))).toBe(true);
     });
 
@@ -316,10 +316,10 @@ describe('BusinessRulesService', () => {
   describe('Ecosystem Validation', () => {
     it('should validate ecosystem for EdoMex client', (done) => {
       service.validateEcosystem(mockEdomexClient).subscribe(validation => {
-        expect(validation).toBeDefined();
-        expect(validation.isValid).toBe(true);
-        expect(validation.ecosystemId).toBe('eco-ruta-norte');
-        expect(validation.validationStatus).toBe('approved');
+        (expect(validation) as any).toBeDefined();
+        (expect(validation.isValid) as any).toBe(true);
+        (expect(validation.ecosystemId) as any).toBe('eco-ruta-norte');
+        (expect(validation.validationStatus) as any).toBe('approved');
         done();
       });
     });
@@ -331,8 +331,8 @@ describe('BusinessRulesService', () => {
       };
 
       service.validateEcosystem(clientNoEcosystem).subscribe(validation => {
-        expect(validation.isValid).toBe(false);
-        expect(validation.validationStatus).toBe('incomplete');
+        (expect(validation.isValid) as any).toBe(false);
+        (expect(validation.validationStatus) as any).toBe('incomplete');
         expect(validation.validationNotes.some(note => note.includes('no asignado'))).toBe(true);
         done();
       });
@@ -353,9 +353,9 @@ describe('BusinessRulesService', () => {
       };
 
       service.validateEcosystem(clientMissingDocs).subscribe(validation => {
-        expect(validation.isValid).toBe(false);
-        expect(validation.missingDocuments.length).toBeGreaterThan(0);
-        expect(validation.missingDocuments).toContain('Acta Constitutiva del Ecosistema');
+        (expect(validation.isValid) as any).toBe(false);
+        (expect(validation.missingDocuments.length) as any).toBeGreaterThan(0);
+        (expect(validation.missingDocuments) as any).toContain('Acta Constitutiva del Ecosistema');
         done();
       });
     });
@@ -364,34 +364,34 @@ describe('BusinessRulesService', () => {
   describe('Market Requirements', () => {
     it('should get Aguascalientes requirements', (done) => {
       service.getMarketRequirements('aguascalientes').subscribe(requirements => {
-        expect(requirements.market).toBe('aguascalientes');
-        expect(requirements.minimumDownPaymentRange.min).toBe(0.60);
-        expect(requirements.allowedTerms).toEqual([12, 24]);
-        expect(requirements.supportsCreditoColectivo).toBe(false);
-        expect(requirements.supportsAhorro).toBe(true);
-        expect(requirements.specialRules.length).toBeGreaterThan(0);
+        (expect(requirements.market) as any).toBe('aguascalientes');
+        (expect(requirements.minimumDownPaymentRange.min) as any).toBe(0.60);
+        (expect(requirements.allowedTerms) as any).toEqual([12, 24]);
+        (expect(requirements.supportsCreditoColectivo) as any).toBe(false);
+        (expect(requirements.supportsAhorro) as any).toBe(true);
+        (expect(requirements.specialRules.length) as any).toBeGreaterThan(0);
         done();
       });
     });
 
     it('should get Estado de México requirements', (done) => {
       service.getMarketRequirements('edomex').subscribe(requirements => {
-        expect(requirements.market).toBe('edomex');
-        expect(requirements.minimumDownPaymentRange.min).toBe(0.15);
-        expect(requirements.minimumDownPaymentRange.max).toBe(0.25);
-        expect(requirements.allowedTerms).toEqual([48, 60]);
-        expect(requirements.supportsCreditoColectivo).toBe(true);
-        expect(requirements.supportsAhorro).toBe(true);
-        expect(requirements.maxLoanAmount).toBe(800000);
+        (expect(requirements.market) as any).toBe('edomex');
+        (expect(requirements.minimumDownPaymentRange.min) as any).toBe(0.15);
+        (expect(requirements.minimumDownPaymentRange.max) as any).toBe(0.25);
+        (expect(requirements.allowedTerms) as any).toEqual([48, 60]);
+        (expect(requirements.supportsCreditoColectivo) as any).toBe(true);
+        (expect(requirements.supportsAhorro) as any).toBe(true);
+        (expect(requirements.maxLoanAmount) as any).toBe(800000);
         done();
       });
     });
 
     it('should include required documents for each market', (done) => {
       service.getMarketRequirements('edomex').subscribe(requirements => {
-        expect(requirements.requiredDocuments).toContain('Acta Constitutiva de la Ruta');
-        expect(requirements.requiredDocuments).toContain('Carta Aval de Ruta');
-        expect(requirements.requiredDocuments.length).toBeGreaterThan(10);
+        (expect(requirements.requiredDocuments) as any).toContain('Acta Constitutiva de la Ruta');
+        (expect(requirements.requiredDocuments) as any).toContain('Carta Aval de Ruta');
+        (expect(requirements.requiredDocuments.length) as any).toBeGreaterThan(10);
         done();
       });
     });
@@ -407,8 +407,8 @@ describe('BusinessRulesService', () => {
       };
 
       service.canChangeBusinessFlow(clientNoDocs, BusinessFlow.AhorroProgramado).subscribe(result => {
-        expect(result.allowed).toBe(true);
-        expect(result.reasons.length).toBe(0);
+        (expect(result.allowed) as any).toBe(true);
+        (expect(result.reasons.length) as any).toBe(0);
         done();
       });
     });
@@ -420,7 +420,7 @@ describe('BusinessRulesService', () => {
       };
 
       service.canChangeBusinessFlow(clientWithApprovedDocs, BusinessFlow.VentaPlazo).subscribe(result => {
-        expect(result.allowed).toBe(false);
+        (expect(result.allowed) as any).toBe(false);
         expect(result.reasons.some(reason => reason.includes('documentos ya aprobados'))).toBe(true);
         done();
       });
@@ -428,7 +428,7 @@ describe('BusinessRulesService', () => {
 
     it('should not allow collective credit in Aguascalientes', (done) => {
       service.canChangeBusinessFlow(mockAgsClient, BusinessFlow.CreditoColectivo).subscribe(result => {
-        expect(result.allowed).toBe(false);
+        (expect(result.allowed) as any).toBe(false);
         expect(result.reasons.some(reason => reason.includes('no disponible en Aguascalientes'))).toBe(true);
         done();
       });
@@ -455,15 +455,15 @@ describe('BusinessRulesService', () => {
       spyOn(Math, 'random').and.returnValue(0.5); // Should give score of 750
 
       const result = service['validateCreditHistory'](mockAgsClient);
-      expect(result.valid).toBe(true);
-      expect(result.nextSteps).toContain('Historial crediticio aprobado');
+      (expect(result.valid) as any).toBe(true);
+      (expect(result.nextSteps) as any).toContain('Historial crediticio aprobado');
     });
 
     it('should warn about low credit score', () => {
       spyOn(Math, 'random').and.returnValue(0); // Should give score of 650
 
       const result = service['validateCreditHistory'](mockAgsClient);
-      expect(result.valid).toBe(true);
+      (expect(result.valid) as any).toBe(true);
       expect(result.warnings.some(warning => warning.includes('regular'))).toBe(true);
     });
 
@@ -471,7 +471,7 @@ describe('BusinessRulesService', () => {
       spyOn(Math, 'random').and.returnValue(-0.5); // Should give score of 550
 
       const result = service['validateCreditHistory'](mockAgsClient);
-      expect(result.valid).toBe(true);
+      (expect(result.valid) as any).toBe(true);
       expect(result.warnings.some(warning => warning.includes('bajo'))).toBe(true);
       expect(result.recommendations.some(rec => rec.includes('aval'))).toBe(true);
     });
@@ -484,7 +484,7 @@ describe('BusinessRulesService', () => {
       
       // Age should be current year minus 1990, adjusted for month/day
       const expectedAge = new Date().getFullYear() - 1990;
-      expect(age).toBeCloseTo(expectedAge, 1);
+      (expect(age) as any).toBeCloseTo(expectedAge, 1);
     });
 
     it('should handle birthday not yet reached this year', () => {
@@ -494,7 +494,7 @@ describe('BusinessRulesService', () => {
       futureDate.setDate(31);  // December 31
 
       const age = service['calculateAge'](futureDate);
-      expect(age).toBe(24); // Should be 24, not 25 if birthday hasn't occurred
+      (expect(age) as any).toBe(24); // Should be 24, not 25 if birthday hasn't occurred
     });
   });
 
@@ -518,23 +518,23 @@ describe('BusinessRulesService', () => {
       ];
 
       const consolidated = service['consolidateValidationResults'](results);
-      expect(consolidated.valid).toBe(false);
-      expect(consolidated.errors).toEqual(['Error 1']);
-      expect(consolidated.warnings).toEqual(['Warning 1', 'Warning 2']);
-      expect(consolidated.recommendations).toEqual(['Rec 1', 'Rec 2']);
-      expect(consolidated.nextSteps).toEqual(['Step 1', 'Step 2']);
+      (expect(consolidated.valid) as any).toBe(false);
+      (expect(consolidated.errors) as any).toEqual(['Error 1']);
+      (expect(consolidated.warnings) as any).toEqual(['Warning 1', 'Warning 2']);
+      (expect(consolidated.recommendations) as any).toEqual(['Rec 1', 'Rec 2']);
+      (expect(consolidated.nextSteps) as any).toEqual(['Step 1', 'Step 2']);
     });
 
     it('should get ecosystem required documents', () => {
       const docs = service['getEcosystemRequiredDocuments']();
-      expect(docs.length).toBeGreaterThan(0);
-      expect(docs).toContain('Acta Constitutiva del Ecosistema');
-      expect(docs).toContain('Padrón de Socios Actualizado');
+      (expect(docs.length) as any).toBeGreaterThan(0);
+      (expect(docs) as any).toContain('Acta Constitutiva del Ecosistema');
+      (expect(docs) as any).toContain('Padrón de Socios Actualizado');
     });
 
     it('should generate ecosystem validation notes', () => {
       const notes = service['getEcosystemValidationNotes'](mockEdomexClient);
-      expect(notes.length).toBeGreaterThan(0);
+      (expect(notes.length) as any).toBeGreaterThan(0);
       expect(notes.some(note => note.includes(mockEdomexClient.ecosystemId!))).toBe(true);
     });
   });
@@ -544,7 +544,7 @@ describe('BusinessRulesService', () => {
 // removed by clean-audit
       const result = service['validateColectivoGroup'](mockEdomexClient);
       // Since we're using a fixed size of 5, this should pass
-      expect(result.valid).toBe(true);
+      (expect(result.valid) as any).toBe(true);
     });
 
     it('should validate down payment range for collective credit', () => {
@@ -564,7 +564,7 @@ describe('BusinessRulesService', () => {
       };
 
       const result = service['validateColectivoGroup'](clientLowDownPayment);
-      expect(result.valid).toBe(false);
+      (expect(result.valid) as any).toBe(false);
       expect(result.errors.some(error => error.includes('15%'))).toBe(true);
     });
   });
@@ -597,19 +597,19 @@ describe('BusinessRulesService', () => {
       };
 
       service.validateEcosystem(clientPartialDocs).subscribe(validation => {
-        expect(validation.isValid).toBe(false);
-        expect(validation.validationStatus).toBe('pending');
-        expect(validation.hasCartaAvalRuta).toBe(false);
-        expect(validation.hasCartaAntiguedadRuta).toBe(false);
+        (expect(validation.isValid) as any).toBe(false);
+        (expect(validation.validationStatus) as any).toBe('pending');
+        (expect(validation.hasCartaAvalRuta) as any).toBe(false);
+        (expect(validation.hasCartaAntiguedadRuta) as any).toBe(false);
         done();
       });
     });
 
     it('should properly identify required vs optional documents', () => {
       const requiredDocs = service['getEcosystemRequiredDocuments']();
-      expect(requiredDocs).toContain('Acta Constitutiva del Ecosistema');
-      expect(requiredDocs).toContain('RFC del Ecosistema');
-      expect(requiredDocs).toContain('Estado de Cuenta Bancario del Ecosistema');
+      (expect(requiredDocs) as any).toContain('Acta Constitutiva del Ecosistema');
+      (expect(requiredDocs) as any).toContain('RFC del Ecosistema');
+      (expect(requiredDocs) as any).toContain('Estado de Cuenta Bancario del Ecosistema');
     });
   });
 });

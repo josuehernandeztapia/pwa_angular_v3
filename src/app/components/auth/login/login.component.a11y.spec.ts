@@ -43,19 +43,19 @@ describe('LoginComponent Accessibility Tests', () => {
       const emailInput = fixture.nativeElement.querySelector('#email');
       const passwordInput = fixture.nativeElement.querySelector('#password');
 
-      expect(emailInput).toBeTruthy();
-      expect(passwordInput).toBeTruthy();
+      (expect(emailInput) as any).toBeTruthy();
+      (expect(passwordInput) as any).toBeTruthy();
 
       // Check for associated labels
-      expect(AccessibilityChecker.hasAssociatedLabel(emailInput)).toBe(true);
-      expect(AccessibilityChecker.hasAssociatedLabel(passwordInput)).toBe(true);
+      (expect(AccessibilityChecker.hasAssociatedLabel(emailInput)) as any).toBe(true);
+      (expect(AccessibilityChecker.hasAssociatedLabel(passwordInput)) as any).toBe(true);
 
       // Check explicit label association
       const emailLabel = fixture.nativeElement.querySelector('label[for="email"]');
       const passwordLabel = fixture.nativeElement.querySelector('label[for="password"]');
 
-      expect(emailLabel).toBeTruthy();
-      expect(passwordLabel).toBeTruthy();
+      (expect(emailLabel) as any).toBeTruthy();
+      (expect(passwordLabel) as any).toBeTruthy();
     });
 
     it('should have appropriate input types and attributes', () => {

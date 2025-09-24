@@ -75,25 +75,25 @@ describe('DocumentValidationService', () => {
 
   describe('Service Initialization', () => {
     it('should be created', () => {
-      expect(service).toBeTruthy();
+      (expect(service) as any).toBeTruthy();
     });
 
     it('should initialize document requirements', () => {
       const agsRequirements = service.getRequiredDocuments('aguascalientes', BusinessFlow.Individual);
-      expect(agsRequirements.length).toBeGreaterThan(0);
+      (expect(agsRequirements.length) as any).toBeGreaterThan(0);
       
       const universalReq = agsRequirements.find(req => req.name === 'INE');
-      expect(universalReq).toBeTruthy();
-      expect(universalReq?.required).toBe(true);
+      (expect(universalReq) as any).toBeTruthy();
+      (expect(universalReq?.required) as any).toBe(true);
     });
   });
 
   describe('Document Validation', () => {
     it('should validate document with valid format', (done) => {
       service.validateDocument(mockDocument).subscribe(result => {
-        expect(result.valid).toBeTruthy();
-        expect(result.score).toBeGreaterThan(70);
-        expect(result.issues.length).toBe(0);
+        (expect(result.valid) as any).toBeTruthy();
+        (expect(result.score) as any).toBeGreaterThan(70);
+        (expect(result.issues.length) as any).toBe(0);
         done();
       });
     });
@@ -105,20 +105,20 @@ describe('DocumentValidationService', () => {
       };
 
       service.validateDocument(invalidFormatDoc).subscribe(result => {
-        expect(result.valid).toBe(false);
-        expect(result.issues.length).toBeGreaterThan(0);
-        expect(result.issues[0].code).toBe('INVALID_FORMAT');
-        expect(result.issues[0].type).toBe('error');
+        (expect(result.valid) as any).toBe(false);
+        (expect(result.issues.length) as any).toBeGreaterThan(0);
+        (expect(result.issues[0].code) as any).toBe('INVALID_FORMAT');
+        (expect(result.issues[0].type) as any).toBe('error');
         done();
       });
     });
 
     it('should detect expired documents', (done) => {
       service.validateDocument(mockExpiredDocument).subscribe(result => {
-        expect(result.valid).toBe(false);
+        (expect(result.valid) as any).toBe(false);
         const expiredIssue = result.issues.find(issue => issue.code === 'DOCUMENT_EXPIRED');
-        expect(expiredIssue).toBeTruthy();
-        expect(expiredIssue?.type).toBe('error');
+        (expect(expiredIssue) as any).toBeTruthy();
+        (expect(expiredIssue?.type) as any).toBe('error');
         done();
       });
     });
@@ -130,9 +130,9 @@ describe('DocumentValidationService', () => {
       };
 
       service.validateDocument(badFilenameDoc).subscribe(result => {
-        expect(result.autoCorrections).toBeDefined();
+        (expect(result.autoCorrections) as any).toBeDefined();
         if (result.issues.some(issue => issue.fixable)) {
-          expect(result.autoCorrections.length).toBeGreaterThan(0);
+          (expect(result.autoCorrections.length) as any).toBeGreaterThan(0);
         }
         done();
       });
@@ -145,8 +145,8 @@ describe('DocumentValidationService', () => {
       };
 
       service.validateDocument(lowQualityDoc).subscribe(result => {
-        expect(result.suggestions).toBeDefined();
-        expect(Array.isArray(result.suggestions)).toBe(true);
+        (expect(result.suggestions) as any).toBeDefined();
+        (expect(Array.isArray(result.suggestions)) as any).toBe(true);
         done();
       });
     });
@@ -155,12 +155,12 @@ describe('DocumentValidationService', () => {
   describe('Compliance Report Generation', () => {
     it('should generate compliance report for Aguascalientes client', (done) => {
       service.generateComplianceReport(mockClient).subscribe(report => {
-        expect(report.clientId).toBe(mockClient.id);
-        expect(report.market).toBe('aguascalientes');
-        expect(report.flow).toBe(BusinessFlow.Individual);
-        expect(report.overallScore).toBeGreaterThanOrEqual(0);
-        expect(report.overallScore).toBeLessThanOrEqual(100);
-        expect(report.complianceLevel).toMatch(/complete|partial|insufficient|non-compliant/);
+        (expect(report.clientId) as any).toBe(mockClient.id);
+        (expect(report.market) as any).toBe('aguascalientes');
+        (expect(report.flow) as any).toBe(BusinessFlow.Individual);
+        (expect(report.overallScore) as any).toBeGreaterThanOrEqual(0);
+        (expect(report.overallScore) as any).toBeLessThanOrEqual(100);
+        (expect(report.complianceLevel) as any).toMatch(/complete|partial|insufficient|non-compliant/);
         done();
       });
     });
@@ -172,23 +172,23 @@ describe('DocumentValidationService', () => {
       };
 
       service.generateComplianceReport(incompleteClient).subscribe(report => {
-        expect(report.missingDocuments.length).toBeGreaterThan(0);
-        expect(report.complianceLevel).not.toBe('complete');
-        expect(report.blockingIssues.length).toBeGreaterThanOrEqual(0);
+        (expect(report.missingDocuments.length) as any).toBeGreaterThan(0);
+        (expect(report.complianceLevel) as any).not.toBe('complete');
+        (expect(report.blockingIssues.length) as any).toBeGreaterThanOrEqual(0);
         done();
       });
     });
 
     it('should categorize documents correctly', (done) => {
       service.generateComplianceReport(mockClient).subscribe(report => {
-        expect(report.validDocuments).toBeDefined();
-        expect(report.invalidDocuments).toBeDefined();
-        expect(report.warningDocuments).toBeDefined();
+        (expect(report.validDocuments) as any).toBeDefined();
+        (expect(report.invalidDocuments) as any).toBeDefined();
+        (expect(report.warningDocuments) as any).toBeDefined();
         
         const totalCategorized = report.validDocuments.length + 
                                report.invalidDocuments.length + 
                                report.warningDocuments.length;
-        expect(totalCategorized).toBe(report.submittedDocuments.length);
+        (expect(totalCategorized) as any).toBe(report.submittedDocuments.length);
         done();
       });
     });
@@ -200,21 +200,21 @@ describe('DocumentValidationService', () => {
       };
 
       service.generateComplianceReport(clientWithoutINE).subscribe(report => {
-        expect(report.blockingIssues.length).toBeGreaterThan(0);
-        expect(report.blockingIssues.some(issue => issue.includes('INE'))).toBe(true);
+        (expect(report.blockingIssues.length) as any).toBeGreaterThan(0);
+        (expect(report.blockingIssues.some(issue => issue.includes('INE'))) as any).toBe(true);
         done();
       });
     });
 
     it('should generate appropriate next steps', (done) => {
       service.generateComplianceReport(mockClient).subscribe(report => {
-        expect(report.nextSteps).toBeDefined();
-        expect(report.nextSteps.length).toBeGreaterThan(0);
+        (expect(report.nextSteps) as any).toBeDefined();
+        (expect(report.nextSteps.length) as any).toBeGreaterThan(0);
         
         if (report.complianceLevel === 'complete') {
-          expect(report.nextSteps.some(step => step.includes('validación financiera'))).toBe(true);
+          (expect(report.nextSteps.some(step => step.includes('validación financiera'))) as any).toBe(true);
         } else {
-          expect(report.nextSteps.some(step => step.includes('Contactar') || step.includes('Solicitar'))).toBe(true);
+          (expect(report.nextSteps.some(step => step.includes('Contactar') || step.includes('Solicitar'))) as any).toBe(true);
         }
         done();
       });
@@ -264,10 +264,10 @@ describe('DocumentValidationService', () => {
     it('should validate complete ecosystem documents', (done) => {
       service.validateEcosystemDocuments('edomex-ruta-001', mockEcosystemDocuments)
         .subscribe(validation => {
-          expect(validation.ecosystemId).toBe('edomex-ruta-001');
-          expect(validation.constitutiveActValid).toBe(true);
-          expect(validation.ecosystemRiskLevel).toMatch(/low|medium|high/);
-          expect(validation.validationNotes.length).toBeGreaterThan(0);
+          (expect(validation.ecosystemId) as any).toBe('edomex-ruta-001');
+          (expect(validation.constitutiveActValid) as any).toBe(true);
+          (expect(validation.ecosystemRiskLevel) as any).toMatch(/low|medium|high/);
+          (expect(validation.validationNotes.length) as any).toBeGreaterThan(0);
           done();
         });
     });
@@ -277,9 +277,9 @@ describe('DocumentValidationService', () => {
       
       service.validateEcosystemDocuments('edomex-ruta-001', incompleteEcosystemDocs)
         .subscribe(validation => {
-          expect(validation.overallValid).toBe(false);
-          expect(validation.ecosystemRiskLevel).toBe('high');
-          expect(validation.validationNotes.some(note => note.includes('pendiente'))).toBe(true);
+          (expect(validation.overallValid) as any).toBe(false);
+          (expect(validation.ecosystemRiskLevel) as any).toBe('high');
+          (expect(validation.validationNotes.some(note => note.includes('pendiente'))) as any).toBe(true);
           done();
         });
     });
@@ -289,10 +289,10 @@ describe('DocumentValidationService', () => {
       
       service.validateEcosystemDocuments('edomex-ruta-001', partiallyValidDocs)
         .subscribe(validation => {
-          expect(['low', 'medium', 'high'].includes(validation.ecosystemRiskLevel)).toBe(true);
+          (expect(['low', 'medium', 'high'].includes(validation.ecosystemRiskLevel)) as any).toBe(true);
           
           // Risk should be high with only 3 valid documents
-          expect(validation.ecosystemRiskLevel).toBe('high');
+          (expect(validation.ecosystemRiskLevel) as any).toBe('high');
           done();
         });
     });
@@ -304,9 +304,9 @@ describe('DocumentValidationService', () => {
       
       service.validateEcosystemDocuments('edomex-ruta-001', criticalDocs)
         .subscribe(validation => {
-          expect(validation.validationDetails).toBeDefined();
+          (expect(validation.validationDetails) as any).toBeDefined();
           // Since these are critical documents, they should be validated
-          expect(Object.keys(validation.validationDetails).length).toBeGreaterThanOrEqual(0);
+          (expect(Object.keys(validation.validationDetails).length) as any).toBeGreaterThanOrEqual(0);
           done();
         });
     });
@@ -316,25 +316,25 @@ describe('DocumentValidationService', () => {
     it('should return AGS specific requirements', () => {
       const agsReqs = service.getRequiredDocuments('aguascalientes', BusinessFlow.Individual, mockClient);
       
-      expect(agsReqs.length).toBeGreaterThan(0);
+      (expect(agsReqs.length) as any).toBeGreaterThan(0);
       
       const universalReqs = agsReqs.filter(req => !req.market);
       const agsSpecific = agsReqs.filter(req => req.market === 'aguascalientes');
       
-      expect(universalReqs.length).toBeGreaterThan(0);
-      expect(agsSpecific.length).toBeGreaterThan(0);
+      (expect(universalReqs.length) as any).toBeGreaterThan(0);
+      (expect(agsSpecific.length) as any).toBeGreaterThan(0);
     });
 
     it('should return EdoMex specific requirements', () => {
       const edomexReqs = service.getRequiredDocuments('edomex', BusinessFlow.CreditoColectivo, mockEdomexClient);
       
-      expect(edomexReqs.length).toBeGreaterThan(0);
+      (expect(edomexReqs.length) as any).toBeGreaterThan(0);
       
       const edomexSpecific = edomexReqs.filter(req => req.market === 'edomex');
-      expect(edomexSpecific.length).toBeGreaterThan(0);
+      (expect(edomexSpecific.length) as any).toBeGreaterThan(0);
       
       const ecosystemReq = edomexReqs.find(req => req.name.includes('Acta Constitutiva'));
-      expect(ecosystemReq).toBeTruthy();
+      (expect(ecosystemReq) as any).toBeTruthy();
     });
 
     it('should filter requirements by flow type', () => {
@@ -342,7 +342,7 @@ describe('DocumentValidationService', () => {
       const collectiveReqs = service.getRequiredDocuments('edomex', BusinessFlow.CreditoColectivo);
       
       // Collective flow should have more requirements (ecosystem docs)
-      expect(collectiveReqs.length).toBeGreaterThanOrEqual(individualReqs.length);
+      (expect(collectiveReqs.length) as any).toBeGreaterThanOrEqual(individualReqs.length);
     });
 
     it('should apply conditional requirements', () => {
@@ -360,58 +360,58 @@ describe('DocumentValidationService', () => {
       const reqsWithoutEcosystem = service.getRequiredDocuments('edomex', BusinessFlow.CreditoColectivo, clientWithoutEcosystem);
       
       // Both should have requirements, but may differ based on ecosystem assignment
-      expect(reqsWithEcosystem.length).toBeGreaterThan(0);
-      expect(reqsWithoutEcosystem.length).toBeGreaterThan(0);
+      (expect(reqsWithEcosystem.length) as any).toBeGreaterThan(0);
+      (expect(reqsWithoutEcosystem.length) as any).toBeGreaterThan(0);
     });
   });
 
   describe('Document Type Detection', () => {
     it('should detect INE from filename', (done) => {
       service.detectDocumentType('INE_Juan_Perez.pdf').subscribe(result => {
-        expect(result.detectedType).toBe('INE');
-        expect(result.confidence).toBeGreaterThan(80);
+        (expect(result.detectedType) as any).toBe('INE');
+        (expect(result.confidence) as any).toBeGreaterThan(80);
         done();
       });
     });
 
     it('should detect RFC documents', (done) => {
       service.detectDocumentType('constancia_situacion_fiscal.pdf').subscribe(result => {
-        expect(result.detectedType).toBe('Constancia de Situación Fiscal');
-        expect(result.confidence).toBeGreaterThan(80);
+        (expect(result.detectedType) as any).toBe('Constancia de Situación Fiscal');
+        (expect(result.confidence) as any).toBeGreaterThan(80);
         done();
       });
     });
 
     it('should detect ecosystem documents', (done) => {
       service.detectDocumentType('acta_constitutiva_ruta.pdf').subscribe(result => {
-        expect(result.detectedType).toBe('Acta Constitutiva de la Ruta');
-        expect(result.confidence).toBeGreaterThan(80);
+        (expect(result.detectedType) as any).toBe('Acta Constitutiva de la Ruta');
+        (expect(result.confidence) as any).toBeGreaterThan(80);
         done();
       });
     });
 
     it('should detect carta aval documents', (done) => {
       service.detectDocumentType('carta_aval_ruta_transportes.pdf').subscribe(result => {
-        expect(result.detectedType).toBe('Carta Aval de Ruta');
-        expect(result.confidence).toBeGreaterThan(90);
+        (expect(result.detectedType) as any).toBe('Carta Aval de Ruta');
+        (expect(result.confidence) as any).toBeGreaterThan(90);
         done();
       });
     });
 
     it('should provide suggestions for unclear filenames', (done) => {
       service.detectDocumentType('documento_123.pdf').subscribe(result => {
-        expect(result.detectedType).toBe('unknown');
-        expect(result.confidence).toBeLessThan(70);
-        expect(result.suggestions.length).toBeGreaterThan(0);
-        expect(result.suggestions[0]).toContain('descriptivo');
+        (expect(result.detectedType) as any).toBe('unknown');
+        (expect(result.confidence) as any).toBeLessThan(70);
+        (expect(result.suggestions.length) as any).toBeGreaterThan(0);
+        (expect(result.suggestions[0]) as any).toContain('descriptivo');
         done();
       });
     });
 
     it('should handle various file extensions', (done) => {
       service.detectDocumentType('INE_scan.jpg').subscribe(result => {
-        expect(result.detectedType).toBe('INE');
-        expect(result.confidence).toBeGreaterThan(80);
+        (expect(result.detectedType) as any).toBe('INE');
+        (expect(result.confidence) as any).toBeGreaterThan(80);
         done();
       });
     });
@@ -424,11 +424,11 @@ describe('DocumentValidationService', () => {
       
       service.validateDocument(pdfDoc).subscribe(pdfResult => {
         service.validateDocument(txtDoc).subscribe(txtResult => {
-          expect(pdfResult.valid).toBe(true);
-          expect(txtResult.valid).toBe(false);
+          (expect(pdfResult.valid) as any).toBe(true);
+          (expect(txtResult.valid) as any).toBe(false);
           
           const formatError = txtResult.issues.find(issue => issue.code === 'INVALID_FORMAT');
-          expect(formatError).toBeTruthy();
+          (expect(formatError) as any).toBeTruthy();
           done();
         });
       });
@@ -447,11 +447,11 @@ describe('DocumentValidationService', () => {
       
       service.validateDocument(validDoc).subscribe(validResult => {
         service.validateDocument(expiredDoc).subscribe(expiredResult => {
-          expect(validResult.valid).toBe(true);
-          expect(expiredResult.valid).toBe(false);
+          (expect(validResult.valid) as any).toBe(true);
+          (expect(expiredResult.valid) as any).toBe(false);
           
           const expirationError = expiredResult.issues.find(issue => issue.code === 'DOCUMENT_EXPIRED');
-          expect(expirationError).toBeTruthy();
+          (expect(expirationError) as any).toBeTruthy();
           done();
         });
       });
@@ -464,11 +464,11 @@ describe('DocumentValidationService', () => {
       };
       
       service.validateDocument(noExpirationDoc).subscribe(result => {
-        expect(result.valid).toBe(true);
+        (expect(result.valid) as any).toBe(true);
         
         const noExpirationInfo = result.issues.find(issue => issue.code === 'NO_EXPIRATION');
         if (noExpirationInfo) {
-          expect(noExpirationInfo.type).toBe('info');
+          (expect(noExpirationInfo.type) as any).toBe('info');
         }
         done();
       });
@@ -476,8 +476,8 @@ describe('DocumentValidationService', () => {
 
     it('should assess legibility scores', (done) => {
       service.validateDocument(mockDocument).subscribe(result => {
-        expect(result.score).toBeGreaterThanOrEqual(0);
-        expect(result.score).toBeLessThanOrEqual(100);
+        (expect(result.score) as any).toBeGreaterThanOrEqual(0);
+        (expect(result.score) as any).toBeLessThanOrEqual(100);
         done();
       });
     });
@@ -491,9 +491,9 @@ describe('DocumentValidationService', () => {
       };
       
       service.generateComplianceReport(emptyClient).subscribe(report => {
-        expect(report.submittedDocuments.length).toBe(0);
-        expect(report.complianceLevel).toBe('non-compliant');
-        expect(report.missingDocuments.length).toBeGreaterThan(0);
+        (expect(report.submittedDocuments.length) as any).toBe(0);
+        (expect(report.complianceLevel) as any).toBe('non-compliant');
+        (expect(report.missingDocuments.length) as any).toBeGreaterThan(0);
         done();
       });
     });
@@ -505,8 +505,8 @@ describe('DocumentValidationService', () => {
       };
       
       service.validateDocument(namelessDoc).subscribe(result => {
-        expect(result).toBeDefined();
-        expect(result.valid).toBe(false);
+        (expect(result) as any).toBeDefined();
+        (expect(result.valid) as any).toBe(false);
         done();
       });
     });
@@ -523,16 +523,16 @@ describe('DocumentValidationService', () => {
         clientNoMarket
       );
       
-      expect(requirements).toBeDefined();
-      expect(Array.isArray(requirements)).toBe(true);
+      (expect(requirements) as any).toBeDefined();
+      (expect(Array.isArray(requirements)) as any).toBe(true);
     });
 
     it('should handle ecosystem validation with empty document list', (done) => {
       service.validateEcosystemDocuments('empty-ecosystem', [])
         .subscribe(validation => {
-          expect(validation.overallValid).toBe(false);
-          expect(validation.ecosystemRiskLevel).toBe('high');
-          expect(validation.validationNotes.length).toBeGreaterThan(0);
+          (expect(validation.overallValid) as any).toBe(false);
+          (expect(validation.ecosystemRiskLevel) as any).toBe('high');
+          (expect(validation.validationNotes.length) as any).toBeGreaterThan(0);
           done();
         });
     });
@@ -550,8 +550,8 @@ describe('DocumentValidationService', () => {
       };
       
       service.generateComplianceReport(problematicClient).subscribe(report => {
-        expect(report.recommendations.length).toBeGreaterThan(0);
-        expect(report.recommendations.some(rec => rec.includes('ecosistema'))).toBe(true);
+        (expect(report.recommendations.length) as any).toBeGreaterThan(0);
+        (expect(report.recommendations.some(rec => rec.includes('ecosistema'))) as any).toBe(true);
         done();
       });
     });

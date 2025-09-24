@@ -60,29 +60,29 @@ describe('CreditScoringService', () => {
 
   describe('Service Initialization', () => {
     it('should be created', () => {
-      expect(service).toBeTruthy();
+      (expect(service) as any).toBeTruthy();
     });
 
     it('should have SCORING_CONFIG defined', () => {
-      expect(service['SCORING_CONFIG']).toBeDefined();
-      expect(service['SCORING_CONFIG'].apiUrl).toBeTruthy();
-      expect(service['SCORING_CONFIG'].clientId).toBeTruthy();
-      expect(service['SCORING_CONFIG'].haseUrl).toBeTruthy();
+      (expect(service['SCORING_CONFIG']) as any).toBeDefined();
+      (expect(service['SCORING_CONFIG'].apiUrl) as any).toBeTruthy();
+      (expect(service['SCORING_CONFIG'].clientId) as any).toBeTruthy();
+      (expect(service['SCORING_CONFIG'].haseUrl) as any).toBeTruthy();
     });
 
     it('should initialize internal storage maps', () => {
-      expect(service['scoringDB']).toBeInstanceOf(Map);
-      expect(service['statusDB']).toBeInstanceOf(Map);
+      (expect(service['scoringDB']) as any).toBeInstanceOf(Map);
+      (expect(service['statusDB']) as any).toBeInstanceOf(Map);
     });
   });
 
   describe('Credit Scoring Process', () => {
     it('should initiate credit scoring request', (done) => {
       service.requestCreditScoring(mockScoringRequest).subscribe(result => {
-        expect(result.scoringId).toBeTruthy();
-        expect(result.scoringId).toMatch(/^scoring-\d+$/);
-        expect(result.status.status).toBe('completed');
-        expect(result.status.message).toContain('Análisis completado');
+        (expect(result.scoringId) as any).toBeTruthy();
+        (expect(result.scoringId) as any).toMatch(/^scoring-\d+$/);
+        (expect(result.status.status) as any).toBe('completed');
+        (expect(result.status.message) as any).toContain('Análisis completado');
         done();
       });
     });
@@ -90,11 +90,11 @@ describe('CreditScoringService', () => {
     it('should store scoring result after processing', (done) => {
       service.requestCreditScoring(mockScoringRequest).subscribe(result => {
         service.getScoringResult(result.scoringId).subscribe(scoringResult => {
-          expect(scoringResult).toBeTruthy();
-          expect(scoringResult!.clientId).toBe('1');
-          expect(scoringResult!.score).toBeGreaterThan(0);
-          expect(scoringResult!.grade).toMatch(/^[A-E][\+]?$/);
-          expect(['APPROVED', 'CONDITIONAL', 'REJECTED']).toContain(scoringResult!.decision);
+          (expect(scoringResult) as any).toBeTruthy();
+          (expect(scoringResult!.clientId) as any).toBe('1');
+          (expect(scoringResult!.score) as any).toBeGreaterThan(0);
+          (expect(scoringResult!.grade) as any).toMatch(/^[A-E][\+]?$/);
+          (expect(['APPROVED', 'CONDITIONAL', 'REJECTED']) as any).toContain(scoringResult!.decision);
           done();
         });
       });
@@ -102,7 +102,7 @@ describe('CreditScoringService', () => {
 
     it('should return null for non-existent scoring ID', (done) => {
       service.getScoringResult('non-existent-id').subscribe(result => {
-        expect(result).toBeNull();
+        (expect(result) as any).toBeNull();
         done();
       });
     });
@@ -110,9 +110,9 @@ describe('CreditScoringService', () => {
     it('should get scoring status correctly', (done) => {
       service.requestCreditScoring(mockScoringRequest).subscribe(result => {
         service.getScoringStatus(result.scoringId).subscribe(status => {
-          expect(status).toBeTruthy();
-          expect(status!.status).toBe('completed');
-          expect(status!.message).toBeTruthy();
+          (expect(status) as any).toBeTruthy();
+          (expect(status!.status) as any).toBe('completed');
+          (expect(status!.message) as any).toBeTruthy();
           done();
         });
       });
@@ -120,7 +120,7 @@ describe('CreditScoringService', () => {
 
     it('should return null for non-existent status ID', (done) => {
       service.getScoringStatus('non-existent-id').subscribe(status => {
-        expect(status).toBeNull();
+        (expect(status) as any).toBeNull();
         done();
       });
     });
@@ -130,9 +130,9 @@ describe('CreditScoringService', () => {
     it('should validate client is ready for scoring', () => {
       const result = service.validateScoringPrerequisites(mockClient);
       
-      expect(result.canStartScoring).toBe(true);
-      expect(result.missingRequirements.length).toBe(0);
-      expect(result.message).toBe('Cliente listo para análisis crediticio');
+      (expect(result.canStartScoring) as any).toBe(true);
+      (expect(result.missingRequirements.length) as any).toBe(0);
+      (expect(result.message) as any).toBe('Cliente listo para análisis crediticio');
     });
 
     it('should identify missing INE document', () => {
@@ -146,8 +146,8 @@ describe('CreditScoringService', () => {
 
       const result = service.validateScoringPrerequisites(clientMissingINE);
       
-      expect(result.canStartScoring).toBe(false);
-      expect(result.missingRequirements).toContain('INE Vigente aprobada');
+      (expect(result.canStartScoring) as any).toBe(false);
+      (expect(result.missingRequirements) as any).toContain('INE Vigente aprobada');
     });
 
     it('should identify missing comprobante document', () => {
@@ -161,8 +161,8 @@ describe('CreditScoringService', () => {
 
       const result = service.validateScoringPrerequisites(clientMissingComprobante);
       
-      expect(result.canStartScoring).toBe(false);
-      expect(result.missingRequirements).toContain('Comprobante de domicilio aprobado');
+      (expect(result.canStartScoring) as any).toBe(false);
+      (expect(result.missingRequirements) as any).toContain('Comprobante de domicilio aprobado');
     });
 
     it('should identify missing KYC verification', () => {
@@ -176,8 +176,8 @@ describe('CreditScoringService', () => {
 
       const result = service.validateScoringPrerequisites(clientMissingKYC);
       
-      expect(result.canStartScoring).toBe(false);
-      expect(result.missingRequirements).toContain('Verificación biométrica completada');
+      (expect(result.canStartScoring) as any).toBe(false);
+      (expect(result.missingRequirements) as any).toContain('Verificación biométrica completada');
     });
 
     it('should identify multiple missing requirements', () => {
@@ -190,9 +190,9 @@ describe('CreditScoringService', () => {
 
       const result = service.validateScoringPrerequisites(clientMissingMultiple);
       
-      expect(result.canStartScoring).toBe(false);
-      expect(result.missingRequirements.length).toBe(3);
-      expect(result.message).toContain('Faltan requisitos');
+      (expect(result.canStartScoring) as any).toBe(false);
+      (expect(result.missingRequirements.length) as any).toBe(3);
+      (expect(result.message) as any).toContain('Faltan requisitos');
     });
   });
 
@@ -200,53 +200,53 @@ describe('CreditScoringService', () => {
     it('should get VentaDirecta recommendations', () => {
       const recommendations = service.getScoringRecommendations(BusinessFlow.VentaDirecta, 'aguascalientes');
       
-      expect(recommendations.minScore).toBe(700);
-      expect(recommendations.preferredGrades).toEqual(['A+', 'A']);
-      expect(recommendations.maxLoanToValue).toBe(0.50);
-      expect(recommendations.notes.some(note => note.includes('compra de contado'))).toBe(true);
+      (expect(recommendations.minScore) as any).toBe(700);
+      (expect(recommendations.preferredGrades) as any).toEqual(['A+', 'A']);
+      (expect(recommendations.maxLoanToValue) as any).toBe(0.50);
+      (expect(recommendations.notes.some(note => note.includes('compra de contado'))).toBe(true);
     });
 
     it('should get VentaPlazo recommendations for AGS', () => {
       const recommendations = service.getScoringRecommendations(BusinessFlow.VentaPlazo, 'aguascalientes');
       
-      expect(recommendations.minScore).toBe(680);
-      expect(recommendations.maxLoanToValue).toBe(0.75);
-      expect(recommendations.notes.some(note => note.includes('menor riesgo'))).toBe(true);
+      (expect(recommendations.minScore) as any).toBe(680);
+      (expect(recommendations.maxLoanToValue) as any).toBe(0.75);
+      (expect(recommendations.notes.some(note => note.includes('menor riesgo'))).toBe(true);
     });
 
     it('should get VentaPlazo recommendations for EdoMex', () => {
       const recommendations = service.getScoringRecommendations(BusinessFlow.VentaPlazo, 'edomex');
       
-      expect(recommendations.minScore).toBe(650);
-      expect(recommendations.maxLoanToValue).toBe(0.80);
-      expect(recommendations.notes.some(note => note.includes('validación de ruta'))).toBe(true);
+      (expect(recommendations.minScore) as any).toBe(650);
+      (expect(recommendations.maxLoanToValue) as any).toBe(0.80);
+      (expect(recommendations.notes.some(note => note.includes('validación de ruta'))).toBe(true);
     });
 
     it('should get CreditoColectivo recommendations', () => {
       const recommendations = service.getScoringRecommendations(BusinessFlow.CreditoColectivo, 'edomex');
       
-      expect(recommendations.minScore).toBe(620);
-      expect(recommendations.preferredGrades).toContain('B');
-      expect(recommendations.maxLoanToValue).toBe(0.85);
-      expect(recommendations.notes.some(note => note.includes('grupal'))).toBe(true);
-      expect(recommendations.notes.some(note => note.includes('5 integrantes'))).toBe(true);
+      (expect(recommendations.minScore) as any).toBe(620);
+      (expect(recommendations.preferredGrades) as any).toContain('B');
+      (expect(recommendations.maxLoanToValue) as any).toBe(0.85);
+      (expect(recommendations.notes.some(note => note.includes('grupal'))).toBe(true);
+      (expect(recommendations.notes.some(note => note.includes('5 integrantes'))).toBe(true);
     });
 
     it('should get AhorroProgramado recommendations', () => {
       const recommendations = service.getScoringRecommendations(BusinessFlow.AhorroProgramado, 'aguascalientes');
       
-      expect(recommendations.minScore).toBe(600);
-      expect(recommendations.preferredGrades).toContain('C+');
-      expect(recommendations.maxLoanToValue).toBe(0.70);
-      expect(recommendations.notes.some(note => note.includes('menor riesgo'))).toBe(true);
+      (expect(recommendations.minScore) as any).toBe(600);
+      (expect(recommendations.preferredGrades) as any).toContain('C+');
+      (expect(recommendations.maxLoanToValue) as any).toBe(0.70);
+      (expect(recommendations.notes.some(note => note.includes('menor riesgo'))).toBe(true);
     });
 
     it('should return default recommendations for unknown flow', () => {
       const recommendations = service.getScoringRecommendations('UNKNOWN_FLOW' as any, 'aguascalientes');
       
-      expect(recommendations.minScore).toBe(650);
-      expect(recommendations.preferredGrades).toEqual(['A+', 'A', 'B+']);
-      expect(recommendations.maxLoanToValue).toBe(0.80);
+      (expect(recommendations.minScore) as any).toBe(650);
+      (expect(recommendations.preferredGrades) as any).toEqual(['A+', 'A', 'B+']);
+      (expect(recommendations.maxLoanToValue) as any).toBe(0.80);
     });
   });
 
@@ -267,10 +267,10 @@ describe('CreditScoringService', () => {
 
       const result = service['simulateScoring'](goodClientRequest, 'test-id');
       
-      expect(result.score).toBeGreaterThan(700);
-      expect(['A+', 'A', 'B+'].some(grade => grade === result.grade)).toBe(true);
-      expect(result.decision).toBe('APPROVED');
-      expect(result.maxApprovedAmount).toBe(goodClientRequest.financialInfo.requestedAmount);
+      (expect(result.score) as any).toBeGreaterThan(700);
+      (expect(['A+', 'A', 'B+'].some(grade => grade === result.grade)) as any).toBe(true);
+      (expect(result.decision) as any).toBe('APPROVED');
+      (expect(result.maxApprovedAmount) as any).toBe(goodClientRequest.financialInfo.requestedAmount);
     });
 
     it('should simulate scoring with low score for risky client', () => {
@@ -294,10 +294,10 @@ describe('CreditScoringService', () => {
 
       const result = service['simulateScoring'](riskyClientRequest, 'test-id');
       
-      expect(result.score).toBeLessThan(650);
-      expect(['C', 'D', 'E'].some(grade => grade === result.grade)).toBe(true);
-      expect(result.decision).toBe('REJECTED');
-      expect(result.maxApprovedAmount).toBe(0);
+      (expect(result.score) as any).toBeLessThan(650);
+      (expect(['C', 'D', 'E'].some(grade => grade === result.grade)) as any).toBe(true);
+      (expect(result.decision) as any).toBe('REJECTED');
+      (expect(result.maxApprovedAmount) as any).toBe(0);
     });
 
     it('should apply market bonus for Aguascalientes', () => {
@@ -310,8 +310,8 @@ describe('CreditScoringService', () => {
       const edomexResult = service['simulateScoring'](edomexRequest, 'edomex-id');
 
       // AGS should get a bonus, but due to randomness, we'll just check it's reasonable
-      expect(agsResult.score).toBeGreaterThan(500);
-      expect(edomexResult.score).toBeGreaterThan(500);
+      (expect(agsResult.score) as any).toBeGreaterThan(500);
+      (expect(edomexResult.score) as any).toBeGreaterThan(500);
     });
 
     it('should apply business flow bonuses correctly', () => {
@@ -324,8 +324,8 @@ describe('CreditScoringService', () => {
       const directResult = service['simulateScoring'](directRequest, 'direct-id');
 
       // Both should be valid scores
-      expect(collectiveResult.score).toBeGreaterThan(300);
-      expect(directResult.score).toBeGreaterThan(300);
+      (expect(collectiveResult.score) as any).toBeGreaterThan(300);
+      (expect(directResult.score) as any).toBeGreaterThan(300);
     });
 
     it('should set correct interest rates by market', () => {
@@ -335,8 +335,8 @@ describe('CreditScoringService', () => {
       const agsResult = service['simulateScoring'](agsRequest, 'ags-id');
       const edomexResult = service['simulateScoring'](edomexRequest, 'edomex-id');
 
-      expect(agsResult.interestRate).toBe(25.5);
-      expect(edomexResult.interestRate).toBe(29.9);
+      (expect(agsResult.interestRate) as any).toBe(25.5);
+      (expect(edomexResult.interestRate) as any).toBe(29.9);
     });
 
     it('should include conditions for conditional approval', () => {
@@ -354,9 +354,9 @@ describe('CreditScoringService', () => {
       const result = service['simulateScoring'](conditionalRequest, 'conditional-id');
 
       if (result.decision === 'CONDITIONAL') {
-        expect(result.conditions).toBeDefined();
-        expect(result.conditions!.length).toBeGreaterThan(0);
-        expect(result.conditions!.some(condition => condition.includes('aval'))).toBe(true);
+        (expect(result.conditions) as any).toBeDefined();
+        (expect(result.conditions!.length) as any).toBeGreaterThan(0);
+        (expect(result.conditions!.some(condition => condition.includes('aval'))) as any).toBe(true);
       }
     });
 
@@ -381,8 +381,8 @@ describe('CreditScoringService', () => {
       const result = service['simulateScoring'](rejectedRequest, 'rejected-id');
 
       if (result.decision === 'REJECTED') {
-        expect(result.reasons).toBeDefined();
-        expect(result.reasons!.length).toBeGreaterThan(0);
+        (expect(result.reasons) as any).toBeDefined();
+        (expect(result.reasons!.length) as any).toBeGreaterThan(0);
       }
     });
 
@@ -392,7 +392,7 @@ describe('CreditScoringService', () => {
       const thirtyDaysFromNow = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
       const timeDiff = Math.abs(result.expiresAt.getTime() - thirtyDaysFromNow.getTime());
       
-      expect(timeDiff).toBeLessThan(1000); // Should be within 1 second
+      (expect(timeDiff) as any).toBeLessThan(1000); // Should be within 1 second
     });
   });
 
@@ -408,9 +408,9 @@ describe('CreditScoringService', () => {
         };
 
         service.retryCreditScoring(originalResult.scoringId, updatedRequest).subscribe(retryResult => {
-          expect(retryResult.scoringId).toBeTruthy();
-          expect(retryResult.scoringId).toMatch(/^scoring-retry-\d+$/);
-          expect(retryResult.status.status).toBe('completed');
+          (expect(retryResult.scoringId) as any).toBeTruthy();
+          (expect(retryResult.scoringId) as any).toMatch(/^scoring-retry-\d+$/);
+          (expect(retryResult.status.status) as any).toBe('completed');
           done();
         });
       });
@@ -419,7 +419,7 @@ describe('CreditScoringService', () => {
     it('should fail retry for non-existent original scoring', (done) => {
       service.retryCreditScoring('non-existent', {}).subscribe({
         error: (error) => {
-          expect(error).toBe('Original scoring not found');
+          (expect(error) as any).toBe('Original scoring not found');
           done();
         }
       });
@@ -436,11 +436,11 @@ describe('CreditScoringService', () => {
         setTimeout(() => {
           service.requestCreditScoring(request2).subscribe(() => {
             service.getClientScoringHistory('1').subscribe(history => {
-              expect(history.length).toBe(2);
-              expect(history[0].clientId).toBe('1');
-              expect(history[1].clientId).toBe('1');
+              (expect(history.length) as any).toBe(2);
+              (expect(history[0].clientId) as any).toBe('1');
+              (expect(history[1].clientId) as any).toBe('1');
               // Should be sorted by timestamp descending
-              expect(history[0].timestamp.getTime()).toBeGreaterThanOrEqual(history[1].timestamp.getTime());
+              (expect(history[0].timestamp.getTime()) as any).toBeGreaterThanOrEqual(history[1].timestamp.getTime());
               done();
             });
           });
@@ -450,7 +450,7 @@ describe('CreditScoringService', () => {
 
     it('should return empty array for client with no scorings', (done) => {
       service.getClientScoringHistory('non-existent-client').subscribe(history => {
-        expect(history).toEqual([]);
+        (expect(history) as any).toEqual([]);
         done();
       });
     });
@@ -460,7 +460,7 @@ describe('CreditScoringService', () => {
     it('should validate non-expired scoring', (done) => {
       service.requestCreditScoring(mockScoringRequest).subscribe(result => {
         service.isScoringValid(result.scoringId).subscribe(isValid => {
-          expect(isValid).toBe(true);
+          (expect(isValid) as any).toBe(true);
           done();
         });
       });
@@ -476,7 +476,7 @@ describe('CreditScoringService', () => {
             service['scoringDB'].set(result.scoringId, scoring);
 
             service.isScoringValid(result.scoringId).subscribe(isValid => {
-              expect(isValid).toBe(false);
+              (expect(isValid) as any).toBe(false);
               done();
             });
           }
@@ -486,7 +486,7 @@ describe('CreditScoringService', () => {
 
     it('should return false for non-existent scoring', (done) => {
       service.isScoringValid('non-existent-id').subscribe(isValid => {
-        expect(isValid).toBe(false);
+        (expect(isValid) as any).toBe(false);
         done();
       });
     });
@@ -513,7 +513,7 @@ describe('CreditScoringService', () => {
         randomSpy.and.returnValue(randomValue as unknown as number);
 
         const result = service['simulateScoring'](mockScoringRequest, `test-${score}`);
-        expect(result.grade).toBe(expectedGrade);
+        (expect(result.grade) as any).toBe(expectedGrade);
       });
     });
   });
@@ -533,7 +533,7 @@ describe('CreditScoringService', () => {
         randomSpy.and.returnValue(mockRandom as unknown as number);
 
         const result = service['simulateScoring'](mockScoringRequest, 'test-risk');
-        expect(result.riskLevel).toBe(expectedRisk);
+        (expect(result.riskLevel) as any).toBe(expectedRisk);
       });
     });
   });
@@ -543,7 +543,7 @@ describe('CreditScoringService', () => {
       spyOn(Math, 'random').and.returnValue(-1); // Very low random value
 
       const result = service['simulateScoring'](mockScoringRequest, 'min-test');
-      expect(result.score).toBeGreaterThanOrEqual(300);
+      (expect(result.score) as any).toBeGreaterThanOrEqual(300);
     });
 
     it('should handle maximum score bounds', () => {
@@ -561,7 +561,7 @@ describe('CreditScoringService', () => {
       spyOn(Math, 'random').and.returnValue(1); // Maximum random value
 
       const result = service['simulateScoring'](perfectRequest, 'max-test');
-      expect(result.score).toBeLessThanOrEqual(900);
+      (expect(result.score) as any).toBeLessThanOrEqual(900);
     });
 
     it('should handle zero or negative income gracefully', () => {
@@ -574,8 +574,8 @@ describe('CreditScoringService', () => {
       };
 
       const result = service['simulateScoring'](zeroIncomeRequest, 'zero-income');
-      expect(result.score).toBeGreaterThan(0);
-      expect(result.decision).toBeDefined();
+      (expect(result.score) as any).toBeGreaterThan(0);
+      (expect(result.decision) as any).toBeDefined();
     });
   });
 });
