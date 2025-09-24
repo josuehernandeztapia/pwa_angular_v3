@@ -170,11 +170,11 @@ describe('DashboardComponent', () => {
   });
 
   it('should toggle view mode', () => {
-    component.currentViewMode = 'advisor';
-    
-    component.onViewModeChanged('client');
+    (component as any).currentViewMode = 'advisor';
 
-    expect(component.currentViewMode).toBe('client');
+    (component as any).onViewModeChanged('client');
+
+    expect((component as any).currentViewMode).toBe('client');
   });
 
   it('should handle error in dashboard data loading', () => {

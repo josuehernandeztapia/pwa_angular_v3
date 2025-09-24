@@ -178,7 +178,7 @@ export class AVIAlignmentValidator {
       questionId: testCase.questionId,
       value: 'test_answer',
       transcription: testCase.transcription,
-      responseTime: testCase.voiceAnalysis.latency_seconds * 1000,
+      responseTime: (testCase.voiceAnalysis?.latency_seconds || 0) * 1000,
       timestamp: new Date().toISOString(),
       voiceAnalysis: testCase.voiceAnalysis,
       stressIndicators: []
@@ -192,11 +192,11 @@ export class AVIAlignmentValidator {
     const aviScore = await this.aviService.calculateScore().toPromise();
 
     return {
-      score: aviScore.totalScore,
-      decision: this.mapScoreToDecision(aviScore.totalScore),
-      riskLevel: aviScore.riskLevel,
-      confidence: aviScore.confidence,
-      processingTime: aviScore.processingTime
+      score: aviScore?.totalScore || 0,
+      decision: this.mapScoreToDecision(aviScore?.totalScore || 0),
+      riskLevel: aviScore?.riskLevel || 'UNKNOWN',
+      confidence: aviScore?.confidence || 0,
+      processingTime: aviScore?.processingTime || 0
     };
   }
 
@@ -212,7 +212,7 @@ export class AVIAlignmentValidator {
     // LAB Algorithm: L,P,D,E,H calculation
     const answerDuration = Math.max(1, (words.length / 150) * 60);
     const expectedLatency = Math.max(1, answerDuration * 0.1);
-    const latencyRatio = testCase.voiceAnalysis.latency_seconds / expectedLatency;
+    const latencyRatio = (testCase.voiceAnalysis?.latency_seconds || 0) / expectedLatency;
     const L = Math.min(1, Math.abs(latencyRatio - 1.5) / 2);
 
     const P = Math.min(1, testCase.voiceAnalysis.pitch_variance);

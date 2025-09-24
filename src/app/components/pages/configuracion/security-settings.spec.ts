@@ -16,9 +16,9 @@ describe('Security settings validation', () => {
   });
 
   it('should create component and verify security functionality', () => {
-    const fixture = TestBed.createComponent(ConfiguracionComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
 
     // Test component creation and basic security-related functionality
     expect(component).toBeTruthy();

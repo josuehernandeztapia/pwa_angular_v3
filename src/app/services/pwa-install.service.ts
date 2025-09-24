@@ -38,12 +38,12 @@ export class PwaInstallService {
       this.deferredPrompt = e as BeforeInstallPromptEvent;
       this.canInstall.set(true);
       this.installPromptSubject.next(true);
-      console.log('PWA install prompt available');
+// removed by clean-audit
     });
 
     // Listen for app installed event
     window.addEventListener('appinstalled', () => {
-      console.log('PWA installed successfully');
+// removed by clean-audit
       this.isInstalled.set(true);
       this.canInstall.set(false);
       this.deferredPrompt = null;
@@ -92,7 +92,7 @@ export class PwaInstallService {
       // Wait for user choice
       const choiceResult = await this.deferredPrompt.userChoice;
 
-      console.log(`PWA install prompt result: ${choiceResult.outcome}`);
+// removed by clean-audit
 
       // Clean up
       this.deferredPrompt = null;
@@ -111,7 +111,7 @@ export class PwaInstallService {
       };
 
     } catch (error) {
-      console.error('Error showing install prompt:', error);
+// removed by clean-audit
       return { outcome: 'unavailable' };
     }
   }
@@ -246,3 +246,4 @@ export class PwaInstallService {
     };
   }
 }
+// removed by clean-audit

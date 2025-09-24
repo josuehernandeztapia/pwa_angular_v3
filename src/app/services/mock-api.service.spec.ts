@@ -146,7 +146,7 @@ describe('MockApiService', () => {
       clientDataSpy.getClients.and.returnValue(of([mockClient]));
 
       const startTime = Date.now();
-      service.getClients().subscribe(clients => {
+      service.getClients().subscribe((clients: any) => {
         const endTime = Date.now();
         (expect(clients) as any).toEqual([mockClient]);
         (expect(endTime - startTime) as any).toBeGreaterThan(100); // Should have some delay
@@ -158,7 +158,7 @@ describe('MockApiService', () => {
     it('should get client by ID with network delay', (done) => {
       clientDataSpy.getClientById.and.returnValue(of(mockClient));
 
-      service.getClientById('1').subscribe(client => {
+      service.getClientById('1').subscribe((client: any) => {
         (expect(client) as any).toEqual(mockClient);
         (expect(clientDataSpy.getClientById) as any).toHaveBeenCalledWith('1');
         done();
@@ -168,7 +168,7 @@ describe('MockApiService', () => {
     it('should return null for non-existent client', (done) => {
       clientDataSpy.getClientById.and.returnValue(of(null));
 
-      service.getClientById('non-existent').subscribe(client => {
+      service.getClientById('non-existent').subscribe((client: any) => {
         (expect(client) as any).toBeNull();
         done();
       });
@@ -180,7 +180,7 @@ describe('MockApiService', () => {
       clientDataSpy.createClient.and.returnValue(of(mockClient));
 
       const startTime = Date.now();
-      service.createClient(newClient).subscribe(client => {
+      service.createClient(newClient).subscribe((client: any) => {
         const endTime = Date.now();
         (expect(client) as any).toEqual(mockClient);
         (expect(endTime - startTime) as any).toBeGreaterThan(1000); // Should use slow delay

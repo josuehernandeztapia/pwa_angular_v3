@@ -171,7 +171,7 @@ describe('DashboardComponent Accessibility Tests', () => {
 
       quickLinks.forEach((link: HTMLElement) => {
         expect(AccessibilityChecker.isKeyboardAccessible(link)).toBe(true);
-        expect(AccessibilityChecker.hasAccessibleName(link)).toBe(true);
+        (expect((AccessibilityChecker as any).hasAccessibleName(link)) as any).toBe(true);
       });
     });
 

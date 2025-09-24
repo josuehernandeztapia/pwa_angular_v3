@@ -817,7 +817,7 @@ export class ClienteDetailComponent implements OnInit {
         await this.loadAviModal();
       }
     } catch (error) {
-      console.warn('Failed to load some heavy components:', error);
+// removed by clean-audit
     }
   }
 
@@ -911,7 +911,7 @@ export class ClienteDetailComponent implements OnInit {
         const { AviVerificationModalComponent } = await import('../../shared/avi-verification-modal/avi-verification-modal.component');
         // Component would be created here with proper inputs and event handlers
       } catch (error) {
-        console.warn('Failed to load AVI modal component:', error);
+// removed by clean-audit
       }
     }
   }

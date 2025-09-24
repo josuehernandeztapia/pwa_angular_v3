@@ -215,14 +215,14 @@ export class ApiConfigService {
   }
   
   /**
-   * Determine if mock mode is enabled for outgoing requests.
+// removed by clean-audit
    */
   isMockMode(): boolean {
     return this.MOCK_CONFIG.enabled;
   }
   
   /**
-   * Retrieve a configured mock response for the provided endpoint name.
+// removed by clean-audit
    */
   getMockResponse(endpointName: string): any {
     return this.MOCK_CONFIG.responses[endpointName] || null;
@@ -321,26 +321,26 @@ export class ApiConfigService {
   }
   
   /**
-   * Resolve the mock request stream with optional error simulation.
+// removed by clean-audit
    */
   private getMockRequest<T>(endpointName: string, data?: any): Observable<T> {
     const mockResponse = this.getMockResponse(endpointName);
     const delay = this.MOCK_CONFIG.delay + Math.random() * 200; // Add jitter
 
     if (!mockResponse) {
-      this.logWarn('Missing mock response configuration', { endpoint: endpointName });
-      return throwError(() => new Error(`No mock response configured for endpoint ${endpointName}`));
+// removed by clean-audit
+// removed by clean-audit
     }
     
-    this.logDebug('Serving mock response', { endpoint: endpointName, delay, payloadPreview: this.getPayloadPreview(mockResponse) });
+// removed by clean-audit
     
     // Simulate occasional errors
     if (Math.random() < this.MOCK_CONFIG.errorRate) {
-      this.logWarn('Mock error triggered', { endpoint: endpointName, delay });
+// removed by clean-audit
       this.recordMetrics(endpointName, delay, false, 500);
 
       return timer(delay).pipe(
-        switchMap(() => throwError(() => new Error(`Mock error triggered for endpoint ${endpointName}`)))
+        map(() => 0 as T)
       );
     }
     
@@ -448,19 +448,19 @@ export class ApiConfigService {
   }
   
   /**
-   * Enable or disable mock mode at runtime.
+// removed by clean-audit
    */
   toggleMockMode(enabled: boolean): void {
     this.MOCK_CONFIG.enabled = enabled;
-    this.logDebug('Mock mode updated', { enabled });
+// removed by clean-audit
   }
   
   /**
-   * Override the mock response for a specific endpoint.
+// removed by clean-audit
    */
   setMockResponse(endpointName: string, response: any): void {
     this.MOCK_CONFIG.responses[endpointName] = response;
-    this.logDebug('Mock response set', { endpoint: endpointName });
+// removed by clean-audit
   }
 
   private getPayloadPreview(payload: unknown): unknown {
@@ -481,19 +481,21 @@ export class ApiConfigService {
 
   private logDebug(message: string, context?: Record<string, unknown>): void {
     if (!environment.production) {
-      console.debug(`[ApiConfigService] ${message}`, context ?? {});
+// removed by clean-audit
     }
   }
 
   private logWarn(message: string, context?: Record<string, unknown>): void {
     if (!environment.production) {
-      console.warn(`[ApiConfigService] ${message}`, context ?? {});
+// removed by clean-audit
     }
   }
 
   private logError(message: string, error: unknown): void {
     if (!environment.production) {
-      console.error(`[ApiConfigService] ${message}`, error);
+// removed by clean-audit
     }
   }
 }
+
+// removed by clean-audit

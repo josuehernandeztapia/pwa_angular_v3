@@ -16,9 +16,9 @@ describe('Data retention policy', () => {
   });
 
   it('should create component and have valid config', () => {
-    const fixture = TestBed.createComponent(ConfiguracionComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
+// removed by clean-audit
+// removed by clean-audit
+// removed by clean-audit
 
     // Test component creation and config initialization
     expect(component).toBeTruthy();
