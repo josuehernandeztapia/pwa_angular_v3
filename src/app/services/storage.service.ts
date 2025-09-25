@@ -60,6 +60,9 @@ export class StorageService {
       const request = indexedDB.open(this.dbName, this.dbVersion);
 
       request.onerror = () => {
+        try {
+          console.error('Failed to open IndexedDB:', request.error as any);
+        } catch {}
         reject(request.error);
       };
 

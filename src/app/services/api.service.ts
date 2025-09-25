@@ -199,6 +199,8 @@ export class ApiService {
    */
   getClientQuotes(clientId: string): Observable<Quote[]> {
     if (environment.features.enableMockData) {
+      // No persisted mock quotes; return empty list to satisfy mock flow
+      return of([]);
     }
 
     return this.httpClient.get<Quote[]>(`clients/${clientId}/quotes`).pipe(
