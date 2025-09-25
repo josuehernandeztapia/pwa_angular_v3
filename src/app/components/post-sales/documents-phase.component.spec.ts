@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { DocumentsPhaseComponent } from './documents-phase.component';
 import { IntegratedImportTrackerService } from '../../services/integrated-import-tracker.service';
 import { PostSalesApiService } from '../../services/post-sales-api.service';
+import { PostSalesQuoteApiService } from '../../services/post-sales-quote-api.service';
 
 describe('DocumentsPhaseComponent', () => {
   let component: DocumentsPhaseComponent;
@@ -26,7 +27,8 @@ describe('DocumentsPhaseComponent', () => {
         FormBuilder,
         { provide: Router, useValue: routerSpy },
         { provide: IntegratedImportTrackerService, useValue: importTrackerSpy },
-        { provide: PostSalesApiService, useValue: postSalesApiSpy }
+        { provide: PostSalesApiService, useValue: postSalesApiSpy },
+        { provide: PostSalesQuoteApiService, useValue: jasmine.createSpyObj('PostSalesQuoteApiService', ['getOrCreateDraftQuote', 'addLine']) }
       ]
     }).compileComponents();
 
