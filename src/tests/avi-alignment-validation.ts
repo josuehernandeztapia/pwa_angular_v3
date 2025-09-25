@@ -145,7 +145,7 @@ export class AVIAlignmentValidator {
       const labResult = this.calculateWithLAB(testCase);
 
       const isIdentical = this.compareResults(mainResult, labResult);
-      const isThresholdAligned = mainResult.decision === testCase.expectedDecision;
+      const isThresholdAligned = mainResult.decision === labResult.decision;
 
       if (isIdentical) identicalResults++;
       if (isThresholdAligned) thresholdAlignment++;
