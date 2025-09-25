@@ -130,7 +130,9 @@ export class AccessibilityTester {
         component: testElement.tagName || 'UnknownElement'
       };
     } catch (error) {
-      return this.createEmptyResult('HTMLElement');
+      const resolved = element instanceof HTMLElement ? element : (element as any)?.nativeElement;
+      const tag = resolved && resolved.tagName ? resolved.tagName : 'HTMLElement';
+      return this.createEmptyResult(tag);
     }
   }
 
@@ -309,15 +311,18 @@ export const setupAccessibilityTesting = () => {
  * Helper function for testing component accessibility
  */
 export const testComponentAccessibility = async <T>(
+  fixture: ComponentFixture<T>,
   options: AccessibilityTestOptions = {}
-): Promise<void> => {
-  
-  // Log results for debugging
-  
-  // Fail test if critical violations found
+): Promise<AccessibilityTestResult> => {
+  await AccessibilityTester.initialize();
+  fixture.detectChanges();
+  const element = fixture.nativeElement as HTMLElement;
+  const componentName = (fixture.componentInstance as any)?.constructor?.name || 'UnknownComponent';
+  const result = await AccessibilityTester.testComponent(element, componentName, options);
   if (AccessibilityTestUtils.hasCriticalViolations(result)) {
     fail(`Critical accessibility violations found in ${result.component}`);
   }
+  return result;
 };
 
 /**
@@ -344,7 +349,21 @@ export function AccessibilityTest(options: AccessibilityTestOptions = {}) {
  * Quick accessibility test function for common use cases
  */
 export const quickAccessibilityTest = async <T>(
+  fixture: ComponentFixture<T>,
   options: AccessibilityTestOptions = {}
 ): Promise<boolean> => {
+  const result = await testComponentAccessibility(fixture, options);
   return !AccessibilityTestUtils.hasCriticalViolations(result);
+};
+
+// Optional reporting helper expected by some specs
+(AccessibilityTester as any).generateAccessibilityReport = function(
+  results: AccessibilityTestResult[],
+  options: { projectName?: string } = {}
+) {
+  const base = AccessibilityTestUtils.generateReport(results);
+  return {
+    ...base,
+    projectName: options.projectName || 'Project'
+  };
 };

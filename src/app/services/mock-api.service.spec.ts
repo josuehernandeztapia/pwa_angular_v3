@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MockApiService } from './mock-api.service';
 import { of, throwError } from 'rxjs';
 import { ClientDataService } from './data/client-data.service';
 import { EcosystemDataService } from './data/ecosystem-data.service';
@@ -193,7 +194,7 @@ describe('MockApiService', () => {
       const updatedClient = { ...mockClient, ...updates };
       clientDataSpy.updateClient.and.returnValue(of(updatedClient));
 
-      service.updateClient('1', updates).subscribe(client => {
+      service.updateClient('1', updates).subscribe((client: any) => {
         (expect(client) as any).toEqual(updatedClient);
         (expect(clientDataSpy.updateClient) as any).toHaveBeenCalledWith('1', updates);
         done();
@@ -205,7 +206,7 @@ describe('MockApiService', () => {
       const updatedClient = { ...mockClient };
       clientDataSpy.addClientEvent.and.returnValue(of(updatedClient));
 
-      service.addClientEvent('1', eventData).subscribe(client => {
+      service.addClientEvent('1', eventData).subscribe((client: any) => {
         (expect(client) as any).toEqual(updatedClient);
         (expect(clientDataSpy.addClientEvent) as any).toHaveBeenCalledWith('1', eventData);
         done();
@@ -216,7 +217,7 @@ describe('MockApiService', () => {
       const updatedClient = { ...mockClient };
       clientDataSpy.updateDocumentStatus.and.returnValue(of(updatedClient));
 
-      service.updateDocumentStatus('1', 'doc1', 'Aprobado' as any).subscribe(client => {
+      service.updateDocumentStatus('1', 'doc1', 'Aprobado' as any).subscribe((client: any) => {
         (expect(client) as any).toEqual(updatedClient);
         (expect(clientDataSpy.updateDocumentStatus) as any).toHaveBeenCalledWith('1', 'doc1', 'Aprobado' as any);
         done();
@@ -228,7 +229,7 @@ describe('MockApiService', () => {
     it('should get ecosystems with network delay', (done) => {
       ecosystemDataSpy.getEcosystems.and.returnValue(of([mockEcosystem]));
 
-      service.getEcosystems().subscribe(ecosystems => {
+      service.getEcosystems().subscribe((ecosystems: any) => {
         (expect(ecosystems) as any).toEqual([mockEcosystem]);
         (expect(ecosystemDataSpy.getEcosystems) as any).toHaveBeenCalled();
         done();
@@ -238,7 +239,7 @@ describe('MockApiService', () => {
     it('should get ecosystem by ID with network delay', (done) => {
       ecosystemDataSpy.getEcosystemById.and.returnValue(of(mockEcosystem));
 
-      service.getEcosystemById('eco1').subscribe(ecosystem => {
+      service.getEcosystemById('eco1').subscribe((ecosystem: any) => {
         (expect(ecosystem) as any).toEqual(mockEcosystem);
         (expect(ecosystemDataSpy.getEcosystemById) as any).toHaveBeenCalledWith('eco1');
         done();
@@ -248,7 +249,7 @@ describe('MockApiService', () => {
     it('should return null for non-existent ecosystem', (done) => {
       ecosystemDataSpy.getEcosystemById.and.returnValue(of(null));
 
-      service.getEcosystemById('non-existent').subscribe(ecosystem => {
+      service.getEcosystemById('non-existent').subscribe((ecosystem: any) => {
         (expect(ecosystem) as any).toBeNull();
         done();
       });
@@ -260,7 +261,7 @@ describe('MockApiService', () => {
       ecosystemDataSpy.createEcosystem.and.returnValue(of(mockEcosystem));
 
       const startTime = Date.now();
-      service.createEcosystem(newEcosystem).subscribe(ecosystem => {
+      service.createEcosystem(newEcosystem).subscribe((ecosystem: any) => {
         const endTime = Date.now();
         (expect(ecosystem) as any).toEqual(mockEcosystem);
         (expect(endTime - startTime) as any).toBeGreaterThan(1000); // Should use slow delay
@@ -273,7 +274,7 @@ describe('MockApiService', () => {
       const updatedEcosystem = { ...mockEcosystem };
       ecosystemDataSpy.updateEcosystemDocumentStatus.and.returnValue(of(updatedEcosystem));
 
-      service.updateEcosystemDocument('eco1', 'doc1', 'Aprobado' as any).subscribe(ecosystem => {
+      service.updateEcosystemDocument('eco1', 'doc1', 'Aprobado' as any).subscribe((ecosystem: any) => {
         (expect(ecosystem) as any).toEqual(updatedEcosystem);
         (expect(ecosystemDataSpy.updateEcosystemDocumentStatus) as any).toHaveBeenCalledWith('eco1', 'doc1', 'Aprobado' as any);
         done();
@@ -285,7 +286,7 @@ describe('MockApiService', () => {
     it('should get collective groups with network delay', (done) => {
       collectiveGroupDataSpy.getCollectiveGroups.and.returnValue(of([mockCollectiveGroup]));
 
-      service.getCollectiveGroups().subscribe(groups => {
+      service.getCollectiveGroups().subscribe((groups: any) => {
         (expect(groups) as any).toEqual([mockCollectiveGroup]);
         (expect(collectiveGroupDataSpy.getCollectiveGroups) as any).toHaveBeenCalled();
         done();
@@ -295,7 +296,7 @@ describe('MockApiService', () => {
     it('should get collective group by ID with network delay', (done) => {
       collectiveGroupDataSpy.getCollectiveGroupById.and.returnValue(of(mockCollectiveGroup));
 
-      service.getCollectiveGroupById('cc1').subscribe(group => {
+      service.getCollectiveGroupById('cc1').subscribe((group: any) => {
         (expect(group) as any).toEqual(mockCollectiveGroup);
         (expect(collectiveGroupDataSpy.getCollectiveGroupById) as any).toHaveBeenCalledWith('cc1');
         done();
@@ -315,7 +316,7 @@ describe('MockApiService', () => {
       const updatedGroup = { ...mockCollectiveGroup };
       collectiveGroupDataSpy.addMemberToGroup.and.returnValue(of(updatedGroup));
 
-      service.addMemberToGroup('cc1', member).subscribe(group => {
+      service.addMemberToGroup('cc1', member).subscribe((group: any) => {
         (expect(group) as any).toEqual(updatedGroup);
         (expect(collectiveGroupDataSpy.addMemberToGroup) as any).toHaveBeenCalledWith('cc1', member);
         done();
@@ -327,7 +328,7 @@ describe('MockApiService', () => {
       collectiveGroupDataSpy.deliverUnitToGroup.and.returnValue(of(updatedGroup));
 
       const startTime = Date.now();
-      service.deliverUnitToGroup('cc1').subscribe(group => {
+      service.deliverUnitToGroup('cc1').subscribe((group: any) => {
         const endTime = Date.now();
         (expect(group) as any).toEqual(updatedGroup);
         (expect(endTime - startTime) as any).toBeGreaterThan(1000); // Should use slow delay
@@ -346,7 +347,7 @@ describe('MockApiService', () => {
       };
 
       const startTime = Date.now();
-      service.createCotizacionScenario(scenarioData).subscribe(scenario => {
+      service.createCotizacionScenario(scenarioData).subscribe((scenario: any) => {
         const endTime = Date.now();
         
         (expect(scenario.clientName) as any).toBe('Juan Pérez');
@@ -369,7 +370,7 @@ describe('MockApiService', () => {
         market: 'edomex'
       };
 
-      service.createSimulacionScenario(scenarioData).subscribe(scenario => {
+      service.createSimulacionScenario(scenarioData).subscribe((scenario: any) => {
         (expect(scenario.clientName) as any).toBe('María López');
         (expect(scenario.flow) as any).toBe(BusinessFlow.AhorroProgramado);
         (expect(scenario.market) as any).toBe('edomex');
@@ -385,7 +386,7 @@ describe('MockApiService', () => {
 
   describe('Search and Analytics', () => {
     it('should perform global search with results structure', (done) => {
-      service.globalSearch('test').subscribe(results => {
+      service.globalSearch('test').subscribe((results: any) => {
         (expect(results) as any).toEqual({
           clients: [],
           ecosystems: [],

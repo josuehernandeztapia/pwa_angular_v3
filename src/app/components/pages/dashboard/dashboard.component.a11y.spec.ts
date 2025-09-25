@@ -154,11 +154,11 @@ describe('DashboardComponent Accessibility Tests', () => {
     });
 
     it('should have high contrast for key metrics', async () => {
-      const metricElements = fixture.nativeElement.querySelectorAll('.metric-value, .metric-label');
+      const metricElements = fixture.nativeElement.querySelectorAll('.metric-value, .metric-label') as NodeListOf<HTMLElement>;
 
       for (const element of Array.from(metricElements)) {
         if (element.textContent?.trim()) {
-          const hasAdequateContrast = await AccessibilityChecker.checkColorContrast(element);
+          const hasAdequateContrast = await AccessibilityChecker.checkColorContrast(element as HTMLElement);
           expect(hasAdequateContrast).toBe(true);
         }
       }
