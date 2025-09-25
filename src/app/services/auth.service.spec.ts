@@ -55,7 +55,8 @@ describe('AuthService', () => {
       });
     });
 
-    it('should fail login with invalid credentials', (done) => {
+    it('should fail login with invalid credentials (logs expected warning)', (done) => {
+      spyOn(console, 'warn');
       const credentials: LoginCredentials = {
         email: 'invalid@conductores.com',
         password: 'wrongpass'
@@ -65,12 +66,14 @@ describe('AuthService', () => {
         next: () => fail('Login should fail with invalid credentials'),
         error: (error) => {
           expect(error.message).toContain('Credenciales incorrectas');
+          expect(console.warn).toHaveBeenCalled();
           done();
         }
       });
     });
 
-    it('should fail login with non-corporate email', (done) => {
+    it('should fail login with non-corporate email (logs expected warning)', (done) => {
+      spyOn(console, 'warn');
       const credentials: LoginCredentials = {
         email: 'user@gmail.com',
         password: 'anypass'
@@ -80,6 +83,7 @@ describe('AuthService', () => {
         next: () => fail('Login should fail with non-corporate email'),
         error: (error) => {
           expect(error.message).toContain('Credenciales incorrectas');
+          expect(console.warn).toHaveBeenCalled();
           done();
         }
       });
@@ -240,13 +244,15 @@ describe('AuthService', () => {
       });
     });
 
-    it('should fail registration with existing email', (done) => {
+    it('should fail registration with existing email (logs expected error)', (done) => {
+      spyOn(console, 'error');
       validRegistrationData.email = 'asesor@conductores.com';
 
       service.register(validRegistrationData).subscribe({
         next: () => fail('Registration should fail with existing email'),
         error: (error) => {
           expect(error.message).toContain('ya está registrado');
+          expect(console.error).toHaveBeenCalled();
           done();
         }
       });

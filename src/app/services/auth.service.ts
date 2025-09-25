@@ -86,6 +86,7 @@ export class AuthService {
    */
   login(credentials: LoginCredentials): Observable<AuthResponse> {
     if (!credentials.email.endsWith('@conductores.com')) {
+      console.warn('[AuthService] Login failed', { email: credentials.email, reason: 'non-corporate-email' });
       return throwError(() => new Error('Credenciales incorrectas'));
     }
     const demoUsers = [

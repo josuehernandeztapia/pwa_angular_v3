@@ -213,6 +213,10 @@ export class AccessibilityTestUtils {
   static generateReport(results: AccessibilityTestResult[]): any {
     const totalViolations = results.reduce((sum, r) => sum + r.violations.length, 0);
     const totalPasses = results.reduce((sum, r) => sum + r.passes, 0);
+    const totalChecks = totalPasses + totalViolations;
+    const complianceScore = totalChecks > 0
+      ? Math.max(0, Math.min(100, Math.round((totalPasses / totalChecks) * 100)))
+      : 100;
     
     const violationsByImpact = {
       critical: 0,
@@ -232,7 +236,8 @@ export class AccessibilityTestUtils {
         totalComponents: results.length,
         totalViolations,
         totalPasses,
-        violationsByImpact
+        violationsByImpact,
+        complianceScore
       },
       results,
       timestamp: new Date().toISOString(),
