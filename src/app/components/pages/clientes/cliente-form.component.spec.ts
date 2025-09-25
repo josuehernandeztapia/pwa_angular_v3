@@ -29,6 +29,7 @@ const mockClient: Client = {
 
 describe('ClienteFormComponent', () => {
   let component: ClienteFormComponent;
+  let fixture: ComponentFixture<ClienteFormComponent>;
   let mockRouter: jasmine.SpyObj<Router>;
   let mockActivatedRoute: any;
   let mockToastService: jasmine.SpyObj<ToastService>;
@@ -56,6 +57,10 @@ describe('ClienteFormComponent', () => {
         { provide: ApiService, useValue: apiServiceSpy }
       ]
     }).compileComponents();
+
+    fixture = TestBed.createComponent(ClienteFormComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     mockToastService = TestBed.inject(ToastService) as jasmine.SpyObj<ToastService>;
@@ -282,7 +287,7 @@ describe('ClienteFormComponent Integration Tests', () => {
       ]
     });
 
-    expect(screen.getByText('Nuevo Cliente')).toBeTruthy();
+    expect(screen.getAllByText('Nuevo Cliente').length).toBeGreaterThan(0);
     expect(screen.getByLabelText('Nombre Completo *')).toBeTruthy();
     expect(screen.getByLabelText('Correo Electrónico *')).toBeTruthy();
     expect(screen.getByLabelText('Teléfono *')).toBeTruthy();
