@@ -157,7 +157,8 @@ describe('DocumentsPhaseComponent', () => {
     const form = component.documentsForm;
     form.get('titular')?.setValue('');
     form.get('proveedorSeguro')?.setValue('');
-    
+    // Ensure documents missing so checklist errors are included
+    component.uploadedDocuments.set({ factura: null, polizaSeguro: null, contratos: [], endosos: [] });
     const errors = component.validationErrors();
     expect(errors).toContain('Titular del vehículo');
     expect(errors).toContain('Proveedor de seguro');
