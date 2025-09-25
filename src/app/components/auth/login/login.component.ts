@@ -45,6 +45,8 @@ import { Subscription } from 'rxjs';
               [class.ui-input-error]="isFieldInvalid('email')"
               placeholder="usuario@empresa.com"
               autocomplete="email"
+              required
+              aria-required="true"
               data-cy="email-input"
             >
             <div *ngIf="isFieldInvalid('email')" class="ui-error-text" role="alert">
@@ -71,6 +73,8 @@ import { Subscription } from 'rxjs';
                 [class.ui-input-error]="isFieldInvalid('password')"
                 placeholder="••••••••"
                 autocomplete="current-password"
+                required
+                aria-required="true"
                 data-cy="password-input"
               >
               <button
