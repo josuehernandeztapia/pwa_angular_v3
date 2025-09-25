@@ -71,9 +71,9 @@ export const AVI_VOICE_WEIGHTS = {
  * Thresholds para decisiones - ALINEADOS CON AVI_LAB
  */
 export const AVI_VOICE_THRESHOLDS = {
-  GO: 750,      // >= 750 = GO
-  REVIEW: 500,  // 500-749 = REVIEW
-  NO_GO: 499    // <= 499 = NO-GO
+  GO: 780,      // >= 780 = GO
+  REVIEW: 551,  // 551-779 = REVIEW
+  NO_GO: 550    // <= 550 = NO-GO
 };
 
 /**

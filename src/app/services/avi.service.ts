@@ -1,24 +1,22 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { map, delay, catchError } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, delay, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 import {
+  AVI_VOICE_WEIGHTS,
+  AVILexiconAnalyzer
+} from '../data/avi-lexicons.data';
+import { ALL_AVI_QUESTIONS } from '../data/avi-questions.data';
+import {
+  AVICategory,
   AVIQuestionEnhanced,
   AVIResponse,
   AVIScore,
-  AVICategory,
-  VoiceAnalysis,
-  RedFlag
+  RedFlag,
+  VoiceAnalysis
 } from '../models/avi';
-import { ALL_AVI_QUESTIONS } from '../data/avi-questions.data';
-import {
-  AVI_LEXICONS,
-  AVI_VOICE_WEIGHTS,
-  AVI_VOICE_THRESHOLDS,
-  AVILexiconAnalyzer
-} from '../data/avi-lexicons.data';
 import { ConfigurationService } from './configuration.service';
-import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -344,23 +342,22 @@ export class AVIService {
   }
 
   private calculateRiskLevel(score: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
-    // ALIGNED WITH AVI_LAB THRESHOLDS
-    // GO ≥750 = LOW, REVIEW 500-749 = MEDIUM/HIGH, NO-GO ≤499 = CRITICAL
-    if (score >= 750) return 'LOW';      // GO range
-    if (score >= 600) return 'MEDIUM';   // REVIEW upper range
-    if (score >= 500) return 'HIGH';     // REVIEW lower range
-    return 'CRITICAL';                   // NO-GO range
+    // Updated thresholds: GO ≥780, REVIEW 551–779, NO-GO ≤550
+    if (score >= 780) return 'LOW';
+    if (score >= 551) return 'MEDIUM';
+    if (score >= 550) return 'HIGH';
+    return 'CRITICAL';
   }
 
   private generateRecommendations(score: number, redFlags: RedFlag[]): string[] {
     const recommendations: string[] = [];
 
-    // ALIGNED WITH AVI_LAB THRESHOLDS
-    if (score >= 750) {
+    // Updated thresholds
+    if (score >= 780) {
       recommendations.push('Cliente de bajo riesgo - puede proceder (GO)');
-    } else if (score >= 600) {
+    } else if (score >= 551) {
       recommendations.push('Riesgo moderado - revisar documentación adicional (REVIEW)');
-    } else if (score >= 500) {
+    } else if (score >= 550) {
       recommendations.push('Alto riesgo - requiere garantías adicionales (REVIEW)');
     } else {
       recommendations.push('Riesgo crítico - no recomendado para crédito (NO-GO)');
