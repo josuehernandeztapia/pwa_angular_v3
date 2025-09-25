@@ -195,7 +195,6 @@ export class AviQuestionGeneratorService {
       
       return false;
     } catch (error) {
-// removed by clean-audit
       return false;
     }
   }
@@ -205,7 +204,6 @@ export class AviQuestionGeneratorService {
     const prompt = this.buildLLMPrompt(municipality);
     
     try {
-// removed by clean-audit
       const response = await fetch('/api/generate-micro-local-questions', {
         method: 'POST',
         headers: {
@@ -226,7 +224,6 @@ export class AviQuestionGeneratorService {
       const data = await response.json();
       return this.parseLLMResponse(data.questions, municipality);
     } catch (error) {
-// removed by clean-audit
       return [];
     }
   }
@@ -302,7 +299,6 @@ EJEMPLOS del estilo deseado:
     try {
       localStorage.setItem(`avi_questions_${municipality}`, JSON.stringify(pool));
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -311,7 +307,6 @@ EJEMPLOS del estilo deseado:
       const stored = localStorage.getItem(`avi_questions_${municipality}`);
       return stored ? JSON.parse(stored) : null;
     } catch (error) {
-// removed by clean-audit
       return null;
     }
   }
@@ -329,4 +324,3 @@ EJEMPLOS del estilo deseado:
     });
   }
 }
-// removed by clean-audit

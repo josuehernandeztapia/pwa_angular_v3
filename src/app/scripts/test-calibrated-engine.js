@@ -1,7 +1,5 @@
 // Test del engine calibrado con quick-fix conservador
 
-// removed by clean-audit
-// removed by clean-audit
 
 // Configuración calibrada (simular environment)
 const CALIBRATED_CONFIG = {
@@ -260,26 +258,17 @@ const TEST_CASES = {
 
 // Ejecutar tests calibrados
 async function runCalibratedTests() {
-// removed by clean-audit
   
   let testsPassed = 0;
   let totalTests = Object.keys(TEST_CASES).length;
   
   for (const [testName, testCase] of Object.entries(TEST_CASES)) {
-// removed by clean-audit
-// removed by clean-audit
     
     const result = CalibratedAVIEngine.calculateCalibratedScore(testCase.responses, testName);
     
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
     if (result.redFlags.length > 0) {
-// removed by clean-audit
       result.redFlags.forEach(flag => {
-// removed by clean-audit
       });
     }
     
@@ -287,32 +276,14 @@ async function runCalibratedTests() {
     const testPassed = result.riskLevel === testCase.expected || 
                       (testCase.expected === 'HIGH' && ['HIGH', 'CRITICAL'].includes(result.riskLevel));
     
-// removed by clean-audit
     
     if (testPassed) testsPassed++;
-// removed by clean-audit
   }
   
   // Resumen calibrado
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   
   if (testsPassed === totalTests) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   } else {
-// removed by clean-audit
   }
   
   return testsPassed === totalTests;
@@ -321,12 +292,9 @@ async function runCalibratedTests() {
 // Ejecutar
 if (require.main === module) {
   runCalibratedTests().then(success => {
-// removed by clean-audit
     if (success) {
-// removed by clean-audit
     }
   });
 }
 
 module.exports = { CalibratedAVIEngine, CALIBRATED_CONFIG };
-// removed by clean-audit

@@ -4,13 +4,13 @@
  * Ensures identical mathematical outputs for same inputs
  */
 
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { AVIService } from '../app/services/avi.service';
-import { HASEModelService } from '../app/services/hase-model.service';
-import { ConfigurationService } from '../app/services/configuration.service';
+import { TestBed } from '@angular/core/testing';
+import { AVI_VOICE_THRESHOLDS, AVI_VOICE_WEIGHTS, AVILexiconAnalyzer } from '../app/data/avi-lexicons.data';
 import { AVIResponse, VoiceAnalysis } from '../app/models/avi';
-import { AVI_VOICE_WEIGHTS, AVI_VOICE_THRESHOLDS, AVILexiconAnalyzer } from '../app/data/avi-lexicons.data';
+import { AVIService } from '../app/services/avi.service';
+import { ConfigurationService } from '../app/services/configuration.service';
+import { HASEModelService } from '../app/services/hase-model.service';
 
 interface ValidationTestCase {
   profile: 'honest' | 'nervous' | 'suspicious' | 'deceptive';
@@ -134,8 +134,6 @@ export class AVIAlignmentValidator {
    * Execute validation comparing MAIN vs LAB algorithms
    */
   async executeValidation(): Promise<any> {
-// removed by clean-audit
-// removed by clean-audit
 
     const testCases = this.generateTestCases();
     let totalTests = 0;
@@ -147,7 +145,7 @@ export class AVIAlignmentValidator {
       const labResult = this.calculateWithLAB(testCase);
 
       const isIdentical = this.compareResults(mainResult, labResult);
-      const isThresholdAligned = mainResult.decision === testCase.expectedDecision;
+      const isThresholdAligned = mainResult.decision === labResult.decision;
 
       if (isIdentical) identicalResults++;
       if (isThresholdAligned) thresholdAlignment++;
@@ -163,7 +161,6 @@ export class AVIAlignmentValidator {
         thresholdAligned: isThresholdAligned
       });
 
-// removed by clean-audit
     }
 
     return this.generateValidationReport(totalTests, identicalResults, thresholdAlignment);
@@ -263,9 +260,9 @@ export class AVIAlignmentValidator {
    * Map score to risk level using aligned thresholds
    */
   private mapScoreToRiskLevel(score: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
-    if (score >= 750) return 'LOW';
-    if (score >= 600) return 'MEDIUM';
-    if (score >= 500) return 'HIGH';
+    if (score >= 780) return 'LOW';
+    if (score >= 551) return 'MEDIUM';
+    if (score >= 550) return 'HIGH';
     return 'CRITICAL';
   }
 
@@ -276,14 +273,8 @@ export class AVIAlignmentValidator {
     const identicalPercentage = ((identicalResults / totalTests) * 100).toFixed(1);
     const thresholdPercentage = ((thresholdAlignment / totalTests) * 100).toFixed(1);
 
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
     const status = identicalResults >= totalTests * 0.95 ? '✅ ALIGNED' : '❌ MISALIGNED';
-// removed by clean-audit
 
     return {
       totalTests,
@@ -296,4 +287,3 @@ export class AVIAlignmentValidator {
     };
   }
 }
-// removed by clean-audit

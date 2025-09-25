@@ -19,7 +19,6 @@ interface StorageStatistics {
 }
 
 @Component({
-// removed by clean-audit
   standalone: true,
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -278,8 +277,6 @@ export class IntegrationDemoComponent implements OnInit, OnDestroy {
       // Simulate storage operations
       const testClient = {
         id: 'test_001',
-// removed by clean-audit
-// removed by clean-audit
         phone: '5555555555',
         rfc: 'XAXX010101000',
         curp: 'XAXX010101HDFXXX01',
@@ -440,4 +437,3 @@ export class IntegrationDemoComponent implements OnInit, OnDestroy {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
-// removed by clean-audit

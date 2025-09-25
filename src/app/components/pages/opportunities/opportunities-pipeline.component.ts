@@ -296,12 +296,12 @@ interface PipelineStats {
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #48bb78, #38a169);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #38a169, #2f855a);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       transform: translateY(-1px);
     }
 
@@ -547,7 +547,7 @@ interface PipelineStats {
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #4299e1, #63b3ed);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       transition: width 0.3s ease;
     }
 
@@ -710,7 +710,6 @@ export class OpportunitiesPipelineComponent implements OnInit {
       this.calculateStats();
       
     } catch (error) {
-// removed by clean-audit
       this.toast.error('Error al cargar datos del pipeline');
     } finally {
       this.isLoading = false;
@@ -1017,4 +1016,3 @@ export class OpportunitiesPipelineComponent implements OnInit {
     return opportunity.id;
   }
 }
-// removed by clean-audit

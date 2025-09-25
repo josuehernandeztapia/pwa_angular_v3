@@ -104,7 +104,6 @@ export class AVIConfusionMatrixService {
     this.saveCalibrationData();
     this.updateCalibrationReport();
 
-// removed by clean-audit
 
     return of(newSample);
   }
@@ -262,7 +261,6 @@ export class AVIConfusionMatrixService {
 
     localStorage.removeItem(this.LOCAL_STORAGE_KEY);
 
-// removed by clean-audit
     return of(true);
   }
 
@@ -273,7 +271,6 @@ export class AVIConfusionMatrixService {
     const validSamples = samples.filter(this.validateSample);
 
     if (validSamples.length === 0) {
-// removed by clean-audit
       return of(false);
     }
 
@@ -281,7 +278,6 @@ export class AVIConfusionMatrixService {
     this.saveCalibrationData();
     this.updateCalibrationReport();
 
-// removed by clean-audit
     return of(true);
   }
 
@@ -447,7 +443,6 @@ export class AVIConfusionMatrixService {
       };
       localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -461,7 +456,6 @@ export class AVIConfusionMatrixService {
         }
       }
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -511,4 +505,3 @@ export class AVIConfusionMatrixService {
     };
   }
 }
-// removed by clean-audit

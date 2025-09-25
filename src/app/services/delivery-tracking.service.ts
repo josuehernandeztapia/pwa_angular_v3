@@ -104,7 +104,6 @@ export class DeliveryTrackingService {
       tap(commitment => {
         this.addCommitmentToState(commitment);
         this.persistCommitment(commitment);
-// removed by clean-audit
       }),
       catchError(error => {
         this.monitoringService.captureWarning(
@@ -137,7 +136,6 @@ export class DeliveryTrackingService {
         this.persistETAUpdate(update);
         this.lastETASync.set(new Date().toISOString());
 
-// removed by clean-audit
       }),
       catchError(error => {
         this.monitoringService.captureWarning(
@@ -245,7 +243,6 @@ export class DeliveryTrackingService {
         // Calculate ETA accuracy
         const etaAccuracy = this.calculateETAAccuracy(delivered);
 
-// removed by clean-audit
         const avgDeliveryTime = 35; // minutes
         const customerSatisfaction = 4.2; // 1-5 scale
         const rescheduleRate = commitments.length > 0 ? (rescheduled.length / commitments.length) * 100 : 0;
@@ -277,7 +274,6 @@ export class DeliveryTrackingService {
     ).subscribe({
       next: (activeDeliveries) => {
         if (activeDeliveries.length > 0) {
-// removed by clean-audit
 
           // Calculate tracking reliability based on sync success
           const reliability = this.calculateTrackingReliability();
@@ -321,7 +317,6 @@ export class DeliveryTrackingService {
         this.etaUpdates$.next(updates);
       }
 
-// removed by clean-audit
     } catch (error) {
       this.monitoringService.captureError(
         'DeliveryTrackingService',
@@ -420,7 +415,6 @@ export class DeliveryTrackingService {
 
   private syncCommitmentWithBFF(commitment: DeliveryCommitment): Observable<DeliveryCommitment> {
     if (!(environment.features as any)?.enableDeliveryBff) {
-// removed by clean-audit
     }
 
     return this.http.post<DeliveryCommitment>(`${this.BFF_BASE_URL}/commitments`, commitment).pipe(
@@ -431,7 +425,6 @@ export class DeliveryTrackingService {
 
   private syncETAWithBFF(eta: ETAUpdate): Observable<ETAUpdate> {
     if (!(environment.features as any)?.enableDeliveryBff) {
-// removed by clean-audit
     }
 
     return this.http.post<ETAUpdate>(`${this.BFF_BASE_URL}/eta-updates`, eta).pipe(
@@ -490,7 +483,6 @@ export class DeliveryTrackingService {
 
   private getRecentSyncAttempts(): Array<{ success: boolean; timestamp: string }> {
     // In a real implementation, this would track actual sync attempts
-// removed by clean-audit
     const now = new Date();
     const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
 
@@ -515,4 +507,3 @@ export class DeliveryTrackingService {
     return this.etaUpdates$.asObservable();
   }
 }
-// removed by clean-audit

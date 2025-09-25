@@ -20,7 +20,7 @@ import { Client, BusinessFlow } from '../../../models/types';
           <span class="current">{{ isEditMode ? 'Editar Cliente' : 'Nuevo Cliente' }}</span>
         </div>
         <h1 class="page-title">
-          {{ isEditMode ? '✏️ Editar Cliente' : '➕ Nuevo Cliente' }}
+          {{ isEditMode ? 'Editar Cliente' : 'Nuevo Cliente' }}
         </h1>
       </header>
 
@@ -165,7 +165,7 @@ import { Client, BusinessFlow } from '../../../models/types';
           </button>
           <button
             type="submit"
-            [disabled]="isLoading || clienteForm.invalid"
+            [disabled]="isLoading"
             class="btn-primary"
           >
             {{ isLoading ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Crear Cliente') }}
@@ -374,8 +374,8 @@ export class ClienteFormComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, CustomValidators.mexicanPhone]],
       rfc: ['', [CustomValidators.rfc]],
-      market: ['', [Validators.required]],
-      flow: ['', [Validators.required]],
+      market: ['aguascalientes', [Validators.required]],
+      flow: [BusinessFlow.VentaPlazo, [Validators.required]],
       notes: ['']
     });
   }
@@ -426,9 +426,9 @@ export class ClienteFormComponent implements OnInit {
     if (this.isEditMode && this.clientId) {
       this.apiService.updateClient(this.clientId, formData).subscribe({
         next: (client) => {
-          this.toast.success('Cliente actualizado correctamente');
+          this.toast.success('Cliente actualizado exitosamente');
           this.isLoading = false;
-          this.router.navigate(['/clientes']);
+          this.router.navigate(['/clientes', this.clientId]);
         },
         error: (error) => {
           this.toast.error('Error al actualizar el cliente');
@@ -438,7 +438,7 @@ export class ClienteFormComponent implements OnInit {
     } else {
       this.apiService.createClient(formData).subscribe({
         next: (client) => {
-          this.toast.success('Cliente creado correctamente');
+          this.toast.success('Cliente creado exitosamente');
           this.isLoading = false;
           this.router.navigate(['/clientes']);
         },

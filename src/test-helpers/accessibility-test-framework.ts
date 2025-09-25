@@ -60,9 +60,7 @@ export class AccessibilityTester {
         rules: []
       });
 
-// removed by clean-audit
     } catch (error) {
-// removed by clean-audit
       this.axeCore = this.createMockAxe();
     }
   }
@@ -77,8 +75,6 @@ export class AccessibilityTester {
   ): Promise<AccessibilityTestResult> {
     await this.initialize();
     
-// removed by clean-audit
-// removed by clean-audit
 
     try {
       const results = await this.axeCore.run(element as any, {
@@ -100,7 +96,6 @@ export class AccessibilityTester {
         component: componentName || 'unknown'
       };
     } catch (error) {
-// removed by clean-audit
       return this.createEmptyResult(componentName || 'unknown');
     }
   }
@@ -135,13 +130,13 @@ export class AccessibilityTester {
         component: testElement.tagName || 'UnknownElement'
       };
     } catch (error) {
-// removed by clean-audit
-      return this.createEmptyResult('HTMLElement');
+      const resolved = element instanceof HTMLElement ? element : (element as any)?.nativeElement;
+      const tag = resolved && resolved.tagName ? resolved.tagName : 'HTMLElement';
+      return this.createEmptyResult(tag);
     }
   }
 
   /**
-// removed by clean-audit
    */
   private static createMockAxe(): any {
     return {
@@ -218,6 +213,10 @@ export class AccessibilityTestUtils {
   static generateReport(results: AccessibilityTestResult[]): any {
     const totalViolations = results.reduce((sum, r) => sum + r.violations.length, 0);
     const totalPasses = results.reduce((sum, r) => sum + r.passes, 0);
+    const totalChecks = totalPasses + totalViolations;
+    const complianceScore = totalChecks > 0
+      ? Math.max(0, Math.min(100, Math.round((totalPasses / totalChecks) * 100)))
+      : 100;
     
     const violationsByImpact = {
       critical: 0,
@@ -237,7 +236,8 @@ export class AccessibilityTestUtils {
         totalComponents: results.length,
         totalViolations,
         totalPasses,
-        violationsByImpact
+        violationsByImpact,
+        complianceScore
       },
       results,
       timestamp: new Date().toISOString(),
@@ -316,19 +316,18 @@ export const setupAccessibilityTesting = () => {
  * Helper function for testing component accessibility
  */
 export const testComponentAccessibility = async <T>(
-// removed by clean-audit
+  fixture: ComponentFixture<T>,
   options: AccessibilityTestOptions = {}
-): Promise<void> => {
-// removed by clean-audit
-  
-  // Log results for debugging
-// removed by clean-audit
-  
-  // Fail test if critical violations found
-// removed by clean-audit
+): Promise<AccessibilityTestResult> => {
+  await AccessibilityTester.initialize();
+  fixture.detectChanges();
+  const element = fixture.nativeElement as HTMLElement;
+  const componentName = (fixture.componentInstance as any)?.constructor?.name || 'UnknownComponent';
+  const result = await AccessibilityTester.testComponent(element, componentName, options);
   if (AccessibilityTestUtils.hasCriticalViolations(result)) {
     fail(`Critical accessibility violations found in ${result.component}`);
   }
+  return result;
 };
 
 /**
@@ -342,7 +341,6 @@ export function AccessibilityTest(options: AccessibilityTestOptions = {}) {
       // Run original test
       const result = await method.apply(this, args);
       
-// removed by clean-audit
       if (args[0] && args[0].componentInstance) {
         await testComponentAccessibility(args[0], options);
       }
@@ -356,10 +354,21 @@ export function AccessibilityTest(options: AccessibilityTestOptions = {}) {
  * Quick accessibility test function for common use cases
  */
 export const quickAccessibilityTest = async <T>(
-// removed by clean-audit
+  fixture: ComponentFixture<T>,
   options: AccessibilityTestOptions = {}
 ): Promise<boolean> => {
-// removed by clean-audit
+  const result = await testComponentAccessibility(fixture, options);
   return !AccessibilityTestUtils.hasCriticalViolations(result);
 };
-// removed by clean-audit
+
+// Optional reporting helper expected by some specs
+(AccessibilityTester as any).generateAccessibilityReport = function(
+  results: AccessibilityTestResult[],
+  options: { projectName?: string } = {}
+) {
+  const base = AccessibilityTestUtils.generateReport(results);
+  return {
+    ...base,
+    projectName: options.projectName || 'Project'
+  };
+};

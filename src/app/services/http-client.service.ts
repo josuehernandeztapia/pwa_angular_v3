@@ -277,7 +277,9 @@ export class HttpClientService {
    */
   private handleSuccess<T>(response: ApiResponse<T>): void {
     if (response.success && response.message) {
-// removed by clean-audit
+      try {
+        console.log('API Success:', response.message);
+      } catch {}
     }
   }
 
@@ -338,7 +340,6 @@ export class HttpClientService {
       url: error.url || undefined
     };
 
-// removed by clean-audit
 
     if (showError) {
       this.toast.error(errorMessage);
@@ -371,4 +372,3 @@ export class HttpClientService {
   }
 }
 
-// removed by clean-audit

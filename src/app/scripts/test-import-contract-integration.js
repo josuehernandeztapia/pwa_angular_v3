@@ -1,14 +1,11 @@
 // Test de integración completa: Import Tracking → Vehicle Assignment → Contract Update
 // Valida el flujo end-to-end desde fabricación hasta contrato actualizado
 
-// removed by clean-audit
-// removed by clean-audit
 
 // Simulador integrado para testing
 class ImportContractIntegrationTestEngine {
   
   static testCompleteIntegrationFlow() {
-// removed by clean-audit
     
     const testCases = [
       {
@@ -139,50 +136,28 @@ class ImportContractIntegrationTestEngine {
     const totalTests = testCases.length;
 
     testCases.forEach((testCase, index) => {
-// removed by clean-audit
-// removed by clean-audit
       
       const result = this.executeIntegrationTest(testCase);
       
       if (result.success && result.actualResult === testCase.expectedResult) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
         passedTests++;
       } else {
-// removed by clean-audit
-// removed by clean-audit
       }
       
-// removed by clean-audit
     });
 
     // Resumen final
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
     if (passedTests === totalTests) {
-// removed by clean-audit
-// removed by clean-audit
     } else {
-// removed by clean-audit
     }
     
-// removed by clean-audit
   }
 
   static executeIntegrationTest(testCase) {
     try {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
       // PASO 1: Simular estado inicial
-// removed by clean-audit
       const initialValidation = this.validateInitialState(testCase.initialState);
       if (!initialValidation.valid) {
         return {
@@ -191,10 +166,8 @@ class ImportContractIntegrationTestEngine {
           error: initialValidation.reason
         };
       }
-// removed by clean-audit
 
       // PASO 2: Ejecutar asignación de vehículo
-// removed by clean-audit
       const vehicleAssignmentResult = this.executeVehicleAssignment(
         testCase.clientId, 
         testCase.vehicleAssignment
@@ -207,44 +180,34 @@ class ImportContractIntegrationTestEngine {
           error: vehicleAssignmentResult.error
         };
       }
-// removed by clean-audit
 
       // PASO 3: Actualizar import status
-// removed by clean-audit
       const updatedImportStatus = this.updateImportStatusWithVehicle(
         testCase.clientId,
         vehicleAssignmentResult.assignedUnit
       );
-// removed by clean-audit
 
       // PASO 4: Propagar a contratos
-// removed by clean-audit
       const contractUpdateResults = this.propagateToContracts(
         testCase.clientId,
         testCase.initialState.existingContracts,
         vehicleAssignmentResult.assignedUnit
       );
       
-// removed by clean-audit
       if (contractUpdateResults.warnings.length > 0) {
         contractUpdateResults.warnings.forEach(warning => {
-// removed by clean-audit
         });
       }
 
       // PASO 5: Validar consistencia final
-// removed by clean-audit
       const consistencyValidation = this.validateFinalConsistency(
         updatedImportStatus,
         contractUpdateResults.updatedContracts
       );
       
       if (consistencyValidation.consistent) {
-// removed by clean-audit
       } else {
-// removed by clean-audit
         consistencyValidation.issues.forEach(issue => {
-// removed by clean-audit
         });
       }
 
@@ -270,7 +233,6 @@ class ImportContractIntegrationTestEngine {
       };
 
     } catch (error) {
-// removed by clean-audit
       return {
         success: false,
         actualResult: 'ERROR_UNEXPECTED',
@@ -328,8 +290,6 @@ class ImportContractIntegrationTestEngine {
       lastSyncDate: new Date()
     };
 
-// removed by clean-audit
-// removed by clean-audit
     
     return updatedImportStatus;
   }
@@ -368,7 +328,6 @@ class ImportContractIntegrationTestEngine {
         updatedContracts.push(updatedContract);
         updatedCount++;
         
-// removed by clean-audit
       } else {
         warnings.push(`Contrato ${contract.id} ya tenía vehículo asignado`);
       }
@@ -420,4 +379,3 @@ class ImportContractIntegrationTestEngine {
 
 // Ejecutar los tests de integración
 ImportContractIntegrationTestEngine.testCompleteIntegrationFlow();
-// removed by clean-audit

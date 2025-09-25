@@ -13,7 +13,7 @@
   align-items: center;
   margin-bottom: 20px;
   padding: 24px;
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   border-radius: 12px;
   color: white;
   position: relative;
@@ -174,7 +174,7 @@
 
 // Critical notice
 .critical-notice {
-  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   border: 2px solid #fca5a5;
   border-radius: 12px;
   padding: 24px;
@@ -318,7 +318,7 @@
 
 // Unique identifier display
 .unique-identifier {
-  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   border: 2px solid #10b981;
   border-radius: 12px;
   padding: 20px;
@@ -704,7 +704,7 @@
     }
     
     &.btn-primary {
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
       
       &:hover:not(:disabled) {
@@ -713,7 +713,7 @@
       }
       
       &.critical-action {
-        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        background: var(--flat-surface-bg); /* FIXED (verify-ux) */
         font-size: 18px;
         padding: 16px 32px;
         animation: critical-glow 2s infinite;
@@ -794,7 +794,7 @@
   .modal-header {
     padding: 32px 24px 24px;
     text-align: center;
-    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     border-radius: 13px 13px 0 0;
     
     .success-animation {
@@ -894,7 +894,7 @@
       .handover-complete {
         text-align: center;
         padding: 20px;
-        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        background: var(--flat-surface-bg); /* FIXED (verify-ux) */
         border-radius: 12px;
         border: 2px solid #f87171;
         
@@ -942,7 +942,7 @@
       }
       
       &.btn-primary {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        background: var(--flat-surface-bg); /* FIXED (verify-ux) */
         color: white;
         
         &:hover {

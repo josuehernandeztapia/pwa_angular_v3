@@ -182,7 +182,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private showErrorToast(message: string): void {
     // This would typically integrate with a toast/notification service
-// removed by clean-audit
     
     // Simple fallback notification
     if ('Notification' in window && Notification.permission === 'granted') {
@@ -193,4 +192,3 @@ export class AuthInterceptor implements HttpInterceptor {
     }
   }
 }
-// removed by clean-audit

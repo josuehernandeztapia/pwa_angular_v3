@@ -380,8 +380,6 @@ export class BusinessRulesService {
       errors.push('Todos los miembros del grupo deben pertenecer a la misma ruta');
     }
 
-// removed by clean-audit
-// removed by clean-audit
     const groupSize = 5; // This should come from: this.apiService.getGroupSize(client.groupId)
     if (groupSize < 5) {
       errors.push(`Grupo incompleto: ${groupSize} miembros. Mínimo requerido: 5 miembros`);
@@ -611,4 +609,3 @@ export class BusinessRulesService {
   }
 }
 
-// removed by clean-audit

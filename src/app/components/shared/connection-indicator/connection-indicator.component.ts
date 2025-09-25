@@ -115,16 +115,16 @@ import { OfflineService } from '../../../services/offline.service';
         </div>
 
         <div class="flex-1">
-          <div class="text-sm font-medium text-gray-900 dark:text-white">
+          <div class="text-sm font-medium text-neutral-100 dark:text-white">
             {{ toastTitle() }}
           </div>
-          <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+          <div class="text-xs text-neutral-300 dark:text-neutral-400 mt-1">
             {{ toastMessage() }}
           </div>
         </div>
 
         <button
-          class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+          class="text-neutral-100 hover:text-neutral-300 dark:hover:text-neutral-300"
           (click)="dismissToast()"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,7 +176,7 @@ export class ConnectionIndicatorComponent {
       case 'poor':
         return 'bg-orange-100 text-orange-800 border border-orange-200 dark:bg-orange-900/20 dark:text-orange-300 dark:border-orange-800';
       default:
-        return 'bg-gray-100 text-gray-800 border border-gray-200 dark:bg-gray-900/20 dark:text-gray-300 dark:border-gray-800';
+        return 'bg-neutral-100 text-neutral-100 border border-neutral-200 dark:bg-neutral-900/20 dark:text-neutral-300 dark:border-neutral-800';
     }
   });
 
@@ -204,8 +204,8 @@ export class ConnectionIndicatorComponent {
 
   public readonly toastClasses = computed(() => {
     return this.isOnline()
-      ? 'bg-white dark:bg-gray-800 border border-green-200 dark:border-green-800 shadow-lg'
-      : 'bg-white dark:bg-gray-800 border border-red-200 dark:border-red-800 shadow-lg';
+      ? 'bg-white dark:bg-neutral-800 border border-green-200 dark:border-green-800 shadow-lg'
+      : 'bg-white dark:bg-neutral-800 border border-red-200 dark:border-red-800 shadow-lg';
   });
 
   public readonly toastTitle = computed(() => {

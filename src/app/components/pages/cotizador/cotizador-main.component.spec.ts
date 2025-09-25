@@ -1,9 +1,10 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CotizadorMainComponent } from './cotizador-main.component';
 import { ToastService } from '../../../services/toast.service';
 
 describe('CotizadorMainComponent – PMT and Amortization', () => {
   let component: CotizadorMainComponent;
+  let fixture: ComponentFixture<CotizadorMainComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -13,8 +14,9 @@ describe('CotizadorMainComponent – PMT and Amortization', () => {
       ]
     }).compileComponents();
 
-// removed by clean-audit
-// removed by clean-audit
+    fixture = TestBed.createComponent(CotizadorMainComponent);
+    component = fixture.componentInstance;
+
     // Minimal pkg to compute prices
     (component as any).pkg = {
       rate: 0.255, // 25.5% anual
@@ -78,4 +80,3 @@ describe('CotizadorMainComponent – PMT and Amortization', () => {
 });
 
 
-// removed by clean-audit

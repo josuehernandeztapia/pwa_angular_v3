@@ -51,7 +51,6 @@ export class CasesService {
     return this.http.post<PresignResponse>(`${this.base}/cases/${caseId}/attachments/presign`, body);
   }
 
-// removed by clean-audit
   // For real S3, replace with actual form POST to url with fields + file
   register(
     caseId: string,
@@ -118,4 +117,3 @@ export class CasesService {
   }
 }
 
-// removed by clean-audit

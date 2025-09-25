@@ -92,7 +92,6 @@ export class DashboardService {
   }
 
   /**
-// removed by clean-audit
    */
   private getMockDashboardStats(market?: Market): DashboardStats {
     const baseStats: DashboardStats = {
@@ -141,7 +140,6 @@ export class DashboardService {
   }
 
   /**
-// removed by clean-audit
    */
   private getMockActivityFeed(): ActivityFeedItem[] {
     const now = new Date();
@@ -201,7 +199,6 @@ export class DashboardService {
   }
 
   /**
-// removed by clean-audit
    */
   private simulateRealTimeActivity(): void {
     if (!environment.features.enableMockData) return;
@@ -214,7 +211,6 @@ export class DashboardService {
           type: 'payment_received' as const,
           timestamp: new Date(),
           message: 'Nuevo pago recibido',
-// removed by clean-audit
           amount: Math.floor(Math.random() * 100000) + 50000,
           icon: '💰'
         },
@@ -223,7 +219,6 @@ export class DashboardService {
           type: 'doc_approved' as const,
           timestamp: new Date(),
           message: 'Documento aprobado automáticamente',
-// removed by clean-audit
           icon: '✅'
         }
       ];
@@ -233,4 +228,3 @@ export class DashboardService {
     }, 120000); // Every 2 minutes
   }
 }
-// removed by clean-audit

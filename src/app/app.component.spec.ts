@@ -1,5 +1,6 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, importProvidersFrom } from '@angular/core';
+import { ComponentFixture, fakeAsync, TestBed, tick, discardPeriodicTasks, flush } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject } from 'rxjs';
@@ -7,6 +8,7 @@ import { AppComponent } from './app.component';
 import { MediaPermissionsService } from './services/media-permissions.service';
 import { SwUpdateService } from './services/sw-update.service';
 import * as designTokens from './styles/design-tokens';
+import { LucideAngularModule, HelpCircle, Mic, Activity, Settings, BarChart, Calculator, LineChart, FileText, Truck, Shield } from 'lucide-angular';
 
 const theme = designTokens.theme;
 
@@ -29,6 +31,9 @@ class SwUpdateServiceStub {
 
 describe('AppComponent', () => {
   let router: Router;
+  let fixture: ComponentFixture<AppComponent> | undefined;
+  let component: AppComponent | undefined;
+  let compiled: HTMLElement | undefined;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -42,9 +47,10 @@ describe('AppComponent', () => {
       ],
       providers: [
         { provide: MediaPermissionsService, useClass: MediaPermissionsStub },
-        { provide: SwUpdateService, useClass: SwUpdateServiceStub }
+        { provide: SwUpdateService, useClass: SwUpdateServiceStub },
+        importProvidersFrom(LucideAngularModule.pick({ HelpCircle, Mic, Activity, Settings, BarChart, Calculator, LineChart, FileText, Truck, Shield }))
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     router = TestBed.inject(Router);
@@ -54,12 +60,11 @@ describe('AppComponent', () => {
     const initSpy = spyOn(theme, 'initFromStorage');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-// removed by clean-audit
-// removed by clean-audit
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
-// removed by clean-audit
     (expect(initSpy) as any).toHaveBeenCalled();
-// removed by clean-audit
   });
 
   it('should toggle dark mode using design tokens API', () => {
@@ -68,14 +73,14 @@ describe('AppComponent', () => {
     const toggleSpy = spyOn(theme, 'toggle');
     spyOn(theme, 'isDark').and.returnValues(false, true);
 
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
-    component.toggleDarkMode();
+    component!.toggleDarkMode();
 
     (expect(toggleSpy) as any).toHaveBeenCalled();
-    (expect(component.isDarkMode) as any).toBe(true);
+    (expect(component!.isDarkMode) as any).toBe(true);
   });
 
   it('should allow explicit dark mode setting', () => {
@@ -83,43 +88,46 @@ describe('AppComponent', () => {
     const setDarkSpy = spyOn(theme, 'setDark');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
-    component.setDarkMode(true);
+    component!.setDarkMode(true);
 
     (expect(setDarkSpy) as any).toHaveBeenCalledWith(true);
-    (expect(component.isDarkMode) as any).toBe(true);
+    (expect(component!.isDarkMode) as any).toBe(true);
   });
 
   it('should render accessibility landmarks', () => {
     spyOn(theme, 'initFromStorage');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-// removed by clean-audit
-// removed by clean-audit
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    compiled = fixture.nativeElement as HTMLElement;
 
-// removed by clean-audit
-    (expect(compiled.querySelector('a.skip-link')) as any).toBeTruthy();
-    (expect(compiled.querySelector('main[role="main"]')) as any).toBeTruthy();
-    (expect(compiled.querySelector('aside nav')) as any).toBeTruthy();
+    (expect(compiled!.querySelector('a.skip-link')) as any).toBeTruthy();
+    (expect(compiled!.querySelector('main[role="main"]')) as any).toBeTruthy();
+    (expect(compiled!.querySelector('aside nav')) as any).toBeTruthy();
   });
 
   it('should render router content inside router-outlet', fakeAsync(() => {
     spyOn(theme, 'initFromStorage');
     spyOn(theme, 'isDark').and.returnValue(false);
 
-// removed by clean-audit
-// removed by clean-audit
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
     router.navigateByUrl('dashboard');
     tick();
-// removed by clean-audit
+    fixture.detectChanges();
+    compiled = fixture.nativeElement as HTMLElement;
 
-// removed by clean-audit
-    (expect(compiled.querySelector('[data-testid="dummy"]')?.textContent) as any).toContain('Dummy');
+    (expect(compiled!.querySelector('[data-testid="dummy"]')?.textContent) as any).toContain('Dummy');
+    flush();
+    discardPeriodicTasks();
   }));
 });
 
-// removed by clean-audit

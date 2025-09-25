@@ -2,14 +2,11 @@
 // Valida: Fase 6 → Fase 7 → Fase 8 → vehicle.delivered → Post-Sales activo
 // Identificación: VIN + PLACA (sistema robusto)
 
-// removed by clean-audit
-// removed by clean-audit
 
 // Simulador completo del flujo post-venta
 class PostSalesFlowTestEngine {
   
   static testCompletePostSalesFlow() {
-// removed by clean-audit
     
     const testCases = [
       {
@@ -187,59 +184,32 @@ class PostSalesFlowTestEngine {
     const totalTests = testCases.length;
 
     testCases.forEach((testCase, index) => {
-// removed by clean-audit
-// removed by clean-audit
       
       const result = this.executePostSalesFlow(testCase);
       
       if (result.success && result.actualResult === testCase.expectedResult) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
         passedTests++;
       } else {
-// removed by clean-audit
-// removed by clean-audit
         if (result.failedPhase) {
-// removed by clean-audit
         }
       }
       
-// removed by clean-audit
     });
 
     // Resumen final
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
     if (passedTests === totalTests) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     } else {
-// removed by clean-audit
     }
     
-// removed by clean-audit
   }
 
   static executePostSalesFlow(testCase) {
     try {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
       const uniqueIdentifier = `${testCase.vehicleData.vin}+${testCase.platesData.numeroPlacas}`;
-// removed by clean-audit
 
       // FASE 6: ENTREGA
-// removed by clean-audit
       const deliveryResult = this.executeDeliveryPhase(testCase.clientId, testCase.deliveryData);
       if (!deliveryResult.success) {
         return {
@@ -249,10 +219,8 @@ class PostSalesFlowTestEngine {
           failedPhase: 'Fase 6 - Entrega'
         };
       }
-// removed by clean-audit
 
       // FASE 7: DOCUMENTOS
-// removed by clean-audit
       const documentsResult = this.executeDocumentsPhase(testCase.clientId, testCase.legalDocuments);
       if (!documentsResult.success) {
         return {
@@ -262,10 +230,8 @@ class PostSalesFlowTestEngine {
           failedPhase: 'Fase 7 - Documentos'
         };
       }
-// removed by clean-audit
 
       // FASE 8: PLACAS (CRÍTICA - DISPARA HANDOVER)
-// removed by clean-audit
       const platesResult = this.executePlatesPhase(testCase.clientId, testCase.platesData);
       if (!platesResult.success) {
         return {
@@ -275,10 +241,8 @@ class PostSalesFlowTestEngine {
           failedPhase: 'Fase 8 - Placas'
         };
       }
-// removed by clean-audit
 
       // EVENTO vehicle.delivered
-// removed by clean-audit
       const eventResult = this.triggerVehicleDeliveredEvent(testCase);
       if (!eventResult.success) {
         return {
@@ -288,31 +252,20 @@ class PostSalesFlowTestEngine {
           failedPhase: 'Vehicle Delivered Event'
         };
       }
-// removed by clean-audit
 
       // POST-SALES RECORD CREATION
-// removed by clean-audit
       const postSalesRecord = this.createPostSalesRecord(uniqueIdentifier, testCase);
-// removed by clean-audit
 
       // RECORDATORIOS Y INTEGRACIONES
-// removed by clean-audit
       const integrationsResult = this.setupPostSalesIntegrations(postSalesRecord);
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
 
       // VALIDACIÓN FINAL
-// removed by clean-audit
       const finalValidation = this.validateCompleteFlow(testCase, postSalesRecord);
       
       if (!finalValidation.consistent) {
-// removed by clean-audit
         finalValidation.issues.forEach(issue => {
-// removed by clean-audit
         });
       } else {
-// removed by clean-audit
       }
 
       // Determinar resultado final
@@ -332,7 +285,6 @@ class PostSalesFlowTestEngine {
       };
 
     } catch (error) {
-// removed by clean-audit
       return {
         success: false,
         actualResult: 'ERROR_UNEXPECTED',
@@ -344,8 +296,6 @@ class PostSalesFlowTestEngine {
   // Métodos de ejecución de fases
 
   static executeDeliveryPhase(clientId, deliveryData) {
-// removed by clean-audit
-// removed by clean-audit
     
     // Simular validaciones de entrega
     if (deliveryData.odometroEntrega < 0 || deliveryData.odometroEntrega > 999999) {
@@ -360,8 +310,6 @@ class PostSalesFlowTestEngine {
   }
 
   static executeDocumentsPhase(clientId, legalDocuments) {
-// removed by clean-audit
-// removed by clean-audit
     
     // Simular validaciones documentales
     if (!legalDocuments.factura || !legalDocuments.polizaSeguro) {
@@ -376,8 +324,6 @@ class PostSalesFlowTestEngine {
   }
 
   static executePlatesPhase(clientId, platesData) {
-// removed by clean-audit
-// removed by clean-audit
     
     // Simular validaciones de placas
     const placaPattern = /^[A-Z]{3}-\d{3}-[A-Z]+$/;
@@ -389,7 +335,6 @@ class PostSalesFlowTestEngine {
       return { success: false, error: 'Tarjeta de circulación requerida' };
     }
 
-// removed by clean-audit
     return { success: true, triggersHandover: true };
   }
 
@@ -427,7 +372,6 @@ class PostSalesFlowTestEngine {
       }
     };
 
-// removed by clean-audit
     
     // Simular envío a API
     return { 
@@ -455,18 +399,12 @@ class PostSalesFlowTestEngine {
       warrantyEnd: new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)
     };
 
-// removed by clean-audit
-// removed by clean-audit
     
     return record;
   }
 
   static setupPostSalesIntegrations(postSalesRecord) {
     // Simular setup de integraciones
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
     return { success: true };
   }
@@ -508,4 +446,3 @@ class PostSalesFlowTestEngine {
 
 // Ejecutar los tests de flujo completo post-venta
 PostSalesFlowTestEngine.testCompletePostSalesFlow();
-// removed by clean-audit

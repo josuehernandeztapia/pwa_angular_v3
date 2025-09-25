@@ -463,7 +463,7 @@ import { Client } from '../../../models/types';
     }
 
     .eligibility-banner {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 12px;
       padding: 20px;
       margin-bottom: 24px;
@@ -786,7 +786,7 @@ import { Client } from '../../../models/types';
     .progress-fill {
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, #06d6a0, #10b981);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       animation: progress-fill 3s ease-in-out infinite;
     }
 
@@ -1000,7 +1000,6 @@ export class ProtectionRealComponent implements OnInit, OnDestroy {
     effect(() => {
       const plan = this.currentPlan();
       if (plan) {
-// removed by clean-audit
       }
     });
   }
@@ -1013,7 +1012,6 @@ export class ProtectionRealComponent implements OnInit, OnDestroy {
     }
 
     // Set up permissions (this would come from auth service)
-// removed by clean-audit
   }
 
   ngOnDestroy(): void {
@@ -1032,7 +1030,6 @@ export class ProtectionRealComponent implements OnInit, OnDestroy {
   simulateScenarios(): void {
     if (this.contractId || this.client?.id) {
       const id = this.contractId || `contract-${this.client!.id}`;
-// removed by clean-audit
       const currentMonth = 12;
       this.protectionState.simulateScenarios(id, currentMonth, {
         triggerReason: 'Manual request from client'
@@ -1107,7 +1104,6 @@ export class ProtectionRealComponent implements OnInit, OnDestroy {
         this.viewNewSchedule();
         break;
       default:
-// removed by clean-audit
     }
   }
 
@@ -1180,4 +1176,3 @@ export class ProtectionRealComponent implements OnInit, OnDestroy {
     return payment.month;
   }
 }
-// removed by clean-audit

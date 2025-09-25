@@ -229,7 +229,6 @@ export class TandaColectivaComponent implements OnInit, OnDestroy, AfterViewInit
 
       this.simulationResult = this.simuladorEngine.generateEdoMexCollectiveScenario(config);
 
-// removed by clean-audit
       this.simulationResult.scenario.monthsToFirstAward = Math.ceil(values.unitPrice / this.simulationResult.scenario.monthlyContribution);
       this.simulationResult.scenario.monthsToFullDelivery = this.simulationResult.scenario.monthsToFirstAward * values.memberCount;
 
@@ -354,4 +353,3 @@ export class TandaColectivaComponent implements OnInit, OnDestroy, AfterViewInit
       });
   }
 }
-// removed by clean-audit

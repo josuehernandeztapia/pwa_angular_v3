@@ -171,7 +171,7 @@ interface NavigationItem {
       left: 0;
       height: 100vh;
       width: 280px;
-      background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
       transition: width 0.3s ease;
       z-index: 1000;
@@ -333,7 +333,7 @@ interface NavigationItem {
     .user-avatar {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, #4299e1, #3182ce);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -366,7 +366,7 @@ interface NavigationItem {
 
     .btn-nueva-oportunidad {
       width: 100%;
-      background: linear-gradient(135deg, #06d6a0, #059669);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border: none;
       color: white;
       padding: 16px;
@@ -385,7 +385,7 @@ interface NavigationItem {
     .btn-nueva-oportunidad:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(6, 214, 160, 0.4);
-      background: linear-gradient(135deg, #059669, #047857);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .btn-nueva-oportunidad.collapsed {
@@ -676,7 +676,6 @@ export class NavigationComponent implements OnInit {
     try {
       await this.notificationService.initializeNotifications();
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -729,12 +728,10 @@ export class NavigationComponent implements OnInit {
   }
 
   showHelp() {
-// removed by clean-audit
     // Implement help functionality
   }
 
   showSettings() {
-// removed by clean-audit
     // Navigate to settings or show modal
   }
 
@@ -759,4 +756,3 @@ export class NavigationComponent implements OnInit {
   }
 }
 
-// removed by clean-audit

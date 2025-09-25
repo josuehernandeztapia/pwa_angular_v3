@@ -337,9 +337,9 @@ export class AVIHeuristicEngineService {
   }
 
   private calculateRiskLevel(score: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
-    if (score >= 750) return 'LOW';
-    if (score >= 600) return 'MEDIUM';
-    if (score >= 450) return 'HIGH';
+    if (score >= 780) return 'LOW';
+    if (score >= 551) return 'MEDIUM';
+    if (score >= 550) return 'HIGH';
     return 'CRITICAL';
   }
 

@@ -433,7 +433,6 @@ interface AmortizationRow {
                 </div>
               </div>
 
-// removed by clean-audit
               <div *ngIf="monthlyPayment > 0 && !isVentaDirecta" class="ui-alert ui-alert-info">
                 <div class="flex items-start space-x-3">
                   <div class="flex-shrink-0 text-2xl">🛡️</div>
@@ -991,4 +990,3 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
   }
 }
 
-// removed by clean-audit

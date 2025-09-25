@@ -30,7 +30,6 @@ export class ErrorHandlerService implements ErrorHandler {
    * Global error handler implementation
    */
   handleError(error: any): void {
-// removed by clean-audit
 
     let errorMessage = 'An unexpected error occurred';
     let errorType: AppError['type'] = 'error';
@@ -307,7 +306,6 @@ export class ErrorHandlerService implements ErrorHandler {
   private logToExternalService(error: AppError): void {
     // In production, send errors to external logging service
     if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-// removed by clean-audit
       
       // Example: Send to logging service
       // fetch('/api/logs', {
@@ -325,4 +323,3 @@ export class ErrorHandlerService implements ErrorHandler {
     }
   }
 }
-// removed by clean-audit

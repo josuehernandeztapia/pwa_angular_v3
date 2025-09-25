@@ -409,14 +409,9 @@ export function spikeTest() {
 
 // Setup function - runs once at the start
 export function setup() {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   
   // Warm-up request to ensure services are ready
   const warmupResponse = http.get(`${BASE_URL}/`);
-// removed by clean-audit
   
   return { 
     startTime: new Date(),
@@ -429,7 +424,4 @@ export function setup() {
 export function teardown(data) {
   const endTime = new Date();
   const duration = (endTime - data.startTime) / 1000;
-// removed by clean-audit
-// removed by clean-audit
 }
-// removed by clean-audit

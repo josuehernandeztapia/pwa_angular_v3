@@ -150,12 +150,12 @@ import { RouterModule } from '@angular/router';
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #4299e1, #3182ce);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #3182ce, #2c5282);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       transform: translateY(-1px);
     }
 
@@ -385,15 +385,11 @@ export class ExpedientesComponent implements OnInit {
   }
 
   newExpediente(): void {
-// removed by clean-audit
   }
 
   viewExpediente(id: string): void {
-// removed by clean-audit
   }
 
   uploadDocument(expedienteId: string): void {
-// removed by clean-audit
   }
 }
-// removed by clean-audit

@@ -177,7 +177,6 @@ export class AgsAhorroComponent implements OnInit, AfterViewInit {
       this.toast.success('PDF de simulación descargado');
     }).catch(error => {
       this.toast.error('Error al generar PDF');
-// removed by clean-audit
     });
   }
 
@@ -429,4 +428,3 @@ export class AgsAhorroComponent implements OnInit, AfterViewInit {
   }
 }
 
-// removed by clean-audit

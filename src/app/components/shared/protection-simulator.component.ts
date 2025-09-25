@@ -23,9 +23,9 @@ interface ProtectionScenarioUI extends ProtectionScenario {
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   template: `
-    <div class="protection-simulator bg-white rounded-xl shadow-lg border border-gray-200">
+    <div class="protection-simulator bg-white rounded-xl shadow-lg border border-neutral-200">
       <!-- Header -->
-      <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-t-xl p-6">
+      <div class="bg-neutral-900 text-white rounded-t-xl p-6">
         <div class="flex justify-between items-start">
           <div>
             <h2 class="text-2xl font-bold mb-2">🛡️ Protección para Conductores</h2>
@@ -41,17 +41,17 @@ interface ProtectionScenarioUI extends ProtectionScenario {
       <div class="p-6">
         <!-- Configuration Form -->
         <div class="mb-6">
-          <h3 class="text-lg font-semibold text-gray-800 mb-4">Configura tu situación:</h3>
+          <h3 class="text-lg font-semibold text-neutral-100 mb-4">Configura tu situación:</h3>
           
           <form [formGroup]="configForm" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="block text-sm font-medium text-neutral-100 mb-2">
                   Meses que necesitas protección *
                 </label>
                 <select formControlName="monthsAffected" 
                         (change)="calculateScenarios()"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        class="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                   <option value="">-- Seleccionar --</option>
                   <option value="1">1 mes</option>
                   <option value="2">2 meses</option>
@@ -61,8 +61,8 @@ interface ProtectionScenarioUI extends ProtectionScenario {
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de dificultad</label>
-                <select formControlName="difficultyType" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                <label class="block text-sm font-medium text-neutral-100 mb-2">Tipo de dificultad</label>
+                <select formControlName="difficultyType" class="w-full px-3 py-2 border border-neutral-300 rounded-lg">
                   <option value="temporary">Dificultad temporal (enfermedad)</option>
                   <option value="economic">Situación económica difícil</option>
                   <option value="work_loss">Pérdida de trabajo</option>
@@ -75,7 +75,7 @@ interface ProtectionScenarioUI extends ProtectionScenario {
               <button type="button" 
                       (click)="calculateScenarios()"
                       [disabled]="!configForm.get('monthsAffected')?.value || isCalculating"
-                      class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-gray-400">
+                      class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-neutral-400">
                 {{ isCalculating ? '🔄 Calculando...' : '🔍 Buscar Opciones' }}
               </button>
             </div>
@@ -84,42 +84,42 @@ interface ProtectionScenarioUI extends ProtectionScenario {
 
         <!-- Scenarios Results -->
         <div *ngIf="scenarios.length > 0 && !isCalculating" class="space-y-4">
-          <h3 class="text-lg font-semibold text-gray-800 mb-4">💡 Opciones Disponibles:</h3>
+          <h3 class="text-lg font-semibold text-neutral-100 mb-4">💡 Opciones Disponibles:</h3>
 
           <div class="grid gap-4">
             <div *ngFor="let scenario of scenarios" 
                  (click)="selectScenario(scenario)"
                  [class]="'cursor-pointer border-2 rounded-xl p-6 transition-all ' + 
-                          (selectedScenario?.type === scenario.type ? 'border-blue-500 bg-blue-50' : 'border-gray-200') +
+                          (selectedScenario?.type === scenario.type ? 'border-blue-500 bg-blue-50' : 'border-neutral-200') +
                           (scenario.recommended ? ' ring-2 ring-green-400' : '')">
               
               <div class="flex justify-between items-start mb-4">
                 <div>
-                  <h4 class="text-lg font-semibold text-gray-800">
+                  <h4 class="text-lg font-semibold text-neutral-100">
                     {{ scenario.title }}
                     <span *ngIf="scenario.recommended" 
                           class="ml-2 px-2 py-1 text-xs font-bold bg-green-100 text-green-800 rounded-full">
                       ⭐ RECOMENDADO
                     </span>
                   </h4>
-                  <p class="text-gray-600 text-sm">{{ scenario.description }}</p>
+                  <p class="text-neutral-100 text-sm">{{ scenario.description }}</p>
                 </div>
                 <div class="text-right">
                   <div class="text-2xl font-bold text-green-600">{{ formatCurrency(scenario.savings) }}</div>
-                  <div class="text-xs text-gray-500">de ahorro</div>
+                  <div class="text-xs text-neutral-400">de ahorro</div>
                 </div>
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <h5 class="font-medium text-green-700 mb-2">✅ Beneficios:</h5>
-                  <ul class="text-sm text-gray-600 space-y-1">
+                  <ul class="text-sm text-neutral-300 space-y-1">
                     <li *ngFor="let benefit of scenario.benefits">• {{ benefit }}</li>
                   </ul>
                 </div>
                 <div>
                   <h5 class="font-medium text-orange-700 mb-2">⚠️ Consideraciones:</h5>
-                  <ul class="text-sm text-gray-600 space-y-1">
+                  <ul class="text-sm text-neutral-300 space-y-1">
                     <li *ngFor="let drawback of scenario.drawbacks">• {{ drawback }}</li>
                   </ul>
                 </div>
@@ -129,10 +129,10 @@ interface ProtectionScenarioUI extends ProtectionScenario {
         </div>
 
         <!-- Action Buttons -->
-        <div *ngIf="scenarios.length > 0" class="mt-6 pt-6 border-t border-gray-200">
+        <div *ngIf="scenarios.length > 0" class="mt-6 pt-6 border-t border-neutral-200">
           <div class="flex gap-4">
             <button (click)="onClose.emit()" 
-                    class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg">
+                    class="flex-1 px-6 py-3 border border-neutral-300 text-neutral-100 font-medium rounded-lg">
               Cancelar
             </button>
             <button (click)="shareWhatsApp()" class="px-6 py-3 bg-green-600 text-white rounded-lg">
@@ -140,7 +140,7 @@ interface ProtectionScenarioUI extends ProtectionScenario {
             </button>
             <button (click)="applyProtection()" 
                     [disabled]="!selectedScenario"
-                    class="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg disabled:bg-gray-400">
+                    class="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg disabled:bg-neutral-400">
               ✅ Aplicar Protección
             </button>
           </div>

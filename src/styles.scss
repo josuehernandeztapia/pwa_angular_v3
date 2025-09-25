@@ -28,10 +28,20 @@
 
 /* ===== CSS VARIABLES (Common tokens) ===== */
 :root {
+  --neutral-950: #0b0f14; /* FIXED (verify-ux) */
+  --neutral-900: #111827; /* FIXED (verify-ux) */
+  --neutral-800: #1f2937; /* FIXED (verify-ux) */
+  --neutral-700: #374151; /* FIXED (verify-ux) */
+  --neutral-600: #4b5563; /* FIXED (verify-ux) */
+  --neutral-500: #6b7280; /* FIXED (verify-ux) */
+  --neutral-400: #9ca3af; /* FIXED (verify-ux) */
+  --neutral-300: #d1d5db; /* FIXED (verify-ux) */
+  --neutral-200: #e5e7eb; /* FIXED (verify-ux) */
+  --neutral-100: #e5e7eb; /* FIXED (verify-ux) */
+  --flat-surface-bg: var(--neutral-900); /* FIXED (verify-ux) */
   --font-scale: 1;
   /* Palette */
-  --bg-gray-950: #0b0f14;
-  --bg-gray-100: #e5e7eb;
+  /* FIXED (verify-ux) removed legacy gray tokens */
 
   --primary-cyan-300: #67e8f9;
   --primary-cyan-400: #22d3ee;
@@ -50,9 +60,8 @@
   --error-600: #dc2626;
 
   /* Surfaces */
-  --glass-bg: rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-backdrop: blur(10px) saturate(140%);
+  /* FIXED (verify-ux): removed frosted tokens */
+  --flat-surface-bg: var(--neutral-900);
   --command-center-bg: radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,0.07), transparent), radial-gradient(1000px 480px at 100% 0%, rgba(255,193,7,0.06), transparent), linear-gradient(180deg, #0b0f14 0%, #0b0f14 100%);
 
   /* Shadows */
@@ -114,8 +123,8 @@ html {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--bg-gray-950);
-  color: var(--bg-gray-100);
+  background: var(--neutral-950);
+  color: var(--neutral-100);
   line-height: 1.6;
   font-size: calc(16px * var(--font-scale));
   -webkit-font-smoothing: antialiased;
@@ -154,7 +163,7 @@ html.hc body { background: var(--bg); color: var(--text); }
 
 .btn-accent {
   background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
-  color: var(--bg-gray-950);
+  color: var(--neutral-950);
   border: none;
   padding: var(--space-button-padding);
   border-radius: var(--radius-md);
@@ -172,10 +181,8 @@ html.hc body { background: var(--bg); color: var(--text); }
 
 /* Premium cards */
 .premium-card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: var(--glass-backdrop);
-  -webkit-backdrop-filter: var(--glass-backdrop);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
+  border: 1px solid var(--neutral-800); /* FIXED (verify-ux) */
   border-radius: 16px;
   padding: 24px;
   box-shadow: var(--shadow-card);
@@ -198,7 +205,7 @@ html.hc body { background: var(--bg); color: var(--text); }
 .premium-input {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--bg-gray-100);
+  color: var(--neutral-100);
   padding: 14px 16px;
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
@@ -227,7 +234,7 @@ html.hc body { background: var(--bg); color: var(--text); }
 }
 .status-warning { 
   background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
-  color: var(--bg-gray-950);
+  color: var(--neutral-950);
 }
 .status-critical { 
   background: linear-gradient(135deg, var(--error-500), var(--error-600));
@@ -271,7 +278,7 @@ html.hc body { background: var(--bg); color: var(--text); }
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-gray-800);
+  background: var(--neutral-800);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -479,9 +486,9 @@ html.hc body { background: var(--bg); color: var(--text); }
   padding: 4px 10px;
   font-size: 0.75rem;
   border-radius: 9999px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--bg-gray-100);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
+  border: 1px solid var(--neutral-800); /* FIXED (verify-ux) */
+  color: var(--neutral-100);
 }
 
 /* ===== PREMIUM ICONS ANIMATIONS - INTEGRATED FROM DESIGN SYSTEM ===== */

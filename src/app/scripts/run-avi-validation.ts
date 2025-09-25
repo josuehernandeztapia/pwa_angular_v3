@@ -3,31 +3,22 @@
 
 import { AVITestDataGenerator, ValidationCase } from '../test-helpers/avi-test-data';
 
-// removed by clean-audit
-// removed by clean-audit
 
 // Simulación de validación sin dependencias de Angular
 class AVIValidationRunner {
   
   async runBasicValidation() {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
     // Generar datos de prueba
     const lowRiskData = AVITestDataGenerator.generateTestResponses('LOW_RISK');
     const highRiskData = AVITestDataGenerator.generateTestResponses('HIGH_RISK');
     const inconsistentData = AVITestDataGenerator.generateTestResponses('INCONSISTENT');
     
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
     return true;
   }
   
   async runDataQualityValidation() {
-// removed by clean-audit
     
     const profiles = ['LOW_RISK', 'HIGH_RISK', 'INCONSISTENT', 'NERVOUS_TRUTHFUL'];
     let validationsPassed = 0;
@@ -45,10 +36,8 @@ class AVIValidationRunner {
       );
       
       if (hasValidStructure) {
-// removed by clean-audit
         validationsPassed++;
       } else {
-// removed by clean-audit
       }
       
       // Validar coherencia del perfil
@@ -67,9 +56,7 @@ class AVIValidationRunner {
       }
       
       if (coherenceCheck) {
-// removed by clean-audit
       } else {
-// removed by clean-audit
       }
     }
     
@@ -77,7 +64,6 @@ class AVIValidationRunner {
   }
   
   async runMathematicalConsistencyValidation() {
-// removed by clean-audit
     
     const inconsistentData = AVITestDataGenerator.generateTestResponses('INCONSISTENT');
     
@@ -100,37 +86,27 @@ class AVIValidationRunner {
       const diferencia = Math.abs(ingresosVal - ingresoTeorico);
       const porcentajeDiferencia = (diferencia / ingresosVal) * 100;
       
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
       
       // Ratio gasolina/ingreso
       const ratioGasolina = (gasolinaVal / ingresosVal) * 100;
-// removed by clean-audit
       
       // Validaciones
       if (porcentajeDiferencia > 20) {
-// removed by clean-audit
       }
       
       if (ratioGasolina > 70) {
-// removed by clean-audit
       }
       
-// removed by clean-audit
       return true;
     }
     
-// removed by clean-audit
     return false;
   }
   
   async runCalibrationDataValidation() {
-// removed by clean-audit
     
     const calibrationSamples = AVITestDataGenerator.generateCalibrationSamples(10);
     
-// removed by clean-audit
     
     // Validar estructura de muestras
     let validSamples = 0;
@@ -144,7 +120,6 @@ class AVIValidationRunner {
       }
     });
     
-// removed by clean-audit
     
     // Validar distribución de outcomes
     const outcomes = calibrationSamples.map(s => s.actualOutcome);
@@ -154,13 +129,11 @@ class AVIValidationRunner {
       BAD: outcomes.filter(o => o === 'BAD').length
     };
     
-// removed by clean-audit
     
     return validSamples === calibrationSamples.length;
   }
   
   async runPerformanceSimulation() {
-// removed by clean-audit
     
     const startTime = Date.now();
     
@@ -183,15 +156,11 @@ class AVIValidationRunner {
     const duration = endTime - startTime;
     const responsesPerSecond = (totalResponses / (duration / 1000)).toFixed(1);
     
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
     return duration < 10000; // Menos de 10 segundos
   }
   
   async runCompleteValidation() {
-// removed by clean-audit
     
     const results = {
       basicValidation: await this.runBasicValidation(),
@@ -201,8 +170,6 @@ class AVIValidationRunner {
       performance: await this.runPerformanceSimulation()
     };
     
-// removed by clean-audit
-// removed by clean-audit
     
     let passedTests = 0;
     let totalTests = Object.keys(results).length;
@@ -210,18 +177,13 @@ class AVIValidationRunner {
     Object.entries(results).forEach(([test, passed]) => {
       const icon = passed ? '✅' : '❌';
       const status = passed ? 'PASÓ' : 'FALLÓ';
-// removed by clean-audit
       if (passed) passedTests++;
     });
     
     const successRate = (passedTests / totalTests * 100).toFixed(1);
-// removed by clean-audit
     
     if (passedTests === totalTests) {
-// removed by clean-audit
-// removed by clean-audit
     } else {
-// removed by clean-audit
     }
     
     return results;
@@ -235,14 +197,11 @@ async function main() {
   try {
     await runner.runCompleteValidation();
   } catch (error) {
-// removed by clean-audit
   }
   
-// removed by clean-audit
 }
 
 // Ejecutar si es llamado directamente
 if (require.main === module) {
   main();
 }
-// removed by clean-audit

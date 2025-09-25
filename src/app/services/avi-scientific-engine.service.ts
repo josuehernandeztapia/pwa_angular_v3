@@ -450,9 +450,9 @@ export class AVIScientificEngineService {
    * Calculate risk level with calibrated thresholds (adjusted for admission cases)
    */
   private calculateRiskLevel(score: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
-    if (score >= 800) return 'LOW';
-    if (score >= 650) return 'MEDIUM';
-    if (score >= 420) return 'HIGH';  // Lowered from 500 to accommodate admission cases
+    if (score >= 780) return 'LOW';
+    if (score >= 551) return 'MEDIUM';
+    if (score >= 550) return 'HIGH';
     return 'CRITICAL';
   }
 

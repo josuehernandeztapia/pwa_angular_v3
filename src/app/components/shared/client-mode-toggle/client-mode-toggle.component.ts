@@ -63,10 +63,8 @@ export type ViewMode = 'advisor' | 'client';
       display: flex;
       align-items: center;
       gap: 16px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-backdrop);
-      -webkit-backdrop-filter: var(--glass-backdrop);
+      background: var(--flat-surface-bg); // FIXED (verify-ux)
+      border: 1px solid var(--neutral-800); // FIXED (verify-ux)
       padding: 12px 20px;
       border-radius: 16px;
       transition: all 0.3s ease;
@@ -105,7 +103,7 @@ export type ViewMode = 'advisor' | 'client';
     }
 
     .mode-text {
-      color: var(--bg-gray-100);
+      color: var(--neutral-100);
       font-weight: 600;
       font-size: 1rem;
     }
@@ -133,7 +131,7 @@ export type ViewMode = 'advisor' | 'client';
       width: 60px;
       height: 32px;
       background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--glass-border);
+      border: 1px solid var(--neutral-800); // FIXED (verify-ux)
       border-radius: 20px;
       position: relative;
       transition: all 0.3s ease;
@@ -162,7 +160,7 @@ export type ViewMode = 'advisor' | 'client';
 
     .slider-client .slider-handle {
       transform: translateX(28px);
-      background: linear-gradient(135deg, var(--bg-gray-950), var(--bg-gray-800));
+      background: linear-gradient(135deg, var(--neutral-950), var(--neutral-800));
       box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
     }
 
@@ -172,7 +170,7 @@ export type ViewMode = 'advisor' | 'client';
     }
 
     .toggle-text {
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       font-size: 0.9rem;
       font-weight: 500;
       transition: all 0.3s ease;
@@ -193,7 +191,7 @@ export type ViewMode = 'advisor' | 'client';
 
     .mode-description p {
       margin: 0;
-      color: var(--bg-gray-400);
+      color: var(--neutral-400);
       font-size: 0.85rem;
       line-height: 1.4;
       transition: all 0.3s ease;
@@ -246,14 +244,14 @@ export type ViewMode = 'advisor' | 'client';
     }
 
     .transition-title {
-      color: var(--bg-gray-100);
+      color: var(--neutral-100);
       font-size: 1.8rem;
       font-weight: 700;
       margin: 0 0 12px 0;
     }
 
     .transition-description {
-      color: var(--bg-gray-300);
+      color: var(--neutral-300);
       font-size: 1rem;
       line-height: 1.5;
       margin: 0 0 32px 0;

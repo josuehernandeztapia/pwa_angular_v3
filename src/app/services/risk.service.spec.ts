@@ -7,7 +7,6 @@ describe('RiskService', () => {
 
   beforeEach(() => {
     api = jasmine.createSpyObj('ApiConfigService', ['loadGeographicRisk']);
-// removed by clean-audit
     (api.loadGeographicRisk as any).and.returnValue({ subscribe: ({ next }: any) => next({ success: true, data: { riskMatrix: {}, multipliers: { urban: 1, rural: 1, highway: 1, conflictZone: 1 } } }) });
     svc = new RiskService(api as unknown as ApiConfigService);
   });
@@ -19,4 +18,3 @@ describe('RiskService', () => {
 });
 
 
-// removed by clean-audit

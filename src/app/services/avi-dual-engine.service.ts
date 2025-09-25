@@ -25,14 +25,12 @@ export class AVIDualEngineService {
     // Ejecutar ambos engines en paralelo
     const scientific$ = of(this.scientificEngine.calculate(responses, ALL_AVI_QUESTIONS)).pipe(
       catchError(error => {
-// removed by clean-audit
         return of(this.getDefaultScore('SCIENTIFIC_ENGINE_ERROR'));
       })
     );
 
     const heuristic$ = from(this.heuristicEngine.calculateHeuristicScore(responses)).pipe(
       catchError(error => {
-// removed by clean-audit
         return of(this.getDefaultScore('HEURISTIC_ENGINE_ERROR'));
       })
     );
@@ -374,4 +372,3 @@ export interface EngineReliability {
   heuristic: number; // 0-1
   overall: number; // 0-1
 }
-// removed by clean-audit

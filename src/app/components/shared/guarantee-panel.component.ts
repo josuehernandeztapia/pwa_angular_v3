@@ -7,7 +7,7 @@ import { Document, DocumentStatus } from '../../models/types';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="guarantee-panel bg-gray-900 rounded-xl border border-gray-800 p-6">
+    <div class="guarantee-panel bg-neutral-900 rounded-xl border border-neutral-800 p-6">
       <!-- Header -->
       <div class="panel-header mb-6">
         <div class="flex items-center gap-3">
@@ -16,7 +16,7 @@ import { Document, DocumentStatus } from '../../models/types';
           </div>
           <div>
             <h3 class="text-xl font-bold text-white">Panel de Garantías</h3>
-            <p class="text-sm text-gray-400">Documentos específicos para garantizar el crédito</p>
+            <p class="text-sm text-neutral-400">Documentos específicos para garantizar el crédito</p>
           </div>
         </div>
       </div>
@@ -25,7 +25,7 @@ import { Document, DocumentStatus } from '../../models/types';
       <div class="documents-list space-y-4">
         <div 
           *ngFor="let document of documents" 
-          class="document-item p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:border-gray-600/50 transition-colors"
+          class="document-item p-4 bg-neutral-800/50 rounded-lg border border-neutral-700/50 hover:border-neutral-600/50 transition-colors"
         >
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -34,16 +34,16 @@ import { Document, DocumentStatus } from '../../models/types';
                 <div [ngSwitch]="document.status" class="w-8 h-8 rounded-full flex items-center justify-center">
                   <span *ngSwitchCase="'Aprobado'" class="w-6 h-6 text-emerald-400">✅</span>
                   <span *ngSwitchCase="'En Revisión'" class="w-6 h-6 text-amber-400 animate-pulse">⏳</span>
-                  <span *ngSwitchCase="'Pendiente'" class="w-6 h-6 text-gray-500">⭕</span>
+                  <span *ngSwitchCase="'Pendiente'" class="w-6 h-6 text-neutral-400">⭕</span>
                   <span *ngSwitchCase="'Rechazado'" class="w-6 h-6 text-red-500">❌</span>
-                  <span *ngSwitchDefault class="w-6 h-6 text-gray-500">❓</span>
+                  <span *ngSwitchDefault class="w-6 h-6 text-neutral-400">❓</span>
                 </div>
               </div>
 
               <!-- Document Info -->
               <div class="document-info">
                 <h4 class="font-semibold text-white text-sm">{{ document.name }}</h4>
-                <p class="text-xs text-gray-400 mt-1" *ngIf="getDocumentDescription(document.name)">
+                <p class="text-xs text-neutral-400 mt-1" *ngIf="getDocumentDescription(document.name)">
                   {{ getDocumentDescription(document.name) }}
                 </p>
                 <div class="flex items-center gap-2 mt-2">
@@ -74,7 +74,7 @@ import { Document, DocumentStatus } from '../../models/types';
               <button 
                 *ngIf="document.status === 'Aprobado'"
                 (click)="viewDocument(document)"
-                class="view-btn px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                class="view-btn px-4 py-2 bg-neutral-600 hover:bg-neutral-500 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
               >
                 <span class="view-icon">👁️</span>
                 Ver
@@ -92,19 +92,19 @@ import { Document, DocumentStatus } from '../../models/types';
           </div>
 
           <!-- Progress Indicator for specific documents -->
-          <div *ngIf="document.name === 'Convenio de Dación en Pago'" class="mt-4 pt-4 border-t border-gray-700/50">
+          <div *ngIf="document.name === 'Convenio de Dación en Pago'" class="mt-4 pt-4 border-t border-neutral-700/50">
             <div class="progress-info">
               <div class="flex justify-between text-sm mb-2">
-                <span class="text-gray-400">Progreso del Convenio</span>
+                <span class="text-neutral-100">Progreso del Convenio</span>
                 <span class="text-primary-cyan-400 font-medium">{{ getConvenioProgress() }}%</span>
               </div>
-              <div class="progress-bar w-full bg-gray-700 rounded-full h-2">
+              <div class="progress-bar w-full bg-neutral-700 rounded-full h-2">
                 <div 
-                  class="progress-fill bg-gradient-to-r from-primary-cyan-500 to-emerald-500 h-2 rounded-full transition-all duration-300"
+                  class="progress-fill bg-neutral-900 h-2 rounded-full transition-all duration-300"
                   [style.width.%]="getConvenioProgress()"
                 ></div>
               </div>
-              <p class="text-xs text-gray-500 mt-2">
+              <p class="text-xs text-neutral-400 mt-2">
                 Este convenio formalizará la transferencia de propiedad como garantía
               </p>
             </div>
@@ -113,26 +113,26 @@ import { Document, DocumentStatus } from '../../models/types';
       </div>
 
       <!-- Summary Card -->
-      <div class="summary-card mt-6 p-4 bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-lg border border-gray-600/50">
+      <div class="summary-card mt-6 p-4 bg-neutral-900 rounded-lg border border-neutral-600/50">
         <div class="flex items-center justify-between">
           <div>
             <h4 class="font-semibold text-white text-sm">Resumen de Garantías</h4>
-            <p class="text-xs text-gray-400 mt-1">Estado general de documentos de garantía</p>
+            <p class="text-xs text-neutral-400 mt-1">Estado general de documentos de garantía</p>
           </div>
           <div class="summary-stats text-right">
             <div class="text-2xl font-bold text-primary-cyan-400">{{ getApprovedCount() }}/{{ documents.length }}</div>
-            <div class="text-xs text-gray-400">Aprobados</div>
+            <div class="text-xs text-neutral-400">Aprobados</div>
           </div>
         </div>
         
         <div class="progress-overview mt-4">
           <div class="flex justify-between text-sm mb-2">
-            <span class="text-gray-400">Completado</span>
+            <span class="text-neutral-100">Completado</span>
             <span class="text-white font-medium">{{ getOverallProgress() }}%</span>
           </div>
-          <div class="progress-bar w-full bg-gray-700 rounded-full h-3">
+          <div class="progress-bar w-full bg-neutral-700 rounded-full h-3">
             <div 
-              class="progress-fill bg-gradient-to-r from-emerald-500 to-primary-cyan-500 h-3 rounded-full transition-all duration-500"
+              class="progress-fill bg-neutral-900 h-3 rounded-full transition-all duration-500"
               [style.width.%]="getOverallProgress()"
             ></div>
           </div>
@@ -155,7 +155,7 @@ import { Document, DocumentStatus } from '../../models/types';
         <button 
           (click)="generateGuaranteeReport()"
           [disabled]="getOverallProgress() < 100"
-          class="generate-report-btn flex-1 px-4 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+          class="generate-report-btn flex-1 px-4 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-neutral-600 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
         >
           <span>📋</span>
           Generar Reporte de Garantías
@@ -184,7 +184,7 @@ import { Document, DocumentStatus } from '../../models/types';
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, #0891b2, #10b981);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .icon-container {
@@ -334,18 +334,14 @@ export class GuaranteePanelComponent {
   }
 
   viewDocument(document: Document): void {
-// removed by clean-audit
     // Implement document viewing logic
   }
 
   generateGuaranteeReport(): void {
-// removed by clean-audit
     // Implement report generation logic
   }
 
   requestLegalReview(): void {
-// removed by clean-audit
     // Implement legal review request logic
   }
 }
-// removed by clean-audit

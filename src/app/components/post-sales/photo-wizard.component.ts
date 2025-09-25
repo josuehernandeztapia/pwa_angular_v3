@@ -493,7 +493,6 @@ export class PhotoWizardComponent {
       step.error = null;
 
       if (this.caseId) {
-// removed by clean-audit
       }
     }
 
@@ -605,7 +604,6 @@ export class PhotoWizardComponent {
         }
 
         return of({
-// removed by clean-audit
           ocr: {
             confidence: ocrResult.confidence,
             missing: this.extractMissingFields(ocrResult.fields, stepId),
@@ -677,4 +675,3 @@ export class PhotoWizardComponent {
     this.draftCount = 0;
   }
 }
-// removed by clean-audit

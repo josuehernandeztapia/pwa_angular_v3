@@ -104,13 +104,9 @@ export class BackendApiService {
       this.isOnline$.next(false);
     };
 
-    // Event listeners
-    window.addEventListener('online', goOnline, { once: true } as any);
-    window.addEventListener('offline', goOffline, { once: true } as any);
-
-    // Fallback handlers for environments that use ononline/onoffline
-    (window as any).ononline = () => { goOnline(); (window as any).ononline = null; };
-    (window as any).onoffline = () => { goOffline(); (window as any).onoffline = null; };
+    // Event listeners (no duplicates, persistent for this instance lifetime)
+    window.addEventListener('online', goOnline as any);
+    window.addEventListener('offline', goOffline as any);
   }
 
   private getAuthHeaders() {
@@ -161,7 +157,6 @@ export class BackendApiService {
                 updatedAt: Date.now()
               });
             } catch (storageError) {
-// removed by clean-audit
             }
             observer.error(error);
           })();
@@ -173,7 +168,6 @@ export class BackendApiService {
   updateClient(clientId: string, clientData: Partial<ClientRecord>): Observable<ClientRecord> {
     const url = `${environment.apiUrl}${environment.endpoints.clients}/${clientId}`;
     // Debug: ensure correct call shape during tests
-// removed by clean-audit
     
     return this.http.put<ClientRecord>(url, clientData, { headers: this.getAuthHeaders() }).pipe(
       tap((response) => {
@@ -191,7 +185,6 @@ export class BackendApiService {
           // Fire-and-forget to satisfy test expectations synchronously
           void this.storage.saveClient(cacheRecord);
         } catch (e) {
-// removed by clean-audit
         }
       }),
       catchError((error) => {
@@ -205,7 +198,6 @@ export class BackendApiService {
                 retryCount: 0
               });
             } catch (storageError) {
-// removed by clean-audit
             }
             observer.error(error);
           })();
@@ -244,7 +236,6 @@ export class BackendApiService {
     
     return this.http.get<ClientRecord[]>(url, options).pipe(
       catchError((error) => {
-// removed by clean-audit
         // Return empty array for offline mode
         return of([]);
       })
@@ -288,7 +279,6 @@ export class BackendApiService {
                 status: 'draft'
               });
             } catch (storageError) {
-// removed by clean-audit
             }
             observer.error(error);
           })();
@@ -345,8 +335,6 @@ export class BackendApiService {
     
     return this.http.get<EcosystemRecord[]>(url, options).pipe(
       catchError((error) => {
-// removed by clean-audit
-// removed by clean-audit
         return this.getMockEcosystems(market);
       })
     );
@@ -357,7 +345,6 @@ export class BackendApiService {
     
     return this.http.get<EcosystemRecord>(url, { headers: this.getAuthHeaders() }).pipe(
       catchError((error) => {
-// removed by clean-audit
         return throwError(() => error);
       })
     );
@@ -368,7 +355,6 @@ export class BackendApiService {
     
     return this.http.patch<EcosystemRecord>(url, { available_spots: availableSpots }, { headers: this.getAuthHeaders() }).pipe(
       catchError((error) => {
-// removed by clean-audit
         return throwError(() => error);
       })
     );
@@ -388,7 +374,6 @@ export class BackendApiService {
         lastUpdated: data.lastUpdated || new Date().toISOString()
       })),
       catchError(async (error) => {
-// removed by clean-audit
         
         // Try to get cached stats
         const stats = await this.storage.getStorageStats();
@@ -432,7 +417,6 @@ export class BackendApiService {
                 retryCount: 0
               });
             } catch (storageError) {
-// removed by clean-audit
             }
             observer.error(error);
           })();
@@ -451,14 +435,12 @@ export class BackendApiService {
         try {
           await this.executeAction(action);
           await this.storage.removeCompletedAction(action.id);
-// removed by clean-audit
         } catch (error) {
-// removed by clean-audit
-          // Could implement exponential backoff here
+          // Log sync failure for observability in tests and runtime
+          console.error('Failed to sync action:', action.type, error as any);
         }
       }
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -475,14 +457,12 @@ export class BackendApiService {
         break;
       case 'UPLOAD_DOCUMENT':
         // Would need to re-implement file upload from cached data
-// removed by clean-audit
         break;
       default:
-// removed by clean-audit
+        console.warn('Unknown action type:', action.type);
     }
   }
 
-// removed by clean-audit
   private getMockEcosystems(market?: 'AGS' | 'EDOMEX'): Observable<EcosystemRecord[]> {
     const mockData: EcosystemRecord[] = [
       {
@@ -582,4 +562,3 @@ export class BackendApiService {
   }
 }
 
-// removed by clean-audit

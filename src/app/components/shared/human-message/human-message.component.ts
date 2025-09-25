@@ -98,19 +98,19 @@ import { PremiumIconComponent } from '../premium-icon/premium-icon.component';
 
     /* 🎯 Context-Specific Styling */
     .message-onboarding {
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #0284c7;
       color: #0c4a6e;
     }
 
     .message-success {
-      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #16a34a;
       color: #14532d;
     }
 
     .message-celebration {
-      background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #eab308;
       color: #713f12;
       position: relative;
@@ -126,25 +126,25 @@ import { PremiumIconComponent } from '../premium-icon/premium-icon.component';
     }
 
     .message-error {
-      background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #dc2626;
       color: #7f1d1d;
     }
 
     .message-guidance {
-      background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #9333ea;
       color: #581c87;
     }
 
     .message-encouragement {
-      background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #2563eb;
       color: #1e3a8a;
     }
 
     .message-reassurance {
-      background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #6b7280;
       color: #374151;
     }
@@ -426,12 +426,9 @@ export class HumanMessageComponent implements OnInit {
 
   onActionClick(): void {
     // Emit action event or handle navigation
-// removed by clean-audit
   }
 
   onDismiss(): void {
     // Emit dismiss event
-// removed by clean-audit
   }
 }
-// removed by clean-audit

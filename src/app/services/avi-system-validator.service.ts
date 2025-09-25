@@ -23,7 +23,6 @@ export class AVISystemValidatorService {
    * Ejecutar validación completa del sistema AVI
    */
   runCompleteValidation(): Observable<ValidationReport> {
-// removed by clean-audit
     
     const validationBatch = AVITestDataGenerator.generateValidationBatch();
     
@@ -39,7 +38,6 @@ export class AVISystemValidatorService {
     }).pipe(
       map(results => this.compileValidationReport(results)),
       catchError(error => {
-// removed by clean-audit
         return of(this.getErrorReport(error));
       })
     );
@@ -242,7 +240,6 @@ export class AVISystemValidatorService {
               }
             } catch (error) {
               completedTests++;
-// removed by clean-audit
             }
           }
         );
@@ -263,7 +260,6 @@ export class AVISystemValidatorService {
               }
             } catch (error) {
               completedTests++;
-// removed by clean-audit
             }
           }
         );
@@ -348,7 +344,6 @@ export class AVISystemValidatorService {
               message: `${result.heuristicScore.processingTime}ms`
             });
             
-// removed by clean-audit
             const memoryUsage = process.memoryUsage ? process.memoryUsage().heapUsed / 1024 / 1024 : 50;
             tests.push({
               name: 'Uso de memoria',
@@ -433,7 +428,6 @@ export class AVISystemValidatorService {
               }
             } catch (error) {
               completedRuns++;
-// removed by clean-audit
             }
           }
         );
@@ -486,7 +480,6 @@ export class AVISystemValidatorService {
               }
             } catch (error) {
               completedCases++;
-// removed by clean-audit
             }
           }
         );
@@ -502,7 +495,6 @@ export class AVISystemValidatorService {
       const startTime = Date.now();
       const tests: TestCase[] = [];
       
-// removed by clean-audit
       const calibrationSamples = AVITestDataGenerator.generateCalibrationSamples(50);
       
       this.calibrationService.performAutoCalibration(calibrationSamples).subscribe({
@@ -657,4 +649,3 @@ export interface TestCase {
   passed: boolean;
   message: string;
 }
-// removed by clean-audit

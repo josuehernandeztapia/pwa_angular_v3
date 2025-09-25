@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { OCRService } from './ocr.service';
 
-// removed by clean-audit
 const mockTesseractResult = {
   data: {
     text: 'INSTITUTO NACIONAL ELECTORAL\nNOMBRE: JUAN PEREZ GARCIA\nCURP: PEGJ850315HDFRGN09\nFECHA NACIMIENTO: 15/03/1985',
@@ -34,10 +33,10 @@ const mockTesseractWorker = {
 
 const mockCreateWorker = jasmine.createSpy('createWorker').and.returnValue(Promise.resolve(mockTesseractWorker));
 
-// removed by clean-audit
 
 describe('OCRService', () => {
   let service: OCRService;
+  let originalRecognize: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -46,12 +45,32 @@ describe('OCRService', () => {
       ]
     });
     service = TestBed.inject(OCRService);
+    (service as any)._retryCount = 0;
     
-// removed by clean-audit
     mockCreateWorker.calls.reset();
     mockTesseractWorker.recognize.calls.reset();
     mockTesseractWorker.setParameters.calls.reset();
     mockTesseractWorker.terminate.calls.reset();
+
+    // Make retries deterministic and instantaneous in unit tests
+    try {
+      (service as any)['retryConfig'] = { maxRetries: 0, baseDelay: 0, maxDelay: 0, backoffMultiplier: 1 };
+      spyOn<any>(service as any, 'delay').and.returnValue(Promise.resolve());
+    } catch {}
+
+    // Ensure default behavior is successful recognition for all tests unless overridden
+    mockTesseractWorker.recognize.and.returnValue(Promise.resolve(mockTesseractResult));
+
+    // Capture original for restoration
+    originalRecognize = mockTesseractWorker.recognize;
+  });
+
+  afterEach(() => {
+    if (service) {
+      try {
+        (service as any)._retryCount = 0;
+      } catch {}
+    }
   });
 
   describe('Service Initialization', () => {
@@ -150,6 +169,7 @@ describe('OCRService', () => {
         fail('Should have thrown error');
       } catch (error) {
         expect(error).toBeInstanceOf(Error);
+        expect((error as Error).message).toContain('OCR failed');
       }
     });
 
@@ -170,7 +190,20 @@ describe('OCRService', () => {
     afterEach(() => {
       // Restore default behavior to avoid leaking rejection into subsequent tests
       mockTesseractWorker.recognize.and.returnValue(Promise.resolve(mockTesseractResult));
+    if (service) {
+      (service as any)._retryCount = 0;
+    }
     });
+
+  afterAll(() => {
+    if (service) {
+      (service as any)._retryCount = 0;
+    }
+    // Best-effort restore
+    try {
+      mockTesseractWorker.recognize = originalRecognize;
+    } catch {}
+  });
   });
 
   describe('Text Extraction from Base64', () => {
@@ -499,4 +532,3 @@ describe('OCRService', () => {
   });
 });
 
-// removed by clean-audit

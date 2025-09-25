@@ -198,7 +198,6 @@ export class GnvStationService {
             timestamp: Date.now()
           }));
         },
-// removed by clean-audit
       });
   }
 
@@ -374,7 +373,6 @@ export class GnvStationService {
     return R * c;
   }
 
-// removed by clean-audit
   private getMockStations(state?: string): GNVStation[] {
     const stations: GNVStation[] = [
       {
@@ -508,4 +506,3 @@ export class GnvStationService {
     };
   }
 }
-// removed by clean-audit

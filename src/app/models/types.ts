@@ -154,7 +154,6 @@ export interface Ecosystem {
     name: string;
     documents?: Document[];
     status: 'Activo' | 'Expediente Pendiente' | string;
-// removed by clean-audit
     market?: Market;
     vehicleType?: string;
     capacity?: number;
@@ -362,4 +361,3 @@ export {
   WhatsAppNotificationResult
 } from './notification';
 
-// removed by clean-audit

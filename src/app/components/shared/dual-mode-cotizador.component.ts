@@ -802,11 +802,11 @@ interface CollectionUnit {
     }
 
     .bar-section.down-payment {
-      background: linear-gradient(135deg, #059669, #10b981);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .bar-section.savings {
-      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .bar-legend {
@@ -907,14 +907,14 @@ interface CollectionUnit {
     .bar {
       width: 100%;
       min-height: 8px;
-      background: linear-gradient(to top, #3b82f6, #60a5fa);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 2px 2px 0 0;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .bar:hover {
-      background: linear-gradient(to top, #2563eb, #3b82f6);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .bar-label {
@@ -1005,30 +1005,30 @@ interface CollectionUnit {
     }
 
     .whatsapp-btn {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
     .whatsapp-btn:hover {
-      background: linear-gradient(135deg, #16a34a, #15803d);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .voice-btn {
-      background: linear-gradient(135deg, #3b82f6, #1e40af);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
     .voice-btn:hover {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .formalize-btn {
-      background: linear-gradient(135deg, #059669, #047857);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
     }
 
     .formalize-btn:hover {
-      background: linear-gradient(135deg, #047857, #065f46);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
     }
 
     .amortization-btn {

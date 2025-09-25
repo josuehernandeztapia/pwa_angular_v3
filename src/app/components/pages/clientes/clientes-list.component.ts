@@ -131,7 +131,6 @@ import { Client, BusinessFlow } from '../../../models/types';
               class="select-all-checkbox"
             >
             <span class="select-all-label">
-// removed by clean-audit
             </span>
           </label>
         </div>
@@ -700,4 +699,3 @@ export class ClientesListComponent implements OnInit {
     // Navigation handled by routerLink
   }
 }
-// removed by clean-audit

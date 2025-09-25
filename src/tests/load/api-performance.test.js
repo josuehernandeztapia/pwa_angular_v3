@@ -581,14 +581,10 @@ export function concurrentUsersTest() {
 
 // Setup function
 export function setup() {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   
   // Verify API is accessible
   const healthResponse = http.get(`${BASE_URL}/health`);
   if (healthResponse.status !== 200) {
-// removed by clean-audit
   }
   
   return { 
@@ -601,7 +597,4 @@ export function setup() {
 export function teardown(data) {
   const endTime = new Date();
   const duration = (endTime - data.startTime) / 1000;
-// removed by clean-audit
-// removed by clean-audit
 }
-// removed by clean-audit

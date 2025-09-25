@@ -62,7 +62,6 @@ declare global {
  * Initialize memory leak prevention globally
  */
 const initializeGlobalTestSetup = async () => {
-// removed by clean-audit
   IndexedDBTestStateManager.mockIndexedDB();
   
   // Make manager available globally
@@ -77,15 +76,12 @@ const initializeGlobalTestSetup = async () => {
   // Set up global memory leak prevention
   setupMemoryLeakPrevention();
   
-// removed by clean-audit
 };
 
 // Initialize immediately
 initializeGlobalTestSetup().catch(error => {
-// removed by clean-audit
 });
 
-// removed by clean-audit
 try {
   const desc = Object.getOwnPropertyDescriptor(Document.prototype, 'hidden');
   if (desc && desc.configurable === false) {
@@ -97,7 +93,6 @@ try {
  * Global error handler for unhandled promise rejections
  */
 window.addEventListener('unhandledrejection', (event) => {
-// removed by clean-audit
   // Don't fail the test for memory cleanup issues
   if (event.reason && typeof event.reason === 'string' && 
       event.reason.includes('Database')) {
@@ -118,7 +113,6 @@ if (typeof jasmine !== 'undefined') {
     if (Math.random() < 0.1) { // 10% of the time
       const stats = testHelpers.getMemoryUsage();
       if (stats.usedJSHeapSize) {
-// removed by clean-audit
       }
     }
   });
@@ -155,4 +149,3 @@ console.log = (...args) => {
 };
 
 export { setupMemoryLeakPrevention, testHelpers, IndexedDBTestStateManager };
-// removed by clean-audit

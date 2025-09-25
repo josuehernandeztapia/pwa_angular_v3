@@ -483,13 +483,11 @@ export class DeliveryPhaseComponent {
     // Simulate saving draft
     setTimeout(() => {
       this.isSaving.set(false);
-// removed by clean-audit
     }, 1500);
   }
 
   onSubmit(): void {
     if (!this.canCompleteDelivery()) {
-// removed by clean-audit
       return;
     }
 
@@ -510,12 +508,10 @@ export class DeliveryPhaseComponent {
     // Complete delivery phase
     this.importTracker.completeDeliveryPhase(this.clientId(), deliveryData).subscribe({
       next: (result) => {
-// removed by clean-audit
         this.isSubmitting.set(false);
         this.showSuccessModal.set(true);
       },
       error: (error) => {
-// removed by clean-audit
         this.isSubmitting.set(false);
         alert('Error al completar la entrega. Intenta nuevamente.');
       }
@@ -537,4 +533,3 @@ export class DeliveryPhaseComponent {
     }
   }
 }
-// removed by clean-audit

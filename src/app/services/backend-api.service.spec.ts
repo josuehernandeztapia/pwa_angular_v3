@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
+import { skip, take } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { BackendApiService } from './backend-api.service';
 import { StorageService } from './storage.service';
@@ -99,18 +100,24 @@ describe('BackendApiService', () => {
     httpClientSpy = TestBed.inject(HttpClient) as jasmine.SpyObj<HttpClient>;
     storageServiceSpy = TestBed.inject(StorageService) as jasmine.SpyObj<StorageService>;
 
-    originalNavigatorOnLine = Object.getOwnPropertyDescriptor(window.navigator, 'onLine');
-    Object.defineProperty(window.navigator, 'onLine', {
-      configurable: true,
-      writable: true,
-      value: true
-    });
+    // Safely attempt to force navigator.onLine to true only if configurable.
+    try {
+      originalNavigatorOnLine = Object.getOwnPropertyDescriptor(window.navigator, 'onLine');
+      if (!originalNavigatorOnLine || originalNavigatorOnLine.configurable) {
+        Object.defineProperty(window.navigator, 'onLine', {
+          configurable: true,
+          get: () => true
+        });
+      }
+    } catch {}
   });
 
   afterEach(() => {
-    if (originalNavigatorOnLine) {
-      Object.defineProperty(window.navigator, 'onLine', originalNavigatorOnLine);
-    }
+    try {
+      if (originalNavigatorOnLine && originalNavigatorOnLine.configurable) {
+        Object.defineProperty(window.navigator, 'onLine', originalNavigatorOnLine);
+      }
+    } catch {}
   });
 
   describe('Service Initialization', () => {
@@ -119,7 +126,7 @@ describe('BackendApiService', () => {
     });
 
     it('should initialize with online status', (done) => {
-      service.isOnline.subscribe(online => {
+      service.isOnline.pipe(take(1)).subscribe(online => {
         expect(online).toBe(true);
         done();
       });
@@ -638,13 +645,12 @@ describe('BackendApiService', () => {
 
   describe('Network Status Management', () => {
     it('should update online status when network changes', (done) => {
-      const offlineEvent = new Event('offline');
-      window.dispatchEvent(offlineEvent);
-
-      service.isOnline.subscribe(online => {
+      service.isOnline.pipe(skip(1), take(1)).subscribe(online => {
         expect(online).toBe(false);
         done();
       });
+      const offlineEvent = new Event('offline');
+      window.dispatchEvent(offlineEvent);
     });
 
     it('should trigger sync when going back online', () => {

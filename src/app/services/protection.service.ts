@@ -330,7 +330,6 @@ export class ProtectionService {
    */
   private handleError(operation: string) {
     return (error: any): Observable<never> => {
-// removed by clean-audit
       
       // Transform HTTP errors into user-friendly messages
       let userMessage = 'Error en el servicio de protección';
@@ -445,4 +444,3 @@ export class ProtectionService {
     }
   }
 }
-// removed by clean-audit

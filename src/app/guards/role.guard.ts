@@ -42,7 +42,6 @@ export class RoleGuard implements CanActivate {
           );
           
           if (!hasRequiredRole) {
-// removed by clean-audit
             this.router.navigate(['/unauthorized']);
             return false;
           }
@@ -55,7 +54,6 @@ export class RoleGuard implements CanActivate {
           );
           
           if (!hasRequiredPermission) {
-// removed by clean-audit
             this.router.navigate(['/unauthorized']);
             return false;
           }
@@ -66,4 +64,3 @@ export class RoleGuard implements CanActivate {
     );
   }
 }
-// removed by clean-audit

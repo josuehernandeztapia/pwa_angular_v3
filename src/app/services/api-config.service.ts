@@ -105,7 +105,6 @@ export class ApiConfigService {
     }
   };
   
-// removed by clean-audit
   
   private readonly MOCK_CONFIG: MockConfig = {
     enabled: true, // Set to false when backend is ready
@@ -215,14 +214,12 @@ export class ApiConfigService {
   }
   
   /**
-// removed by clean-audit
    */
   isMockMode(): boolean {
     return this.MOCK_CONFIG.enabled;
   }
   
   /**
-// removed by clean-audit
    */
   getMockResponse(endpointName: string): any {
     return this.MOCK_CONFIG.responses[endpointName] || null;
@@ -321,22 +318,17 @@ export class ApiConfigService {
   }
   
   /**
-// removed by clean-audit
    */
   private getMockRequest<T>(endpointName: string, data?: any): Observable<T> {
     const mockResponse = this.getMockResponse(endpointName);
     const delay = this.MOCK_CONFIG.delay + Math.random() * 200; // Add jitter
 
     if (!mockResponse) {
-// removed by clean-audit
-// removed by clean-audit
     }
     
-// removed by clean-audit
     
     // Simulate occasional errors
     if (Math.random() < this.MOCK_CONFIG.errorRate) {
-// removed by clean-audit
       this.recordMetrics(endpointName, delay, false, 500);
 
       return timer(delay).pipe(
@@ -448,19 +440,15 @@ export class ApiConfigService {
   }
   
   /**
-// removed by clean-audit
    */
   toggleMockMode(enabled: boolean): void {
     this.MOCK_CONFIG.enabled = enabled;
-// removed by clean-audit
   }
   
   /**
-// removed by clean-audit
    */
   setMockResponse(endpointName: string, response: any): void {
     this.MOCK_CONFIG.responses[endpointName] = response;
-// removed by clean-audit
   }
 
   private getPayloadPreview(payload: unknown): unknown {
@@ -481,21 +469,17 @@ export class ApiConfigService {
 
   private logDebug(message: string, context?: Record<string, unknown>): void {
     if (!environment.production) {
-// removed by clean-audit
     }
   }
 
   private logWarn(message: string, context?: Record<string, unknown>): void {
     if (!environment.production) {
-// removed by clean-audit
     }
   }
 
   private logError(message: string, error: unknown): void {
     if (!environment.production) {
-// removed by clean-audit
     }
   }
 }
 
-// removed by clean-audit

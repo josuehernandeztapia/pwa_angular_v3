@@ -5,10 +5,11 @@ import { of } from 'rxjs';
 import { DocumentsPhaseComponent } from './documents-phase.component';
 import { IntegratedImportTrackerService } from '../../services/integrated-import-tracker.service';
 import { PostSalesApiService } from '../../services/post-sales-api.service';
+import { PostSalesQuoteApiService } from '../../services/post-sales-quote-api.service';
 
 describe('DocumentsPhaseComponent', () => {
   let component: DocumentsPhaseComponent;
-// removed by clean-audit
+  let fixture: ComponentFixture<DocumentsPhaseComponent>;
   let mockRouter: jasmine.SpyObj<Router>;
   let mockImportTracker: jasmine.SpyObj<IntegratedImportTrackerService>;
   let mockPostSalesApi: jasmine.SpyObj<PostSalesApiService>;
@@ -26,15 +27,18 @@ describe('DocumentsPhaseComponent', () => {
         FormBuilder,
         { provide: Router, useValue: routerSpy },
         { provide: IntegratedImportTrackerService, useValue: importTrackerSpy },
-        { provide: PostSalesApiService, useValue: postSalesApiSpy }
+        { provide: PostSalesApiService, useValue: postSalesApiSpy },
+        { provide: PostSalesQuoteApiService, useValue: jasmine.createSpyObj('PostSalesQuoteApiService', ['getOrCreateDraftQuote', 'addLine']) }
       ]
     }).compileComponents();
 
-// removed by clean-audit
-// removed by clean-audit
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     mockImportTracker = TestBed.inject(IntegratedImportTrackerService) as jasmine.SpyObj<IntegratedImportTrackerService>;
     mockPostSalesApi = TestBed.inject(PostSalesApiService) as jasmine.SpyObj<PostSalesApiService>;
+
+    fixture = TestBed.createComponent(DocumentsPhaseComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -153,7 +157,8 @@ describe('DocumentsPhaseComponent', () => {
     const form = component.documentsForm;
     form.get('titular')?.setValue('');
     form.get('proveedorSeguro')?.setValue('');
-    
+    // Ensure documents missing so checklist errors are included
+    component.uploadedDocuments.set({ factura: null, polizaSeguro: null, contratos: [], endosos: [] });
     const errors = component.validationErrors();
     expect(errors).toContain('Titular del vehículo');
     expect(errors).toContain('Proveedor de seguro');
@@ -167,4 +172,3 @@ describe('DocumentsPhaseComponent', () => {
     expect(console.log).toHaveBeenCalledWith('❌ Cannot complete documents - validation failed');
   });
 });
-// removed by clean-audit

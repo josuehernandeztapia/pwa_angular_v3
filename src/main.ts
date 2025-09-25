@@ -14,6 +14,4 @@ if (!isDevMode()) {
 
 bootstrapApplication(AppComponent, appConfig)
   .then(() => {})
-// removed by clean-audit
 
-// removed by clean-audit

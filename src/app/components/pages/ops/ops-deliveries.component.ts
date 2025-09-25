@@ -608,7 +608,7 @@ import {
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #06d6a0, #10b981);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       transition: width 0.3s ease;
     }
 
@@ -974,7 +974,6 @@ export class OpsDeliveriesComponent implements OnInit {
         this.stockPositions.set(allPositions);
       })
       .catch(error => {
-// removed by clean-audit
       });
 
     // Load stock alerts
@@ -985,7 +984,6 @@ export class OpsDeliveriesComponent implements OnInit {
           this.stockAlerts.set(alerts);
         },
         error: (error) => {
-// removed by clean-audit
         }
       });
   }
@@ -998,7 +996,6 @@ export class OpsDeliveriesComponent implements OnInit {
             this.availableRoutes.set(routes);
           },
           error: (error) => {
-// removed by clean-audit
           }
         });
     }
@@ -1167,4 +1164,3 @@ export class OpsDeliveriesComponent implements OnInit {
     return this.stockAlerts().filter(alert => alert.market === market && !alert.resolved);
   }
 }
-// removed by clean-audit

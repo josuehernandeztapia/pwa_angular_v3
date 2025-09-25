@@ -77,7 +77,6 @@ export class IndexedDBTestStateManager {
             db.close();
           }
         } catch (error) {
-// removed by clean-audit
         }
         resolve();
       });
@@ -126,18 +125,15 @@ export class IndexedDBTestStateManager {
         };
 
         deleteRequest.onerror = () => {
-// removed by clean-audit
           resolve(); // Resolve anyway to prevent blocking
         };
 
         deleteRequest.onblocked = () => {
-// removed by clean-audit
           // Try to resolve after timeout
           setTimeout(() => resolve(), 1000);
         };
 
       } catch (error) {
-// removed by clean-audit
         resolve();
       }
     });
@@ -196,11 +192,9 @@ export class IndexedDBTestStateManager {
   }
 
   /**
-// removed by clean-audit
    */
   static mockIndexedDB(): void {
     if (typeof globalThis.indexedDB === 'undefined') {
-// removed by clean-audit
       const mockIndexedDB = {
         open: () => ({
           onsuccess: null,
@@ -208,7 +202,6 @@ export class IndexedDBTestStateManager {
           onupgradeneeded: null,
           result: {
             close: () => {},
-// removed by clean-audit
             readyState: 'done'
           }
         }),
@@ -284,4 +277,3 @@ export const testHelpers = {
     return manager.getMemoryStats();
   }
 };
-// removed by clean-audit

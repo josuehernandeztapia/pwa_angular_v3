@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfiguracionComponent } from './configuracion.component';
 import { Router } from '@angular/router';
 
@@ -7,26 +7,28 @@ class RouterStub {
 }
 
 describe('Data retention policy', () => {
+  let fixture: ComponentFixture<ConfiguracionComponent> | undefined;
+  let component: ConfiguracionComponent | undefined;
+
   beforeEach(async () => {
     localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [ConfiguracionComponent],
       providers: [{ provide: Router, useClass: RouterStub }]
     }).compileComponents();
+
+    fixture = TestBed.createComponent(ConfiguracionComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create component and have valid config', () => {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-
     // Test component creation and config initialization
     expect(component).toBeTruthy();
-    expect(component.config()).toBeTruthy();
-    expect(component.config().mode).toBe('cotizador');
-    expect(component.config().precio).toBeGreaterThan(0);
+    expect(component!.config()).toBeTruthy();
+    expect(component!.config().mode).toBe('cotizador');
+    expect(component!.config().precio).toBeGreaterThan(0);
   });
 });
 
 
-// removed by clean-audit

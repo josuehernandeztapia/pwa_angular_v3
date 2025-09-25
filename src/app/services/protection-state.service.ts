@@ -239,7 +239,6 @@ export class ProtectionStateService {
             }
           }),
           catchError(error => {
-// removed by clean-audit
             return EMPTY;
           })
         )
@@ -501,4 +500,3 @@ export class ProtectionStateService {
     this._lastAction.set(null);
   }
 }
-// removed by clean-audit

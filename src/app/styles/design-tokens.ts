@@ -113,7 +113,6 @@ export const getToken = (path: string): string => {
   for (const key of keys) {
     value = value[key];
     if (value === undefined) {
-// removed by clean-audit
       return '';
     }
   }
@@ -145,4 +144,3 @@ export const theme = {
     }
   }
 };
-// removed by clean-audit

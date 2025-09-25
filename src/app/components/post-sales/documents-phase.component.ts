@@ -450,45 +450,37 @@ export class DocumentsPhaseComponent {
            docs.contratos.length > 0;
   });
 
-  canCompleteDocuments = computed(() => {
+  canCompleteDocuments(): boolean {
     const form = this.documentsForm;
     if (!form) return false;
+    return form.valid &&
+      this.hasRequiredDocuments() &&
+      !!form.get('facturaValida')?.value &&
+      !!form.get('polizaVigente')?.value &&
+      !!form.get('contratosFirmados')?.value &&
+      !!form.get('datosCorrectos')?.value;
+  }
 
-    return form.valid && 
-           this.hasRequiredDocuments() &&
-           form.get('facturaValida')?.value &&
-           form.get('polizaVigente')?.value &&
-           form.get('contratosFirmados')?.value &&
-           form.get('datosCorrectos')?.value;
-  });
-
-  validationErrors = computed(() => {
+  validationErrors(): string[] {
     const errors: string[] = [];
     const form = this.documentsForm;
     if (!form) return errors;
-
-    // Form validation errors
     if (form.get('fechaTransferencia')?.invalid) errors.push('Fecha de transferencia');
     if (form.get('titular')?.invalid) errors.push('Titular del vehículo');
     if (form.get('proveedorSeguro')?.invalid) errors.push('Proveedor de seguro');
     if (form.get('duracionPoliza')?.invalid) errors.push('Duración de póliza');
-
-    // Document validation errors
     const docs = this.uploadedDocuments();
     if (!docs.factura) errors.push('Factura original');
     if (!docs.polizaSeguro) errors.push('Póliza de seguro');
     if (docs.contratos.length === 0) errors.push('Contratos firmados');
-
-    // Verification checkboxes
     if (this.hasRequiredDocuments()) {
       if (!form.get('facturaValida')?.value) errors.push('Verificación de factura');
       if (!form.get('polizaVigente')?.value) errors.push('Verificación de póliza vigente');
       if (!form.get('contratosFirmados')?.value) errors.push('Verificación de contratos firmados');
       if (!form.get('datosCorrectos')?.value) errors.push('Verificación de datos correctos');
     }
-
     return errors;
-  });
+  }
 
   addToQuote(): void {
     this.quoteStatus.set('');
@@ -654,13 +646,12 @@ export class DocumentsPhaseComponent {
     
     setTimeout(() => {
       this.isSaving.set(false);
-// removed by clean-audit
     }, 1500);
   }
 
   onSubmit(): void {
     if (!this.canCompleteDocuments()) {
-// removed by clean-audit
+      console.log('❌ Cannot complete documents - validation failed');
       return;
     }
 
@@ -680,12 +671,10 @@ export class DocumentsPhaseComponent {
     // Complete documents phase
     this.importTracker.completeDocumentsPhase(this.clientId(), legalDocuments).subscribe({
       next: (result) => {
-// removed by clean-audit
         this.isSubmitting.set(false);
         this.showSuccessModal.set(true);
       },
       error: (error) => {
-// removed by clean-audit
         this.isSubmitting.set(false);
         alert('Error al completar la transferencia de documentos. Intenta nuevamente.');
       }
@@ -710,7 +699,7 @@ export class DocumentsPhaseComponent {
       this.closeSuccessModal();
     }
   }
-  constructor(private integratedImportTracker: IntegratedImportTrackerService, private pdfExport?: any) {
+  constructor() {
     this.documentsForm = this.fb.group({
       fechaTransferencia: [new Date().toISOString().split('T')[0], Validators.required],
       titular: ['', [Validators.required, Validators.minLength(3)]],
@@ -748,9 +737,7 @@ export class DocumentsPhaseComponent {
       const blob = await pdf.generatePostSalesOnePager(data);
       pdf.downloadPDF(blob, `postventa-${data.vin || 'expediente'}.pdf`);
     } catch (e) {
-// removed by clean-audit
     }
   }
 }
 
-// removed by clean-audit

@@ -83,7 +83,6 @@ export class DeliveriesService {
         map(response => {
           // Client-side validation of FSM transition (double-check)
           if (response.success && !response.validationErrors?.length) {
-// removed by clean-audit
           }
           return response;
         }),
@@ -329,7 +328,6 @@ export class DeliveriesService {
    */
   private handleError(operation: string) {
     return (error: any): Observable<never> => {
-// removed by clean-audit
       
       // Transform HTTP errors into user-friendly messages
       let userMessage = 'Error en el servicio de entregas';
@@ -619,4 +617,3 @@ export class DeliveriesService {
     });
   }
 }
-// removed by clean-audit

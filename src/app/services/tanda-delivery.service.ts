@@ -42,7 +42,6 @@ export class TandaDeliveryService {
   }
 
   /**
-// removed by clean-audit
    */
   private initializeDemoData(): void {
     const demoTanda: TandaGroupDelivery = {
@@ -977,4 +976,3 @@ export class TandaDeliveryService {
   }
 }
 
-// removed by clean-audit

@@ -54,12 +54,13 @@ export class MockApiService {
         observer.next(clonedData);
         observer.complete();
       } catch (error) {
+        // Log error for observability in tests
+        console.error('MockApi Error:', error as any);
         observer.error(error);
       }
     }).pipe(
       delay(delayMs),
       catchError(error => {
-// removed by clean-audit
         return throwError(() => error);
       })
     );
@@ -498,4 +499,3 @@ export class MockApiService {
     });
   }
 }
-// removed by clean-audit

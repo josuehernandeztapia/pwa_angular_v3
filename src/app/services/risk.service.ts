@@ -18,7 +18,6 @@ export class RiskService {
   private geoConfig$ = new BehaviorSubject<GeographicRiskConfigResponse['data'] | null>(null);
 
   constructor(private apiConfig: ApiConfigService) {
-// removed by clean-audit
     this.apiConfig.loadGeographicRisk().subscribe({
       next: (resp) => { if (resp?.success) this.geoConfig$.next(resp.data); },
       error: () => { /* silent */ }
@@ -69,4 +68,3 @@ export class RiskService {
 }
 
 
-// removed by clean-audit

@@ -399,28 +399,28 @@
 
     /* Health Score Avatar Colors */
     .client-avatar.score-excellent {
-      background: linear-gradient(135deg, #10b981, #059669);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #d1fae5;
     }
 
     .client-avatar.score-good {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #fef3c7;
     }
 
     .client-avatar.score-poor {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #fee2e2;
     }
 
     .client-avatar.score-critical {
-      background: linear-gradient(135deg, #991b1b, #7f1d1d);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #fecaca;
       animation: pulse-critical 2s infinite;
     }
 
     .client-avatar.score-unknown {
-      background: linear-gradient(135deg, #6b7280, #4b5563);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-color: #f3f4f6;
     }
 

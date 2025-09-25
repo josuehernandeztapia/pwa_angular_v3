@@ -111,7 +111,7 @@ import { PwaInstallService } from '../../../services/pwa-install.service';
       left: 0;
       right: 0;
       z-index: 999;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
       padding: 16px;
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
@@ -337,7 +337,7 @@ import { PwaInstallService } from '../../../services/pwa-install.service';
       bottom: 20px;
       right: 20px;
       z-index: 998;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       color: white;
       border: none;
       border-radius: 50px;
@@ -475,17 +475,14 @@ export class PwaInstallPromptComponent {
       const result = await this.pwaInstallService.showInstallPrompt();
 
       if (result.outcome === 'accepted') {
-// removed by clean-audit
         this.dismissed.set(true);
       } else if (result.outcome === 'dismissed') {
-// removed by clean-audit
         this.dismissed.set(true);
       } else {
         // Unavailable - show manual instructions
         this.showInstallOptions();
       }
     } catch (error) {
-// removed by clean-audit
       this.showInstallOptions();
     } finally {
       this.isInstalling.set(false);
@@ -519,4 +516,3 @@ export class PwaInstallPromptComponent {
     this.pwaInstallService.resetInstallTracking();
   }
 }
-// removed by clean-audit

@@ -710,7 +710,6 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.availableEcosystems = ecosystems;
       },
       error: (error: unknown) => {
-// removed by clean-audit
         this.availableEcosystems = [];
       }
     });
@@ -767,7 +766,6 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.nextStep();
       },
       error: (error: unknown) => {
-// removed by clean-audit
       }
     });
   }
@@ -794,7 +792,6 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.nextStep();
       },
       error: (error: unknown) => {
-// removed by clean-audit
       }
     });
   }
@@ -812,7 +809,6 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     };
 
     // Add to ecosystem service (this would normally be an API call)
-// removed by clean-audit
     
     // Refresh available ecosystems
     this.loadAvailableEcosystems();
@@ -861,13 +857,11 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.currentClient = updatedClient;
         this.updateDocumentProgress();
         
-// removed by clean-audit
         setTimeout(() => {
           this.approveDocument(documentId);
         }, 2000);
       },
       error: (error: unknown) => {
-// removed by clean-audit
       }
     });
   }
@@ -901,7 +895,6 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.updateDocumentProgress();
       },
       error: (error: unknown) => {
-// removed by clean-audit
       }
     });
   }
@@ -949,10 +942,8 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       (reason) => this.onKycExit(reason)
     ).subscribe({
       next: (button: HTMLElement | null) => {
-// removed by clean-audit
       },
       error: (error: unknown) => {
-// removed by clean-audit
       }
     });
   }
@@ -966,13 +957,11 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.updateKycStatus();
       },
       error: (error: unknown) => {
-// removed by clean-audit
       }
     });
   }
 
   onKycExit(reason: string): void {
-// removed by clean-audit
   }
 
   // Contract handling
@@ -991,7 +980,6 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.isGeneratingContract = false;
       },
       error: (error: unknown) => {
-// removed by clean-audit
         this.isGeneratingContract = false;
       }
     });
@@ -1016,7 +1004,6 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   // Completion actions
   goToClient(): void {
     // Navigate to client detail page
-// removed by clean-audit
   }
 
   startNewOnboarding(): void {
@@ -1141,4 +1128,3 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     this.clearDraft();
   }
 }
-// removed by clean-audit

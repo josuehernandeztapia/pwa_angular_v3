@@ -577,7 +577,6 @@ export const AVI_PAYMENT_INTENTION: AVIQuestionEnhanced[] = [
     followUpQuestions: [
       '¿Cuánto paga en total de compromisos al mes?',
       '¿Incluye gastos de casa, familia, otros créditos?',
-// removed by clean-audit
     ],
     analytics: {
       expectedResponseTime: 8000,
@@ -709,7 +708,6 @@ export const AVI_CREDIT_HISTORY_EXTENDED: AVIQuestionEnhanced[] = [
     followUpQuestions: [
       '¿Cuándo y por qué motivo?',
       '¿A qué tasas de interés?',
-// removed by clean-audit
     ],
     analytics: {
       expectedResponseTime: 12000,
@@ -1196,4 +1194,3 @@ export const AVI_CONFIG = {
   
   system_status: '✅ SISTEMA AVI COMPLETO - 55/55 PREGUNTAS IMPLEMENTADAS'
 };
-// removed by clean-audit

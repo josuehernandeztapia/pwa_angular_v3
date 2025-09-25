@@ -117,7 +117,6 @@ import { NextBestActionService, NextBestAction, ActionInsights } from '../../../
       <!-- Empty state -->
       <div class="empty-state" *ngIf="!isLoading && allActions.length === 0">
         <div class="empty-icon">✨</div>
-// removed by clean-audit
         <div class="empty-description">No hay acciones urgentes en este momento.</div>
       </div>
 
@@ -155,7 +154,7 @@ import { NextBestActionService, NextBestAction, ActionInsights } from '../../../
     }
 
     .icon-container {
-      background: linear-gradient(135deg, #06d6a0, #04d9ff);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 12px;
       padding: 10px;
       box-shadow: 0 4px 12px rgba(6, 214, 160, 0.3);
@@ -510,7 +509,7 @@ import { NextBestActionService, NextBestAction, ActionInsights } from '../../../
 
     .skeleton-card {
       height: 120px;
-      background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       background-size: 200% 100%;
       animation: loading 1.5s infinite;
       border-radius: 12px;
@@ -630,7 +629,6 @@ export class NextBestActionWidgetComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: (error) => {
-// removed by clean-audit
           this.isLoading = false;
           this.allActions = [];
           this.displayActions = [];
@@ -709,4 +707,3 @@ export class NextBestActionWidgetComponent implements OnInit, OnDestroy {
   }
 }
 
-// removed by clean-audit

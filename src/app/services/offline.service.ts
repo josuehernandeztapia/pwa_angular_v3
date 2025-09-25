@@ -97,10 +97,8 @@ export class OfflineService {
       this.connectionSubject.next(isOnline);
 
       if (isOnline) {
-// removed by clean-audit
         this.processPendingRequests();
       } else {
-// removed by clean-audit
       }
     }
   }
@@ -162,7 +160,6 @@ export class OfflineService {
     this.savePendingRequests();
     this.pendingRequestsSubject.next([...this.pendingRequests]);
 
-// removed by clean-audit
   }
 
   // Procesar requests pendientes cuando vuelve la conexión
@@ -171,7 +168,6 @@ export class OfflineService {
       return;
     }
 
-// removed by clean-audit
     const requests = [...this.pendingRequests];
     this.pendingRequests = [];
     this.pendingRequestsSubject.next([]);
@@ -181,9 +177,7 @@ export class OfflineService {
         // Aquí normalmente harías la llamada real al API
         // Por ahora, simulamos el procesamiento
         await this.simulateApiCall(request);
-// removed by clean-audit
       } catch (error) {
-// removed by clean-audit
         // Re-agregar a la queue si falla
         this.pendingRequests.push(request);
       }
@@ -220,7 +214,6 @@ export class OfflineService {
     try {
       localStorage.setItem(`${this.STORAGE_PREFIX}cache_${key}`, JSON.stringify(cacheEntry));
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -245,7 +238,6 @@ export class OfflineService {
 
       return cacheEntry.data as T;
     } catch (error) {
-// removed by clean-audit
       return null;
     }
   }
@@ -257,7 +249,6 @@ export class OfflineService {
         localStorage.removeItem(key);
       }
     });
-// removed by clean-audit
   }
 
   private cleanupExpiredCache(): void {
@@ -286,7 +277,6 @@ export class OfflineService {
     });
 
     if (cleanedCount > 0) {
-// removed by clean-audit
     }
   }
 
@@ -297,7 +287,6 @@ export class OfflineService {
         JSON.stringify(this.pendingRequests)
       );
     } catch (error) {
-// removed by clean-audit
     }
   }
 
@@ -307,10 +296,8 @@ export class OfflineService {
       if (stored) {
         this.pendingRequests = JSON.parse(stored);
         this.pendingRequestsSubject.next([...this.pendingRequests]);
-// removed by clean-audit
       }
     } catch (error) {
-// removed by clean-audit
       this.pendingRequests = [];
     }
   }
@@ -381,4 +368,3 @@ export class OfflineService {
     }
   }
 }
-// removed by clean-audit

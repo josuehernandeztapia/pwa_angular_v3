@@ -77,7 +77,6 @@ interface SavedSimulation {
         </div>
       </div>
 
-// removed by clean-audit
       <section class="ui-card mb-6" *ngIf="simulationResults.selectedScenario">
         <h2 class="text-sm font-semibold mb-3">Resultado de Simulación</h2>
 
@@ -393,7 +392,6 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
   private ahorroChart?: Chart;
   private pmtChart?: Chart;
 
-// removed by clean-audit
   simulationResults = {
     loading: false,
     selectedScenario: null as string | null,
@@ -539,7 +537,6 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
   }
 
   selectScenario(scenario: SimulatorScenario): void {
-// removed by clean-audit
     this.simulationResults.selectedScenario = scenario.id;
     this.simulationResults.loading = true;
 
@@ -598,7 +595,6 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
           this.savedSimulations.push(simulation);
         }
       } catch (error) {
-// removed by clean-audit
       }
     });
 
@@ -688,7 +684,6 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
         }
       });
     } else {
-// removed by clean-audit
     }
   }
 
@@ -701,7 +696,6 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
 
   showAllSimulations(): void {
     // Future implementation: navigate to a full simulations management page
-// removed by clean-audit
   }
 
   getMarketLabel(market: string): string {
@@ -1058,4 +1052,3 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
   }
 }
 
-// removed by clean-audit

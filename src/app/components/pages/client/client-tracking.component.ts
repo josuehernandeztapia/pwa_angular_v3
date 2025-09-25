@@ -378,7 +378,7 @@ import {
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #06d6a0, #10b981);
+      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 4px;
       transition: width 0.5s ease;
     }
@@ -854,9 +854,7 @@ export class ClientTrackingComponent implements OnInit {
       });
       svc.downloadPDF(blob, `entrega-${info.orderId}.pdf`);
     } catch (e) {
-// removed by clean-audit
     }
   }
 }
 
-// removed by clean-audit

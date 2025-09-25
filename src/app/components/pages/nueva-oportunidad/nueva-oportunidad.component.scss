@@ -1,6 +1,6 @@
 .nueva-oportunidad-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   padding: 20px;
 }
 
@@ -162,7 +162,7 @@
 
 .opportunity-card.selected {
   border-color: #4299e1;
-  background: linear-gradient(135deg, #ebf8ff, #f0f9ff);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   box-shadow: 0 8px 25px rgba(66, 153, 225, 0.2);
 }
 
@@ -245,12 +245,12 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #4299e1, #3182ce);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #3182ce, #2c5282);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(66, 153, 225, 0.3);
 }
@@ -357,7 +357,7 @@
 }
 
 .context-tag {
-  background: linear-gradient(135deg, #4299e1, #3182ce);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   color: white;
   padding: 6px 14px;
   border-radius: 20px;
@@ -388,7 +388,7 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #4299e1, #3182ce);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   border-radius: 3px;
   transition: width 0.5s ease;
 }
@@ -433,7 +433,7 @@
 
 /* Draft Banner Styles */
 .draft-banner {
-  background: linear-gradient(135deg, #fef5e7, #fed7aa);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   border: 1px solid #f6ad55;
   border-radius: 12px;
   padding: 16px;
@@ -515,7 +515,7 @@
 .suggestions-skeletons { margin-top: 8px; }
 .skeleton-row {
   height: 16px;
-  background: linear-gradient(90deg, #e2e8f0 25%, #f7fafc 37%, #e2e8f0 63%);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   background-size: 400% 100%;
   animation: shimmer 1.4s ease infinite;
   border-radius: 8px;
@@ -528,7 +528,7 @@
 
 /* Ecosystem skeletons */
 .ecoskeletons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-.ecoskeleton-card { height: 120px; border-radius: 12px; background: linear-gradient(90deg, #e2e8f0 25%, #f7fafc 37%, #e2e8f0 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
+.ecoskeleton-card { height: 120px; border-radius: 12px; background: var(--flat-surface-bg); /* FIXED (verify-ux) */ background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
 .ecosystem-error { color: #c05621; }
 
 /* Similar Clients Warning Styles */
@@ -584,7 +584,7 @@
 .client-avatar {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, #4299e1, #3182ce);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   color: white;
   border-radius: 50%;
   display: flex;
@@ -656,7 +656,7 @@
   position: absolute;
   top: -8px;
   left: 16px;
-  background: linear-gradient(135deg, #f6ad55, #ed8936);
+  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   color: white;
   padding: 4px 12px;
   border-radius: 12px;

@@ -29,7 +29,7 @@ const mockClient: Client = {
 
 describe('ClienteFormComponent', () => {
   let component: ClienteFormComponent;
-// removed by clean-audit
+  let fixture: ComponentFixture<ClienteFormComponent>;
   let mockRouter: jasmine.SpyObj<Router>;
   let mockActivatedRoute: any;
   let mockToastService: jasmine.SpyObj<ToastService>;
@@ -58,13 +58,14 @@ describe('ClienteFormComponent', () => {
       ]
     }).compileComponents();
 
-// removed by clean-audit
-// removed by clean-audit
+    fixture = TestBed.createComponent(ClienteFormComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     mockToastService = TestBed.inject(ToastService) as jasmine.SpyObj<ToastService>;
     mockApiService = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
 
-// removed by clean-audit
   });
 
   it('should create', () => {
@@ -286,7 +287,7 @@ describe('ClienteFormComponent Integration Tests', () => {
       ]
     });
 
-    expect(screen.getByText('Nuevo Cliente')).toBeTruthy();
+    expect(screen.getAllByText('Nuevo Cliente').length).toBeGreaterThan(0);
     expect(screen.getByLabelText('Nombre Completo *')).toBeTruthy();
     expect(screen.getByLabelText('Correo Electrónico *')).toBeTruthy();
     expect(screen.getByLabelText('Teléfono *')).toBeTruthy();
@@ -423,4 +424,3 @@ describe('ClienteFormComponent Integration Tests', () => {
   });
 });
 
-// removed by clean-audit

@@ -1,14 +1,11 @@
 // Test de asignación de vehículos en tracking de importación
 // Valida el flujo completo desde "unidadFabricada" hasta asignación exitosa
 
-// removed by clean-audit
-// removed by clean-audit
 
 // Simulador de los servicios para testing
 class VehicleAssignmentTestEngine {
   
   static testCompleteAssignmentFlow() {
-// removed by clean-audit
     
     const testCases = [
       {
@@ -76,49 +73,30 @@ class VehicleAssignmentTestEngine {
     const totalTests = testCases.length;
 
     testCases.forEach((testCase, index) => {
-// removed by clean-audit
-// removed by clean-audit
       
       const result = this.executeAssignmentTest(testCase);
       
       if (result.success && result.actualResult === testCase.expectedResult) {
-// removed by clean-audit
         passedTests++;
       } else {
-// removed by clean-audit
-// removed by clean-audit
       }
       
-// removed by clean-audit
     });
 
     // Resumen final
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
     
     if (passedTests === totalTests) {
-// removed by clean-audit
     } else {
-// removed by clean-audit
     }
     
-// removed by clean-audit
   }
 
   static executeAssignmentTest(testCase) {
     try {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
       
       // 1. Validar estado del cliente
       const statusValidation = this.validateClientImportStatus(testCase.clientId, testCase.importStatus);
       if (!statusValidation.valid) {
-// removed by clean-audit
         return { 
           success: true, 
           actualResult: 'ERROR_INVALID_STATUS',
@@ -129,7 +107,6 @@ class VehicleAssignmentTestEngine {
       // 2. Validar duplicados de VIN
       const duplicateCheck = this.checkVINDuplicate(testCase.vehicleData.vin);
       if (duplicateCheck.isDuplicate) {
-// removed by clean-audit
         return { 
           success: true, 
           actualResult: 'ERROR_VIN_DUPLICATE',
@@ -140,7 +117,6 @@ class VehicleAssignmentTestEngine {
       // 3. Validar datos del vehículo
       const dataValidation = this.validateVehicleData(testCase.vehicleData);
       if (!dataValidation.valid) {
-// removed by clean-audit
         return { 
           success: true, 
           actualResult: 'ERROR_VALIDATION',
@@ -152,11 +128,6 @@ class VehicleAssignmentTestEngine {
       const assignmentResult = this.processVehicleAssignment(testCase.clientId, testCase.vehicleData);
       
       if (assignmentResult.success) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
         
         // Simular actualización de import status
         this.updateImportStatusWithAssignment(testCase.clientId, assignmentResult.assignedUnit);
@@ -170,7 +141,6 @@ class VehicleAssignmentTestEngine {
           assignedUnit: assignmentResult.assignedUnit
         };
       } else {
-// removed by clean-audit
         return { 
           success: true, 
           actualResult: 'ERROR_ASSIGNMENT',
@@ -179,7 +149,6 @@ class VehicleAssignmentTestEngine {
       }
       
     } catch (error) {
-// removed by clean-audit
       return { 
         success: false, 
         actualResult: 'ERROR_UNEXPECTED',
@@ -288,15 +257,9 @@ class VehicleAssignmentTestEngine {
   }
 
   static updateImportStatusWithAssignment(clientId, assignedUnit) {
-// removed by clean-audit
-// removed by clean-audit
   }
 
   static sendAssignmentNotification(clientId, assignedUnit) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   }
 
   // Métodos auxiliares
@@ -313,11 +276,8 @@ class VehicleAssignmentTestEngine {
     // Registrar VIN como asignado
     this.assignedVINsDatabase[assignedUnit.vin] = clientId;
     
-// removed by clean-audit
-// removed by clean-audit
   }
 }
 
 // Ejecutar los tests
 VehicleAssignmentTestEngine.testCompleteAssignmentFlow();
-// removed by clean-audit

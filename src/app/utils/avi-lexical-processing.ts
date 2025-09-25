@@ -27,7 +27,6 @@ export function adjustLogLRForAdmission(
   // 1. Verificar si hay negación tajante - NO aplicar relief
   const hasStrongNegation = LexiconUtils.hasStrongEvasion(text);
   if (hasStrongNegation) {
-// removed by clean-audit
     return logLR; // Sin relief para evasión fuerte
   }
   
@@ -58,12 +57,6 @@ export function adjustLogLRForAdmission(
   
   // Log para debugging
   if (tokensFound.length > 0) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   }
   
   return adjustedLogLR;
@@ -150,10 +143,6 @@ export function applyNervousAdmissionCap(
   const cappedSubscore = Math.max(baseSubscore, dynamicCap);
   
   if (cappedSubscore > baseSubscore) {
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
-// removed by clean-audit
   }
   
   return cappedSubscore;
@@ -243,4 +232,3 @@ export function sigmoid(x: number): number {
 export function clamp01(value: number): number {
   return Math.max(0, Math.min(1, value));
 }
-// removed by clean-audit

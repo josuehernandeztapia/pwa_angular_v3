@@ -110,7 +110,6 @@ export class RiskEvaluationService {
       retry({
         count: this.MAX_RETRIES,
         delay: (error, retryCount) => {
-// removed by clean-audit
           return timer(Math.pow(2, retryCount) * 1000); // Exponential backoff
         }
       }),
@@ -125,8 +124,6 @@ export class RiskEvaluationService {
           evaluation,
           { requestData: request, processingTime: Date.now() - startTime }
         ).subscribe({
-// removed by clean-audit
-// removed by clean-audit
         });
 
         // Track successful evaluation for analytics
@@ -152,7 +149,6 @@ export class RiskEvaluationService {
     return this.riskPersistenceService.getEvaluationHistory(clientId).pipe(
       map(storedEvaluations => storedEvaluations.map(stored => stored.evaluation)),
       catchError(error => {
-// removed by clean-audit
         // Fallback to direct API call
         return this.http.get<RiskEvaluationResponse[]>(`${this.BFF_BASE_URL}/evaluations/${clientId}`).pipe(
           map(responses => responses.map(response =>
@@ -176,7 +172,6 @@ export class RiskEvaluationService {
 
     return this.http.get(`${this.BFF_BASE_URL}/analytics`, { params }).pipe(
       catchError(error => {
-// removed by clean-audit
         return throwError(() => error);
       })
     );
@@ -205,7 +200,6 @@ export class RiskEvaluationService {
         summary: response.batchStats
       })),
       catchError(error => {
-// removed by clean-audit
         return throwError(() => error);
       })
     );
@@ -751,7 +745,6 @@ export class RiskEvaluationService {
     };
     
     // Send to analytics service or log for monitoring
-// removed by clean-audit
   }
 
   /**
@@ -768,4 +761,3 @@ export class RiskEvaluationService {
     return `BATCH-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 }
-// removed by clean-audit

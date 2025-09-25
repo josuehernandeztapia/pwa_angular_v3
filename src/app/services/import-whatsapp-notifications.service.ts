@@ -110,7 +110,6 @@ export class ImportWhatsAppNotificationsService {
     clientData?: Partial<Client>
   ): Observable<WhatsAppNotificationResult> {
     
-// removed by clean-audit
 
     return this.getNotificationSettings(clientId).pipe(
       map(settings => {
@@ -163,7 +162,6 @@ export class ImportWhatsAppNotificationsService {
         return result;
       }),
       catchError(error => {
-// removed by clean-audit
         
         const result: WhatsAppNotificationResult = {
           messageId: 'failed',
@@ -192,7 +190,6 @@ export class ImportWhatsAppNotificationsService {
     metadata?: any
   ): Observable<WhatsAppNotificationResult> {
     
-// removed by clean-audit
 
     return this.getNotificationSettings(clientId).pipe(
       map(settings => {
@@ -256,7 +253,6 @@ export class ImportWhatsAppNotificationsService {
         return result;
       }),
       catchError(error => {
-// removed by clean-audit
         
         return of({
           messageId: 'failed',
@@ -286,7 +282,6 @@ export class ImportWhatsAppNotificationsService {
       settings
     ).pipe(
       tap(updatedSettings => {
-// removed by clean-audit
       }),
       catchError(() => of(this.getDefaultNotificationSettings(clientId)))
     );
@@ -331,7 +326,6 @@ export class ImportWhatsAppNotificationsService {
     status: 'in_progress' | 'completed' | 'delayed'
   ): Observable<WhatsAppNotificationResult[]> {
     
-// removed by clean-audit
 
     const notificationPromises = clientIds.map(clientId => 
       this.sendMilestoneNotification(clientId, milestone, status, {} as any).toPromise()
@@ -342,10 +336,8 @@ export class ImportWhatsAppNotificationsService {
       tap(results => {
         const successful = results.filter(r => r.success).length;
         const failed = results.length - successful;
-// removed by clean-audit
       }),
       catchError(error => {
-// removed by clean-audit
         return of([]);
       })
     );
@@ -496,7 +488,6 @@ export class ImportWhatsAppNotificationsService {
 
   private handleError<T>(operation = 'operation') {
     return (error: any): Observable<T> => {
-// removed by clean-audit
       
       let userMessage = 'Error en el sistema de notificaciones de importación';
       
@@ -519,4 +510,3 @@ export class ImportWhatsAppNotificationsService {
     };
   }
 }
-// removed by clean-audit

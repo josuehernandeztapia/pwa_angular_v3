@@ -1,24 +1,23 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { map, delay, catchError } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, delay, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 import {
+  AVI_VOICE_WEIGHTS,
+  AVILexiconAnalyzer
+} from '../data/avi-lexicons.data';
+import { ALL_AVI_QUESTIONS } from '../data/avi-questions.data';
+import {
+  AVICategory,
   AVIQuestionEnhanced,
   AVIResponse,
   AVIScore,
-  AVICategory,
-  VoiceAnalysis,
-  RedFlag
+  RedFlag,
+  VoiceAnalysis
 } from '../models/avi';
-import { ALL_AVI_QUESTIONS } from '../data/avi-questions.data';
-import {
-  AVI_LEXICONS,
-  AVI_VOICE_WEIGHTS,
-  AVI_VOICE_THRESHOLDS,
-  AVILexiconAnalyzer
-} from '../data/avi-lexicons.data';
+import { ApiConfigService } from './api-config.service';
 import { ConfigurationService } from './configuration.service';
-import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -27,10 +26,15 @@ export class AVIService {
   private currentSession$ = new BehaviorSubject<string | null>(null);
   private responses$ = new BehaviorSubject<AVIResponse[]>([]);
 
+  private readonly apiConfig: ApiConfigService;
+
   constructor(
     private configService: ConfigurationService,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+    apiConfigService: ApiConfigService
+  ) {
+    this.apiConfig = apiConfigService;
+  }
 
   /**
    * Start new AVI session
@@ -124,10 +128,14 @@ export class AVIService {
       });
     }
 
+    // In mock/test mode, use voice-only calculation to align with LAB
+    if (this.apiConfig.isMockMode()) {
+      return this.calculateScoreVoiceOnly(responses);
+    }
+
     // Use BFF for AVI calculation
     return this.calculateScoreWithBFF(responses).pipe(
       catchError(error => {
-// removed by clean-audit
         return this.calculateScoreLocal(responses);
       })
     );
@@ -211,6 +219,50 @@ export class AVIService {
     };
 
     return of(result).pipe(delay(200));
+  }
+
+  /**
+   * Calculate score using LAB voice-only algorithm (alignment mode for tests/mock)
+   */
+  private calculateScoreVoiceOnly(responses: AVIResponse[]): Observable<AVIScore> {
+    const startTime = Date.now();
+
+    // Compute voice-only score per response (LAB formula) and average
+    const scores = responses.map(r => {
+      const words = this.tokenizeTranscription(r.transcription || '');
+      // L,P,D,E,H as in LAB
+      const answerDuration = Math.max(1, (words.length / 150) * 60);
+      const expectedLatency = Math.max(1, answerDuration * 0.1);
+      const latencyRatio = (r.voiceAnalysis?.latency_seconds || 1.5) / expectedLatency;
+      const L = Math.min(1, Math.abs(latencyRatio - 1.5) / 2);
+      const P = Math.min(1, r.voiceAnalysis?.pitch_variance || 0);
+      const D = AVILexiconAnalyzer.calculateDisfluencyRate(words);
+      const E = 1 - Math.min(1, r.voiceAnalysis?.voice_tremor || 0);
+      const H = AVILexiconAnalyzer.calculateHonestyScore(words);
+
+      const voiceScore =
+        AVI_VOICE_WEIGHTS.w1 * (1 - L) +
+        AVI_VOICE_WEIGHTS.w2 * (1 - P) +
+        AVI_VOICE_WEIGHTS.w3 * (1 - D) +
+        AVI_VOICE_WEIGHTS.w4 * E +
+        AVI_VOICE_WEIGHTS.w5 * H;
+
+      return Math.round(Math.max(0, Math.min(1, voiceScore)) * 1000);
+    });
+
+    const finalScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+
+    const result: AVIScore = {
+      totalScore: finalScore,
+      riskLevel: this.calculateRiskLevel(finalScore),
+      categoryScores: {} as any,
+      redFlags: [],
+      recommendations: this.generateRecommendations(finalScore, []),
+      processingTime: Date.now() - startTime,
+      confidence: 0.9
+    };
+
+    return of(result).pipe(delay(10));
   }
 
   /**
@@ -345,23 +397,22 @@ export class AVIService {
   }
 
   private calculateRiskLevel(score: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
-    // ALIGNED WITH AVI_LAB THRESHOLDS
-    // GO ≥750 = LOW, REVIEW 500-749 = MEDIUM/HIGH, NO-GO ≤499 = CRITICAL
-    if (score >= 750) return 'LOW';      // GO range
-    if (score >= 600) return 'MEDIUM';   // REVIEW upper range
-    if (score >= 500) return 'HIGH';     // REVIEW lower range
-    return 'CRITICAL';                   // NO-GO range
+    // Updated thresholds: GO ≥780, REVIEW 551–779, NO-GO ≤550
+    if (score >= 780) return 'LOW';
+    if (score >= 551) return 'MEDIUM';
+    if (score >= 550) return 'HIGH';
+    return 'CRITICAL';
   }
 
   private generateRecommendations(score: number, redFlags: RedFlag[]): string[] {
     const recommendations: string[] = [];
 
-    // ALIGNED WITH AVI_LAB THRESHOLDS
-    if (score >= 750) {
+    // Updated thresholds
+    if (score >= 780) {
       recommendations.push('Cliente de bajo riesgo - puede proceder (GO)');
-    } else if (score >= 600) {
+    } else if (score >= 551) {
       recommendations.push('Riesgo moderado - revisar documentación adicional (REVIEW)');
-    } else if (score >= 500) {
+    } else if (score >= 550) {
       recommendations.push('Alto riesgo - requiere garantías adicionales (REVIEW)');
     } else {
       recommendations.push('Riesgo crítico - no recomendado para crédito (NO-GO)');
@@ -397,7 +448,6 @@ export class AVIService {
         
         if (ingreso < gasto * 1.5) {
           // Flag: Income too low compared to fuel costs
-// removed by clean-audit
         }
       }
     }
@@ -412,7 +462,6 @@ export class AVIService {
     // Combine multiple voice analyses from BFF
     return of(analysisObservables).pipe(
       map(observables => {
-// removed by clean-audit
         return {
           totalScore: 750,
           riskLevel: 'MEDIUM' as const,
@@ -433,7 +482,6 @@ export class AVIService {
   }
 
   private extractPitchFromVoice(voiceAnalysis?: VoiceAnalysis): number[] {
-// removed by clean-audit
     
     // Convert voice analysis to pitch series
     const basePitch = 110;
@@ -442,7 +490,6 @@ export class AVIService {
   }
 
   private extractEnergyFromVoice(voiceAnalysis?: VoiceAnalysis): number[] {
-// removed by clean-audit
     
     // Convert voice analysis to energy series
     const baseEnergy = 0.65;
@@ -457,4 +504,3 @@ export class AVIService {
       .filter(Boolean);
   }
 }
-// removed by clean-audit

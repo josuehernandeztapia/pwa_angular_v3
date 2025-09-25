@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { SwPush } from '@angular/service-worker';
-import { of, throwError } from 'rxjs';
+import { of, throwError, firstValueFrom } from 'rxjs';
 import { PushNotificationService } from './push-notification.service';
 import { NotificationHistory, NotificationPayload } from '../models/notification';
 
@@ -30,7 +30,6 @@ describe('PushNotificationService', () => {
     service = TestBed.inject(PushNotificationService);
     httpMock = TestBed.inject(HttpTestingController);
 
-// removed by clean-audit
     Object.defineProperty(window, 'Notification', {
       writable: true,
       configurable: true,
@@ -40,7 +39,6 @@ describe('PushNotificationService', () => {
       }
     });
 
-// removed by clean-audit
     Object.defineProperty(document, 'hidden', {
       writable: true,
       configurable: true,
@@ -87,18 +85,8 @@ describe('PushNotificationService', () => {
 
       const freshService = TestBed.inject(PushNotificationService);
 
-      await new Promise<void>((resolve, reject) => {
-        const sub = freshService.permission.subscribe(permission => {
-          try {
-            expect(permission).toBe('default');
-            sub.unsubscribe();
-            resolve();
-          } catch (e) {
-            sub.unsubscribe();
-            reject(e);
-          }
-        });
-      });
+      const permission = await firstValueFrom(freshService.permission);
+      expect(permission).toBe('default');
     });
 
     it('should initialize with no subscription', (done) => {
@@ -141,7 +129,6 @@ describe('PushNotificationService', () => {
     });
 
     it('should throw error when push notifications not supported', async () => {
-// removed by clean-audit
       const originalNotification = (window as any).Notification;
       const originalDescriptor = Object.getOwnPropertyDescriptor(window, 'Notification');
       delete (window as any).Notification;
@@ -194,7 +181,6 @@ describe('PushNotificationService', () => {
         value: 'granted'
       });
       
-// removed by clean-audit
       localStorage.setItem('currentUser', JSON.stringify({ id: 'user123' }));
       localStorage.setItem('auth_token', 'mock_token');
     });
@@ -459,7 +445,6 @@ describe('PushNotificationService', () => {
         }
       };
 
-// removed by clean-audit
       let canMockAssign = true;
       const originalLocation = window.location;
       const assignSpy = jasmine.createSpy('assign');
@@ -839,7 +824,6 @@ describe('PushNotificationService', () => {
         notificationClicks: of({})
       });
 
-// removed by clean-audit
       const originalNotification = (window as any).Notification;
       const originalDescriptor = Object.getOwnPropertyDescriptor(window, 'Notification');
       delete (window as any).Notification;
@@ -886,4 +870,3 @@ describe('PushNotificationService', () => {
   });
 });
 
-// removed by clean-audit

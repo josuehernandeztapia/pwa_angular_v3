@@ -39,7 +39,6 @@ export class PostSalesApiService {
 
   /**
    * POST /events/vehicle-delivered
-// removed by clean-audit
    */
   sendVehicleDeliveredEvent(event: VehicleDeliveredEvent): Observable<{
     success: boolean;
@@ -659,7 +658,6 @@ export class PostSalesApiService {
 
   private handleError<T>(operation = 'operation') {
     return (error: any): Observable<T> => {
-// removed by clean-audit
       
       let userMessage = 'Error en el sistema de post-venta';
       
@@ -683,4 +681,3 @@ export class PostSalesApiService {
     };
   }
 }
-// removed by clean-audit
