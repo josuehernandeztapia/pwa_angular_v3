@@ -59,8 +59,11 @@ describe('HttpClientService', () => {
       // Observe next emission and expect true
       service.isConnected$.pipe(skip(1), take(1)).subscribe(val => {
         expect(val).toBe(true);
-        expect(mockToastService.success).toHaveBeenCalledWith('Conexión restaurada');
-        done();
+        // Allow event handler to complete after synchronous next
+        setTimeout(() => {
+          expect(mockToastService.success).toHaveBeenCalledWith('Conexión restaurada');
+          done();
+        }, 0);
       });
       // Trigger online event
       const onlineEvent = new Event('online');
@@ -497,7 +500,13 @@ describe('HttpClientService', () => {
       req.flush({ success: false, data: { status: 'error' } });
     });
 
-    it('should handle API health check failure', () => {
+    it('should handle API health check failure', (done) => {
+      // Observe the next emission to ensure we capture the transition to false
+      service.isConnected$.pipe(skip(1), take(1)).subscribe(connected => {
+        expect(connected).toBe(false);
+        done();
+      });
+
       service.checkApiHealth().subscribe(isHealthy => {
         expect(isHealthy).toBe(false);
       });
@@ -510,11 +519,6 @@ describe('HttpClientService', () => {
       h3.error(new ErrorEvent('Health check failed'), { status: 0, statusText: 'Unknown Error' });
       const h4 = httpMock.expectOne('http://localhost:3000/api/health');
       h4.error(new ErrorEvent('Health check failed'), { status: 0, statusText: 'Unknown Error' });
-
-      // Should update connection status
-      service.isConnected$.pipe(skip(1), take(1)).subscribe(connected => {
-        expect(connected).toBe(false);
-      });
     });
   });
 
