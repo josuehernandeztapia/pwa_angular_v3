@@ -25,7 +25,7 @@ jobs:
         run: |
           echo "🎯 Running AVI-related test suites"
           npm run test -- --include 'voice-validation.service.spec.ts'
-          npm run test -- --include 'avi-lab.service.spec.ts'
+          npm run test -- --include 'avi-lab.threshold.spec.ts'
 
       - name: Report result
         if: failure()
