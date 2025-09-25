@@ -277,6 +277,9 @@ export class HttpClientService {
    */
   private handleSuccess<T>(response: ApiResponse<T>): void {
     if (response.success && response.message) {
+      try {
+        console.log('API Success:', response.message);
+      } catch {}
     }
   }
 
