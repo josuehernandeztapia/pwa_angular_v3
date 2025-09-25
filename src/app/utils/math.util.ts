@@ -48,7 +48,8 @@ export function toMonthlyRate(annualRatePercent: Numeric): number {
 	const annualRate = toNumber(annualRatePercent) / 100;
 	// Effective monthly from nominal APR with compounding
 	const monthly = Math.pow(1 + annualRate, 1 / 12) - 1;
-	return round2(monthly);
+	// Return as percent (not decimal) to match UI expectations/tests
+	return round2(monthly * 100);
 }
 
 // Standard annuity payment formula: P = r * PV / (1 - (1 + r)^-n)

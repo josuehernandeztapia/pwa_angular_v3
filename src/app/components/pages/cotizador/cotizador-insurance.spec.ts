@@ -1,9 +1,10 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CotizadorMainComponent } from './cotizador-main.component';
 import { ToastService } from '../../../services/toast.service';
 
 describe('CotizadorMainComponent – Insurance toggle', () => {
   let component: CotizadorMainComponent;
+  let fixture: ComponentFixture<CotizadorMainComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -12,6 +13,9 @@ describe('CotizadorMainComponent – Insurance toggle', () => {
         { provide: ToastService, useValue: { success: () => {}, error: () => {}, info: () => {} } }
       ]
     }).compileComponents();
+
+    fixture = TestBed.createComponent(CotizadorMainComponent);
+    component = fixture.componentInstance;
 
     // Set minimal package
     (component as any).pkg = {
@@ -25,6 +29,7 @@ describe('CotizadorMainComponent – Insurance toggle', () => {
     (component as any).selectedOptions = { vehiculo: true };
     (component as any).term = 24;
     // Ensure not venta directa
+    fixture.detectChanges();
   });
 
   it('adds insurance to amountToFinance when financed', () => {
