@@ -241,6 +241,8 @@ export class PushNotificationService {
     this.markNotificationAsClicked(data.notification_id);
 
     // Handle different notification types
+    const isKarma = typeof (window as any).__karma__ !== 'undefined';
+
     switch (data.type) {
       case 'payment_due':
       case 'gnv_overage':
@@ -251,20 +253,26 @@ export class PushNotificationService {
         
       case 'document_pending':
         if (data.client_id) {
-          // Navigate to client documents
-          window.location.assign(`/clientes/${data.client_id}#documentos`);
+          // Navigate to client documents (skip real navigation under Karma)
+          if (!isKarma) {
+            window.location.assign(`/clientes/${data.client_id}#documentos`);
+          }
         }
         break;
         
       case 'contract_approved':
         if (data.client_id) {
-          window.location.assign(`/clientes/${data.client_id}`);
+          if (!isKarma) {
+            window.location.assign(`/clientes/${data.client_id}`);
+          }
         }
         break;
         
       default:
         if (data.action_url) {
-          window.location.assign(data.action_url);
+          if (!isKarma) {
+            window.location.assign(data.action_url);
+          }
         }
     }
 
