@@ -99,18 +99,24 @@ describe('BackendApiService', () => {
     httpClientSpy = TestBed.inject(HttpClient) as jasmine.SpyObj<HttpClient>;
     storageServiceSpy = TestBed.inject(StorageService) as jasmine.SpyObj<StorageService>;
 
-    originalNavigatorOnLine = Object.getOwnPropertyDescriptor(window.navigator, 'onLine');
-    Object.defineProperty(window.navigator, 'onLine', {
-      configurable: true,
-      writable: true,
-      value: true
-    });
+    // Safely attempt to force navigator.onLine to true only if configurable.
+    try {
+      originalNavigatorOnLine = Object.getOwnPropertyDescriptor(window.navigator, 'onLine');
+      if (!originalNavigatorOnLine || originalNavigatorOnLine.configurable) {
+        Object.defineProperty(window.navigator, 'onLine', {
+          configurable: true,
+          get: () => true
+        });
+      }
+    } catch {}
   });
 
   afterEach(() => {
-    if (originalNavigatorOnLine) {
-      Object.defineProperty(window.navigator, 'onLine', originalNavigatorOnLine);
-    }
+    try {
+      if (originalNavigatorOnLine && originalNavigatorOnLine.configurable) {
+        Object.defineProperty(window.navigator, 'onLine', originalNavigatorOnLine);
+      }
+    } catch {}
   });
 
   describe('Service Initialization', () => {

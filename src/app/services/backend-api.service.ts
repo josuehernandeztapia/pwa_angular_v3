@@ -440,7 +440,8 @@ export class BackendApiService {
           await this.executeAction(action);
           await this.storage.removeCompletedAction(action.id);
         } catch (error) {
-          // Could implement exponential backoff here
+          // Log sync failure for observability in tests and runtime
+          console.error('Failed to sync action:', action.type, error as any);
         }
       }
     } catch (error) {
@@ -462,6 +463,7 @@ export class BackendApiService {
         // Would need to re-implement file upload from cached data
         break;
       default:
+        console.warn('Unknown action type:', action.type);
     }
   }
 
