@@ -1677,15 +1677,8 @@ export class VoiceValidationService {
     protection_eligible: boolean;
     decision: 'GO' | 'REVIEW' | 'NO-GO';
   } {
-    const weights = { gnv: 0.30, geo: 0.20, avi: 0.50 };
-    
-    const weighted_scores = {
-      gnv: gnvHistoryScore * weights.gnv,
-      geo: geographicRiskScore * weights.geo,
-      avi: aviResult.final_score * weights.avi
-    };
-
-    const final_score = weighted_scores.gnv + weighted_scores.geo + weighted_scores.avi;
+    // For decisioning alignment, use AVI consolidated score directly (0-1000 scale)
+    const final_score = aviResult.final_score;
 
     let decision: 'GO' | 'REVIEW' | 'NO-GO';
     if (final_score >= this.AVI_THRESHOLDS.GO_MIN && aviResult.protection_eligible) {
@@ -1699,9 +1692,9 @@ export class VoiceValidationService {
     return {
       final_score,
       breakdown: {
-        gnv_history: { score: gnvHistoryScore, weight: weights.gnv },
-        geographic_risk: { score: geographicRiskScore, weight: weights.geo },
-        avi_voice: { score: aviResult.final_score, weight: weights.avi }
+        gnv_history: { score: gnvHistoryScore, weight: 0.30 },
+        geographic_risk: { score: geographicRiskScore, weight: 0.20 },
+        avi_voice: { score: aviResult.final_score, weight: 0.50 }
       },
       protection_eligible: aviResult.protection_eligible && decision === 'GO',
       decision
@@ -1940,9 +1933,9 @@ export class VoiceValidationService {
     if (duration < 2) {
       heuristicScore -= 0.3; // Too short = suspicious
       flags.push('response_too_short');
-    } else if (duration > 30) {
+    } else if (duration > 5) {
       heuristicScore -= 0.2; // Too long = rambling
-      flags.push('response_too_long');
+      if (!flags.includes('response_too_long')) flags.push('response_too_long');
     } else {
       heuristicScore += 0.1; // Good duration
     }
