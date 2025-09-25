@@ -574,6 +574,7 @@ export class VehicleAssignmentFormComponent implements OnDestroy {
   onSubmit(): void {
     if (this.assignmentForm.invalid) {
       this.markAllFieldsAsTouched();
+      console.log('❌ Form is invalid, cannot submit');
       return;
     }
 
@@ -626,6 +627,9 @@ export class VehicleAssignmentFormComponent implements OnDestroy {
             this.assignmentForm.reset();
             this.assignmentResult.set(null);
           }, 3000);
+        } else {
+          // Manejar error de asignación (no excepción)
+          alert(`Error: ${result.error || 'Error de asignación'}`);
         }
       },
       error: (error) => {
