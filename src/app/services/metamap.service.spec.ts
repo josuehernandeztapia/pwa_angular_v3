@@ -63,7 +63,15 @@ describe('MetaMapService', () => {
     
     // Install spies BEFORE service instantiation to catch deferred init
     spyOn(document, 'createElement').and.callThrough();
+    spyOn(document.head, 'appendChild').and.callThrough();
     spyOn(document, 'querySelector').and.returnValue(null);
+
+    // Provide SDK mock on window with init/reset to emulate external SDK
+    (window as any).Mati = {
+      init: jasmine.createSpy('init'),
+      reset: jasmine.createSpy('reset'),
+      version: 'test'
+    };
 
     // Configure environment for MetaMap test IDs
     (environment as any).services = {
@@ -94,6 +102,8 @@ describe('MetaMapService', () => {
     
     const scripts = document.querySelectorAll('script[src*="getmati.com"]');
     scripts.forEach(script => script.remove());
+
+    delete (window as any).Mati;
   });
 
   describe('Service Initialization', () => {
