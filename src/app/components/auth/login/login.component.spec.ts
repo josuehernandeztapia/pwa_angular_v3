@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { render, screen, waitFor, fireEvent } from '@testing-library/angular';
@@ -64,8 +64,8 @@ describe('LoginComponent', () => {
 
   it('should accept valid form inputs', () => {
     component.loginForm.patchValue({
-      email: 'test@example.com',
-      password: 'validPassword123'
+      email: 'demo@conductores.com',
+      password: 'demo123'
     });
 
     expect(component.loginForm.valid).toBe(true);
@@ -83,35 +83,27 @@ describe('LoginComponent', () => {
     expect(component.loginForm.get('password')?.touched).toBe(true);
   });
 
-  it('should call performLogin when form is valid', () => {
-    spyOn(component as any, 'performLogin');
-    
+  it('should submit when form is valid and navigate', fakeAsync(() => {
+    const router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     component.loginForm.patchValue({
-      email: 'test@example.com',
-      password: 'validPassword123'
+      email: 'demo@conductores.com',
+      password: 'demo123'
     });
 
     component.onSubmit();
+    expect(component.isLoading).toBeTrue();
+    tick(1600);
+    expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
+  }));
 
-    expect((component as any).performLogin).toHaveBeenCalledWith({
-      email: 'test@example.com',
-      password: 'validPassword123'
-    });
-  });
-
-  it('should navigate to dashboard on successful login', () => {
-    component.loginForm.patchValue({
-      email: 'test@example.com',
-      password: 'validPassword123'
-    });
-
+  it('should navigate to dashboard on successful login', fakeAsync(() => {
     component.performLogin({
-      email: 'test@example.com',
-      password: 'validPassword123'
+      email: 'demo@conductores.com',
+      password: 'demo123'
     });
-
+    tick(1600);
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard']);
-  });
+  }));
 
   it('should handle login loading state', () => {
     component.isLoading = true;
@@ -159,9 +151,11 @@ describe('LoginComponent Integration Tests', () => {
       ]
     });
 
-    expect(screen.getByText('Centro de Comando')).toBeTruthy();
-    expect(screen.getByLabelText(/correo electrónico/i)).toBeTruthy();
-    expect(screen.getByLabelText(/contraseña/i)).toBeTruthy();
+    expect(screen.getByText('Conductores')).toBeTruthy();
+    expect(screen.getByLabelText('Correo electrónico')).toBeTruthy();
+    // Disambiguate by selecting the input with id=password
+    const passwordInput = screen.getByLabelText('Contraseña', { selector: 'input#password' });
+    expect(passwordInput).toBeTruthy();
     expect(screen.getByRole('button', { name: /iniciar sesión/i })).toBeTruthy();
   });
 
@@ -174,11 +168,14 @@ describe('LoginComponent Integration Tests', () => {
       ]
     });
 
-    const submitButton = screen.getByRole('button');
-    fireEvent.click(submitButton);
+    const emailInput = screen.getByLabelText('Correo electrónico');
+    const passwordInput = screen.getByLabelText('Contraseña', { selector: 'input#password' });
+
+    fireEvent.blur(emailInput);
+    fireEvent.blur(passwordInput);
 
     await waitFor(() => {
-      expect(screen.getByText('El correo es requerido')).toBeTruthy();
+      expect(screen.getByText('El correo electrónico es requerido')).toBeTruthy();
       expect(screen.getByText('La contraseña es requerida')).toBeTruthy();
     });
   });
@@ -193,7 +190,7 @@ describe('LoginComponent Integration Tests', () => {
       ]
     });
 
-    const emailInput = screen.getByLabelText(/correo electrónico/i);
+    const emailInput = screen.getByLabelText('Correo electrónico');
     await user.type(emailInput, 'invalid-email');
     await user.tab(); // Trigger blur event
 
@@ -212,8 +209,8 @@ describe('LoginComponent Integration Tests', () => {
       ]
     });
 
-    const emailInput = screen.getByLabelText(/correo electrónico/i);
-    const passwordInput = screen.getByLabelText(/contraseña/i);
+    const emailInput = screen.getByLabelText('Correo electrónico');
+    const passwordInput = screen.getByLabelText('Contraseña', { selector: 'input#password' });
     const submitButton = screen.getByRole('button', { name: /iniciar sesión/i });
 
     await user.type(emailInput, 'test@example.com');
@@ -232,17 +229,16 @@ describe('LoginComponent Integration Tests', () => {
       ]
     });
 
-    const emailInput = screen.getByLabelText(/correo electrónico/i);
-    const passwordInput = screen.getByLabelText(/contraseña/i);
+    const emailInput = screen.getByLabelText('Correo electrónico');
+    const passwordInput = screen.getByLabelText('Contraseña', { selector: 'input#password' });
     const submitButton = screen.getByRole('button', { name: /iniciar sesión/i });
 
-    await user.type(emailInput, 'test@example.com');
-    await user.type(passwordInput, 'validPassword123');
+    await user.type(emailInput, 'demo@conductores.com');
+    await user.type(passwordInput, 'demo123');
     await user.click(submitButton);
 
-    await waitFor(() => {
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard']);
-    });
+    await new Promise(resolve => setTimeout(resolve, 1600));
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard']);
   });
 
   it('should toggle password visibility', async () => {
@@ -255,8 +251,8 @@ describe('LoginComponent Integration Tests', () => {
       ]
     });
 
-    const passwordInput = screen.getByLabelText(/contraseña/i) as HTMLInputElement;
-    const toggleButton = container.querySelector('.password-toggle-premium');
+    const passwordInput = screen.getByLabelText('Contraseña', { selector: 'input#password' }) as HTMLInputElement;
+    const toggleButton = container.querySelector('[data-cy="password-toggle"]');
 
     expect(passwordInput.type).toBe('password');
 
@@ -275,8 +271,8 @@ describe('LoginComponent Integration Tests', () => {
       ]
     });
 
-    const emailInput = screen.getByLabelText(/correo electrónico/i);
-    const passwordInput = screen.getByLabelText(/contraseña/i);
+    const emailInput = screen.getByLabelText('Correo electrónico');
+    const passwordInput = screen.getByLabelText('Contraseña', { selector: 'input#password' });
 
     expect(emailInput.getAttribute('type')).toBe('email');
     expect(emailInput.getAttribute('id')).toBe('email');
@@ -292,7 +288,7 @@ describe('LoginComponent Integration Tests', () => {
       ]
     });
 
-    expect(screen.getByText('Centro de Comando')).toBeTruthy();
-    expect(screen.getByText('El Copiloto Estratégico para el Asesor Moderno')).toBeTruthy();
+    expect(screen.getByText('Conductores')).toBeTruthy();
+    expect(screen.getByText('Sistema de Gestión Empresarial')).toBeTruthy();
   });
 });

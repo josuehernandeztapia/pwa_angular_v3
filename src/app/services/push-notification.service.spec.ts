@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { SwPush } from '@angular/service-worker';
-import { of, throwError } from 'rxjs';
+import { of, throwError, firstValueFrom } from 'rxjs';
 import { PushNotificationService } from './push-notification.service';
 import { NotificationHistory, NotificationPayload } from '../models/notification';
 
@@ -85,18 +85,8 @@ describe('PushNotificationService', () => {
 
       const freshService = TestBed.inject(PushNotificationService);
 
-      await new Promise<void>((resolve, reject) => {
-        const sub = freshService.permission.subscribe(permission => {
-          try {
-            expect(permission).toBe('default');
-            sub.unsubscribe();
-            resolve();
-          } catch (e) {
-            sub.unsubscribe();
-            reject(e);
-          }
-        });
-      });
+      const permission = await firstValueFrom(freshService.permission);
+      expect(permission).toBe('default');
     });
 
     it('should initialize with no subscription', (done) => {
