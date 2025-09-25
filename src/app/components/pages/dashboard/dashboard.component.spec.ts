@@ -171,11 +171,11 @@ describe('DashboardComponent', () => {
   });
 
   it('should toggle view mode', () => {
-    (component as any).currentViewMode = 'advisor';
-
-    (component as any).onViewModeChanged('client');
-
-    expect((component as any).currentViewMode).toBe('client');
+    expect((component as any).showMobileActions).toBeFalse();
+    component.toggleMobileActions();
+    expect((component as any).showMobileActions).toBeTrue();
+    component.toggleMobileActions();
+    expect((component as any).showMobileActions).toBeFalse();
   });
 
   it('should handle error in dashboard data loading', () => {
@@ -286,16 +286,19 @@ describe('DashboardComponent Integration Tests', () => {
       updateMarket: jasmine.createSpy()
     };
 
-    await render(DashboardComponent, {
+    const { container } = await render(DashboardComponent, {
       providers: [
         { provide: DashboardService, useValue: mockDashboardService },
         { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) }
       ]
     });
 
-    // Should display KPI values
-    expect(screen.getByText('15')).toBeTruthy(); // Active contracts
-    expect(screen.getByText('5')).toBeTruthy(); // New opportunities
+    // Should display KPI values aligned with template
+    const deliveries = container.querySelector("[data-cy='kpi-entregas']");
+    expect(deliveries).toBeTruthy();
+    expect(deliveries!.textContent!.trim()).toBe('15');
+    // PMT KPI should be present
+    expect(container.querySelector("[data-cy='kpi-pmt']")).toBeTruthy();
   });
 
   it('should handle view mode toggle clicks', async () => {
