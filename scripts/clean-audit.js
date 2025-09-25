@@ -79,16 +79,18 @@ function applyFixes(filePath, lines, findings) {
   // Build a set of line numbers to replace
   const linesToReplace = new Set(findings.map(f => f.lineNumber));
   let modified = false;
-  const newLines = lines.map((line, idx) => {
-    const lineNumber = idx + 1;
-    if (linesToReplace.has(lineNumber)) {
-      modified = true;
-    }
-    return line;
-  });
+  const newLines = lines
+    .map((line, idx) => {
+      const lineNumber = idx + 1;
+      if (linesToReplace.has(lineNumber)) {
+        modified = true;
+        // remove the offending line completely
+        return null;
+      }
+      return line;
+    })
+    .filter(Boolean);
   if (modified) {
-    // Ensure a trailing audit comment trail (once per file)
-    }
     fs.writeFileSync(filePath, newLines.join('\n'), 'utf8');
   }
   return modified;

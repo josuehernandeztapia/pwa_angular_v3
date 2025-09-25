@@ -1,7 +1,0 @@
-This is an invalid document type for testing file upload validation.
-It should be rejected by the system as it's not a PDF, JPG, or PNG file.
-
-Test content:
-- Invalid file type: .txt
-- Should trigger validation error
-- Upload should be blocked

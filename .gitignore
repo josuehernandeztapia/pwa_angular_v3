@@ -49,3 +49,10 @@ Thumbs.db
 # BFF build outputs
 bff/dist/
 bff/coverage/
+
+# Ignore backup artifacts
+*.bak
+*.backup
+*.orig
+tests/visual/**/*.webm.bak
+.github/workflows/*.bak
