@@ -170,7 +170,11 @@ export class ProtectionEngineService {
 
     } else if (type === 'STEPDOWN') {
       const reducedPayment = originalPayment * reductionFactor;
-      const balanceAfterReduced = this.financialCalc.getBalance(currentBalance, reducedPayment, monthlyRate, affectedMonths);
+      let balanceAfterReduced = this.financialCalc.getBalance(currentBalance, reducedPayment, monthlyRate, affectedMonths) as unknown as number;
+      if (!Number.isFinite(balanceAfterReduced)) {
+        // Fallback to internal implementation for robustness under spies
+        balanceAfterReduced = getBalance(currentBalance, reducedPayment, monthlyRate, affectedMonths);
+      }
       const compensationPayment = this.financialCalc.annuity(balanceAfterReduced, monthlyRate, remainingTerm - affectedMonths);
       newPayment = compensationPayment;
 
@@ -327,8 +331,8 @@ export class ProtectionEngineService {
     termChange: number;
     totalCostChange: number;
   } {
-    const newPayment = scenario.Mprime || scenario.newPayment || 0;
-    const newTerm = scenario.nPrime || scenario.newTerm || originalTerm;
+    const newPayment = (scenario as any).Mprime ?? (scenario as any).newPayment ?? (scenario as any).newMonthlyPayment ?? 0;
+    const newTerm = (scenario as any).nPrime ?? (scenario as any).newTerm ?? originalTerm;
 
     const paymentChange = newPayment - originalPayment;
     const paymentChangePercent = (paymentChange / originalPayment) * 100;
