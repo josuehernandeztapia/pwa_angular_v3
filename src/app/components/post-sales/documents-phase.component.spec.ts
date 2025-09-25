@@ -8,6 +8,7 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
 
 describe('DocumentsPhaseComponent', () => {
   let component: DocumentsPhaseComponent;
+  let fixture: ComponentFixture<DocumentsPhaseComponent>;
   let mockRouter: jasmine.SpyObj<Router>;
   let mockImportTracker: jasmine.SpyObj<IntegratedImportTrackerService>;
   let mockPostSalesApi: jasmine.SpyObj<PostSalesApiService>;
@@ -32,6 +33,10 @@ describe('DocumentsPhaseComponent', () => {
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     mockImportTracker = TestBed.inject(IntegratedImportTrackerService) as jasmine.SpyObj<IntegratedImportTrackerService>;
     mockPostSalesApi = TestBed.inject(PostSalesApiService) as jasmine.SpyObj<PostSalesApiService>;
+
+    fixture = TestBed.createComponent(DocumentsPhaseComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
