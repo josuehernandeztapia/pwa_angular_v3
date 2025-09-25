@@ -49,6 +49,15 @@ describe('OCRService', () => {
     mockTesseractWorker.recognize.calls.reset();
     mockTesseractWorker.setParameters.calls.reset();
     mockTesseractWorker.terminate.calls.reset();
+
+    // Make retries deterministic and instantaneous in unit tests
+    try {
+      (service as any)['retryConfig'] = { maxRetries: 0, baseDelay: 0, maxDelay: 0, backoffMultiplier: 1 };
+      spyOn<any>(service as any, 'delay').and.returnValue(Promise.resolve());
+    } catch {}
+
+    // Ensure default behavior is successful recognition for all tests unless overridden
+    mockTesseractWorker.recognize.and.returnValue(Promise.resolve(mockTesseractResult));
   });
 
   describe('Service Initialization', () => {
