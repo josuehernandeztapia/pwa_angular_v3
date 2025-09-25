@@ -55,12 +55,16 @@ describe('HttpClientService', () => {
   });
 
   describe('Connection Monitoring', () => {
-    it('should detect online status change', () => {
+    it('should detect online status change', (done) => {
+      // Observe next emission and expect true
+      service.isConnected$.pipe(skip(1), take(1)).subscribe(val => {
+        expect(val).toBe(true);
+        expect(mockToastService.success).toHaveBeenCalledWith('Conexión restaurada');
+        done();
+      });
       // Trigger online event
       const onlineEvent = new Event('online');
       window.dispatchEvent(onlineEvent);
-
-      expect(mockToastService.success).toHaveBeenCalledWith('Conexión restaurada');
     });
 
     it('should detect offline status change', () => {
