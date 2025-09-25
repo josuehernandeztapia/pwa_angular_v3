@@ -36,6 +36,7 @@ const mockCreateWorker = jasmine.createSpy('createWorker').and.returnValue(Promi
 
 describe('OCRService', () => {
   let service: OCRService;
+  let originalRecognize: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -59,6 +60,9 @@ describe('OCRService', () => {
 
     // Ensure default behavior is successful recognition for all tests unless overridden
     mockTesseractWorker.recognize.and.returnValue(Promise.resolve(mockTesseractResult));
+
+    // Capture original for restoration
+    originalRecognize = mockTesseractWorker.recognize;
   });
 
   afterEach(() => {
@@ -186,7 +190,20 @@ describe('OCRService', () => {
     afterEach(() => {
       // Restore default behavior to avoid leaking rejection into subsequent tests
       mockTesseractWorker.recognize.and.returnValue(Promise.resolve(mockTesseractResult));
+    if (service) {
+      (service as any)._retryCount = 0;
+    }
     });
+
+  afterAll(() => {
+    if (service) {
+      (service as any)._retryCount = 0;
+    }
+    // Best-effort restore
+    try {
+      mockTesseractWorker.recognize = originalRecognize;
+    } catch {}
+  });
   });
 
   describe('Text Extraction from Base64', () => {

@@ -409,7 +409,13 @@ describe('HttpClientService', () => {
       s4.flush({}, { status: 500, statusText: 'Server Error' });
     });
 
-    it('should handle network connectivity issues', () => {
+    it('should handle network connectivity issues', (done) => {
+      // Observe the next transition to false
+      service.isConnected$.pipe(skip(1), take(1)).subscribe(connected => {
+        expect(connected).toBe(false);
+        done();
+      });
+
       service.get('test').subscribe({
         error: (error: ApiError) => {
           expect(error.status).toBe(0);
@@ -425,11 +431,6 @@ describe('HttpClientService', () => {
       nerr3.error(new ErrorEvent('Network Error'), { status: 0, statusText: 'Unknown Error' });
       const nerr4 = httpMock.expectOne('http://localhost:3000/api/test');
       nerr4.error(new ErrorEvent('Network Error'), { status: 0, statusText: 'Unknown Error' });
-
-      // Should update connection status
-      service.isConnected$.pipe(skip(1), take(1)).subscribe(connected => {
-        expect(connected).toBe(false);
-      });
     });
 
     it('should not show error toast when showError is false', () => {
