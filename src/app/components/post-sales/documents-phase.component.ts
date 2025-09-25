@@ -659,6 +659,7 @@ export class DocumentsPhaseComponent {
 
   onSubmit(): void {
     if (!this.canCompleteDocuments()) {
+      console.log('❌ Cannot complete documents - validation failed');
       return;
     }
 
@@ -706,7 +707,7 @@ export class DocumentsPhaseComponent {
       this.closeSuccessModal();
     }
   }
-  constructor(private integratedImportTracker: IntegratedImportTrackerService, private pdfExport?: any) {
+  constructor() {
     this.documentsForm = this.fb.group({
       fechaTransferencia: [new Date().toISOString().split('T')[0], Validators.required],
       titular: ['', [Validators.required, Validators.minLength(3)]],
