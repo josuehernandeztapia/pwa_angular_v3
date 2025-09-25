@@ -5,6 +5,7 @@ import { ApiConfigService } from './api-config.service';
 import { VoiceValidationService } from './voice-validation.service';
 import { ConsolidatedAVIResult } from './voice-validation.service';
 import { AVI_THRESHOLDS, ThresholdHelpers } from './voice-validation.config';
+import { AVI_THRESHOLD_TEST_CASES, AVI_THRESHOLDS_FIXTURE } from './avi-thresholds.fixture';
 
 class ApiConfigServiceStub {
   config$ = of(null);
@@ -128,6 +129,21 @@ describe('VoiceValidationService', () => {
     (expect(downgraded.decision) as any).toBe('REVIEW');
     (expect(downgraded.protection_eligible) as any).toBeFalse();
     (expect(downgraded.final_score) as any).toBe(850);
+  });
+
+  it('should classify scores correctly according to thresholds (fixture cases)', () => {
+    AVI_THRESHOLD_TEST_CASES.forEach(({ score, expected }) => {
+      const result = service.calculateHASEWithAVI(score, score, buildAviResult(score, true));
+      (expect(result.decision) as any).toBe(expected);
+    });
+  });
+
+  it('service thresholds should match fixture constants', () => {
+    const svcThresholds = (service as any).AVI_THRESHOLDS;
+    (expect(svcThresholds.GO_MIN) as any).toBe(AVI_THRESHOLDS_FIXTURE.GO_MIN);
+    (expect(svcThresholds.NOGO_MAX) as any).toBe(AVI_THRESHOLDS_FIXTURE.NOGO_MAX);
+    (expect(svcThresholds.REVIEW_MIN) as any).toBe(AVI_THRESHOLDS_FIXTURE.REVIEW_MIN);
+    (expect(svcThresholds.REVIEW_MAX) as any).toBe(AVI_THRESHOLDS_FIXTURE.REVIEW_MAX);
   });
 
   it('should have consistent thresholds (NO-GO < REVIEW < GO)', () => {
