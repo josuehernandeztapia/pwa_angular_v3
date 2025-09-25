@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
+import { skip, take } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { BackendApiService } from './backend-api.service';
 import { StorageService } from './storage.service';
@@ -125,7 +126,7 @@ describe('BackendApiService', () => {
     });
 
     it('should initialize with online status', (done) => {
-      service.isOnline.subscribe(online => {
+      service.isOnline.pipe(take(1)).subscribe(online => {
         expect(online).toBe(true);
         done();
       });
@@ -644,13 +645,12 @@ describe('BackendApiService', () => {
 
   describe('Network Status Management', () => {
     it('should update online status when network changes', (done) => {
-      const offlineEvent = new Event('offline');
-      window.dispatchEvent(offlineEvent);
-
-      service.isOnline.subscribe(online => {
+      service.isOnline.pipe(skip(1), take(1)).subscribe(online => {
         expect(online).toBe(false);
         done();
       });
+      const offlineEvent = new Event('offline');
+      window.dispatchEvent(offlineEvent);
     });
 
     it('should trigger sync when going back online', () => {
