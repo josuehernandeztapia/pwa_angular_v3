@@ -61,6 +61,14 @@ describe('OCRService', () => {
     mockTesseractWorker.recognize.and.returnValue(Promise.resolve(mockTesseractResult));
   });
 
+  afterEach(() => {
+    if (service) {
+      try {
+        (service as any)._retryCount = 0;
+      } catch {}
+    }
+  });
+
   describe('Service Initialization', () => {
     it('should be created', () => {
       expect(service).toBeTruthy();

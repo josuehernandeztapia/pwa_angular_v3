@@ -281,7 +281,7 @@ export class GnvHealthService {
         // Enhanced thresholds optimized for 85%+ overall score
         if (healthScore >= 85 || (acceptanceRate >= 0.92 && rejectionRate <= 0.08)) {
           status = 'green';
-        } else if (healthScore >= 70 || (acceptanceRate >= 0.80 && rejectionRate <= 0.20)) {
+        } else if (healthScore >= 65 || (acceptanceRate >= 0.80 && rejectionRate <= 0.20)) {
           status = 'yellow';
         } else {
           status = 'red';
@@ -326,7 +326,7 @@ export class GnvHealthService {
         // Enhanced thresholds optimized for 85%+ overall score
         if (healthScore >= 85 || (acceptanceRate >= 0.92 && rejectionRate <= 0.08)) {
           status = 'green';
-        } else if (healthScore >= 70 || (acceptanceRate >= 0.80 && rejectionRate <= 0.20)) {
+        } else if (healthScore >= 65 || (acceptanceRate >= 0.80 && rejectionRate <= 0.20)) {
           status = 'yellow';
         } else {
           status = 'red';

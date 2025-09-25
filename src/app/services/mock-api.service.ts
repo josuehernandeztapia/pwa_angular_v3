@@ -54,6 +54,8 @@ export class MockApiService {
         observer.next(clonedData);
         observer.complete();
       } catch (error) {
+        // Log error for observability in tests
+        console.error('MockApi Error:', error as any);
         observer.error(error);
       }
     }).pipe(

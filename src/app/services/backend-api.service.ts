@@ -104,13 +104,9 @@ export class BackendApiService {
       this.isOnline$.next(false);
     };
 
-    // Event listeners
-    window.addEventListener('online', goOnline, { once: true } as any);
-    window.addEventListener('offline', goOffline, { once: true } as any);
-
-    // Fallback handlers for environments that use ononline/onoffline
-    (window as any).ononline = () => { goOnline(); (window as any).ononline = null; };
-    (window as any).onoffline = () => { goOffline(); (window as any).onoffline = null; };
+    // Event listeners (no duplicates, persistent for this instance lifetime)
+    window.addEventListener('online', goOnline as any);
+    window.addEventListener('offline', goOffline as any);
   }
 
   private getAuthHeaders() {
