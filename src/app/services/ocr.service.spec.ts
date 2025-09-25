@@ -44,6 +44,7 @@ describe('OCRService', () => {
       ]
     });
     service = TestBed.inject(OCRService);
+    (service as any)._retryCount = 0;
     
     mockCreateWorker.calls.reset();
     mockTesseractWorker.recognize.calls.reset();
@@ -156,6 +157,7 @@ describe('OCRService', () => {
         fail('Should have thrown error');
       } catch (error) {
         expect(error).toBeInstanceOf(Error);
+        expect((error as Error).message).toContain('OCR failed');
       }
     });
 
