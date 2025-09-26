@@ -56,7 +56,7 @@ type ProgressSize = 'sm' | 'md' | 'lg' | 'xl';
         <!-- Goal Marker (if different from max) -->
         <div 
           *ngIf="goalMarker && goal < max" 
-          class="goal-marker absolute top-0 w-0.5 h-full bg-white/80 z-10"
+          class="goal-marker absolute top-0 w-0.5 h-full bg-ink/50 z-10"
           [style.left.%]="(goal / max) * 100"
         >
           <div class="marker-tooltip absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-neutral-900 text-white text-xs rounded whitespace-nowrap">
@@ -339,11 +339,11 @@ export class ProgressBarComponent {
 
   getStatusMessage(): string {
     const percentage = this.getPercentage();
-    if (percentage >= 100) return '¡Objetivo completado!';
+    if (percentage >= 100) return 'ï¿½Objetivo completado!';
     if (percentage >= 80) return 'En buen camino';
     if (percentage >= 60) return 'Progreso constante';
-    if (percentage >= 40) return 'Necesita atención';
-    return 'Requiere acción urgente';
+    if (percentage >= 40) return 'Necesita atenciï¿½n';
+    return 'Requiere acciï¿½n urgente';
   }
 
   getStatusMessageClass(): string {

@@ -1,5 +1,5 @@
-import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, computed, signal } from '@angular/core';
 import { PwaInstallService } from '../../../services/pwa-install.service';
 
 @Component({
@@ -115,7 +115,7 @@ import { PwaInstallService } from '../../../services/pwa-install.service';
       color: white;
       padding: 16px;
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(8px);
+      
     }
 
     .banner-content {
@@ -168,7 +168,7 @@ import { PwaInstallService } from '../../../services/pwa-install.service';
     .install-btn.primary {
       background: rgba(255, 255, 255, 0.2);
       color: white;
-      backdrop-filter: blur(8px);
+      
     }
 
     .install-btn.primary:hover:not(:disabled) {
@@ -206,7 +206,7 @@ import { PwaInstallService } from '../../../services/pwa-install.service';
       align-items: center;
       justify-content: center;
       padding: 16px;
-      backdrop-filter: blur(4px);
+      
     }
 
     .modal-content {
@@ -349,7 +349,7 @@ import { PwaInstallService } from '../../../services/pwa-install.service';
       cursor: pointer;
       box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
       transition: all 0.2s ease;
-      backdrop-filter: blur(8px);
+      
     }
 
     .floating-install-btn:hover {

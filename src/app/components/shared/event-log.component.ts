@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EventLog, Actor, EventType } from '../../models/types';
+import { Component, Input, OnInit } from '@angular/core';
+import { Actor, EventLog, EventType } from '../../models/types';
 
 interface EventGroup {
   date: string;
@@ -89,7 +89,7 @@ interface EventGroup {
           <div class="event-groups space-y-8">
             <div *ngFor="let group of getEventGroups(); trackBy: trackByDate" class="event-group">
               <!-- Date Header -->
-              <div class="date-header sticky top-0 z-10 bg-neutral-900/80 backdrop-blur-sm py-3 mb-4">
+              <div class="date-header sticky top-0 z-10 bg-surface py-3 mb-4">
                 <div class="flex items-center gap-4">
                   <div class="date-marker w-4 h-4 bg-primary-cyan-500 rounded-full relative z-10 flex-shrink-0 ml-6"></div>
                   <h4 class="text-lg font-semibold text-white">{{ group.date }}</h4>
@@ -315,9 +315,8 @@ interface EventGroup {
     }
 
     .event-card {
-      background: rgba(31, 41, 55, 0.5);
-      border-color: rgba(75, 85, 99, 0.3);
-      backdrop-filter: blur(4px);
+      background: #1f2937;
+      border-color: #4b5563;
     }
 
     .event-card.payment {
@@ -391,7 +390,6 @@ interface EventGroup {
     }
 
     .date-header {
-      backdrop-filter: blur(8px);
     }
 
     @media (max-width: 768px) {

@@ -70,7 +70,7 @@ import { RouterModule, Router } from '@angular/router';
       max-width: 500px;
       width: 100%;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(10px);
+      
     }
 
     .error-illustration {

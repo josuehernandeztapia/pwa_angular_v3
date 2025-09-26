@@ -135,7 +135,7 @@ import { NextBestActionService, NextBestAction, ActionInsights } from '../../../
       padding: 20px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       border: 1px solid rgba(0, 0, 0, 0.06);
-      backdrop-filter: blur(10px);
+      
     }
 
     /* Header */

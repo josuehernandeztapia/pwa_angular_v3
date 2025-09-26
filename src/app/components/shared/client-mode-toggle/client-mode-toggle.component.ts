@@ -209,8 +209,7 @@ export type ViewMode = 'advisor' | 'client';
       right: 0;
       bottom: 0;
       background: rgba(3, 7, 18, 0.95);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      
       display: flex;
       align-items: center;
       justify-content: center;

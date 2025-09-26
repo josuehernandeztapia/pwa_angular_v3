@@ -85,7 +85,7 @@ import { OfflineService } from '../../../services/offline.service';
       right: 0;
       z-index: 1000;
       padding: 12px 16px;
-      backdrop-filter: blur(8px);
+      
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       transition: all 0.3s ease;
       animation: slideDown 0.3s ease;
@@ -206,7 +206,7 @@ import { OfflineService } from '../../../services/offline.service';
       font-size: 12px;
       font-weight: 500;
       cursor: pointer;
-      backdrop-filter: blur(8px);
+      
       border: 1px solid rgba(255, 255, 255, 0.1);
       transition: all 0.2s ease;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);

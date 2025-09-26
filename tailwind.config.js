@@ -5,6 +5,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        surface: 'var(--color-surface)',
+        surface2: 'var(--color-surface-2)',
+        border: 'var(--color-border)',
+        ink: {
+          DEFAULT: 'var(--color-text)',
+          muted: 'var(--color-text-muted)'
+        },
         brand: {
           primary: '#0EA5E9',
           success: '#22C55E',
@@ -30,7 +37,8 @@ module.exports = {
         lg: '12px'
       },
       boxShadow: {
-        sm: '0 1px 2px rgba(0,0,0,0.06)',
+        none: '0 0 #0000',
+        sm: 'var(--shadow-elev-1)',
         md: '0 8px 25px rgba(0,0,0,0.10)'
       }
     }

@@ -26,7 +26,7 @@ declare var Chart: any;
 
     <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
       <!-- Header -->
-      <header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur">
+      <header class="border-b border-border bg-surface">
         <div class="max-w-6xl mx-auto px-6 py-4">
           <div class="flex items-center gap-4">
             <button (click)="goBack()" class="ui-btn ui-btn-ghost ui-btn-sm" data-cy="back-button">

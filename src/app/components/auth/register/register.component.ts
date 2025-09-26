@@ -401,7 +401,7 @@ interface WizardStep {
       width: 100%;
       max-width: 600px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(10px);
+      
     }
 
     .register-header {

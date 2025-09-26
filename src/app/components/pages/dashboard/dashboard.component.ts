@@ -37,7 +37,7 @@ interface KPICard {
       <app-connection-indicator></app-connection-indicator>
 
       <!-- Header -->
-      <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 py-4">
+      <header class="bg-surface border-b border-border px-4 sm:px-6 py-4">
         <div class="flex items-center justify-between">
           <div class="flex-1 min-w-0">
             <h1 class="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-1 truncate">
