@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   template: `
-    <div class="expedientes-container premium-container">
+    <div class="expedientes-container container-neutral">
       <header class="page-header">
         <div class="header-content">
           <h1>📂 Expedientes</h1>

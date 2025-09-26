@@ -14,7 +14,7 @@ import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
   standalone: true,
   imports: [CommonModule, FormsModule, SkeletonCardComponent, EmptyStateCardComponent],
   template: `
-    <div class="premium-container min-h-screen bg-neutral-50 p-6">
+    <div class="container-neutral min-h-screen bg-neutral-50 p-6">
       <!-- Header (compact) -->
       <div class="mb-4">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">

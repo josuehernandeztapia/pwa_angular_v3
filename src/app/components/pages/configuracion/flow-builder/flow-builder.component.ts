@@ -70,7 +70,7 @@ export interface MarketProductCompatibility {
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="flow-builder-container premium-container">
+    <div class="flow-builder-container container-neutral">
       
       <!-- Header -->
       <div class="flow-builder-header premium-card">

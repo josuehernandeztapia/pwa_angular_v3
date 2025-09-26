@@ -6,9 +6,9 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@
 import { CommonModule } from '@angular/common';
 import { Subject, interval, takeUntil } from 'rxjs';
 
-import { PremiumIconComponent } from '../ui/premium-icon/premium-icon.component';
+import { UiIconComponent } from '../ui/ui-icon/ui-icon.component';
 import { HumanMessageComponent } from './human-message/human-message.component'; // Path verified: exists
-import { PremiumIconsService } from '../../services/premium-icons.service';
+// Removed dependency on PremiumIconsService
 import { HumanMicrocopyService } from '../../services/human-microcopy.service';
 
 interface DashboardMetric {
@@ -29,15 +29,15 @@ interface SystemStatus {
 }
 
 @Component({
-  selector: 'app-premium-dashboard-showcase',
+  selector: 'app-ui-dashboard-showcase',
   standalone: true,
-  imports: [CommonModule, PremiumIconComponent, HumanMessageComponent],
+  imports: [CommonModule, UiIconComponent, HumanMessageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="premium-dashboard command-center-layout">
       <!-- Dashboard Header with Welcome Message -->
       <header class="dashboard-header animate-fluid-enter">
-        <div class="header-content premium-container">
+        <div class="header-content container-neutral">
           <div class="welcome-section">
             <app-human-message
               microcopyId="welcome-first-time"
@@ -53,12 +53,10 @@ interface SystemStatus {
               *ngFor="let status of systemStatuses(); trackBy: trackByStatus"
               class="status-indicator"
               [ngClass]="'status-' + status.status">
-              <app-premium-icon 
-                [iconName]="getStatusIcon(status.status)"
-                [theme]="getStatusTheme(status.status)"
-                size="sm"
-                [animate]="status.status !== 'healthy'">
-              </app-premium-icon>
+              <app-ui-icon 
+                [name]="getStatusIcon(status.status)"
+                size="sm">
+              </app-ui-icon>
               <span class="status-label">{{ status.component }}</span>
             </div>
           </div>
@@ -66,10 +64,10 @@ interface SystemStatus {
       </header>
 
       <!-- Key Metrics Dashboard -->
-      <section class="metrics-section premium-container">
+      <section class="metrics-section container-neutral">
         <div class="section-header">
           <h2 class="section-title text-gradient-primary">
-            <app-premium-icon iconName="dashboard-insights" size="lg" theme="primary"></app-premium-icon>
+            <app-ui-icon name="cotizador" size="lg"></app-ui-icon>
             Métricas en Tiempo Real
           </h2>
         </div>
@@ -82,23 +80,20 @@ interface SystemStatus {
             
             <!-- Metric Icon with Animation -->
             <div class="metric-icon">
-              <app-premium-icon 
-                [iconName]="metric.iconName"
-                [semanticContext]="metric.semanticContext"
-                size="xl"
-                [animate]="true">
-              </app-premium-icon>
+              <app-ui-icon 
+                [name]="metric.iconName"
+                size="xl">
+              </app-ui-icon>
             </div>
 
             <!-- Metric Value -->
             <div class="metric-value">
               <span class="value animate-kpi-count-up">{{ formatMetricValue(metric.value) }}</span>
               <div class="metric-change" [ngClass]="'trend-' + metric.trend">
-                <app-premium-icon 
-                  [iconName]="getTrendIcon(metric.trend)"
-                  size="sm"
-                  [theme]="getTrendTheme(metric.trend)">
-                </app-premium-icon>
+                <app-ui-icon 
+                  [name]="getTrendIcon(metric.trend)"
+                  size="sm">
+                </app-ui-icon>
                 {{ formatChange(metric.change) }}%
               </div>
             </div>
@@ -112,13 +107,13 @@ interface SystemStatus {
       <!-- Interactive Success Demonstrations -->
         <div class="section-header">
           <h2 class="section-title text-gradient-primary">
-            <app-premium-icon iconName="integration-active" size="lg" theme="primary"></app-premium-icon>
+            <app-ui-icon name="refresh" size="lg"></app-ui-icon>
             Sistema de Experiencia Premium
           </h2>
         </div>
 
             <h3>
-              <app-premium-icon iconName="payment-processing" size="md" theme="success"></app-premium-icon>
+              <app-ui-icon name="check-circle" size="md"></app-ui-icon>
               Procesamiento de Pagos
             </h3>
             
@@ -131,13 +126,13 @@ interface SystemStatus {
             <button 
               (click)="triggerPaymentSuccess()"
               [class.animate-payment-success]="paymentSuccessTriggered()">
-              <app-premium-icon iconName="action-save" size="sm"></app-premium-icon>
+              <app-ui-icon name="check" size="sm"></app-ui-icon>
               Simular Pago Exitoso
             </button>
           </div>
 
             <h3>
-              <app-premium-icon iconName="protection-shield" size="md" theme="info"></app-premium-icon>
+              <app-ui-icon name="proteccion" size="md"></app-ui-icon>
               Firma Digital
             </h3>
             
@@ -150,13 +145,13 @@ interface SystemStatus {
             <button 
               (click)="triggerContractSigning()"
               [class.animate-contract-signed]="contractSignedTriggered()">
-              <app-premium-icon iconName="customer-verification" size="sm"></app-premium-icon>
+              <app-ui-icon name="check-circle" size="sm"></app-ui-icon>
               Simular Firma
             </button>
           </div>
 
             <h3>
-              <app-premium-icon iconName="customer-verification" size="md" theme="success"></app-premium-icon>
+              <app-ui-icon name="check-circle" size="md"></app-ui-icon>
               Verificación KYC
             </h3>
             
@@ -169,7 +164,7 @@ interface SystemStatus {
             <button 
               (click)="triggerKYCVerification()"
               [class.animate-success-pulse]="kycVerifiedTriggered()">
-              <app-premium-icon iconName="system-healthy" size="sm"></app-premium-icon>
+              <app-ui-icon name="check-circle" size="sm"></app-ui-icon>
               Verificar Cliente
             </button>
           </div>
@@ -178,7 +173,7 @@ interface SystemStatus {
 
         <div class="section-header">
           <h2 class="section-title text-gradient-primary">
-            <app-premium-icon iconName="system-processing" size="lg" theme="info"></app-premium-icon>
+            <app-ui-icon name="refresh" size="lg"></app-ui-icon>
             Estados de Carga Premium
           </h2>
         </div>
@@ -205,22 +200,20 @@ interface SystemStatus {
           <!-- Spinner -->
             <h4>Smart Spinner</h4>
             <div class="spinner-container">
-              <app-premium-icon 
-                iconName="system-processing" 
-                size="xl" 
-                theme="primary"
-                [customClasses]="'animate-loading-spinner'">
-              </app-premium-icon>
+              <app-ui-icon 
+                name="refresh" 
+                size="xl">
+              </app-ui-icon>
             </div>
           </div>
         </div>
       </section>
 
       <!-- Contextual Guidance Examples -->
-      <section class="guidance-section premium-container">
+      <section class="guidance-section container-neutral">
         <div class="section-header">
           <h2 class="section-title text-gradient-primary">
-            <app-premium-icon iconName="customer-communication" size="lg" theme="primary"></app-premium-icon>
+            <app-ui-icon name="info" size="lg"></app-ui-icon>
             Mensajería Contextual
           </h2>
         </div>
@@ -556,7 +549,6 @@ export class PremiumDashboardShowcaseComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private iconService: PremiumIconsService,
     private microcopyService: HumanMicrocopyService
   ) {}
 

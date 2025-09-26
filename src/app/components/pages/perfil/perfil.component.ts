@@ -20,7 +20,7 @@ interface UserProfile {
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="perfil-container premium-container">
+    <div class="perfil-container container-neutral">
       <header class="page-header">
         <div class="header-content">
           <h1>👤 Mi Perfil</h1>
