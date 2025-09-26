@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
   <meta charset="utf-8">
   <title>Conductores PWA - Fintech Mobility Platform</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
-  <meta name="color-scheme" content="dark light">
+  <meta name="color-scheme" content="dark">
   <meta name="description" content="Plataforma fintech para conductores con evaluación de riesgo KIBAN, gestión de entregas y monitoreo GNV en tiempo real">
   <meta name="keywords" content="fintech,conductores,kiban,gnv,riesgo,movilidad">
   <meta name="author" content="Conductores PWA Team">
@@ -17,7 +17,7 @@
   <link rel="apple-touch-icon" sizes="512x512" href="assets/icons/icon-512x512.png">
 
   <!-- PWA and Mobile Configuration -->
-  <meta name="theme-color" content="#111827" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: dark)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -44,11 +44,8 @@
   <script>
     (function(){
       try {
-        var saved = localStorage.getItem('darkMode');
-        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (saved === 'true' || (saved === null && prefersDark)) {
-          document.documentElement.classList.add('dark');
-        }
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('darkMode', 'true');
       } catch (e) { /* no-op */ }
     })();
   </script>
