@@ -223,7 +223,6 @@
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   font-size: 0.875rem;
-  backdrop-filter: blur(10px);
 }
 
 .factor.light, .factor.clear, .factor.optimal {

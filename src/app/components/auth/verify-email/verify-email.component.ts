@@ -70,7 +70,7 @@ import { AuthService } from '../../../services/auth.service';
       width: 100%;
       max-width: 500px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(10px);
+      
       text-align: center;
     }
 

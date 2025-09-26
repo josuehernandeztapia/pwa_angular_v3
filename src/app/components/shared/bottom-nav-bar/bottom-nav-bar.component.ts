@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 
@@ -42,8 +42,7 @@ interface BottomNavItem {
       right: 0;
       z-index: 1000;
       display: flex;
-      background: rgba(45, 55, 72, 0.95);
-      backdrop-filter: blur(20px);
+      background: var(--flat-surface-bg);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
@@ -180,7 +179,7 @@ interface BottomNavItem {
     /* Dark mode support */
     @media (prefers-color-scheme: dark) {
       .bottom-nav-bar {
-        background: rgba(17, 24, 39, 0.95);
+        background: var(--flat-surface-bg);
         border-top: 1px solid rgba(255, 255, 255, 0.1);
       }
     }
@@ -259,7 +258,7 @@ export class BottomNavBarComponent implements OnInit {
     
     // Listen to route changes
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
+      filter((event: any) => event instanceof NavigationEnd)
     ).subscribe(() => {
       this.updateActiveStates();
     });
