@@ -6,12 +6,12 @@
 import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HumanMicrocopyService, MicrocopyConfig } from '../../../services/human-microcopy.service';
-import { PremiumIconComponent } from '../premium-icon/premium-icon.component';
+import { UiIconComponent } from '../../ui/ui-icon/ui-icon.component';
 
 @Component({
   selector: 'app-human-message',
   standalone: true,
-  imports: [CommonModule, PremiumIconComponent],
+  imports: [CommonModule, UiIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div 
@@ -24,12 +24,10 @@ import { PremiumIconComponent } from '../premium-icon/premium-icon.component';
     >
       <!-- Icon (contextual) -->
       <div class="message-icon" *ngIf="showIcon">
-        <app-premium-icon 
-          [iconName]="getContextIcon()"
-          [theme]="getIconTheme()"
-          [size]="iconSize"
-          [animate]="animateIcon">
-        </app-premium-icon>
+        <app-ui-icon 
+          [name]="getContextIcon()"
+          [size]="iconSize">
+        </app-ui-icon>
       </div>
 
       <!-- Content -->
@@ -65,7 +63,7 @@ import { PremiumIconComponent } from '../premium-icon/premium-icon.component';
         (click)="onDismiss()"
         aria-label="Cerrar mensaje"
       >
-        <app-premium-icon iconName="action-delete" size="sm" theme="neutral"></app-premium-icon>
+        <app-ui-icon name="alert-circle" size="sm"></app-ui-icon>
       </button>
     </div>
   `,

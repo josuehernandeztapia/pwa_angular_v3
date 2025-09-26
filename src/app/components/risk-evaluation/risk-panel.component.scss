@@ -45,7 +45,7 @@
   padding: 48px 24px;
   text-align: center;
 
-  app-premium-icon {
+  app-ui-icon {
     --icon-size: 48px;
     color: var(--risk-primary);
   }
@@ -67,7 +67,7 @@
     color: var(--ink);
     margin: 0;
 
-    app-premium-icon {
+    app-ui-icon {
       --icon-size: 24px;
       color: var(--risk-primary);
     }
@@ -109,7 +109,7 @@
     font-weight: 600;
     color: var(--ink);
 
-    app-premium-icon {
+    app-ui-icon {
       --icon-size: 20px;
       color: var(--risk-info);
     }
@@ -188,7 +188,7 @@
     align-items: flex-start;
     gap: 12px;
 
-    app-premium-icon {
+    app-ui-icon {
       --icon-size: 20px;
       color: var(--risk-info);
       margin-top: 2px;
@@ -264,7 +264,7 @@
     gap: 8px;
     margin-bottom: 16px;
 
-    app-premium-icon {
+    app-ui-icon {
       --icon-size: 20px;
       color: var(--risk-primary);
     }
@@ -344,7 +344,7 @@
       border-left: 4px solid var(--risk-danger);
     }
 
-    app-premium-icon {
+    app-ui-icon {
       --icon-size: 16px;
     }
 
@@ -402,7 +402,7 @@
     gap: 8px;
     margin-bottom: 16px;
 
-    app-premium-icon {
+    app-ui-icon {
       --icon-size: 20px;
       color: var(--risk-warning);
     }
@@ -447,7 +447,7 @@
     .factor-icon {
       flex-shrink: 0;
 
-      app-premium-icon {
+      app-ui-icon {
         --icon-size: 24px;
       }
     }
@@ -523,7 +523,7 @@
     gap: 8px;
     margin-bottom: 16px;
 
-    app-premium-icon {
+    app-ui-icon {
       --icon-size: 20px;
     }
   }
@@ -601,7 +601,7 @@
     gap: 8px;
     margin-bottom: 16px;
 
-    app-premium-icon {
+    app-ui-icon {
       --icon-size: 20px;
       color: var(--risk-success);
     }
@@ -660,7 +660,7 @@
     gap: 8px;
     margin-bottom: 16px;
 
-    app-premium-icon {
+    app-ui-icon {
       --icon-size: 20px;
       color: var(--risk-primary);
     }
@@ -720,7 +720,7 @@
       cursor: pointer;
       border: none;
 
-      app-premium-icon {
+      app-ui-icon {
         --icon-size: 16px;
       }
 
@@ -767,7 +767,7 @@
   padding: 16px;
   border-radius: var(--radius);
 
-  app-premium-icon {
+  app-ui-icon {
     --icon-size: 20px;
     flex-shrink: 0;
     margin-top: 2px;
@@ -778,7 +778,7 @@
   background: rgba(59, 130, 246, 0.1);
   border: 1px solid var(--risk-info);
 
-  app-premium-icon {
+  app-ui-icon {
     color: var(--risk-info);
   }
 }
@@ -787,7 +787,7 @@
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid var(--risk-danger);
 
-  app-premium-icon {
+  app-ui-icon {
     color: var(--risk-danger);
   }
 }
@@ -801,7 +801,7 @@
   padding: 32px;
   text-align: center;
 
-  app-premium-icon {
+  app-ui-icon {
     --icon-size: 32px;
     color: var(--risk-danger);
   }

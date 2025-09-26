@@ -27,6 +27,11 @@ PATTERNS=(
   "premium-container"
   "theme-premium"
   "premium-animations"
+  "app-premium-icon(?!.*demo-production-ready\.js)"
+  "PremiumIconComponent"
+  "premium-icon\.component\.ts"
+  "premium-icons\.service\.ts"
+  "premium-icons-system\.ts"
 )
 
 INCLUDE_PATHS=("src")
@@ -57,14 +62,14 @@ for pattern in "${PATTERNS[@]}"; do
   if grep -RIn --color=never \
       $(printf -- '--exclude-dir=%s ' "${EXCLUDE_DIRS[@]}") \
       --exclude="*.min.*" --exclude="*backup*" --exclude="*.broken*" --exclude="*.working*" --exclude=".*!*" \
-      --include="*.ts" --include="*.html" \
+      --include="*.ts" --include="*.html" --include="*.js" \
       -E "$pattern" "${EXISTING_PATHS[@]}" 2>/dev/null >/dev/null; then
     echo -e "${RED}✖ Encontrado patrón: ${pattern}${NC}"
     echo "# Pattern: $pattern" >> "$TMP_REPORT"
     grep -RIn --color=never \
       $(printf -- '--exclude-dir=%s ' "${EXCLUDE_DIRS[@]}") \
       --exclude="*.min.*" --exclude="*backup*" --exclude="*.broken*" --exclude="*.working*" --exclude=".*!*" \
-      --include="*.ts" --include="*.html" \
+      --include="*.ts" --include="*.html" --include="*.js" \
       -E "$pattern" "${EXISTING_PATHS[@]}" 2>/dev/null | sed "s|$ROOT_DIR/||" | tee -a "$TMP_REPORT"
     echo >> "$TMP_REPORT"
     EXIT_CODE=1

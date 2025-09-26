@@ -117,19 +117,16 @@ class ProductionDemo {
   }
 
   async validateUXComponents() {
-    console.log('\n🎨 PHASE 2: PREMIUM UX/UI VALIDATION');
+    console.log('\n🎨 PHASE 2: UI VALIDATION (Minimal Dark)');
     console.log('-'.repeat(60));
 
     const uiChecks = [];
 
     try {
-      // Check if premium components are built
+      // Check that premium components are NOT present and neutral UI exists
       const componentPaths = [
-        'src/app/services/premium-icons.service.ts',
-        'src/app/services/human-microcopy.service.ts',
-        'src/app/components/shared/premium-icon/premium-icon.component.ts',
-        'src/app/components/shared/human-message/human-message.component.ts',
-        'src/styles/premium-animations.scss'
+        'src/app/components/ui/ui-icon/ui-icon.component.ts',
+        'src/app/components/shared/human-message/human-message.component.ts'
       ];
 
       for (const componentPath of componentPaths) {
@@ -149,15 +146,13 @@ class ProductionDemo {
       const stylesPath = path.join(__dirname, 'src/styles.scss');
       if (fs.existsSync(stylesPath)) {
         const stylesContent = fs.readFileSync(stylesPath, 'utf8');
-        const hasAnimations = stylesContent.includes('premium-animations.scss');
-        
+        const hasPremiumKeywords = /app-premium-icon/.test(stylesContent);
         uiChecks.push({
-          name: 'Animations Integration',
-          passed: hasAnimations,
-          details: hasAnimations ? 'Premium animations imported' : 'Animations not imported'
+          name: 'No Premium Styles Present',
+          passed: !hasPremiumKeywords,
+          details: !hasPremiumKeywords ? 'Clean Minimal Dark styles' : 'Premium keywords found'
         });
-        
-        console.log(`   ${hasAnimations ? '✅' : '❌'} Premium Animations: ${hasAnimations ? 'Integrated' : 'Missing'}`);
+        console.log(`   ${!hasPremiumKeywords ? '✅' : '❌'} Styles cleanliness: ${!hasPremiumKeywords ? 'Minimal Dark' : 'Contains Premium keywords'}`);
       }
 
     } catch (error) {

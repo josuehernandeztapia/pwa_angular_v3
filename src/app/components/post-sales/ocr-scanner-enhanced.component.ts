@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { OCRService, OCRProgress } from '../../services/ocr.service';
-import { PremiumIconComponent } from '../premium-icon/premium-icon.component';
+import { UiIconComponent } from '../ui/ui-icon/ui-icon.component';
 import { HumanMessageComponent } from '../human-message/human-message.component';
 import { HumanMicrocopyService } from '../../services/human-microcopy.service';
 
@@ -25,18 +25,18 @@ export type ScanMode = 'vin' | 'odometer' | 'general';
 @Component({
   selector: 'app-ocr-scanner-enhanced',
   standalone: true,
-  imports: [CommonModule, FormsModule, PremiumIconComponent, HumanMessageComponent],
+  imports: [CommonModule, FormsModule, UiIconComponent, HumanMessageComponent],
   template: `
     <div class="ocr-scanner-enhanced" [attr.data-testid]="'ocr-scanner-' + mode">
       
       <!-- Scanner Header -->
       <div class="scanner-header">
         <div class="scanner-title">
-          <app-premium-icon 
+          <app-ui-icon 
             [name]="getScannerIcon()" 
             [size]="24"
             class="scanner-icon">
-          </app-premium-icon>
+          </app-ui-icon>
           <h3>{{ getScannerTitle() }}</h3>
         </div>
         <div class="scanner-status" [class]="'status-' + currentStatus">
@@ -59,7 +59,7 @@ export type ScanMode = 'vin' | 'odometer' | 'general';
         <div class="camera-preview" *ngIf="selectedImage">
           <img [src]="selectedImage" alt="Imagen seleccionada" class="preview-image">
           <button class="retake-btn" (click)="retakePhoto()">
-            <app-premium-icon name="camera" [size]="20"></app-premium-icon>
+            <app-ui-icon name="camera" [size]="20"></app-ui-icon>
             Tomar otra foto
           </button>
         </div>
@@ -69,11 +69,11 @@ export type ScanMode = 'vin' | 'odometer' | 'general';
           (click)="triggerCamera()"
           [disabled]="isProcessing"
           [attr.data-testid]="mode + '-camera-trigger'">
-          <app-premium-icon 
+          <app-ui-icon 
             [name]="selectedImage ? 'refresh' : 'camera'"
             [size]="32"
             [class.spinning]="isProcessing">
-          </app-premium-icon>
+          </app-ui-icon>
           <span>{{ selectedImage ? 'Procesar imagen' : 'Tomar foto del ' + getScannerLabel() }}</span>
         </button>
       </div>
@@ -98,11 +98,11 @@ export type ScanMode = 'vin' | 'odometer' | 'general';
       <!-- OCR Results -->
       <div class="ocr-results" *ngIf="ocrResult && !showManualEntry">
         <div class="result-header">
-          <app-premium-icon 
+          <app-ui-icon 
             [name]="ocrResult.needsManualEntry ? 'alert-triangle' : 'check-circle'"
             [size]="20"
             [class]="ocrResult.needsManualEntry ? 'text-warning' : 'text-success'">
-          </app-premium-icon>
+          </app-ui-icon>
           <span>{{ ocrResult.needsManualEntry ? 'Verificación necesaria' : 'Detectado automáticamente' }}</span>
         </div>
         
@@ -128,7 +128,7 @@ export type ScanMode = 'vin' | 'odometer' | 'general';
       <!-- Manual Entry Mode -->
       <div class="manual-entry" *ngIf="showManualEntry">
         <div class="manual-header">
-          <app-premium-icon name="edit" [size]="20"></app-premium-icon>
+          <app-ui-icon name="edit" [size]="20"></app-ui-icon>
           <span>Entrada manual</span>
         </div>
         
@@ -141,7 +141,7 @@ export type ScanMode = 'vin' | 'odometer' | 'general';
             [attr.data-testid]="mode + '-manual-input'"
             (input)="onManualValueChange()">
           <div class="input-validation" *ngIf="validationMessage">
-            <app-premium-icon name="info" [size]="16"></app-premium-icon>
+            <app-ui-icon name="info" [size]="16"></app-ui-icon>
             <span>{{ validationMessage }}</span>
           </div>
         </div>
@@ -159,10 +159,10 @@ export type ScanMode = 'vin' | 'odometer' | 'general';
           (click)="toggleManualEntry()"
           [disabled]="isProcessing"
           [attr.data-testid]="mode + '-toggle-manual'">
-          <app-premium-icon 
+          <app-ui-icon 
             [name]="showManualEntry ? 'camera' : 'edit'"
             [size]="20">
-          </app-premium-icon>
+          </app-ui-icon>
           {{ showManualEntry ? 'Usar cámara' : 'Entrada manual' }}
         </button>
 
@@ -171,7 +171,7 @@ export type ScanMode = 'vin' | 'odometer' | 'general';
           (click)="confirmValue()"
           [disabled]="!canConfirm()"
           [attr.data-testid]="mode + '-confirm'">
-          <app-premium-icon name="check" [size]="20"></app-premium-icon>
+          <app-ui-icon name="check" [size]="20"></app-ui-icon>
           Confirmar {{ getScannerLabel() }}
         </button>
       </div>
@@ -183,7 +183,7 @@ export type ScanMode = 'vin' | 'odometer' | 'general';
           [data]="{ error: errorMessage, canRetry: true }">
         </app-human-message>
         <button class="btn btn-outline" (click)="retry()">
-          <app-premium-icon name="refresh" [size]="20"></app-premium-icon>
+          <app-ui-icon name="refresh" [size]="20"></app-ui-icon>
           Reintentar
         </button>
       </div>

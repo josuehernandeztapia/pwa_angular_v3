@@ -10,7 +10,6 @@ import { catchError, retry, timeout, map, tap } from 'rxjs/operators';
 
 import { RiskEvaluation } from '../components/risk-evaluation/risk-panel.component';
 import { WebhookRetryService } from './webhook-retry.service';
-import { PremiumIconsService } from './premium-icons.service';
 import { HumanMicrocopyService } from './human-microcopy.service';
 import { RiskPersistenceService } from './risk-persistence.service';
 
@@ -65,7 +64,6 @@ export interface RiskEvaluationResponse {
 export class RiskEvaluationService {
   private http = inject(HttpClient);
   private webhookRetryService = inject(WebhookRetryService);
-  private premiumIconsService = inject(PremiumIconsService);
   private humanMicrocopyService = inject(HumanMicrocopyService);
   private riskPersistenceService = inject(RiskPersistenceService);
 
