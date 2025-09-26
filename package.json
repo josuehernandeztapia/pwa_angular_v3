@@ -45,9 +45,7 @@
     "test:visual": "playwright test --config=playwright.config.ts",
     "test:visual:all": "playwright test --config=playwright.config.ts",
     "test:visual:report": "playwright show-report",
-    "test:visual:all:premium": "npm run test:ux:premium:consistency:all",
-    "test:visual:responsive:premium": "npm run test:responsive:premium:mobile && npm run test:responsive:premium:tablet && npm run test:responsive:premium:desktop",
-    "test:performance:premium": "npm run test:perf:lighthouse",
+    
     "test:visual:modules": "playwright test --config=playwright.config.ts --grep @",
     "test:visual:modules:cross:browser": "npm run test:visual",
     "test:visual:modules:responsive": "npm run test:visual",
@@ -131,23 +129,17 @@
     "test:visual:color:palette:consistency": "node scripts/ux-coherence-runner.js visual:palette",
     "test:visual:typography:hierarchy": "node scripts/ux-coherence-runner.js visual:typography",
     "test:visual:spacing:consistency": "node scripts/ux-coherence-runner.js visual:spacing",
-    "test:brand:premium:fintech:identity": "node scripts/ux-coherence-runner.js brand:identity",
-    "test:brand:human:touch:elements": "node scripts/ux-coherence-runner.js brand:identity",
-    "test:brand:ferrari:level:quality": "node scripts/ux-coherence-runner.js brand:identity",
+    
     "test:ux:component:transitions": "node scripts/ux-coherence-runner.js ux:transitions",
     "test:ux:modal:overlay:consistency": "node scripts/ux-coherence-runner.js ux:modals",
     "test:ux:form:interaction:flow": "node scripts/ux-coherence-runner.js ux:forms",
     "test:ux:navigation:flow:coherence": "node scripts/ux-coherence-runner.js ux:navigation",
-    "test:responsive:premium:mobile": "node scripts/ux-coherence-runner.js responsive:mobile",
-    "test:responsive:premium:tablet": "node scripts/ux-coherence-runner.js responsive:tablet",
-    "test:responsive:premium:desktop": "node scripts/ux-coherence-runner.js responsive:desktop",
+    
     "test:responsive:breakpoint:coherence": "node scripts/ux-coherence-runner.js responsive:breakpoints",
     "test:ux:coherence:master:validation": "node scripts/ux-coherence-runner.js master:validation",
-    "test:ux:premium:consistency:all": "node scripts/ux-coherence-runner.js coherence:all",
-    "test:ux:ferrari:level:experience": "node scripts/ux-coherence-runner.js master:validation",
+    
     "monitor:ux:coherence:real:time": "node scripts/ux-coherence-runner.js coherence:all",
-    "monitor:ux:premium:perception:tracking": "node scripts/ux-coherence-runner.js brand:identity",
-    "monitor:ux:competitive:advantage:metrics": "node scripts/ux-coherence-runner.js brand:identity",
+    
     "upgrade:component:nueva-oportunidad": "node scripts/upgrade-component.js nueva-oportunidad",
     "upgrade:component:clientes-list": "node scripts/upgrade-component.js clientes",
     "upgrade:component:onboarding-main": "node scripts/upgrade-component.js onboarding",

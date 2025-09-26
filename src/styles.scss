@@ -1,8 +1,3 @@
-/* ===== CONDUCTORES PWA - PREMIUM FINTECH THEME =====
- * Global styles and theme imports - Performance Optimized
- * Version: Centro de Comando + Performance Pack + Tailwind Enterprise
- */
-
 /* ===== TAILWIND CSS - ENTERPRISE DESIGN SYSTEM ===== */
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
@@ -17,14 +12,7 @@
 /* Performance-Critical Styles */
 @import 'styles/performance.scss';
 
-/* Phosphor Icons - Premium Icon System */
-/* Essential styles for Phosphor Icons integration */
-
-/* Premium FinTech Theme - Lazy loaded */
-@import 'styles/theme-premium.css';
-
-/* Premium Animations - Deferred for better performance */
-@import 'styles/premium-animations.scss';
+/* Removed Premium FinTech Theme imports (migrated to Minimal Dark) */
 
 /* ===== CSS VARIABLES (Common tokens) ===== */
 :root {
