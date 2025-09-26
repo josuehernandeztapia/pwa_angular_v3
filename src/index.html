@@ -40,27 +40,40 @@
   <link rel="modulepreload" href="main.js">
   <link rel="modulepreload" href="polyfills.js">
 
-  <!-- Critical Above-the-fold CSS - Inline for immediate render -->
+  <!-- Force Dark Mode on first paint to avoid flash of light theme -->
+  <script>
+    (function(){
+      try {
+        var saved = localStorage.getItem('darkMode');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'true' || (saved === null && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) { /* no-op */ }
+    })();
+  </script>
+
+  <!-- Critical Above-the-fold CSS - Inline for immediate render (Minimal Dark) -->
   <style>
     /* CSS Reset & Base Styles */
     *,*::before,*::after{box-sizing:border-box}
     html{line-height:1.15;-webkit-text-size-adjust:100%;height:100%}
     body{margin:0;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-         background:#f8fafc;color:#1e293b;height:100%;overflow-x:hidden}
+         background:#0b0f14;color:#e5e7eb;height:100%;overflow-x:hidden}
 
     /* App Shell Critical Styles */
     app-root{display:block;min-height:100vh;position:relative}
 
-    /* Premium Loading Experience */
+    /* Minimal Dark Loading */
     .app-shell-loading{
       display:flex;flex-direction:column;align-items:center;justify-content:center;
-      min-height:100vh;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-      color:white;text-align:center;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999
+      min-height:100vh;background:#0b1220;
+      color:#e5e7eb;text-align:center;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999
     }
 
     .loading-logo{
       width:80px;height:80px;margin-bottom:24px;
-      background:rgba(255,255,255,0.1);border-radius:20px;
+      background:rgba(255,255,255,0.06);border-radius:20px;
       display:flex;align-items:center;justify-content:center;
       font-size:32px;animation:pulse 2s infinite
     }
@@ -81,8 +94,8 @@
     /* Hide loading when app ready */
     .app-ready .app-shell-loading{display:none}
 
-    /* Critical Header Styles for LCP */
-    .header{height:64px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:100}
+    /* Critical Header Styles for LCP (Dark) */
+    .header{height:64px;background:#0f172a;border-bottom:1px solid #1f2937;position:sticky;top:0;z-index:100;color:#e5e7eb}
     .nav{height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
     .logo{font-size:20px;font-weight:700;color:#94a3b8}
 
@@ -93,8 +106,8 @@
       text-decoration:none;border:none;cursor:pointer;
       transition:all 0.2s cubic-bezier(0.4,0,0.2,1)
     }
-    .btn-primary{background:#475569;color:white}
-    .btn-primary:hover{background:#334155;transform:translateY(-1px)}
+    .btn-primary{background:#334155;color:#e5e7eb}
+    .btn-primary:hover{background:#1f2937;transform:translateY(-1px)}
 
     /* Performance Optimized Utilities */
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
@@ -106,7 +119,7 @@
     /* Critical Layout Shift Prevention */
     .container{max-width:1200px;margin:0 auto;padding:0 16px}
     .grid{display:grid;gap:24px}
-    .card{background:white;border-radius:12px;border:1px solid #e2e8f0;padding:24px}
+    .card{background:#0f172a;border-radius:12px;border:1px solid #1f2937;padding:24px;color:#e5e7eb}
   </style>
 
   <!-- Non-critical CSS - Load Async -->
