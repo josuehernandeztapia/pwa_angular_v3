@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="35.394" tests="5" failures="1">
+  <testsuite name="Root Suite" timestamp="2025-09-26T04:31:57" tests="0" file="cypress/e2e/02-dashboard.cy.ts" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Dashboard Functionality" timestamp="2025-09-26T04:31:57" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Dashboard Overview" timestamp="2025-09-26T04:31:57" tests="5" time="35.336" failures="2">
+    <testcase name="Dashboard Functionality Dashboard Overview &quot;before each&quot; hook for &quot;should load and display dashboard correctly&quot;" time="11.287" classname="&quot;before each&quot; hook for &quot;should load and display dashboard correctly&quot;">
+      <failure message="Timed out retrying after 10000ms: Expected to find element: `[data-cy=&quot;email-input&quot;]`, but never found it.
+
+This error occurred while creating the session. Because the session setup failed, we failed the test.
+
+Because this error occurred during a `before each` hook we are skipping the remaining tests in the current suite: `Dashboard Functionality`" type="AssertionError"><![CDATA[AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-cy="email-input"]`, but never found it.
+
+This error occurred while creating the session. Because the session setup failed, we failed the test.
+
+Because this error occurred during a `before each` hook we are skipping the remaining tests in the current suite: `Dashboard Functionality`
+    at Object.eval [as setup] (webpack://conductores-pwa/./cypress/support/commands.ts:14:7)
+    at Context.<anonymous> (http://localhost:4200/__cypress/runner/cypress_runner.js:136587:38)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)]]></failure>
+    </testcase>
+    <testcase name="Dashboard Functionality Responsive Design &quot;after all&quot; hook: generateReport for &quot;should display correctly on desktop&quot;" time="0.000" classname="&quot;after all&quot; hook: generateReport for &quot;should display correctly on desktop&quot;">
+      <failure message="`cy.task(&apos;coverageReport&apos;)` failed with the following error:
+
+&gt; Command failed with exit code 1: npm run coverage:report
+
+https://on.cypress.io/api/task
+
+Because this error occurred during a `after all` hook we are skipping all of the remaining tests.
+
+Although you have test retries enabled, we do not retry tests when `before all` or `after all` hooks fail" type="CypressError"><![CDATA[CypressError: `cy.task('coverageReport')` failed with the following error:
+
+> Command failed with exit code 1: npm run coverage:report
+
+https://on.cypress.io/api/task
+
+Because this error occurred during a `after all` hook we are skipping all of the remaining tests.
+
+Although you have test retries enabled, we do not retry tests when `before all` or `after all` hooks fail
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:138627:70)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise._settlePromiseFromHandler (http://localhost:4200/__cypress/runner/cypress_runner.js:1489:31)
+    at Promise._settlePromise (http://localhost:4200/__cypress/runner/cypress_runner.js:1546:18)
+    at Promise._settlePromise0 (http://localhost:4200/__cypress/runner/cypress_runner.js:1591:10)
+    at Promise._settlePromises (http://localhost:4200/__cypress/runner/cypress_runner.js:1667:18)
+    at _drainQueueStep (http://localhost:4200/__cypress/runner/cypress_runner.js:2377:12)
+    at _drainQueue (http://localhost:4200/__cypress/runner/cypress_runner.js:2370:9)
+    at Async._drainQueues (http://localhost:4200/__cypress/runner/cypress_runner.js:2386:5)
+    at Async.drainQueues (http://localhost:4200/__cypress/runner/cypress_runner.js:2256:14)
+From Your Spec Code:
+    at Context.generateReport (webpack://conductores-pwa/./node_modules/@cypress/code-coverage/support.js:263:0)
+
+From Node.js Internals:
+  Error: Command failed with exit code 1: npm run coverage:report
+      at makeError (/workspace/node_modules/@cypress/code-coverage/node_modules/execa/lib/error.js:59:11)
+      at handlePromise (/workspace/node_modules/@cypress/code-coverage/node_modules/execa/index.js:114:26)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>
