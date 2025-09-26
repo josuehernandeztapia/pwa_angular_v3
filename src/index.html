@@ -40,12 +40,18 @@
   <link rel="modulepreload" href="main.js">
   <link rel="modulepreload" href="polyfills.js">
 
-  <!-- Force Dark Mode on first paint to avoid flash of light theme -->
+  <!-- Force Minimal Dark or Light Mode on first paint to avoid flash -->
   <script>
     (function(){
       try {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('darkMode', 'true');
+        var saved = localStorage.getItem('darkMode');
+        var prefersDark = window.matchMedia &&
+                          window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'true' || (saved === null && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
       } catch (e) { /* no-op */ }
     })();
   </script>
