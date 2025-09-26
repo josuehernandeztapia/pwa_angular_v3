@@ -43,15 +43,15 @@
   /* Palette */
   /* FIXED (verify-ux) removed legacy gray tokens */
 
-  --primary-cyan-300: #67e8f9;
-  --primary-cyan-400: #22d3ee;
-  --primary-cyan-500: #06b6d4;
-  --primary-cyan-600: #0891b2;
+  --primary-cyan-300: #94a3b8;
+  --primary-cyan-400: #64748b;
+  --primary-cyan-500: #475569;
+  --primary-cyan-600: #334155;
 
-  --accent-amber-300: #fcd34d;
-  --accent-amber-400: #fbbf24;
-  --accent-amber-500: #f59e0b;
-  --accent-amber-600: #d97706;
+  --accent-amber-300: #cbd5e1;
+  --accent-amber-400: #94a3b8;
+  --accent-amber-500: #64748b;
+  --accent-amber-600: #475569;
 
   --success-500: #22c55e;
   --success-600: #16a34a;
@@ -69,7 +69,7 @@
   --shadow-elevated: 0 14px 32px rgba(0, 0, 0, 0.5);
 
   /* Focus */
-  --focus-ring-color: #22d3ee;
+  --focus-ring-color: #94a3b8;
 
   /* Spacing, radii, motion */
   --space-button-padding: 12px 24px;
@@ -604,9 +604,9 @@ html.hc body { background: var(--bg); color: var(--text); }
   --muted: #A8B3CF;
   --card: #101826;
   --line: #1F2937;
-  --acc: #3AA6FF;
+  --acc: #94A3B8;
   --ok: #22C55E;
-  --warn: #F59E0B;
+  --warn: #94A3B8;
   --bad: #EF4444;
   --radius: 16px;
   --shadow: 0 6px 24px rgba(0,0,0,.25);
