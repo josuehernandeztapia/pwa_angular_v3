@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="229.513" tests="17" failures="17">
+  <testsuite name="Root Suite" timestamp="2025-09-26T04:28:04" tests="0" file="cypress/e2e/01-authentication.cy.ts" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Authentication Flow" timestamp="2025-09-26T04:28:04" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Login Process" timestamp="2025-09-26T04:28:04" tests="7" time="53.382" failures="7">
+    <testcase name="Authentication Flow Login Process should display login form correctly" time="1.804" classname="should display login form correctly">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Login Process should show validation errors for empty fields" time="2.117" classname="should show validation errors for empty fields">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Login Process should show validation error for invalid email format" time="2.097" classname="should show validation error for invalid email format">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Login Process should successfully login with valid credentials" time="2.685" classname="should successfully login with valid credentials">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Login Process should handle login failure gracefully" time="2.868" classname="should handle login failure gracefully">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Login Process should show loading state during login" time="3.109" classname="should show loading state during login">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Login Process should toggle password visibility" time="3.305" classname="should toggle password visibility">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Authentication State" timestamp="2025-09-26T04:28:57" tests="3" time="86.672" failures="3">
+    <testcase name="Authentication Flow Authentication State should redirect unauthenticated users to login" time="3.564" classname="should redirect unauthenticated users to login">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Authentication State should maintain session after page refresh" time="12.495" classname="should maintain session after page refresh">
+      <failure message="Timed out retrying after 10000ms: Expected to find element: `[data-cy=&quot;email-input&quot;]`, but never found it.
+
+This error occurred while creating the session. Because the session setup failed, we failed the test." type="AssertionError"><![CDATA[AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-cy="email-input"]`, but never found it.
+
+This error occurred while creating the session. Because the session setup failed, we failed the test.
+    at Object.eval [as setup] (webpack://conductores-pwa/./cypress/support/commands.ts:14:7)
+    at Context.<anonymous> (http://localhost:4200/__cypress/runner/cypress_runner.js:136587:38)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Authentication State should logout successfully" time="12.844" classname="should logout successfully">
+      <failure message="Timed out retrying after 10000ms: Expected to find element: `[data-cy=&quot;email-input&quot;]`, but never found it.
+
+This error occurred while creating the session. Because the session setup failed, we failed the test." type="AssertionError"><![CDATA[AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-cy="email-input"]`, but never found it.
+
+This error occurred while creating the session. Because the session setup failed, we failed the test.
+    at Object.eval [as setup] (webpack://conductores-pwa/./cypress/support/commands.ts:14:7)
+    at Context.<anonymous> (http://localhost:4200/__cypress/runner/cypress_runner.js:136587:38)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)]]></failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Accessibility" timestamp="2025-09-26T04:30:24" tests="2" time="17.241" failures="2">
+    <testcase name="Authentication Flow Accessibility should be accessible" time="2.010" classname="should be accessible">
+      <failure message="cy.get(...).tab is not a function" type="TypeError"><![CDATA[TypeError: cy.get(...).tab is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/e2e/01-authentication.cy.ts:208:21)
+    at runnable.fn (http://localhost:4200/__cypress/runner/cypress_runner.js:141885:19)
+    at callFn (http://localhost:4200/__cypress/runner/cypress_runner.js:160954:21)
+    at Runnable.run (http://localhost:4200/__cypress/runner/cypress_runner.js:160941:7)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:167036:30)
+    at PassThroughHandlerContext.finallyHandler (http://localhost:4200/__cypress/runner/cypress_runner.js:4042:23)
+    at PassThroughHandlerContext.tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise._settlePromiseFromHandler (http://localhost:4200/__cypress/runner/cypress_runner.js:1489:31)
+    at Promise._settlePromise (http://localhost:4200/__cypress/runner/cypress_runner.js:1546:18)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Accessibility should announce form validation errors to screen readers" time="4.200" classname="should announce form validation errors to screen readers">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Responsive Design" timestamp="2025-09-26T04:30:41" tests="3" time="40.377" failures="3">
+    <testcase name="Authentication Flow Responsive Design should display correctly on mobile" time="4.562" classname="should display correctly on mobile">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Responsive Design should display correctly on tablet" time="4.657" classname="should display correctly on tablet">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Responsive Design should display correctly on desktop" time="5.242" classname="should display correctly on desktop">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Network Conditions" timestamp="2025-09-26T04:31:21" tests="2" time="31.706" failures="3">
+    <testcase name="Authentication Flow Network Conditions should handle offline condition gracefully" time="6.361" classname="should handle offline condition gracefully">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Network Conditions should handle slow network condition" time="5.509" classname="should handle slow network condition">
+      <failure message="cy.waitUntil is not a function" type="TypeError"><![CDATA[TypeError: cy.waitUntil is not a function
+    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)
+    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)
+    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)
+    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)
+    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)]]></failure>
+    </testcase>
+    <testcase name="Authentication Flow Network Conditions &quot;after all&quot; hook: generateReport for &quot;should handle slow network condition&quot;" time="5.509" classname="&quot;after all&quot; hook: generateReport for &quot;should handle slow network condition&quot;">
+      <failure message="`cy.task(&apos;coverageReport&apos;)` failed with the following error:
+
+&gt; Command failed with exit code 1: npm run coverage:report
+
+https://on.cypress.io/api/task
+
+Because this error occurred during a `after all` hook we are skipping all of the remaining tests.
+
+Although you have test retries enabled, we do not retry tests when `before all` or `after all` hooks fail" type="CypressError"><![CDATA[CypressError: `cy.task('coverageReport')` failed with the following error:
+
+> Command failed with exit code 1: npm run coverage:report
+
+https://on.cypress.io/api/task
+
+Because this error occurred during a `after all` hook we are skipping all of the remaining tests.
+
+Although you have test retries enabled, we do not retry tests when `before all` or `after all` hooks fail
+    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:138627:70)
+    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)
+    at Promise._settlePromiseFromHandler (http://localhost:4200/__cypress/runner/cypress_runner.js:1489:31)
+    at Promise._settlePromise (http://localhost:4200/__cypress/runner/cypress_runner.js:1546:18)
+    at Promise._settlePromise0 (http://localhost:4200/__cypress/runner/cypress_runner.js:1591:10)
+    at Promise._settlePromises (http://localhost:4200/__cypress/runner/cypress_runner.js:1667:18)
+    at _drainQueueStep (http://localhost:4200/__cypress/runner/cypress_runner.js:2377:12)
+    at _drainQueue (http://localhost:4200/__cypress/runner/cypress_runner.js:2370:9)
+    at Async._drainQueues (http://localhost:4200/__cypress/runner/cypress_runner.js:2386:5)
+    at Async.drainQueues (http://localhost:4200/__cypress/runner/cypress_runner.js:2256:14)
+
+From Node.js Internals:
+  Error: Command failed with exit code 1: npm run coverage:report
+      at makeError (/workspace/node_modules/@cypress/code-coverage/node_modules/execa/lib/error.js:59:11)
+      at handlePromise (/workspace/node_modules/@cypress/code-coverage/node_modules/execa/index.js:114:26)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

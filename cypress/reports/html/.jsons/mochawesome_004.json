@@ -1,0 +1,582 @@
+{
+  "stats": {
+    "suites": 6,
+    "tests": 17,
+    "passes": 0,
+    "pending": 0,
+    "failures": 17,
+    "start": "2025-09-26T04:28:04.062Z",
+    "end": "2025-09-26T04:31:53.575Z",
+    "duration": 229513,
+    "testsRegistered": 17,
+    "passPercent": 0,
+    "pendingPercent": 0,
+    "other": 1,
+    "hasOther": true,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "4b8e760c-ff17-408f-844b-41fcad1c3e4c",
+      "title": "",
+      "fullFile": "cypress/e2e/01-authentication.cy.ts",
+      "file": "cypress/e2e/01-authentication.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "d459d5df-062b-483c-82e4-ae185e8618aa",
+          "title": "Authentication Flow",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [],
+          "suites": [
+            {
+              "uuid": "a5b45f32-33a1-4713-9b34-3aa288a78a7f",
+              "title": "Login Process",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should display login form correctly",
+                  "fullTitle": "Authentication Flow Login Process should display login form correctly",
+                  "timedOut": null,
+                  "duration": 2066,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should display login form correctly (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should display login form correctly (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should display login form correctly (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.navigateAndWait('/login');\n// Verify login form elements are present using enhanced commands\ncy.waitForElement('[data-cy=\"login-form\"]');\ncy.waitForElement('[data-cy=\"email-input\"]');\ncy.waitForElement('[data-cy=\"password-input\"]');\ncy.waitForElement('[data-cy=\"login-submit\"]');\n// Verify branding elements\ncy.contains('Centro de Comando').should('be.visible');\ncy.contains('El Copiloto Estratégico para el Asesor Moderno').should('be.visible');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "1c5b9aea-4255-4b8c-86c2-3927e9e2add5",
+                  "parentUUID": "a5b45f32-33a1-4713-9b34-3aa288a78a7f",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should show validation errors for empty fields",
+                  "fullTitle": "Authentication Flow Login Process should show validation errors for empty fields",
+                  "timedOut": null,
+                  "duration": 2337,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should show validation errors for empty fields (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should show validation errors for empty fields (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should show validation errors for empty fields (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.navigateAndWait('/login');\n// Try to submit empty form\ncy.waitForElement('[data-cy=\"login-submit\"]').click();\n// Wait for form validation and verify messages\ncy.waitForFormValidation('[data-cy=\"login-form\"]');\ncy.contains('El correo es requerido').should('be.visible');\ncy.contains('La contraseña es requerida').should('be.visible');\n// Verify form is not submitted\ncy.url().should('include', '/login');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "b5fc5914-ebc7-4ab8-8ecc-f2672aa858bf",
+                  "parentUUID": "a5b45f32-33a1-4713-9b34-3aa288a78a7f",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should show validation error for invalid email format",
+                  "fullTitle": "Authentication Flow Login Process should show validation error for invalid email format",
+                  "timedOut": null,
+                  "duration": 2545,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should show validation error for invalid email format (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should show validation error for invalid email format (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should show validation error for invalid email format (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.navigateAndWait('/login');\n// Use enhanced form filling with validation\ncy.fillFormField('email-input', 'invalid-email');\ncy.fillFormField('password-input', 'somepassword');\ncy.waitForElement('[data-cy=\"login-submit\"]').click();\ncy.waitForFormValidation('[data-cy=\"login-form\"]');\ncy.contains('Formato de correo inválido').should('be.visible');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "a1fa9b7d-b1dd-4647-bee8-b8fd96fb3fdf",
+                  "parentUUID": "a5b45f32-33a1-4713-9b34-3aa288a78a7f",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should successfully login with valid credentials",
+                  "fullTitle": "Authentication Flow Login Process should successfully login with valid credentials",
+                  "timedOut": null,
+                  "duration": 3024,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should successfully login with valid credentials (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should successfully login with valid credentials (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should successfully login with valid credentials (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "// Mock successful login response\ncy.intercept('POST', '**/auth/login', {\n    statusCode: 200,\n    body: {\n        success: true,\n        token: 'fake-jwt-token',\n        user: {\n            id: 'user-001',\n            name: 'Ricardo Montoya',\n            email: 'ricardo.montoya@cmu.com'\n        }\n    }\n}).as('loginRequest');\ncy.navigateAndWait('/login');\n// Use enhanced form filling\ncy.fillFormField('email-input', 'ricardo.montoya@cmu.com');\ncy.fillFormField('password-input', 'testPassword123');\ncy.waitForElement('[data-cy=\"login-submit\"]').click();\n// Wait for login API call and page transition\ncy.wait('@loginRequest');\ncy.waitForApiIdle();\n// Verify redirect to dashboard with enhanced wait\ncy.waitForPageLoad('/dashboard');\ncy.waitForElement('[data-cy=\"dashboard-header\"]');\n// Verify authentication state\ncy.window().its('localStorage.authToken').should('exist');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "7b529ed6-214e-4570-bc38-6ab65745b3f5",
+                  "parentUUID": "a5b45f32-33a1-4713-9b34-3aa288a78a7f",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should handle login failure gracefully",
+                  "fullTitle": "Authentication Flow Login Process should handle login failure gracefully",
+                  "timedOut": null,
+                  "duration": 3146,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should handle login failure gracefully (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should handle login failure gracefully (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should handle login failure gracefully (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "// Mock failed login response\ncy.intercept('POST', '**/auth/login', {\n    statusCode: 401,\n    body: {\n        success: false,\n        error: 'Credenciales inválidas'\n    }\n}).as('failedLogin');\ncy.navigateAndWait('/login');\n// Use enhanced form filling\ncy.fillFormField('email-input', 'wrong@email.com');\ncy.fillFormField('password-input', 'wrongpassword');\ncy.waitForElement('[data-cy=\"login-submit\"]').click();\ncy.wait('@failedLogin');\ncy.waitForApiIdle();\n// Verify error message is displayed with enhanced waiting\ncy.waitForElement('[data-cy=\"login-error\"]');\ncy.contains('Credenciales inválidas').should('be.visible');\n// Verify user stays on login page\ncy.url().should('include', '/login');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "020797bb-97f4-43c4-b0c0-57712ba1cbd4",
+                  "parentUUID": "a5b45f32-33a1-4713-9b34-3aa288a78a7f",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should show loading state during login",
+                  "fullTitle": "Authentication Flow Login Process should show loading state during login",
+                  "timedOut": null,
+                  "duration": 3240,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should show loading state during login (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should show loading state during login (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should show loading state during login (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "// Mock delayed login response\ncy.intercept('POST', '**/auth/login', (req) => {\n    req.reply((res) => {\n        res.delay(2000);\n        res.send({\n            statusCode: 200,\n            body: { success: true, token: 'fake-token' }\n        });\n    });\n}).as('slowLogin');\ncy.navigateAndWait('/login');\n// Use enhanced form filling\ncy.fillFormField('email-input', 'test@email.com');\ncy.fillFormField('password-input', 'password123');\ncy.waitForElement('[data-cy=\"login-submit\"]').click();\n// Verify loading state with enhanced waiting\ncy.waitForElement('[data-cy=\"login-submit\"]').should('be.disabled');\ncy.waitForElement('[data-cy=\"login-loading\"]');\ncy.wait('@slowLogin');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "6ee1232f-d7ab-4726-8a6e-612bd1c9465e",
+                  "parentUUID": "a5b45f32-33a1-4713-9b34-3aa288a78a7f",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should toggle password visibility",
+                  "fullTitle": "Authentication Flow Login Process should toggle password visibility",
+                  "timedOut": null,
+                  "duration": 3649,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should toggle password visibility (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should toggle password visibility (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Login Process -- should toggle password visibility (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.navigateAndWait('/login');\n// Use enhanced form filling\ncy.fillFormField('password-input', 'secretPassword123');\n// Initially password should be hidden\ncy.get('[data-cy=\"password-input\"]').should('have.attr', 'type', 'password');\n// Click toggle button with enhanced element waiting\ncy.waitForElement('[data-cy=\"password-toggle\"]').click();\n// Password should now be visible\ncy.get('[data-cy=\"password-input\"]').should('have.attr', 'type', 'text');\n// Click toggle again\ncy.get('[data-cy=\"password-toggle\"]').click();\n// Password should be hidden again\ncy.get('[data-cy=\"password-input\"]').should('have.attr', 'type', 'password');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "76d2d7f6-2413-491a-a401-37920eccdaf6",
+                  "parentUUID": "a5b45f32-33a1-4713-9b34-3aa288a78a7f",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "1c5b9aea-4255-4b8c-86c2-3927e9e2add5",
+                "b5fc5914-ebc7-4ab8-8ecc-f2672aa858bf",
+                "a1fa9b7d-b1dd-4647-bee8-b8fd96fb3fdf",
+                "7b529ed6-214e-4570-bc38-6ab65745b3f5",
+                "020797bb-97f4-43c4-b0c0-57712ba1cbd4",
+                "6ee1232f-d7ab-4726-8a6e-612bd1c9465e",
+                "76d2d7f6-2413-491a-a401-37920eccdaf6"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 20007,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "85a14f6c-20c3-4d1d-8bca-2eef281d7eb4",
+              "title": "Authentication State",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should redirect unauthenticated users to login",
+                  "fullTitle": "Authentication Flow Authentication State should redirect unauthenticated users to login",
+                  "timedOut": null,
+                  "duration": 3922,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Authentication State -- should redirect unauthenticated users to login (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Authentication State -- should redirect unauthenticated users to login (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Authentication State -- should redirect unauthenticated users to login (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "// Try to access protected route without authentication\ncy.navigateAndWait('/dashboard');\n// Should redirect to login with enhanced wait\ncy.waitForPageLoad('/login');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "dc0ce3b3-72e4-4501-9bdb-0d8961d4c996",
+                  "parentUUID": "85a14f6c-20c3-4d1d-8bca-2eef281d7eb4",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should maintain session after page refresh",
+                  "fullTitle": "Authentication Flow Authentication State should maintain session after page refresh",
+                  "timedOut": null,
+                  "duration": 13096,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Authentication State -- should maintain session after page refresh (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Authentication State -- should maintain session after page refresh (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Authentication State -- should maintain session after page refresh (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "// Login first\ncy.login();\ncy.navigateAndWait('/dashboard');\n// Refresh page and wait for complete reload\ncy.reload();\ncy.waitForLoadComplete();\n// Should remain authenticated\ncy.waitForPageLoad('/dashboard');\ncy.waitForElement('[data-cy=\"dashboard-header\"]');",
+                  "err": {
+                    "message": "AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-cy=\"email-input\"]`, but never found it.\n\nThis error occurred while creating the session. Because the session setup failed, we failed the test.",
+                    "estack": "AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-cy=\"email-input\"]`, but never found it.\n\nThis error occurred while creating the session. Because the session setup failed, we failed the test.\n    at Object.eval [as setup] (webpack://conductores-pwa/./cypress/support/commands.ts:14:7)\n    at Context.<anonymous> (http://localhost:4200/__cypress/runner/cypress_runner.js:136587:38)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)",
+                    "diff": null
+                  },
+                  "uuid": "36119731-4e42-4979-80ba-1209d859e0f9",
+                  "parentUUID": "85a14f6c-20c3-4d1d-8bca-2eef281d7eb4",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should logout successfully",
+                  "fullTitle": "Authentication Flow Authentication State should logout successfully",
+                  "timedOut": null,
+                  "duration": 13349,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Authentication State -- should logout successfully (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Authentication State -- should logout successfully (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Authentication State -- should logout successfully (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.login();\ncy.navigateAndWait('/dashboard');\n// Click logout button with enhanced waiting\ncy.waitForElement('[data-cy=\"user-menu\"]').click();\ncy.waitForElement('[data-cy=\"logout-button\"]').click();\ncy.waitForApiIdle();\n// Should redirect to login\ncy.waitForPageLoad('/login');\n// Authentication token should be cleared\ncy.window().its('localStorage.authToken').should('not.exist');",
+                  "err": {
+                    "message": "AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-cy=\"email-input\"]`, but never found it.\n\nThis error occurred while creating the session. Because the session setup failed, we failed the test.",
+                    "estack": "AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-cy=\"email-input\"]`, but never found it.\n\nThis error occurred while creating the session. Because the session setup failed, we failed the test.\n    at Object.eval [as setup] (webpack://conductores-pwa/./cypress/support/commands.ts:14:7)\n    at Context.<anonymous> (http://localhost:4200/__cypress/runner/cypress_runner.js:136587:38)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)",
+                    "diff": null
+                  },
+                  "uuid": "b3fe571a-3056-479c-b0e6-fdaef9c70866",
+                  "parentUUID": "85a14f6c-20c3-4d1d-8bca-2eef281d7eb4",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "dc0ce3b3-72e4-4501-9bdb-0d8961d4c996",
+                "36119731-4e42-4979-80ba-1209d859e0f9",
+                "b3fe571a-3056-479c-b0e6-fdaef9c70866"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 30367,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "3fa79081-5e9f-4018-9fd0-9cdfeca0c39d",
+              "title": "Accessibility",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should be accessible",
+                  "fullTitle": "Authentication Flow Accessibility should be accessible",
+                  "timedOut": null,
+                  "duration": 2018,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Accessibility -- should be accessible (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Accessibility -- should be accessible (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Accessibility -- should be accessible (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.navigateAndWait('/login');\n// Check accessibility with enhanced waiting\ncy.waitForLoadComplete();\ncy.checkA11y();\n// Verify keyboard navigation\ncy.get('body').tab();\ncy.focused().should('have.attr', 'data-cy', 'email-input');\ncy.focused().tab();\ncy.focused().should('have.attr', 'data-cy', 'password-input');\ncy.focused().tab();\ncy.focused().should('have.attr', 'data-cy', 'login-submit');",
+                  "err": {
+                    "message": "TypeError: cy.get(...).tab is not a function",
+                    "estack": "TypeError: cy.get(...).tab is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/e2e/01-authentication.cy.ts:208:21)\n    at runnable.fn (http://localhost:4200/__cypress/runner/cypress_runner.js:141885:19)\n    at callFn (http://localhost:4200/__cypress/runner/cypress_runner.js:160954:21)\n    at Runnable.run (http://localhost:4200/__cypress/runner/cypress_runner.js:160941:7)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:167036:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:4200/__cypress/runner/cypress_runner.js:4042:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise._settlePromiseFromHandler (http://localhost:4200/__cypress/runner/cypress_runner.js:1489:31)\n    at Promise._settlePromise (http://localhost:4200/__cypress/runner/cypress_runner.js:1546:18)",
+                    "diff": null
+                  },
+                  "uuid": "b50c2e95-915f-4b5d-8e6f-665b9537164f",
+                  "parentUUID": "3fa79081-5e9f-4018-9fd0-9cdfeca0c39d",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should announce form validation errors to screen readers",
+                  "fullTitle": "Authentication Flow Accessibility should announce form validation errors to screen readers",
+                  "timedOut": null,
+                  "duration": 4649,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Accessibility -- should announce form validation errors to screen readers (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Accessibility -- should announce form validation errors to screen readers (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Accessibility -- should announce form validation errors to screen readers (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.navigateAndWait('/login');\n// Submit empty form with enhanced waiting\ncy.waitForElement('[data-cy=\"login-submit\"]').click();\ncy.waitForFormValidation('[data-cy=\"login-form\"]');\n// Verify ARIA attributes for errors\ncy.get('[data-cy=\"email-input\"]').should('have.attr', 'aria-invalid', 'true');\ncy.get('[data-cy=\"password-input\"]').should('have.attr', 'aria-invalid', 'true');\n// Verify error messages are associated with inputs\ncy.get('[data-cy=\"email-error\"]').should('have.id');\ncy.get('[data-cy=\"email-input\"]').should('have.attr', 'aria-describedby').and('include', 'email-error');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "9188ac1f-06b9-4aa3-a36d-53ef36bc9871",
+                  "parentUUID": "3fa79081-5e9f-4018-9fd0-9cdfeca0c39d",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "b50c2e95-915f-4b5d-8e6f-665b9537164f",
+                "9188ac1f-06b9-4aa3-a36d-53ef36bc9871"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 6667,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "33bd6355-523c-4cb5-9f76-e9a0f47af3e4",
+              "title": "Responsive Design",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should display correctly on mobile",
+                  "fullTitle": "Authentication Flow Responsive Design should display correctly on mobile",
+                  "timedOut": null,
+                  "duration": 5197,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Responsive Design -- should display correctly on mobile (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Responsive Design -- should display correctly on mobile (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Responsive Design -- should display correctly on mobile (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.viewport(width, height);\ncy.navigateAndWait('/login');\n// Verify login form is visible and functional with enhanced waits\ncy.waitForElement('[data-cy=\"login-form\"]');\ncy.waitForElement('[data-cy=\"email-input\"]');\ncy.waitForElement('[data-cy=\"password-input\"]');\ncy.waitForElement('[data-cy=\"login-submit\"]');\n// Verify form is usable with enhanced form filling\ncy.fillFormField('email-input', 'test@email.com');\ncy.fillFormField('password-input', 'password123');\n// Verify inputs contain the typed values\ncy.get('[data-cy=\"email-input\"]').should('have.value', 'test@email.com');\ncy.get('[data-cy=\"password-input\"]').should('have.value', 'password123');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "ef2fb35c-0385-46ec-ac05-b09d60af91e2",
+                  "parentUUID": "33bd6355-523c-4cb5-9f76-e9a0f47af3e4",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should display correctly on tablet",
+                  "fullTitle": "Authentication Flow Responsive Design should display correctly on tablet",
+                  "timedOut": null,
+                  "duration": 5620,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Responsive Design -- should display correctly on tablet (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Responsive Design -- should display correctly on tablet (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Responsive Design -- should display correctly on tablet (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.viewport(width, height);\ncy.navigateAndWait('/login');\n// Verify login form is visible and functional with enhanced waits\ncy.waitForElement('[data-cy=\"login-form\"]');\ncy.waitForElement('[data-cy=\"email-input\"]');\ncy.waitForElement('[data-cy=\"password-input\"]');\ncy.waitForElement('[data-cy=\"login-submit\"]');\n// Verify form is usable with enhanced form filling\ncy.fillFormField('email-input', 'test@email.com');\ncy.fillFormField('password-input', 'password123');\n// Verify inputs contain the typed values\ncy.get('[data-cy=\"email-input\"]').should('have.value', 'test@email.com');\ncy.get('[data-cy=\"password-input\"]').should('have.value', 'password123');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "57057cc0-ddc5-45b2-8c0b-e5c26f9d94d7",
+                  "parentUUID": "33bd6355-523c-4cb5-9f76-e9a0f47af3e4",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should display correctly on desktop",
+                  "fullTitle": "Authentication Flow Responsive Design should display correctly on desktop",
+                  "timedOut": null,
+                  "duration": 5633,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Responsive Design -- should display correctly on desktop (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Responsive Design -- should display correctly on desktop (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Responsive Design -- should display correctly on desktop (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.viewport(width, height);\ncy.navigateAndWait('/login');\n// Verify login form is visible and functional with enhanced waits\ncy.waitForElement('[data-cy=\"login-form\"]');\ncy.waitForElement('[data-cy=\"email-input\"]');\ncy.waitForElement('[data-cy=\"password-input\"]');\ncy.waitForElement('[data-cy=\"login-submit\"]');\n// Verify form is usable with enhanced form filling\ncy.fillFormField('email-input', 'test@email.com');\ncy.fillFormField('password-input', 'password123');\n// Verify inputs contain the typed values\ncy.get('[data-cy=\"email-input\"]').should('have.value', 'test@email.com');\ncy.get('[data-cy=\"password-input\"]').should('have.value', 'password123');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "5c84cefb-51cd-4ec4-97d9-5505d7e91c04",
+                  "parentUUID": "33bd6355-523c-4cb5-9f76-e9a0f47af3e4",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "ef2fb35c-0385-46ec-ac05-b09d60af91e2",
+                "57057cc0-ddc5-45b2-8c0b-e5c26f9d94d7",
+                "5c84cefb-51cd-4ec4-97d9-5505d7e91c04"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 16450,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "5f32a288-385d-47a9-a6b1-8044ee541fdc",
+              "title": "Network Conditions",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should handle offline condition gracefully",
+                  "fullTitle": "Authentication Flow Network Conditions should handle offline condition gracefully",
+                  "timedOut": null,
+                  "duration": 5332,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Network Conditions -- should handle offline condition gracefully (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Network Conditions -- should handle offline condition gracefully (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Network Conditions -- should handle offline condition gracefully (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.navigateAndWait('/login');\n// Simulate offline condition\ncy.simulateNetworkCondition('offline');\n// Use enhanced form filling\ncy.fillFormField('email-input', 'test@email.com');\ncy.fillFormField('password-input', 'password123');\ncy.waitForElement('[data-cy=\"login-submit\"]').click();\n// Should show network error\ncy.get('[data-cy=\"network-error\"]').should('be.visible');\ncy.contains('Error de conexión').should('be.visible');",
+                  "err": {
+                    "message": "TypeError: cy.waitUntil is not a function",
+                    "estack": "TypeError: cy.waitUntil is not a function\n    at Context.eval (webpack://conductores-pwa/./cypress/support/enhanced-commands.ts:79:7)\n    at getRet (http://localhost:4200/__cypress/runner/cypress_runner.js:120768:20)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4285:29)\n    at Context.thenFn (http://localhost:4200/__cypress/runner/cypress_runner.js:120779:66)\n    at Context.then (http://localhost:4200/__cypress/runner/cypress_runner.js:121030:21)\n    at wrapped (http://localhost:4200/__cypress/runner/cypress_runner.js:141618:19)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:147554:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)",
+                    "diff": null
+                  },
+                  "uuid": "3f2f356d-3107-4395-865c-cade483b5ab8",
+                  "parentUUID": "5f32a288-385d-47a9-a6b1-8044ee541fdc",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should handle slow network condition",
+                  "fullTitle": "Authentication Flow Network Conditions should handle slow network condition",
+                  "timedOut": null,
+                  "duration": 1352,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": "[\n  {\n    \"title\": \"cypress-mochawesome-reporter-videos-failed\",\n    \"value\": \"cypress/e2e/01-authentication.cy.ts\"\n  },\n  {\n    \"title\": \"cypress-mochawesome-reporter-screenshots\",\n    \"value\": [\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Network Conditions -- should handle slow network condition (failed).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Network Conditions -- should handle slow network condition (failed) (attempt 2).png\"\n      ],\n      [\n        \"/01-authentication.cy.ts/Authentication Flow -- Network Conditions -- should handle slow network condition (failed) (attempt 3).png\",\n        \"/01-authentication.cy.ts/should handle slow network condition -- after all hook generateReport (failed) (attempt 3).png\"\n      ]\n    ]\n  }\n]",
+                  "code": "cy.navigateAndWait('/login');\n// Simulate slow network\ncy.simulateNetworkCondition('slow');\n// Use enhanced form filling\ncy.fillFormField('email-input', 'test@email.com');\ncy.fillFormField('password-input', 'password123');\ncy.waitForElement('[data-cy=\"login-submit\"]').click();\n// Should show loading state for extended period\ncy.get('[data-cy=\"login-loading\"]').should('be.visible');\ncy.get('[data-cy=\"login-submit\"]').should('be.disabled');",
+                  "err": {
+                    "message": "CypressError: `cy.task('coverageReport')` failed with the following error:\n\n> Command failed with exit code 1: npm run coverage:report\n\nhttps://on.cypress.io/api/task\n\nBecause this error occurred during a `after all` hook we are skipping all of the remaining tests.\n\nAlthough you have test retries enabled, we do not retry tests when `before all` or `after all` hooks fail",
+                    "estack": "CypressError: `cy.task('coverageReport')` failed with the following error:\n\n> Command failed with exit code 1: npm run coverage:report\n\nhttps://on.cypress.io/api/task\n\nBecause this error occurred during a `after all` hook we are skipping all of the remaining tests.\n\nAlthough you have test retries enabled, we do not retry tests when `before all` or `after all` hooks fail\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:138627:70)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise._settlePromiseFromHandler (http://localhost:4200/__cypress/runner/cypress_runner.js:1489:31)\n    at Promise._settlePromise (http://localhost:4200/__cypress/runner/cypress_runner.js:1546:18)\n    at Promise._settlePromise0 (http://localhost:4200/__cypress/runner/cypress_runner.js:1591:10)\n    at Promise._settlePromises (http://localhost:4200/__cypress/runner/cypress_runner.js:1667:18)\n    at _drainQueueStep (http://localhost:4200/__cypress/runner/cypress_runner.js:2377:12)\n    at _drainQueue (http://localhost:4200/__cypress/runner/cypress_runner.js:2370:9)\n    at Async._drainQueues (http://localhost:4200/__cypress/runner/cypress_runner.js:2386:5)\n    at Async.drainQueues (http://localhost:4200/__cypress/runner/cypress_runner.js:2256:14)\n\nFrom Node.js Internals:\n  Error: Command failed with exit code 1: npm run coverage:report\n      at makeError (/workspace/node_modules/@cypress/code-coverage/node_modules/execa/lib/error.js:59:11)\n      at handlePromise (/workspace/node_modules/@cypress/code-coverage/node_modules/execa/index.js:114:26)\n      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)",
+                    "diff": null
+                  },
+                  "uuid": "70792735-6598-4199-b5a6-780ef93cb5eb",
+                  "parentUUID": "5f32a288-385d-47a9-a6b1-8044ee541fdc",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "3f2f356d-3107-4395-865c-cade483b5ab8",
+                "70792735-6598-4199-b5a6-780ef93cb5eb"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 6684,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            }
+          ],
+          "passes": [],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 0,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "id": "default",
+        "charts": true,
+        "reportPageTitle": "Conductores PWA E2E Tests",
+        "embeddedScreenshots": true,
+        "inlineAssets": true,
+        "saveAllAttempts": false,
+        "reportDir": "cypress/reports/html/.jsons",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}
