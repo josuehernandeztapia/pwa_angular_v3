@@ -24,6 +24,9 @@ PATTERNS=(
   "bg-gradient-"
   "bg-gray-"
   "text-gray-"
+  "premium-container"
+  "theme-premium"
+  "premium-animations"
 )
 
 INCLUDE_PATHS=("src")

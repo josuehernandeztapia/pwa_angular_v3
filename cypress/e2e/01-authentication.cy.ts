@@ -1,11 +1,13 @@
-describe('Authentication Flow', () => {
+describe('Authentication Flow (Minimal Dark)', () => {
   beforeEach(() => {
     cy.setupDefaultIntercepts();
   });
 
   describe('Login Process', () => {
-    it('should display login form correctly', () => {
+    it('should display login form correctly (Minimal Dark)', () => {
       cy.navigateAndWait('/login');
+      // Container exists (Minimal Dark)
+      cy.get('main, [role="main"], .ui-card').should('exist');
       
       // Verify login form elements are present using enhanced commands
       cy.waitForElement('[data-cy="login-form"]');

@@ -44,8 +44,8 @@ describe('Smoke Navigation (visual + functional)', () => {
 
       // Page renders
       cy.get('body').should('be.visible');
-      // Container exists
-      cy.get('main, [role="main"], .premium-container').should('exist');
+      // Container exists (Minimal Dark)
+      cy.get('main, [role="main"], .ui-card').should('exist');
 
       // Try safe interactions: click non-destructive CTAs if present
       // Prefer data-cy primary actions
