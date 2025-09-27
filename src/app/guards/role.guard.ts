@@ -1,13 +1,28 @@
 import { Injectable } from '@angular/core';
-import { 
-  CanActivate, 
-  ActivatedRouteSnapshot, 
-  RouterStateSnapshot, 
-  Router 
-} from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+
+@Injectable({ providedIn: 'root' })
+export class RoleGuard implements CanActivate {
+  constructor(private auth: AuthService, private router: Router) {}
+
+  canActivate(): boolean {
+    const user = this.auth.getCurrentUser();
+    const allowed = user && (user.role === 'admin' || (user as any).role === 'lab' || user.role === 'supervisor' && (user.permissions || []).includes('lab:access'));
+    if (!allowed) {
+      this.router.navigate(['/unauthorized']);
+      return false;
+    }
+    return true;
+  }
+}
+
+import {
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot
+} from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

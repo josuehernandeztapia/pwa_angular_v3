@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ErrorHandlerService } from '../../../services/error-handler.service';
+import { UserProfile as BffUserProfile, UpdatePasswordDto, UpdateUserProfileDto, UserProfileService } from '../../../services/user-profile.service';
 
 interface UserProfile {
   id: string;
@@ -597,9 +599,9 @@ export class PerfilComponent implements OnInit {
 
   private originalProfile: UserProfile = { ...this.userProfile };
 
-  ngOnInit(): void {
-    this.loadUserProfile();
-  }
+  constructor(private userProfileService: UserProfileService, private errors: ErrorHandlerService) {}
+
+  ngOnInit(): void { this.loadUserProfile(); }
 
   getInitials(): string {
     const first = this.userProfile.firstName.charAt(0).toUpperCase();
@@ -622,9 +624,20 @@ export class PerfilComponent implements OnInit {
   }
 
   saveProfile(): void {
-    this.isEditing = false;
-    this.originalProfile = { ...this.userProfile };
-    // Here you would typically save to a service
+    const dto: UpdateUserProfileDto = { 
+      name: `${this.userProfile.firstName} ${this.userProfile.lastName}`.trim(), 
+      email: this.userProfile.email 
+    };
+    this.userProfileService.update(dto).subscribe({
+      next: (bff) => {
+        this.userProfile.firstName = (bff.name || '').split(' ')[0] || this.userProfile.firstName;
+        this.userProfile.lastName = (bff.name || '').split(' ').slice(1).join(' ') || this.userProfile.lastName;
+        this.userProfile.email = bff.email;
+        this.isEditing = false;
+        this.originalProfile = { ...this.userProfile };
+      },
+      error: () => {}
+    });
   }
 
   changeAvatar(): void {
@@ -632,7 +645,11 @@ export class PerfilComponent implements OnInit {
   }
 
   changePassword(): void {
-    // Here you would open a password change dialog
+    const body: UpdatePasswordDto = { currentPassword: 'demo123', newPassword: 'demo1234' };
+    this.userProfileService.updatePassword(body).subscribe({
+      next: () => {},
+      error: () => {}
+    });
   }
 
   setup2FA(): void {
@@ -652,6 +669,15 @@ export class PerfilComponent implements OnInit {
   }
 
   private loadUserProfile(): void {
-    // Here you would load user profile from a service
+    this.userProfileService.me().subscribe({
+      next: (bff: BffUserProfile) => {
+        const [firstName, ...rest] = (bff.name || '').split(' ');
+        this.userProfile.id = bff.id;
+        this.userProfile.firstName = firstName || this.userProfile.firstName;
+        this.userProfile.lastName = rest.join(' ') || this.userProfile.lastName;
+        this.userProfile.email = bff.email;
+      },
+      error: () => {}
+    });
   }
 }

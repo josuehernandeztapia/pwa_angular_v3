@@ -1,3 +1,7 @@
+export interface PhotoMeta { kind: 'front'|'side'|'interior'|'detail'; url: string; }
+export interface Suggestion { id: string; name: string; qty: number; price?: number; selected: boolean; }
+export interface DraftQuote { id: string; lines: Array<{ sku:string; qty:number; }>; }
+
 // SSOT - PostVenta System Types
 // Consolidates post-sales, delivery, and import tracking types
 

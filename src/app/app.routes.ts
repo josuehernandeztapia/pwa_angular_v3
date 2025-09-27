@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './guards/auth.guard';
 import { environment } from '../environments/environment';
+import { AuthGuard } from './guards/auth.guard';
+import { RoleGuard } from './guards/role.guard';
 
 // Rutas comunes (antes del wildcard)
 const commonBeforeWildcard: Routes = [
@@ -255,24 +256,24 @@ const commonBeforeWildcard: Routes = [
     title: 'Configuración - Conductores PWA'
   },
 
-  // Flow Builder direct route (optional entry point)
-  {
+  // Flow Builder direct route (optional entry point; gated by flag)
+  ...(environment.features.enableFlowBuilder ? [{
     path: 'flow-builder',
     loadComponent: () => import('./components/pages/configuracion/flow-builder/flow-builder.component').then(c => c.FlowBuilderComponent),
     canActivate: [AuthGuard],
     title: 'Flow Builder - Conductores PWA'
-  },
+  }] : []),
 
   {
     canActivate: [AuthGuard],
   },
 
-  {
+  ...(environment.features.enablePerfil ? [{
     path: 'perfil',
     loadComponent: () => import('./components/pages/perfil/perfil.component').then(c => c.PerfilComponent),
     canActivate: [AuthGuard],
     title: 'Mi Perfil - Conductores PWA'
-  },
+  }] : []),
 
   // Error routes
   {
@@ -298,13 +299,13 @@ const labRoutes: Routes = [
   {
     path: 'lab/tanda-enhanced',
     loadComponent: () => import('./components/pages/lab/tanda-enhanced-panel.component').then(c => c.TandaEnhancedPanelComponent),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, RoleGuard],
     title: 'LAB – Tanda Enhanced Panel'
   },
   {
     path: 'lab/tanda-consensus',
     loadComponent: () => import('./components/pages/lab/tanda-consensus-panel.component').then(c => c.TandaConsensusPanelComponent),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, RoleGuard],
     title: 'LAB – Tanda Consensus Panel'
   }
 ];
@@ -346,11 +347,11 @@ const tailRoutes: Routes = [
   }
 ];
 
-const withLab = environment.features.enableTandaLab
+const withLab = (environment.features.enableLabs ?? environment.features.enableTandaLab)
   ? [...labRoutes]
   : [];
 
-const withWizard = environment.features.enablePostSalesWizard
+const withWizard = (environment.features.enablePostventa ?? environment.features.enablePostSalesWizard)
   ? [...postSalesWizardRoutes]
   : [];
 
