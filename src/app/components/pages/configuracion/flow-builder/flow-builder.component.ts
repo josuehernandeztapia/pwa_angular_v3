@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
 export interface FlowNode {
   id: string;
@@ -159,6 +159,7 @@ export interface MarketProductCompatibility {
             <div class="canvas-controls">
               <button class="canvas-btn" (click)="fitToView()">🎯 Ajustar</button>
               <button class="canvas-btn" (click)="centerView()">📐 Centrar</button>
+            <button class="canvas-btn" (click)="openGenerationModal()">📦 Exportar</button>
             </div>
           </div>
 
@@ -1746,6 +1747,11 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
   }
 
   deployFlow() {
+    this.showGenerationModal = true;
+    this.generateCode();
+  }
+
+  openGenerationModal() {
     this.showGenerationModal = true;
     this.generateCode();
   }

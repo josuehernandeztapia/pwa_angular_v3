@@ -5,11 +5,18 @@ export interface DraftQuote { id: string; lines: Array<{ sku:string; qty:number;
 // SSOT - PostVenta System Types
 // Consolidates post-sales, delivery, and import tracking types
 
-export type ServicePackage = 'basic' | 'premium' | 'extended';
-export type ServiceType = 'mantenimiento' | 'reparacion' | 'garantia' | 'revision';
-export type ContactChannel = 'whatsapp' | 'sms' | 'email' | 'phone';
-export type ContactPurpose = 'delivery' | '30_days' | '90_days' | '6_months' | '12_months' | 'maintenance_reminder' | 'warranty_claim';
-export type ContactOutcome = 'sent' | 'answered' | 'escalated' | 'no_response';
+export enum ServicePackageEnum { Basic = 'basic', Premium = 'premium', Extended = 'extended' }
+export enum ServiceTypeEnum { Mantenimiento = 'mantenimiento', Reparacion = 'reparacion', Garantia = 'garantia', Revision = 'revision' }
+export enum ContactChannelEnum { Whatsapp = 'whatsapp', Sms = 'sms', Email = 'email', Phone = 'phone' }
+export enum ContactPurposeEnum { Delivery = 'delivery', Days30 = '30_days', Days90 = '90_days', Months6 = '6_months', Months12 = '12_months', MaintenanceReminder = 'maintenance_reminder', WarrantyClaim = 'warranty_claim' }
+export enum ContactOutcomeEnum { Sent = 'sent', Answered = 'answered', Escalated = 'escalated', NoResponse = 'no_response' }
+
+// Backwards-compatible type aliases
+export type ServicePackage = `${ServicePackageEnum}`;
+export type ServiceType = `${ServiceTypeEnum}`;
+export type ContactChannel = `${ContactChannelEnum}`;
+export type ContactPurpose = `${ContactPurposeEnum}`;
+export type ContactOutcome = `${ContactOutcomeEnum}`;
 
 // Import milestone status tracking
 export type ImportMilestoneStatus = {
@@ -205,6 +212,16 @@ export interface VehicleDeliveredEvent {
     plates: PlatesData;
   };
 }
+
+// Type guards and parsing utilities
+export function isDeliveryData(value: any): value is DeliveryData {
+  return value && typeof value.odometroEntrega === 'number' && value.fechaEntrega instanceof Date && typeof value.horaEntrega === 'string' && Array.isArray(value.checklistEntrega);
+}
+
+export function isPostSalesRecord(value: any): value is PostSalesRecord {
+  return value && typeof value.id === 'string' && typeof value.vin === 'string' && (value.servicePackage === ServicePackageEnum.Basic || value.servicePackage === ServicePackageEnum.Premium || value.servicePackage === ServicePackageEnum.Extended);
+}
+
 
 export interface PostSalesSurveyResponse {
   id: string;
