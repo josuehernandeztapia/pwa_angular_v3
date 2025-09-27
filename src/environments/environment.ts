@@ -4,6 +4,15 @@ export const environment = {
   appName: 'Conductores PWA',
   version: '1.0.0',
   
+  // BFF API maps (new)
+  api: {
+    flows: '/bff/flows',
+    postventa: '/bff/postventa',
+    quotes: '/bff/odoo/quotes',
+    users: '/bff/users',
+    labs: '/bff/lab'
+  },
+  
   // Feature flags
   features: {
     enableMockData: true,
@@ -50,7 +59,12 @@ export const environment = {
     // 🛡️ KIBAN/HASE BFF activation
     enableRiskBff: true,
     // 🚚 P0.2 SURGICAL FIX - Delivery Tracking BFF
-    enableDeliveryBff: true
+    enableDeliveryBff: true,
+    // New feature flags for parity
+    enableLabs: true,
+    enablePostventa: true,
+    enableFlowBuilder: true,
+    enablePerfil: true
   },
 
   // Dynamic configuration base paths

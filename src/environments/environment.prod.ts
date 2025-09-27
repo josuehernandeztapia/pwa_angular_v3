@@ -4,6 +4,15 @@ export const environment = {
   appName: 'Conductores PWA',
   version: '1.0.0',
   
+  // BFF API maps (new)
+  api: {
+    flows: '/bff/flows',
+    postventa: '/bff/postventa',
+    quotes: '/bff/odoo/quotes',
+    users: '/bff/users',
+    labs: '/bff/lab'
+  },
+  
   // Feature flags for production
   features: {
     enableMockData: false,
@@ -34,7 +43,12 @@ export const environment = {
     enableKycBff: true,
     enablePaymentsBff: true,
     enableContractsBff: true,
-    enableAutomationBff: true
+    enableAutomationBff: true,
+    // New parity flags (default conservative in prod)
+    enableLabs: false,
+    enablePostventa: false,
+    enableFlowBuilder: true,
+    enablePerfil: true
   },
 
   // Dynamic configuration base paths

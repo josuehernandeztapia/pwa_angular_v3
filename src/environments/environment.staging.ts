@@ -3,6 +3,15 @@ export const environment = {
   apiUrl: 'https://bff-staging.conductores.com/api',
   appName: 'Conductores PWA (Staging)',
   version: '1.0.0-stg',
+  
+  // BFF API maps (new)
+  api: {
+    flows: '/bff/flows',
+    postventa: '/bff/postventa',
+    quotes: '/bff/odoo/quotes',
+    users: '/bff/users',
+    labs: '/bff/lab'
+  },
 
   features: {
     enableMockData: false,
@@ -33,7 +42,12 @@ export const environment = {
     enableKycBff: true,
     enablePaymentsBff: true,
     enableContractsBff: true,
-    enableAutomationBff: true
+    enableAutomationBff: true,
+    // New parity flags (staging enabled)
+    enableLabs: true,
+    enablePostventa: true,
+    enableFlowBuilder: true,
+    enablePerfil: true
   },
   // Optional overrides for BFF base URLs per integration
   integrations: {
