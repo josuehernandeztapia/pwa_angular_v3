@@ -49,7 +49,7 @@ export const environment = {
     enableCatalogConfig: false,
     enableLocalizationConfig: false,
     enableIntegrationsConfig: false,
-    enableAdminConfig: false,
+    enableAdminConfig: true,
     enableSecurityConfig: false,
     // Integrations (BFF) flags
     enableKycBff: false,
