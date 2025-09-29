@@ -36,7 +36,7 @@
 
     &:hover,
     &:focus-visible {
-      background: color-mix(in srgb, var(--neutral-100, #f5f5f5) 80%, transparent);
+      background: var(--neutral-100, transparent);
       color: var(--neutral-600, #737373);
       outline: none;
     }
@@ -123,7 +123,7 @@
 
   @media (prefers-color-scheme: dark) {
     background: var(--neutral-900, #171717);
-    border-top-color: color-mix(in srgb, var(--neutral-700, #404040) 35%, transparent);
+    border-top-color: var(--neutral-700, transparent);
     box-shadow: 0 -6px 24px rgba(8, 8, 8, 0.4);
   }
 

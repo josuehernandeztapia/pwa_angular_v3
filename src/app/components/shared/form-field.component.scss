@@ -16,7 +16,7 @@
     width: 100%;
     padding: 12px 14px;
     border-radius: var(--radius-md, 8px);
-    border: 1px solid color-mix(in srgb, var(--neutral-400, #a3a3a3) 65%, transparent);
+    border: 1px solid var(--neutral-400, transparent);
     background: var(--flat-surface-bg, #ffffff);
     color: var(--neutral-700, #525252);
     font: inherit;

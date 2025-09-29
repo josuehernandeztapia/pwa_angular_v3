@@ -7,10 +7,12 @@
         </div>
         <div class="ops-deliveries__header-actions">
           <button class="ops-deliveries__action-button ops-deliveries__action-button--refresh" (click)="refreshData()" [disabled]="loading()" aria-label="Actualizar">
-            {{ loading() ? '⏳' : '🔄' }} Actualizar
+            <app-icon [name]="loading() ? 'clock' : 'refresh'" [size]="16" class="ops-deliveries__action-icon" />
+            Actualizar
           </button>
           <button class="ops-deliveries__action-button ops-deliveries__action-button--recompute" (click)="recomputeStock()" [disabled]="stockLoading()" aria-label="Recalcular stock">
-            📊 Recalcular Stock
+            <app-icon name="bar-chart" [size]="16" class="ops-deliveries__action-icon" />
+            Recalcular Stock
           </button>
         </div>
       </div>
@@ -18,7 +20,10 @@
       <!-- Filtros Jerárquicos: Mercado > Ruta > Cliente > Pedido -->
       <div class="ops-deliveries__filters" role="region" aria-label="Filtros de entregas">
         <div class="ops-deliveries__filters-item">
-          <label class="ops-deliveries__filters-label">📍 Mercado</label>
+          <label class="ops-deliveries__filters-label">
+            <app-icon name="location-marker" [size]="16" class="ops-deliveries__filter-icon" />
+            Mercado
+          </label>
           <select [(ngModel)]="selectedMarket" (change)="onMarketChange()" class="ops-deliveries__filters-select" aria-label="Seleccionar mercado">
             <option value="">Todos los mercados</option>
             <option value="AGS">Aguascalientes (CON asientos)</option>
@@ -27,7 +32,10 @@
         </div>
 
         <div class="ops-deliveries__filters-item" *ngIf="selectedMarket() === 'EdoMex'">
-          <label class="ops-deliveries__filters-label">🛣️ Ruta</label>
+          <label class="ops-deliveries__filters-label">
+            <app-icon name="map" [size]="16" class="ops-deliveries__filter-icon" />
+            Ruta
+          </label>
           <select [(ngModel)]="selectedRoute" (change)="onRouteChange()" class="ops-deliveries__filters-select" aria-label="Seleccionar ruta">
             <option value="">Todas las rutas</option>
             <option *ngFor="let route of availableRoutes()" [value]="route.id">
@@ -37,7 +45,10 @@
         </div>
 
         <div class="ops-deliveries__filters-item">
-          <label class="ops-deliveries__filters-label">👤 Cliente</label>
+          <label class="ops-deliveries__filters-label">
+            <app-icon name="user" [size]="16" class="ops-deliveries__filter-icon" />
+            Cliente
+          </label>
           <input 
             type="text" 
             [(ngModel)]="clientSearch" 
@@ -48,7 +59,10 @@
         </div>
 
         <div class="ops-deliveries__filters-item">
-          <label class="ops-deliveries__filters-label">📦 Estado</label>
+          <label class="ops-deliveries__filters-label">
+            <app-icon name="package" [size]="16" class="ops-deliveries__filter-icon" />
+            Estado
+          </label>
           <select [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="ops-deliveries__filters-select" aria-label="Seleccionar estado">
             <option value="">Todos los estados</option>
             <option *ngFor="let status of deliveryStatuses" [value]="status">
@@ -62,7 +76,8 @@
             {{ filteredDeliveries().length }} pedido{{ filteredDeliveries().length !== 1 ? 's' : '' }} encontrado{{ filteredDeliveries().length !== 1 ? 's' : '' }}
           </span>
           <button *ngIf="hasActiveFilters()" class="ops-deliveries__clear-button" (click)="clearFilters()" aria-label="Limpiar filtros activos">
-            🗑️ Limpiar filtros
+            <app-icon name="trash" [size]="16" class="ops-deliveries__action-icon" />
+            Limpiar filtros
           </button>
         </div>
       </div>
@@ -100,7 +115,10 @@
         </div>
 
         <div class="ops-deliveries__market-summary">
-          <h3>📊 Resumen de Entregas por Mercado</h3>
+          <h3>
+            <app-icon name="bar-chart" [size]="20" class="ops-deliveries__section-icon" />
+            Resumen de Entregas por Mercado
+          </h3>
           <div class="ops-deliveries__summary-grid">
             <div class="ops-deliveries__summary-card" *ngFor="let summary of marketSummary()">
               <h4>{{ getMarketName(summary.market) }}</h4>
@@ -129,7 +147,10 @@
 
       <!-- Vista por Ruta (Solo EdoMex) -->
       <div *ngIf="currentView() === 'route'" class="ops-deliveries__panel ops-deliveries__panel--route">
-        <h3>🛣️ Entregas por Ruta - {{ getSelectedRouteName() }}</h3>
+        <h3>
+          <app-icon name="map" [size]="20" class="ops-deliveries__section-icon" />
+          Entregas por Ruta - {{ getSelectedRouteName() }}
+        </h3>
         <div class="ops-deliveries__route">
           <div class="ops-deliveries__table">
             <table>
@@ -196,7 +217,10 @@
 
       <!-- Vista por Cliente -->
       <div *ngIf="currentView() === 'client'" class="ops-deliveries__panel ops-deliveries__panel--client">
-        <h3>👤 Vista por Cliente</h3>
+        <h3>
+          <app-icon name="user" [size]="20" class="ops-deliveries__section-icon" />
+          Vista por Cliente
+        </h3>
         <div class="ops-deliveries__client-groups">
           <div *ngFor="let client of groupedByClient()" class="ops-deliveries__client-group">
             <div class="ops-deliveries__client-header">

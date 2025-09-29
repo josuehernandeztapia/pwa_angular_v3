@@ -4,7 +4,7 @@
   gap: var(--space-24, 24px);
   padding: var(--space-24, 24px);
   min-height: 100vh;
-  background: color-mix(in srgb, var(--neutral-950, #171717) 96%, transparent);
+  background: var(--neutral-950, transparent);
   color: var(--neutral-100, #f5f5f5);
 
   &__header {
@@ -15,8 +15,8 @@
     gap: var(--space-16, 16px);
     padding: var(--space-20, 20px);
     border-radius: var(--radius-lg, 16px);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 94%, transparent);
-    border: 1px solid color-mix(in srgb, var(--neutral-800, #404040) 55%, transparent);
+    background: var(--neutral-900, transparent);
+    border: 1px solid var(--neutral-800, transparent);
     box-shadow: var(--shadow-md, 0 2px 4px rgba(8, 8, 8, 0.12));
   }
 
@@ -36,7 +36,7 @@
   &__subtitle {
     margin: 0;
     font-size: var(--font-small-size, 0.875rem);
-    color: color-mix(in srgb, var(--neutral-300, #e5e5e5) 70%, transparent);
+    color: var(--neutral-300, transparent);
   }
 
   &__header-actions {
@@ -52,8 +52,8 @@
     gap: var(--space-8, 8px);
     padding: 12px 18px;
     border-radius: var(--radius-md, 8px);
-    border: 1px solid color-mix(in srgb, var(--neutral-700, #525252) 40%, transparent);
-    background: color-mix(in srgb, var(--neutral-800, #404040) 55%, transparent);
+    border: 1px solid var(--neutral-700, transparent);
+    background: var(--neutral-800, transparent);
     color: var(--neutral-100, #f5f5f5);
     font-weight: var(--font-weight-semibold, 600);
     transition: var(--transition-quick, all 0.2s ease);
@@ -65,7 +65,7 @@
 
     &:not(:disabled):hover {
       border-color: var(--accent-blue-500, #3b82f6);
-      background: color-mix(in srgb, var(--neutral-800, #404040) 75%, transparent);
+      background: var(--neutral-800, transparent);
     }
 
     &--recompute {
@@ -84,8 +84,8 @@
     gap: var(--space-16, 16px);
     padding: var(--space-20, 20px);
     border-radius: var(--radius-lg, 16px);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 92%, transparent);
-    border: 1px solid color-mix(in srgb, var(--neutral-800, #404040) 45%, transparent);
+    background: var(--neutral-900, transparent);
+    border: 1px solid var(--neutral-800, transparent);
   }
 
   &__filters-item {
@@ -107,8 +107,8 @@
     width: 100%;
     padding: 12px;
     border-radius: var(--radius-md, 8px);
-    border: 1px solid color-mix(in srgb, var(--neutral-700, #525252) 45%, transparent);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 92%, transparent);
+    border: 1px solid var(--neutral-700, transparent);
+    background: var(--neutral-900, transparent);
     color: var(--neutral-100, #f5f5f5);
     transition: border-color var(--transition-quick, 0.2s ease),
       box-shadow var(--transition-quick, 0.2s ease);
@@ -116,7 +116,7 @@
     &:focus {
       outline: none;
       border-color: var(--accent-blue-500, #3b82f6);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500, #3b82f6) 25%, transparent);
+      box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
     }
   }
 
@@ -136,8 +136,8 @@
   &__clear-button {
     padding: 8px 16px;
     border-radius: var(--radius-md, 8px);
-    background: color-mix(in srgb, var(--accent-red-500, #dc2626) 18%, transparent);
-    border: 1px solid color-mix(in srgb, var(--accent-red-500, #dc2626) 45%, transparent);
+    background: var(--accent-red-500, transparent);
+    border: 1px solid var(--accent-red-500, transparent);
     color: var(--accent-red-200, #fecaca);
     font-size: var(--font-small-size, 0.875rem);
     font-weight: var(--font-weight-semibold, 600);
@@ -145,7 +145,7 @@
     transition: var(--transition-quick, all 0.2s ease);
 
     &:hover {
-      background: color-mix(in srgb, var(--accent-red-500, #dc2626) 35%, transparent);
+      background: var(--accent-red-500, transparent);
     }
   }
 
@@ -167,8 +167,8 @@
     gap: var(--space-12, 12px);
     padding: var(--space-16, 16px);
     border-radius: var(--radius-lg, 16px);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 94%, transparent);
-    border: 1px solid color-mix(in srgb, var(--neutral-800, #404040) 45%, transparent);
+    background: var(--neutral-900, transparent);
+    border: 1px solid var(--neutral-800, transparent);
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.12));
   }
 
@@ -209,12 +209,12 @@
     gap: 4px;
     padding: 12px;
     border-radius: var(--radius-md, 8px);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 86%, transparent);
+    background: var(--neutral-900, transparent);
   }
 
   &__metric-label {
     font-size: var(--font-small-size, 0.875rem);
-    color: color-mix(in srgb, var(--neutral-300, #e5e5e5) 60%, transparent);
+    color: var(--neutral-300, transparent);
   }
 
   &__metric-value {
@@ -238,21 +238,21 @@
     font-size: var(--font-small-size, 0.875rem);
 
     &--high {
-      background: color-mix(in srgb, var(--accent-red-500, #dc2626) 18%, transparent);
+      background: var(--accent-red-500, transparent);
       color: var(--accent-red-200, #fecaca);
-      border: 1px solid color-mix(in srgb, var(--accent-red-500, #dc2626) 45%, transparent);
+      border: 1px solid var(--accent-red-500, transparent);
     }
 
     &--medium {
-      background: color-mix(in srgb, var(--accent-amber-500, #f59e0b) 18%, transparent);
+      background: var(--accent-amber-500, transparent);
       color: var(--accent-amber-200, #fdba74);
-      border: 1px solid color-mix(in srgb, var(--accent-amber-500, #f59e0b) 45%, transparent);
+      border: 1px solid var(--accent-amber-500, transparent);
     }
 
     &--low {
-      background: color-mix(in srgb, var(--accent-green-500, #16a34a) 12%, transparent);
-      color: color-mix(in srgb, var(--accent-green-200, #86efac) 85%, transparent);
-      border: 1px solid color-mix(in srgb, var(--accent-green-500, #16a34a) 40%, transparent);
+      background: var(--accent-green-500, transparent);
+      color: var(--accent-green-200, transparent);
+      border: 1px solid var(--accent-green-500, transparent);
     }
   }
 
@@ -280,8 +280,8 @@
     gap: var(--space-12, 12px);
     padding: var(--space-16, 16px);
     border-radius: var(--radius-lg, 16px);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 90%, transparent);
-    border: 1px solid color-mix(in srgb, var(--neutral-800, #404040) 45%, transparent);
+    background: var(--neutral-900, transparent);
+    border: 1px solid var(--neutral-800, transparent);
 
     h4 {
       margin: 0;
@@ -310,12 +310,12 @@
 
   &__summary-label {
     font-size: var(--font-small-size, 0.875rem);
-    color: color-mix(in srgb, var(--neutral-400, #d4d4d4) 60%, transparent);
+    color: var(--neutral-400, transparent);
   }
 
   &__route {
-    background: color-mix(in srgb, var(--neutral-900, #262626) 93%, transparent);
-    border: 1px solid color-mix(in srgb, var(--neutral-800, #404040) 45%, transparent);
+    background: var(--neutral-900, transparent);
+    border: 1px solid var(--neutral-800, transparent);
     border-radius: var(--radius-lg, 16px);
     padding: var(--space-16, 16px);
     overflow: hidden;
@@ -336,13 +336,13 @@
       padding: 12px;
       font-size: var(--font-small-size, 0.875rem);
       font-weight: var(--font-weight-semibold, 600);
-      background: color-mix(in srgb, var(--neutral-900, #262626) 70%, transparent);
-      color: color-mix(in srgb, var(--neutral-200, #f5f5f5) 80%, transparent);
+      background: var(--neutral-900, transparent);
+      color: var(--neutral-200, transparent);
     }
 
     td {
       padding: 12px;
-      border-bottom: 1px solid color-mix(in srgb, var(--neutral-800, #404040) 35%, transparent);
+      border-bottom: 1px solid var(--neutral-800, transparent);
     }
   }
 
@@ -350,7 +350,7 @@
     transition: background var(--transition-quick, 0.2s ease);
 
     &:hover {
-      background: color-mix(in srgb, var(--neutral-900, #262626) 78%, transparent);
+      background: var(--neutral-900, transparent);
     }
   }
 
@@ -366,7 +366,7 @@
 
   &__client-id {
     font-size: 0.75rem;
-    color: color-mix(in srgb, var(--neutral-400, #d4d4d4) 55%, transparent);
+    color: var(--neutral-400, transparent);
   }
 
   &__order-id {
@@ -375,7 +375,7 @@
     gap: 6px;
     padding: 6px 10px;
     border-radius: var(--radius-md, 8px);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 82%, transparent);
+    background: var(--neutral-900, transparent);
     font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
     font-size: 0.75rem;
   }
@@ -409,7 +409,7 @@
     width: 120px;
     height: 8px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--neutral-800, #404040) 55%, transparent);
+    background: var(--neutral-800, transparent);
     overflow: hidden;
   }
 
@@ -426,7 +426,7 @@
     position: absolute;
     right: 8px;
     font-size: 0.7rem;
-    color: color-mix(in srgb, var(--neutral-200, #f5f5f5) 70%, transparent);
+    color: var(--neutral-200, transparent);
   }
 
   &__table-actions {
@@ -438,8 +438,8 @@
     min-width: 36px;
     padding: 8px 12px;
     border-radius: var(--radius-md, 8px);
-    border: 1px solid color-mix(in srgb, var(--neutral-800, #404040) 40%, transparent);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 80%, transparent);
+    border: 1px solid var(--neutral-800, transparent);
+    background: var(--neutral-900, transparent);
     color: var(--neutral-100, #f5f5f5);
     display: inline-flex;
     align-items: center;
@@ -448,7 +448,7 @@
     transition: var(--transition-quick, all 0.2s ease);
 
     &:hover {
-      background: color-mix(in srgb, var(--neutral-900, #262626) 65%, transparent);
+      background: var(--neutral-900, transparent);
       border-color: var(--accent-blue-500, #3b82f6);
     }
 
@@ -465,8 +465,8 @@
   &__client-group {
     padding: var(--space-16, 16px);
     border-radius: var(--radius-lg, 16px);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 90%, transparent);
-    border: 1px solid color-mix(in srgb, var(--neutral-800, #404040) 45%, transparent);
+    background: var(--neutral-900, transparent);
+    border: 1px solid var(--neutral-800, transparent);
     display: flex;
     flex-direction: column;
     gap: var(--space-12, 12px);
@@ -503,8 +503,8 @@
     gap: var(--space-16, 16px);
     padding: var(--space-16, 16px);
     border-radius: var(--radius-lg, 16px);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 92%, transparent);
-    border: 1px solid color-mix(in srgb, var(--neutral-800, #404040) 45%, transparent);
+    background: var(--neutral-900, transparent);
+    border: 1px solid var(--neutral-800, transparent);
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.1));
     transition: border-color var(--transition-quick, 0.2s ease);
 
@@ -549,7 +549,7 @@
 
     .ops-deliveries__created-date {
       font-size: 0.75rem;
-      color: color-mix(in srgb, var(--neutral-400, #d4d4d4) 60%, transparent);
+      color: var(--neutral-400, transparent);
     }
   }
 
@@ -576,7 +576,7 @@
   &__eta-label,
   &__contract-label {
     font-size: var(--font-small-size, 0.875rem);
-    color: color-mix(in srgb, var(--neutral-300, #e5e5e5) 60%, transparent);
+    color: var(--neutral-300, transparent);
   }
 
   &__contract-value {
@@ -601,8 +601,8 @@
     gap: var(--space-8, 8px);
     padding: 10px 18px;
     border-radius: var(--radius-md, 8px);
-    border: 1px solid color-mix(in srgb, var(--neutral-700, #525252) 45%, transparent);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 82%, transparent);
+    border: 1px solid var(--neutral-700, transparent);
+    background: var(--neutral-900, transparent);
     color: var(--neutral-100, #f5f5f5);
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
@@ -611,7 +611,7 @@
 
     &:hover {
       border-color: var(--accent-blue-500, #3b82f6);
-      background: color-mix(in srgb, var(--neutral-900, #262626) 68%, transparent);
+      background: var(--neutral-900, transparent);
     }
 
     &--advance {
@@ -626,7 +626,7 @@
 
     &--cancel {
       border-color: transparent;
-      background: color-mix(in srgb, var(--neutral-800, #404040) 75%, transparent);
+      background: var(--neutral-800, transparent);
     }
   }
 
@@ -641,8 +641,8 @@
   &__page-button {
     padding: 8px 16px;
     border-radius: var(--radius-md, 8px);
-    border: 1px solid color-mix(in srgb, var(--neutral-700, #525252) 45%, transparent);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 82%, transparent);
+    border: 1px solid var(--neutral-700, transparent);
+    background: var(--neutral-900, transparent);
     color: var(--neutral-100, #f5f5f5);
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
@@ -655,7 +655,7 @@
 
   &__page-info {
     font-size: var(--font-small-size, 0.875rem);
-    color: color-mix(in srgb, var(--neutral-300, #e5e5e5) 60%, transparent);
+    color: var(--neutral-300, transparent);
   }
 
   &__loading,
@@ -663,7 +663,7 @@
     padding: var(--space-16, 16px);
     border-radius: var(--radius-lg, 16px);
     text-align: center;
-    color: color-mix(in srgb, var(--neutral-300, #e5e5e5) 70%, transparent);
+    color: var(--neutral-300, transparent);
   }
 
   &__loading {
@@ -687,8 +687,8 @@
   &__modal {
     width: min(520px, 90vw);
     border-radius: var(--radius-lg, 16px);
-    background: color-mix(in srgb, var(--neutral-900, #262626) 95%, transparent);
-    border: 1px solid color-mix(in srgb, var(--neutral-800, #404040) 50%, transparent);
+    background: var(--neutral-900, transparent);
+    border: 1px solid var(--neutral-800, transparent);
     padding: var(--space-24, 24px);
     box-shadow: var(--shadow-lg, 0 12px 32px rgba(8, 8, 8, 0.35));
 
@@ -731,7 +731,7 @@
 
   &__transition-description {
     font-size: var(--font-small-size, 0.875rem);
-    color: color-mix(in srgb, var(--neutral-300, #e5e5e5) 70%, transparent);
+    color: var(--neutral-300, transparent);
   }
 
   &__modal-footer {

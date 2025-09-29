@@ -91,13 +91,13 @@
     }
 
     &--secondary {
-      background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 90%, transparent);
+      background: var(--surface-neutral-weak, transparent);
       color: var(--color-text-secondary, #4b5563);
       border-color: var(--border-neutral-weak, #e2e8f0);
 
       &:hover:enabled,
       &:focus-visible {
-        background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 120%, transparent);
+        background: var(--surface-neutral-weak, transparent);
       }
     }
   }
@@ -109,7 +109,7 @@
     padding: var(--space-4, 16px);
     border-radius: var(--radius-xl, 16px);
     border: 1px solid var(--border-neutral-weak, #e2e8f0);
-    background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 80%, transparent);
+    background: var(--surface-neutral-weak, transparent);
   }
 
   &__filter-group {
@@ -118,7 +118,7 @@
     gap: var(--space-2, 8px);
 
     &--types {
-      border-top: 1px solid color-mix(in srgb, var(--border-neutral-weak, #e2e8f0) 60%, transparent);
+      border-top: 1px solid var(--border-neutral-weak, transparent);
       padding-top: var(--space-3, 12px);
     }
   }
@@ -135,8 +135,8 @@
     transition: background var(--transition-quick, 0.2s ease), border-color var(--transition-quick, 0.2s ease), color var(--transition-quick, 0.2s ease);
 
     &--active {
-      border-color: color-mix(in srgb, var(--accent-blue-500, #3b82f6) 45%, transparent);
-      background: color-mix(in srgb, var(--accent-blue-500, #3b82f6) 12%, transparent);
+      border-color: var(--accent-blue-500, transparent);
+      background: var(--accent-blue-500, transparent);
       color: var(--accent-blue-700, #1d4ed8);
     }
   }
@@ -150,7 +150,7 @@
     padding: var(--space-6, 24px);
     border-radius: var(--radius-xl, 16px);
     border: 1px dashed var(--border-neutral-weak, #d1d5db);
-    background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 60%, transparent);
+    background: var(--surface-neutral-weak, transparent);
     text-align: center;
   }
 
@@ -175,16 +175,16 @@
   border: 1px solid var(--border-neutral-weak, #e2e8f0);
   padding: var(--space-5, 20px);
   background: var(--flat-surface-bg, #ffffff);
-  box-shadow: 0 12px 28px color-mix(in srgb, var(--openai-black, #000000) 8%, transparent);
+  box-shadow: 0 12px 28px var(--openai-black, transparent);
   transition: transform var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 16px 32px color-mix(in srgb, var(--openai-black, #000000) 12%, transparent);
+    box-shadow: 0 16px 32px var(--openai-black, transparent);
   }
 
   &--popular {
-    border-color: color-mix(in srgb, var(--accent-purple-500, #8b5cf6) 45%, transparent);
+    border-color: var(--accent-purple-500, transparent);
   }
 
   &__badge {
@@ -196,7 +196,7 @@
     gap: var(--space-1, 4px);
     padding: 4px 10px;
     border-radius: var(--radius-md, 8px);
-    background: color-mix(in srgb, var(--accent-purple-500, #8b5cf6) 22%, transparent);
+    background: var(--accent-purple-500, transparent);
     color: var(--accent-purple-700, #6b21a8);
     font-weight: var(--font-weight-semibold, 600);
     font-size: 0.85rem;
@@ -295,8 +295,8 @@
     border: 1px solid var(--border-neutral-weak, #e2e8f0);
 
     &--optional {
-      border-color: color-mix(in srgb, var(--accent-orange-500, #f97316) 35%, transparent);
-      background: color-mix(in srgb, var(--accent-orange-500, #f97316) 12%, transparent);
+      border-color: var(--accent-orange-500, transparent);
+      background: var(--accent-orange-500, transparent);
     }
   }
 
@@ -314,14 +314,14 @@
   &__component-pill {
     padding: 2px 8px;
     border-radius: var(--radius-md, 8px);
-    background: color-mix(in srgb, var(--accent-purple-500, #8b5cf6) 18%, transparent);
+    background: var(--accent-purple-500, transparent);
     color: var(--accent-purple-600, #7c3aed);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.02em;
 
     &--muted {
-      background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 90%, transparent);
+      background: var(--surface-neutral-weak, transparent);
       color: var(--color-text-tertiary, #6b7280);
     }
   }
@@ -340,7 +340,7 @@
   &__feature {
     padding: 4px 10px;
     border-radius: var(--radius-md, 8px);
-    background: color-mix(in srgb, var(--accent-blue-500, #3b82f6) 14%, transparent);
+    background: var(--accent-blue-500, transparent);
     color: var(--accent-blue-700, #1d4ed8);
     font-size: 0.85rem;
     font-weight: var(--font-weight-medium, 500);

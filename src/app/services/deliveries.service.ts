@@ -377,7 +377,7 @@ export class DeliveriesService {
    * Get status color for UI components
    */
   getStatusColor(status: DeliveryStatus): string {
-    return DELIVERY_STATUS_DESCRIPTIONS[status]?.color || '#737373'; /* OpenAI neutral */
+    return DELIVERY_STATUS_DESCRIPTIONS[status]?.color || 'var(--color-text-muted, #737373)';
   }
 
   /**

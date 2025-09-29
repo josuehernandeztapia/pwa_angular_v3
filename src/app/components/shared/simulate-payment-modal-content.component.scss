@@ -20,7 +20,7 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 2px solid color-mix(in srgb, var(--neutral-400, #a3a3a3) 70%, transparent);
+    border: 2px solid var(--neutral-400, transparent);
     border-top-color: var(--accent-green-500, #16a34a);
     animation: simulate-payment-spin 1s linear infinite;
   }
@@ -76,7 +76,7 @@
     width: 100%;
     padding: 10px 16px 10px 30px;
     border-radius: 8px;
-    border: 1px solid color-mix(in srgb, var(--neutral-500, #737373) 65%, transparent);
+    border: 1px solid var(--neutral-500, transparent);
     background: var(--neutral-900, #111827);
     color: var(--flat-surface-bg, #ffffff);
     font-size: 1rem;

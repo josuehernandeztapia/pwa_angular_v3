@@ -10,7 +10,7 @@
     border-radius: 16px;
     background: var(--flat-surface-bg, #ffffff);
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.08));
-    border: 1px solid color-mix(in srgb, var(--neutral-300, #e5e5e5) 60%, transparent);
+    border: 1px solid var(--neutral-300, transparent);
   }
 
   &__title {
@@ -43,17 +43,17 @@
     justify-content: center;
     width: 100%;
     min-height: 128px;
-    border: 2px dashed color-mix(in srgb, var(--neutral-400, #a3a3a3) 60%, transparent);
+    border: 2px dashed var(--neutral-400, transparent);
     border-radius: 12px;
     cursor: pointer;
-    background: color-mix(in srgb, var(--neutral-100, #f5f5f5) 70%, transparent);
+    background: var(--neutral-100, transparent);
     transition: background var(--transition-quick, 0.2s ease), border-color var(--transition-quick, 0.2s ease);
     text-align: center;
   }
 
   &__dropzone:hover {
-    background: color-mix(in srgb, var(--neutral-100, #f5f5f5) 85%, transparent);
-    border-color: color-mix(in srgb, var(--neutral-400, #a3a3a3) 85%, transparent);
+    background: var(--neutral-100, transparent);
+    border-color: var(--neutral-400, transparent);
   }
 
   &__dropzone-inner {
@@ -133,7 +133,7 @@
   &__loading-line {
     height: 12px;
     border-radius: 8px;
-    background: color-mix(in srgb, var(--neutral-300, #d4d4d4) 70%, transparent);
+    background: var(--neutral-300, transparent);
   }
 
   &__loading-line--wide {
@@ -156,8 +156,8 @@
     justify-content: space-between;
     padding: var(--space-16, 16px);
     border-radius: 12px;
-    background: color-mix(in srgb, var(--neutral-100, #f5f5f5) 90%, transparent);
-    border: 1px solid color-mix(in srgb, var(--neutral-300, #d4d4d4) 70%, transparent);
+    background: var(--neutral-100, transparent);
+    border: 1px solid var(--neutral-300, transparent);
   }
 
   &__item-meta {
@@ -170,7 +170,7 @@
     width: 32px;
     height: 32px;
     border-radius: 8px;
-    background: color-mix(in srgb, var(--neutral-200, #e5e5e5) 60%, transparent);
+    background: var(--neutral-200, transparent);
   }
 
   &__item-copy {
@@ -205,24 +205,24 @@
   }
 
   &__item-status--validated {
-    background: color-mix(in srgb, var(--accent-green-500, #16a34a) 18%, transparent);
+    background: var(--accent-green-500, transparent);
     color: var(--accent-green-700, #166534);
   }
 
   &__item-status--pending {
-    background: color-mix(in srgb, var(--accent-amber-500, #f59e0b) 18%, transparent);
+    background: var(--accent-amber-500, transparent);
     color: var(--accent-amber-700, #9a3412);
   }
 
   &__item-status--error {
-    background: color-mix(in srgb, var(--accent-red-500, #dc2626) 18%, transparent);
+    background: var(--accent-red-500, transparent);
     color: var(--accent-red-700, #b91c1c);
   }
 
   @media (prefers-color-scheme: dark) {
     &__card {
-      background: color-mix(in srgb, var(--neutral-900, #171717) 85%, transparent);
-      border-color: color-mix(in srgb, var(--neutral-700, #404040) 65%, transparent);
+      background: var(--neutral-900, transparent);
+      border-color: var(--neutral-700, transparent);
     }
 
     &__title {
@@ -230,13 +230,13 @@
     }
 
     &__dropzone {
-      background: color-mix(in srgb, var(--neutral-900, #171717) 35%, transparent);
-      border-color: color-mix(in srgb, var(--neutral-700, #404040) 80%, transparent);
+      background: var(--neutral-900, transparent);
+      border-color: var(--neutral-700, transparent);
     }
 
     &__dropzone:hover {
-      background: color-mix(in srgb, var(--neutral-900, #171717) 55%, transparent);
-      border-color: color-mix(in srgb, var(--neutral-600, #525252) 65%, transparent);
+      background: var(--neutral-900, transparent);
+      border-color: var(--neutral-600, transparent);
     }
 
     &__dropzone-icon,
@@ -245,12 +245,12 @@
     }
 
     &__loading-line {
-      background: color-mix(in srgb, var(--neutral-800, #262626) 60%, transparent);
+      background: var(--neutral-800, transparent);
     }
 
     &__item {
-      background: color-mix(in srgb, var(--neutral-900, #171717) 55%, transparent);
-      border-color: color-mix(in srgb, var(--neutral-700, #404040) 60%, transparent);
+      background: var(--neutral-900, transparent);
+      border-color: var(--neutral-700, transparent);
     }
 
     &__item-name {

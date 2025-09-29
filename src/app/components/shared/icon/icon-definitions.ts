@@ -120,6 +120,11 @@ export type IconName =
   | 'piggy-bank'
   | 'trending-up'
   | 'clipboard-list'
+  | 'waves'
+  | 'building-construction'
+  | 'store'
+  | 'celebration'
+  | 'fuel'
 
 type IconShape =
   | {
@@ -614,9 +619,49 @@ const ICON_LIBRARY: Record<IconName, IconDefinition> = {
   'eye-off': {
     viewBox: '0 0 24 24',
     shapes: [
-      { type: 'path', d: 'M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 711.563-3.029m5.858.908a3 3 0 114.243 4.243', strokeLinecap: 'round', strokeLinejoin: 'round' },
       { type: 'path', d: 'M9.878 9.878l4.242 4.242', strokeLinecap: 'round', strokeLinejoin: 'round' },
       { type: 'path', d: 'M9.878 9.878L3 3m6.878 6.878L21 21', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+  'waves': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M2 12c0 0 3-3 5-3s5 6 7 6 5-3 5-3', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M2 8c0 0 3-3 5-3s5 6 7 6 5-3 5-3', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M2 16c0 0 3-3 5-3s5 6 7 6 5-3 5-3', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+  'building-construction': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M3 21V7l9-4 9 4v14', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M9 21V11h6v10', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M7 9h2m4 0h2', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+  'store': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M3 9a2 2 0 002 2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 8h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 11H19a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v2z', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M5 11v8a2 2 0 002 2h10a2 2 0 002-2v-8', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+  'celebration': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'circle', cx: '12', cy: '8', r: '3' },
+      { type: 'path', d: 'M8 14l-2 4h12l-2-4', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M12 11v3', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M6 2l1.5 1.5M18 2l-1.5 1.5M2 6l1.5 1.5M22 6l-1.5 1.5', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+  'fuel': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M4 6h16v10a2 2 0 01-2 2H6a2 2 0 01-2-2V6z', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M4 6V4a2 2 0 012-2h12a2 2 0 012 2v2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M8 10h8m-8 4h6', strokeLinecap: 'round', strokeLinejoin: 'round' }
     ]
   },
   mail: {

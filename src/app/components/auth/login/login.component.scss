@@ -165,7 +165,7 @@
 
 .login-footer {
   padding-top: 24px;
-  border-top: 1px solid color-mix(in srgb, var(--color-border-muted, #94a3b8) 35%, transparent);
+  border-top: 1px solid var(--color-border-muted, transparent);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -237,7 +237,7 @@
   }
 
   .login-footer {
-    border-top-color: color-mix(in srgb, var(--color-border-muted-inverted, #475569) 50%, transparent);
+    border-top-color: var(--color-border-muted-inverted, transparent);
   }
 
   .footer-link,

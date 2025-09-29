@@ -79,7 +79,7 @@
   }
 
   &__action-button--secondary {
-    background: color-mix(in srgb, var(--flat-surface-bg, #ffffff) 85%, transparent);
+    background: var(--flat-surface-bg, transparent);
     color: inherit;
     border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
   }

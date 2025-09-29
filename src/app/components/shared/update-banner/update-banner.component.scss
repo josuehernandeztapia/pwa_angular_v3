@@ -5,7 +5,7 @@
   transform: translate(-50%, 12px);
   display: inline-flex;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--accent-blue-500, #3b82f6) 92%, transparent);
+  background: var(--accent-blue-500, transparent);
   color: var(--flat-surface-bg, #ffffff);
   box-shadow: 0 12px 24px rgba(8, 8, 8, 0.24);
   padding: 0;

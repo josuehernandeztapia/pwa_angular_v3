@@ -5,7 +5,7 @@
 .savings-chart-container {
   width: 100%;
   height: 256px;
-  background: color-mix(in srgb, var(--color-primary-900, #171717) 72%, transparent);
+  background: var(--color-primary-900, transparent);
   border-radius: var(--radius-md, 10px);
   display: flex;
   align-items: flex-end;
@@ -33,7 +33,7 @@
 .bar-tooltip {
   position: absolute;
   top: -32px;
-  background: color-mix(in srgb, var(--color-primary-900, #171717) 92%, transparent);
+  background: var(--color-primary-900, transparent);
   color: var(--color-bg-primary, #ffffff);
   padding: var(--space-1, 4px) var(--space-2, 8px);
   border-radius: var(--radius-sm, 8px);

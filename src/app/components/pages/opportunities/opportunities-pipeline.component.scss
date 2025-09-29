@@ -58,12 +58,12 @@
     }
 
     &--secondary {
-      background: color-mix(in srgb, var(--color-bg-secondary, #f1f5f9) 90%, transparent);
+      background: var(--color-bg-secondary, transparent);
       color: var(--color-text-secondary, #475569);
       border-color: var(--color-border-primary, #e2e8f0);
 
       &:hover {
-        background: color-mix(in srgb, var(--color-bg-tertiary, #e2e8f0) 85%, transparent);
+        background: var(--color-bg-tertiary, transparent);
       }
     }
   }
@@ -94,7 +94,7 @@
     width: 48px;
     height: 48px;
     border-radius: 14px;
-    background: color-mix(in srgb, var(--accent-blue-100, #dbeafe) 60%, transparent);
+    background: var(--accent-blue-100, transparent);
   }
 
   &__stat-content {
@@ -149,7 +149,7 @@
     &:focus {
       outline: none;
       border-color: var(--accent-blue-500, #2563eb);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500, #2563eb) 12%, transparent);
+      box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
     }
   }
 
@@ -166,7 +166,7 @@
     background: var(--color-bg-secondary, #f8fafc);
     border-radius: 18px;
     padding: var(--space-4, 16px);
-    border: 1px solid color-mix(in srgb, var(--color-border-primary, #e2e8f0) 70%, transparent);
+    border: 1px solid var(--color-border-primary, transparent);
   }
 
   &__stage-header {
@@ -218,15 +218,15 @@
     }
 
     &--priority-alta {
-      border-color: color-mix(in srgb, var(--accent-red-400, #f87171) 60%, transparent);
+      border-color: var(--accent-red-400, transparent);
     }
 
     &--priority-media {
-      border-color: color-mix(in srgb, var(--accent-amber-400, #fbbf24) 60%, transparent);
+      border-color: var(--accent-amber-400, transparent);
     }
 
     &--priority-baja {
-      border-color: color-mix(in srgb, var(--accent-green-400, #34d399) 60%, transparent);
+      border-color: var(--accent-green-400, transparent);
     }
   }
 
@@ -263,17 +263,17 @@
   }
 
   &__card-priority--alta {
-    background: color-mix(in srgb, var(--accent-red-100, #fee2e2) 80%, transparent);
+    background: var(--accent-red-100, transparent);
     color: var(--accent-red-700, #b91c1c);
   }
 
   &__card-priority--media {
-    background: color-mix(in srgb, var(--accent-amber-100, #fef3c7) 80%, transparent);
+    background: var(--accent-amber-100, transparent);
     color: var(--accent-amber-700, #b45309);
   }
 
   &__card-priority--baja {
-    background: color-mix(in srgb, var(--accent-green-100, #dcfce7) 80%, transparent);
+    background: var(--accent-green-100, transparent);
     color: var(--accent-green-700, #047857);
   }
 
@@ -311,7 +311,7 @@
     width: 100%;
     height: 10px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--color-border-primary, #e2e8f0) 70%, transparent);
+    background: var(--color-border-primary, transparent);
     overflow: hidden;
   }
 
@@ -362,7 +362,7 @@
     border-radius: 999px;
     font-size: 0.75rem;
     font-weight: 600;
-    background: color-mix(in srgb, var(--accent-blue-100, #dbeafe) 60%, transparent);
+    background: var(--accent-blue-100, transparent);
     color: var(--accent-blue-700, #1d4ed8);
   }
 
@@ -387,7 +387,7 @@
     transition: background 0.2s ease;
 
     &--secondary {
-      background: color-mix(in srgb, var(--color-bg-secondary, #f1f5f9) 90%, transparent);
+      background: var(--color-bg-secondary, transparent);
       color: var(--color-text-secondary, #475569);
       border-color: var(--color-border-primary, #e2e8f0);
     }
@@ -414,7 +414,7 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    border: 3px solid color-mix(in srgb, var(--accent-blue-100, #dbeafe) 70%, transparent);
+    border: 3px solid var(--accent-blue-100, transparent);
     border-top-color: var(--accent-blue-500, #2563eb);
     animation: opportunities-spinner 0.8s linear infinite;
   }

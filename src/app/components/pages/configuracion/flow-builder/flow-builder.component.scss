@@ -23,7 +23,7 @@
   padding: 16px 24px;
   background: var(--color-bg-primary, #ffffff);
   border-bottom: 1px solid var(--color-border-muted, #e2e8f0);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--color-text-primary, #080808) 10%, transparent);
+  box-shadow: 0 1px 3px var(--color-text-primary, transparent);
 }
 
 .header-left h1 {
@@ -65,19 +65,19 @@
 }
 
 .btn-primary:disabled {
-  background: color-mix(in srgb, var(--color-border-muted, #e2e8f0) 70%, transparent);
+  background: var(--color-border-muted, transparent);
   color: var(--color-text-primary-inverted, #ffffff);
   cursor: not-allowed;
 }
 
 .btn-secondary {
-  background: color-mix(in srgb, var(--color-bg-primary, #ffffff) 90%, var(--color-bg-secondary, #f8fafc));
+  background: var(--color-bg-primary, var(--color-bg-secondary, #f8fafc));
   color: var(--color-text-muted, #64748b);
   border: 1px solid var(--color-border-muted, #e2e8f0);
 }
 
 .btn-secondary:hover {
-  background: color-mix(in srgb, var(--color-bg-secondary, #f8fafc) 85%, var(--color-bg-primary, #ffffff));
+  background: var(--color-bg-secondary, var(--color-bg-primary, #ffffff));
 }
 
 .btn-secondary:hover {
@@ -125,7 +125,7 @@
 }
 
 .node-category {
-  border-bottom: 1px solid color-mix(in srgb, var(--color-bg-primary, #ffffff) 90%, var(--color-bg-secondary, #f8fafc));
+  border-bottom: 1px solid var(--color-bg-primary, var(--color-bg-secondary, #f8fafc));
 }
 
 .category-header {
@@ -409,18 +409,18 @@
   border-radius: 8px;
   min-width: 200px;
   cursor: pointer;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-text-primary, #080808) 10%, transparent);
+  box-shadow: 0 2px 8px var(--color-text-primary, transparent);
   transition: all 0.2s;
 }
 
 .flow-node:hover {
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-text-primary, #080808) 15%, transparent);
+  box-shadow: 0 4px 16px var(--color-text-primary, transparent);
   transform: none;
 }
 
 .flow-node.node-selected {
   border-color: var(--color-text-primary, #080808);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-text-primary, #080808) 10%, transparent);
+  box-shadow: 0 0 0 3px var(--color-text-primary, transparent);
 }
 
 .node-header {
@@ -451,7 +451,7 @@
 }
 
 .node-action-btn {
-  background: color-mix(in srgb, var(--color-text-primary-inverted, #ffffff) 20%, transparent);
+  background: var(--color-text-primary-inverted, transparent);
   border: none;
   color: var(--color-text-primary-inverted, #ffffff);
   width: 20px;
@@ -601,7 +601,7 @@
 .property-select:focus {
   outline: none;
   border-color: var(--color-text-primary, #080808);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-text-primary, #080808) 10%, transparent);
+  box-shadow: 0 0 0 3px var(--color-text-primary, transparent);
 }
 
 /* Modal */
@@ -611,7 +611,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: color-mix(in srgb, var(--color-text-primary, #080808) 50%, transparent);
+  background: var(--color-text-primary, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -626,7 +626,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 20px 40px color-mix(in srgb, var(--color-text-primary, #080808) 30%, transparent);
+  box-shadow: 0 20px 40px var(--color-text-primary, transparent);
 }
 
 .modal-header {

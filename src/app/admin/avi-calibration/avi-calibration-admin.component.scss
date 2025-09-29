@@ -95,21 +95,21 @@
     border: 1px solid var(--border-neutral-weak, #e2e8f0);
     background: var(--flat-surface-bg, #ffffff);
     padding: var(--space-5, 20px);
-    box-shadow: 0 16px 32px color-mix(in srgb, var(--openai-black, #000000) 8%, transparent);
+    box-shadow: 0 16px 32px var(--openai-black, transparent);
     display: flex;
     flex-direction: column;
     gap: var(--space-4, 16px);
 
     &[data-status='PASSED'] {
-      border-color: color-mix(in srgb, var(--accent-green-500, #22c55e) 45%, transparent);
+      border-color: var(--accent-green-500, transparent);
     }
 
     &[data-status='FAILED'] {
-      border-color: color-mix(in srgb, var(--accent-red-500, #ef4444) 45%, transparent);
+      border-color: var(--accent-red-500, transparent);
     }
 
     &[data-status='PENDING'] {
-      border-color: color-mix(in srgb, var(--accent-orange-500, #f97316) 45%, transparent);
+      border-color: var(--accent-orange-500, transparent);
     }
   }
 
@@ -169,8 +169,8 @@
     gap: var(--space-1, 4px);
     padding: var(--space-3, 12px);
     border-radius: var(--radius-lg, 12px);
-    border: 1px solid color-mix(in srgb, var(--border-neutral-weak, #e2e8f0) 80%, transparent);
-    background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 70%, transparent);
+    border: 1px solid var(--border-neutral-weak, transparent);
+    background: var(--surface-neutral-weak, transparent);
   }
 
   &__metric-value {
@@ -189,13 +189,13 @@
     margin-top: var(--space-2, 8px);
     padding: 4px 10px;
     border-radius: var(--radius-md, 8px);
-    background: color-mix(in srgb, var(--accent-orange-500, #f97316) 14%, transparent);
+    background: var(--accent-orange-500, transparent);
     color: var(--accent-orange-700, #c2410c);
     font-size: 0.8rem;
     font-weight: var(--font-weight-semibold, 600);
 
     &--passed {
-      background: color-mix(in srgb, var(--accent-green-500, #22c55e) 18%, transparent);
+      background: var(--accent-green-500, transparent);
       color: var(--accent-green-700, #15803d);
     }
   }
@@ -236,7 +236,7 @@
   &__matrix-cell {
     padding: var(--space-3, 12px);
     border-radius: var(--radius-lg, 12px);
-    background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 70%, transparent);
+    background: var(--surface-neutral-weak, transparent);
     display: flex;
     flex-direction: column;
     gap: var(--space-1, 4px);
@@ -278,7 +278,7 @@
     justify-content: space-between;
     padding: var(--space-3, 12px) var(--space-4, 16px);
     border-radius: var(--radius-lg, 12px);
-    border: 1px solid color-mix(in srgb, var(--border-neutral-weak, #e2e8f0) 80%, transparent);
+    border: 1px solid var(--border-neutral-weak, transparent);
     background: var(--flat-surface-bg, #ffffff);
 
     &[data-status='FAILED'] {
@@ -314,17 +314,17 @@
     font-size: 0.85rem;
 
     &--passed {
-      background: color-mix(in srgb, var(--accent-green-500, #22c55e) 16%, transparent);
+      background: var(--accent-green-500, transparent);
       color: var(--accent-green-700, #15803d);
     }
 
     &--failed {
-      background: color-mix(in srgb, var(--accent-red-500, #ef4444) 16%, transparent);
+      background: var(--accent-red-500, transparent);
       color: var(--accent-red-700, #b91c1c);
     }
 
     &--pending {
-      background: color-mix(in srgb, var(--accent-orange-500, #f97316) 16%, transparent);
+      background: var(--accent-orange-500, transparent);
       color: var(--accent-orange-700, #9a3412);
     }
   }
@@ -335,7 +335,7 @@
     display: grid;
     place-items: center;
     backdrop-filter: blur(6px);
-    background: color-mix(in srgb, var(--openai-black, #000000) 45%, transparent);
+    background: var(--openai-black, transparent);
     z-index: 1000;
   }
 
@@ -348,7 +348,7 @@
     gap: var(--space-4, 16px);
     align-items: center;
     text-align: center;
-    box-shadow: 0 24px 48px color-mix(in srgb, var(--openai-black, #000000) 22%, transparent);
+    box-shadow: 0 24px 48px var(--openai-black, transparent);
   }
 
   &__overlay-icon {
@@ -372,7 +372,7 @@
     max-width: 100%;
     height: 6px;
     border-radius: var(--radius-md, 8px);
-    background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 90%, transparent);
+    background: var(--surface-neutral-weak, transparent);
     overflow: hidden;
   }
 

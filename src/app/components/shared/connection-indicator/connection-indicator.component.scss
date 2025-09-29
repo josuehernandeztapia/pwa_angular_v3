@@ -22,8 +22,8 @@
     gap: var(--space-12, 12px);
     padding: var(--space-8, 8px) var(--space-16, 16px);
     border-radius: 999px;
-    border: 1px solid color-mix(in srgb, var(--neutral-300, #e5e5e5) 65%, transparent);
-    background: color-mix(in srgb, var(--neutral-100, #f5f5f5) 80%, var(--flat-surface-bg, #ffffff));
+    border: 1px solid var(--neutral-300, transparent);
+    background: var(--neutral-100, var(--flat-surface-bg, #ffffff));
     color: var(--neutral-600, #737373);
     font-size: 0.875rem;
     font-weight: var(--font-weight-semibold, 600);
@@ -32,37 +32,37 @@
   }
 
   &__card--offline {
-    background: color-mix(in srgb, var(--accent-red-500, #dc2626) 18%, var(--flat-surface-bg, #ffffff));
-    border-color: color-mix(in srgb, var(--accent-red-500, #dc2626) 36%, transparent);
+    background: var(--accent-red-500, var(--flat-surface-bg, #ffffff));
+    border-color: var(--accent-red-500, transparent);
     color: var(--accent-red-700, #b91c1c);
   }
 
   &__card--excellent {
-    background: color-mix(in srgb, var(--accent-green-500, #16a34a) 18%, var(--flat-surface-bg, #ffffff));
-    border-color: color-mix(in srgb, var(--accent-green-500, #16a34a) 32%, transparent);
+    background: var(--accent-green-500, var(--flat-surface-bg, #ffffff));
+    border-color: var(--accent-green-500, transparent);
     color: var(--accent-green-700, #166534);
   }
 
   &__card--good {
-    background: color-mix(in srgb, var(--accent-blue-500, #3b82f6) 18%, var(--flat-surface-bg, #ffffff));
-    border-color: color-mix(in srgb, var(--accent-blue-500, #3b82f6) 32%, transparent);
+    background: var(--accent-blue-500, var(--flat-surface-bg, #ffffff));
+    border-color: var(--accent-blue-500, transparent);
     color: var(--accent-blue-700, #1d4ed8);
   }
 
   &__card--fair {
-    background: color-mix(in srgb, var(--accent-amber-400, #fb923c) 24%, var(--flat-surface-bg, #ffffff));
-    border-color: color-mix(in srgb, var(--accent-amber-400, #fb923c) 34%, transparent);
+    background: var(--accent-amber-400, var(--flat-surface-bg, #ffffff));
+    border-color: var(--accent-amber-400, transparent);
     color: var(--accent-amber-700, #9a3412);
   }
 
   &__card--poor {
-    background: color-mix(in srgb, var(--accent-amber-500, #f59e0b) 24%, var(--flat-surface-bg, #ffffff));
-    border-color: color-mix(in srgb, var(--accent-amber-500, #f59e0b) 36%, transparent);
+    background: var(--accent-amber-500, var(--flat-surface-bg, #ffffff));
+    border-color: var(--accent-amber-500, transparent);
     color: var(--accent-amber-700, #9a3412);
   }
 
   &__card--neutral {
-    background: color-mix(in srgb, var(--neutral-200, #e5e5e5) 45%, var(--flat-surface-bg, #ffffff));
+    background: var(--neutral-200, var(--flat-surface-bg, #ffffff));
     color: var(--neutral-600, #737373);
   }
 
@@ -81,7 +81,7 @@
     position: absolute;
     inset: -4px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-amber-400, #fb923c) 45%, transparent);
+    background: var(--accent-amber-400, transparent);
     animation: connection-indicator-pulse 1.6s ease-out infinite;
     pointer-events: none;
   }
@@ -109,7 +109,7 @@
     right: 0;
     bottom: 0;
     padding: var(--space-12, 12px) var(--space-16, 16px);
-    background: color-mix(in srgb, var(--accent-red-500, #dc2626) 92%, transparent);
+    background: var(--accent-red-500, transparent);
     color: var(--flat-surface-bg, #ffffff);
     transition: opacity var(--transition-fast, 0.3s ease), max-height var(--transition-fast, 0.3s ease), padding var(--transition-fast, 0.3s ease);
     max-height: 160px;
@@ -168,7 +168,7 @@
     align-items: center;
     justify-content: center;
     border: none;
-    background: color-mix(in srgb, var(--flat-surface-bg, #ffffff) 20%, transparent);
+    background: var(--flat-surface-bg, transparent);
     color: currentColor;
     padding: 6px;
     border-radius: 999px;
@@ -178,7 +178,7 @@
 
   &__mobile-dismiss:hover,
   &__mobile-dismiss:focus-visible {
-    background: color-mix(in srgb, var(--flat-surface-bg, #ffffff) 30%, transparent);
+    background: var(--flat-surface-bg, transparent);
     opacity: 0.9;
     outline: none;
   }
@@ -230,16 +230,16 @@
     padding: var(--space-12, 12px) var(--space-16, 16px);
     border-radius: var(--radius-md, 8px);
     background: var(--flat-surface-bg, #ffffff);
-    border: 1px solid color-mix(in srgb, var(--neutral-300, #e5e5e5) 60%, transparent);
+    border: 1px solid var(--neutral-300, transparent);
     box-shadow: var(--shadow-md, 0 2px 4px rgba(8, 8, 8, 0.12));
   }
 
   &__toast-card--online {
-    border-color: color-mix(in srgb, var(--accent-green-500, #16a34a) 40%, transparent);
+    border-color: var(--accent-green-500, transparent);
   }
 
   &__toast-card--offline {
-    border-color: color-mix(in srgb, var(--accent-red-500, #dc2626) 40%, transparent);
+    border-color: var(--accent-red-500, transparent);
   }
 
   &__toast-icon {
@@ -299,7 +299,7 @@
   &__toast-dismiss:hover,
   &__toast-dismiss:focus-visible {
     color: var(--neutral-700, #525252);
-    background: color-mix(in srgb, var(--neutral-200, #e5e5e5) 60%, transparent);
+    background: var(--neutral-200, transparent);
     outline: none;
   }
 

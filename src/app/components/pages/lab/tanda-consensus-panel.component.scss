@@ -42,7 +42,7 @@
 
     @media (prefers-color-scheme: dark) {
       background: var(--color-neutral-900, #0f172a);
-      border-color: color-mix(in srgb, var(--color-neutral-700, #334155) 80%, transparent);
+      border-color: var(--color-neutral-700, transparent);
       box-shadow: none;
     }
   }
@@ -97,12 +97,12 @@
     &:focus {
       outline: none;
       border-color: var(--accent-blue-500, #2563eb);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500, #2563eb) 15%, transparent);
+      box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
     }
 
     @media (prefers-color-scheme: dark) {
-      background: color-mix(in srgb, var(--color-neutral-900, #0f172a) 90%, transparent);
-      border-color: color-mix(in srgb, var(--color-neutral-700, #334155) 80%, transparent);
+      background: var(--color-neutral-900, transparent);
+      border-color: var(--color-neutral-700, transparent);
     }
   }
 
@@ -129,7 +129,7 @@
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500, #2563eb) 25%, transparent);
+      box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
     }
   }
 
@@ -177,7 +177,7 @@
     @media (prefers-color-scheme: dark) {
       th,
       td {
-        border-color: color-mix(in srgb, var(--color-neutral-700, #334155) 70%, transparent);
+        border-color: var(--color-neutral-700, transparent);
       }
 
       th {

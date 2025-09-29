@@ -63,7 +63,7 @@
     border: 1px solid var(--border-neutral-weak, #e2e8f0);
     background: var(--flat-surface-bg, #ffffff);
     padding: var(--space-6, 24px);
-    box-shadow: 0 12px 24px color-mix(in srgb, var(--openai-black, #000000) 8%, transparent);
+    box-shadow: 0 12px 24px var(--openai-black, transparent);
   }
 
   &__avatar {
@@ -85,7 +85,7 @@
     transition: border-color var(--transition-quick, 0.2s ease);
 
     &--image {
-      border-color: color-mix(in srgb, var(--accent-blue-400, #60a5fa) 40%, transparent);
+      border-color: var(--accent-blue-400, transparent);
     }
 
     img {
@@ -104,7 +104,7 @@
 
   &__avatar-button {
     border: 1px solid var(--border-neutral-weak, #e2e8f0);
-    background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 90%, transparent);
+    background: var(--surface-neutral-weak, transparent);
     border-radius: var(--radius-md, 8px);
     padding: var(--space-2, 8px) var(--space-3, 12px);
     font-size: 0.85rem;
@@ -116,7 +116,7 @@
     transition: background var(--transition-quick, 0.2s ease);
 
     &:hover {
-      background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 120%, transparent);
+      background: var(--surface-neutral-weak, transparent);
     }
   }
 
@@ -206,7 +206,7 @@
     justify-content: space-between;
     align-items: center;
     padding-bottom: var(--space-3, 12px);
-    border-bottom: 1px solid color-mix(in srgb, var(--border-neutral-weak, #e2e8f0) 70%, transparent);
+    border-bottom: 1px solid var(--border-neutral-weak, transparent);
   }
 
   &__panel-title {
@@ -229,8 +229,8 @@
     transition: background var(--transition-quick, 0.2s ease), border-color var(--transition-quick, 0.2s ease);
 
     &--active {
-      background: color-mix(in srgb, var(--accent-red-500, #ef4444) 12%, transparent);
-      border-color: color-mix(in srgb, var(--accent-red-400, #f87171) 60%, transparent);
+      background: var(--accent-red-500, transparent);
+      border-color: var(--accent-red-400, transparent);
       color: var(--accent-red-700, #b91c1c);
     }
   }
@@ -274,7 +274,7 @@
     &:focus-visible {
       outline: none;
       border-color: var(--accent-blue-500, #3b82f6);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500, #3b82f6) 20%, transparent);
+      box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
     }
 
     &--disabled {
@@ -318,13 +318,13 @@
     }
 
     &--secondary {
-      background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 90%, transparent);
+      background: var(--surface-neutral-weak, transparent);
       color: var(--color-text-secondary, #4b5563);
       border-color: var(--border-neutral-weak, #e2e8f0);
 
       &:hover:enabled,
       &:focus-visible {
-        background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 120%, transparent);
+        background: var(--surface-neutral-weak, transparent);
       }
     }
 
@@ -335,25 +335,25 @@
 
       &:hover:enabled,
       &:focus-visible {
-        background: color-mix(in srgb, var(--accent-blue-500, #3b82f6) 15%, transparent);
+        background: var(--accent-blue-500, transparent);
         color: var(--accent-blue-600, #2563eb);
       }
     }
 
     &--neutral {
-      background: color-mix(in srgb, var(--surface-neutral-weak, #f3f4f6) 110%, transparent);
+      background: var(--surface-neutral-weak, transparent);
       color: var(--color-text-secondary, #4b5563);
       border-color: var(--border-neutral-weak, #e2e8f0);
     }
 
     &--danger {
-      background: color-mix(in srgb, var(--accent-red-400, #f87171) 18%, transparent);
+      background: var(--accent-red-400, transparent);
       color: var(--accent-red-700, #b91c1c);
-      border-color: color-mix(in srgb, var(--accent-red-500, #ef4444) 40%, transparent);
+      border-color: var(--accent-red-500, transparent);
 
       &:hover:enabled,
       &:focus-visible {
-        background: color-mix(in srgb, var(--accent-red-500, #ef4444) 28%, transparent);
+        background: var(--accent-red-500, transparent);
       }
     }
   }

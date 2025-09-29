@@ -19,11 +19,11 @@
   }
 
   &:not(:disabled):hover {
-    border-color: color-mix(in srgb, var(--neutral-700, #374151) 70%, var(--neutral-500, #6b7280));
+    border-color: var(--neutral-700, var(--neutral-500, #6b7280));
   }
 
   &--selected {
-    background: color-mix(in srgb, var(--accent-green-500, #16a34a) 12%, var(--neutral-900, #1f2937));
+    background: var(--accent-green-500, var(--neutral-900, #1f2937));
     border-color: var(--accent-green-500, #16a34a);
   }
 
@@ -52,12 +52,12 @@
   &__description {
     margin: 0;
     font-size: 0.9rem;
-    color: color-mix(in srgb, var(--flat-surface-bg, #ffffff) 70%, transparent);
+    color: var(--flat-surface-bg, transparent);
   }
 
   &__details {
     padding-top: var(--space-3, 12px);
-    border-top: 1px solid color-mix(in srgb, var(--neutral-700, #374151) 80%, transparent);
+    border-top: 1px solid var(--neutral-700, transparent);
     display: flex;
     flex-direction: column;
     gap: var(--space-3, 12px);
@@ -90,7 +90,7 @@
   }
 
   &__term-change {
-    color: color-mix(in srgb, var(--flat-surface-bg, #ffffff) 60%, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-weight: var(--font-weight-medium, 500);
   }
 
@@ -107,12 +107,12 @@
     padding: var(--space-2, 8px);
     border-radius: 8px;
     background: var(--neutral-950, #111827);
-    border: 1px solid color-mix(in srgb, var(--neutral-700, #374151) 70%, transparent);
+    border: 1px solid var(--neutral-700, transparent);
   }
 
   &__kpi-label {
     font-size: 0.75rem;
-    color: color-mix(in srgb, var(--flat-surface-bg, #ffffff) 60%, transparent);
+    color: var(--flat-surface-bg, transparent);
   }
 
   &__kpi-value {
