@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { IconComponent } from '../icon/icon.component';
 
 import { AviQuestionGeneratorService, MicroLocalQuestion } from '../../../services/avi-question-generator.service';
 import { AviSimpleConfigService, SimpleAviQuestion } from '../../../services/avi-simple-config.service';
 import { VoiceFraudAnalysis, VoiceFraudDetectionService, VoiceMetrics } from '../../../services/voice-fraud-detection.service';
 import { VoiceValidationService } from '../../../services/voice-validation.service';
 
-// ✅ NUEVO: Voice Evaluation UI Types
+//  NUEVO: Voice Evaluation UI Types
 interface QuestionResult {
   questionId: string;
   decision: 'GO' | 'NO-GO' | 'REVIEW';
@@ -41,215 +42,9 @@ interface AviSessionData {
 @Component({
   selector: 'app-avi-verification-modal',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="avi-modal-overlay" (click)="onOverlayClick($event)" role="dialog" aria-modal="true" [attr.aria-labelledby]="titleId" [attr.aria-describedby]="descId">
-      <div class="avi-modal-container" (click)="$event.stopPropagation()" tabindex="-1" (keydown)="onKeydown($event)">
-        
-        <!-- Header -->
-        <div class="avi-header">
-          <div class="avi-title">
-            <span class="avi-icon">🎤</span>
-            <h2 [attr.id]="titleId">Verificación Inteligente AVI</h2>
-          </div>
-          <button class="avi-close-btn" (click)="closeModal()">✕</button>
-        </div>
-
-        <!-- Main Content -->
-        <div class="avi-content">
-          
-          <!-- Recording Status -->
-          <div class="recording-status" [class.recording-active]="isRecording">
-            <div class="recording-indicator">
-              <span *ngIf="isRecording" class="recording-dot">🔴</span>
-              <span class="recording-text">
-                {{ isRecording ? 'GRABANDO...' : (sessionData.status === 'completed' ? 'VERIFICACIÓN COMPLETADA' : 'LISTO PARA GRABAR') }}
-              </span>
-            </div>
-          </div>
-
-          <!-- Microphone Button -->
-          <div class="mic-section" [attr.id]="descId">
-            <button 
-              #micButton
-              class="mic-button" 
-              [class.mic-recording]="isRecording"
-              [disabled]="sessionData.status === 'completed'"
-              (click)="toggleRecording()">
-              <span class="mic-icon">🎤</span>
-            </button>
-            
-            <div class="mic-instructions">
-              <p *ngIf="sessionData.status === 'initializing'">
-                Preparando verificación...
-              </p>
-              <p *ngIf="sessionData.status === 'asking_questions' && getCurrentTransportQuestion()">
-                <strong>Pregunta {{ sessionData.currentQuestionIndex + 1 }} de {{ sessionData.transportQuestions.length }}:</strong><br>
-                {{ getCurrentTransportQuestion()?.text }}
-              </p>
-              <p *ngIf="sessionData.status === 'micro_local_questions' && currentQuestion">
-                <strong>Pregunta de verificación local:</strong><br>
-                {{ currentQuestion.question }}
-              </p>
-              <p *ngIf="sessionData.status === 'completed'" class="success-message">
-                ✨ Verificación completada exitosamente
-              </p>
-            </div>
-          </div>
-
-          <!-- Real-time Transcription -->
-          <div class="transcription-section" *ngIf="currentTranscript">
-            <h3>📝 Transcripción en vivo:</h3>
-            <div class="transcript-box">
-              {{ currentTranscript }}
-            </div>
-          </div>
-
-          <!-- ✅ NUEVO: Voice Evaluation Results (Semáforo Display) -->
-          <div class="voice-evaluation-section" *ngIf="questionResults.length > 0">
-            <h3>🚦 Resultados de Análisis de Voz:</h3>
-            <div class="question-results-grid">
-              <div class="question-result-card" 
-                   *ngFor="let result of questionResults; trackBy: trackByQuestionId"
-                   [class]="'result-' + result.decision.toLowerCase().replace('-', '')">
-                
-                <!-- Semáforo Icon -->
-                <div class="semaforo-indicator" [attr.aria-label]="result.decision">
-                  <span class="decision-icon">{{ result.icon }}</span>
-                </div>
-                
-                <!-- Question Info -->
-                <div class="question-info">
-                  <div class="question-id">{{ result.questionId }}</div>
-                  <div class="decision-status">{{ result.decision }}</div>
-                  <div class="confidence-score">Score: {{ result.score.toFixed(1) }}/10</div>
-                </div>
-                
-                <!-- Analysis Flags -->
-                <div class="analysis-flags" *ngIf="result.flags.length > 0">
-                  <span class="flag-item" *ngFor="let flag of result.flags">{{ flag }}</span>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Analysis Loading State -->
-            <div class="analysis-loading" *ngIf="isAnalyzing">
-              <div class="loading-spinner"></div>
-              <span class="loading-text">Analizando respuesta de voz...</span>
-            </div>
-          </div>
-
-          <!-- ✅ NUEVO: Final Resilience Summary -->
-          <div class="resilience-summary-section" *ngIf="resilienceSummary && sessionData.status === 'completed'">
-            <h3>💪 Resumen de Resiliencia:</h3>
-            <div class="resilience-overview">
-              <div class="resilience-score-display">
-                <div class="overall-score">
-                  <span class="score-label">Puntuación Global:</span>
-                  <span class="score-value" [class]="'score-' + getScoreLevel(resilienceSummary.overallScore)">
-                    {{ resilienceSummary.overallScore.toFixed(1) }}/10
-                  </span>
-                </div>
-                <div class="resilience-level">
-                  {{ getResilienceLevel(resilienceSummary.overallScore) }}
-                </div>
-              </div>
-              
-              <!-- Category Breakdown -->
-              <div class="category-breakdown">
-                <div class="category-item">
-                  <span class="category-label">Estabilidad Financiera:</span>
-                  <span class="category-score">{{ resilienceSummary.categoryScores.financial_stability.toFixed(1) }}/10</span>
-                </div>
-                <div class="category-item">
-                  <span class="category-label">Adaptabilidad Operacional:</span>
-                  <span class="category-score">{{ resilienceSummary.categoryScores.operational_adaptability.toFixed(1) }}/10</span>
-                </div>
-                <div class="category-item">
-                  <span class="category-label">Conocimiento del Mercado:</span>
-                  <span class="category-score">{{ resilienceSummary.categoryScores.market_knowledge.toFixed(1) }}/10</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Progress Display -->
-          <div class="progress-info-section" *ngIf="sessionData.responses.length > 0">
-            <h3>📊 Progreso de Verificación:</h3>
-            <div class="progress-details">
-              <div class="progress-item">
-                <span class="progress-label">Preguntas Respondidas:</span>
-                <span class="progress-value">{{ sessionData.responses.length }}</span>
-              </div>
-              <div class="progress-item">
-                <span class="progress-label">Preguntas Restantes:</span>
-                <span class="progress-value">
-                  {{ (sessionData.transportQuestions.length + sessionData.microLocalQuestions.length) - sessionData.responses.length }}
-                </span>
-              </div>
-            </div>
-            <div class="progress-bar-container">
-              <div class="progress-bar-fill" [style.width.%]="getProgressPercentage()"></div>
-            </div>
-          </div>
-
-          <!-- Success Message (Client-Friendly) -->
-          <div class="completion-section" *ngIf="sessionData.status === 'completed'">
-            <div class="completion-message">
-              <div class="success-icon">✨</div>
-              <h3>¡Verificación Completada!</h3>
-              <p class="completion-text">
-                Hemos procesado exitosamente su información de verificación.
-                Su puntuación AVI ha sido calculada y está lista para revisión.
-              </p>
-              <div class="score-display">
-                <span class="score-label">Puntuación AVI:</span>
-                <span class="score-value">{{ getClientFriendlyScore() }}/100</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Progress Indicator -->
-          <div class="progress-section">
-            <div class="progress-steps">
-              <div class="progress-step" 
-                   [class.step-active]="sessionData.status === 'asking_questions'"
-                   [class.step-completed]="isStepCompleted('asking_questions')">
-                <span class="step-number">1</span>
-                <span class="step-label">Preguntas de Transporte</span>
-              </div>
-              <div class="progress-step" 
-                   [class.step-active]="sessionData.status === 'micro_local_questions'"
-                   [class.step-completed]="isStepCompleted('micro_local_questions')">
-                <span class="step-number">2</span>
-                <span class="step-label">Verificación Local</span>
-              </div>
-              <div class="progress-step" 
-                   [class.step-active]="sessionData.status === 'completed'"
-                   [class.step-completed]="sessionData.status === 'completed'">
-                <span class="step-number">3</span>
-                <span class="step-label">Completado</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Footer Actions -->
-        <div class="avi-footer">
-          <button class="btn-secondary" (click)="closeModal()" [disabled]="isRecording">
-            Cancelar
-          </button>
-          <button 
-            *ngIf="sessionData.status === 'completed'" 
-            class="btn-primary" 
-            (click)="completeVerification()">
-            Finalizar Verificación
-          </button>
-        </div>
-      </div>
-    </div>
-  `,
-  styleUrl: './avi-verification-modal.component.scss',
+  imports: [CommonModule, IconComponent],
+  templateUrl: './avi-verification-modal.component.html',
+  styleUrls: ['./avi-verification-modal.component.scss'],
 })
 export class AviVerificationModalComponent implements OnInit, OnDestroy {
   @Input() clientId: string = '';
@@ -270,7 +65,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
   currentQuestion: MicroLocalQuestion | null = null;
   recordingStartTime = 0;
   
-  // ✅ NUEVO: Voice Evaluation UI State
+  //  NUEVO: Voice Evaluation UI State
   private _questionResults: { [questionId: string]: QuestionResult } = {};
   isAnalyzing = false;
   analysisMessage = 'Analizando respuesta...';
@@ -369,7 +164,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
       const result = await this.voiceValidation.getValidationResult(this.sessionData.clientId) as any;
       if (!result) return;
       
-      // ✅ NUEVO: Start voice evaluation
+      //  NUEVO: Start voice evaluation
       this.isAnalyzing = true;
       this.analysisMessage = 'Analizando respuesta...';
       
@@ -377,7 +172,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
       
       if (currentQuestionId && result.audioBlob) {
         try {
-          // ✅ NUEVO: Evaluate voice
+          //  NUEVO: Evaluate voice
           const voiceEvaluation = await this.voiceValidation.evaluateAudio(
             result.audioBlob,
             currentQuestionId,
@@ -385,7 +180,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
             this.municipality
           );
           
-          // ✅ NUEVO: Show question result
+          //  NUEVO: Show question result
           this.showQuestionResult(voiceEvaluation);
           
         } catch (voiceError) {
@@ -559,7 +354,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     this.sessionData.status = 'completed';
     this.currentQuestion = null;
     
-    // ✅ NUEVO: Generate final resilience summary
+    //  NUEVO: Generate final resilience summary
     this.showFinalResilienceSummary();
   }
 
@@ -711,7 +506,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     return Math.round((originalScore / this.aviConfigService.getConfig().haseContribution) * 100);
   }
 
-  // ✅ NUEVO: Voice Evaluation UI Methods
+  //  NUEVO: Voice Evaluation UI Methods
   private getCurrentQuestionId(): string | null {
     if (this.sessionData.status === 'asking_questions') {
       const currentQuestion = this.getCurrentTransportQuestion();
@@ -737,10 +532,10 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
 
   private getDecisionIcon(decision: string): string {
     switch(decision) {
-      case 'GO': return '✅';
-      case 'REVIEW': return '⚠️';  
-      case 'NO-GO': return '❌';
-      default: return '🔍';
+      case 'GO': return '';
+      case 'REVIEW': return '';  
+      case 'NO-GO': return '';
+      default: return '';
     }
   }
 
@@ -789,7 +584,7 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     return 'score-poor';
   }
 
-  // ✅ NUEVO: Helper methods for template
+  //  NUEVO: Helper methods for template
 
   trackByQuestionId(index: number, result: QuestionResult): string {
     return result.questionId;
@@ -815,5 +610,47 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     if (score >= 5.5) return 'Buena';
     if (score >= 4.0) return 'Regular';
     return 'Necesita Mejora';
+  }
+
+  getRecordingClasses(): Record<string, boolean> {
+    return {
+      'avi-verification__recording--active': this.isRecording
+    };
+  }
+
+  getMicButtonClasses(): Record<string, boolean> {
+    return {
+      'avi-verification__mic-button--recording': this.isRecording
+    };
+  }
+
+  getResultClasses(result: QuestionResult): Record<string, boolean> {
+    const decision = result.decision.toLowerCase();
+    return {
+      'avi-verification__result-card--go': decision === 'go',
+      'avi-verification__result-card--no-go': decision === 'no-go',
+      'avi-verification__result-card--review': decision === 'review'
+    };
+  }
+
+  getScoreClasses(score: number): Record<string, boolean> {
+    const level = this.getScoreLevel(score);
+    return {
+      'avi-verification__score-value--high': level === 'high',
+      'avi-verification__score-value--medium': level === 'medium',
+      'avi-verification__score-value--low': level === 'low'
+    };
+  }
+
+  getStepClasses(step: 'asking_questions' | 'micro_local_questions' | 'completed'): Record<string, boolean> {
+    const isActive = this.sessionData.status === step;
+    const isCompleted = step === 'completed'
+      ? this.sessionData.status === 'completed'
+      : this.isStepCompleted(step);
+
+    return {
+      'avi-verification__step--active': isActive,
+      'avi-verification__step--completed': isCompleted
+    };
   }
 }

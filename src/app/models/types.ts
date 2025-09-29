@@ -62,6 +62,7 @@ export interface Document {
   fileUrl?: string;
   fileName?: string;
   fileSize?: number;
+  updatedAt?: Date;
   // Extended lifecycle fields used in tests and services
   reviewedAt?: Date;
   completedAt?: Date;
@@ -246,7 +247,7 @@ export interface ActivityFeedItem {
   message: string;
   clientName?: string;
   amount?: number;
-  icon: string;
+  iconType: string;
 }
 
 export interface PaymentLinkDetails {
@@ -276,7 +277,7 @@ export type NotificationAction = {
     type: 'convert' | 'assign_unit' | 'configure_plan';
 }
 
-// 🔥 Notification interface moved to models/notification.ts as SSOT
+//  Notification interface moved to models/notification.ts as SSOT
 
 export type OpportunityStage = {
     name: 'Nuevas Oportunidades' | 'Expediente en Proceso' | 'Aprobado' | 'Activo' | 'Completado';
@@ -360,4 +361,3 @@ export {
   NotificationResult,
   WhatsAppNotificationResult
 } from './notification';
-

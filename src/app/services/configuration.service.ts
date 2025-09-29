@@ -889,8 +889,8 @@ export class ConfigurationService {
 
     const simpleUI: SimpleUIConfiguration = {
       theme: {
-        primaryColor: '#1E40AF',
-        secondaryColor: '#64748B',
+        primaryColor: '#080808',        // OpenAI black /* OpenAI black */
+        secondaryColor: '#737373',       // OpenAI neutral gray /* OpenAI neutral */
         fontSize: 'large',
         buttonSize: 'large',
         spacing: 'comfortable',

@@ -1,5 +1,5 @@
-// 🚀 DEMO COMPLETO NEON ETA API ENDPOINTS
-console.log('🚀 DEMO NEON ETA API ENDPOINTS');
+//  DEMO COMPLETO NEON ETA API ENDPOINTS
+console.log(' DEMO NEON ETA API ENDPOINTS');
 console.log('='.repeat(60));
 
 // Simulador de API calls para demostrar endpoints funcionando
@@ -267,7 +267,7 @@ class NeonEtaApiDemo {
       await this.simulateApiCall('POST', '/api/v1/deliveries/DO-2025-001/schedule', scheduleData);
       
     } catch (error) {
-      console.error('❌ Error in API demo:', error);
+      console.error(' Error in API demo:', error);
     }
   }
 }
@@ -355,7 +355,7 @@ function showApiDocumentation() {
 
 // Función para mostrar casos de uso
 function showUseCases() {
-  console.log('\n🎯 CASOS DE USO PRINCIPALES');
+  console.log('\n CASOS DE USO PRINCIPALES');
   console.log('='.repeat(60));
   
   const useCases = [
@@ -408,27 +408,27 @@ async function runDemo() {
   
   // Resumen final
   console.log('\n' + '='.repeat(60));
-  console.log('🏆 DEMO NEON ETA API COMPLETADO');
+  console.log(' DEMO NEON ETA API COMPLETADO');
   console.log('='.repeat(60));
   
-  console.log('✅ Endpoints demostrados exitosamente:');
+  console.log(' Endpoints demostrados exitosamente:');
   console.log('   • 📋 CRUD completo para delivery orders');
   console.log('   • 🔄 FSM transitions with ETA recalculation');
   console.log('   • 📚 Complete audit trail (events + ETA history)');
-  console.log('   • 📊 Performance metrics and statistics');
+  console.log('   •  Performance metrics and statistics');
   console.log('   • 👥 Client-friendly tracking interfaces');
-  console.log('   • ⚙️ Administrative and operational tools');
+  console.log('   •  Administrative and operational tools');
   
-  console.log('\n🎯 Características clave validadas:');
-  console.log('   • ✅ NEON PostgreSQL integration ready');
-  console.log('   • ✅ 77-day delivery cycle management');
-  console.log('   • ✅ Real-time ETA calculations');
-  console.log('   • ✅ Complete audit trail persistence');
-  console.log('   • ✅ Multi-role access patterns');
-  console.log('   • ✅ Error handling and validation');
+  console.log('\n Características clave validadas:');
+  console.log('   •  NEON PostgreSQL integration ready');
+  console.log('   •  77-day delivery cycle management');
+  console.log('   •  Real-time ETA calculations');
+  console.log('   •  Complete audit trail persistence');
+  console.log('   •  Multi-role access patterns');
+  console.log('   •  Error handling and validation');
   
-  console.log('\n🚀 SISTEMA LISTO PARA PRODUCCIÓN');
-  console.log('   📦 P0 Critical Issue #6: ✅ COMPLETADO');
+  console.log('\n SISTEMA LISTO PARA PRODUCCIÓN');
+  console.log('   📦 P0 Critical Issue #6:  COMPLETADO');
   console.log('   🔄 NEON ETA persistence totalmente funcional');
 }
 

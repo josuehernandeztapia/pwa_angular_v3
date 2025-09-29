@@ -101,9 +101,7 @@
 
   <section *ngIf="filteredExpedientes.length === 0" class="expedientes__empty premium-card" role="status" aria-live="polite">
     <div class="expedientes__empty-icon">
-      <svg class="icon-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-5L9 5H5a2 2 0 00-2 2z" />
-      </svg>
+      <app-icon name="folder" [size]="20" class="icon-20" />
     </div>
     <h2 class="expedientes__empty-title">{{ searchTerm ? 'No se encontraron expedientes' : 'No hay expedientes' }}</h2>
     <p class="expedientes__empty-description">

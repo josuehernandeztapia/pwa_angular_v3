@@ -2,12 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, ElementRef, ViewChild, AfterViewChecked, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chart } from 'chart.js/auto';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 interface SimulatorScenario {
   id: string;
   title: string;
   subtitle: string;
-  icon: string;
+  icon?: string;
+  iconType?: string;
   description: string;
   market: 'aguascalientes' | 'edomex';
   clientType: 'Individual' | 'Colectivo';
@@ -35,352 +37,10 @@ interface SavedSimulation {
 @Component({
   selector: 'app-simulador-main',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrl: './simulador-main.component.scss',
-  template: `
-    <!-- Skip Link for Accessibility -->
-    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
-
-    <div class="ui-container ui-section" *ngIf="!isRedirecting">
-      <!-- Header -->
-      <div class="mb-8">
-        <button (click)="goBack()" class="ui-btn ui-btn-ghost mb-4">← Dashboard</button>
-        <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">Hub de Simuladores</h1>
-        <p class="text-sm text-slate-600 dark:text-slate-400">Herramientas de simulación financiera para diferentes escenarios</p>
-      </div>
-
-      <!-- Hub de escenarios -->
-      <div id="main-content" class="grid gap-4 md:grid-cols-3 mb-8">
-        <div
-          *ngFor="let scenario of availableScenarios"
-          class="ui-card hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-          [attr.data-cy]="'sim-' + scenario.id.replace('_', '-').toLowerCase()"
-          (click)="selectScenario(scenario)"
-        >
-          <div class="text-2xl mb-3">{{ scenario.icon }}</div>
-          <h3 class="text-sm font-semibold mb-2">{{ scenario.title }}</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">{{ scenario.subtitle }}</p>
-          <p class="text-xs text-slate-600 dark:text-slate-300">{{ scenario.description }}</p>
-        </div>
-      </div>
-
-      <!-- Context Info -->
-      <div *ngIf="smartContext.hasContext" class="ui-alert ui-alert-info mb-6">
-        <div class="flex items-center space-x-2">
-          <span class="text-lg">⚡</span>
-          <div>
-            <strong>Contexto detectado:</strong>
-            {{ smartContext.market }} • {{ smartContext.clientType }}
-            <span *ngIf="smartContext.clientName"> • {{ smartContext.clientName }}</span>
-          </div>
-        </div>
-      </div>
-
-      <section class="ui-card mb-6" *ngIf="simulationResults.selectedScenario">
-        <h2 class="text-sm font-semibold mb-3">Resultado de Simulación</h2>
-
-        <!-- Skeleton loader -->
-        <div *ngIf="simulationResults.loading" class="animate-pulse space-y-3">
-          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
-          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
-          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
-        </div>
-
-        <!-- KPIs -->
-        <div *ngIf="!simulationResults.loading" class="grid gap-3 md:grid-cols-3">
-          <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
-            <div class="text-xs text-slate-500 dark:text-slate-400">Ahorro</div>
-            <div class="text-xl font-semibold" data-cy="sim-ahorro">
-              {{ formatCurrency(simulationResults.data.ahorro) }}
-            </div>
-          </div>
-          <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
-            <div class="text-xs text-slate-500 dark:text-slate-400">Plazo</div>
-            <div class="text-xl font-semibold" data-cy="sim-plazo">
-              {{ simulationResults.data.plazo }} meses
-            </div>
-          </div>
-          <div class="rounded border border-slate-200 dark:border-slate-700 p-3">
-            <div class="text-xs text-slate-500 dark:text-slate-400">PMT Proyectado</div>
-            <div class="text-xl font-semibold" data-cy="sim-pmt">
-              {{ formatCurrency(simulationResults.data.pmt) }}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Charts -->
-      <div class="grid gap-4 md:grid-cols-2 mb-6" *ngIf="simulationResults.selectedScenario && !simulationResults.loading">
-        <div class="ui-card">
-          <h2 class="text-sm font-semibold mb-3">Ahorro acumulado</h2>
-          <canvas id="chartAhorro" data-cy="chart-ahorro"></canvas>
-        </div>
-        <div class="ui-card">
-          <h2 class="text-sm font-semibold mb-3">PMT mensual</h2>
-          <canvas id="chartPMT" data-cy="chart-pmt"></canvas>
-        </div>
-      </div>
-
-      <!-- Simulaciones Guardadas -->
-      <section class="mb-8" *ngIf="savedSimulations.length > 0">
-        <div class="mb-6">
-          <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">💾 Simulaciones Recientes</h2>
-          <p class="text-sm text-slate-600 dark:text-slate-400">Continúa donde lo dejaste</p>
-        </div>
-
-        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <div
-            *ngFor="let simulation of savedSimulations.slice(0, 5)"
-            class="ui-card relative"
-            [class.ring-2]="selectedForComparison.has(simulation.id)"
-            [class.ring-sky-500]="selectedForComparison.has(simulation.id)"
-          >
-            <!-- Comparison Checkbox -->
-            <div class="absolute top-3 left-3" *ngIf="comparisonMode">
-              <input
-                type="checkbox"
-                [id]="'compare-' + simulation.id"
-                [checked]="selectedForComparison.has(simulation.id)"
-                [disabled]="!selectedForComparison.has(simulation.id) && selectedForComparison.size >= 3"
-                (change)="toggleSimulationSelection(simulation.id)"
-                class="h-4 w-4 text-sky-600 focus:ring-sky-500 border-slate-300 rounded"
-              />
-            </div>
-
-            <div class="flex items-start justify-between mb-3" [class.ml-8]="comparisonMode">
-              <div class="flex-1">
-                <h4 class="font-medium text-slate-900 dark:text-slate-100">{{ simulation.clientName || 'Cliente sin nombre' }}</h4>
-                <p class="text-xs text-slate-500 dark:text-slate-400">{{ simulation.scenarioTitle }}</p>
-              </div>
-              <div class="flex space-x-2" *ngIf="!comparisonMode">
-                <button
-                  (click)="continueSimulation(simulation)"
-                  class="ui-btn ui-btn-ghost ui-btn-xs"
-                >
-                  Continuar
-                </button>
-                <button
-                  (click)="deleteSimulation(simulation.id)"
-                  class="text-slate-400 hover:text-red-500 text-xs"
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
-
-            <div class="space-y-2 mb-3">
-              <div class="flex justify-between text-xs">
-                <span class="text-slate-500 dark:text-slate-400">Mercado:</span>
-                <span class="text-slate-700 dark:text-slate-300">{{ getMarketLabel(simulation.market) }}</span>
-              </div>
-              <div class="flex justify-between text-xs">
-                <span class="text-slate-500 dark:text-slate-400">Tipo:</span>
-                <span class="text-slate-700 dark:text-slate-300">{{ simulation.clientType }}</span>
-              </div>
-              <div class="flex justify-between text-xs" *ngIf="simulation.summary.targetAmount">
-                <span class="text-slate-500 dark:text-slate-400">Meta:</span>
-                <span class="text-slate-700 dark:text-slate-300 font-medium">{{ formatCurrency(simulation.summary.targetAmount) }}</span>
-              </div>
-              <div class="flex justify-between text-xs" *ngIf="simulation.summary.monthlyContribution">
-                <span class="text-slate-500 dark:text-slate-400">Mensual:</span>
-                <span class="text-slate-700 dark:text-slate-300 font-medium">{{ formatCurrency(simulation.summary.monthlyContribution) }}</span>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-700">
-              <span class="text-xs text-slate-500 dark:text-slate-400">
-                {{ formatLastModified(simulation.lastModified) }}
-              </span>
-              <span class="text-xs px-2 py-1 rounded"
-                    [class]="simulation.summary.status === 'draft' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'">
-                {{ simulation.summary.status === 'draft' ? 'Borrador' : 'Completado' }}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Comparison Controls -->
-        <div class="mt-6" *ngIf="savedSimulations.length > 1" data-cy="comparison-controls">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <button
-              (click)="toggleComparisonMode()"
-              class="ui-btn ui-btn-secondary"
-              [class.ui-btn-primary]="comparisonMode"
-              data-cy="toggle-compare"
-            >
-              {{ comparisonMode ? '✅ Modo Comparación' : '📊 Comparar Escenarios' }}
-            </button>
-
-            <div class="flex items-center space-x-3" *ngIf="comparisonMode">
-              <span class="text-sm text-slate-600 dark:text-slate-400">
-                {{ selectedForComparison.size }}/3 seleccionados
-              </span>
-              <button
-                (click)="clearSelection()"
-                *ngIf="selectedForComparison.size > 0"
-                class="ui-btn ui-btn-ghost ui-btn-sm"
-              >
-                Limpiar
-              </button>
-            </div>
-          </div>
-
-          <div class="mt-4" *ngIf="comparisonMode && selectedForComparison.size > 1">
-            <button
-              (click)="compareSelectedSimulations()"
-              [disabled]="selectedForComparison.size < 2"
-              class="ui-btn ui-btn-primary"
-              data-cy="open-comparison"
-            >
-              🔬 Comparar {{ selectedForComparison.size }} Escenarios
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <div class="text-center" *ngIf="savedSimulations.length > 5">
-        <button (click)="showAllSimulations()" class="ui-btn ui-btn-ghost">
-          Ver todas las simulaciones ({{ savedSimulations.length }})
-        </button>
-      </div>
-
-      <!-- Empty State -->
-      <div class="text-center py-12" *ngIf="savedSimulations.length === 0 && !smartContext.hasContext">
-        <div class="text-4xl mb-4">📊</div>
-        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">Primera vez en el Hub de Simuladores</h3>
-        <p class="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">Selecciona un escenario arriba para comenzar tu primera simulación. Tus borradores aparecerán aquí para continuar más tarde.</p>
-      </div>
-    </div>
-
-    <!-- Smart Redirection Loading -->
-    <div class="smart-redirect" *ngIf="isRedirecting">
-      <div class="redirect-content">
-        <div class="redirect-spinner"></div>
-        <h2>🧠 Analizando contexto...</h2>
-        <p>{{ redirectMessage }}</p>
-      </div>
-    </div>
-
-    <!-- Comparison Modal -->
-    <div class="fixed inset-0 z-50 overflow-y-auto" *ngIf="showComparisonModal" data-cy="comparison-modal">
-      <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-slate-900/50 transition-opacity" (click)="closeComparisonModal()"></div>
-
-        <div class="inline-block align-bottom bg-white dark:bg-slate-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full" role="dialog" aria-modal="true" aria-labelledby="cmp-title" tabindex="-1" #cmpDialog>
-          <!-- Header -->
-          <div class="px-4 py-5 sm:px-6 border-b border-slate-200 dark:border-slate-700">
-            <div class="flex items-center justify-between">
-              <h2 id="cmp-title" class="text-lg font-semibold text-slate-900 dark:text-slate-100">📊 Comparación de Escenarios</h2>
-              <button (click)="closeComparisonModal()" class="ui-btn ui-btn-ghost ui-btn-sm" #cmpClose aria-label="Cerrar">×</button>
-            </div>
-          </div>
-
-          <!-- Table -->
-          <div class="px-4 py-5 sm:p-6">
-            <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
-                <thead>
-                  <tr>
-                    <th class="px-3 py-3 bg-slate-50 dark:bg-slate-800 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Métrica</th>
-                    <th *ngFor="let sim of getSelectedSimulations()" class="px-3 py-3 bg-slate-50 dark:bg-slate-800 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                      <div>
-                        <div class="font-semibold text-slate-900 dark:text-slate-100">{{ sim.clientName }}</div>
-                        <div class="text-xs">{{ sim.scenarioTitle }}</div>
-                        <div class="text-xs">{{ getMarketLabel(sim.market) }}</div>
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="bg-white dark:bg-slate-900 divide-y divide-slate-200 dark:divide-slate-700">
-                  <tr>
-                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">🎯 Meta Total</td>
-                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
-                      {{ sim.summary.targetAmount ? formatCurrency(sim.summary.targetAmount) : 'N/D' }}
-                    </td>
-                  </tr>
-                  <tr class="bg-slate-50 dark:bg-slate-800">
-                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">💰 Aportación Mensual</td>
-                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
-                      {{ sim.summary.monthlyContribution ? formatCurrency(sim.summary.monthlyContribution) : 'N/D' }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">⏱️ Tiempo a la Meta</td>
-                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
-                      {{ sim.summary.timeToTarget ? (sim.summary.timeToTarget + ' meses') : 'N/D' }}
-                    </td>
-                  </tr>
-                  <tr class="bg-slate-50 dark:bg-slate-800">
-                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">📊 Tipo de Cliente</td>
-                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">
-                      {{ sim.clientType }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">📅 Estado</td>
-                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm">
-                      <span class="text-xs px-2 py-1 rounded"
-                            [class]="sim.summary.status === 'draft' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'">
-                        {{ sim.summary.status === 'draft' ? 'Borrador' : 'Completado' }}
-                      </span>
-                    </td>
-                  </tr>
-                  <tr class="bg-slate-50 dark:bg-slate-800">
-                    <td class="px-3 py-4 text-sm text-slate-900 dark:text-slate-100">🎯 Eficiencia</td>
-                    <td *ngFor="let sim of getSelectedSimulations()" class="px-3 py-4 text-sm">
-                      <span class="text-xs px-2 py-1 rounded font-medium"
-                            [class]="getEfficiencyClass(sim) === 'excellent' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                                    getEfficiencyClass(sim) === 'good' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
-                                    getEfficiencyClass(sim) === 'fair' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
-                                    'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'">
-                        {{ getEfficiencyScore(sim) }}
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Insights -->
-          <div class="px-4 py-5 sm:px-6 border-t border-slate-200 dark:border-slate-700">
-            <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-4">💡 Insights Automáticos</h3>
-            <div class="grid gap-4 md:grid-cols-3">
-              <div class="ui-card">
-                <div class="text-lg mb-2">👑</div>
-                <div class="text-xs font-medium text-slate-900 dark:text-slate-100 mb-1">Mejor Opción</div>
-                <div class="text-xs text-slate-600 dark:text-slate-400">{{ getBestOption() }}</div>
-              </div>
-              <div class="ui-card">
-                <div class="text-lg mb-2">⚡</div>
-                <div class="text-xs font-medium text-slate-900 dark:text-slate-100 mb-1">Más Rápido</div>
-                <div class="text-xs text-slate-600 dark:text-slate-400">{{ getFastestOption() }}</div>
-              </div>
-              <div class="ui-card">
-                <div class="text-lg mb-2">💰</div>
-                <div class="text-xs font-medium text-slate-900 dark:text-slate-100 mb-1">Menor Aportación</div>
-                <div class="text-xs text-slate-600 dark:text-slate-400">{{ getLowestContributionOption() }}</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Actions -->
-          <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-200 dark:border-slate-700">
-            <button (click)="closeComparisonModal()" class="ui-btn ui-btn-primary sm:ml-3">
-              Cerrar
-            </button>
-            <button (click)="shareComparison()" class="ui-btn ui-btn-secondary sm:mr-3 mb-2 sm:mb-0">
-              📱 Compartir WhatsApp
-            </button>
-            <button (click)="exportComparison()" class="ui-btn ui-btn-ghost">
-              📋 Exportar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `
+  templateUrl: './simulador-main.component.html',
+  styleUrls: ['./simulador-main.component.scss'],
 })
 export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild('cmpDialog') cmpDialog?: ElementRef<HTMLDivElement>;
@@ -422,8 +82,8 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
     {
       id: 'ags-ahorro',
       title: 'Proyector de Ahorro y Liquidación',
-      subtitle: '🌵 AGS Individual',
-      icon: '🏦',
+      subtitle: 'AGS Individual',
+      iconType: 'bank',
       description: 'Modela un plan de ahorro con aportación fuerte y recaudación para clientes de Aguascalientes.',
       market: 'aguascalientes',
       clientType: 'Individual',
@@ -433,8 +93,8 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
     {
       id: 'edomex-individual',
       title: 'Planificador de Enganche',
-      subtitle: '🏢 EdoMex Individual',
-      icon: '📊',
+      subtitle: 'EdoMex Individual',
+      iconType: 'chart',
       description: 'Proyecta el tiempo para alcanzar la meta de enganche para un cliente individual en EdoMex.',
       market: 'edomex',
       clientType: 'Individual',
@@ -444,8 +104,8 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
     {
       id: 'tanda-colectiva',
       title: 'Simulador de Tanda Colectiva',
-      subtitle: '👥 EdoMex Colectivo',
-      icon: '🔄',
+      subtitle: 'EdoMex Colectivo',
+      icon: '',
       description: 'Modela el "efecto bola de nieve" para un grupo de crédito colectivo.',
       market: 'edomex',
       clientType: 'Colectivo',
@@ -914,19 +574,19 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
     const fastestOption = this.getFastestOption();
     const lowestContribution = this.getLowestContributionOption();
     
-    const message = `📊 *Comparación de Simulaciones*\n\n` +
-      `🔬 Analizadas: ${selected.length} opciones\n\n` +
-      `👑 *Mejor Opción General:*\n${bestOption}\n\n` +
-      `⚡ *Opción Más Rápida:*\n${fastestOption}\n\n` +
-      `💰 *Menor Aportación Mensual:*\n${lowestContribution}\n\n` +
-      `📋 *Detalles:*\n` +
+    const message = `*Comparación de Simulaciones*\n\n` +
+      ` Analizadas: ${selected.length} opciones\n\n` +
+      `*Mejor Opción General:*\n${bestOption}\n\n` +
+      `*Opción Más Rápida:*\n${fastestOption}\n\n` +
+      `*Menor Aportación Mensual:*\n${lowestContribution}\n\n` +
+      ` *Detalles:*\n` +
       selected.map(sim => {
         const target = sim.summary.targetAmount ? `$${sim.summary.targetAmount.toLocaleString('es-MX')}` : 'N/D';
         const monthly = sim.summary.monthlyContribution ? `$${sim.summary.monthlyContribution.toLocaleString('es-MX')}` : 'N/D';
         const months = sim.summary.timeToTarget ? `${sim.summary.timeToTarget} meses` : 'N/D';
         return `• ${sim.clientName} (${sim.scenarioTitle})\n  Meta: ${target} | Mensual: ${monthly} | Tiempo: ${months}`;
       }).join('\n') +
-      `\n\n🚗 Generado desde Conductores PWA`;
+      `\n\nGenerado desde Conductores PWA`;
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
@@ -969,8 +629,8 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
         datasets: [{
           label: 'Ahorro Acumulado',
           data: [3250, 19500, 39000, 58500, 78000],
-          borderColor: '#0EA5E9',
-          backgroundColor: '#0EA5E9/10',
+          borderColor: 'var(--color-accent-primary, #0EA5E9)',
+          backgroundColor: 'var(--color-accent-primary-muted, rgba(14, 165, 233, 0.1))',
           borderWidth: 2,
           fill: true,
           tension: 0.4
@@ -1016,7 +676,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
         datasets: [{
           label: 'PMT Mensual',
           data: [3250, 3250, 3250],
-          backgroundColor: ['#0EA5E9', '#0EA5E9', '#10B981'],
+          backgroundColor: ['var(--color-accent-primary, #0EA5E9)', 'var(--color-accent-primary, #0EA5E9)', 'var(--color-success, #10B981)'],
           borderRadius: 4
         }]
       },
@@ -1051,4 +711,3 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
     }).format(amount);
   }
 }
-

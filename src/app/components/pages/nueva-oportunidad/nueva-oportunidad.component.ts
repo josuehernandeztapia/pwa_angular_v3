@@ -7,6 +7,8 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ApiService } from '../../../services/api.service';
 import { EcosystemUiService } from '../../../services/ecosystem-ui.service';
 import { CustomValidators } from '../../../validators/custom-validators';
+import { IconComponent } from '../../shared/icon/icon.component';
+import { IconName } from '../../shared/icon/icon-definitions';
 
 // Dynamic Wizard Step Interface
 interface WizardStep {
@@ -22,564 +24,9 @@ interface WizardStep {
 @Component({
   selector: 'app-nueva-oportunidad',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  template: `
-    <div class="nueva-oportunidad-container command-container">
-      <div class="header-section">
-        <div class="breadcrumb">
-          <button class="back-btn premium-button outline" (click)="goBack()" [attr.aria-label]="'Volver'">
-            ⬅️ Regresar
-          </button>
-          <h1 class="command-title">💎 Generador de Oportunidades Inteligente</h1>
-          <div class="smart-context" *ngIf="smartContext.market || smartContext.suggestedFlow">
-            <span class="context-tag" *ngIf="smartContext.market">
-              📍 {{ getMarketName(smartContext.market) }}
-            </span>
-            <span class="context-tag" *ngIf="smartContext.suggestedFlow">
-              🎯 {{ smartContext.suggestedFlow === 'COTIZACION' ? 'Sugerido: Cotizador' : 'Sugerido: Simulador' }}
-            </span>
-          </div>
-        </div>
-        <p class="intelligence-subtitle">
-          {{ smartContext.market 
-            ? ('Creando oportunidad para ' + getMarketName(smartContext.market) + ' con contexto inteligente del Dashboard')
-            : 'El primer paso para ayudar a un transportista a obtener su unidad' }}
-        </p>
-        
-        <!-- Progress Indicator -->
-        <div class="progress-indicator">
-          <div class="progress-bar intelligent-progress">
-            <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
-          </div>
-          <div class="progress-steps">
-            <span 
-              *ngFor="let step of visibleSteps; let i = index" 
-              class="step"
-              [class.active]="getStepStatus(i) === 'current'"
-              [class.completed]="getStepStatus(i) === 'completed'"
-              [class.pending]="getStepStatus(i) === 'pending'"
-              [attr.aria-current]="getStepStatus(i) === 'current' ? 'step' : null"
-            >
-              <span class="step-icon">{{ getStepIcon(i) }}</span>
-              <span class="step-label">{{ step.label }}</span>
-              <span class="step-progress" *ngIf="getStepStatus(i) === 'current' && currentStepProgress > 0">
-                ({{ (currentStepProgress * 100) | number:'1.0-0' }}%)
-              </span>
-            </span>
-          </div>
-        </div>
-        
-        <!-- Draft Recovery Banner -->
-        <div class="draft-banner premium-card" *ngIf="hasDraftAvailable && !draftRecovered">
-          <div class="banner-content">
-            <span class="banner-icon">💾</span>
-            <div class="banner-text">
-              <strong>Borrador encontrado</strong>
-              <p>Tienes una oportunidad sin terminar del {{ formatDraftDate(draftData.timestamp) }}</p>
-            </div>
-            <div class="banner-actions">
-              <button class="premium-button" (click)="recoverDraft()">Continuar</button>
-              <button class="premium-button secondary" (click)="discardDraft()">Descartar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-container">
-        <form [formGroup]="opportunityForm" (ngSubmit)="onSubmit()" class="opportunity-form premium-card">
-          
-          <!-- Step 1: Client Information -->
-          <div class="form-section">
-            <h2 class="section-title" id="step-title-client-info" tabindex="-1">👤 Información del Cliente</h2>
-            
-            <div class="form-group">
-              <label for="clientName">Nombre Completo *</label>
-              <div class="smart-input-container">
-                <input
-                  id="clientName"
-                  type="text"
-                  formControlName="clientName"
-                  class="premium-input"
-                  [class.error]="isFieldInvalid('clientName')"
-                  [attr.aria-invalid]="isFieldInvalid('clientName')"
-                  [attr.aria-describedby]="getErrorId('clientName')"
-                  [class.checking]="isCheckingDuplicates"
-                  [class.has-suggestions]="clientSuggestions.length > 0"
-                  placeholder="Ej: Juan Pérez García"
-                  (focus)="onClientNameFocus()"
-                  (blur)="onClientNameBlur()"
-                  (keydown)="handleClientNameKeydown($event)"
-                  autocomplete="off"
-                >
-                <div class="input-status" *ngIf="isCheckingDuplicates">
-                  <span class="checking-icon">🔍</span>
-                </div>
-                <div class="suggestions-skeletons" *ngIf="isCheckingDuplicates && clientSuggestions.length === 0">
-                  <div class="skeleton-row" *ngFor="let s of [1,2,3]"></div>
-                </div>
-                
-                <!-- Intelligent Autocomplete Dropdown -->
-                <div class="autocomplete-dropdown" *ngIf="showSuggestions && clientSuggestions.length > 0">
-                  <div class="suggestion-header">
-                    <span class="suggestion-icon">💡</span>
-                    <strong>Sugerencias inteligentes</strong>
-                  </div>
-                  <div class="suggestions-list">
-                    <div 
-                      *ngFor="let suggestion of clientSuggestions; trackBy: trackBySuggestion; let i = index" 
-                      class="suggestion-item"
-                      [class.highlighted]="i === selectedSuggestionIndex"
-                      (click)="selectSuggestion(suggestion)"
-                      (mouseenter)="selectedSuggestionIndex = i"
-                    >
-                      <div class="suggestion-content">
-                        <div class="suggestion-name">{{ suggestion.name }}</div>
-                        <div class="suggestion-details">
-                          <span class="detail-item" *ngIf="suggestion.phone">📞 {{ suggestion.phone }}</span>
-                          <span class="detail-item" *ngIf="suggestion.market">🏢 {{ suggestion.market }}</span>
-                          <span class="detail-item suggestion-type">{{ suggestion.type }}</span>
-                        </div>
-                      </div>
-                      <span class="select-arrow">→</span>
-                    </div>
-                  </div>
-                  <div class="suggestion-footer" *ngIf="!isCheckingDuplicates">
-                    <span class="suggestion-hint">Use ↑↓ para navegar, Enter para seleccionar</span>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Similar Clients Warning -->
-              <div class="similar-clients-warning" *ngIf="similarClients.length > 0">
-                <div class="warning-header">
-                  <span class="warning-icon">⚠️</span>
-                  <strong>Clientes similares encontrados</strong>
-                </div>
-                <div class="similar-clients-list">
-                  <div 
-                    *ngFor="let client of similarClients" 
-                    class="similar-client-item"
-                    (click)="selectSimilarClient(client)"
-                  >
-                    <div class="client-avatar">{{ getClientInitials(client.name) }}</div>
-                    <div class="client-info">
-                      <div class="client-name">{{ client.name }}</div>
-                      <div class="client-details">{{ client.phone || 'Sin teléfono' }} • {{ client.market || 'Sin mercado' }}</div>
-                    </div>
-                    <button type="button" class="btn-use-client">Usar este cliente</button>
-                  </div>
-                </div>
-                <div class="continue-anyway">
-                  <button type="button" class="premium-button outline" (click)="clearSimilarClients()">
-                    Continuar con cliente nuevo
-                  </button>
-                </div>
-              </div>
-              
-              <div *ngIf="isFieldInvalid('clientName')" class="error-message" [id]="getErrorId('clientName')">
-                <span *ngIf="opportunityForm.get('clientName')?.errors?.['required']">
-                  El nombre del cliente es requerido
-                </span>
-                <span *ngIf="opportunityForm.get('clientName')?.errors?.['clientName']">
-                  {{ opportunityForm.get('clientName')?.errors?.['clientName']?.message }}
-                </span>
-              </div>
-            </div>
-
-            <div class="form-row priority-contact">
-              <div class="form-group primary-contact">
-                <label for="phone" class="primary-label">
-                  📱 WhatsApp *
-                  <span class="contact-priority">Principal vía de contacto</span>
-                </label>
-                <div class="whatsapp-input">
-                  <span class="country-prefix">🇲🇽 +52</span>
-                  <input
-                    id="phone"
-                    type="tel"
-                    formControlName="phone"
-                    class="form-input whatsapp-field"
-                    [class.error]="isFieldInvalid('phone')"
-                    [attr.aria-invalid]="isFieldInvalid('phone')"
-                    [attr.aria-describedby]="getErrorId('phone')"
-                    placeholder="55 1234 5678"
-                    maxlength="16"
-                    (blur)="onPhoneBlur()"
-                  >
-                  <span class="whatsapp-icon">💬</span>
-                </div>
-                <div *ngIf="isFieldInvalid('phone')" class="error-message" [id]="getErrorId('phone')">
-                  <span *ngIf="opportunityForm.get('phone')?.errors?.['required']">
-                    El número de WhatsApp es requerido para contacto
-                  </span>
-                  <span *ngIf="opportunityForm.get('phone')?.errors?.['mexicanPhone']">Debe contener 10 dígitos</span>
-                </div>
-              </div>
-
-              <div class="form-group secondary-contact">
-                <label for="email" class="secondary-label">
-                  📧 Email
-                  <span class="contact-optional" *ngIf="!requiresClientContactData()">Opcional</span>
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  formControlName="email"
-                  class="form-input email-field"
-                  [class.error]="isFieldInvalid('email')"
-                  [attr.aria-invalid]="isFieldInvalid('email')"
-                  [attr.aria-describedby]="getErrorId('email')"
-                  placeholder="cliente@correo.com"
-                >
-                <div *ngIf="isFieldInvalid('email')" class="error-message" [id]="getErrorId('email')">
-                  <span *ngIf="opportunityForm.get('email')?.errors?.['required']">
-                    El email es requerido
-                  </span>
-                  <span *ngIf="opportunityForm.get('email')?.errors?.['email']">
-                    Formato de email inválido
-                  </span>
-                  <span *ngIf="opportunityForm.get('email')?.errors?.['duplicateEmail']">
-                    Este email ya existe en el sistema
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="rfc">RFC <span *ngIf="requiresClientContactData()">*</span></label>
-                <input
-                  id="rfc"
-                  type="text"
-                  formControlName="rfc"
-                  class="form-input"
-                  [class.error]="isFieldInvalid('rfc')"
-                  [attr.aria-invalid]="isFieldInvalid('rfc')"
-                  [attr.aria-describedby]="getErrorId('rfc')"
-                  placeholder="GODE561231GR8"
-                  (input)="opportunityForm.get('rfc')?.setValue(opportunityForm.get('rfc')?.value?.toUpperCase(), { emitEvent: false })"
-                >
-                <div *ngIf="isFieldInvalid('rfc')" class="error-message" [id]="getErrorId('rfc')">
-                  <span *ngIf="opportunityForm.get('rfc')?.errors?.['required']">El RFC es requerido</span>
-                  <span *ngIf="opportunityForm.get('rfc')?.errors?.['rfc']">RFC inválido</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 2: Opportunity Type Selection -->
-          <div class="form-section">
-            <h2 id="step-title-opportunity-type" tabindex="-1">🎯 ¿Qué quieres modelar para {{ clientNameValue || 'este cliente' }}?</h2>
-            <p class="section-description">
-              Selecciona el tipo de oportunidad que mejor se adapte a las necesidades del cliente
-            </p>
-
-            <div class="opportunity-cards">
-              <div 
-                class="opportunity-card"
-                [class.selected]="opportunityType === 'COTIZACION'"
-                [class.suggested]="smartContext.suggestedFlow === 'COTIZACION'"
-                (click)="selectOpportunityType('COTIZACION')"
-              >
-                <div class="card-icon">💰</div>
-                <div class="card-content">
-                  <h3>Adquisición de Unidad</h3>
-                  <p>Cliente listo para comprar. Generar cotización rápida y transparente.</p>
-                  <div class="card-tag">Modo Cotizador</div>
-                </div>
-              </div>
-
-              <div 
-                class="opportunity-card"
-                [class.selected]="opportunityType === 'SIMULACION'"
-                [class.suggested]="smartContext.suggestedFlow === 'SIMULACION'"
-                (click)="selectOpportunityType('SIMULACION')"
-              >
-                <div class="card-icon">🎯</div>
-                <div class="card-content">
-                  <h3>Plan de Ahorro</h3>
-                  <p>Modelar capacidad de ahorro y proyecciones financieras.</p>
-                  <div class="card-tag">Modo Simulador</div>
-                </div>
-              </div>
-            </div>
-
-            <div *ngIf="opportunityTypeError" class="error-message">
-              Debe seleccionar un tipo de oportunidad
-            </div>
-          </div>
-
-          <!-- Step 3: Dynamic Market Configuration -->
-          <div class="form-section" *ngIf="opportunityType && shouldShowStep('market')">
-            <h2 id="step-title-market" tabindex="-1">{{ getMarketStepTitle() }}</h2>
-            <p class="section-description">{{ getMarketStepDescription() }}</p>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="market">Mercado *</label>
-                <select
-                  id="market"
-                  formControlName="market"
-                  class="form-select"
-                  [class.error]="isFieldInvalid('market')"
-                  (change)="onMarketChange()"
-                >
-                  <option value="">Seleccionar mercado...</option>
-                  <option value="aguascalientes">🌵 Aguascalientes</option>
-                  <option value="edomex">🏔️ Estado de México</option>
-                </select>
-                <div *ngIf="isFieldInvalid('market')" class="error-message">
-                  <span *ngIf="opportunityForm.get('market')?.errors?.['required']">
-                    El mercado es requerido
-                  </span>
-                </div>
-              </div>
-
-              <!-- Sale Type selector (required to gate continue) -->
-              <div class="form-group">
-                <label for="saleType">Tipo de venta *</label>
-                <select
-                  id="saleType"
-                  formControlName="saleType"
-                  class="form-select"
-                  [class.error]="isFieldInvalid('saleType')"
-                  (change)="onSaleTypeChange()"
-                >
-                  <option value="">Seleccionar tipo...</option>
-                  <option value="contado">💵 Contado</option>
-                  <option value="financiero">🏦 Financiero</option>
-                </select>
-                <div *ngIf="isFieldInvalid('saleType')" class="error-message">
-                  <span *ngIf="opportunityForm.get('saleType')?.errors?.['required']">
-                    El tipo de venta es requerido
-                  </span>
-                </div>
-              </div>
-
-              <!-- Municipality selector (only for EdoMex) -->
-              <div class="form-group" *ngIf="marketValue === 'edomex'">
-                <label for="municipality">Municipio *</label>
-                <select
-                  id="municipality"
-                  formControlName="municipality"
-                  class="form-select"
-                  [class.error]="isFieldInvalid('municipality')"
-                >
-                  <option value="">Seleccionar municipio...</option>
-                  
-                  <!-- ZMVM Municipalities -->
-                  <optgroup label="Zona Metropolitana">
-                    <option value="ecatepec">Ecatepec de Morelos</option>
-                    <option value="nezahualcoyotl">Ciudad Nezahualcóyotl</option>
-                    <option value="naucalpan">Naucalpan de Juárez</option>
-                    <option value="tlalnepantla">Tlalnepantla de Baz</option>
-                    <option value="chimalhuacan">Chimalhuacán</option>
-                    <option value="valle_chalco">Valle de Chalco Solidaridad</option>
-                    <option value="la_paz">La Paz</option>
-                    <option value="ixtapaluca">Ixtapaluca</option>
-                    <option value="coacalco">Coacalco de Berriozábal</option>
-                    <option value="tultitlan">Tultitlán</option>
-                    <option value="cuautitlan_izcalli">Cuautitlán Izcalli</option>
-                    <option value="atizapan">Atizapán de Zaragoza</option>
-                  </optgroup>
-                  
-                  <!-- Central Zone -->
-                  <optgroup label="Zona Central">
-                    <option value="toluca">Toluca de Lerdo</option>
-                    <option value="metepec">Metepec</option>
-                    <option value="lerma">Lerma</option>
-                    <option value="zinacantepec">Zinacantepec</option>
-                    <option value="almoloya_juarez">Almoloya de Juárez</option>
-                  </optgroup>
-                  
-                  <!-- Eastern Zone -->
-                  <optgroup label="Zona Oriente">
-                    <option value="texcoco">Texcoco</option>
-                    <option value="chalco">Chalco</option>
-                    <option value="chicoloapan">Chicoloapan</option>
-                  </optgroup>
-                  
-                  <!-- Northern Zone -->
-                  <optgroup label="Zona Norte">
-                    <option value="tepotzotlan">Tepotzotlán</option>
-                    <option value="villa_nicolas_romero">Villa Nicolás Romero</option>
-                    <option value="isidro_fabela">Isidro Fabela</option>
-                  </optgroup>
-                  
-                  <!-- Southern Zone -->
-                  <optgroup label="Zona Sur">
-                    <option value="valle_bravo">Valle de Bravo</option>
-                    <option value="temascaltepec">Temascaltepec</option>
-                    <option value="tejupilco">Tejupilco</option>
-                  </optgroup>
-                </select>
-                <div *ngIf="isFieldInvalid('municipality')" class="error-message">
-                  <span *ngIf="opportunityForm.get('municipality')?.errors?.['required']">
-                    El municipio es requerido para Estado de México
-                  </span>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="clientType">Tipo de Cliente <span *ngIf="requiresClientType()">*</span></label>
-                <select
-                  id="clientType"
-                  formControlName="clientType"
-                  class="form-select"
-                  [class.error]="isFieldInvalid('clientType')"
-                >
-                  <option value="">Seleccionar tipo...</option>
-                  <option value="Individual">👤 Individual</option>
-                  <option value="Colectivo">👥 Colectivo (Tanda)</option>
-                </select>
-                <div *ngIf="isFieldInvalid('clientType')" class="error-message">
-                  <span *ngIf="opportunityForm.get('clientType')?.errors?.['required']">El tipo de cliente es requerido para Financiero en EdoMex</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Business Flow (determined automatically) -->
-            <div class="info-card" *ngIf="marketValue && clientTypeValue">
-              <div class="info-icon">ℹ️</div>
-              <div class="info-content">
-                <h4>Flujo de Negocio Sugerido</h4>
-                <p>
-                  <strong>{{ getBusinessFlowLabel() }}</strong> - 
-                  {{ getBusinessFlowDescription() }}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 4: Ecosystem Selection (EdoMex Only) -->
-          <div class="form-section" *ngIf="shouldShowStep('ecosystem')">
-            <h2 id="step-title-ecosystem" tabindex="-1">🏪 Selección de Ecosistema</h2>
-            <p class="section-description">
-              En Estado de México, los clientes se organizan por ecosistemas territoriales
-            </p>
-
-            <div class="ecosystem-cards">
-              <ng-container *ngIf="!loadingEcosystems && !errorEcosystems; else ecoState">
-                <div 
-                  *ngFor="let ecosystem of availableEcosystems" 
-                  class="ecosystem-card"
-                  [class.selected]="selectedEcosystem === ecosystem.id"
-                  (click)="selectEcosystem(ecosystem.id)"
-                >
-                  <div class="ecosystem-icon">{{ ecosystem.icon }}</div>
-                  <div class="ecosystem-content">
-                    <h3>{{ ecosystem.name }}</h3>
-                    <p>{{ ecosystem.description }}</p>
-                    <div class="ecosystem-stats">
-                      <span class="stat">{{ ecosystem.activeClients }} activos</span>
-                      <span class="stat">{{ ecosystem.avgSavings }}% ahorro promedio</span>
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
-              <ng-template #ecoState>
-                <div *ngIf="loadingEcosystems" class="ecoskeletons">
-                  <div class="ecoskeleton-card" *ngFor="let s of [1,2,3]"></div>
-                </div>
-                <div *ngIf="errorEcosystems" class="ecosystem-error">
-                  <p>Ocurrió un error al cargar ecosistemas.</p>
-                  <button class="premium-button secondary" type="button" (click)="reloadEcosystems()">Reintentar</button>
-                </div>
-              </ng-template>
-            </div>
-          </div>
-
-
-          <!-- Step 4: Additional Notes -->
-          <div class="form-section" *ngIf="opportunityType && marketValue">
-            <h2>📝 Notas Adicionales</h2>
-            
-            <div class="form-group">
-              <label for="notes">Observaciones</label>
-              <textarea
-                id="notes"
-                formControlName="notes"
-                class="form-textarea"
-                rows="4"
-                placeholder="Información adicional sobre el cliente o la oportunidad..."
-              ></textarea>
-            </div>
-          </div>
-
-          <!-- Form Actions -->
-          <div class="form-actions" *ngIf="opportunityType">
-            <button 
-              type="button" 
-              class="premium-button secondary"
-              (click)="saveDraft()"
-              [disabled]="isLoading"
-            >
-              📄 Guardar Borrador
-            </button>
-            
-            <button 
-              type="submit" 
-              class="premium-button"
-              [disabled]="opportunityForm.invalid || isLoading"
-              [attr.aria-disabled]="opportunityForm.invalid || isLoading ? true : null"
-            >
-              <span *ngIf="!isLoading">
-                {{ opportunityType === 'COTIZACION' ? '💰 Continuar a Cotizador' : '🎯 Continuar a Simulador' }}
-              </span>
-              <span *ngIf="isLoading" class="loading">
-                ⏳ Procesando...
-              </span>
-            </button>
-            <span class="next-step-pill">Siguiente: {{ nextStepLabel() }}</span>
-            <span class="disabled-hint" *ngIf="opportunityForm.invalid && !isLoading">Completa los campos requeridos para continuar</span>
-          </div>
-        </form>
-
-        <!-- Helper Sidebar -->
-        <div class="helper-sidebar">
-          <div class="helper-card">
-            <h3>💡 Guía Rápida</h3>
-            
-            <div class="helper-section">
-              <h4>🎯 ¿Cuándo usar Cotizador?</h4>
-              <ul>
-                <li>Cliente con decisión de compra</li>
-                <li>Tiene claridad sobre enganche</li>
-                <li>Necesita información de pagos</li>
-              </ul>
-            </div>
-
-            <div class="helper-section">
-              <h4>📊 ¿Cuándo usar Simulador?</h4>
-              <ul>
-                <li>Cliente explora opciones</li>
-                <li>Necesita planear ahorro</li>
-                <li>Quiere ver proyecciones</li>
-              </ul>
-            </div>
-
-            <div class="helper-section">
-              <h4>🏪 Diferencias por Mercado</h4>
-              <div class="market-comparison">
-                <div class="market-item">
-                  <strong>Aguascalientes:</strong>
-                  <span>Plazos: 12-24 meses</span>
-                  <span>Enganche: 20% mín.</span>
-                </div>
-                <div class="market-item">
-                  <strong>Estado de México:</strong>
-                  <span>Plazos: 48-60 meses</span>
-                  <span>Individual: 25% mín.</span>
-                  <span>Colectivo: 15% mín.</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  styleUrl: './nueva-oportunidad.component.scss',
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, IconComponent],
+  templateUrl: './nueva-oportunidad.component.html',
+  styleUrls: ['./nueva-oportunidad.component.scss'],
 })
 export class NuevaOportunidadComponent implements OnInit, OnDestroy {
   opportunityForm!: FormGroup;
@@ -1123,11 +570,43 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
     const clientType = this.clientTypeValue;
 
     if (market === 'aguascalientes' && clientType === 'Individual') {
-      return '⚡ Configuración Rápida'; // Simplified for AGS Individual
+      return 'Configuración Rápida'; // Simplified for AGS Individual
     } else if (market === 'edomex') {
-      return '🏔️ Configuración Estado de México'; // Full config for EdoMex
+      return 'Configuración Estado de México'; // Full config for EdoMex
     } else {
-      return '📍 Configuración del Mercado'; // Default
+      return 'Configuración del Mercado'; // Default
+    }
+  }
+
+  /**
+   * Get icon for market step based on context
+   */
+  getMarketStepIcon(): IconName {
+    const market = this.marketValue;
+    const clientType = this.clientTypeValue;
+
+    if (market === 'aguascalientes' && clientType === 'Individual') {
+      return 'lightning-bolt'; // Quick setup
+    } else if (market === 'edomex') {
+      return 'globe'; // Global/regional configuration
+    } else {
+      return 'location-marker'; // Location-based setup
+    }
+  }
+
+  /**
+   * Get CSS modifier class for market step icon
+   */
+  getMarketStepIconClass(): string {
+    const market = this.marketValue;
+    const clientType = this.clientTypeValue;
+
+    if (market === 'aguascalientes' && clientType === 'Individual') {
+      return 'market-title__icon--yellow';
+    } else if (market === 'edomex') {
+      return 'market-title__icon--blue';
+    } else {
+      return 'market-title__icon--red';
     }
   }
 
@@ -1153,7 +632,7 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
         id: 'centro',
         name: 'Centro Histórico',
         description: 'Zona céntrica con alta actividad comercial',
-        icon: '🏛️',
+        icon: 'building-office',
         activeClients: 45,
         avgSavings: 85
       },
@@ -1161,7 +640,7 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
         id: 'industrial',
         name: 'Zona Industrial',
         description: 'Área industrial con empresas manufactureras',
-        icon: '🏭',
+        icon: 'building-factory',
         activeClients: 32,
         avgSavings: 78
       },
@@ -1169,7 +648,7 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
         id: 'residencial',
         name: 'Zona Residencial',
         description: 'Área residencial con familias trabajadoras',
-        icon: '🏘️',
+        icon: 'building-residential',
         activeClients: 28,
         avgSavings: 92
       }
@@ -1255,11 +734,11 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
     
     switch (status) {
       case 'completed':
-        return '✅';
+        return '';
       case 'current':
-        return step?.icon || '⏳';
+        return step?.icon || '';
       default:
-        return step?.icon || '⭕';
+        return step?.icon || '';
     }
   }
 
@@ -1600,15 +1079,15 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
     // Suggestions based on market context
     if (this.smartContext.market === 'aguascalientes') {
       this.clientSuggestions.push(
-        { name: 'María González Hernández', phone: '449-123-4567', market: 'AGS', type: '📊 Cotización recurrente' },
-        { name: 'Carlos López Torres', phone: '449-234-5678', market: 'AGS', type: '💰 Cliente premium' },
-        { name: 'Ana Patricia Morales', phone: '449-345-6789', market: 'AGS', type: '🎯 Simulación activa' }
+        { name: 'María González Hernández', phone: '449-123-4567', market: 'AGS', type: 'Cotización recurrente' },
+        { name: 'Carlos López Torres', phone: '449-234-5678', market: 'AGS', type: 'Cliente premium' },
+        { name: 'Ana Patricia Morales', phone: '449-345-6789', market: 'AGS', type: 'Simulación activa' }
       );
     } else if (this.smartContext.market === 'edomex') {
       this.clientSuggestions.push(
-        { name: 'Roberto Sánchez Martínez', phone: '55-9876-5432', market: 'EdoMex', type: '🏢 Cliente corporativo' },
-        { name: 'Laura Jiménez Ruiz', phone: '55-8765-4321', market: 'EdoMex', type: '👥 Cliente familiar' },
-        { name: 'Miguel Ángel Torres', phone: '55-7654-3210', market: 'EdoMex', type: '🚗 Renovación pendiente' }
+        { name: 'Roberto Sánchez Martínez', phone: '55-9876-5432', market: 'EdoMex', type: ' Cliente corporativo' },
+        { name: 'Laura Jiménez Ruiz', phone: '55-8765-4321', market: 'EdoMex', type: 'Cliente familiar' },
+        { name: 'Miguel Ángel Torres', phone: '55-7654-3210', market: 'EdoMex', type: ' Renovación pendiente' }
       );
     }
 
@@ -1623,7 +1102,7 @@ export class NuevaOportunidadComponent implements OnInit, OnDestroy {
     // Add generic suggestions based on typing patterns
     if (currentName.length >= 3) {
       this.clientSuggestions.unshift(
-        { name: this.formatSuggestionName(currentName), type: '✨ Completar automáticamente' }
+        { name: this.formatSuggestionName(currentName), type: 'Completar automáticamente' }
       );
     }
 

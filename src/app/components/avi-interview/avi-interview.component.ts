@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { IconComponent } from '../shared/icon/icon.component';
 import { BehaviorSubject, Subject, timer } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { switchMap, takeUntil } from 'rxjs/operators';
@@ -21,7 +22,7 @@ import { ApiConfigService } from '../../services/api-config.service';
 @Component({
   selector: 'app-avi-interview',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IconComponent],
   templateUrl: './avi-interview.component.html',
   styleUrls: ['./avi-interview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -9,6 +9,7 @@ import { DocumentRequirementsService } from '../../services/document-requirement
 import { DocumentValidationService } from '../../services/document-validation.service';
 import { OCRProgress, OCRResult, OCRService } from '../../services/ocr.service';
 import { VoiceValidationService } from '../../services/voice-validation.service';
+import { IconComponent } from './icon/icon.component';
 
 interface FlowContext {
   clientId?: string;
@@ -23,91 +24,9 @@ interface FlowContext {
 @Component({
   selector: 'app-document-upload-flow',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IconComponent],
+  templateUrl: './document-upload-flow.component.html',
   styleUrls: ['./document-upload-flow.component.scss'],
-  template: `
-    <div class="document-upload-container" *ngIf="flowContext">
-      <!-- Documentos Minimalista Card -->
-      <section class="ui-card">
-        <h2 class="text-sm font-semibold mb-3 text-slate-900 dark:text-slate-100">Documentos</h2>
-
-        <!-- Upload Form -->
-        <div class="upload-section mb-6">
-          <input
-            type="file"
-            #fileInput
-            (change)="onFileSelected($event)"
-            accept="image/*,application/pdf"
-            class="hidden"
-            id="document-upload">
-
-          <label for="document-upload"
-                 class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg cursor-pointer bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                 data-cy="document-upload">
-            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-              <svg class="w-8 h-8 mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-              </svg>
-              <p class="text-sm text-slate-600 dark:text-slate-400">Subir documento</p>
-            </div>
-          </label>
-        </div>
-
-        <!-- OCR Status -->
-        <div *ngIf="showOCRStatus" class="mb-6" data-cy="ocr-status">
-          <!-- OCR Pendiente -->
-          <div *ngIf="ocrStatus === 'processing'" class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-            <div class="animate-pulse w-2 h-2 bg-amber-500 rounded-full"></div>
-            <span data-cy="ocr-pendiente">Pendiente</span>
-          </div>
-
-          <!-- OCR Validado -->
-          <div *ngIf="ocrStatus === 'validated'" class="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400">
-            <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
-            <span data-cy="ocr-validado">Validado</span>
-          </div>
-
-          <!-- OCR Error -->
-          <div *ngIf="ocrStatus === 'error'" class="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
-            <div class="w-2 h-2 bg-red-500 rounded-full"></div>
-            <span data-cy="ocr-error">Error</span>
-          </div>
-        </div>
-
-        <!-- Loading State -->
-        <div *ngIf="isProcessingDocument" class="animate-pulse space-y-3" data-cy="documents-loading">
-          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
-          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
-        </div>
-
-        <!-- Documents Table -->
-        <div *ngIf="!isProcessingDocument && processedDocuments.length > 0" data-cy="documents-table">
-          <div class="space-y-2">
-            <div *ngFor="let doc of processedDocuments"
-                 class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-slate-200 dark:bg-slate-700 rounded flex items-center justify-center text-xs text-slate-600 dark:text-slate-400">
-                  📄
-                </div>
-                <div>
-                  <p class="text-sm font-medium text-slate-900 dark:text-slate-100">{{ doc.name }}</p>
-                  <p class="text-xs text-slate-500 dark:text-slate-400">{{ doc.type }}</p>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <span *ngIf="doc.status === 'validated'" class="text-xs text-emerald-600 dark:text-emerald-400" data-cy="doc-status">Validado</span>
-                <span *ngIf="doc.status === 'pending'" class="text-xs text-amber-600 dark:text-amber-400" data-cy="doc-status">Pendiente</span>
-                <span *ngIf="doc.status === 'error'" class="text-xs text-red-600 dark:text-red-400" data-cy="doc-status">Error</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </div>
-
-  `
 })
 export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -185,6 +104,42 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
     
     // Cleanup OCR worker
     this.ocrService.terminateWorker();
+  }
+
+  getStatusLineClasses(status: 'processing' | 'validated' | 'error'): Record<string, boolean> {
+    return {
+      'document-upload__status-line--processing': status === 'processing',
+      'document-upload__status-line--validated': status === 'validated',
+      'document-upload__status-line--error': status === 'error',
+    };
+  }
+
+  getStatusDotClasses(status: 'processing' | 'validated' | 'error'): Record<string, boolean> {
+    return {
+      'document-upload__status-dot--processing': status === 'processing',
+      'document-upload__status-dot--validated': status === 'validated',
+      'document-upload__status-dot--error': status === 'error',
+    };
+  }
+
+  getDocumentStatusClasses(status: 'validated' | 'pending' | 'error'): Record<string, boolean> {
+    return {
+      'document-upload__item-status--validated': status === 'validated',
+      'document-upload__item-status--pending': status === 'pending',
+      'document-upload__item-status--error': status === 'error',
+    };
+  }
+
+  getDocumentStatusLabel(status: 'validated' | 'pending' | 'error'): string {
+    switch (status) {
+      case 'validated':
+        return 'Validado';
+      case 'pending':
+        return 'Pendiente';
+      case 'error':
+      default:
+        return 'Error';
+    }
   }
 
   private async initializeFlow() {

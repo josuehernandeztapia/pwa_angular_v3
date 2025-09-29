@@ -30,9 +30,9 @@ for comp in "${COMPONENTS[@]}"; do
         sed '1d;$d' | \
         sed 's/^[ ]*`//g; s/`[ ]*$//g; s/^[ ]*'"'"'//g; s/'"'"'[ ]*$//g' > "$SCSS_FILE"
         
-        echo "  ✅ CSS extracted to $SCSS_FILE"
+        echo "  [SUCCESS] CSS extracted to $SCSS_FILE"
     else
-        echo "  ❌ File not found: $TS_FILE"
+        echo "  [ERROR] File not found: $TS_FILE"
     fi
 done
 

@@ -88,7 +88,7 @@ interface MunicipalityQuestions {
   resilience_questions?: RequiredQuestion[];
 }
 
-// ✅ COMPLEMENTO: Geographic Risk Scoring (20% HASE)
+//  COMPLEMENTO: Geographic Risk Scoring (20% HASE)
 interface GeographicRiskFactors {
   municipality: string;
   score: number; // 0-100 scale
@@ -99,7 +99,7 @@ interface GeographicRiskFactors {
   factors: string[];
 }
 
-// ✅ COMPLEMENTO: Advanced Voice Patterns 
+//  COMPLEMENTO: Advanced Voice Patterns 
 interface AdvancedVoicePatterns {
   nervousness: number;
   evasion: number;
@@ -112,7 +112,7 @@ interface AdvancedVoicePatterns {
   filler_words_count: number;
 }
 
-// ✅ COMPLEMENTO: HASE Scoring Components
+//  COMPLEMENTO: HASE Scoring Components
 interface HASEScoring {
   historical_gnv: number;     // 30%
   geographic_risk: number;    // 20% 
@@ -334,7 +334,7 @@ export class VoiceValidationService {
   private isRecording$ = new BehaviorSubject<boolean>(false);
   private recordingError$ = new Subject<string>();
   
-  // ✅ NUEVO: Voice evaluation storage
+  //  NUEVO: Voice evaluation storage
   private voiceEvaluations: VoiceEvaluationStore[] = [];
   private requestIdCounter = 0;
   private readonly logPrefix = '[VoiceValidationService]';
@@ -889,11 +889,11 @@ export class VoiceValidationService {
 
   getRiskFlagIcon(flag: RiskFlag): string {
     switch (flag.severity) {
-      case 'critical': return '🚨';
-      case 'high': return '⚠️';
-      case 'medium': return '⚡';
-      case 'low': return 'ℹ️';
-      default: return '🔍';
+      case 'critical': return 'CRITICAL';
+      case 'high': return 'HIGH';
+      case 'medium': return 'MEDIUM';
+      case 'low': return 'LOW';
+      default: return 'UNKNOWN';
     }
   }
 
@@ -904,7 +904,7 @@ export class VoiceValidationService {
     return '#ef4444'; // Red
   }
 
-  // ✅ COMPLEMENTO: Geographic Risk Scoring (EDOMEX)
+  //  COMPLEMENTO: Geographic Risk Scoring (EDOMEX)
   private readonly EDOMEX_GEOGRAPHIC_SCORING: Record<string, GeographicRiskFactors> = {
     // ALTÍSIMO RIESGO (0-25 pts)
     'ecatepec_morelos': {
@@ -1210,7 +1210,7 @@ export class VoiceValidationService {
     LOGGING_ENABLED: true
   };
 
-  // ✅ COMPLEMENTO: Tu Cuestionario de Resiliencia (12 preguntas) - LEGACY SUPPORT
+  //  COMPLEMENTO: Tu Cuestionario de Resiliencia (12 preguntas) - LEGACY SUPPORT
   private readonly RESILIENCE_QUESTIONS_CORE: RequiredQuestion[] = [
     {
       id: 'seasonal_vulnerability',
@@ -1334,7 +1334,7 @@ export class VoiceValidationService {
     }
   ];
 
-  // ✅ COMPLEMENTO: Nuevas Preguntas Adicionales
+  //  COMPLEMENTO: Nuevas Preguntas Adicionales
   private readonly ADDITIONAL_RESILIENCE_QUESTIONS: RequiredQuestion[] = [
     {
       id: 'route_blockade_response',
@@ -1368,7 +1368,7 @@ export class VoiceValidationService {
     }
   ];
 
-  // ✅ COMPLEMENTO: Geographic Risk Calculation
+  //  COMPLEMENTO: Geographic Risk Calculation
   calculateGeographicRisk(municipality: string): number {
     const municipalityKey = municipality.toLowerCase().replace(/\s+/g, '_');
     const riskData = this.EDOMEX_GEOGRAPHIC_SCORING[municipalityKey];
@@ -1382,7 +1382,7 @@ export class VoiceValidationService {
     return riskData.score / 100;
   }
 
-  // ✅ COMPLEMENTO: HASE Score Integration (30-20-50)
+  //  COMPLEMENTO: HASE Score Integration (30-20-50)
   calculateHASEScore(
     historicalGNV: number = 0.5,  // From backend
     municipality: string,
@@ -1423,7 +1423,7 @@ export class VoiceValidationService {
     };
   }
 
-  // ✅ COMPLEMENTO: Resilience Score Calculation
+  //  COMPLEMENTO: Resilience Score Calculation
   private calculateResilienceScore(responses: any[]): number {
     const maxScore = 78; // Total weight from 12 questions
     let totalScore = 0;
@@ -1440,7 +1440,7 @@ export class VoiceValidationService {
     return Math.min(totalScore / maxScore, 1.0);
   }
 
-  // ✅ COMPLEMENTO: Voice Score Calculation  
+  //  COMPLEMENTO: Voice Score Calculation  
   private calculateVoiceScore(voiceAnalysis: any): number {
     if (!voiceAnalysis) return 0.5;
     
@@ -1451,7 +1451,7 @@ export class VoiceValidationService {
     return Math.max(0, honestyScore - nervousnessPenalty - evasionPenalty);
   }
 
-  // ✅ COMPLEMENTO: Red Flags Detection
+  //  COMPLEMENTO: Red Flags Detection
   private hasNoMajorRedFlags(voiceAnalysis: any): boolean {
     if (!voiceAnalysis) return true;
     
@@ -1459,7 +1459,7 @@ export class VoiceValidationService {
            (voiceAnalysis.evasion || 0) < 0.6;
   }
 
-  // ✅ COMPLEMENTO: Vulnerability Indicators
+  //  COMPLEMENTO: Vulnerability Indicators
   private hasVulnerabilityIndicators(responses: any[]): boolean {
     const vulnerabilityQuestions = ['seasonal_vulnerability', 'cost_crisis_adjustment', 'health_contingency'];
     
@@ -1834,7 +1834,7 @@ export class VoiceValidationService {
     };
   }
 
-  // ✅ EXISTING: Core Voice Evaluation Method (now using BFF)
+  //  EXISTING: Core Voice Evaluation Method (now using BFF)
   async evaluateAudio(
     audioBlob: Blob, 
     questionId: string, 
@@ -1868,7 +1868,7 @@ export class VoiceValidationService {
       // Convert BFF response to VoiceEvaluationResult format
       const response = this.convertBFFToVoiceEvaluationResult(bffResponse, questionId);
       
-      // ✅ Store result locally
+      //  Store result locally
       this.storeVoiceEvaluationResult(response);
       
       this.logInfo('Voice evaluation completed', {
@@ -1882,7 +1882,7 @@ export class VoiceValidationService {
     } catch (error) {
       this.logError('Voice evaluation pipeline failed, invoking heuristic fallback', error);
       
-      // ✅ FALLBACK: Apply heuristic analysis + mark as REVIEW
+      //  FALLBACK: Apply heuristic analysis + mark as REVIEW
       const fallbackResult = this.applyHeuristicFallback(audioBlob, questionId);
       this.storeVoiceEvaluationResult(fallbackResult);
       
@@ -1915,7 +1915,7 @@ export class VoiceValidationService {
     };
   }
 
-  // ✅ NUEVO: Heuristic Fallback Implementation
+  //  NUEVO: Heuristic Fallback Implementation
   private applyHeuristicFallback(audioBlob: Blob, questionId: string): VoiceEvaluationResult {
     this.logWarn('Applying heuristic fallback scoring', {
       questionId,
@@ -1963,7 +1963,7 @@ export class VoiceValidationService {
     };
   }
 
-  // ✅ NUEVO: Store Voice Evaluation locally
+  //  NUEVO: Store Voice Evaluation locally
   private storeVoiceEvaluationResult(evaluation: VoiceEvaluationResult): void {
     // Remove any existing evaluation for this question (allow re-evaluation)
     this.voiceEvaluations = this.voiceEvaluations.filter(
@@ -1987,7 +1987,7 @@ export class VoiceValidationService {
     });
   }
 
-  // ✅ NUEVO: Generate unique request ID
+  //  NUEVO: Generate unique request ID
   private generateRequestId(): string {
     this.requestIdCounter++;
     const timestamp = Date.now();
@@ -2005,7 +2005,7 @@ export class VoiceValidationService {
     return this.http.post<any>(`${environment.apiUrl}/v1/voice/evaluate`, form, { headers });
   }
 
-  // ✅ NUEVO: Aggregate Resilience Scoring
+  //  NUEVO: Aggregate Resilience Scoring
   aggregateResilience(): ResilienceSummary {
     this.logDebug('Aggregating resilience metrics', {
       evaluationCount: this.voiceEvaluations.length
@@ -2094,7 +2094,7 @@ export class VoiceValidationService {
     return summary;
   }
 
-  // ✅ NUEVO: Determine Final Decision Logic
+  //  NUEVO: Determine Final Decision Logic
   private determineFinalDecision(
     voiceScore: number, 
     reviewCount: number, 
@@ -2128,7 +2128,7 @@ export class VoiceValidationService {
     return 'REVIEW';
   }
 
-  // ✅ NUEVO: Find question by ID helper
+  //  NUEVO: Find question by ID helper
   private findQuestionById(questionId: string): RequiredQuestion | undefined {
     // Search in all question pools
     const allQuestions = [
@@ -2141,12 +2141,12 @@ export class VoiceValidationService {
     return allQuestions.find(q => q.id === questionId);
   }
 
-  // ✅ NUEVO: Get Voice Evaluations (public accessor)
+  //  NUEVO: Get Voice Evaluations (public accessor)
   getVoiceEvaluations(): VoiceEvaluationStore[] {
     return [...this.voiceEvaluations]; // Return copy to prevent external mutation
   }
 
-  // ✅ NUEVO: Clear Voice Evaluations (for new sessions)
+  //  NUEVO: Clear Voice Evaluations (for new sessions)
   clearVoiceEvaluations(): void {
     this.logDebug('Clearing stored voice evaluations');
     this.voiceEvaluations = [];
@@ -2163,12 +2163,12 @@ export class VoiceValidationService {
     return phrases[Math.floor(Math.random() * phrases.length)];
   }
 
-  // ✅ NUEVO: Get Voice Evaluation by Question ID
+  //  NUEVO: Get Voice Evaluation by Question ID
   getVoiceEvaluationByQuestion(questionId: string): VoiceEvaluationStore | undefined {
     return this.voiceEvaluations.find(evaluation => evaluation.questionId === questionId);
   }
 
-  // ✅ NUEVO: Check if question has been evaluated
+  //  NUEVO: Check if question has been evaluated
   hasVoiceEvaluation(questionId: string): boolean {
     return this.voiceEvaluations.some(evaluation => evaluation.questionId === questionId);
   }

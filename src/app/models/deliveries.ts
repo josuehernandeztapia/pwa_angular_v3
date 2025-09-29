@@ -180,84 +180,84 @@ export const DELIVERY_STATUS_DESCRIPTIONS: Record<DeliveryStatus, {
   title: string;
   description: string;
   color: string;
-  icon: string;
+  iconType: string;
   clientFriendly: string; // Simplified version for clients
 }> = {
   PO_ISSUED: {
     title: 'Orden Emitida',
     description: 'Orden de compra enviada a fábrica',
-    color: '#6b7280',
-    icon: '📋',
+    color: 'var(--color-text-muted, #737373)',
+    iconType: 'clipboard-list',
     clientFriendly: 'Procesando pedido'
   },
   IN_PRODUCTION: {
     title: 'En Producción',
     description: 'Vagoneta siendo fabricada en China',
-    color: '#f59e0b',
-    icon: '🏭',
+    color: 'var(--color-text-muted, #737373)',
+    iconType: 'factory',
     clientFriendly: 'En producción'
   },
   READY_AT_FACTORY: {
     title: 'Lista en Fábrica',
     description: 'Producción completa, lista para envío',
-    color: '#10b981',
-    icon: '✅',
+    color: 'var(--color-text-muted, #737373)',
+    iconType: 'check-circle',
     clientFriendly: 'En producción'
   },
   AT_ORIGIN_PORT: {
     title: 'En Puerto Origen',
     description: 'En puerto de China para embarque',
-    color: '#3b82f6',
-    icon: '🚢',
+    color: 'var(--color-text-muted, #737373)',
+    iconType: 'ship',
     clientFriendly: 'En camino'
   },
   ON_VESSEL: {
     title: 'En Tránsito Marítimo',
     description: 'Navegando hacia México',
-    color: '#0891b2',
-    icon: '🌊',
+    color: 'var(--color-text-muted, #737373)',
+    iconType: 'waves',
     clientFriendly: 'En camino'
   },
   AT_DEST_PORT: {
     title: 'En Puerto Destino',
     description: 'Arribó a puerto mexicano',
-    color: '#8b5cf6',
-    icon: '🏗️',
+    color: 'var(--color-text-muted, #737373)',
+    iconType: 'building-construction',
     clientFriendly: 'En camino'
   },
   IN_CUSTOMS: {
     title: 'En Aduanas',
     description: 'Proceso de liberación aduanal',
-    color: '#f59e0b',
-    icon: '📄',
+    color: 'var(--color-text-muted, #737373)',
+    iconType: 'document-text',
     clientFriendly: 'En camino'
   },
   RELEASED: {
     title: 'Liberado',
     description: 'Liberado de aduanas, en transporte local',
-    color: '#10b981',
-    icon: '🚛',
+    color: 'var(--color-text-muted, #737373)',
+    iconType: 'truck',
     clientFriendly: 'En camino'
   },
   AT_WH: {
     title: 'En Bodega',
     description: 'En bodega local, preparando entrega',
-    color: '#06d6a0',
-    icon: '🏪',
+    color: 'var(--color-text-muted, #737373)',
+    iconType: 'store',
     clientFriendly: 'Lista para entrega'
   },
   READY_FOR_HANDOVER: {
     title: 'Lista para Entrega',
     description: 'Lista para coordinar entrega con cliente',
-    color: '#059669',
-    icon: '🎯',
+    color: 'var(--color-text-muted, #737373)',
+    iconType: 'target',
     clientFriendly: 'Lista para entrega'
   },
   DELIVERED: {
     title: 'Entregada',
     description: 'Entregada exitosamente al cliente',
-    color: '#065f46',
-    icon: '🎉',
+    color: 'var(--color-text-muted, #737373)',
+    iconType: 'celebration',
     clientFriendly: 'Entregada'
   }
 };
@@ -266,62 +266,62 @@ export const DELIVERY_STATUS_DESCRIPTIONS: Record<DeliveryStatus, {
 export const DELIVERY_EVENT_DESCRIPTIONS: Record<DeliveryEvent, {
   title: string;
   description: string;
-  icon: string;
+  iconType: string;
 }> = {
   ISSUE_PO: {
     title: 'Orden Emitida',
     description: 'Orden de compra enviada a proveedor',
-    icon: '📋'
+    iconType: 'clipboard-list'
   },
   START_PROD: {
     title: 'Inicio de Producción',
     description: 'Comenzó el proceso de fabricación',
-    icon: '🏭'
+    iconType: 'factory'
   },
   FACTORY_READY: {
     title: 'Lista en Fábrica',
     description: 'Producción completada exitosamente',
-    icon: '✅'
+    iconType: 'check-circle'
   },
   LOAD_ORIGIN: {
     title: 'Carga en Puerto',
     description: 'Cargada en contenedor para embarque',
-    icon: '📦'
+    iconType: 'package'
   },
   DEPART_VESSEL: {
     title: 'Embarcación Zarpó',
     description: 'Inició tránsito marítimo hacia México',
-    icon: '🚢'
+    iconType: 'ship'
   },
   ARRIVE_DEST: {
     title: 'Arribó a México',
     description: 'Llegó al puerto de destino',
-    icon: '🏗️'
+    iconType: 'building-construction'
   },
   CUSTOMS_CLEAR: {
     title: 'En Proceso Aduanal',
     description: 'Iniciado proceso de liberación',
-    icon: '📄'
+    iconType: 'document-text'
   },
   RELEASE: {
     title: 'Liberación Aduanal',
     description: 'Liberada de aduanas exitosamente',
-    icon: '🔓'
+    iconType: 'lock-open'
   },
   ARRIVE_WH: {
     title: 'Llegó a Bodega',
     description: 'Arribó a bodega local',
-    icon: '🏪'
+    iconType: 'store'
   },
   SCHEDULE_HANDOVER: {
     title: 'Agendando Entrega',
     description: 'Coordinando entrega con cliente',
-    icon: '📅'
+    iconType: 'calendar'
   },
   CONFIRM_DELIVERY: {
     title: 'Entrega Confirmada',
     description: 'Cliente confirmó recepción',
-    icon: '🎉'
+    iconType: 'celebration'
   }
 };
 

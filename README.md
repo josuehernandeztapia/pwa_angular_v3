@@ -1,4 +1,4 @@
-# 🚗 Conductores PWA – Angular 17+
+# [CAR] Conductores PWA – Angular 17+
 
 ![Coverage](reports/quality/coverage-badge.svg)
 ![Tests](reports/quality/tests-badge.svg)
@@ -11,7 +11,7 @@ Construida con **Angular 17+** y un stack de calidad enterprise.
 
 ---
 
-## ⚙️ Instalación rápida
+## [TOOLS] Instalación rápida
 
 ```bash
 # Instalar dependencias
@@ -27,7 +27,7 @@ ng serve
 
 ---
 
-## 🏭 Build & Deploy
+## [FACTORY] Build & Deploy
 
 ```bash
 # Build optimizado de producción

@@ -520,7 +520,7 @@ class AVIValidationRunner {
     let totalTests = Object.keys(results).length;
     
     Object.entries(results).forEach(([test, passed]) => {
-      const icon = passed ? '✅' : '❌';
+      const icon = passed ? '' : '';
       const status = passed ? 'PASÓ' : 'FALLÓ';
       if (passed) passedTests++;
     });

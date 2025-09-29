@@ -9,11 +9,12 @@ import { Market } from '../../../models/types';
 import { ProtectionScenario } from '../../../models/protection';
 import { calculateIRR, calculateModifiedPayment, IRRResult } from '../../../utils/irr-calculator';
 import { environment } from '../../../../environments/environment';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-proteccion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './proteccion.component.scss',
   templateUrl: './proteccion.component.html'

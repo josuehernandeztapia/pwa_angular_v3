@@ -274,7 +274,7 @@ export class AVIAlignmentValidator {
     const thresholdPercentage = ((thresholdAlignment / totalTests) * 100).toFixed(1);
 
 
-    const status = identicalResults >= totalTests * 0.95 ? '✅ ALIGNED' : '❌ MISALIGNED';
+    const status = identicalResults >= totalTests * 0.95 ? ' ALIGNED' : ' MISALIGNED';
 
     return {
       totalTests,

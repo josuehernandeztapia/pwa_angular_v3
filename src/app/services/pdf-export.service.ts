@@ -333,7 +333,7 @@ export class PdfExportService {
       doc.text('CONDUCTORES DEL MUNDO', 105, yPos, { align: 'center' });
       yPos += 5;
       doc.setTextColor(0, 0, 0);
-      doc.text('📞 01-800-CONDUCE | 📧 info@conductores.com', 105, yPos, { align: 'center' });
+      doc.text(' 01-800-CONDUCE |  info@conductores.com', 105, yPos, { align: 'center' });
       
       // Footer
       doc.setFontSize(8);
@@ -425,10 +425,10 @@ export class PdfExportService {
       doc.setFontSize(11);
       doc.setTextColor(0, 0, 0);
       const rows = [
-        ['🧾 Factura', data.docs.factura ? '✓ Entregada' : '✗ Pendiente'],
-        ['🛡️ Póliza', data.docs.poliza ? '✓ Entregada' : '✗ Pendiente'],
-        ['📜 Contratos', `${data.docs.contratos} archivo(s)`],
-        ['📃 Endosos', `${data.docs.endosos} archivo(s)`]
+        ['Factura', data.docs.factura ? 'Entregada' : 'Pendiente'],
+        [' Póliza', data.docs.poliza ? 'Entregada' : 'Pendiente'],
+        ['Contratos', `${data.docs.contratos} archivo(s)`],
+        ['Endosos', `${data.docs.endosos} archivo(s)`]
       ];
       rows.forEach(r => { doc.text(`${r[0]}: ${r[1]}`, 24, y); y += 7; });
 
@@ -471,7 +471,7 @@ export class PdfExportService {
       y += 6;
       doc.setFontSize(14); doc.setTextColor(45, 55, 72);
       doc.text('Hitos', 20, y); y += 8; doc.setFontSize(11); doc.setTextColor(0,0,0);
-      const steps = ['📋 Pedido', '🏭 Producción', '🚢 En camino', '🏪 Lista para entrega', '🎉 Entregada'];
+      const steps = ['Pedido', 'Producción', 'En camino', 'Lista para entrega', 'Entregada'];
       steps.forEach((s, i) => { doc.text(`${i+1}. ${s}`, 24, y); y += 6; });
 
       doc.setFontSize(8);
@@ -905,27 +905,27 @@ export class PdfExportService {
         switch(reportType) {
           case 'simulaciones':
             title = 'Reporte de Simulaciones';
-            icon = '📊';
+            icon = '';
             break;
           case 'cotizaciones':
             title = 'Reporte de Cotizaciones';
-            icon = '💼';
+            icon = '';
             break;
           case 'clientes':
             title = 'Reporte de Clientes';
-            icon = '👥';
+            icon = 'Grupo';
             break;
           case 'financiero':
             title = 'Análisis Financiero';
-            icon = '📈';
+            icon = '';
             break;
           case 'proteccion':
             title = 'Reporte de Protección';
-            icon = '🛡️';
+            icon = '';
             break;
           default:
             title = 'Reporte General';
-            icon = '📄';
+            icon = '';
         }
         
         doc.text(`${icon} ${title}`, pageWidth / 2, 20, { align: 'center' });
@@ -943,7 +943,7 @@ export class PdfExportService {
         const pageHeight = doc.internal.pageSize.height;
         doc.setFontSize(8);
         doc.setFont('helvetica', 'italic');
-        doc.text('🤖 Generado con Claude Code', pageWidth / 2, pageHeight - 10, { align: 'center' });
+        doc.text('Generado con Claude Code', pageWidth / 2, pageHeight - 10, { align: 'center' });
         
         const pdfBlob = doc.output('blob');
         
@@ -969,7 +969,7 @@ export class PdfExportService {
     
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text('📊 RESUMEN EJECUTIVO', 20, yPos);
+    doc.text(' RESUMEN EJECUTIVO', 20, yPos);
     yPos += 15;
     
     doc.setFontSize(10);
@@ -1021,7 +1021,7 @@ export class PdfExportService {
         
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
-        doc.text('🎯 RECOMENDACIONES', 20, yPos);
+        doc.text(' RECOMENDACIONES', 20, yPos);
         yPos += 10;
         
         doc.setFontSize(9);

@@ -140,19 +140,19 @@
   align-items: flex-end;
 }
 
-.score-excellent {
+.metric-value--excellent {
   color: var(--accent-green-600);
 }
 
-.score-good {
+.metric-value--good {
   color: var(--accent-amber-600);
 }
 
-.score-poor {
+.metric-value--poor {
   color: var(--accent-red-600);
 }
 
-.score-neutral {
+.metric-value--neutral {
   color: var(--color-text-secondary);
 }
 

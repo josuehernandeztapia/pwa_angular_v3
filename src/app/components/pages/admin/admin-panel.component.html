@@ -1,106 +1,161 @@
 <!-- Skip Link for Accessibility -->
 <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
 
-<div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-  <!-- Header -->
-  <header class="bg-surface border-b border-border px-4 sm:px-6 py-4">
-    <div class="flex items-center justify-between">
-      <div class="flex-1 min-w-0">
-        <h1 class="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-1 truncate">
-          Panel de Administración
-        </h1>
-        <p class="text-sm text-slate-600 dark:text-slate-400 truncate">
-          Gestión de usuarios y configuración del sistema
-        </p>
+<div class="admin-shell">
+  <header class="admin-header">
+    <div class="admin-header__content">
+      <div class="admin-header__info">
+        <h1 class="admin-title">Panel de Administración</h1>
+        <p class="admin-subtitle">Gestión de usuarios y configuración del sistema</p>
       </div>
+      <button class="btn btn-primary admin-header__action" type="button" (click)="openCreate()" data-cy="admin-create-user">
+        + Nuevo Usuario
+      </button>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main id="main-content" class="max-w-6xl mx-auto p-6 space-y-6">
+  <main id="main-content" class="admin-main">
     <!-- Users Management -->
-    <section class="ui-card">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-          Usuarios del Sistema
-        </h2>
-        <button class="ui-btn ui-btn-primary" data-cy="add-user">
-          Agregar Usuario
-        </button>
+    <section class="card admin-section">
+      <div class="admin-section__header">
+        <div>
+          <h2 class="section-title">Usuarios del Sistema</h2>
+          <p class="section-subtitle">Controla los roles y el estado operativo de cada usuario</p>
+        </div>
       </div>
 
-      <!-- Users List -->
-      <div class="space-y-4" data-cy="users-list">
-        <div *ngFor="let user of users(); trackBy: trackByUser" class="border border-slate-200 dark:border-slate-700 rounded-lg p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-              <div class="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center">
-                <span class="text-sm font-medium text-slate-600 dark:text-slate-400">
-                  {{ getUserInitials(user.name) }}
+      <div class="admin-table" role="region" aria-live="polite">
+        <table class="admin-table__grid">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Rol</th>
+              <th scope="col">Estado</th>
+              <th scope="col" class="admin-table__actions-header">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let usuario of usuarios; trackBy: trackByUsuario">
+              <td>
+                <div class="admin-user">
+                  <div class="admin-user__avatar" aria-hidden="true">{{ getInitials(usuario.nombre) }}</div>
+                  <div class="admin-user__meta">
+                    <span class="admin-user__name">{{ usuario.nombre }}</span>
+                    <span class="admin-user__email">{{ usuario.email }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="admin-table__email">{{ usuario.email }}</td>
+              <td>
+                <label class="visually-hidden" [attr.for]="'rol-' + usuario.id">Cambiar rol</label>
+                <select
+                  class="input input-sm admin-select"
+                  [id]="'rol-' + usuario.id"
+                  [(ngModel)]="usuario.rol"
+                  (ngModelChange)="onEdit(usuario)"
+                >
+                  <option value="admin">Admin</option>
+                  <option value="asesor">Asesor</option>
+                  <option value="operaciones">Operaciones</option>
+                  <option value="soporte">Soporte</option>
+                </select>
+              </td>
+              <td>
+                <span class="admin-status" [ngClass]="usuario.activo ? 'admin-status--active' : 'admin-status--blocked'">
+                  {{ usuario.activo ? 'Activo' : 'Bloqueado' }}
                 </span>
-              </div>
-              <div>
-                <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">{{ user.name }}</h3>
-                <p class="text-xs text-slate-600 dark:text-slate-400">{{ user.email }}</p>
-              </div>
-            </div>
-            <div class="flex items-center space-x-2">
-              <span class="px-2 py-1 text-xs rounded-full"
-                    [ngClass]="{
-                      'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400': user.status === 'active',
-                      'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400': user.status === 'pending',
-                      'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400': user.status === 'inactive'
-                    }">
-                {{ getStatusText(user.status) }}
-              </span>
-              <button class="ui-btn ui-btn-secondary text-xs" [attr.data-cy]="'edit-user-' + user.id">
-                ✏️ Editar
-              </button>
-            </div>
-          </div>
-        </div>
+              </td>
+              <td class="admin-table__actions">
+                <button
+                  class="btn btn-secondary btn-sm"
+                  type="button"
+                  (click)="toggle(usuario)"
+                  [attr.aria-label]="usuario.activo ? 'Bloquear ' + usuario.nombre : 'Desbloquear ' + usuario.nombre"
+                >
+                  {{ usuario.activo ? 'Bloquear' : 'Desbloquear' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
     <!-- System Configuration -->
-    <section class="ui-card">
-      <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">
-        Configuración del Sistema
-      </h2>
-
-      <div class="grid md:grid-cols-2 gap-6">
+    <section class="card admin-section">
+      <div class="admin-section__header">
         <div>
-          <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">
-            Configuración General
-          </h3>
-          <div class="space-y-3">
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-slate-600 dark:text-slate-400">Mantenimiento</span>
-              <input type="checkbox" class="rounded">
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-slate-600 dark:text-slate-400">Logs de Debug</span>
-              <input type="checkbox" class="rounded">
-            </div>
-          </div>
+          <h2 class="section-title">Configuración del Sistema</h2>
+          <p class="section-subtitle">Preferencias globales para el entorno operativo</p>
+        </div>
+      </div>
+
+      <div class="admin-config">
+        <div class="admin-config__column">
+          <h3 class="config-heading">Configuración General</h3>
+          <ul class="config-list">
+            <li class="config-item">
+              <span>Mantenimiento</span>
+              <label class="toggle">
+                <input type="checkbox" class="toggle__control">
+                <span class="toggle__visual" aria-hidden="true"></span>
+              </label>
+            </li>
+            <li class="config-item">
+              <span>Logs de debug</span>
+              <label class="toggle">
+                <input type="checkbox" class="toggle__control">
+                <span class="toggle__visual" aria-hidden="true"></span>
+              </label>
+            </li>
+          </ul>
         </div>
 
-        <div>
-          <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">
-            Límites del Sistema
-          </h3>
-          <div class="space-y-3">
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-slate-600 dark:text-slate-400">Max usuarios</span>
-              <input type="number" value="50" class="w-20 px-2 py-1 text-xs border rounded">
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-slate-600 dark:text-slate-400">Timeout (seg)</span>
-              <input type="number" value="30" class="w-20 px-2 py-1 text-xs border rounded">
-            </div>
-          </div>
+        <div class="admin-config__column">
+          <h3 class="config-heading">Límites del Sistema</h3>
+          <ul class="config-list">
+            <li class="config-item config-item--input">
+              <label for="max-users">Max usuarios</label>
+              <input id="max-users" type="number" value="50" class="input input-sm admin-number">
+            </li>
+            <li class="config-item config-item--input">
+              <label for="timeout">Timeout (seg)</label>
+              <input id="timeout" type="number" value="30" class="input input-sm admin-number">
+            </li>
+          </ul>
         </div>
       </div>
     </section>
   </main>
+</div>
+
+<!-- Modal -->
+<div class="admin-modal" *ngIf="showModal" (click)="closeModal()" role="presentation">
+  <div class="admin-modal__panel" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title" (click)="$event.stopPropagation()">
+    <h3 class="admin-modal__title" id="admin-modal-title">{{ editing ? 'Editar Usuario' : 'Crear Usuario' }}</h3>
+    <form class="admin-form" (ngSubmit)="save()">
+      <label class="admin-form__field">
+        <span class="admin-form__label">Nombre</span>
+        <input [(ngModel)]="form.nombre" name="nombre" required class="input" />
+      </label>
+      <label class="admin-form__field">
+        <span class="admin-form__label">Email</span>
+        <input [(ngModel)]="form.email" name="email" type="email" required class="input" />
+      </label>
+      <label class="admin-form__field">
+        <span class="admin-form__label">Rol</span>
+        <select [(ngModel)]="form.rol" name="rol" required class="input">
+          <option value="admin">Admin</option>
+          <option value="asesor">Asesor</option>
+          <option value="operaciones">Operaciones</option>
+          <option value="soporte">Soporte</option>
+        </select>
+      </label>
+      <div class="admin-form__actions">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div>
 </div>

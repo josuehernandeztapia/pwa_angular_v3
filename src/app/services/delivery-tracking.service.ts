@@ -89,7 +89,7 @@ export class DeliveryTrackingService {
   }
 
   /**
-   * 📦 Create new delivery commitment with persistent ETA
+   * [PACKAGE] Create new delivery commitment with persistent ETA
    */
   createDeliveryCommitment(commitment: Omit<DeliveryCommitment, 'id' | 'trackingCode' | 'createdAt' | 'updatedAt'>): Observable<DeliveryCommitment> {
     const newCommitment: DeliveryCommitment = {
@@ -152,7 +152,7 @@ export class DeliveryTrackingService {
   }
 
   /**
-   * 📋 Get delivery commitments with filtering
+   *  Get delivery commitments with filtering
    */
   getDeliveryCommitments(filters?: {
     status?: DeliveryCommitment['status'];
@@ -183,7 +183,7 @@ export class DeliveryTrackingService {
   }
 
   /**
-   * 🔍 Track delivery by tracking code
+   *  Track delivery by tracking code
    */
   trackDelivery(trackingCode: string): Observable<{
     commitment: DeliveryCommitment | null;
@@ -212,7 +212,7 @@ export class DeliveryTrackingService {
   }
 
   /**
-   * 📊 Get delivery metrics and performance
+   *  Get delivery metrics and performance
    */
   getDeliveryMetrics(dateRange?: { start: string; end: string }): Observable<DeliveryMetrics> {
     return this.getDeliveryCommitments({ dateRange }).pipe(
@@ -260,7 +260,7 @@ export class DeliveryTrackingService {
   }
 
   /**
-   * 🔄 Start ETA monitoring with persistence
+   *  Start ETA monitoring with persistence
    */
   private startETAMonitoring(): void {
     this.isTracking.set(true);

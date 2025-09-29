@@ -69,6 +69,14 @@ export interface ProductPackage {
     clientTypeRestrictions?: ClientType[];
     minimumIncome?: number;
     maximumFinanceAmount?: number;
+    // Additional properties for productos-catalog component
+    market?: string;
+    type?: string;
+    businessFlow?: string;
+    basePrice?: number;
+    features?: string[];
+    minDownPayment?: number;
+    isPopular?: boolean;
 }
 
 // Senior executive summary for business scenarios

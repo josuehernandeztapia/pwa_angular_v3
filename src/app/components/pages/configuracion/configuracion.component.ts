@@ -1,7 +1,6 @@
-import { Component, OnInit, signal, computed, inject } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 
 interface ConfigurationState {
   mode: 'cotizador' | 'simulador';
@@ -12,7 +11,7 @@ interface ConfigurationState {
   mercado: 'nacional' | 'internacional' | 'premium';
   selectedPackage: 'basico' | 'premium' | 'colectivo' | null;
   isCalculating: boolean;
-  errors: { [key: string]: string };
+  errors: Record<string, string>;
 }
 
 interface ProductPackage {
@@ -36,174 +35,10 @@ interface FinancialResult {
   selector: 'app-configuracion',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  template: `
-    <section class="ui-card">
-      <h2 class="text-sm font-semibold mb-6 text-slate-900 dark:text-slate-100">Configuración de Flujos y Productos</h2>
-
-      <!-- Dual Mode Selector -->
-      <div class="mb-6">
-        <div class="mode-selector" data-cy="config-mode-toggle">
-          <button
-            class="mode-btn"
-            [class.active]="config().mode === 'cotizador'"
-            (click)="setMode('cotizador')"
-          >
-            Cotizador
-          </button>
-          <button
-            class="mode-btn"
-            [class.active]="config().mode === 'simulador'"
-            (click)="setMode('simulador')"
-          >
-            Simulador
-          </button>
-        </div>
-      </div>
-
-      <!-- Configuration Panel -->
-      <div class="grid grid-cols-2 gap-4 mb-6">
-        <!-- Precio -->
-        <div class="config-field">
-          <label class="field-label">Precio</label>
-          <input
-            type="number"
-            class="field-input"
-            data-cy="config-precio"
-            [value]="config().precio"
-            (input)="updateConfig('precio', $event)"
-            placeholder="$0"
-          >
-          <div *ngIf="config().errors['precio']" class="field-error">
-            {{ config().errors['precio'] }}
-          </div>
-        </div>
-
-        <!-- Enganche -->
-        <div class="config-field">
-          <label class="field-label">% Enganche</label>
-          <input
-            type="number"
-            class="field-input"
-            data-cy="config-eng"
-            [value]="config().enganche"
-            (input)="updateConfig('enganche', $event)"
-            placeholder="20"
-            min="0"
-            max="100"
-          >
-          <div *ngIf="config().errors['enganche']" class="field-error">
-            {{ config().errors['enganche'] }}
-          </div>
-        </div>
-
-        <!-- Plazo -->
-        <div class="config-field">
-          <label class="field-label">Plazo (meses)</label>
-          <select
-            class="field-select"
-            data-cy="config-plazo"
-            [value]="config().plazo"
-            (change)="updateConfigFromSelect('plazo', $event)"
-          >
-            <option value="12">12 meses</option>
-            <option value="24">24 meses</option>
-            <option value="36">36 meses</option>
-            <option value="48">48 meses</option>
-            <option value="60">60 meses</option>
-          </select>
-        </div>
-
-        <!-- Tipo Cliente -->
-        <div class="config-field">
-          <label class="field-label">Tipo de Cliente</label>
-          <select
-            class="field-select"
-            data-cy="config-cliente"
-            [value]="config().tipoCliente"
-            (change)="updateConfigFromSelect('tipoCliente', $event)"
-          >
-            <option value="nuevo">Nuevo</option>
-            <option value="existente">Existente</option>
-            <option value="vip">VIP</option>
-          </select>
-        </div>
-
-        <!-- Mercado -->
-        <div class="config-field col-span-2">
-          <label class="field-label">Mercado</label>
-          <select
-            class="field-select"
-            data-cy="config-mercado"
-            [value]="config().mercado"
-            (change)="updateConfigFromSelect('mercado', $event)"
-          >
-            <option value="nacional">Nacional</option>
-            <option value="internacional">Internacional</option>
-            <option value="premium">Premium</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Product Packages -->
-      <div class="mb-6">
-        <h3 class="text-sm font-medium mb-3 text-slate-900 dark:text-slate-100">Paquetes de Productos</h3>
-        <div class="grid grid-cols-3 gap-3">
-          <div
-            *ngFor="let pkg of productPackages"
-            class="product-package"
-            [class.selected]="config().selectedPackage === pkg.id"
-            [class.recommended]="pkg.recommended"
-            (click)="selectPackage(pkg.id)"
-            data-cy="product-package"
-          >
-            <div class="package-header">
-              <div class="package-icon">{{ pkg.icon }}</div>
-              <div class="package-info">
-                <div class="package-name">{{ pkg.name }}</div>
-                <div class="package-price">{{ '$' + pkg.price }}</div>
-              </div>
-            </div>
-            <div class="package-description">{{ pkg.description }}</div>
-            <ul class="package-features">
-              <li *ngFor="let feature of pkg.features">{{ feature }}</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- Financial Results -->
-      <div class="financial-results" data-cy="config-result">
-        <div *ngIf="config().isCalculating" class="results-loading">
-          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mb-2"></div>
-          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse w-2/3 mb-2"></div>
-          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse w-1/2"></div>
-        </div>
-
-        <div *ngIf="!config().isCalculating && financialResults()" class="results-grid">
-          <div class="result-item">
-            <div class="result-label">PMT Mensual</div>
-            <div class="result-value">{{ '$' + financialResults()?.pmt?.toFixed(2) }}</div>
-          </div>
-          <div class="result-item">
-            <div class="result-label">Tasa Efectiva</div>
-            <div class="result-value">{{ financialResults()?.tasa?.toFixed(2) }}%</div>
-          </div>
-          <div class="result-item">
-            <div class="result-label">Ahorro Total</div>
-            <div class="result-value text-emerald-600 dark:text-emerald-400">{{ '$' + financialResults()?.ahorro?.toFixed(2) }}</div>
-          </div>
-          <div class="result-item col-span-3">
-            <div class="result-label">Total a Pagar</div>
-            <div class="result-value text-lg font-semibold">{{ '$' + financialResults()?.total?.toFixed(2) }}</div>
-          </div>
-        </div>
-      </div>
-    </section>
-  `,
+  templateUrl: './configuracion.component.html',
   styleUrls: ['./configuracion.component.scss']
 })
 export class ConfiguracionComponent implements OnInit {
-  // Configuration state signal
   config = signal<ConfigurationState>({
     mode: 'cotizador',
     precio: 250000,
@@ -216,13 +51,12 @@ export class ConfiguracionComponent implements OnInit {
     errors: {}
   });
 
-  // Product packages
   productPackages: ProductPackage[] = [
     {
       id: 'basico',
       name: 'Básico',
       description: 'Paquete esencial para comenzar',
-      icon: '📦',
+      icon: '<svg class="configuracion__package-icon configuracion__package-icon--basic" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>',
       features: ['Cobertura básica', 'Soporte estándar', '1 año garantía'],
       price: 15000
     },
@@ -230,7 +64,7 @@ export class ConfiguracionComponent implements OnInit {
       id: 'premium',
       name: 'Premium',
       description: 'Funcionalidades avanzadas',
-      icon: '⭐',
+      icon: '<svg class="configuracion__package-icon configuracion__package-icon--premium" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>',
       features: ['Cobertura completa', 'Soporte prioritario', '3 años garantía', 'Beneficios extra'],
       price: 35000,
       recommended: true
@@ -239,13 +73,12 @@ export class ConfiguracionComponent implements OnInit {
       id: 'colectivo',
       name: 'Colectivo',
       description: 'Para grupos y empresas',
-      icon: '🏢',
+      icon: '',
       features: ['Cobertura empresarial', 'Soporte dedicado', '5 años garantía', 'Descuentos grupales'],
       price: 75000
     }
   ];
 
-  // Financial results computed signal
   financialResults = computed<FinancialResult | null>(() => {
     const cfg = this.config();
     if (cfg.precio <= 0 || cfg.enganche < 0 || cfg.plazo <= 0) {
@@ -253,33 +86,28 @@ export class ConfiguracionComponent implements OnInit {
     }
 
     const principal = cfg.precio * (1 - cfg.enganche / 100);
-    const monthlyRate = 0.12 / 12; // 12% annual rate
+    const monthlyRate = 0.12 / 12;
     const months = cfg.plazo;
 
-    // PMT calculation
     const pmt = principal * (monthlyRate * Math.pow(1 + monthlyRate, months)) /
-                (Math.pow(1 + monthlyRate, months) - 1);
+      (Math.pow(1 + monthlyRate, months) - 1);
 
     const total = pmt * months;
     const tasa = (total / principal - 1) * 100;
-    const ahorro = cfg.precio * 0.05; // 5% savings
+    const ahorro = cfg.precio * 0.05;
 
     return { pmt, tasa, ahorro, total };
   });
-
-  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.initializeCalculation();
   }
 
-  // Set mode (Cotizador/Simulador)
   setMode(mode: 'cotizador' | 'simulador'): void {
     this.config.update(cfg => ({ ...cfg, mode }));
     this.recalculate();
   }
 
-  // Update configuration field
   updateConfig(field: keyof ConfigurationState, event: Event): void {
     const target = event.target as HTMLInputElement;
     const value = target.type === 'number' ? parseFloat(target.value) || 0 : target.value;
@@ -293,10 +121,9 @@ export class ConfiguracionComponent implements OnInit {
     this.recalculate();
   }
 
-  // Update configuration from select
   updateConfigFromSelect(field: keyof ConfigurationState, event: Event): void {
     const target = event.target as HTMLSelectElement;
-    const value = field === 'plazo' ? parseInt(target.value) : target.value;
+    const value = field === 'plazo' ? parseInt(target.value, 10) : target.value;
 
     this.config.update(cfg => ({
       ...cfg,
@@ -307,22 +134,20 @@ export class ConfiguracionComponent implements OnInit {
     this.recalculate();
   }
 
-  // Select product package
   selectPackage(packageId: 'basico' | 'premium' | 'colectivo'): void {
     this.config.update(cfg => ({ ...cfg, selectedPackage: packageId }));
     this.recalculate();
   }
 
-  // Validation logic
-  private validateField(field: string, value: any, currentErrors: { [key: string]: string }): { [key: string]: string } {
+  private validateField(field: string, value: any, currentErrors: Record<string, string>): Record<string, string> {
     const errors = { ...currentErrors };
-    delete errors[field]; // Clear previous error
+    delete errors[field];
 
     switch (field) {
       case 'precio':
         if (value <= 0) {
           errors[field] = 'El precio debe ser mayor a 0';
-        } else if (value > 10000000) {
+        } else if (value > 10_000_000) {
           errors[field] = 'El precio no puede superar los $10,000,000';
         }
         break;
@@ -338,17 +163,14 @@ export class ConfiguracionComponent implements OnInit {
     return errors;
   }
 
-  // Recalculate with loading state
   private recalculate(): void {
     this.config.update(cfg => ({ ...cfg, isCalculating: true }));
 
-    // Simulate calculation delay
     setTimeout(() => {
       this.config.update(cfg => ({ ...cfg, isCalculating: false }));
     }, 800);
   }
 
-  // Initialize calculation on component load
   private initializeCalculation(): void {
     this.recalculate();
   }

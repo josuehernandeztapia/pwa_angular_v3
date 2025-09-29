@@ -1,45 +1,178 @@
-.app-layout {
+.app-shell {
   display: flex;
   min-height: 100vh;
-  background: var(--neutral-950);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
 }
 
-.main-content {
+.app-shell__sidebar {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-neutral-900);
+  border-right: 1px solid var(--color-neutral-800);
+  color: var(--color-neutral-200);
+}
+
+.app-shell__sidebar-header {
+  padding: var(--space-4);
+  font-weight: var(--font-semibold);
+  color: var(--openai-white);
+  border-bottom: 1px solid var(--color-neutral-800);
+}
+
+.app-shell__nav {
   flex: 1;
-  margin-left: 280px; // Desktop navigation width
-  padding: 24px;
-  padding-bottom: calc(24px + env(safe-area-inset-bottom));
-  transition: margin-left 0.3s ease;
-  
-  // When navigation is collapsed
-  &.nav-collapsed {
-    margin-left: 70px;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-4) var(--space-3) var(--space-6);
+  overflow-y: auto;
 }
 
-// Mobile responsive adjustments
-@media (max-width: 768px) {
-  .main-content {
-    margin-left: 0;
-    padding: 16px;
-    padding-bottom: calc(76px + 16px + env(safe-area-inset-bottom)); // Account for bottom nav
-  }
+.app-shell__nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
-// Responsive layout adjustments
-@media (min-width: 769px) and (max-width: 1024px) {
-  .main-content {
-    margin-left: 280px;
-    padding: 20px;
-  }
+.app-shell__nav-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-tertiary);
+  padding: 0 var(--space-2);
 }
 
-// Large screens
-@media (min-width: 1440px) {
-  .main-content {
-    margin-left: 300px;
-    padding: 32px;
-    max-width: calc(100% - 300px);
+.app-shell__nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.app-shell__nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  --icon-color: var(--color-text-tertiary);
+}
+
+.app-shell__nav-link:hover,
+.app-shell__nav-link:focus-visible {
+  background: var(--color-neutral-800);
+  color: var(--openai-white);
+  --icon-color: var(--openai-white);
+}
+
+.app-shell__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--flat-surface-bg);
+}
+
+.app-shell__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 var(--space-6);
+  border-bottom: 1px solid var(--color-border-primary);
+  background: var(--flat-surface-bg);
+}
+
+.app-shell__topbar-info {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.app-shell__topbar-info span {
+  color: var(--color-text-primary);
+}
+
+.app-shell__topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.app-shell__topbar-actions .btn {
+  --icon-color: var(--color-text-tertiary);
+}
+
+.app-shell__topbar-actions .btn:hover,
+.app-shell__topbar-actions .btn:focus-visible {
+  --icon-color: var(--color-text-primary);
+}
+
+.app-shell__content {
+  flex: 1;
+  padding: var(--space-6);
+  overflow: auto;
+}
+
+.app-shell__empty {
+  padding: var(--space-12) 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.app-shell__empty-icon {
+  width: 64px;
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.app-shell__empty-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+}
+
+.app-shell__empty-subtitle {
+  max-width: 420px;
+  margin: 0 auto;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+}
+
+.app-shell__mobile-nav {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .app-shell__sidebar {
+    display: none;
+  }
+
+  .app-shell__topbar {
+    padding: 0 var(--space-4);
+  }
+
+  .app-shell__content {
+    padding: var(--space-4);
+  }
+
+  .app-shell__mobile-nav {
+    display: block;
+    width: 100%;
   }
 }
 
@@ -65,22 +198,22 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
+  background: var(--color-neutral-200);
+  border-radius: var(--radius-sm);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
+  background: var(--color-neutral-400);
+  border-radius: var(--radius-sm);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: var(--color-neutral-500);
 }
 
 // Focus styles for accessibility
 *:focus {
-  outline: 2px solid #4299e1;
+  outline: 2px solid var(--color-primary-500);
   outline-offset: 2px;
 }
 
@@ -90,12 +223,12 @@
 
 // Selection styles
 ::selection {
-  background: rgba(66, 153, 225, 0.3);
+  background: color-mix(in srgb, var(--accent-blue-500) 30%, transparent);
   color: inherit;
 }
 
 ::-moz-selection {
-  background: rgba(66, 153, 225, 0.3);
+  background: color-mix(in srgb, var(--accent-blue-500) 30%, transparent);
   color: inherit;
 }
 
@@ -103,16 +236,16 @@
 .skip-link {
   position: absolute;
   top: -40px;
-  left: 16px;
-  background: #111827;
-  color: #ffffff;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: top 0.2s ease;
-  z-index: 1000;
+  left: var(--space-4);
+  background: var(--color-neutral-900);
+  color: var(--color-text-primary);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: top var(--duration-200) var(--ease-out);
+  z-index: var(--z-modal);
 }
 
 .skip-link:focus {
-  top: 12px;
-  outline: 3px solid var(--focus-ring-color);
+  top: var(--space-3);
+  outline: 3px solid var(--color-primary-500);
 }

@@ -34,7 +34,7 @@ export class PostSalesApiService {
   private baseUrl = (window as any).__BFF_BASE__ ?? '/api';
 
   // ==========================================
-  // 🎯 CORE POST-SALES ENDPOINTS
+  //  CORE POST-SALES ENDPOINTS
   // ==========================================
 
   /**
@@ -57,7 +57,7 @@ export class PostSalesApiService {
   }
 
   // ==========================================
-  // 📊 POST-SALES RECORD MANAGEMENT
+  //  POST-SALES RECORD MANAGEMENT
   // ==========================================
 
   /**
@@ -111,7 +111,7 @@ export class PostSalesApiService {
   }
 
   // ==========================================
-  // 🔧 SERVICE MANAGEMENT
+  // [TOOLS] SERVICE MANAGEMENT
   // ==========================================
 
   /**
@@ -233,7 +233,7 @@ export class PostSalesApiService {
   }
 
   // ==========================================
-  // 📞 CONTACT & SURVEY MANAGEMENT
+  //  CONTACT & SURVEY MANAGEMENT
   // ==========================================
 
   /**
@@ -311,7 +311,7 @@ export class PostSalesApiService {
   }
 
   // ==========================================
-  // 📋 SURVEY RESPONSES
+  //  SURVEY RESPONSES
   // ==========================================
 
   /**
@@ -453,7 +453,7 @@ export class PostSalesApiService {
   }
 
   // ==========================================
-  // 💰 REVENUE & ANALYTICS
+  //  REVENUE & ANALYTICS
   // ==========================================
 
   /**
@@ -554,7 +554,7 @@ export class PostSalesApiService {
   }
 
   // ==========================================
-  // 📋 MAINTENANCE & CONTACT METHODS
+  //  MAINTENANCE & CONTACT METHODS
   // ==========================================
 
   /**
@@ -609,7 +609,7 @@ export class PostSalesApiService {
   }
 
   // ==========================================
-  // 🔄 UTILITY METHODS
+  //  UTILITY METHODS
   // ==========================================
 
   /**
@@ -653,7 +653,7 @@ export class PostSalesApiService {
   }
 
   // ==========================================
-  // 🚨 ERROR HANDLING
+  // [ALERT] ERROR HANDLING
   // ==========================================
 
   private handleError<T>(operation = 'operation') {

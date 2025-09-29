@@ -10,13 +10,14 @@ import { SavingsScenario, SimuladorEngineService } from '../../../../services/si
 import { ToastService } from '../../../../services/toast.service';
 import { SkeletonCardComponent } from '../../../shared/skeleton-card.component';
 import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-panel.component';
+import { IconComponent } from '../../../shared/icon/icon.component';
 
 declare var Chart: any;
 
 @Component({
   selector: 'app-edomex-individual',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SummaryPanelComponent, SkeletonCardComponent],
+  imports: [CommonModule, ReactiveFormsModule, SummaryPanelComponent, SkeletonCardComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './edomex-individual.component.scss',
   templateUrl: './edomex-individual.component.html'
@@ -32,8 +33,8 @@ export class EdomexIndividualComponent implements OnInit, OnDestroy, AfterViewIn
   scenario: SavingsScenario | null = null;
   isCalculating = false;
   asideActions = [
-    { label: '📄 PDF', click: () => this.generatePDF() },
-    { label: '✅ Crear Cliente', click: () => this.proceedToClientCreation() }
+    { label: 'PDF', click: () => this.generatePDF() },
+    { label: 'Crear Cliente', click: () => this.proceedToClientCreation() }
   ];
 
   constructor(
@@ -215,7 +216,7 @@ export class EdomexIndividualComponent implements OnInit, OnDestroy, AfterViewIn
         labels: ['Recaudación Combustible', 'Aportación Voluntaria'],
         datasets: [{
           data: [collectionAmount, voluntaryAmount],
-          backgroundColor: ['#10B981', '#3B82F6'],
+          backgroundColor: ['#080808', '#525252'],  /* OpenAI black/gray */
           borderWidth: 0
         }]
       },

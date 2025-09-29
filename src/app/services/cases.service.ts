@@ -102,7 +102,7 @@ export class CasesService {
   }
 
   /**
-   * 🔄 P0.2 SURGICAL FIX - Store manual OCR data
+   *  P0.2 SURGICAL FIX - Store manual OCR data
    */
   storeManualOCRData(caseId: string, documentType: string, data: ManualOCRData): Observable<{ ok: boolean; stored: boolean }> {
     const body = {

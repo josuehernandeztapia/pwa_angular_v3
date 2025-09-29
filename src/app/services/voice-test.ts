@@ -1,4 +1,4 @@
-// ✅ TESTING: Voice Evaluation System
+//  TESTING: Voice Evaluation System
 // Run this in browser console to test voice evaluation logic
 
 function createMockAudioBlob(duration: number = 10): Blob {

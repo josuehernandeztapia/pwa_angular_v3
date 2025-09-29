@@ -86,14 +86,14 @@ export class GnvHealthService {
   }
 
   /**
-   * 📊 Get system-wide metrics with ≥85% target tracking
+   *  Get system-wide metrics with ≥85% target tracking
    */
   getSystemMetrics(): Observable<GNVSystemMetrics> {
     return this.systemMetrics$.asObservable();
   }
 
   /**
-   * 🔄 Trigger T+1 data sync for specific station
+   *  Trigger T+1 data sync for specific station
    */
   triggerT1Sync(stationId: string): Observable<any> {
     if (!(environment.features as any)?.enableGnvBff) {

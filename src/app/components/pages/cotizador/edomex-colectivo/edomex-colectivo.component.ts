@@ -7,11 +7,12 @@ import { FinancialCalculatorService } from '../../../../services/financial-calcu
 import { LoadingService } from '../../../../services/loading.service';
 import { PdfExportService } from '../../../../services/pdf-export.service';
 import { CollectiveScenarioConfig, SimuladorEngineService } from '../../../../services/simulador-engine.service';
+import { IconComponent } from '../../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-edomex-colectivo',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IconComponent],
   styleUrls: ['./edomex-colectivo.component.scss'],
   templateUrl: './edomex-colectivo.component.html',
 })

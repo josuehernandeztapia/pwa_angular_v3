@@ -6,24 +6,8 @@ import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div class="dev-kpi-card" aria-label="KPIs de Postventa (dev)">
-      <div class="kpi-item">
-        <div class="kpi-label">t_first_recommendation (avg)</div>
-        <div class="kpi-value">{{ avgMs() }} ms</div>
-      </div>
-      <div class="kpi-item">
-        <div class="kpi-label">%need_info</div>
-        <div class="kpi-value">{{ pctNeedInfo() }}%</div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .dev-kpi-card { display:flex; gap:16px; padding:12px; border-radius:12px; border:1px dashed #94a3b8; background:#0b1220; color:#e2e8f0; }
-    .kpi-item { display:flex; flex-direction:column; gap:4px; }
-    .kpi-label { font-size:12px; color:#94a3b8; }
-    .kpi-value { font-size:18px; font-weight:700; }
-  `]
+  templateUrl: './dev-kpi-mini.component.html',
+  styleUrls: ['./dev-kpi-mini.component.scss']
 })
 export class DevKpiMiniComponent {
   private getMs(): number[] {
@@ -46,4 +30,3 @@ export class DevKpiMiniComponent {
     this.pctNeedInfo.set(pct);
   }
 }
-

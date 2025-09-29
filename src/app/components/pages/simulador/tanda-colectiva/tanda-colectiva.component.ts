@@ -11,150 +11,17 @@ import { SpeechService } from '../../../../services/speech.service';
 import { ToastService } from '../../../../services/toast.service';
 import { SkeletonCardComponent } from '../../../shared/skeleton-card.component';
 import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-panel.component';
+import { IconComponent } from '../../../shared/icon/icon.component';
 
 declare var Chart: any;
 
 @Component({
   selector: 'app-tanda-colectiva',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, SummaryPanelComponent, SkeletonCardComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, SummaryPanelComponent, SkeletonCardComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrl: './tanda-colectiva.component.scss',
-  template: `
-    <!-- Skip Link for Accessibility -->
-    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
-
-    <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-      <!-- Header -->
-      <header class="border-b border-border bg-surface">
-        <div class="max-w-6xl mx-auto px-6 py-4">
-          <div class="flex items-center gap-4">
-            <button (click)="goBack()" class="ui-btn ui-btn-ghost ui-btn-sm" data-cy="back-button">
-              ← Volver
-            </button>
-            <div>
-              <h1 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Simulador de Tanda Colectiva</h1>
-              <p class="text-sm text-slate-600 dark:text-slate-400">Estrategia de ahorro grupal para vagonetas EdoMex</p>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main id="main-content" class="max-w-6xl mx-auto px-6 py-8">
-        <!-- KPIs -->
-        <div class="ui-card mb-6" *ngIf="simulationResult?.scenario">
-          <div class="grid grid-cols-3 gap-6">
-            <div class="text-center">
-              <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="group-monthly-label">Aportación Mensual (Grupo)</div>
-              <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="group-monthly">
-                {{ formatCurrency(simulationResult?.scenario?.monthlyContribution || 0) }}
-              </div>
-            </div>
-            <div class="text-center">
-              <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="first-award-label">1er Otorgamiento</div>
-              <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="first-award">
-                {{ simulationResult?.scenario?.monthsToFirstAward || 0 }} meses
-              </div>
-            </div>
-            <div class="text-center">
-              <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="full-delivery-label">Entrega Completa</div>
-              <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="full-delivery">
-                {{ simulationResult?.scenario?.monthsToFullDelivery || 0 }} meses
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="grid lg:grid-cols-2 gap-8">
-          <!-- Configuration Panel -->
-          <section class="ui-card" data-cy="edomex-colectivo-panel">
-            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">EdoMex Colectivo – Parámetros</h2>
-
-            <form [formGroup]="configForm" class="space-y-6">
-              <div class="grid gap-3 md:grid-cols-2">
-                <label class="text-sm">
-                  Miembros (n)
-                  <input data-cy="members" type="number" formControlName="memberCount" class="mt-1 w-full border rounded-md px-2 py-2" placeholder="15">
-                </label>
-
-                <label class="text-sm">
-                  Valor Unidad (MXN)
-                  <input data-cy="unit-price" type="number" formControlName="unitPrice" class="mt-1 w-full border rounded-md px-2 py-2" placeholder="800000">
-                </label>
-
-                <label class="text-sm">
-                  Consumo Promedio /Miembro (L)
-                  <input data-cy="avg-consumption" type="number" formControlName="avgConsumption" class="mt-1 w-full border rounded-md px-2 py-2" placeholder="500">
-                </label>
-
-                <label class="text-sm">
-                  Sobreprecio por Litro (MXN)
-                  <input data-cy="overprice-lit" type="number" step="0.01" formControlName="overpricePerLiter" class="mt-1 w-full border rounded-md px-2 py-2" placeholder="2.50">
-                </label>
-
-                <label class="text-sm">
-                  Aportación Voluntaria /Miembro (MXN)
-                  <input data-cy="voluntary-member" type="number" formControlName="voluntaryMonthly" class="mt-1 w-full border rounded-md px-2 py-2" placeholder="0">
-                </label>
-              </div>
-
-              <button (click)="simulateTanda()" [disabled]="!configForm.valid || isSimulating" data-cy="run-edomex-colectivo" class="ui-btn ui-btn-primary mt-4">
-                {{ isSimulating ? 'Simulando...' : 'Simular' }}
-              </button>
-            </form>
-          </section>
-
-          <!-- Results Panel -->
-          <section class="ui-card" data-cy="edomex-colectivo-results" *ngIf="simulationResult?.scenario">
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Resultado – EdoMex Colectivo</h3>
-
-            <div class="grid gap-4 md:grid-cols-2 mb-6">
-              <div class="ui-card">
-                <h4 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">Ahorro acumulado (grupo)</h4>
-                <canvas id="chartAhorroCol" data-cy="chart-ahorro-col" #groupSavingsChart></canvas>
-              </div>
-              <div class="ui-card">
-                <h4 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">PMT promedio</h4>
-                <canvas id="chartPMTCol" data-cy="chart-pmt-col" #avgPmtChart></canvas>
-              </div>
-            </div>
-
-            <!-- Comparison Table -->
-            <div class="ui-card">
-              <h4 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">Comparación de Simulaciones</h4>
-              <table class="w-full text-sm border-collapse" data-cy="sim-comparison-table">
-                <thead>
-                  <tr class="text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
-                    <th class="text-left py-2">Escenario</th>
-                    <th class="text-left py-2">Ahorro/Grupo</th>
-                    <th class="text-left py-2">PMT Promedio</th>
-                    <th class="text-left py-2">1er Otorg.</th>
-                    <th class="text-left py-2">Entrega Total</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
-                  <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                    <td class="py-2 text-slate-900 dark:text-slate-100">Escenario Actual</td>
-                    <td class="py-2 text-slate-900 dark:text-slate-100">{{ formatCurrency(simulationResult?.scenario?.monthlyContribution || 0) }}</td>
-                    <td class="py-2 text-slate-900 dark:text-slate-100">{{ formatCurrency((simulationResult?.scenario?.monthlyContribution || 0) / (configForm.get('memberCount')?.value || 1)) }}</td>
-                    <td class="py-2 text-slate-900 dark:text-slate-100">{{ simulationResult?.scenario?.monthsToFirstAward || 0 }} m</td>
-                    <td class="py-2 text-slate-900 dark:text-slate-100">{{ simulationResult?.scenario?.monthsToFullDelivery || 0 }} m</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="flex gap-3 flex-wrap mt-6">
-              <button (click)="generatePDF()" class="ui-btn ui-btn-primary">📄 PDF</button>
-              <button (click)="resetForm()" class="ui-btn ui-btn-secondary">🔄 Limpiar</button>
-            </div>
-          </section>
-        </div>
-      </main>
-    </div>
-  `
+  templateUrl: './tanda-colectiva.component.html',
+  styleUrls: ['./tanda-colectiva.component.scss']
 })
 export class TandaColectivaComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('groupSavingsChart') groupSavingsChartRef!: ElementRef<HTMLCanvasElement>;

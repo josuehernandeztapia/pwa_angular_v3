@@ -12,7 +12,7 @@ describe('AVI Alignment Validation', () => {
 
     // At least 95% alignment is required for production
     expect(results.identicalPercentage).toBeGreaterThanOrEqual(95);
-    expect(results.status).toBe('✅ ALIGNED');
+    expect(results.status).toBe(' ALIGNED');
   });
 
   it('should validate threshold alignment with expected decisions', async () => {

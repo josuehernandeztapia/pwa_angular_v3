@@ -251,9 +251,11 @@ test.describe('🎬 PWA Conductores - Cotizador EdoMex Colectivo Demo', () => {
         `;
         benefits.style.cssText = `
           position: fixed;
-          top: 45%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+          top: 20%;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          transform: none;
           background: #1565C0;
           color: white;
           padding: 25px;
@@ -264,6 +266,7 @@ test.describe('🎬 PWA Conductores - Cotizador EdoMex Colectivo Demo', () => {
           text-align: center;
           min-width: 400px;
           line-height: 1.5;
+          width: fit-content;
         `;
         document.body.appendChild(benefits);
       }, EDOMEX_COLECTIVO_CONFIG);

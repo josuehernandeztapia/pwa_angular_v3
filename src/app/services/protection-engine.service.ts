@@ -230,20 +230,20 @@ export class ProtectionEngineService {
         `Pagos de $0 por ${affectedMonths} meses`,
         `Interés capitalizado: ${this.financialCalc.formatCurrency(capitalizedInterest)}`,
         `El pago mensual sube a ${this.financialCalc.formatCurrency(newPayment)} después.`,
-        `TIR: ${(annualTIR * 100).toFixed(2)}% ${tirOK ? '✓' : '✗'}`
+        `TIR: ${(annualTIR * 100).toFixed(2)}% ${tirOK ? 'APROBADA' : 'NO APROBADA'}`
       ];
     } else if (type === 'STEPDOWN') {
       const reducedPayment = originalPayment * reductionFactor;
       scenario.details = [
         `Pagos de ${this.financialCalc.formatCurrency(reducedPayment)} por ${affectedMonths} meses`,
         `El pago sube a ${this.financialCalc.formatCurrency(newPayment)} después.`,
-        `TIR: ${(annualTIR * 100).toFixed(2)}% ${tirOK ? '✓' : '✗'}`
+        `TIR: ${(annualTIR * 100).toFixed(2)}% ${tirOK ? 'APROBADA' : 'NO APROBADA'}`
       ];
     } else if (type === 'RECALENDAR') {
       scenario.details = [
         `Pagos de $0 por ${affectedMonths} meses`,
         `El plazo se extiende en ${affectedMonths} meses.`,
-        `TIR: ${(annualTIR * 100).toFixed(2)}% ${tirOK ? '✓' : '✗'}`
+        `TIR: ${(annualTIR * 100).toFixed(2)}% ${tirOK ? 'APROBADA' : 'NO APROBADA'}`
       ];
     }
 

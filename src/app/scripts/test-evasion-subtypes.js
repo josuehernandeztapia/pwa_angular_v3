@@ -384,19 +384,19 @@ class AdvancedEvasionAnalyzer {
     reasons.push(`Subtipo detectado: ${evasionSubtype.description}`);
     
     if (honestyIndicators.admissionCount > 0) {
-      reasons.push(`✅ Admite pagos (${honestyIndicators.admissionCount} indicadores)`);
+      reasons.push(` Admite pagos (${honestyIndicators.admissionCount} indicadores)`);
     }
     
     if (honestyIndicators.specificityCount > 0) {
-      reasons.push(`✅ Proporciona números específicos (${honestyIndicators.specificityCount})`);
+      reasons.push(` Proporciona números específicos (${honestyIndicators.specificityCount})`);
     }
     
     if (evasionPatterns.directDenialCount > 0) {
-      reasons.push(`❌ Negación directa (${evasionPatterns.directDenialCount} veces)`);
+      reasons.push(` Negación directa (${evasionPatterns.directDenialCount} veces)`);
     }
     
     if (evasionPatterns.nervousFillersCount >= 4) {
-      reasons.push(`⚠️ Mucho nerviosismo (${evasionPatterns.nervousFillersCount} muletillas)`);
+      reasons.push(` Mucho nerviosismo (${evasionPatterns.nervousFillersCount} muletillas)`);
     }
     
     if (avgConfidence > 0.90 && evasionPatterns.directDenialCount > 0) {

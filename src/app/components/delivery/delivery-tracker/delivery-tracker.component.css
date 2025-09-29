@@ -6,7 +6,7 @@
   margin: 0 auto;
 }
 
-/* 📊 Metrics Overview */
+/*  Metrics Overview */
 .metrics-overview {
   margin-bottom: 2rem;
 }
@@ -21,7 +21,7 @@
 .metric-card {
   background: white;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
   text-align: center;
   position: relative;
@@ -29,7 +29,7 @@
 }
 
 .metric-card:hover {
-  transform: translateY(-2px);
+  /* transform removed - OpenAI compliance */
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
@@ -53,18 +53,18 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #10b981;
+  background: #737373 /* OpenAI neutral */;
 }
 
-.metric-status.good { background: #10b981; }
-.metric-status.warning { background: #f59e0b; }
-.metric-status.critical { background: #ef4444; }
+.metric-status.good { background: #737373 /* OpenAI neutral */; }
+.metric-status.warning { background: #737373 /* OpenAI neutral */; }
+.metric-status.critical { background: #737373 /* OpenAI neutral */; }
 
-/* 🔍 Tracking Input */
+/*  Tracking Input */
 .tracking-input {
   background: white;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -86,13 +86,13 @@
 
 .tracking-code-input:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #080808 /* OpenAI black */;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .track-button {
   padding: 0.75rem 1.5rem;
-  background: #3b82f6;
+  background: #080808 /* OpenAI black */;
   color: white;
   border: none;
   border-radius: 8px;
@@ -103,7 +103,7 @@
 
 .track-button:hover:not(:disabled) {
   background: #2563eb;
-  transform: translateY(-1px);
+  transform: none; /* OpenAI no transforms */
 }
 
 .track-button:disabled {
@@ -131,7 +131,7 @@
 .status-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  border-radius: 8px; /* OpenAI standard */
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -179,7 +179,7 @@
 .current-eta {
   background: var(--flat-surface-bg);
   color: white;
-  border-radius: 12px;
+  border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
   margin-bottom: 1.5rem;
 }
@@ -221,7 +221,7 @@
 .factor {
   background: rgba(255, 255, 255, 0.1);
   padding: 0.5rem 0.75rem;
-  border-radius: 6px;
+  border-radius: 8px; /* OpenAI standard */
   font-size: 0.875rem;
 }
 
@@ -263,7 +263,7 @@
   margin-top: 0.25rem;
 }
 
-/* ❌ No Results */
+/*  No Results */
 .no-results {
   text-align: center;
   padding: 2rem;
@@ -279,7 +279,7 @@
   font-size: 1.1rem;
 }
 
-/* 📋 Active Deliveries */
+/*  Active Deliveries */
 .active-deliveries {
   margin-bottom: 2rem;
 }
@@ -300,22 +300,22 @@
 .delivery-card {
   background: white;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
   transition: all 0.2s ease;
 }
 
 .delivery-card:hover {
-  transform: translateY(-2px);
+  /* transform removed - OpenAI compliance */
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .delivery-card.status-en-route {
-  border-left: 4px solid #f59e0b;
+  border-left: 4px solid #737373 /* OpenAI neutral */;
 }
 
 .delivery-card.status-arriving {
-  border-left: 4px solid #10b981;
+  border-left: 4px solid #737373 /* OpenAI neutral */;
 }
 
 .delivery-header {
@@ -345,7 +345,7 @@
 
 .priority {
   padding: 0.25rem 0.5rem;
-  border-radius: 12px;
+  border-radius: 8px; /* OpenAI standard */
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -356,7 +356,7 @@
 
 .delivery-window {
   background: #f9fafb;
-  border-radius: 6px;
+  border-radius: 8px; /* OpenAI standard */
   padding: 0.75rem;
   margin-bottom: 1rem;
   font-size: 0.875rem;
@@ -374,7 +374,7 @@
 }
 
 .eta {
-  color: #3b82f6;
+  color: #080808 /* OpenAI black */;
   font-weight: 600;
 }
 
@@ -392,7 +392,7 @@
 
 .btn {
   padding: 0.5rem 1rem;
-  border-radius: 6px;
+  border-radius: 8px; /* OpenAI standard */
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -409,9 +409,9 @@
 }
 
 .btn-primary {
-  background: #3b82f6;
+  background: #080808 /* OpenAI black */;
   color: white;
-  border: 1px solid #3b82f6;
+  border: 1px solid #080808 /* OpenAI black */;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -451,11 +451,11 @@
   font-size: 1.1rem;
 }
 
-/* 🔄 System Status */
+/*  System Status */
 .system-status {
   background: white;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
 }
 
@@ -467,11 +467,11 @@
 }
 
 .status-icon.online {
-  color: #10b981;
+  color: #737373 /* OpenAI neutral */;
 }
 
 .status-icon.offline {
-  color: #ef4444;
+  color: #737373 /* OpenAI neutral */;
 }
 
 .status-text {
@@ -499,7 +499,7 @@
   width: 100%;
   height: 8px;
   background: #e5e7eb;
-  border-radius: 4px;
+  border-radius: 8px; /* OpenAI standard */
   overflow: hidden;
   margin-bottom: 0.5rem;
 }
@@ -507,13 +507,13 @@
 .reliability-fill {
   height: 100%;
   transition: width 0.3s ease;
-  border-radius: 4px;
+  border-radius: 8px; /* OpenAI standard */
 }
 
-.reliability-fill.excellent { background: #10b981; }
-.reliability-fill.good { background: #3b82f6; }
-.reliability-fill.warning { background: #f59e0b; }
-.reliability-fill.critical { background: #ef4444; }
+.reliability-fill.excellent { background: #737373 /* OpenAI neutral */; }
+.reliability-fill.good { background: #080808 /* OpenAI black */; }
+.reliability-fill.warning { background: #737373 /* OpenAI neutral */; }
+.reliability-fill.critical { background: #737373 /* OpenAI neutral */; }
 
 .reliability-value {
   text-align: center;
@@ -522,7 +522,7 @@
   color: #1f2937;
 }
 
-/* 📱 Responsive Design */
+/*  Responsive Design */
 @media (max-width: 768px) {
   .delivery-tracker {
     padding: 1rem;
@@ -585,7 +585,7 @@
   }
 }
 
-/* 🎨 Animations */
+/*  Animations */
 @keyframes deliveryPulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
@@ -598,7 +598,7 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: #f59e0b;
+  background: #737373 /* OpenAI neutral */;
   animation: deliveryPulse 2s infinite;
 }
 
@@ -609,6 +609,6 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: #10b981;
+  background: #737373 /* OpenAI neutral */;
   animation: deliveryPulse 1s infinite;
 }

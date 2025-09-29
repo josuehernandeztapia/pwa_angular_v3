@@ -36,7 +36,7 @@ describe('DashboardComponent', () => {
       timestamp: new Date(),
       message: 'Nuevo cliente registrado: Ana García',
       clientName: 'Ana García',
-      icon: '👤'
+      iconType: 'user'
     },
     {
       id: '2',
@@ -44,7 +44,7 @@ describe('DashboardComponent', () => {
       timestamp: new Date(),
       message: 'Pago recibido por $5,000',
       amount: 5000,
-      icon: '💰'
+      iconType: 'payment'
     }
   ];
 

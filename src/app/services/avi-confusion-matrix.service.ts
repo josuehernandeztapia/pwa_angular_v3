@@ -1,5 +1,5 @@
 /**
- * 🎙️ AVI Confusion Matrix Service
+ * AVI AVI Confusion Matrix Service
  * P0.2 SURGICAL FIX - Calibration ≥30 audios + confusion matrix
  *
  * Advanced analytics for AVI system performance evaluation
@@ -88,7 +88,7 @@ export class AVIConfusionMatrixService {
   }
 
   /**
-   * 📊 Add new calibration sample
+   *  Add new calibration sample
    */
   addCalibrationSample(sample: Omit<CalibrationSample, 'id' | 'timestamp'>): Observable<CalibrationSample> {
     const newSample: CalibrationSample = {
@@ -143,7 +143,7 @@ export class AVIConfusionMatrixService {
   }
 
   /**
-   * 📈 Calculate performance metrics from confusion matrix
+   *  Calculate performance metrics from confusion matrix
    */
   calculateMetrics(): Observable<ConfusionMatrixMetrics> {
     return this.calculateConfusionMatrix().pipe(
@@ -180,7 +180,7 @@ export class AVIConfusionMatrixService {
   }
 
   /**
-   * 📋 Generate comprehensive calibration report
+   *  Generate comprehensive calibration report
    */
   generateCalibrationReport(): Observable<CalibrationReport> {
     const samples = this.calibrationSamples$.value;
@@ -219,7 +219,7 @@ export class AVIConfusionMatrixService {
   }
 
   /**
-   * 🎯 Get specific samples for analysis
+   *  Get specific samples for analysis
    */
   getSamplesByRiskLevel(riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'): Observable<CalibrationSample[]> {
     return this.calibrationSamples$.pipe(
@@ -228,7 +228,7 @@ export class AVIConfusionMatrixService {
   }
 
   /**
-   * 🔍 Get misclassified samples for analysis
+   *  Get misclassified samples for analysis
    */
   getMisclassifiedSamples(): Observable<{
     falsePositives: CalibrationSample[];
@@ -375,7 +375,7 @@ export class AVIConfusionMatrixService {
     }
 
     if (samples.length >= this.TARGET_SAMPLES && metrics.confidence >= 80 && metrics.accuracy >= 80) {
-      recommendations.push('✅ Calibration is performing well - system is ready for production use');
+      recommendations.push(' Calibration is performing well - system is ready for production use');
     }
 
     return recommendations;

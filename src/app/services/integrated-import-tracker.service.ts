@@ -51,7 +51,7 @@ export interface IntegratedImportStatus extends ImportStatus {
   delayReasons?: string[];
   customsReleaseDate?: Date;
   
-  // 🚛 NUEVA PROPIEDAD: Unidad asignada
+  //  NUEVA PROPIEDAD: Unidad asignada
   assignedUnit?: VehicleUnit;
 }
 
@@ -219,7 +219,7 @@ export class IntegratedImportTrackerService {
         // Sincronizar con delivery order si existe
         this.syncMilestoneWithDeliveryOrder(clientId, milestone, status);
         
-        // 🚛 NUEVA FUNCIONALIDAD: Trigger asignación de unidad al completar fabricación
+        //  NUEVA FUNCIONALIDAD: Trigger asignación de unidad al completar fabricación
         if (milestone === 'unidadFabricada' && status === 'completed') {
           this.triggerVehicleAssignmentFlow(clientId, metadata);
         }
@@ -682,7 +682,7 @@ export class IntegratedImportTrackerService {
   }
 
   /**
-   * 🚛 NUEVA FUNCIONALIDAD: Trigger el flujo de asignación de unidad
+   *  NUEVA FUNCIONALIDAD: Trigger el flujo de asignación de unidad
    * Se ejecuta cuando se completa el milestone "unidadFabricada"
    */
   private triggerVehicleAssignmentFlow(
@@ -813,7 +813,7 @@ export class IntegratedImportTrackerService {
               // Actualizar el import status con la unidad asignada
               this.updateImportStatusWithAssignedUnit(clientId, result.assignedUnit);
               
-              // 🚛 NUEVA FUNCIONALIDAD: Actualizar contrato con unidad asignada
+              //  NUEVA FUNCIONALIDAD: Actualizar contrato con unidad asignada
               this.updateContractWithAssignedVehicle(clientId, result.assignedUnit);
               
               // Enviar notificación de asignación exitosa
@@ -858,7 +858,7 @@ export class IntegratedImportTrackerService {
     if (clientStatus) {
       const updatedStatus: IntegratedImportStatus = {
         ...clientStatus,
-        // 🚛 Actualizar con la unidad asignada
+        //  Actualizar con la unidad asignada
         assignedUnit: assignedUnit,
         syncStatus: 'synced',
         lastSyncDate: new Date()
@@ -902,7 +902,7 @@ export class IntegratedImportTrackerService {
   }
 
   /**
-   * 🚛 NUEVA FUNCIONALIDAD: Actualizar contrato con unidad asignada
+   *  NUEVA FUNCIONALIDAD: Actualizar contrato con unidad asignada
    * Propaga la información de la unidad específica a los contratos del cliente
    */
   private updateContractWithAssignedVehicle(clientId: string, assignedUnit: VehicleUnit): void {
@@ -1049,7 +1049,7 @@ export class IntegratedImportTrackerService {
   }
 
   // ==========================================
-  // 🚀 POST-SALES SYSTEM IMPLEMENTATION
+  //  POST-SALES SYSTEM IMPLEMENTATION
   // ==========================================
 
   /**
@@ -1145,7 +1145,7 @@ export class IntegratedImportTrackerService {
   }
 
   /**
-   * 🎯 HANDOVER CRÍTICO: Disparar el evento vehicle.delivered
+   *  HANDOVER CRÍTICO: Disparar el evento vehicle.delivered
    * Esto crea el expediente post-venta y activa todos los recordatorios
    */
   private triggerPostSalesHandover(clientId: string, platesData: PlatesData): void {

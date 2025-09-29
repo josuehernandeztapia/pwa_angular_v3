@@ -1,5 +1,5 @@
 /**
- * 🎯 Simple P2 Coverage Tests - Working & Compiling
+ *  Simple P2 Coverage Tests - Working & Compiling
  * Basic tests that definitely work to boost coverage
  */
 

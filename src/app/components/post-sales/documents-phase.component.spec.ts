@@ -169,6 +169,6 @@ describe('DocumentsPhaseComponent', () => {
   it('should prevent submission when form is invalid', () => {
     spyOn(console, 'log');
     component.onSubmit();
-    expect(console.log).toHaveBeenCalledWith('❌ Cannot complete documents - validation failed');
+    expect(console.log).toHaveBeenCalledWith(' Cannot complete documents - validation failed');
   });
 });

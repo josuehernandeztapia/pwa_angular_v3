@@ -11,7 +11,7 @@ import { AVIConfusionMatrixService, CalibrationSample } from './avi-confusion-ma
 export class AVICalibrationService {
   private confusionMatrixService = inject(AVIConfusionMatrixService);
 
-  // 🎙️ P0.2 SURGICAL FIX - Enhanced tracking for ≥30 audios
+  // AVI P0.2 SURGICAL FIX - Enhanced tracking for ≥30 audios
   private readonly TARGET_AUDIO_SAMPLES = 30;
   readonly audioSamplesCollected = signal(0);
   readonly calibrationProgress = signal(0);
@@ -48,7 +48,7 @@ export class AVICalibrationService {
   }
 
   /**
-   * 🎙️ P0.2 SURGICAL FIX - Initialize calibration tracking
+   * AVI P0.2 SURGICAL FIX - Initialize calibration tracking
    */
   private initializeCalibrationTracking(): void {
     // Subscribe to confusion matrix service to track progress
@@ -61,7 +61,7 @@ export class AVICalibrationService {
   }
 
   /**
-   * 🎯 Record audio sample with validation outcome
+   *  Record audio sample with validation outcome
    */
   recordAudioSampleWithOutcome(
     responses: AVIResponse[],
@@ -112,7 +112,7 @@ export class AVICalibrationService {
   }
 
   /**
-   * 📊 Get enhanced calibration status with confusion matrix
+   *  Get enhanced calibration status with confusion matrix
    */
   getEnhancedCalibrationStatus(): Observable<{
     audioSamplesCollected: number;

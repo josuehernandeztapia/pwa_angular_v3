@@ -27,7 +27,7 @@
                 <button id="uploadBtn" class="btn secondary">📁 Upload Audio</button>
             </div>
 
-            <div class="audio-info" id="audioInfo" style="display: none;">
+            <div class="audio-info" id="audioInfo">
                 <p><strong>Duration:</strong> <span id="audioDuration">0</span>s</p>
                 <p><strong>Size:</strong> <span id="audioSize">0</span> KB</p>
             </div>
@@ -197,14 +197,14 @@
         <!-- Analysis Button -->
         <section class="analyze-section">
             <button id="analyzeBtn" class="btn analyze" disabled>🧠 Analyze with AVI + Whisper</button>
-            <div class="loading" id="loading" style="display: none;">
+            <div class="loading" id="loading">
                 <div class="spinner"></div>
                 <p>Processing with OpenAI Whisper...</p>
             </div>
         </section>
 
         <!-- Results Dashboard -->
-        <section class="results-section" id="resultsSection" style="display: none;">
+        <section class="results-section" id="resultsSection">
             <h2>📊 Analysis Results</h2>
             
             <div class="result-cards">
@@ -264,7 +264,7 @@
         </section>
 
         <!-- Benchmark Dashboard -->
-        <section class="benchmark-section" id="benchmarkSection" style="display: none;">
+        <section class="benchmark-section" id="benchmarkSection">
             <h2>📊 Benchmark Results</h2>
             <div id="benchmarkData" class="benchmark-data">
                 <p>No benchmark data yet. Analyze some audio files to see comparisons!</p>
@@ -279,7 +279,7 @@
     </div>
 
     <!-- Audio Element -->
-    <audio id="audioPlayer" controls style="display: none;"></audio>
+    <audio id="audioPlayer" controls></audio>
 
     <!-- Load complete AVI system modules and expose to window for app-complete.js -->
     <script type="module">

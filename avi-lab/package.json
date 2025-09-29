@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx http-server . -p 8080 -o",
     "dev": "npx live-server --port=8080 --open=/index.html",
-    "test": "echo \"AVI_LAB Testing Suite\" && echo \"✅ Ready to test voice analysis\""
+    "test": "echo \"AVI_LAB Testing Suite\" && echo \"[READY] Ready to test voice analysis\""
   },
   "keywords": ["avi", "voice", "whisper", "testing", "lab"],
   "author": "Conductores PWA Team",

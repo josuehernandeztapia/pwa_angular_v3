@@ -1,5 +1,5 @@
-// 🛡️ PROTECCIÓN TIR DOM VISIBILITY VALIDATION
-console.log('🛡️ PROTECCIÓN TIR DOM VISIBILITY VALIDATION');
+//  PROTECCIÓN TIR DOM VISIBILITY VALIDATION
+console.log(' PROTECCIÓN TIR DOM VISIBILITY VALIDATION');
 console.log('='.repeat(60));
 
 // Simulate the fixed protection engine and component behavior
@@ -113,7 +113,7 @@ const component = new MockProteccionComponent();
 // Compute scenarios
 const scenarios = component.computeScenarios();
 
-console.log('📊 SCENARIO ANALYSIS RESULTS:');
+console.log(' SCENARIO ANALYSIS RESULTS:');
 console.log(`Total scenarios generated: ${scenarios.length}`);
 console.log('');
 
@@ -133,10 +133,10 @@ scenarios.forEach((scenario, index) => {
   console.log(`   PMT′: ${component.formatCurrency(scenario.newMonthlyPayment)}`);
   console.log(`   n′: ${scenario.newTerm} meses`);
   
-  // ✅ KEY FIX: TIR post values are ALWAYS visible now
-  console.log(`   TIR post: ${tirPct.toFixed(2)}% ${component.isTirOk(scenario) ? '✅ OK' : '❌ BAD'}`);
+  //  KEY FIX: TIR post values are ALWAYS visible now
+  console.log(`   TIR post: ${tirPct.toFixed(2)}% ${component.isTirOk(scenario) ? ' OK' : ' BAD'}`);
   
-  // ✅ KEY FIX: Rejection reasons are visible when applicable
+  //  KEY FIX: Rejection reasons are visible when applicable
   if (hasRejectionReasons) {
     rejectionReasonsVisible++;
     console.log(`   🚨 Rejection reasons:`);
@@ -148,7 +148,7 @@ scenarios.forEach((scenario, index) => {
     }
   }
   
-  console.log(`   Eligibility: ${isEligible ? '✅ ELIGIBLE' : '❌ NOT ELIGIBLE'}`);
+  console.log(`   Eligibility: ${isEligible ? ' ELIGIBLE' : ' NOT ELIGIBLE'}`);
   console.log('');
 
   if (isEligible) eligibleCount++;
@@ -157,19 +157,19 @@ scenarios.forEach((scenario, index) => {
   // Validate TIR is always present
   if (!scenario.irr && scenario.irr !== 0) {
     allScenariosHaveTIR = false;
-    console.log(`   ⚠️ WARNING: TIR value missing for scenario ${scenarioNum}`);
+    console.log(`    WARNING: TIR value missing for scenario ${scenarioNum}`);
   }
 });
 
-console.log('🎯 VALIDATION SUMMARY:');
-console.log(`✅ All scenarios have TIR values: ${allScenariosHaveTIR ? 'YES' : 'NO'}`);
-console.log(`✅ Rejection reasons shown: ${rejectionReasonsVisible}/${nonEligibleCount} non-eligible scenarios`);
-console.log(`✅ Eligible scenarios: ${eligibleCount}/${scenarios.length}`);
-console.log(`✅ Non-eligible scenarios: ${nonEligibleCount}/${scenarios.length}`);
+console.log(' VALIDATION SUMMARY:');
+console.log(` All scenarios have TIR values: ${allScenariosHaveTIR ? 'YES' : 'NO'}`);
+console.log(` Rejection reasons shown: ${rejectionReasonsVisible}/${nonEligibleCount} non-eligible scenarios`);
+console.log(` Eligible scenarios: ${eligibleCount}/${scenarios.length}`);
+console.log(` Non-eligible scenarios: ${nonEligibleCount}/${scenarios.length}`);
 console.log('');
 
 // Test DOM template rendering logic
-console.log('🖼️ DOM TEMPLATE RENDERING VALIDATION:');
+console.log(' DOM TEMPLATE RENDERING VALIDATION:');
 console.log('');
 
 scenarios.forEach((scenario, index) => {
@@ -177,19 +177,19 @@ scenarios.forEach((scenario, index) => {
   console.log(`🎭 Scenario ${scenarioNum} DOM Elements:`);
   
   // TIR post row - ALWAYS visible now
-  console.log(`   [✅] <div data-testid="tir-post"> TIR post: ${component.getIrrPct(scenario).toFixed(2)}% </div>`);
+  console.log(`   [] <div data-testid="tir-post"> TIR post: ${component.getIrrPct(scenario).toFixed(2)}% </div>`);
   
   // Rejection box - visible when hasRejectionReasons returns true
   if (component.hasRejectionReasons(scenario)) {
-    console.log(`   [✅] <div data-testid="rejection-reason"> Rejection reasons shown </div>`);
+    console.log(`   [] <div data-testid="rejection-reason"> Rejection reasons shown </div>`);
     if (!component.isTirOk(scenario)) {
-      console.log(`   [✅] <div data-testid="irr-rejection"> Motivo: IRRpost < IRRmin </div>`);
+      console.log(`   [] <div data-testid="irr-rejection"> Motivo: IRRpost < IRRmin </div>`);
     }
     if (component.isBelowMinPayment(scenario)) {
-      console.log(`   [✅] <div data-testid="pmt-rejection"> Motivo: PMT′ < PMTmin </div>`);
+      console.log(`   [] <div data-testid="pmt-rejection"> Motivo: PMT′ < PMTmin </div>`);
     }
   } else {
-    console.log(`   [ℹ️] No rejection reasons (scenario is eligible)`);
+    console.log(`   [] No rejection reasons (scenario is eligible)`);
   }
   
   console.log('');
@@ -203,18 +203,18 @@ const validationResults = {
   mixOfEligibleAndNonEligible: eligibleCount > 0 && nonEligibleCount > 0
 };
 
-console.log('🏆 FINAL VALIDATION RESULTS:');
-console.log(`✅ TIR values always visible in DOM: ${validationResults.tirValuesAlwaysVisible ? 'PASS' : 'FAIL'}`);
-console.log(`✅ Rejection reasons always rendered: ${validationResults.rejectionReasonsShown ? 'PASS' : 'FAIL'}`); 
-console.log(`✅ All scenarios returned (not filtered): ${validationResults.allScenariosReturned ? 'PASS' : 'FAIL'}`);
-console.log(`✅ Mix of eligible/non-eligible scenarios: ${validationResults.mixOfEligibleAndNonEligible ? 'PASS' : 'FAIL'}`);
+console.log(' FINAL VALIDATION RESULTS:');
+console.log(` TIR values always visible in DOM: ${validationResults.tirValuesAlwaysVisible ? 'PASS' : 'FAIL'}`);
+console.log(` Rejection reasons always rendered: ${validationResults.rejectionReasonsShown ? 'PASS' : 'FAIL'}`); 
+console.log(` All scenarios returned (not filtered): ${validationResults.allScenariosReturned ? 'PASS' : 'FAIL'}`);
+console.log(` Mix of eligible/non-eligible scenarios: ${validationResults.mixOfEligibleAndNonEligible ? 'PASS' : 'FAIL'}`);
 
 const allTestsPassed = Object.values(validationResults).every(result => result === true);
 
 console.log('');
 console.log('='.repeat(60));
 if (allTestsPassed) {
-  console.log('🎉 ✅ ALL VALIDATIONS PASSED - PROTECCIÓN TIR FIXES WORKING!');
+  console.log('  ALL VALIDATIONS PASSED - PROTECCIÓN TIR FIXES WORKING!');
   console.log('');
   console.log('📋 Key fixes implemented:');
   console.log('   1. ProtectionEngineService: Remove tirOK filter, return all scenarios');
@@ -223,6 +223,6 @@ if (allTestsPassed) {
   console.log('   4. Component methods: Added hasRejectionReasons() helper');
   console.log('   5. TIR calculation: Handle NaN/Infinity gracefully');
 } else {
-  console.log('❌ SOME VALIDATIONS FAILED - NEED FURTHER FIXES');
+  console.log(' SOME VALIDATIONS FAILED - NEED FURTHER FIXES');
 }
 console.log('='.repeat(60));

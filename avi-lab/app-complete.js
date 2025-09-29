@@ -226,7 +226,7 @@ class AVILabComplete {
                             </div>
                         </div>
 
-                        <div id="basic-flow" class="basic-flow" style="display:none; margin:12px 0; padding:12px; border:1px solid #e1e4e8; border-radius:6px; background:#fafbfc;">
+                        <div id="basic-flow" class="basic-flow" style="display:none; margin:12px 0; padding:12px; border:1px solid #e5e7eb; border-radius:8px; background:#ffffff;">
                             <div id="basic-flow-status" style="margin-bottom:8px; font-weight:600;">Flow de Información Básica</div>
                             <div id="basic-flow-question" style="margin-bottom:8px; font-size:15px;">—</div>
                             <div class="basic-flow-actions">
@@ -241,7 +241,7 @@ class AVILabComplete {
                             <!-- Questions will be populated here -->
                         </div>
 
-                        <div id="random-flow" class="basic-flow" style="display:none; margin:12px 0; padding:12px; border:1px solid #e1e4e8; border-radius:6px; background:#fafbfc;">
+                        <div id="random-flow" class="basic-flow" style="display:none; margin:12px 0; padding:12px; border:1px solid #e5e7eb; border-radius:8px; background:#ffffff;">
                             <div id="random-flow-status" style="margin-bottom:8px; font-weight:600;">Random Flow</div>
                             <div id="random-flow-question" style="margin-bottom:8px; font-size:15px;">—</div>
                             <div class="basic-flow-actions">
@@ -257,14 +257,14 @@ class AVILabComplete {
                     <section id="voice-analysis" class="tab-content">
                         <div class="voice-analysis-section">
                             <h3>🎤 Análisis de Voz Matemático</h3>
-                            <div class="instructions" style="margin:8px 0; padding:10px; background:#f6f8fa; border:1px solid #e1e4e8; border-radius:6px;">
+                            <div class="instructions" style="margin:8px 0; padding:10px; background:#ffffff; border:1px solid #e5e7eb; border-radius:8px;">
                                 <strong>Cómo probar:</strong>
                                 <ol style="margin:6px 0 0 16px; padding:0;">
                                     <li>Graba o sube un archivo de audio corto (5–10s).</li>
                                     <li>Ve a la pestaña “Questions”, elige una pregunta y pulsa “Analizar Voz”.</li>
                                     <li>Revisa score, métricas y flags en este panel.</li>
                                 </ol>
-                                <div style="margin-top:6px; font-size:12px; color:#555;">
+                                <div style="margin-top:6px; font-size:12px; color:#737373;">
                                     Modo actual: usa el botón del header para cambiar entre Offline (motor local) y Online (BFF).
                                 </div>
                             </div>

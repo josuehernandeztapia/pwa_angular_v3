@@ -1,4 +1,4 @@
-// ✅ Single Source of Truth for AVI threshold test data
+//  Single Source of Truth for AVI threshold test data
 // Thresholds: NO-GO ≤ 550, REVIEW 551–779, GO ≥ 780
 
 export const AVI_THRESHOLDS_FIXTURE = {

@@ -578,14 +578,14 @@ export class AVISystemValidatorService {
       if (!result.passed) {
         const failedTests = result.tests.filter(t => !t.passed);
         failedTests.forEach(test => {
-          recommendations.push(`⚠️ ${result.category}: ${test.name} - ${test.message}`);
+          recommendations.push(` ${result.category}: ${test.name} - ${test.message}`);
         });
       }
     });
     
     if (recommendations.length === 0) {
-      recommendations.push('✅ Todos los tests pasaron exitosamente');
-      recommendations.push('🚀 Sistema AVI listo para producción');
+      recommendations.push(' Todos los tests pasaron exitosamente');
+      recommendations.push(' Sistema AVI listo para producción');
     }
     
     return recommendations;
@@ -615,7 +615,7 @@ export class AVISystemValidatorService {
         passed: false,
         duration: 0
       }],
-      recommendations: ['🔥 Error crítico en validación - revisar logs del sistema']
+      recommendations: [' Error crítico en validación - revisar logs del sistema']
     };
   }
 }

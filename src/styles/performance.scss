@@ -1,22 +1,22 @@
 /**
- * 🚀 Performance-Optimized CSS
+ *  Performance-Optimized CSS
  * Critical styles for fast FCP/LCP and minimal CLS
  */
 
 // CSS Variables for consistent theming and reduced bundle size
 :root {
   // Color Palette - Optimized for performance
-  --primary: #06b6d4;
-  --primary-dark: #0891b2;
-  --secondary: #64748b;
-  --surface: #ffffff;
-  --background: #f8fafc;
-  --border: #e2e8f0;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
+  --primary: #080808; /* OpenAI black */
+  --primary-dark: #525252; /* OpenAI dark gray */
+  --secondary: #64748b; /* OpenAI muted text */
+  --surface: #ffffff; /* OpenAI white */
+  --background: #f8fafc; /* OpenAI very light gray */
+  --border: #e2e8f0; /* OpenAI light border */
+  --text-primary: #1e293b; /* OpenAI very dark text */
+  --text-secondary: #64748b; /* OpenAI muted text */
+  --success: #737373; /* OpenAI neutral */
+  --warning: #737373; /* OpenAI neutral */
+  --error: #737373; /* OpenAI neutral */
 
   // Spacing System - Reduced CSS output
   --space-1: 0.25rem;
@@ -93,11 +93,11 @@
 
   // Hardware-accelerated hover states
   &:hover {
-    transform: translateY(-1px);
+    transform: none; /* OpenAI no transforms */
   }
 
   &:active {
-    transform: translateY(0);
+    transform: none; /* OpenAI no transforms */
   }
 
   // Button Variants
@@ -228,7 +228,7 @@
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-1) var(--space-3);
-  border-radius: 9999px;
+  border-radius: 8px; /* OpenAI standard */
   font-size: 0.75rem;
   font-weight: 500;
 
@@ -257,8 +257,8 @@
 
 // Animations - GPU optimized
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from { transform: none; /* OpenAI no transforms */ }
+  to { transform: none; /* OpenAI no transforms */ }
 }
 
 @keyframes shimmer {
@@ -267,13 +267,13 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: none; /* OpenAI no transforms */ }
+  to { opacity: 1; transform: none; /* OpenAI no transforms */ }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from { transform: none; /* OpenAI no transforms */ opacity: 0; }
+  to { transform: none; /* OpenAI no transforms */ opacity: 1; }
 }
 
 // Utility Classes - Critical for layout stability
@@ -295,11 +295,11 @@
 // Dark Mode Support - Performance optimized
 @media (prefers-color-scheme: dark) {
   :root {
-    --surface: #1e293b;
-    --background: #0f172a;
-    --border: #334155;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
+    --surface: #1e293b; /* OpenAI very dark text */
+    --background: #080808; /* OpenAI black */
+    --border: #525252; /* OpenAI dark gray */
+    --text-primary: #f8fafc; /* OpenAI very light gray */
+    --text-secondary: #94a3b8; /* OpenAI muted text */
   }
 }
 

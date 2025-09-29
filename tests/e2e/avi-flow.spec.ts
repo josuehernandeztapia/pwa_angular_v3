@@ -110,15 +110,18 @@ test.describe('🎬 PWA Conductores - AVI Voice Interview Demo', () => {
           `;
           aviSetup.style.cssText = `
             position: fixed;
-            top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 20%;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            transform: none;
             background: #1976D2;
             color: white;
             padding: 20px;
             border-radius: 12px;
             z-index: 9999;
             box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            width: fit-content;
           `;
           document.body.appendChild(aviSetup);
         });
@@ -152,9 +155,11 @@ test.describe('🎬 PWA Conductores - AVI Voice Interview Demo', () => {
         `;
         interview.style.cssText = `
           position: fixed;
-          top: 40%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+          top: 20%;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          transform: none;
           background: #2E7D32;
           color: white;
           padding: 20px;
@@ -162,6 +167,7 @@ test.describe('🎬 PWA Conductores - AVI Voice Interview Demo', () => {
           z-index: 9999;
           box-shadow: 0 8px 24px rgba(0,0,0,0.3);
           min-width: 400px;
+          width: fit-content;
         `;
         document.body.appendChild(interview);
       });
@@ -226,15 +232,18 @@ test.describe('🎬 PWA Conductores - AVI Voice Interview Demo', () => {
         `;
         matrix.style.cssText = `
           position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+          top: 20%;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          transform: none;
           background: white;
           color: #333;
           border-radius: 12px;
           z-index: 9999;
           box-shadow: 0 8px 24px rgba(0,0,0,0.4);
           min-width: 450px;
+          width: fit-content;
         `;
         document.body.appendChild(matrix);
       }, AVI_CONFIG);

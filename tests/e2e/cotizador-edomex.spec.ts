@@ -240,9 +240,11 @@ test.describe('🎬 PWA Conductores - Cotizador Estado de México Demo', () => {
         `;
         comparison.style.cssText = `
           position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+          top: 20%;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          transform: none;
           background: #D32F2F;
           color: white;
           padding: 20px;
@@ -252,6 +254,7 @@ test.describe('🎬 PWA Conductores - Cotizador Estado de México Demo', () => {
           box-shadow: 0 8px 24px rgba(0,0,0,0.4);
           text-align: center;
           min-width: 350px;
+          width: fit-content;
         `;
         document.body.appendChild(comparison);
       }, EDOMEX_CONFIG);

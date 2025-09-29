@@ -192,9 +192,9 @@ describe('NavigationService', () => {
 
       service.getCurrentBreadcrumbs().subscribe(breadcrumbs => {
         expect(breadcrumbs.length).toBe(2);
-        expect(breadcrumbs[0].label).toBe('🏠 Dashboard');
+        expect(breadcrumbs[0].label).toBe('Dashboard');
         expect(breadcrumbs[0].route).toBe('/dashboard');
-        expect(breadcrumbs[1].label).toBe('➕ Nueva Oportunidad');
+        expect(breadcrumbs[1].label).toBe('Nueva Oportunidad');
         done();
       });
     });
@@ -314,7 +314,7 @@ describe('NavigationService', () => {
         {
           id: 'custom-action',
           label: 'Custom',
-          icon: '⚡',
+          icon: 'FAST',
           action: customAction
         }
       ]));
@@ -422,7 +422,7 @@ describe('NavigationService', () => {
       service.navigationState$.pipe(take(1)).subscribe(state => {
         expect(state.pageTitle).toBe('Simulador Tanda Colectiva');
         expect(state.breadcrumbs.length).toBe(3);
-        expect(state.breadcrumbs[2].label).toBe('🌨️ Tanda Colectiva');
+        expect(state.breadcrumbs[2].label).toBe('Tanda Colectiva');
         expect(state.showBackButton).toBe(true);
       });
     });

@@ -7,22 +7,8 @@ import { ControlContainer, FormsModule, ReactiveFormsModule } from '@angular/for
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   viewProviders: [{ provide: ControlContainer, useExisting: ControlContainer }],
-  template: `
-    <div class="form-field" [class.sm]="size === 'sm'">
-      <label *ngIf="label" [for]="id" class="label">{{ label }}</label>
-      <ng-content></ng-content>
-      <div class="helper-text" *ngIf="helper && !error" [id]="helperId">{{ helper }}</div>
-      <div class="error-text" *ngIf="error" [id]="errorId">{{ error }}</div>
-    </div>
-  `,
-  styles: [
-    `
-      :host { display: block; }
-      .form-field { display: grid; gap: var(--space-8); }
-      .form-field.sm :where(input, select, textarea) { padding: 8px 10px; font-size: 0.875rem; border-radius: var(--radius-sm); }
-      .label { font-weight: var(--font-weight-semibold); }
-    `
-  ],
+  templateUrl: './form-field.component.html',
+  styleUrls: ['./form-field.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormFieldComponent {
@@ -34,5 +20,10 @@ export class FormFieldComponent {
 
   get helperId(): string | null { return this.id ? `${this.id}-helper` : null; }
   get errorId(): string | null { return this.id ? `${this.id}-error` : null; }
-}
 
+  getContainerClasses(): Record<string, boolean> {
+    return {
+      'form-field--size-sm': this.size === 'sm',
+    };
+  }
+}

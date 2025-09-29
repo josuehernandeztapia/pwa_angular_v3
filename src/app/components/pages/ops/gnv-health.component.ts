@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { IconComponent } from '../../shared/icon/icon.component';
 import { GnvHealthService, StationHealthRow } from '../../../services/gnv-health.service';
 
 @Component({
   selector: 'app-gnv-health',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './gnv-health.component.html',
-  styles: []
+  styleUrl: './gnv-health.component.scss'
 })
 export class GnvHealthComponent implements OnInit {
   private svc = inject(GnvHealthService);
@@ -97,4 +98,3 @@ export class GnvHealthComponent implements OnInit {
     }, 2000);
   }
 }
-

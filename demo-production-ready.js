@@ -54,10 +54,10 @@ class ProductionDemo {
         passed: isHealthy,
         details: healthResponse.data
       });
-      console.log(`   ${isHealthy ? '✅' : '❌'} Webhook system: ${healthResponse.data.status || 'unknown'}`);
+      console.log(`   ${isHealthy ? '' : ''} Webhook system: ${healthResponse.data.status || 'unknown'}`);
 
       // 2. Webhook Statistics
-      console.log('📊 Checking webhook statistics...');
+      console.log(' Checking webhook statistics...');
       const statsResponse = await axios.get(`${this.bffURL}/api/bff/webhooks/stats`);
       const hasStats = statsResponse.status === 200;
       checks.push({
@@ -65,7 +65,7 @@ class ProductionDemo {
         passed: hasStats,
         details: hasStats ? 'Stats endpoint responsive' : 'Stats unavailable'
       });
-      console.log(`   ${hasStats ? '✅' : '❌'} Webhook stats: ${hasStats ? 'Available' : 'Unavailable'}`);
+      console.log(`   ${hasStats ? '' : ''} Webhook stats: ${hasStats ? 'Available' : 'Unavailable'}`);
 
       // 3. Production Endpoints Status
       const endpoints = ['conekta', 'mifiel', 'metamap', 'gnv'];
@@ -82,19 +82,19 @@ class ProductionDemo {
             passed: isActive,
             details: isActive ? 'Endpoint active' : 'Endpoint inactive'
           });
-          console.log(`   ${isActive ? '✅' : '❌'} ${endpoint.toUpperCase()}: Active`);
+          console.log(`   ${isActive ? '' : ''} ${endpoint.toUpperCase()}: Active`);
         } catch (error) {
           checks.push({
             name: `${endpoint.toUpperCase()} Endpoint`,
             passed: false,
             details: `Error: ${error.message}`
           });
-          console.log(`   ❌ ${endpoint.toUpperCase()}: ${error.message}`);
+          console.log(`    ${endpoint.toUpperCase()}: ${error.message}`);
         }
       }
 
     } catch (error) {
-      console.log(`   ❌ BFF System Error: ${error.message}`);
+      console.log(`    BFF System Error: ${error.message}`);
       checks.push({
         name: 'BFF System',
         passed: false,
@@ -112,7 +112,7 @@ class ProductionDemo {
       checks: checks
     };
 
-    console.log(`\n📊 BFF Status: ${passedChecks}/${checks.length} checks passed (${Math.round(passRate)}%)`);
+    console.log(`\n BFF Status: ${passedChecks}/${checks.length} checks passed (${Math.round(passRate)}%)`);
     return passRate >= 80; // 80% threshold
   }
 
@@ -139,7 +139,7 @@ class ProductionDemo {
           details: exists ? 'Component exists' : 'Component missing'
         });
         
-        console.log(`   ${exists ? '✅' : '❌'} ${componentName}: ${exists ? 'Present' : 'Missing'}`);
+        console.log(`   ${exists ? '' : ''} ${componentName}: ${exists ? 'Present' : 'Missing'}`);
       }
 
       // Check styles integration
@@ -152,11 +152,11 @@ class ProductionDemo {
           passed: !hasPremiumKeywords,
           details: !hasPremiumKeywords ? 'Clean Minimal Dark styles' : 'Premium keywords found'
         });
-        console.log(`   ${!hasPremiumKeywords ? '✅' : '❌'} Styles cleanliness: ${!hasPremiumKeywords ? 'Minimal Dark' : 'Contains Premium keywords'}`);
+        console.log(`   ${!hasPremiumKeywords ? '' : ''} Styles cleanliness: ${!hasPremiumKeywords ? 'Minimal Dark' : 'Contains Premium keywords'}`);
       }
 
     } catch (error) {
-      console.log(`   ❌ UX/UI Validation Error: ${error.message}`);
+      console.log(`    UX/UI Validation Error: ${error.message}`);
     }
 
     const passedUXChecks = uiChecks.filter(c => c.passed).length;
@@ -186,7 +186,7 @@ class ProductionDemo {
     };
 
     try {
-      console.log('🚀 Running production-ready E2E tests...');
+      console.log(' Running production-ready E2E tests...');
       const testCommand = 'npx playwright test e2e/production-ready-e2e.spec.ts --project=chromium --reporter=json';
       
       const result = await this.executeCommand(testCommand);
@@ -216,12 +216,12 @@ class ProductionDemo {
         }
       }
 
-      console.log(`   ✅ E2E Tests Executed: ${testResults.executed ? 'Yes' : 'No'}`);
-      console.log(`   📊 Pass Rate: ${testResults.passRate}%`);
+      console.log(`    E2E Tests Executed: ${testResults.executed ? 'Yes' : 'No'}`);
+      console.log(`    Pass Rate: ${testResults.passRate}%`);
       console.log(`   📋 Details: ${testResults.details}`);
 
     } catch (error) {
-      console.log(`   ❌ E2E Test Error: ${error.message}`);
+      console.log(`    E2E Test Error: ${error.message}`);
       testResults.details = `Error: ${error.message}`;
     }
 
@@ -243,8 +243,8 @@ class ProductionDemo {
       const lighthouseExists = fs.existsSync(path.join(__dirname, 'performance/lighthouse-performance-gates.js'));
       const k6Exists = fs.existsSync(path.join(__dirname, 'performance/k6-load-testing.js'));
 
-      console.log(`   ${lighthouseExists ? '✅' : '❌'} Lighthouse Gates: ${lighthouseExists ? 'Ready' : 'Missing'}`);
-      console.log(`   ${k6Exists ? '✅' : '❌'} K6 Load Testing: ${k6Exists ? 'Ready' : 'Missing'}`);
+      console.log(`   ${lighthouseExists ? '' : ''} Lighthouse Gates: ${lighthouseExists ? 'Ready' : 'Missing'}`);
+      console.log(`   ${k6Exists ? '' : ''} K6 Load Testing: ${k6Exists ? 'Ready' : 'Missing'}`);
 
       performanceResults.lighthouse.executed = lighthouseExists;
       performanceResults.loadTesting.executed = k6Exists;
@@ -252,16 +252,16 @@ class ProductionDemo {
       // Simulate performance scores (in production, these would run actual tests)
       if (lighthouseExists) {
         performanceResults.lighthouse.score = 92; // Simulated good score
-        console.log(`   📊 Lighthouse Score: ${performanceResults.lighthouse.score}/100`);
+        console.log(`    Lighthouse Score: ${performanceResults.lighthouse.score}/100`);
       }
 
       if (k6Exists) {
         performanceResults.loadTesting.success = true;
-        console.log(`   🚀 Load Testing: Configuration Ready`);
+        console.log(`    Load Testing: Configuration Ready`);
       }
 
     } catch (error) {
-      console.log(`   ❌ Performance Validation Error: ${error.message}`);
+      console.log(`    Performance Validation Error: ${error.message}`);
     }
 
     this.demoResults.phases.performance = performanceResults;
@@ -296,7 +296,7 @@ class ProductionDemo {
     const htmlReport = this.generateHTMLReport();
     fs.writeFileSync(htmlReportPath, htmlReport);
 
-    console.log('\n📊 DEMO REPORTS GENERATED:');
+    console.log('\n DEMO REPORTS GENERATED:');
     console.log(`   JSON: ${reportPath}`);
     console.log(`   HTML: ${htmlReportPath}`);
   }
@@ -335,18 +335,18 @@ class ProductionDemo {
 </head>
 <body>
     <div class="header">
-        <h1>🚀 Conductores PWA - Production Ready Demo</h1>
+        <h1> Conductores PWA - Production Ready Demo</h1>
         <p>Generated: ${timestamp}</p>
         <p>Comprehensive validation of enterprise readiness</p>
     </div>
 
     <div class="overall-status">
-        <div class="status-icon">${isProductionReady ? '🎉' : '⚠️'}</div>
+        <div class="status-icon">${isProductionReady ? '🎉' : ''}</div>
         <div class="score" style="color: ${isProductionReady ? '#22c55e' : '#f59e0b'}">${overallScore}%</div>
         <h2>${isProductionReady ? 'PRODUCTION READY!' : 'NEEDS IMPROVEMENT'}</h2>
         <p>${isProductionReady ? 
-          '✅ All systems validated - Ready for enterprise deployment' : 
-          '⚠️ Some components need attention before production'
+          ' All systems validated - Ready for enterprise deployment' : 
+          ' Some components need attention before production'
         }</p>
     </div>
 
@@ -367,7 +367,7 @@ class ProductionDemo {
                         <div class="check">
                             <span>${check.name}</span>
                             <span class="check-status ${check.passed ? 'passed' : 'failed'}">
-                                ${check.passed ? '✅ PASS' : '❌ FAIL'}
+                                ${check.passed ? ' PASS' : ' FAIL'}
                             </span>
                         </div>
                     `).join('')}
@@ -382,7 +382,7 @@ class ProductionDemo {
     `).join('')}
 
     <div class="footer">
-        <p>🚀 Conductores PWA - Built with enterprise-grade reliability</p>
+        <p> Conductores PWA - Built with enterprise-grade reliability</p>
         <p>BFF System • Premium UX/UI • E2E Testing • Performance Gates</p>
     </div>
 </body>
@@ -445,24 +445,24 @@ class ProductionDemo {
 
     // Final summary
     console.log('\n' + '='.repeat(80));
-    console.log('🎯 PRODUCTION READINESS SUMMARY');
+    console.log(' PRODUCTION READINESS SUMMARY');
     console.log('='.repeat(80));
-    console.log(`⏱️  Total Duration: ${duration}s`);
-    console.log(`🏭 BFF System: ${results.bff ? '✅ READY' : '❌ NEEDS WORK'}`);
-    console.log(`🎨 UX/UI Polish: ${results.ux ? '✅ READY' : '❌ NEEDS WORK'}`);
-    console.log(`🧪 E2E Testing: ${results.e2e ? '✅ READY' : '❌ NEEDS WORK'}`);
-    console.log(`⚡ Performance: ${results.performance ? '✅ READY' : '❌ NEEDS WORK'}`);
+    console.log(`  Total Duration: ${duration}s`);
+    console.log(`🏭 BFF System: ${results.bff ? ' READY' : ' NEEDS WORK'}`);
+    console.log(`🎨 UX/UI Polish: ${results.ux ? ' READY' : ' NEEDS WORK'}`);
+    console.log(`🧪 E2E Testing: ${results.e2e ? ' READY' : ' NEEDS WORK'}`);
+    console.log(`⚡ Performance: ${results.performance ? ' READY' : ' NEEDS WORK'}`);
     
     const readyCount = Object.values(results).filter(Boolean).length;
     const overallReady = readyCount >= 3; // At least 3/4 phases must pass
     
-    console.log(`\n📊 Overall: ${overallReady ? '🎉 PRODUCTION READY' : '⚠️ NEEDS IMPROVEMENT'} (${readyCount}/4 phases)`);
+    console.log(`\n Overall: ${overallReady ? '🎉 PRODUCTION READY' : ' NEEDS IMPROVEMENT'} (${readyCount}/4 phases)`);
     
     if (overallReady) {
-      console.log('\n✅ CONDUCTORES PWA IS READY FOR ENTERPRISE DEPLOYMENT!');
-      console.log('🚀 All critical systems validated and operational.');
+      console.log('\n CONDUCTORES PWA IS READY FOR ENTERPRISE DEPLOYMENT!');
+      console.log(' All critical systems validated and operational.');
     } else {
-      console.log('\n⚠️ Some components need attention before production deployment.');
+      console.log('\n Some components need attention before production deployment.');
       console.log('📋 Please review the detailed report for specific recommendations.');
     }
 
@@ -480,7 +480,7 @@ if (require.main === module) {
       process.exit(result.overallReady ? 0 : 1);
     })
     .catch(error => {
-      console.error('❌ Demo failed:', error.message);
+      console.error(' Demo failed:', error.message);
       process.exit(1);
     });
 }

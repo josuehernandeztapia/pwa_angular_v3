@@ -34,8 +34,8 @@ export class AgsAhorroComponent implements OnInit, AfterViewInit {
   isLoading = false;
   isSimulating = false;
   asideActions = [
-    { label: '📄 PDF', click: () => this.generatePDF() },
-    { label: '✅ Continuar', click: () => this.proceedWithScenario() }
+    { label: ' PDF', click: () => this.generatePDF() },
+    { label: ' Continuar', click: () => this.proceedWithScenario() }
   ];
   
   // Enhanced features
@@ -292,17 +292,17 @@ export class AgsAhorroComponent implements OnInit, AfterViewInit {
 
     const formatter = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
     
-    return `🌵 *Simulación AGS Ahorro Programado*
+    return `*Simulación AGS Ahorro Programado*
 
-📊 *Resumen del Plan:*
+ *Resumen del Plan:*
 • Meta: ${formatter.format(this.currentScenario.targetAmount)}
 • Enganche inicial: ${formatter.format(this.simuladorForm.value.initialDownPayment)}
 • Ahorro mensual: ${formatter.format(this.currentScenario.monthlyContribution)}
 • Tiempo estimado: ${this.currentScenario.monthsToTarget} meses
 • Remanente a liquidar: ${formatter.format(this.remainderAmount)}
 
-🚐 *Placas incluidas:* ${this.plates.join(', ')}
-⛽ *Sobreprecio por litro:* $${this.simuladorForm.value.overpricePerLiter}
+*Placas incluidas:* ${this.plates.join(', ')}
+*Sobreprecio por litro:* $${this.simuladorForm.value.overpricePerLiter}
 
 ¿Te interesa formalizar este plan? ¡Contáctanos!`;
   }
@@ -399,7 +399,7 @@ export class AgsAhorroComponent implements OnInit, AfterViewInit {
         labels: ['Ahorro Programado', 'Remanente a Financiar'],
         datasets: [{
           data: [monthlyContribution * this.currentScenario.monthsToTarget, remainderAmount],
-          backgroundColor: ['#10B981', '#F59E0B'],
+          backgroundColor: ['#080808', '#737373'],  /* OpenAI palette */
           borderWidth: 0
         }]
       },

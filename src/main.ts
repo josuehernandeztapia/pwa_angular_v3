@@ -1,4 +1,7 @@
+import { Title } from '@angular/platform-browser';
 import { bootstrapApplication } from '@angular/platform-browser';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import { isDevMode } from '@angular/core';
@@ -13,5 +16,18 @@ if (!isDevMode()) {
 }
 
 bootstrapApplication(AppComponent, appConfig)
-  .then(() => {})
-
+  .then(appRef => {
+    const router = appRef.injector.get(Router);
+    const title = appRef.injector.get(Title);
+    router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        if (!title.getTitle()) {
+          title.setTitle('Conductores PWA');
+        }
+      });
+    const html = document.documentElement;
+    if (!html.getAttribute('lang')) {
+      html.setAttribute('lang', 'es-MX');
+    }
+  })

@@ -315,7 +315,7 @@ export class AVICalibratedEngineService {
   ): string[] {
     const recommendations: string[] = [];
     
-    recommendations.push(`🔬 Análisis con perfil ${profile.toUpperCase()}`);
+    recommendations.push(` Análisis con perfil ${profile.toUpperCase()}`);
     
     const normalizedScore = score / 1000;
     const criticalFlags = redFlags.filter(f => f.severity === 'CRITICAL').length;
@@ -323,26 +323,26 @@ export class AVICalibratedEngineService {
     
     if (profile === 'conservative') {
       if (normalizedScore >= 0.78) {
-        recommendations.push('✅ APROBADO: Score alto con perfil conservador');
+        recommendations.push('APROBADO: Score alto con perfil conservador');
       } else if (normalizedScore <= 0.55) {
-        recommendations.push('🚫 RECHAZADO: Score crítico - riesgo inaceptable');
+        recommendations.push('RECHAZADO: Score crítico - riesgo inaceptable');
       } else if (criticalFlags >= 1) {
-        recommendations.push('⚠️ REVISAR: Red flags críticas detectadas');
+        recommendations.push('REVISAR: Red flags críticas detectadas');
       } else {
-        recommendations.push('🔍 ANÁLISIS ADICIONAL: Score en zona intermedia');
+        recommendations.push('ANÁLISIS ADICIONAL: Score en zona intermedia');
       }
     }
     
     // Recomendaciones específicas por red flags
     if (redFlags.some(f => f.type.includes('EVASIVE_LANGUAGE'))) {
-      recommendations.push('🕵️ Lenguaje evasivo en preguntas críticas - verificar manualmente');
+      recommendations.push('Lenguaje evasivo en preguntas críticas - verificar manualmente');
     }
     
     if (redFlags.some(f => f.type.includes('CALIBRATED_LOW_SCORE'))) {
-      recommendations.push('📉 Score muy bajo en preguntas de alto peso - alto riesgo');
+      recommendations.push('Score muy bajo en preguntas de alto peso - alto riesgo');
     }
     
-    recommendations.push(`📊 Score final: ${score}/1000 (${criticalFlags} críticas, ${highFlags} altas)`);
+    recommendations.push(`Score final: ${score}/1000 (${criticalFlags} críticas, ${highFlags} altas)`);
     
     return recommendations;
   }

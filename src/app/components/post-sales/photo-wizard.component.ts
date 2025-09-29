@@ -1,8 +1,9 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ManualEntryComponent, ManualEntryData } from '../shared/manual-entry/manual-entry.component';
 import { ManualOCREntryComponent, ManualOCRData } from '../shared/manual-ocr-entry/manual-ocr-entry.component';
+import { IconComponent } from '../shared/icon/icon.component';
+import { IconName } from '../shared/icon/icon-definitions';
 import { VisionOCRRetryService, OCRResult } from '../../services/vision-ocr-retry.service';
 import { CasesService, CaseRecord } from '../../services/cases.service';
 import { environment } from '../../../environments/environment';
@@ -12,6 +13,7 @@ import { timeout, catchError, retry, delayWhen, tap, switchMap } from 'rxjs/oper
 import { of, timer, throwError } from 'rxjs';
 
 type StepId = 'plate' | 'vin' | 'odometer' | 'evidence';
+type IconKey = 'camera' | 'edit';
 
 interface StepState {
   id: StepId;
@@ -29,353 +31,20 @@ interface StepState {
 @Component({
   selector: 'app-photo-wizard',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgOptimizedImage, ManualEntryComponent, ManualOCREntryComponent],
+  imports: [CommonModule, FormsModule, NgOptimizedImage, ManualOCREntryComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <section class="ui-card" *ngIf="enabled; else disabledTpl">
-      <h2 class="text-sm font-semibold mb-6 text-slate-900 dark:text-slate-100">
-        Postventa – Wizard de 4 Fotos
-      </h2>
-
-      <!-- Status Banner -->
-      <div *ngIf="!caseId" class="mb-4 px-3 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-        <p class="text-xs text-slate-600 dark:text-slate-400">
-          Se creará un caso al iniciar. Las fotos se subirán y evaluarán automáticamente.
-        </p>
-      </div>
-
-      <!-- Photo Upload Steps -->
-      <div class="space-y-4">
-        <div *ngFor="let step of steps; let i = index"
-             class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden"
-             data-cy="step-card">
-
-          <!-- Step Header -->
-          <div class="px-4 py-3 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3">
-                <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold"
-                     [class.bg-slate-200]="!step.done"
-                     [class.text-slate-600]="!step.done"
-                     [class.dark:bg-slate-700]="!step.done"
-                     [class.dark:text-slate-400]="!step.done"
-                     [class.bg-green-500]="step.done && (step.confidence || 0) >= threshold"
-                     [class.text-white]="step.done && (step.confidence || 0) >= threshold"
-                     [class.bg-yellow-500]="step.done && (step.confidence || 0) < threshold"
-                     [class.text-white]="step.done && (step.confidence || 0) < threshold">
-                  {{ step.done && (step.confidence || 0) >= threshold ? '✓' : (i + 1) }}
-                </div>
-                <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">
-                  {{ step.title }}
-                </h3>
-              </div>
-
-              <!-- Status Indicator -->
-              <div *ngIf="step.done" class="text-xs">
-                <span *ngIf="(step.confidence || 0) >= threshold && (!step.missing || step.missing.length === 0)"
-                      class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-md">
-                  Validado ({{ (step.confidence!*100) | number:'1.0-0' }}%)
-                </span>
-                <span *ngIf="(step.confidence || 0) < threshold || (step.missing && step.missing.length > 0)"
-                      class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-md">
-                  Revisar
-                </span>
-              </div>
-
-              <!-- Loading Spinner -->
-              <div *ngIf="step.uploading" class="flex items-center space-x-2">
-                <div class="animate-spin h-4 w-4 border-2 border-slate-300 dark:border-slate-600 border-t-slate-600 dark:border-t-slate-300 rounded-full"></div>
-                <span class="text-xs text-slate-500 dark:text-slate-400">Procesando...</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Step Content -->
-          <div class="p-4">
-            <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
-              {{ step.hint }}
-            </p>
-
-            <!-- Upload Actions -->
-            <div class="flex items-center space-x-3 mb-3">
-              <label class="ui-btn ui-btn-secondary text-xs cursor-pointer">
-                <input type="file" accept="image/*" capture="environment"
-                       (change)="onFileSelected($event, step.id)"
-                       [disabled]="step.uploading"
-                       class="sr-only" />
-                📷 Tomar Foto
-              </label>
-
-              <button *ngIf="step.done"
-                      (click)="retake(step.id)"
-                      class="ui-btn ui-btn-secondary text-xs">
-                🔄 Repetir
-              </button>
-            </div>
-
-            <!-- Upload Progress -->
-            <div *ngIf="step.uploading" class="mb-3">
-              <!-- Skeleton Loading -->
-              <div class="animate-pulse space-y-2">
-                <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
-                <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
-              </div>
-
-              <div *ngIf="step.id === 'vin' && vinRetryAttempt > 0"
-                   class="mt-2 text-xs text-blue-600 dark:text-blue-400">
-                Intento {{ vinRetryAttempt }} de 3 (análisis VIN extendido)
-              </div>
-            </div>
-
-            <!-- Quality Assessment -->
-            <div *ngIf="step.done" class="border-t border-slate-200 dark:border-slate-700 pt-3 -mx-4 px-4">
-              <div *ngIf="(step.confidence || 0) >= threshold && (!step.missing || step.missing.length === 0)"
-                   class="flex items-center text-xs text-green-600 dark:text-green-400">
-                <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                Documento procesado correctamente
-              </div>
-
-              <div *ngIf="(step.confidence || 0) < threshold || (step.missing && step.missing.length > 0)"
-                   class="space-y-3">
-                <div class="flex items-center text-xs text-yellow-600 dark:text-yellow-400">
-                  <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
-                  Requiere revisión manual
-                </div>
-
-                <!-- Missing Fields List -->
-                <div *ngIf="step.missing && step.missing.length > 0" class="ml-4">
-                  <p class="text-xs text-slate-600 dark:text-slate-400 mb-1">Campos faltantes:</p>
-                  <ul class="text-xs text-slate-500 dark:text-slate-500 space-y-1">
-                    <li *ngFor="let m of step.missing" class="flex items-center">
-                      <div class="w-1 h-1 bg-slate-400 rounded-full mr-2"></div>
-                      {{ m | titlecase }}
-                    </li>
-                  </ul>
-                </div>
-
-                <!-- Manual Entry Actions -->
-                <div class="flex items-center space-x-2">
-                  <button (click)="retake(step.id)"
-                          class="ui-btn ui-btn-secondary text-xs">
-                    🔄 Repetir captura
-                  </button>
-                  <button *ngIf="step.id === 'vin' || step.id === 'odometer'"
-                          (click)="openManualEntry(step.id)"
-                          class="ui-btn ui-btn-primary text-xs"
-                          data-testid="manual-entry-btn">
-                    📝 Ingresar manualmente
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- OCR Processing Summary -->
-      <div *ngIf="caseId" class="mt-6 space-y-4">
-        <!-- Success State -->
-        <div *ngIf="isAllGood" class="px-4 py-3 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <div class="flex items-center space-x-2">
-            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-            <p class="text-sm text-green-700 dark:text-green-400 font-medium">
-              Validación completa
-            </p>
-          </div>
-          <p class="text-xs text-green-600 dark:text-green-500 mt-1 ml-4">
-            Todos los documentos procesados correctamente
-          </p>
-        </div>
-
-        <!-- Performance Metrics -->
-        <div *ngIf="firstRecommendationMs != null" class="text-xs text-slate-500 dark:text-slate-400">
-          ⏱️ Tiempo de procesamiento: {{ (firstRecommendationMs!/1000) | number:'1.1-1' }}s
-        </div>
-
-        <!-- Issues State -->
-        <div *ngIf="!isAllGood" class="px-4 py-3 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-          <div class="flex items-center space-x-2 mb-2">
-            <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
-            <p class="text-sm text-yellow-700 dark:text-yellow-400 font-medium">
-              Estado: Pendiente
-            </p>
-          </div>
-          <div class="ml-4 space-y-2">
-            <p class="text-xs text-yellow-600 dark:text-yellow-500">Elementos identificados:</p>
-            <ul class="text-xs text-yellow-600 dark:text-yellow-500 space-y-1">
-              <li *ngFor="let msg of summaryIssues" class="flex items-start">
-                <div class="w-1 h-1 bg-yellow-400 rounded-full mt-2 mr-2 flex-shrink-0"></div>
-                {{ msg }}
-              </li>
-            </ul>
-
-            <!-- Quick Actions -->
-            <div class="flex flex-wrap gap-2 pt-2">
-              <button *ngIf="needsVin"
-                      (click)="jumpTo('vin')"
-                      class="ui-btn ui-btn-secondary text-xs">
-                📷 Capturar VIN
-              </button>
-              <button *ngIf="needsOdometer"
-                      (click)="jumpTo('odometer')"
-                      class="ui-btn ui-btn-secondary text-xs">
-                📷 Capturar Odómetro
-              </button>
-              <button *ngIf="needsEvidence"
-                      (click)="jumpTo('evidence')"
-                      class="ui-btn ui-btn-secondary text-xs">
-                📷 Tomar Evidencia
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Enhanced VIN Detection Banner -->
-        <div *ngIf="showVinDetectionBanner"
-             class="px-4 py-3 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800 rounded-lg"
-             data-testid="vin-detection-banner"
-             data-cy="vin-detection-banner">
-          <div class="flex items-center space-x-2 mb-2">
-            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
-            <p class="text-sm text-orange-700 dark:text-orange-400 font-medium">
-              VIN requiere revisión manual
-            </p>
-          </div>
-          <p class="text-xs text-orange-600 dark:text-orange-500 mb-3 ml-4">
-            Timeout en detección automática después de varios intentos
-          </p>
-          <button (click)="retakeVinWithRetry()"
-                  class="ui-btn ui-btn-secondary text-xs ml-4">
-            🔄 Reintentar con tiempo extendido
-          </button>
-        </div>
-
-        <!-- Trigger need_info recording when applicable -->
-        <ng-container *ngIf="showNeedInfoRecording"></ng-container>
-
-        <!-- Refacciones Sugeridas -->
-        <div *ngIf="enableAddToQuote && recommendedParts.length > 0"
-             class="border-t border-slate-200 dark:border-slate-700 pt-6"
-             data-cy="parts-suggested">
-
-          <div class="mb-4">
-            <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1">
-              🔧 Refacciones Recomendadas
-            </h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400">
-              Basado en el análisis de las fotografías
-            </p>
-          </div>
-
-          <!-- Parts Chips Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-            <div *ngFor="let p of recommendedParts"
-                 class="border border-slate-200 dark:border-slate-700 rounded-lg p-3 hover:shadow-sm transition-shadow"
-                 [attr.data-cy]="'chip-' + p.id">
-
-              <div class="flex justify-between items-start mb-2">
-                <h4 class="text-sm font-medium text-slate-900 dark:text-slate-100">
-                  {{ p.name }}
-                </h4>
-                <span class="text-sm font-semibold text-green-600 dark:text-green-400">
-                  {{ p.priceMXN | currency:'MXN':'symbol-narrow':'1.0-0' }}
-                </span>
-              </div>
-
-              <div class="text-xs text-slate-500 dark:text-slate-500 space-y-1 mb-3">
-                <div class="flex justify-between">
-                  <span>OEM: {{ p.oem }}</span>
-                  <span *ngIf="p.equivalent">Equiv: {{ p.equivalent }}</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <span>Stock: {{ p.stock }}</span>
-                  <span *ngIf="p.stock === 0"
-                        class="px-2 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded text-xs">
-                    Agotado
-                  </span>
-                  <span *ngIf="p.stock > 0"
-                        class="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded text-xs">
-                    Disponible
-                  </span>
-                </div>
-              </div>
-
-              <button (click)="addToQuote(p)"
-                      class="w-full ui-btn ui-btn-primary text-xs"
-                      [attr.data-cy]="'add-' + p.id"
-                      [attr.aria-label]="'Agregar ' + p.name + ' a cotización'"
-                      [disabled]="p.stock === 0">
-                ➕ Agregar a Cotización
-              </button>
-            </div>
-          </div>
-
-          <!-- Quote Draft Summary -->
-          <div *ngIf="draftCount > 0"
-               class="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800"
-               data-cy="quote-draft-summary"
-               aria-live="polite">
-            <div class="flex items-center space-x-2">
-              <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span class="text-sm text-blue-700 dark:text-blue-400">
-                Cotización provisional: <strong>{{ draftCount }}</strong> artículo{{ draftCount > 1 ? 's' : '' }}
-              </span>
-            </div>
-            <button (click)="clearDraft()"
-                    class="ui-btn ui-btn-secondary text-xs"
-                    data-cy="clear-draft">
-              🗑️ Limpiar
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Navigation Footer -->
-      <div class="mt-6 flex justify-between items-center pt-4 border-t border-slate-200 dark:border-slate-700">
-        <div class="text-xs text-slate-500 dark:text-slate-500">
-          Paso {{ currentIndex + 1 }} de {{ steps.length }}
-        </div>
-
-        <button [disabled]="!caseId"
-                (click)="next()"
-                class="ui-btn ui-btn-primary"
-                data-cy="wizard-next">
-          {{ ctaText }}
-        </button>
-      </div>
-    </section>
-
-    <!-- Manual OCR Entry Modal -->
-    <app-manual-ocr-entry
-      [documentType]="manualEntryType || ''"
-      [isOpen]="showManualEntry"
-      (save)="onManualOCRSave($event)"
-      (cancel)="onManualCancel()">
-    </app-manual-ocr-entry>
-
-    <ng-template #disabledTpl>
-      <section class="ui-card">
-        <div class="px-4 py-3 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-          <div class="flex items-center space-x-2">
-            <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
-            <p class="text-sm text-yellow-700 dark:text-yellow-400 font-medium">
-              Función desactivada
-            </p>
-          </div>
-          <p class="text-xs text-yellow-600 dark:text-yellow-500 mt-1 ml-4">
-            El Wizard de Postventa está desactivado. Actívalo con el flag environment.features.enablePostSalesWizard.
-          </p>
-        </div>
-      </section>
-    </ng-template>
-  `,
-  styles: []
+  templateUrl: './photo-wizard.component.html',
+  styleUrls: ['./photo-wizard.component.scss']
 })
 export class PhotoWizardComponent {
   enabled = environment.features?.enablePostSalesWizard === true;
   threshold = 0.7; // QA threshold
   environment = environment;
   enableAddToQuote = environment.features?.enablePostSalesAddToQuote === true;
+  private readonly iconMap = new Map<IconKey, IconName>([
+    ['camera', 'camera'],
+    ['edit', 'edit']
+  ]);
 
   steps: StepState[] = [
     { id: 'plate', title: 'Placa de circulación', hint: 'Asegúrate de buena luz y enfoque. Evita reflejos.', example: 'assets/examples/plate-example.jpg' },
@@ -468,6 +137,10 @@ export class PhotoWizardComponent {
   private hasMissing(key: 'vin' | 'odometer' | 'evidence'): boolean {
     const s = this.find(key);
     return !!(s && s.done && (s.missing?.includes(key) || (s.confidence || 0) < this.threshold));
+  }
+
+  getIcon(key: IconKey): IconName {
+    return this.iconMap.get(key) ?? 'document';
   }
 
   onExampleError(evt: Event) {

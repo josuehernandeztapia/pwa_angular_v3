@@ -1,5 +1,5 @@
 /**
- * 🎯 KIBAN/HASE Risk Evaluation Service
+ *  KIBAN/HASE Risk Evaluation Service
  * Enterprise Angular service integrating with BFF for risk evaluation
  */
 
@@ -116,7 +116,7 @@ export class RiskEvaluationService {
         this.updatePerformanceMetrics(startTime, true);
         this.setLoadingState(false, null, evaluation);
 
-        // 🛡️ P0.2 SURGICAL FIX - Persist evaluation
+        //  P0.2 SURGICAL FIX - Persist evaluation
         this.riskPersistenceService.storeEvaluation(
           request.clientId,
           evaluation,
@@ -143,7 +143,7 @@ export class RiskEvaluationService {
    * Get evaluation history for a client
    */
   getEvaluationHistory(clientId: string): Observable<RiskEvaluation[]> {
-    // 🛡️ P0.2 SURGICAL FIX - Use persistence service for history
+    //  P0.2 SURGICAL FIX - Use persistence service for history
     return this.riskPersistenceService.getEvaluationHistory(clientId).pipe(
       map(storedEvaluations => storedEvaluations.map(stored => stored.evaluation)),
       catchError(error => {
@@ -229,7 +229,7 @@ export class RiskEvaluationService {
   }
 
   /**
-   * 🛡️ P0.2 SURGICAL FIX - Access persistence service
+   *  P0.2 SURGICAL FIX - Access persistence service
    */
   get persistenceService() {
     return this.riskPersistenceService;

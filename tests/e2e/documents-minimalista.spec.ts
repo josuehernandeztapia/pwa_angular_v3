@@ -16,10 +16,9 @@ test.describe('Documents Minimalista - Upload & OCR States', () => {
     // Check upload section is visible
     await expect(page.locator('[data-cy="document-upload"]')).toBeVisible();
 
-    // Validate upload area styling
+    // Validate upload area styling with semantic classes
     const uploadArea = page.locator('[data-cy="document-upload"]');
-    await expect(uploadArea).toHaveClass(/border-dashed/);
-    await expect(uploadArea).toHaveClass(/border-slate-300/);
+    await expect(uploadArea).toHaveClass(/documents__upload-area/);  // OpenAI semantic class
 
     // Check for upload icon and text
     await expect(page.locator('text=Subir documento')).toBeVisible();
@@ -83,8 +82,8 @@ test.describe('Documents Minimalista - Upload & OCR States', () => {
     await expect(validadoElement).toBeVisible();
     await expect(validadoElement).toHaveText('Validado');
 
-    // Check for emerald color styling
-    await expect(validadoElement).toHaveClass(/text-emerald-600/);
+    // Check for success styling with semantic class
+    await expect(validadoElement).toHaveClass(/documents__status--success/);
 
     // Screenshot
     await expect(page).toHaveScreenshot('documents-ocr-validado.png');
@@ -114,8 +113,8 @@ test.describe('Documents Minimalista - Upload & OCR States', () => {
     await expect(errorElement).toBeVisible();
     await expect(errorElement).toHaveText('Error');
 
-    // Check for red color styling
-    await expect(errorElement).toHaveClass(/text-red-600/);
+    // Check for error styling with semantic class
+    await expect(errorElement).toHaveClass(/documents__status--error/);
 
     // Screenshot
     await expect(page).toHaveScreenshot('documents-ocr-error.png');
@@ -183,10 +182,10 @@ test.describe('Documents Minimalista - Upload & OCR States', () => {
     await expect(statusElements.nth(1)).toHaveText('Pendiente');
     await expect(statusElements.nth(2)).toHaveText('Error');
 
-    // Check status colors
-    await expect(statusElements.nth(0)).toHaveClass(/text-emerald-600/);
-    await expect(statusElements.nth(1)).toHaveClass(/text-amber-600/);
-    await expect(statusElements.nth(2)).toHaveClass(/text-red-600/);
+    // Check status semantic classes
+    await expect(statusElements.nth(0)).toHaveClass(/documents__status--success/);
+    await expect(statusElements.nth(1)).toHaveClass(/documents__status--pending/);
+    await expect(statusElements.nth(2)).toHaveClass(/documents__status--error/);
 
     // Screenshot
     await expect(page).toHaveScreenshot('documents-table.png');
@@ -220,13 +219,12 @@ test.describe('Documents Minimalista - Upload & OCR States', () => {
     await expect(title).toHaveClass(/text-sm/);
     await expect(title).toHaveClass(/font-semibold/);
 
-    // Check dark mode classes are present
-    await expect(title).toHaveClass(/dark:text-slate-100/);
+    // Check semantic title classes
+    await expect(title).toHaveClass(/documents__title/);
 
-    // Validate upload area styling
+    // Validate upload area semantic styling
     const uploadArea = page.locator('[data-cy="document-upload"]');
-    await expect(uploadArea).toHaveClass(/border-slate-300/);
-    await expect(uploadArea).toHaveClass(/dark:border-slate-600/);
+    await expect(uploadArea).toHaveClass(/documents__upload-area/);
 
     // Screenshot of complete minimalista design
     await expect(page).toHaveScreenshot('documents-minimalista-design.png');

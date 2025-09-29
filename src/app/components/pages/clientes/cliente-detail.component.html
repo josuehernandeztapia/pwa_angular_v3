@@ -3,7 +3,7 @@
     <div class="cliente-header__primary">
       <h1 class="cliente-title">{{ client?.name || 'Cliente' }}</h1>
       <div class="cliente-header__meta">
-        <span class="cliente-status-badge" [ngClass]="getStatusBadgeClass(client?.status)">
+        <span [ngClass]="getStatusBadgeClasses(client?.status)">
           {{ client?.status || 'Sin estado' }}
         </span>
         <span class="cliente-meta" *ngIf="client?.flow">{{ getFlowDisplayName(client?.flow) }}</span>
@@ -13,7 +13,7 @@
 
     <div class="cliente-header__metrics" *ngIf="client?.healthScore !== null">
       <span class="metric-label">Score de Salud</span>
-      <span class="metric-value" [ngClass]="getHealthScoreClass()">
+      <span [ngClass]="getHealthScoreClasses()">
         {{ client?.healthScore }}%
       </span>
     </div>

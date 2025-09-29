@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, importProvidersFrom } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick, discardPeriodicTasks, flush } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { MediaPermissionsService } from './services/media-permissions.service';
 import { SwUpdateService } from './services/sw-update.service';
 import * as designTokens from './styles/design-tokens';
-import { LucideAngularModule, HelpCircle, Mic, Activity, Settings, BarChart, Calculator, LineChart, FileText, Truck, Shield } from 'lucide-angular';
 
 const theme = designTokens.theme;
 
@@ -47,8 +46,7 @@ describe('AppComponent', () => {
       ],
       providers: [
         { provide: MediaPermissionsService, useClass: MediaPermissionsStub },
-        { provide: SwUpdateService, useClass: SwUpdateServiceStub },
-        importProvidersFrom(LucideAngularModule.pick({ HelpCircle, Mic, Activity, Settings, BarChart, Calculator, LineChart, FileText, Truck, Shield }))
+        { provide: SwUpdateService, useClass: SwUpdateServiceStub }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -130,4 +128,3 @@ describe('AppComponent', () => {
     discardPeriodicTasks();
   }));
 });
-

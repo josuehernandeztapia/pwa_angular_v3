@@ -333,9 +333,11 @@ test.describe('🎬 PWA Conductores - Simulador Aguascalientes Demo', () => {
         `;
         summary.style.cssText = `
           position: fixed;
-          top: 40%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+          top: 20%;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          transform: none;
           background: #2E7D32;
           color: white;
           padding: 25px;
@@ -346,6 +348,7 @@ test.describe('🎬 PWA Conductores - Simulador Aguascalientes Demo', () => {
           text-align: center;
           min-width: 400px;
           line-height: 1.4;
+          width: fit-content;
         `;
         document.body.appendChild(summary);
       }, AGS_SIMULATOR_CONFIG);

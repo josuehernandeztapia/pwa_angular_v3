@@ -1,41 +1,41 @@
 <!-- Skip Link for Accessibility -->
 <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
 
-<div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+<div class="edomex-individual">
   <!-- Header -->
-  <header class="border-b border-border bg-surface">
-    <div class="max-w-6xl mx-auto px-6 py-4">
-      <div class="flex items-center gap-4">
-        <button (click)="goBack()" class="ui-btn ui-btn-ghost ui-btn-sm" data-cy="back-button">
+  <header class="edomex-individual__header">
+    <div class="edomex-individual__container">
+      <div class="edomex-individual__header-content">
+        <button (click)="goBack()" class="btn btn-ghost btn-sm" data-cy="back-button">
           ← Volver
         </button>
-        <div>
-          <h1 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Planificador de Enganche Individual</h1>
-          <p class="text-sm text-slate-600 dark:text-slate-400">Calcula cuánto tiempo necesitas para ahorrar tu enganche</p>
+        <div class="edomex-individual__header-text">
+          <h1 class="edomex-individual__title">Planificador de Enganche Individual</h1>
+          <p class="edomex-individual__subtitle">Calcula cuánto tiempo necesitas para ahorrar tu enganche</p>
         </div>
       </div>
     </div>
   </header>
 
-  <main id="main-content" class="max-w-6xl mx-auto px-6 py-8">
+  <main id="main-content" class="edomex-individual__body">
     <!-- KPIs -->
-    <div class="ui-card mb-6" *ngIf="scenario">
-      <div class="grid grid-cols-3 gap-6">
-        <div class="text-center">
-          <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="sim-ahorro-label">Mensualidad</div>
-          <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="sim-ahorro">
+    <div class="card edomex-individual__kpi-card" *ngIf="scenario">
+      <div class="edomex-individual__kpi-grid">
+        <div class="edomex-individual__kpi-item">
+          <div class="edomex-individual__kpi-label" data-cy="sim-ahorro-label">Mensualidad</div>
+          <div class="edomex-individual__kpi-value" data-cy="sim-ahorro">
             {{ formatCurrency(scenario.monthlyContribution || 0) }}
           </div>
         </div>
-        <div class="text-center">
-          <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="sim-plazo-label">Tiempo</div>
-          <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="sim-plazo">
+        <div class="edomex-individual__kpi-item">
+          <div class="edomex-individual__kpi-label" data-cy="sim-plazo-label">Tiempo</div>
+          <div class="edomex-individual__kpi-value" data-cy="sim-plazo">
             {{ scenario.monthsToTarget || 0 }} meses
           </div>
         </div>
-        <div class="text-center">
-          <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="sim-pmt-label">Meta</div>
-          <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="sim-pmt">
+        <div class="edomex-individual__kpi-item">
+          <div class="edomex-individual__kpi-label" data-cy="sim-pmt-label">Meta</div>
+          <div class="edomex-individual__kpi-value" data-cy="sim-pmt">
             {{ formatCurrency(scenario.targetAmount || 0) }}
           </div>
         </div>
@@ -43,106 +43,106 @@
     </div>
 
     <!-- Main Content -->
-    <div class="grid lg:grid-cols-2 gap-8">
+    <div class="edomex-individual__content">
       <!-- Configuration Panel -->
-      <div class="ui-card">
-        <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Configuración</h2>
+      <div class="card edomex-individual__panel">
+        <h2 class="edomex-individual__section-title">Configuración</h2>
 
-        <form [formGroup]="configForm" class="space-y-6">
+        <form [formGroup]="configForm" class="edomex-individual__form">
           <!-- Target Down Payment -->
           <div>
-            <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Meta de Enganche *</label>
-            <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500">$</span>
+            <label class="edomex-individual__label">Meta de Enganche *</label>
+            <div class="input-affix-wrapper">
+              <span class="input-affix input-affix--prefix" aria-hidden="true" style="color: var(--color-text-tertiary)">$</span>
               <input
                 type="number"
                 formControlName="targetDownPayment"
                 placeholder="150000"
-                class="ui-input pl-8"
+                class="input input-has-prefix"
                 min="50000"
                 step="1000"
                 data-cy="target-down-payment"
               />
             </div>
-            <div class="flex justify-between text-xs text-slate-500 mt-1">
+            <div class="edomex-individual__hint" style="display: flex; justify-content: space-between;">
               <span>Mínimo: $50,000</span>
               <span>Para unidad de $749K: $149,800 (20%)</span>
             </div>
             <div *ngIf="configForm.get('targetDownPayment')?.errors?.['required']"
-                 class="text-red-500 text-xs mt-1">La meta de enganche es obligatoria</div>
+                 class="edomex-individual__error">La meta de enganche es obligatoria</div>
             <div *ngIf="configForm.get('targetDownPayment')?.errors?.['min']"
-                 class="text-red-500 text-xs mt-1">El mínimo es $50,000</div>
+                 class="edomex-individual__error">El mínimo es $50,000</div>
           </div>
 
           <!-- Current Plate Consumption -->
           <div>
-            <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Consumo Actual de Combustible *</label>
-            <div class="relative">
+            <label class="edomex-individual__label">Consumo Actual de Combustible *</label>
+            <div class="input-affix-wrapper">
               <input
                 type="number"
                 formControlName="currentPlateConsumption"
                 placeholder="500"
-                class="ui-input pr-20"
+                class="input input-has-suffix"
                 min="100"
                 step="50"
                 data-cy="consumption"
               />
-              <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 text-sm">litros/mes</span>
+              <span class="input-affix input-affix--suffix" aria-hidden="true" style="color: var(--color-text-tertiary)">litros/mes</span>
             </div>
-            <p class="text-xs text-slate-500 mt-1">Promedio de litros que consumes mensualmente</p>
+            <p class="edomex-individual__hint">Promedio de litros que consumes mensualmente</p>
             <div *ngIf="configForm.get('currentPlateConsumption')?.errors?.['required']"
-                 class="text-red-500 text-xs mt-1">El consumo de combustible es obligatorio</div>
+                 class="edomex-individual__error">El consumo de combustible es obligatorio</div>
             <div *ngIf="configForm.get('currentPlateConsumption')?.errors?.['min']"
-                 class="text-red-500 text-xs mt-1">El mínimo es 100 litros/mes</div>
+                 class="edomex-individual__error">El mínimo es 100 litros/mes</div>
           </div>
 
           <!-- Overprice Per Liter -->
           <div>
-            <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Sobreprecio por Litro *</label>
-            <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500">$</span>
+            <label class="edomex-individual__label">Sobreprecio por Litro *</label>
+            <div class="input-affix-wrapper">
+              <span class="input-affix input-affix--prefix" aria-hidden="true" style="color: var(--color-text-tertiary)">$</span>
               <input
                 type="number"
                 formControlName="overpricePerLiter"
                 placeholder="2.50"
-                class="ui-input pl-8"
+                class="input input-has-prefix"
                 min="0.5"
                 step="0.1"
                 data-cy="overprice"
               />
             </div>
-            <p class="text-xs text-slate-500 mt-1">Cantidad extra por litro que destinarás al ahorro</p>
+            <p class="edomex-individual__hint">Cantidad extra por litro que destinarás al ahorro</p>
             <div *ngIf="configForm.get('overpricePerLiter')?.errors?.['required']"
-                 class="text-red-500 text-xs mt-1">El sobreprecio por litro es obligatorio</div>
+                 class="edomex-individual__error">El sobreprecio por litro es obligatorio</div>
             <div *ngIf="configForm.get('overpricePerLiter')?.errors?.['min']"
-                 class="text-red-500 text-xs mt-1">El mínimo es $0.50/litro</div>
+                 class="edomex-individual__error">El mínimo es $0.50/litro</div>
           </div>
 
           <!-- Optional Voluntary Monthly -->
           <div>
-            <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Aportación Voluntaria Mensual (Opcional)</label>
-            <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500">$</span>
+            <label class="edomex-individual__label">Aportación Voluntaria Mensual (Opcional)</label>
+            <div class="input-affix-wrapper">
+              <span class="input-affix input-affix--prefix" aria-hidden="true" style="color: var(--color-text-tertiary)">$</span>
               <input
                 type="number"
                 formControlName="voluntaryMonthly"
                 placeholder="0"
-                class="ui-input pl-8"
+                class="input input-has-prefix"
                 min="0"
                 step="100"
                 data-cy="voluntary"
               />
             </div>
-            <p class="text-xs text-slate-500 mt-1">Dinero adicional que puedes aportar mensualmente</p>
+            <p class="edomex-individual__hint">Dinero adicional que puedes aportar mensualmente</p>
           </div>
 
           <!-- Action Buttons -->
-          <div class="flex gap-3 pt-4">
+          <div class="edomex-individual__actions">
             <button
               type="button"
               (click)="calculateScenario()"
               [disabled]="!configForm.valid || isCalculating"
-              class="ui-btn ui-btn-primary flex-1"
+              class="btn btn-primary"
               data-cy="calculate-btn"
             >
               {{ isCalculating ? 'Calculando...' : 'Calcular Plan de Ahorro' }}
@@ -150,7 +150,7 @@
             <button
               type="button"
               (click)="resetForm()"
-              class="ui-btn ui-btn-secondary"
+              class="btn btn-secondary"
             >
               Limpiar
             </button>
@@ -158,178 +158,182 @@
         </form>
       </div>
 
-    <!-- Results Panel -->
-    <div class="ui-card" *ngIf="scenario">
-      <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Resultados del Simulador</h2>
+      <!-- Results Panel -->
+      <div class="card edomex-individual__panel" *ngIf="scenario">
+        <h2 class="edomex-individual__section-title">Resultados del Simulador</h2>
 
-      <!-- Charts Section -->
-      <div class="grid lg:grid-cols-2 gap-6 mb-6">
-        <div>
-          <h3 class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-3">Progreso de Ahorro</h3>
-          <div class="relative h-48 bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4">
-            <canvas #progressChart></canvas>
-          </div>
-        </div>
-        <div>
-          <h3 class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-3">Distribución de Aportes</h3>
-          <div class="relative h-48 bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4">
-            <canvas #distributionChart></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- Breakdown -->
-      <div class="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 mb-6">
-        <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">Desglose de Aportación Mensual</h3>
-        <div class="space-y-3 text-sm">
-          <div class="flex justify-between items-center">
-            <span class="text-slate-600 dark:text-slate-400">Por recaudación de combustible</span>
-            <span class="font-medium text-slate-900 dark:text-slate-100">{{ formatCurrency(scenario.collectionContribution) }}</span>
-          </div>
-          <div class="flex justify-between items-center" *ngIf="scenario.voluntaryContribution > 0">
-            <span class="text-slate-600 dark:text-slate-400">Aportación voluntaria</span>
-            <span class="font-medium text-slate-900 dark:text-slate-100">{{ formatCurrency(scenario.voluntaryContribution) }}</span>
-          </div>
-          <div class="border-t border-slate-200 dark:border-slate-700 pt-2 flex justify-between items-center font-medium">
-            <span class="text-slate-900 dark:text-slate-100">Total mensual</span>
-            <span class="text-slate-900 dark:text-slate-100">{{ formatCurrency(scenario.monthlyContribution) }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Comparison Table -->
-      <div class="mb-6">
-        <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">Proyección Mensual (Primeros 12 meses)</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead class="bg-slate-100 dark:bg-slate-800">
-              <tr>
-                <th class="text-left py-2 px-3 text-slate-600 dark:text-slate-400 font-medium">Mes</th>
-                <th class="text-right py-2 px-3 text-slate-600 dark:text-slate-400 font-medium">Balance</th>
-                <th class="text-right py-2 px-3 text-slate-600 dark:text-slate-400 font-medium">Progreso</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
-              <tr *ngFor="let balance of scenario.projectedBalance.slice(0, 12); let i = index"
-                  class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                <td class="py-2 px-3 text-slate-900 dark:text-slate-100">{{ i + 1 }}</td>
-                <td class="py-2 px-3 text-right font-medium text-slate-900 dark:text-slate-100">{{ formatCurrency(balance) }}</td>
-                <td class="py-2 px-3 text-right text-slate-600 dark:text-slate-400">{{ ((balance / scenario.targetAmount) * 100).toFixed(1) }}%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Timeline -->
-      <div class="mb-6" *ngIf="scenario && scenario.timeline && scenario.timeline.length > 0">
-        <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">Cronograma de Hitos</h3>
-        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 space-y-3">
-          <div *ngFor="let event of scenario.timeline.slice(0, 6)"
-               class="flex justify-between items-start py-2 border-b border-slate-200 dark:border-slate-700 last:border-b-0">
-            <div class="flex-1">
-              <span class="text-sm font-medium text-slate-900 dark:text-slate-100">Mes {{ event.month }}</span>
-              <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">{{ event.event }}</p>
+        <!-- Charts Section -->
+        <div class="edomex-individual__charts">
+          <div class="edomex-individual__chart-card">
+            <h3 class="edomex-individual__chart-title">Progreso de Ahorro</h3>
+            <div style="position: relative; height: 192px;">
+              <canvas #progressChart></canvas>
             </div>
-            <span class="text-sm font-medium text-emerald-600 dark:text-emerald-400" *ngIf="event.amount > 0">
-              {{ formatCurrency(event.amount) }}
-            </span>
+          </div>
+          <div class="edomex-individual__chart-card">
+            <h3 class="edomex-individual__chart-title">Distribución de Aportes</h3>
+            <div style="position: relative; height: 192px;">
+              <canvas #distributionChart></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Breakdown -->
+        <div class="edomex-individual__breakdown">
+          <h3 class="edomex-individual__section-title" style="font-size: var(--text-sm);">Desglose de Aportación Mensual</h3>
+          <div class="edomex-individual__breakdown-rows">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--color-text-tertiary)">Por recaudación de combustible</span>
+              <span style="color: var(--color-text-primary); font-weight: var(--font-medium);">{{ formatCurrency(scenario.collectionContribution) }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;" *ngIf="scenario.voluntaryContribution > 0">
+              <span style="color: var(--color-text-tertiary)">Aportación voluntaria</span>
+              <span style="color: var(--color-text-primary); font-weight: var(--font-medium);">{{ formatCurrency(scenario.voluntaryContribution) }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: var(--font-semibold); border-top: 1px solid var(--color-border-secondary); padding-top: var(--space-12);">
+              <span style="color: var(--color-text-primary)">Total mensual</span>
+              <span style="color: var(--color-text-primary)">{{ formatCurrency(scenario.monthlyContribution) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div>
+          <h3 class="edomex-individual__section-title" style="font-size: var(--text-sm);">Proyección Mensual (Primeros 12 meses)</h3>
+          <div class="edomex-individual__table-wrapper">
+            <table class="edomex-individual__table">
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th class="edomex-individual__table-cell--right">Balance</th>
+                  <th class="edomex-individual__table-cell--right">Progreso</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let balance of scenario.projectedBalance.slice(0, 12); let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td class="edomex-individual__table-cell--right" style="font-weight: var(--font-medium);">
+                    {{ formatCurrency(balance) }}
+                  </td>
+                  <td class="edomex-individual__table-cell--right" style="color: var(--color-text-tertiary);">
+                    {{ ((balance / scenario.targetAmount) * 100).toFixed(1) }}%
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div *ngIf="scenario && scenario.timeline && scenario.timeline.length > 0">
+          <h3 class="edomex-individual__section-title" style="font-size: var(--text-sm);">Cronograma de Hitos</h3>
+          <div class="edomex-individual__timeline">
+            <div *ngFor="let event of scenario.timeline.slice(0, 6)" class="edomex-individual__timeline-item">
+              <div style="flex: 1;">
+                <span style="display: block; font-size: var(--text-sm); font-weight: var(--font-medium); color: var(--color-text-primary);">Mes {{ event.month }}</span>
+                <p class="edomex-individual__hint" style="margin-top: var(--space-4);">{{ event.event }}</p>
+              </div>
+              <span class="edomex-individual__timeline-amount" *ngIf="event.amount > 0">
+                {{ formatCurrency(event.amount) }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="edomex-individual__primary-actions">
+          <button
+            (click)="generatePDF()"
+            class="btn btn-primary"
+            data-cy="edomex-pdf">
+             Descargar PDF
+          </button>
+          <button
+            (click)="proceedToClientCreation()"
+            class="btn btn-primary">
+             Crear Cliente
+          </button>
+          <button
+            (click)="saveDraft()"
+            [disabled]="!scenario"
+            class="btn btn-secondary"
+            data-cy="save-scenario">
+             Guardar
+          </button>
+          <button
+            (click)="recalculate()"
+            class="btn btn-ghost">
+             Ajustar Plan
+          </button>
+        </div>
+      </div>
+
+      <!-- Initial Help Panel -->
+      <div class="card edomex-individual__panel" *ngIf="!scenario">
+        <div class="edomex-individual__help-card">
+          <div class="edomex-individual__help-header">
+            <div class="edomex-individual__help-icon">?</div>
+            <h2 class="edomex-individual__section-title" style="font-size: var(--text-lg);">¿Cómo funciona el planificador?</h2>
+            <p class="edomex-individual__hint" style="text-align: center;">Calcula tu plan personalizado de ahorro para el enganche</p>
+          </div>
+
+          <div class="edomex-individual__help-steps">
+            <div class="edomex-individual__help-step">
+              <div class="edomex-individual__help-step-number">1</div>
+              <div>
+                <h3 class="edomex-individual__section-title" style="font-size: var(--text-sm);">Define tu meta de enganche</h3>
+                <p class="edomex-individual__hint" style="margin-top: var(--space-4);">Establece cuánto necesitas ahorrar para tu unidad</p>
+              </div>
+            </div>
+
+            <div class="edomex-individual__help-step">
+              <div class="edomex-individual__help-step-number">2</div>
+              <div>
+                <h3 class="edomex-individual__section-title" style="font-size: var(--text-sm);">Ingresa tu consumo actual</h3>
+                <p class="edomex-individual__hint" style="margin-top: var(--space-4);">Basado en los litros que ya consumes mensualmente</p>
+              </div>
+            </div>
+
+            <div class="edomex-individual__help-step">
+              <div class="edomex-individual__help-step-number">3</div>
+              <div>
+                <h3 class="edomex-individual__section-title" style="font-size: var(--text-sm);">Sobreprecio estratégico</h3>
+                <p class="edomex-individual__hint" style="margin-top: var(--space-4);">Cada litro extra que pagues se destina a tu ahorro</p>
+              </div>
+            </div>
+
+            <div class="edomex-individual__help-step">
+              <div class="edomex-individual__help-step-number edomex-individual__help-step-number--success">
+                <app-icon name="check" [size]="16" />
+              </div>
+              <div>
+                <h3 class="edomex-individual__section-title" style="font-size: var(--text-sm);">Obtén tu plan personalizado</h3>
+                <p class="edomex-individual__hint" style="margin-top: var(--space-4);">Cronograma detallado con proyecciones y hitos</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="flex gap-3 flex-wrap">
-        <button
-          (click)="generatePDF()"
-          class="ui-btn ui-btn-primary"
-          data-cy="edomex-pdf"
-        >
-          📄 Descargar PDF
-        </button>
-        <button
-          (click)="proceedToClientCreation()"
-          class="ui-btn ui-btn-primary"
-        >
-          ✅ Crear Cliente
-        </button>
-        <button
-          (click)="saveDraft()"
-          [disabled]="!scenario"
-          class="ui-btn ui-btn-secondary"
-          data-cy="save-scenario"
-        >
-          💾 Guardar
-        </button>
-        <button
-          (click)="recalculate()"
-          class="ui-btn ui-btn-ghost"
-        >
-          🔄 Ajustar Plan
-        </button>
-      </div>
+      <!-- Aside Summary -->
+      <app-summary-panel class="edomex-individual__aside" *ngIf="scenario"
+        [metrics]="[
+          { label: 'Mensualidad', value: formatCurrency(scenario.monthlyContribution || 0), badge: 'success' },
+          { label: 'Meses a Meta', value: (scenario.monthsToTarget || 0) + ' meses' },
+          { label: 'Meta de Enganche', value: formatCurrency(scenario.targetAmount || 0) }
+        ]"
+        [actions]="asideActions"
+      ></app-summary-panel>
     </div>
 
-    <!-- Initial Help Panel -->
-    <div class="ui-card" *ngIf="!scenario">
-      <div class="text-center mb-6">
-        <div class="w-12 h-12 bg-sky-100 dark:bg-sky-900/50 rounded-full flex items-center justify-center mx-auto mb-3">
-          <span class="text-sky-600 dark:text-sky-400 text-xl">💡</span>
-        </div>
-        <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">¿Cómo funciona el planificador?</h2>
-        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Calcula tu plan personalizado de ahorro para el enganche</p>
-      </div>
-
-      <div class="space-y-4">
-        <div class="flex items-start gap-3">
-          <div class="w-6 h-6 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-xs font-medium text-slate-600 dark:text-slate-400 flex-shrink-0">
-            1
-          </div>
-          <div>
-            <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">Define tu meta de enganche</h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Establece cuánto necesitas ahorrar para tu unidad</p>
-          </div>
-        </div>
-
-        <div class="flex items-start gap-3">
-          <div class="w-6 h-6 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-xs font-medium text-slate-600 dark:text-slate-400 flex-shrink-0">
-            2
-          </div>
-          <div>
-            <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">Ingresa tu consumo actual</h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Basado en los litros que ya consumes mensualmente</p>
-          </div>
-        </div>
-
-        <div class="flex items-start gap-3">
-          <div class="w-6 h-6 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-xs font-medium text-slate-600 dark:text-slate-400 flex-shrink-0">
-            3
-          </div>
-          <div>
-            <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">Sobreprecio estratégico</h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Cada litro extra que pagues se destina a tu ahorro</p>
-          </div>
-        </div>
-
-        <div class="flex items-start gap-3">
-          <div class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/50 rounded-full flex items-center justify-center text-xs font-medium text-emerald-600 dark:text-emerald-400 flex-shrink-0">
-            ✓
-          </div>
-          <div>
-            <h3 class="text-sm font-medium text-slate-900 dark:text-slate-100">Obtén tu plan personalizado</h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Cronograma detallado con proyecciones y hitos</p>
-          </div>
-        </div>
-      </div>
+    <!-- Loading State -->
+    <div *ngIf="!scenario && isCalculating" class="edomex-individual__loading">
+      <app-skeleton-card
+        ariaLabel="Calculando escenario de enganche"
+        [titleWidth]="60"
+        [subtitleWidth]="50"
+        [buttonWidth]="30">
+      </app-skeleton-card>
     </div>
-
-    <!-- Aside Summary -->
-    <app-summary-panel class="aside" *ngIf="scenario"
-      [metrics]="[
-        { label: 'Mensualidad', value: formatCurrency(scenario.monthlyContribution || 0), badge: 'success' },
-        { label: 'Meses a Meta', value: (scenario.monthsToTarget || 0) + ' meses' },
-        { label: 'Meta de Enganche', value: formatCurrency(scenario.targetAmount || 0) }
-      ]"
-      [actions]="asideActions"
-    ></app-summary-panel>
-  </div>
+  </main>
+</div>

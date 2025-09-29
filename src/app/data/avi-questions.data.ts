@@ -1163,7 +1163,7 @@ export const AVI_CONFIG = {
   estimated_duration_minutes: 50, // Aumentado por las preguntas adicionales
   critical_questions: ALL_AVI_QUESTIONS.filter(q => q.weight >= 9).length,
   high_stress_questions: ALL_AVI_QUESTIONS.filter(q => q.stressLevel >= 4).length,
-  completion_percentage: 100, // 100% COMPLETO ✅
+  completion_percentage: 100, // 100% COMPLETO 
   
   // Estadísticas detalladas
   questions_by_category: {
@@ -1192,5 +1192,5 @@ export const AVI_CONFIG = {
     'level_1': ALL_AVI_QUESTIONS.filter(q => q.stressLevel === 1).length
   },
   
-  system_status: '✅ SISTEMA AVI COMPLETO - 55/55 PREGUNTAS IMPLEMENTADAS'
+  system_status: ' SISTEMA AVI COMPLETO - 55/55 PREGUNTAS IMPLEMENTADAS'
 };

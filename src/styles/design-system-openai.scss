@@ -1,5 +1,5 @@
 /* ========================================
-   🎨 OPENAI-INSPIRED DESIGN SYSTEM
+    OPENAI-INSPIRED DESIGN SYSTEM
    PWA Conductores - Premium Edition
    Inspired by: OpenAI, Claude, Linear, Framer
    ======================================== */
@@ -53,51 +53,51 @@
 /* ===== COLOR SYSTEM - OPENAI INSPIRED ===== */
 :root {
   /* Semantic Colors - Light Mode */
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8f9fa;
-  --color-bg-tertiary: #f1f3f4;
+  --color-bg-primary: #ffffff; /* OpenAI white */
+  --color-bg-secondary: #f8fafc; /* OpenAI light gray */
+  --color-bg-tertiary: #f1f5f9; /* OpenAI subtle background */
   --color-bg-overlay: rgba(0, 0, 0, 0.05);
 
-  --color-text-primary: #0d1117;
-  --color-text-secondary: #656d76;
-  --color-text-tertiary: #8b949e;
-  --color-text-placeholder: #a8a8a8;
-  --color-text-disabled: #d0d7de;
+  --color-text-primary: #080808; /* OpenAI black */
+  --color-text-secondary: #737373; /* OpenAI neutral */
+  --color-text-tertiary: #94a3b8; /* OpenAI muted text */
+  --color-text-placeholder: #94a3b8; /* OpenAI muted text */
+  --color-text-disabled: #cbd5e1; /* OpenAI medium border */
 
-  --color-border-primary: #d1d9e0;
-  --color-border-secondary: #e1e8ed;
-  --color-border-muted: #f1f3f4;
-  --color-border-focus: #0969da;
+  --color-border-primary: #e5e7eb; /* OpenAI light gray border */
+  --color-border-secondary: #e2e8f0; /* OpenAI light border */
+  --color-border-muted: #f1f5f9; /* OpenAI subtle background */
+  --color-border-focus: #525252; /* OpenAI dark gray */
 
-  /* Brand Colors - OpenAI Inspired */
-  --color-primary-50: #f0f9f9;
-  --color-primary-100: #ccf2f2;
-  --color-primary-200: #99e6e6;
-  --color-primary-300: #66d9d9;
-  --color-primary-400: #33cccc;
-  --color-primary-500: #00bfbf;    /* Primary */
-  --color-primary-600: #009999;
-  --color-primary-700: #007373;
-  --color-primary-800: #004d4d;
-  --color-primary-900: #002626;
+  /* Brand Colors - OpenAI Neutral */
+  --color-primary-50: #f8fafc; /* OpenAI very light gray */
+  --color-primary-100: #f1f5f9; /* OpenAI subtle background */
+  --color-primary-200: #e2e8f0; /* OpenAI light border */
+  --color-primary-300: #cbd5e1; /* OpenAI medium border */
+  --color-primary-400: #94a3b8; /* OpenAI muted text */
+  --color-primary-500: #737373; /* OpenAI neutral */
+  --color-primary-600: #525252; /* OpenAI dark gray */
+  --color-primary-700: #404040; /* OpenAI dark */
+  --color-primary-800: #1e293b; /* OpenAI very dark text */
+  --color-primary-900: #080808; /* OpenAI black */
 
-  /* Success Colors */
-  --color-success-50: #f0fdf4;
-  --color-success-100: #dcfce7;
-  --color-success-500: #22c55e;
-  --color-success-600: #16a34a;
+  /* Success Colors - OpenAI Neutral */
+  --color-success-50: #f8fafc; /* OpenAI very light gray */
+  --color-success-100: #f1f5f9; /* OpenAI subtle background */
+  --color-success-500: #737373; /* OpenAI neutral */
+  --color-success-600: #525252; /* OpenAI dark gray */
 
-  /* Warning Colors */
-  --color-warning-50: #fffbeb;
-  --color-warning-100: #fef3c7;
-  --color-warning-500: #f59e0b;
-  --color-warning-600: #d97706;
+  /* Warning Colors - OpenAI Neutral */
+  --color-warning-50: #f8fafc; /* OpenAI very light gray */
+  --color-warning-100: #f1f5f9; /* OpenAI subtle background */
+  --color-warning-500: #737373;  /* OpenAI neutral */
+  --color-warning-600: #525252;  /* OpenAI neutral dark */
 
-  /* Error Colors */
-  --color-error-50: #fef2f2;
-  --color-error-100: #fee2e2;
-  --color-error-500: #ef4444;
-  --color-error-600: #dc2626;
+  /* Error Colors - OpenAI Neutral */
+  --color-error-50: #f8fafc; /* OpenAI very light gray */
+  --color-error-100: #f1f5f9; /* OpenAI subtle background */
+  --color-error-500: #737373;  /* OpenAI neutral */
+  --color-error-600: #525252;  /* OpenAI neutral dark */
 
   /* Neutral Scale - Refined */
   --color-neutral-50: #fafafa;
@@ -112,53 +112,51 @@
   --color-neutral-900: #171717;
 }
 
-/* Dark Mode - OpenAI Style */
+/* Dark Mode - 100% OpenAI Authentic */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg-primary: #0d1117;
-    --color-bg-secondary: #161b22;
-    --color-bg-tertiary: #21262d;
-    --color-bg-overlay: rgba(255, 255, 255, 0.05);
-
-    --color-text-primary: #f0f6fc;
-    --color-text-secondary: #b1bac4;
-    --color-text-tertiary: #8b949e;
-    --color-text-placeholder: #656d76;
-    --color-text-disabled: #484f58;
-
-    --color-border-primary: #30363d;
-    --color-border-secondary: #21262d;
-    --color-border-muted: #161b22;
-    --color-border-focus: #58a6ff;
+    /* OpenAI Dark Mode - Inverted but clean */
+    --openai-black: #ffffff;        /* Text becomes white */
+    --openai-white: #080808;        /* Background becomes dark */
+    --openai-gray-50: #171717;      /* Darkest background */
+    --openai-gray-100: #262626;     /* Dark background */
+    --openai-gray-200: #404040;     /* Dark borders */
+    --openai-gray-300: #525252;     /* Dark disabled */
+    --openai-gray-400: #737373;     /* Dark secondary */
+    --openai-gray-500: #a3a3a3;     /* Dark medium */
+    --openai-gray-600: #d4d4d4;     /* Dark primary text */
+    --openai-gray-700: #e5e5e5;     /* Dark light text */
+    --openai-gray-800: #f5f5f5;     /* Dark lighter */
+    --openai-gray-900: #fafafa;     /* Dark lightest */
+    --openai-blue: #737373;         /* OpenAI neutral */
+    --openai-blue-hover: #525252;   /* OpenAI dark gray */
   }
 }
 
-/* ===== SPACING SYSTEM ===== */
+/* ===== OPENAI SPACING SYSTEM - 4PX BASE GRID ===== */
 :root {
-  /* Spacing Scale - Fibonacci Inspired */
-  --space-px: 1px;
+  /* OpenAI 4px Base Grid System */
   --space-0: 0;
-  --space-0-5: 0.125rem;   /* 2px */
-  --space-1: 0.25rem;      /* 4px */
-  --space-1-5: 0.375rem;   /* 6px */
-  --space-2: 0.5rem;       /* 8px */
-  --space-2-5: 0.625rem;   /* 10px */
-  --space-3: 0.75rem;      /* 12px */
-  --space-3-5: 0.875rem;   /* 14px */
-  --space-4: 1rem;         /* 16px */
-  --space-5: 1.25rem;      /* 20px */
-  --space-6: 1.5rem;       /* 24px */
-  --space-7: 1.75rem;      /* 28px */
-  --space-8: 2rem;         /* 32px */
-  --space-9: 2.25rem;      /* 36px */
-  --space-10: 2.5rem;      /* 40px */
-  --space-12: 3rem;        /* 48px */
-  --space-14: 3.5rem;      /* 56px */
-  --space-16: 4rem;        /* 64px */
-  --space-20: 5rem;        /* 80px */
-  --space-24: 6rem;        /* 96px */
-  --space-28: 7rem;        /* 112px */
-  --space-32: 8rem;        /* 128px */
+  --space-1: 4px;    /* 1x base unit */
+  --space-2: 8px;    /* 2x base unit */
+  --space-3: 12px;   /* 3x base unit */
+  --space-4: 16px;   /* 4x base unit */
+  --space-5: 20px;   /* 5x base unit */
+  --space-6: 24px;   /* 6x base unit */
+  --space-8: 32px;   /* 8x base unit */
+  --space-10: 40px;  /* 10x base unit */
+  --space-12: 48px;  /* 12x base unit */
+  --space-16: 64px;  /* 16x base unit */
+  --space-20: 80px;  /* 20x base unit */
+  --space-24: 96px;  /* 24x base unit */
+  --space-32: 128px; /* 32x base unit */
+
+  /* Semantic Spacing - OpenAI Style */
+  --space-button-x: var(--space-4);      /* 16px horizontal */
+  --space-button-y: var(--space-2);      /* 8px vertical */
+  --space-card-padding: var(--space-6);  /* 24px card padding */
+  --space-section: var(--space-8);       /* 32px section spacing */
+  --space-page: var(--space-12);         /* 48px page margins */
 }
 
 /* ===== SHADOWS & ELEVATION ===== */
@@ -193,14 +191,14 @@
 /* ===== BORDER RADIUS ===== */
 :root {
   --radius-none: 0;
-  --radius-xs: 0.125rem;    /* 2px */
-  --radius-sm: 0.25rem;     /* 4px */
-  --radius-md: 0.375rem;    /* 6px */
-  --radius-lg: 0.5rem;      /* 8px */
-  --radius-xl: 0.75rem;     /* 12px */
-  --radius-2xl: 1rem;       /* 16px */
-  --radius-3xl: 1.5rem;     /* 24px */
-  --radius-full: 9999px;
+  --radius-xs: 8px;         /* OpenAI standard */
+  --radius-sm: 8px;         /* OpenAI standard */
+  --radius-md: 8px;         /* OpenAI standard */
+  --radius-lg: 8px;         /* OpenAI standard */
+  --radius-xl: 8px;         /* OpenAI standard */
+  --radius-2xl: 8px;        /* OpenAI standard */
+  --radius-3xl: 8px;        /* OpenAI standard */
+  --radius-full: 8px;       /* OpenAI standard */
 }
 
 /* ===== TRANSITIONS ===== */
@@ -373,7 +371,7 @@
   transition: opacity var(--duration-150) var(--ease-out);
 }
 .transition-transform {
-  transition: transform var(--duration-150) var(--ease-out);
+  transition: box-shadow var(--duration-150) var(--ease-out);
 }
 
 .duration-75 { transition-duration: var(--duration-75); }
@@ -429,66 +427,66 @@
 @keyframes slideInDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: none; /* OpenAI no transforms */
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none; /* OpenAI no transforms */
   }
 }
 
 @keyframes slideInUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: none; /* OpenAI no transforms */
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none; /* OpenAI no transforms */
   }
 }
 
 @keyframes slideInLeft {
   from {
     opacity: 0;
-    transform: translateX(-10px);
+    transform: none; /* OpenAI no transforms */
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: none; /* OpenAI no transforms */
   }
 }
 
 @keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translateX(10px);
+    transform: none; /* OpenAI no transforms */
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: none; /* OpenAI no transforms */
   }
 }
 
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: none; /* OpenAI no transforms */
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: none; /* OpenAI no transforms */
   }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from { transform: none; /* OpenAI no transforms */ }
+  to { transform: none; /* OpenAI no transforms */ }
 }
 
 @keyframes ping {
   75%, 100% {
-    transform: scale(2);
+    transform: none; /* OpenAI no transforms */
     opacity: 0;
   }
 }
@@ -504,11 +502,11 @@
 
 @keyframes bounce {
   0%, 100% {
-    transform: translateY(-25%);
+    transform: none; /* OpenAI no transforms */
     animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
   50% {
-    transform: translateY(0);
+    transform: none; /* OpenAI no transforms */
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
 }
@@ -528,18 +526,18 @@
 
 /* Hover Effects */
 .hover-lift {
-  transition: transform var(--duration-200) var(--ease-out);
+  transition: box-shadow var(--duration-200) var(--ease-out);
 
   &:hover {
-    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
   }
 }
 
 .hover-scale {
-  transition: transform var(--duration-200) var(--ease-out);
+  transition: box-shadow var(--duration-200) var(--ease-out);
 
   &:hover {
-    transform: scale(1.02);
+    box-shadow: var(--shadow-md);
   }
 }
 

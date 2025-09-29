@@ -1,116 +1,109 @@
 <!-- Skip Link for Accessibility -->
 <a class="skip-link" href="#main-content">Saltar al contenido</a>
 
-<!-- Enterprise Layout: Sidebar + Topbar + Main Content -->
-<div class="min-h-screen flex bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+<div class="app-shell">
+  <!-- Sidebar Navigation -->
+  <aside class="app-shell__sidebar">
+    <div class="app-shell__sidebar-header">Conductores</div>
 
-  <!-- Sidebar Navigation - OpenAI Style -->
-  <aside class="w-64 bg-slate-900 text-slate-200 border-r border-slate-800 flex flex-col">
-    <div class="p-4 font-semibold text-white border-b border-slate-800">
-      Conductores
-    </div>
+    <nav class="app-shell__nav" role="navigation" aria-label="Navegación principal">
+      <div class="app-shell__nav-section">
+        <div class="app-shell__nav-label">Crear</div>
+        <div class="app-shell__nav-links">
+          <a routerLink="/chat" class="app-shell__nav-link" data-cy="nav-chat">
+            <app-icon name="chat"></app-icon>
+            <span>Chat</span>
+          </a>
+          <a routerLink="/audio" class="app-shell__nav-link" data-cy="nav-audio">
+            <app-icon name="microphone"></app-icon>
+            <span>Audio</span>
+          </a>
+          <a routerLink="/images" class="app-shell__nav-link" data-cy="nav-images">
+            <app-icon name="image"></app-icon>
+            <span>Images</span>
+          </a>
+          <a routerLink="/assistants" class="app-shell__nav-link" data-cy="nav-assistants">
+            <app-icon name="assistants"></app-icon>
+            <span>Assistants</span>
+          </a>
+        </div>
+      </div>
 
-    <nav class="flex-1 px-2 py-4 space-y-2" role="navigation" aria-label="Navegación principal">
-    <style>
-      /* Icon hover state enhancement */
-      .nav-link:hover lucide-icon {
-        color: white !important;
-      }
-    </style>
-      <!-- Crear -->
-      <div class="text-xs uppercase text-slate-400 px-2 mb-2">Crear</div>
-      <a routerLink="/chat" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-chat">
-        <lucide-icon name="HelpCircle" class="w-5 h-5 text-slate-400"></lucide-icon>
-        Chat
-      </a>
-      <a routerLink="/audio" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-audio">
-        <lucide-icon name="Mic" class="w-5 h-5 text-slate-400"></lucide-icon>
-        Audio
-      </a>
-      <a routerLink="/images" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-images">
-        <lucide-icon name="Activity" class="w-5 h-5 text-slate-400"></lucide-icon>
-        Images
-      </a>
-      <a routerLink="/assistants" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-assistants">
-        <lucide-icon name="Settings" class="w-5 h-5 text-slate-400"></lucide-icon>
-        Assistants
-      </a>
+      <div class="app-shell__nav-section">
+        <div class="app-shell__nav-label">Gestionar</div>
+        <div class="app-shell__nav-links">
+          <a routerLink="/usage" class="app-shell__nav-link" data-cy="nav-usage">
+            <app-icon name="usage"></app-icon>
+            <span>Usage</span>
+          </a>
+          <a routerLink="/cotizador" class="app-shell__nav-link" data-cy="nav-cotizador">
+            <app-icon name="calculator"></app-icon>
+            <span>Cotizador</span>
+          </a>
+          <a routerLink="/simulador" class="app-shell__nav-link" data-cy="nav-simulador">
+            <app-icon name="simulator"></app-icon>
+            <span>Simulador</span>
+          </a>
+          <a routerLink="/documentos" class="app-shell__nav-link" data-cy="nav-documentos">
+            <app-icon name="document"></app-icon>
+            <span>Documentos</span>
+          </a>
+          <a routerLink="/entregas" class="app-shell__nav-link" data-cy="nav-entregas">
+            <app-icon name="truck"></app-icon>
+            <span>Entregas</span>
+          </a>
+        </div>
+      </div>
 
-      <!-- Gestionar -->
-      <div class="text-xs uppercase text-slate-400 px-2 mt-6 mb-2">Gestionar</div>
-      <a routerLink="/usage" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-usage">
-        <lucide-icon name="BarChart" class="w-5 h-5 text-slate-400"></lucide-icon>
-        Usage
-      </a>
-      <a routerLink="/cotizador" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-cotizador">
-        <lucide-icon name="Calculator" class="w-5 h-5 text-slate-400"></lucide-icon>
-        Cotizador
-      </a>
-      <a routerLink="/simulador" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-simulador">
-        <lucide-icon name="LineChart" class="w-5 h-5 text-slate-400"></lucide-icon>
-        Simulador
-      </a>
-      <a routerLink="/documentos" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-documentos">
-        <lucide-icon name="FileText" class="w-5 h-5 text-slate-400"></lucide-icon>
-        Documentos
-      </a>
-      <a routerLink="/entregas" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-entregas">
-        <lucide-icon name="Truck" class="w-5 h-5 text-slate-400"></lucide-icon>
-        Entregas
-      </a>
-
-      <!-- Optimizar -->
-      <div class="text-xs uppercase text-slate-400 px-2 mt-6 mb-2">Optimizar</div>
-      <a routerLink="/avi" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-avi">
-        <lucide-icon name="Mic" class="w-5 h-5 text-slate-400"></lucide-icon>
-        AVI
-      </a>
-      <a routerLink="/proteccion" class="nav-link flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-slate-800 hover:text-white transition-colors" data-cy="nav-proteccion">
-        <lucide-icon name="Shield" class="w-5 h-5 text-slate-400"></lucide-icon>
-        Protección
-      </a>
+      <div class="app-shell__nav-section">
+        <div class="app-shell__nav-label">Optimizar</div>
+        <div class="app-shell__nav-links">
+          <a routerLink="/avi" class="app-shell__nav-link" data-cy="nav-avi">
+            <app-icon name="microphone"></app-icon>
+            <span>AVI</span>
+          </a>
+          <a routerLink="/proteccion" class="app-shell__nav-link" data-cy="nav-proteccion">
+            <app-icon name="shield"></app-icon>
+            <span>Protección</span>
+          </a>
+        </div>
+      </div>
     </nav>
   </aside>
 
   <!-- Main Content Area -->
-  <div class="flex-1 flex flex-col">
-
-    <!-- Topbar - Enterprise Style -->
-    <header class="h-16 border-b border-border bg-surface flex items-center justify-between px-6">
-      <div class="text-sm text-slate-600 dark:text-slate-400">
-        Organización: <span class="font-medium text-slate-900 dark:text-slate-100" data-cy="org-name">mvpcoductores</span>
+  <div class="app-shell__main">
+    <header class="app-shell__topbar">
+      <div class="app-shell__topbar-info">
+        Organización: <span data-cy="org-name">mvpcoductores</span>
       </div>
 
-      <div class="flex items-center gap-3">
-        <button class="ui-btn ui-btn-primary ui-btn-sm" data-cy="export">
-          Exportar
-        </button>
-        <button class="ui-btn ui-btn-secondary ui-btn-sm" data-cy="date-range">
-          Rango de fechas
-        </button>
+      <div class="app-shell__topbar-actions">
+        <button class="btn btn-primary btn-sm" data-cy="export">Exportar</button>
+        <button class="btn btn-secondary btn-sm" data-cy="date-range">Rango de fechas</button>
         <button
-          class="ui-btn ui-btn-ghost ui-btn-sm"
+          class="btn btn-ghost btn-sm"
           (click)="toggleDarkMode()"
           data-cy="toggle-dark"
           [attr.aria-label]="isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'">
-          <span class="text-base">{{ isDarkMode ? '☀️' : '🌙' }}</span>
+          <app-icon name="moon" *ngIf="!isDarkMode"></app-icon>
+          <app-icon name="sun" *ngIf="isDarkMode"></app-icon>
         </button>
       </div>
     </header>
 
-    <!-- Router Content -->
-    <main id="main-content" class="flex-1 p-6 overflow-auto" role="main">
+    <main id="main-content" class="app-shell__content" role="main">
       <router-outlet></router-outlet>
     </main>
   </div>
-
-  <!-- Mobile Bottom Navigation (Hidden on Desktop) -->
-  <app-bottom-nav-bar
-    class="lg:hidden"
-    role="navigation"
-    aria-label="Navegación móvil">
-  </app-bottom-nav-bar>
 </div>
+
+<!-- Mobile Bottom Navigation -->
+<app-bottom-nav-bar
+  class="app-shell__mobile-nav"
+  role="navigation"
+  aria-label="Navegación móvil">
+</app-bottom-nav-bar>
 
 <!-- Update Banner for PWA updates -->
 <app-update-banner></app-update-banner>

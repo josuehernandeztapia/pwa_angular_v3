@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { getDataColor, getChartColor } from '../../styles/design-tokens';
 
 interface SavingsMonth {
   name: string;
@@ -10,116 +11,8 @@ interface SavingsMonth {
   selector: 'app-savings-projection-chart',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="savings-chart-container">
-      <div class="chart-bars">
-        <div 
-          *ngFor="let month of months; let i = index" 
-          class="bar-container"
-        >
-          <div class="bar-tooltip">
-            {{ formatCurrency(month.saved) }}
-          </div>
-          <div 
-            class="bar"
-            [class.bar-complete]="month.saved >= goal"
-            [class.bar-progress]="month.saved < goal"
-            [style.height.%]="getBarHeight(month.saved)"
-          ></div>
-          <div class="bar-label">{{ getMonthNumber(month.name) }}</div>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .savings-chart-container {
-      width: 100%;
-      height: 256px;
-      background: rgba(31, 41, 55, 0.5);
-      border-radius: 8px;
-      display: flex;
-      align-items: end;
-      padding: 16px;
-    }
-
-    .chart-bars {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: end;
-      gap: 8px;
-    }
-
-    .bar-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: end;
-      align-items: center;
-      position: relative;
-      height: 100%;
-    }
-
-    .bar-tooltip {
-      position: absolute;
-      top: -32px;
-      background: #111827;
-      color: white;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      white-space: nowrap;
-      opacity: 0;
-      transition: opacity 0.2s;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    .bar-container:hover .bar-tooltip {
-      opacity: 1;
-    }
-
-    .bar {
-      width: 100%;
-      border-radius: 4px 4px 0 0;
-      transition: all 0.3s ease;
-      min-height: 2px;
-    }
-
-    .bar-complete {
-      background: #10b981; /* emerald-500 */
-    }
-
-    .bar-progress {
-      background: #0891b2; /* cyan-600 */
-    }
-
-    .bar:hover {
-      background: #06b6d4 !important; /* cyan-400 */
-    }
-
-    .bar-label {
-      color: #6b7280; /* gray-500 */
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
-    @media (max-width: 768px) {
-      .savings-chart-container {
-        height: 200px;
-        padding: 12px;
-      }
-      
-      .chart-bars {
-        gap: 4px;
-      }
-      
-      .bar-tooltip {
-        font-size: 10px;
-        padding: 2px 6px;
-      }
-    }
-  `]
+  templateUrl: './savings-projection-chart.component.html',
+  styleUrls: ['./savings-projection-chart.component.scss']
 })
 export class SavingsProjectionChartComponent implements OnChanges {
   @Input() goal: number = 0;
@@ -127,6 +20,19 @@ export class SavingsProjectionChartComponent implements OnChanges {
 
   months: SavingsMonth[] = [];
   maxValue: number = 0;
+
+  // OpenAI compliant colors for data visualization
+  get completeColor(): string {
+    return getDataColor('secondary'); // Green for completed goals
+  }
+
+  get progressColor(): string {
+    return getDataColor('primary'); // Blue for progress
+  }
+
+  get hoverColor(): string {
+    return getDataColor('accent'); // Cyan for hover states
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['goal'] || changes['monthlySavings']) {

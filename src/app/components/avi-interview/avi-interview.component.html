@@ -1,15 +1,15 @@
 <!-- AVI Interview Component -->
-<div class="avi-interview-container" [class.is-recording]="isRecording" [class.is-processing]="isProcessingResponse">
+<div class="avi-interview-shell" [class.is-recording]="isRecording" [class.is-processing]="isProcessingResponse">
   
   <!-- Header con progreso -->
   <div class="interview-header" *ngIf="isInterviewActive || showResults">
-    <div class="progress-section">
+    <div class="progress-section layout-stack-sm">
       <div class="progress-bar" aria-label="Progreso de la entrevista" role="progressbar" [attr.aria-valuenow]="progressPercentage | number:'1.0-0'" aria-valuemin="0" [attr.aria-valuemax]="100">
         <div class="progress-fill" [style.width.%]="progressPercentage"></div>
       </div>
       <div class="progress-info">
-        <span class="question-count">Pregunta {{ currentIndex }} de {{ totalQuestions }}</span>
-        <span class="time-remaining" *ngIf="estimatedTimeRemaining > 0">
+        <span class="body-sm">Pregunta {{ currentIndex }} de {{ totalQuestions }}</span>
+        <span class="body-xs" *ngIf="estimatedTimeRemaining > 0">
           ~{{ estimatedTimeRemaining.toFixed(1) }}min restantes
         </span>
       </div>
@@ -17,38 +17,40 @@
   </div>
 
   <!-- Estado: Antes de comenzar -->
-  <div class="interview-start" *ngIf="!isInterviewActive && !showResults">
-    <div class="start-card">
-      <div class="avi-logo">
-        <span class="logo-icon">🎤</span>
+  <div class="interview-start overlay-panel" *ngIf="!isInterviewActive && !showResults">
+    <div class="overlay-panel__content interview-start-card">
+      <div class="interview-logo layout-stack-sm">
+        <span class="logo-icon">
+          <app-icon name="microphone" [size]="32" />
+        </span>
         <h1>Entrevista AVI</h1>
         <p class="subtitle">Sistema Automatizado de Evaluación Vocal</p>
       </div>
       
-      <div class="interview-info">
-        <div class="info-item">
-          <span class="icon">📋</span>
+      <div class="interview-info layout-stack-md">
+        <div class="info-item layout-row-center">
+          <app-icon name="document-text" [size]="24" />
           <span>{{ totalQuestions }} preguntas personalizadas</span>
         </div>
-        <div class="info-item">
-          <span class="icon">⏱️</span>
+        <div class="info-item layout-row-center">
+          <app-icon name="clock" [size]="24" />
           <span>~45 minutos de duración</span>
         </div>
-        <div class="info-item">
-          <span class="icon">🔬</span>
+        <div class="info-item layout-row-center">
+          <app-icon name="beaker" [size]="24" />
           <span>Análisis científico dual engine</span>
         </div>
-        <div class="info-item">
-          <span class="icon">🎯</span>
+        <div class="info-item layout-row-center">
+          <app-icon name="check-circle-solid" [size]="24" />
           <span>Detección de inconsistencias en tiempo real</span>
         </div>
       </div>
       
-      <button class="start-btn" (click)="startInterview()">
+      <button class="ui-btn ui-btn-primary start-button" (click)="startInterview()">
         Comenzar Entrevista
       </button>
       <div class="guided-start">
-        <button class="start-btn secondary" (click)="guidedBasicActive = true; startInterview()" title="Flujo guiado: 6 preguntas de Información Básica">
+        <button class="ui-btn ui-btn-secondary start-button" (click)="guidedBasicActive = true; startInterview()" title="Flujo guiado: 6 preguntas de Información Básica">
           Guided Básicas (6)
         </button>
       </div>
@@ -56,52 +58,53 @@
   </div>
 
   <!-- Estado: Entrevista activa -->
-  <div class="interview-active" *ngIf="isInterviewActive && currentQuestion">
-    <div class="question-card">
+  <div class="interview-active layout-stack-lg" *ngIf="isInterviewActive && currentQuestion">
+    <div class="surface-card question-card layout-stack-md">
       <!-- Info de la pregunta -->
       <div class="question-header">
-        <div class="question-meta">
-          <span class="category">{{ formatCategoryName(currentQuestion.category) }}</span>
-          <span class="weight" [class.critical]="currentQuestion.weight >= 8">
+        <div class="question-meta layout-row-between">
+          <span class="chip chip--neutral">{{ formatCategoryName(currentQuestion.category) }}</span>
+          <span class="chip chip--warning" [class.critical]="currentQuestion.weight >= 8">
             Peso: {{ currentQuestion.weight }}/10
           </span>
-          <span class="stress-level">
+          <span class="chip chip--success">
             Estrés: {{ currentQuestion.stressLevel }}/5
           </span>
-          <span class="audio-indicator" [class.ready]="isAudioReady(currentQuestion.id)">
-            {{ isAudioReady(currentQuestion.id) ? '🎧 Audio listo' : '⏺️ Sin audio' }}
+          <span class="chip chip--neutral audio-indicator" [class.ready]="isAudioReady(currentQuestion.id)">
+            <app-icon [name]="isAudioReady(currentQuestion.id) ? 'volume-up' : 'volume-off'" [size]="20" />
+            {{ isAudioReady(currentQuestion.id) ? 'Audio listo' : 'Sin audio' }}
           </span>
         </div>
       </div>
 
       <!-- La pregunta -->
-      <div class="question-text">
+      <div class="question-text layout-stack-sm">
         <h2 tabindex="-1" #questionTitle id="question-title">{{ currentQuestion.question }}</h2>
-        <div class="question-time">
+        <div class="body-sm question-meta-time">
           Tiempo estimado: {{ currentQuestion.estimatedTime }}s
         </div>
-        <div class="question-hint">Responde con normalidad. No hay respuestas correctas o incorrectas.</div>
+        <div class="body-xs question-hint">Responde con normalidad. No hay respuestas correctas o incorrectas.</div>
         <!-- Pill de feedback inmediato para la última respuesta registrada -->
         <div class="pill-feedback" *ngIf="questionPills.length > 0">
           <ng-container *ngIf="questionPills[questionPills.length - 1] as pill">
-            <span class="pill" [class.clear]="pill.status==='clear'" [class.review]="pill.status==='review'" [class.evasive]="pill.status==='evasive'">
+            <span class="chip" [class.clear]="pill.status==='clear'" [class.review]="pill.status==='review'" [class.evasive]="pill.status==='evasive'">
               {{ pill.label }}
             </span>
-            <span class="pill-reason">{{ pill.reason }}</span>
+            <span class="body-xs pill-reason">{{ pill.reason }}</span>
           </ng-container>
         </div>
       </div>
 
       <!-- Área de respuesta -->
-      <div class="response-area" [attr.aria-busy]="isProcessingResponse">
+      <div class="response-area layout-stack-md" [attr.aria-busy]="isProcessingResponse">
         <!-- Estados accesibles -->
-        <div class="state-announcer" aria-live="polite">
-          <span class="badge idle" *ngIf="!isRecording && !isProcessingResponse && !lastSavedAt">Listo para grabar</span>
-          <span class="badge recording" *ngIf="isRecording">Grabando… ({{ formatTimeMMSS(recordingSeconds) }})</span>
-          <span class="badge processing" *ngIf="isProcessingResponse">Procesando respuesta…</span>
-          <span class="badge saved" *ngIf="!isRecording && !isProcessingResponse && lastSavedAt">Guardado ✓</span>
+        <div class="state-announcer layout-row-center" aria-live="polite">
+          <span class="badge badge-neutral" *ngIf="!isRecording && !isProcessingResponse && !lastSavedAt">Listo para grabar</span>
+          <span class="badge badge-warning" *ngIf="isRecording">Grabando… ({{ formatTimeMMSS(recordingSeconds) }})</span>
+          <span class="badge badge-warning" *ngIf="isProcessingResponse">Procesando respuesta…</span>
+          <span class="badge badge-positive" *ngIf="!isRecording && !isProcessingResponse && lastSavedAt">Guardado</span>
         </div>
-        <div class="input-container">
+        <div class="input-container layout-stack-sm">
           <textarea 
             [(ngModel)]="currentResponse"
             placeholder="Escriba su respuesta aquí..."
@@ -111,9 +114,9 @@
           </textarea>
           
           <!-- Controles de voz -->
-          <div class="voice-controls">
+          <div class="voice-controls layout-row-center">
             <button 
-              class="voice-btn"
+              class="ui-btn ui-btn-secondary voice-button"
               [class.recording]="isRecording"
               (click)="toggleRecording()"
               [disabled]="isRecording || isProcessingResponse"
@@ -121,18 +124,22 @@
               title="Grabar"
               (keydown.enter)="$event.preventDefault(); toggleRecording()"
               (keydown.space)="$event.preventDefault(); toggleRecording()">
-              <span class="voice-icon">🎤</span>
+              <span class="voice-icon">
+                <app-icon name="microphone" [size]="20" />
+              </span>
               Grabar
             </button>
             <button 
-              class="voice-btn stop"
+              class="ui-btn ui-btn-warning voice-button"
               *ngIf="isRecording"
               (click)="toggleRecording()"
               aria-label="Detener"
               title="Detener"
               (keydown.enter)="$event.preventDefault(); toggleRecording()"
               (keydown.space)="$event.preventDefault(); toggleRecording()">
-              <span class="voice-icon">🔴</span>
+              <span class="voice-icon recording">
+                <app-icon name="stop" [size]="20" />
+              </span>
               Detener
             </button>
           </div>
@@ -140,16 +147,16 @@
 
         <!-- Indicadores de estrés en tiempo real -->
         <div class="stress-indicators" *ngIf="stressIndicators | async as indicators">
-          <div class="indicator-list" *ngIf="indicators.length > 0">
-            <span class="indicator-label">Detectado:</span>
-            <span class="indicator" *ngFor="let indicator of indicators">{{ indicator }}</span>
+          <div class="indicator-list layout-row-center" *ngIf="indicators.length > 0">
+            <span class="body-xs">Detectado:</span>
+            <span class="chip chip--warning" *ngFor="let indicator of indicators">{{ indicator }}</span>
           </div>
         </div>
 
         <!-- Botones de acción -->
-        <div class="action-buttons">
+        <div class="action-buttons layout-row-end">
           <button 
-            class="skip-btn" 
+            class="ui-btn ui-btn-ghost" 
             (click)="skipQuestion()"
             *ngIf="currentQuestion.weight <= 4"
             [disabled]="isProcessingResponse">
@@ -157,7 +164,7 @@
           </button>
           
           <button 
-            class="submit-btn"
+            class="ui-btn ui-btn-primary"
             *ngIf="hasResultReady"
             (click)="submitResponse()"
             [disabled]="isProcessingResponse"
@@ -168,14 +175,14 @@
         </div>
 
         <!-- Overlay de procesamiento -->
-        <div class="processing-overlay" *ngIf="isProcessingResponse">
-          <div class="processing-content">Procesando respuesta…</div>
+        <div class="overlay-panel" *ngIf="isProcessingResponse">
+          <div class="overlay-panel__content processing-content">Procesando respuesta…</div>
         </div>
 
         <!-- Preguntas de seguimiento (si las hay) -->
-        <div class="follow-up-questions" *ngIf="currentQuestion.followUpQuestions && currentQuestion.followUpQuestions.length > 0">
-          <div class="follow-up-header">Preguntas de seguimiento sugeridas:</div>
-          <ul class="follow-up-list">
+        <div class="follow-up-questions layout-stack-sm" *ngIf="currentQuestion.followUpQuestions && currentQuestion.followUpQuestions.length > 0">
+          <div class="heading-sm">Preguntas de seguimiento sugeridas:</div>
+          <ul class="follow-up-list layout-stack-xs">
             <li *ngFor="let followUp of currentQuestion.followUpQuestions">{{ followUp }}</li>
           </ul>
         </div>
@@ -185,17 +192,17 @@
 
   <!-- Estado: Analizando -->
   <div class="analyzing-state" *ngIf="isAnalyzing">
-    <section class="ui-card">
-      <h2 class="text-sm font-semibold mb-3 text-slate-900 dark:text-slate-100">Resultado AVI</h2>
+    <section class="card">
+      <h2 class="analysis-heading">Resultado AVI</h2>
 
       <!-- Skeleton Loader -->
-      <div class="animate-pulse space-y-3">
-        <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
-        <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
-        <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+      <div class="skeleton-stack">
+        <div class="skeleton-line skeleton-line--lg"></div>
+        <div class="skeleton-line skeleton-line--lg"></div>
+        <div class="skeleton-line skeleton-line--sm skeleton-line--wide"></div>
       </div>
 
-      <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">Analizando respuestas...</p>
+      <p class="analysis-description">Analizando respuestas...</p>
     </section>
   </div>
 
@@ -203,22 +210,22 @@
   <div class="results-state" *ngIf="showResults && dualEngineResult">
     <div class="results-container">
       <!-- Resultado AVI Minimalista -->
-      <section class="ui-card">
-        <h2 class="text-sm font-semibold mb-3 text-slate-900 dark:text-slate-100">Resultado AVI</h2>
+      <section class="card">
+        <h2 class="analysis-heading">Resultado AVI</h2>
 
         <!-- Loader -->
-        <div *ngIf="isAnalyzing" class="animate-pulse space-y-3">
-          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
-          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+        <div *ngIf="isAnalyzing" class="skeleton-stack">
+          <div class="skeleton-line skeleton-line--lg"></div>
+          <div class="skeleton-line skeleton-line--lg"></div>
         </div>
 
         <!-- Resultados -->
         <div *ngIf="!isAnalyzing">
-          <div class="text-2xl font-semibold mb-2 text-slate-900 dark:text-slate-100" data-cy="avi-decision">
+          <div class="result-decision" data-cy="avi-decision">
             {{ finalDecision }}
           </div>
-          <ul class="list-disc pl-4 space-y-1" *ngIf="finalFlags.length > 0">
-            <li *ngFor="let flag of finalFlags" class="text-sm text-slate-500 dark:text-slate-400" data-cy="avi-flag">
+          <ul class="result-flag-list" *ngIf="finalFlags.length > 0">
+            <li *ngFor="let flag of finalFlags" class="result-flag" data-cy="avi-flag">
               {{ flag }}
             </li>
           </ul>
@@ -248,7 +255,10 @@
       <!-- Comparación de engines -->
       <div class="engines-comparison">
         <div class="engine-result">
-          <h3>🔬 Engine Científico</h3>
+          <h3>
+            <app-icon name="beaker" [size]="24" class="engine-icon" />
+            Engine Científico
+          </h3>
           <div class="engine-score">{{ dualEngineResult.scientificScore.totalScore }}</div>
           <div class="engine-risk">{{ dualEngineResult.scientificScore.riskLevel }}</div>
           <div class="engine-time">{{ dualEngineResult.scientificScore.processingTime }}ms</div>
@@ -264,7 +274,10 @@
         </div>
 
         <div class="engine-result">
-          <h3>🎯 Engine Heurístico</h3>
+          <h3>
+            <app-icon name="check-circle-solid" [size]="24" class="engine-icon" />
+            Engine Heurístico
+          </h3>
           <div class="engine-score">{{ dualEngineResult.heuristicScore.totalScore }}</div>
           <div class="engine-risk">{{ dualEngineResult.heuristicScore.riskLevel }}</div>
           <div class="engine-time">{{ dualEngineResult.heuristicScore.processingTime }}ms</div>
@@ -302,7 +315,10 @@
 
       <!-- Red Flags -->
       <div class="red-flags-section" *ngIf="dualEngineResult.consolidatedScore.redFlags.length > 0">
-        <h3>🚨 Red Flags Detectadas</h3>
+        <h3>
+          <app-icon name="exclamation-triangle" [size]="24" class="red-flag-icon" />
+          Red Flags Detectadas
+        </h3>
         <div class="red-flags-list">
           <div 
             class="red-flag-item" 
@@ -346,7 +362,7 @@
       <!-- Métricas técnicas -->
       <div class="technical-metrics">
         <h3>Métricas Técnicas</h3>
-        <div class="metrics-grid">
+        <div class="metrics-grid layout-grid-responsive">
           <div class="metric">
             <span class="metric-label">Tiempo Total:</span>
             <span class="metric-value">{{ formatTime(dualEngineResult.processingTime) }}</span>
@@ -368,10 +384,10 @@
 
       <!-- Botones de acción final -->
       <div class="final-actions">
-        <button class="restart-btn" (click)="restartInterview()">
+        <button class="ui-btn ui-btn-secondary" (click)="restartInterview()">
           Nueva Entrevista
         </button>
-        <button class="export-btn" disabled>
+        <button class="ui-btn ui-btn-ghost" disabled>
           Exportar Reporte
         </button>
       </div>

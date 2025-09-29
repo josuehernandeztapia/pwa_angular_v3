@@ -759,11 +759,11 @@ export class DocumentValidationService {
     notes.push(`Documentos válidos: ${validCount}/${totalCount}`);
     
     if (validationStatus['constitutiveActValid']) {
-      notes.push('✓ Acta Constitutiva aprobada');
+      notes.push('Acta Constitutiva aprobada');
     }
     
     if (!validationStatus['rfcValid']) {
-      notes.push('⚠ RFC del ecosistema pendiente');
+      notes.push('RFC del ecosistema pendiente');
     }
     
     return notes;

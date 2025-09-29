@@ -7,6 +7,9 @@ import { Chart, ChartConfiguration, ChartType, registerables } from 'chart.js';
 import { ActionableClient, ActionableGroup, ActivityFeedItem, DashboardStats, Market, OpportunityStage } from '../../../models/types';
 import { DashboardService } from '../../../services/dashboard.service';
 import { ConnectionIndicatorComponent } from '../../shared/connection-indicator/connection-indicator.component';
+import { getDataColor, getChartColor } from '../../../styles/design-tokens';
+import { IconComponent } from '../../shared/icon/icon.component';
+import { IconName } from '../../shared/icon/icon-definitions';
 
 // Register Chart.js components
 Chart.register(...registerables);
@@ -15,7 +18,8 @@ interface KPICard {
   title: string;
   value: string;
   subValue?: string;
-  icon: string;
+  iconName: IconName;
+  iconClass?: string;
   dataCy: string;
   trend?: 'up' | 'down' | 'stable';
   trendValue?: string;
@@ -27,199 +31,11 @@ interface KPICard {
   imports: [
     CommonModule,
     RouterModule,
-    ConnectionIndicatorComponent
+    ConnectionIndicatorComponent,
+    IconComponent
   ],
-  template: `
-    <!-- Dashboard Container -->
-    <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-
-      <!-- Connection Indicator -->
-      <app-connection-indicator></app-connection-indicator>
-
-      <!-- Header -->
-      <header class="bg-surface border-b border-border px-4 sm:px-6 py-4">
-        <div class="flex items-center justify-between">
-          <div class="flex-1 min-w-0">
-            <h1 class="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-1 truncate">
-              Dashboard
-            </h1>
-            <p class="text-sm text-slate-600 dark:text-slate-400 truncate">
-              Vista general de tu negocio, {{ userName }}
-            </p>
-          </div>
-
-          <!-- Desktop Actions -->
-          <div class="hidden sm:flex items-center space-x-3 ml-4">
-            <button class="ui-btn ui-btn-secondary ui-btn-sm">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-              </svg>
-              Exportar
-            </button>
-            <button class="ui-btn ui-btn-primary ui-btn-sm" (click)="createNewOpportunity()">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-              </svg>
-              Nueva Oportunidad
-            </button>
-          </div>
-
-          <!-- Mobile Menu Button -->
-          <div class="sm:hidden ml-4">
-            <button
-              class="ui-btn ui-btn-secondary ui-btn-sm p-2"
-              (click)="toggleMobileActions()"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- Mobile Actions Dropdown -->
-        <div
-          *ngIf="showMobileActions"
-          class="sm:hidden mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3"
-        >
-          <button class="ui-btn ui-btn-secondary w-full justify-center">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-            Exportar
-          </button>
-          <button class="ui-btn ui-btn-primary w-full justify-center" (click)="createNewOpportunity()">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-            </svg>
-            Nueva Oportunidad
-          </button>
-        </div>
-      </header>
-
-      <!-- Main Content -->
-      <main class="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto">
-
-        <!-- KPIs Grid -->
-        <section>
-          <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-            Métricas Principales
-          </h2>
-          <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            <div *ngFor="let kpi of kpiCards" class="ui-card">
-              <div class="flex items-center justify-between">
-                <div class="flex-1 min-w-0">
-                  <div class="text-xs text-slate-500 dark:text-slate-400 mb-1 truncate">
-                    {{ kpi.title }}
-                  </div>
-                  <div class="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-slate-100" [attr.data-cy]="kpi.dataCy">
-                    {{ kpi.value }}
-                  </div>
-                  <div *ngIf="kpi.subValue" class="text-xs text-slate-500 dark:text-slate-400 mt-1 truncate">
-                    {{ kpi.subValue }}
-                  </div>
-                </div>
-                <div class="text-sky-600 dark:text-sky-400 text-2xl flex-shrink-0 ml-3">
-                  {{ kpi.icon }}
-                </div>
-              </div>
-              <div *ngIf="kpi.trend" class="flex items-center mt-3 text-xs">
-                <span
-                  class="flex items-center flex-shrink-0"
-                  [class.text-green-600]="kpi.trend === 'up'"
-                  [class.text-red-600]="kpi.trend === 'down'"
-                  [class.text-slate-500]="kpi.trend === 'stable'">
-                  <span *ngIf="kpi.trend === 'up'" class="mr-1">↗</span>
-                  <span *ngIf="kpi.trend === 'down'" class="mr-1">↘</span>
-                  <span *ngIf="kpi.trend === 'stable'" class="mr-1">→</span>
-                  {{ kpi.trendValue }}
-                </span>
-                <span class="ml-2 text-slate-500 truncate">vs semana anterior</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Charts Section -->
-        <section class="grid gap-6 lg:grid-cols-2">
-
-          <!-- PMT Evolution Chart -->
-          <div class="ui-card">
-            <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-4">
-              Evolución PMT (Últimos 6 meses)
-            </h3>
-            <div class="h-64">
-              <canvas #pmtChart data-cy="chart-pmt"></canvas>
-            </div>
-          </div>
-
-          <!-- Revenue Projection Chart -->
-          <div class="ui-card">
-            <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-4">
-              Proyección de Ingresos
-            </h3>
-            <div class="h-64">
-              <canvas #revenueChart data-cy="chart-revenue"></canvas>
-            </div>
-          </div>
-        </section>
-
-        <!-- Action Items -->
-        <section *ngIf="actionableGroups.length > 0">
-          <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-            Acciones Requeridas
-          </h2>
-          <div class="grid gap-4 md:grid-cols-2">
-            <div *ngFor="let group of actionableGroups" class="ui-card">
-              <div class="flex items-start justify-between mb-3">
-                <div>
-                  <h3 class="font-medium text-slate-900 dark:text-slate-100">{{ group.title }}</h3>
-                  <p class="text-sm text-slate-500 dark:text-slate-400">{{ group.description }}</p>
-                </div>
-                <span class="ui-btn ui-btn-ghost ui-btn-sm">
-                  {{ group.clients.length }}
-                </span>
-              </div>
-              <div class="space-y-2">
-                <div *ngFor="let client of group.clients.slice(0, 3)" class="flex items-center justify-between text-sm">
-                  <span class="text-slate-900 dark:text-slate-100">{{ client.name }}</span>
-                  <span class="text-xs text-slate-500 dark:text-slate-400">{{ client.status }}</span>
-                </div>
-                <button *ngIf="group.clients.length > 3" class="text-xs text-sky-600 hover:text-sky-500" (click)="navigateToClients()">
-                  Ver {{ group.clients.length - 3 }} más...
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Recent Activity -->
-        <section *ngIf="activityFeed.length > 0">
-          <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-            Actividad Reciente
-          </h2>
-          <div class="ui-card space-y-4">
-            <div *ngFor="let activity of activityFeed.slice(0, 5)" class="flex items-start space-x-3 pb-3 border-b border-slate-100 dark:border-slate-800 last:border-0">
-              <div class="flex-shrink-0 w-8 h-8 bg-sky-100 dark:bg-sky-900 rounded-full flex items-center justify-center text-xs">
-                📊
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm text-slate-900 dark:text-slate-100">{{ activity.message }}</p>
-                <p class="text-xs text-slate-500 dark:text-slate-400">{{ formatTimeAgo(activity.timestamp) }}</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
-  `,
-  styles: [`
-    /* Minimal custom styles - mainly relying on Tailwind + UI helpers */
-    .chart-container {
-      position: relative;
-      height: 250px;
-    }
-  `]
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('pmtChart', { static: false }) pmtChartRef!: ElementRef<HTMLCanvasElement>;
@@ -249,7 +65,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       title: 'PMT Mensual',
       value: '$8,450',
       subValue: 'Promedio móvil',
-      icon: '💰',
+      iconName: 'currency-dollar',
+      iconClass: 'kpi-icon--money',
       dataCy: 'kpi-pmt',
       trend: 'up',
       trendValue: '+5.2%'
@@ -258,7 +75,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       title: 'TIR',
       value: '27.1%',
       subValue: 'Tasa Interna de Retorno',
-      icon: '📈',
+      iconName: 'chart',
+      iconClass: 'kpi-icon--chart-up',
       dataCy: 'kpi-tir',
       trend: 'up',
       trendValue: '+2.1%'
@@ -267,7 +85,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       title: 'Ahorro Proyectado',
       value: '$32,500',
       subValue: 'Próximos 12 meses',
-      icon: '🎯',
+      iconName: 'target',
+      iconClass: 'kpi-icon--target',
       dataCy: 'kpi-ahorro',
       trend: 'up',
       trendValue: '+12.8%'
@@ -276,7 +95,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       title: 'Unidades Entregadas',
       value: '12',
       subValue: 'Este mes',
-      icon: '🚚',
+      iconName: 'truck',
+      iconClass: 'kpi-icon--delivery',
       dataCy: 'kpi-entregas',
       trend: 'stable',
       trendValue: '0%'
@@ -333,10 +153,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         datasets: [{
           label: 'PMT',
           data: [7800, 8200, 8300, 8450, 8600, 8750],
-          borderColor: '#0EA5E9',
+          borderColor: getDataColor('primary'),           // OpenAI data blue
           backgroundColor: 'transparent',
           borderWidth: 2,
-          pointBackgroundColor: '#0EA5E9',
+          pointBackgroundColor: getDataColor('primary'),  // OpenAI data blue
           pointBorderColor: '#ffffff',
           pointBorderWidth: 2,
           pointRadius: 4,
@@ -356,16 +176,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
               callback: function(value) {
                 return '$' + Number(value).toLocaleString();
               },
-              color: '#6B7280'
+              color: getChartColor('line', 'axis')       // OpenAI chart axis color
             },
             grid: {
-              color: '#E5E7EB'
+              color: getChartColor('line', 'grid')       // OpenAI chart grid color
             }
           },
           x: {
-            ticks: { color: '#6B7280' },
+            ticks: { color: getChartColor('line', 'axis') }, // OpenAI chart axis color
             grid: {
-              color: '#E5E7EB'
+              color: getChartColor('line', 'grid')       // OpenAI chart grid color
             }
           }
         },
@@ -391,13 +211,13 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         datasets: [{
           label: 'Ingresos Reales',
           data: [45000, 52000, 48000, 61000, 55000, 67000],
-          backgroundColor: '#0EA5E9',
-          borderRadius: 4
+          backgroundColor: getDataColor('primary'),     // OpenAI data blue
+          borderRadius: 2
         }, {
           label: 'Proyección',
           data: [50000, 55000, 53000, 65000, 60000, 70000],
-          backgroundColor: '#94A3B8',
-          borderRadius: 4
+          backgroundColor: getDataColor('secondary'),   // OpenAI data green
+          borderRadius: 2
         }]
       },
       options: {
@@ -421,16 +241,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
               callback: function(value) {
                 return '$' + Number(value).toLocaleString();
               },
-              color: '#6B7280'
+              color: getChartColor('bar', 'primary')     // OpenAI chart axis color
             },
             grid: {
-              color: '#E5E7EB'
+              color: getChartColor('line', 'grid')       // OpenAI chart grid color
             }
           },
           x: {
-            ticks: { color: '#6B7280' },
+            ticks: { color: getChartColor('bar', 'primary') }, // OpenAI chart axis color
             grid: {
-              color: '#E5E7EB'
+              color: getChartColor('line', 'grid')       // OpenAI chart grid color
             }
           }
         }
@@ -491,6 +311,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   navigateToOpportunities(): void {
     this.router.navigate(['/opportunities']);
+  }
+
+  getTrendSymbol(trend: KPICard['trend']): string {
+    if (trend === 'up') {
+      return '↗';
+    }
+    if (trend === 'down') {
+      return '↘';
+    }
+    return '→';
   }
 
   private loadDashboardData(): void {
@@ -637,7 +467,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         message: 'Juan Pérez se registró en la plataforma',
         timestamp: new Date(Date.now() - 5 * 60000),
         clientName: 'Juan Pérez',
-        icon: '👤'
+        iconType: 'user'
       },
       {
         id: '2',
@@ -646,7 +476,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         timestamp: new Date(Date.now() - 15 * 60000),
         clientName: 'María González',
         amount: 5000,
-        icon: '💰'
+        iconType: 'money'
       }
     ];
 

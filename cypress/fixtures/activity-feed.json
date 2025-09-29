@@ -5,7 +5,7 @@
     "timestamp": "2024-02-03T10:15:00Z",
     "message": "Nuevo cliente registrado: Carlos Rodríguez",
     "clientName": "Carlos Rodríguez Martín",
-    "icon": "👤"
+    "icon": "user"
   },
   {
     "id": "activity-002", 
@@ -14,7 +14,7 @@
     "message": "Pago recibido por $8,500 MXN",
     "clientName": "Juan Pérez García",
     "amount": 8500,
-    "icon": "💰"
+    "icon": "payment"
   },
   {
     "id": "activity-003",
@@ -22,7 +22,7 @@
     "timestamp": "2024-02-01T09:45:00Z",
     "message": "Documento INE aprobado para Juan Pérez",
     "clientName": "Juan Pérez García", 
-    "icon": "✅"
+    "icon": "approved"
   },
   {
     "id": "activity-004",
@@ -31,7 +31,7 @@
     "message": "María López alcanzó su meta de ahorro",
     "clientName": "María López Silva",
     "amount": 25000,
-    "icon": "🎯"
+    "icon": "target"
   },
   {
     "id": "activity-005",
@@ -39,6 +39,6 @@
     "timestamp": "2024-01-30T11:10:00Z",
     "message": "Contrato firmado digitalmente",
     "clientName": "Carlos Rodríguez Martín", 
-    "icon": "📝"
+    "icon": "document"
   }
 ]

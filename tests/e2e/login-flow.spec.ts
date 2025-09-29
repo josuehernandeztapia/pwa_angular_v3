@@ -137,15 +137,18 @@ test.describe('🎬 PWA Conductores - Complete Demo Journey', () => {
         indicator.textContent = '✅ PWA Demo Complete - Professional Journey';
         indicator.style.cssText = `
           position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+          top: 20%;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          transform: none;
           background: #4CAF50;
           color: white;
           padding: 20px;
           border-radius: 10px;
           font-size: 24px;
           z-index: 9999;
+          width: fit-content;
         `;
         document.body.appendChild(indicator);
       });

@@ -9,493 +9,14 @@ import { Client, EventType, Actor, BusinessFlow } from '../../../models/types';
 import { NotificationUI } from '../../../models/notification';
 import { ToastService } from '../../../services/toast.service';
 
-// ✅ Using SSOT NotificationUI from models/notification.ts
+//  Using SSOT NotificationUI from models/notification.ts
 
 @Component({
   selector: 'app-notifications-panel',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
-  template: `
-    <div class="notifications-panel" [class.open]="isOpen">
-      <!-- Panel Header -->
-      <div class="panel-header">
-        <div class="header-title">
-          <h3>🔔 Notificaciones</h3>
-          <span class="notification-count" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
-        </div>
-        <div class="header-actions">
-          <button 
-            class="filter-btn" 
-            [class.active]="showUnreadOnly"
-            (click)="toggleUnreadFilter()"
-            title="Solo no leídas"
-          >
-            {{ showUnreadOnly ? '📬' : '📭' }}
-          </button>
-          <button 
-            class="mark-all-read-btn"
-            (click)="markAllAsRead()"
-            *ngIf="unreadCount > 0"
-            title="Marcar todas como leídas"
-          >
-            ✅
-          </button>
-          <button 
-            class="close-btn"
-            (click)="closePanel()"
-            title="Cerrar panel"
-          >
-            ✕
-          </button>
-        </div>
-      </div>
-
-      <!-- Loading State -->
-      <div *ngIf="isLoading" class="loading-state">
-        <div class="loading-spinner"></div>
-        <p>Cargando notificaciones...</p>
-      </div>
-
-      <!-- Notifications List -->
-      <div *ngIf="!isLoading" class="notifications-list">
-        <div 
-          *ngFor="let notification of filteredNotifications; trackBy: trackByNotificationId"
-          class="notification-item"
-          [class.unread]="!notification.isRead"
-          [class.priority-high]="notification.priority === 'high'"
-          [class.priority-medium]="notification.priority === 'medium'"
-          (click)="onNotificationClick(notification)"
-        >
-          <div class="notification-icon">
-            {{ getNotificationIcon(notification.type) }}
-          </div>
-          
-          <div class="notification-content">
-            <div class="notification-header">
-              <h4 class="notification-title">{{ notification.title }}</h4>
-              <span class="notification-time">{{ formatTime(notification.timestamp) }}</span>
-            </div>
-            
-            <p class="notification-message">{{ notification.message }}</p>
-            
-            <div class="notification-meta" *ngIf="notification.clientId || notification.actionLabel">
-              <span class="client-name" *ngIf="notification.clientId">
-                👤 {{ getClientName(notification.clientId) }}
-              </span>
-              <span class="action-available" *ngIf="notification.actionLabel">
-                🎯 {{ notification.actionLabel }}
-              </span>
-            </div>
-          </div>
-          
-          <div class="notification-actions">
-            <button 
-              *ngIf="!notification.isRead"
-              class="mark-read-btn"
-              (click)="markAsRead(notification.id); $event.stopPropagation()"
-              title="Marcar como leída"
-            >
-              👁️
-            </button>
-            <div class="priority-indicator" [class]="'priority-' + notification.priority">
-              {{ getPriorityIcon(notification.priority) }}
-            </div>
-          </div>
-        </div>
-
-        <!-- Empty State -->
-        <div *ngIf="filteredNotifications.length === 0" class="empty-state">
-          <div class="empty-icon">
-            {{ showUnreadOnly ? '📪' : '🎉' }}
-          </div>
-          <p>{{ showUnreadOnly ? 'No hay notificaciones sin leer' : 'No hay notificaciones pendientes' }}</p>
-        </div>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="quick-actions" *ngIf="!isLoading">
-        <button 
-          class="quick-action-btn"
-          (click)="refreshNotifications()"
-          [disabled]="isLoading"
-        >
-          🔄 Actualizar
-        </button>
-        <button 
-          class="quick-action-btn"
-          routerLink="/clientes"
-          (click)="closePanel()"
-        >
-          👥 Ver Clientes
-        </button>
-        <button 
-          class="quick-action-btn"
-          routerLink="/dashboard"
-          (click)="closePanel()"
-        >
-          📊 Dashboard
-        </button>
-      </div>
-    </div>
-
-    <!-- Backdrop -->
-    <div 
-      class="panel-backdrop" 
-      *ngIf="isOpen"
-      (click)="closePanel()"
-    ></div>
-  `,
-  styles: [`
-    .notifications-panel {
-      position: fixed;
-      top: 0;
-      right: -400px;
-      width: 400px;
-      height: 100vh;
-      background: white;
-      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
-      z-index: 1001;
-      transition: right 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      border-left: 1px solid #e2e8f0;
-    }
-
-    .notifications-panel.open {
-      right: 0;
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      border-bottom: 1px solid #e2e8f0;
-      background: #f7fafc;
-    }
-
-    .header-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .header-title h3 {
-      margin: 0;
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #2d3748;
-    }
-
-    .notification-count {
-      background: #e53e3e;
-      color: white;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      min-width: 20px;
-      text-align: center;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .filter-btn, .mark-all-read-btn, .close-btn {
-      width: 36px;
-      height: 36px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      transition: all 0.2s;
-    }
-
-    .filter-btn {
-      background: #edf2f7;
-      color: #4a5568;
-    }
-
-    .filter-btn.active {
-      background: #4299e1;
-      color: white;
-    }
-
-    .mark-all-read-btn {
-      background: #48bb78;
-      color: white;
-    }
-
-    .mark-all-read-btn:hover {
-      background: #38a169;
-    }
-
-    .close-btn {
-      background: #fed7d7;
-      color: #c53030;
-    }
-
-    .close-btn:hover {
-      background: #feb2b2;
-    }
-
-    .loading-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-      color: #718096;
-    }
-
-    .loading-spinner {
-      width: 32px;
-      height: 32px;
-      border: 2px solid #e2e8f0;
-      border-left-color: #4299e1;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 16px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .notifications-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0;
-    }
-
-    .notification-item {
-      display: flex;
-      align-items: flex-start;
-      padding: 16px 20px;
-      border-bottom: 1px solid #f1f5f9;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-    }
-
-    .notification-item:hover {
-      background: #f8fafc;
-    }
-
-    .notification-item.unread {
-      background: #f0f9ff;
-      border-left: 4px solid #4299e1;
-    }
-
-    .notification-item.priority-high {
-      border-left-color: #e53e3e;
-    }
-
-    .notification-item.priority-medium {
-      border-left-color: #ed8936;
-    }
-
-    .notification-icon {
-      font-size: 1.5rem;
-      margin-right: 12px;
-      margin-top: 2px;
-      flex-shrink: 0;
-    }
-
-    .notification-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .notification-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 4px;
-    }
-
-    .notification-title {
-      margin: 0;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #2d3748;
-      line-height: 1.3;
-    }
-
-    .notification-time {
-      font-size: 0.75rem;
-      color: #718096;
-      flex-shrink: 0;
-      margin-left: 8px;
-    }
-
-    .notification-message {
-      margin: 0 0 8px 0;
-      font-size: 0.85rem;
-      color: #4a5568;
-      line-height: 1.4;
-    }
-
-    .notification-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      font-size: 0.75rem;
-    }
-
-    .client-name, .action-available {
-      background: #edf2f7;
-      color: #4a5568;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-weight: 500;
-    }
-
-    .notification-actions {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      margin-left: 8px;
-    }
-
-    .mark-read-btn {
-      width: 28px;
-      height: 28px;
-      border: none;
-      background: #edf2f7;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-    }
-
-    .mark-read-btn:hover {
-      background: #e2e8f0;
-    }
-
-    .priority-indicator {
-      font-size: 0.8rem;
-      opacity: 0.7;
-    }
-
-    .priority-indicator.priority-high {
-      color: #e53e3e;
-    }
-
-    .priority-indicator.priority-medium {
-      color: #ed8936;
-    }
-
-    .priority-indicator.priority-low {
-      color: #48bb78;
-    }
-
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-      text-align: center;
-      color: #718096;
-    }
-
-    .empty-icon {
-      font-size: 3rem;
-      margin-bottom: 16px;
-    }
-
-    .empty-state h4 {
-      margin: 0 0 8px 0;
-      color: #4a5568;
-      font-size: 1.2rem;
-    }
-
-    .empty-state p {
-      margin: 0;
-      font-size: 0.9rem;
-    }
-
-    .quick-actions {
-      padding: 16px 20px;
-      border-top: 1px solid #e2e8f0;
-      background: #f7fafc;
-      display: flex;
-      gap: 8px;
-    }
-
-    .quick-action-btn {
-      flex: 1;
-      padding: 8px 12px;
-      border: 1px solid #e2e8f0;
-      background: white;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: #4a5568;
-      text-decoration: none;
-      text-align: center;
-    }
-
-    .quick-action-btn:hover {
-      background: #edf2f7;
-      border-color: #cbd5e0;
-    }
-
-    .panel-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.3);
-      z-index: 1000;
-      opacity: 0;
-      animation: fadeIn 0.3s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    /* Mobile responsive */
-    @media (max-width: 768px) {
-      .notifications-panel {
-        width: 100vw;
-        right: -100vw;
-      }
-      
-      .notifications-panel.open {
-        right: 0;
-      }
-    }
-
-    /* Scrollbar styling */
-    .notifications-list::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .notifications-list::-webkit-scrollbar-track {
-      background: #f1f5f9;
-    }
-
-    .notifications-list::-webkit-scrollbar-thumb {
-      background: #cbd5e0;
-      border-radius: 3px;
-    }
-
-    .notifications-list::-webkit-scrollbar-thumb:hover {
-      background: #a0aec0;
-    }
-  `]
+  templateUrl: './notifications-panel.component.html',
+  styleUrls: ['./notifications-panel.component.scss'],
 })
 export class NotificationsPanelComponent implements OnInit, OnDestroy {
   @Input() isOpen = false;
@@ -511,6 +32,40 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
 
   get unreadCount(): number {
     return this.notifications.filter(n => !n.isRead).length;
+  }
+
+  getPanelStateClasses(): Record<string, boolean> {
+    return {
+      'notifications-panel--open': this.isOpen,
+    };
+  }
+
+  getFilterButtonClasses(): Record<string, boolean> {
+    return {
+      'notifications-panel__filter--active': this.showUnreadOnly,
+    };
+  }
+
+  getNotificationItemClasses(notification: NotificationUI): Record<string, boolean> {
+    const classes: Record<string, boolean> = {
+      'notifications-panel__item--unread': !notification.isRead,
+    };
+
+    if (notification.priority) {
+      classes[`notifications-panel__item--priority-${notification.priority}`] = true;
+    }
+
+    return classes;
+  }
+
+  getPriorityClasses(notification: NotificationUI): Record<string, boolean> {
+    const classes: Record<string, boolean> = {};
+
+    if (notification.priority) {
+      classes[`notifications-panel__priority--${notification.priority}`] = true;
+    }
+
+    return classes;
   }
 
   constructor(
@@ -717,22 +272,22 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
 
   getNotificationIcon(type: string): string {
     const icons = {
-      'payment_reminder': '💰',
-      'document_required': '📋',
-      'client_action': '👤',
-      'system_alert': '⚠️',
-      'opportunity': '🎯'
+      'payment_reminder': '',
+      'document_required': '',
+      'client_action': '',
+      'system_alert': '',
+      'opportunity': ''
     };
-    return icons[type as keyof typeof icons] || '📢';
+    return icons[type as keyof typeof icons] || 'info';
   }
 
   getPriorityIcon(priority: string): string {
     const icons = {
-      'high': '🔴',
-      'medium': '🟡',
-      'low': '🟢'
+      'high': '●',
+      'medium': '●',
+      'low': '●'
     };
-    return icons[priority as keyof typeof icons] || '⚪';
+    return icons[priority as keyof typeof icons] || '●';
   }
 
   getClientName(clientId: string): string {

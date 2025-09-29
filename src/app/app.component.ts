@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { BottomNavBarComponent } from './components/shared/bottom-nav-bar/bottom-nav-bar.component';
@@ -9,11 +10,12 @@ import { PwaInstallPromptComponent } from './components/shared/pwa-install-promp
 import { MediaPermissionsService } from './services/media-permissions.service';
 import { SwUpdateService } from './services/sw-update.service';
 import { theme } from './styles/design-tokens';
+import { IconComponent } from './components/shared/icon/icon.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavigationComponent, BottomNavBarComponent, UpdateBannerComponent, OfflineIndicatorComponent, PwaInstallPromptComponent, LucideAngularModule],
+  imports: [CommonModule, RouterOutlet, NavigationComponent, BottomNavBarComponent, UpdateBannerComponent, OfflineIndicatorComponent, PwaInstallPromptComponent, LucideAngularModule, IconComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -23,13 +25,26 @@ export class AppComponent implements OnInit {
   // 🌙 Dark mode state
   isDarkMode = false;
 
-  constructor(private mediaPermissions: MediaPermissionsService, _sw: SwUpdateService) {}
+  constructor(
+    private mediaPermissions: MediaPermissionsService,
+    _sw: SwUpdateService,
+    @Inject(DOCUMENT) private readonly documentRef: Document
+  ) {}
 
   async ngOnInit() {
     // Media permissions will be requested just-in-time when needed (voice/camera flows)
 
     // 🌙 Initialize dark mode from localStorage
+    this.ensureDocumentLang();
     this.initializeDarkMode();
+  }
+
+  private ensureDocumentLang(): void {
+    const html = this.documentRef?.documentElement;
+    if (!html) {
+      return;
+    }
+    html.setAttribute('lang', 'es-MX');
   }
 
   /**

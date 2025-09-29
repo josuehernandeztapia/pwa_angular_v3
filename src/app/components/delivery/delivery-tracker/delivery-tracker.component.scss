@@ -1,20 +1,85 @@
-/**
- * 📦 Delivery Tracker - Minimalista Enterprise
- * Lightweight styling leveraging global helpers (.ui-card, .ui-btn) and Tailwind tokens
- */
-
 :host {
-  @apply block space-y-4;
+  display: block;
+}
 
-  ul {
-    @apply space-y-2;
+.delivery-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+
+  &__title {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
   }
 
-  li {
-    @apply rounded border border-slate-200 dark:border-slate-700 p-3 flex justify-between text-sm;
+  &__skeleton-list,
+  &__timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
   }
 
-  .eta-text {
-    @apply text-sm font-medium text-slate-700 dark:text-slate-300;
+  &__skeleton {
+    height: var(--space-5);
+    border-radius: var(--radius-lg);
+    background: var(--surface-skeleton);
+    animation: pulse 1.6s ease-in-out infinite;
+
+    @media (prefers-color-scheme: dark) {
+      background: var(--surface-skeleton-dark);
+    }
   }
+
+  &__timeline-step {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-secondary);
+    background: var(--color-bg-primary);
+    transition: border-color var(--duration-150) var(--ease-out);
+
+    &:hover {
+      border-color: var(--color-border-primary);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background: color-mix(in srgb, var(--color-neutral-900) 72%, transparent);
+      border-color: color-mix(in srgb, var(--color-neutral-400) 24%, transparent);
+    }
+  }
+
+  &__timeline-day {
+    font-weight: var(--font-medium);
+    color: var(--color-text-primary);
+  }
+
+  &__timeline-description {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+
+  &__eta {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+
+  &__eta-value {
+    margin-left: var(--space-1);
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }

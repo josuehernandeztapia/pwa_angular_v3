@@ -66,9 +66,7 @@
 
   <div *ngIf="type === 'fade'" class="premium-loading__fade">
     <div class="premium-loading__fade-content">
-      <svg class="premium-loading__fade-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
+      <app-icon name="lightning-bolt" [size]="24" class="premium-loading__fade-icon" />
       <div *ngIf="showLabel" class="premium-loading__label">{{ label }}</div>
     </div>
   </div>

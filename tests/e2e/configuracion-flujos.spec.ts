@@ -315,9 +315,11 @@ test.describe('🎬 PWA Conductores - Configuración de Flujos Demo', () => {
         `;
         summary.style.cssText = `
           position: fixed;
-          top: 40%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+          top: 20%;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          transform: none;
           background: #1565C0;
           color: white;
           padding: 25px;
@@ -330,6 +332,7 @@ test.describe('🎬 PWA Conductores - Configuración de Flujos Demo', () => {
           line-height: 1.4;
           max-height: 80vh;
           overflow-y: auto;
+          width: fit-content;
         `;
         document.body.appendChild(summary);
       }, CONFIGURACION_CONFIG);

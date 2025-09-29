@@ -1,58 +1,24 @@
-import { Component, Input, Output, EventEmitter, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   DeliveryCommitment,
-  ETAUpdate,
+  DeliveryMetrics,
   DeliveryTrackingService,
-  DeliveryMetrics
+  ETAUpdate
 } from '../../../services/delivery-tracking.service';
 
 @Component({
   selector: 'app-delivery-tracker',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  template: `
-    <section class="ui-card">
-      <h2 class="text-sm font-semibold mb-3 text-slate-900 dark:text-slate-100">Timeline de Entrega (77 días)</h2>
-
-      <!-- Loader -->
-      <ul *ngIf="loading" class="space-y-2">
-        <li class="h-6 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></li>
-        <li class="h-6 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></li>
-        <li class="h-6 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></li>
-      </ul>
-
-      <!-- Timeline -->
-      <ul *ngIf="!loading" class="space-y-2" data-cy="delivery-timeline">
-        <li class="rounded border border-slate-200 dark:border-slate-700 p-3 flex items-center justify-between text-slate-900 dark:text-slate-100" data-cy="delivery-step">
-          <span>Día 1</span>
-          <span class="text-xs text-slate-500 dark:text-slate-400">Creación de entrega</span>
-        </li>
-        <li class="rounded border border-slate-200 dark:border-slate-700 p-3 flex items-center justify-between text-slate-900 dark:text-slate-100" data-cy="delivery-step">
-          <span>Día 30</span>
-          <span class="text-xs text-slate-500 dark:text-slate-400">Pago programado</span>
-        </li>
-        <li class="rounded border border-slate-200 dark:border-slate-700 p-3 flex items-center justify-between text-slate-900 dark:text-slate-100" data-cy="delivery-step">
-          <span>Día 77</span>
-          <span class="text-xs text-slate-500 dark:text-slate-400">Entrega final</span>
-        </li>
-      </ul>
-
-      <!-- ETA -->
-      <div *ngIf="!loading" class="mt-4 text-sm text-slate-700 dark:text-slate-300">
-        ETA calculado: <span class="font-semibold" data-cy="delivery-eta">{{ eta }} días</span>
-      </div>
-    </section>
-  `,
+  templateUrl: './delivery-tracker.component.html',
   styleUrls: ['./delivery-tracker.component.scss']
 })
 export class DeliveryTrackerComponent {
-  // Minimalista properties
   loading = false;
   eta = 75;
 
-  // Legacy properties (preserved for compatibility)
   @Input() showMetrics = signal(true);
   @Input() showTrackingInput = signal(true);
   @Input() showActiveDeliveries = signal(true);
@@ -61,10 +27,8 @@ export class DeliveryTrackerComponent {
   @Output() deliverySelected = new EventEmitter<DeliveryCommitment>();
   @Output() etaUpdateRequested = new EventEmitter<string>();
 
-  // Injected service
   deliveryService = inject(DeliveryTrackingService);
 
-  // Component state
   trackingCode = '';
   searchPerformed = signal(false);
   trackingResult = signal<{
@@ -73,11 +37,9 @@ export class DeliveryTrackerComponent {
     history: ETAUpdate[];
   } | null>(null);
 
-  // Computed data
   metrics = signal<DeliveryMetrics | null>(null);
   activeDeliveries = signal<DeliveryCommitment[]>([]);
 
-  // Expose Math for template
   Math = Math;
 
   constructor() {
@@ -86,14 +48,12 @@ export class DeliveryTrackerComponent {
     this.initializeMinimalista();
   }
 
-  // Initialize minimalista functionality
-  private initializeMinimalista() {
+  private initializeMinimalista(): void {
     this.loading = true;
 
-    // Simulate loading timeline and ETA calculation
     setTimeout(() => {
       this.loading = false;
-      this.eta = Math.floor(Math.random() * 120) + 1; // Random ETA between 1-120 days
+      this.eta = Math.floor(Math.random() * 120) + 1;
     }, 1500);
   }
 
@@ -106,7 +66,7 @@ export class DeliveryTrackerComponent {
       next: (result) => {
         this.trackingResult.set(result);
       },
-      error: (error) => {
+      error: () => {
         this.trackingResult.set(null);
       }
     });
@@ -122,83 +82,74 @@ export class DeliveryTrackerComponent {
 
   private loadMetrics(): void {
     this.deliveryService.getDeliveryMetrics().subscribe({
-      next: (metrics) => {
-        this.metrics.set(metrics);
-      },
-      error: (error) => {
-      }
+      next: (metrics) => this.metrics.set(metrics),
+      error: () => undefined
     });
   }
 
   private loadActiveDeliveries(): void {
-    this.deliveryService.getDeliveryCommitments({
-      status: 'en_route' // Can be expanded to include other active statuses
-    }).subscribe({
-      next: (deliveries) => {
-        this.activeDeliveries.set(deliveries);
-      },
-      error: (error) => {
-      }
+    this.deliveryService.getDeliveryCommitments({ status: 'en_route' }).subscribe({
+      next: (deliveries) => this.activeDeliveries.set(deliveries),
+      error: () => undefined
     });
   }
 
-  // Template helper methods
   getStatusClass(status?: DeliveryCommitment['status']): string {
     const statusClasses: Record<string, string> = {
-      'scheduled': 'status-scheduled',
-      'en_route': 'status-en-route',
-      'arriving': 'status-arriving',
-      'delivered': 'status-delivered',
-      'failed': 'status-failed',
-      'rescheduled': 'status-rescheduled'
+      scheduled: 'status-scheduled',
+      en_route: 'status-en-route',
+      arriving: 'status-arriving',
+      delivered: 'status-delivered',
+      failed: 'status-failed',
+      rescheduled: 'status-rescheduled'
     };
     return statusClasses[status || ''] || '';
   }
 
   getStatusLabel(status?: DeliveryCommitment['status']): string {
     const statusLabels: Record<string, string> = {
-      'scheduled': 'Programada',
-      'en_route': 'En camino',
-      'arriving': 'Llegando',
-      'delivered': 'Entregada',
-      'failed': 'Fallida',
-      'rescheduled': 'Reprogramada'
+      scheduled: 'Programada',
+      en_route: 'En camino',
+      arriving: 'Llegando',
+      delivered: 'Entregada',
+      failed: 'Fallida',
+      rescheduled: 'Reprogramada'
     };
     return statusLabels[status || ''] || 'Desconocido';
   }
 
   getPriorityLabel(priority?: DeliveryCommitment['metadata']['priority']): string {
     const priorityLabels: Record<string, string> = {
-      'normal': 'Normal',
-      'high': 'Alta',
-      'urgent': 'Urgente'
+      normal: 'Normal',
+      high: 'Alta',
+      urgent: 'Urgente'
     };
     return priorityLabels[priority || 'normal'] || 'Normal';
   }
 
   getTrafficLabel(traffic?: ETAUpdate['factors']['traffic']): string {
     const trafficLabels: Record<string, string> = {
-      'light': 'Ligero',
-      'moderate': 'Moderado',
-      'heavy': 'Pesado'
+      light: 'Ligero',
+      moderate: 'Moderado',
+      heavy: 'Pesado'
     };
     return trafficLabels[traffic || 'light'] || 'Desconocido';
   }
 
   getWeatherLabel(weather?: ETAUpdate['factors']['weather']): string {
     const weatherLabels: Record<string, string> = {
-      'clear': 'Despejado',
-      'rain': 'Lluvia',
-      'adverse': 'Adverso'
+      clear: 'Despejado',
+      rain: 'Lluvia',
+      adverse: 'Adverso'
     };
     return weatherLabels[weather || 'clear'] || 'Desconocido';
   }
 
   getRouteLabel(route?: ETAUpdate['factors']['route']): string {
     const routeLabels: Record<string, string> = {
-      'optimal': 'Óptima',
-      'detour': 'Desvío',
-      'blocked': 'Bloqueada'
+      optimal: 'Óptima',
+      detour: 'Desvío',
+      blocked: 'Bloqueada'
     };
     return routeLabels[route || 'optimal'] || 'Desconocida';
   }

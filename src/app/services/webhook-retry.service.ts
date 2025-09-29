@@ -1,5 +1,5 @@
 /**
- * 🔗 Webhook Retry Service with Surgical Precision
+ * [LINK] Webhook Retry Service with Surgical Precision
  * P0.2 SURGICAL FIX - Enhanced reliability ≥95%
  *
  * Features:
@@ -104,7 +104,7 @@ export class WebhookRetryService {
   }
 
   /**
-   * 🚀 Send webhook with enhanced reliability
+   *  Send webhook with enhanced reliability
    */
   sendWebhook(payload: WebhookPayload): Observable<WebhookResult> {
     const startTime = Date.now();
@@ -151,7 +151,7 @@ export class WebhookRetryService {
   }
 
   /**
-   * 🔄 Process webhook with surgical retry logic
+   *  Process webhook with surgical retry logic
    */
   private processWebhook(webhookState: PersistentWebhookState): Observable<WebhookResult> {
     const { payload } = webhookState;
@@ -232,7 +232,7 @@ export class WebhookRetryService {
   }
 
   /**
-   * ⚡ Queue processor for persistent webhooks
+   * [FAST] Queue processor for persistent webhooks
    */
   private startQueueProcessor(): void {
     // Process queue every 5 seconds
@@ -301,7 +301,7 @@ export class WebhookRetryService {
   }
 
   /**
-   * 📊 Metrics calculation for reliability monitoring
+   *  Metrics calculation for reliability monitoring
    */
   private startMetricsCalculation(): void {
     timer(0, 30000).subscribe(() => { // Every 30 seconds
@@ -370,7 +370,7 @@ export class WebhookRetryService {
   }
 
   /**
-   * 🛠️ Management methods
+   * [BUILD] Management methods
    */
   getWebhookById(webhookId: string): PersistentWebhookState | null {
     return this.persistentQueue$.value.find(w => w.id === webhookId) || null;

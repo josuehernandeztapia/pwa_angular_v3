@@ -8,6 +8,7 @@ export interface BreadcrumbItem {
   label: string;
   route?: string;
   icon?: string;
+  iconType?: 'home' | 'money' | 'target' | 'users' | 'documents' | 'protection' | 'reports' | 'add' | 'truck' | 'handshake' | 'lightbulb' | 'bank' | 'snowflake';
   params?: any;
 }
 
@@ -23,6 +24,7 @@ export interface QuickAction {
   id: string;
   label: string;
   icon: string;
+  iconType?: 'home' | 'money' | 'target' | 'users' | 'documents' | 'protection' | 'reports' | 'add' | 'truck' | 'handshake' | 'lightbulb' | 'bank' | 'snowflake' | 'user' | 'import';
   route?: string;
   action?: () => void;
   badge?: number;
@@ -55,102 +57,102 @@ export class NavigationService {
     '/dashboard': {
       title: 'Panel Principal',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' }
       ]
     },
     '/nueva-oportunidad': {
       title: 'Nueva Oportunidad',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '➕ Nueva Oportunidad' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Nueva Oportunidad', iconType: 'add' }
       ],
       showBackButton: true
     },
     '/cotizador': {
       title: 'Cotizador',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '💰 Cotizador' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Cotizador', iconType: 'money' }
       ]
     },
     '/cotizador/ags-individual': {
       title: 'Cotizador AGS Individual',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '💰 Cotizador', route: '/cotizador' },
-        { label: '🚐 AGS Individual' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Cotizador', route: '/cotizador', iconType: 'money' },
+        { label: 'AGS Individual', iconType: 'truck' }
       ],
       showBackButton: true
     },
     '/cotizador/edomex-colectivo': {
       title: 'Cotizador EdoMex Colectivo',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '💰 Cotizador', route: '/cotizador' },
-        { label: '🤝 EdoMex Colectivo' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Cotizador', route: '/cotizador', iconType: 'money' },
+        { label: 'EdoMex Colectivo', iconType: 'handshake' }
       ],
       showBackButton: true
     },
     '/simulador': {
       title: 'Simulador de Escenarios',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '🎯 Simulador' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Simulador', iconType: 'target' }
       ]
     },
     '/simulador/ags-ahorro': {
       title: 'Simulador AGS Ahorro',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '🎯 Simulador', route: '/simulador' },
-        { label: '💡 AGS Ahorro' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Simulador', route: '/simulador', iconType: 'target' },
+        { label: 'AGS Ahorro', iconType: 'lightbulb' }
       ],
       showBackButton: true
     },
     '/simulador/edomex-individual': {
       title: 'Simulador EdoMex Individual',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '🎯 Simulador', route: '/simulador' },
-        { label: '🏦 EdoMex Individual' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Simulador', route: '/simulador', iconType: 'target' },
+        { label: 'EdoMex Individual', iconType: 'bank' }
       ],
       showBackButton: true
     },
     '/simulador/tanda-colectiva': {
       title: 'Simulador Tanda Colectiva',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '🎯 Simulador', route: '/simulador' },
-        { label: '🌨️ Tanda Colectiva' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Simulador', route: '/simulador', iconType: 'target' },
+        { label: 'Tanda Colectiva', iconType: 'snowflake' }
       ],
       showBackButton: true
     },
     '/clientes': {
       title: 'Gestión de Clientes',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '👥 Clientes' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Clientes', iconType: 'users' }
       ]
     },
     '/expedientes': {
       title: 'Expedientes Digitales',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '📋 Expedientes' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Expedientes', iconType: 'documents' }
       ]
     },
     '/proteccion': {
       title: 'Protección Financiera',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '🛡️ Protección' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Protección', iconType: 'protection' }
       ]
     },
     '/reportes': {
       title: 'Reportes y Análisis',
       breadcrumbs: [
-        { label: '🏠 Dashboard', route: '/dashboard' },
-        { label: '📊 Reportes' }
+        { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
+        { label: 'Reportes', iconType: 'reports' }
       ]
     }
   };
@@ -195,7 +197,7 @@ export class NavigationService {
     // Get route configuration
     const config = this.routeConfig[url] || {
       title: 'Conductores PWA',
-      breadcrumbs: [{ label: '🏠 Dashboard', route: '/dashboard' }],
+      breadcrumbs: [{ label: 'Dashboard', route: '/dashboard', iconType: 'home' }],
       showBackButton: false
     };
 
@@ -285,21 +287,24 @@ export class NavigationService {
               {
                 id: 'new-opportunity',
                 label: 'Nueva Oportunidad',
-                icon: '➕',
+                icon: 'plus-icon',
+                iconType: 'add',
                 route: '/nueva-oportunidad',
                 color: 'primary' as const
               },
               {
                 id: 'quick-quote',
                 label: 'Cotización Rápida',
-                icon: '💰',
+                icon: '',
+                iconType: 'money',
                 route: '/cotizador',
                 color: 'success' as const
               },
               {
                 id: 'simulator',
                 label: 'Simulador',
-                icon: '🎯',
+                icon: '',
+                iconType: 'target',
                 route: '/simulador',
                 color: 'secondary' as const
               }
@@ -310,13 +315,15 @@ export class NavigationService {
               {
                 id: 'new-client',
                 label: 'Nuevo Cliente',
-                icon: '👤',
+                icon: '',
+                iconType: 'user',
                 color: 'primary' as const
               },
               {
                 id: 'import-clients',
                 label: 'Importar',
-                icon: '📥',
+                icon: 'import-icon',
+                iconType: 'import',
                 color: 'secondary' as const
               }
             ];
@@ -326,14 +333,16 @@ export class NavigationService {
               {
                 id: 'ags-quote',
                 label: 'AGS Individual',
-                icon: '🚐',
+                icon: 'truck-icon',
+                iconType: 'truck',
                 route: '/cotizador/ags-individual',
                 color: 'primary' as const
               },
               {
                 id: 'edomex-quote',
                 label: 'EdoMex Colectivo',
-                icon: '🤝',
+                icon: 'handshake-icon',
+                iconType: 'handshake',
                 route: '/cotizador/edomex-colectivo',
                 color: 'success' as const
               }
@@ -344,21 +353,24 @@ export class NavigationService {
               {
                 id: 'ags-saving',
                 label: 'AGS Ahorro',
-                icon: '💡',
+                icon: 'lightbulb',
+                iconType: 'lightbulb',
                 route: '/simulador/ags-ahorro',
                 color: 'warning' as const
               },
               {
                 id: 'edomex-individual',
                 label: 'EdoMex Individual',
-                icon: '🏦',
+                icon: 'bank-icon',
+                iconType: 'bank',
                 route: '/simulador/edomex-individual',
                 color: 'primary' as const
               },
               {
                 id: 'collective-tanda',
                 label: 'Tanda Colectiva',
-                icon: '🌨️',
+                icon: 'snowflake-icon',
+                iconType: 'snowflake',
                 route: '/simulador/tanda-colectiva',
                 color: 'secondary' as const
               }

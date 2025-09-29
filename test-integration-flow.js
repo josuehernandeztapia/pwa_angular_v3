@@ -21,9 +21,9 @@ async function simulateIntegrationFlow() {
     response_time_ms: 850 + Math.random() * 300
   };
   
-  console.log(`   ✅ Firma completada: ${mifielResult.signature_id}`);
+  console.log(`    Firma completada: ${mifielResult.signature_id}`);
   console.log(`   📄 Hash documento: ${mifielResult.document_hash}`);
-  console.log(`   ⏱️ Tiempo respuesta: ${Math.round(mifielResult.response_time_ms)}ms`);
+  console.log(`    Tiempo respuesta: ${Math.round(mifielResult.response_time_ms)}ms`);
   testResults.push(mifielResult);
   
   // Simular delay de red
@@ -45,10 +45,10 @@ async function simulateIntegrationFlow() {
     mifiel_reference: mifielResult.signature_id
   };
   
-  console.log(`   ✅ Contrato creado: ${odooResult.contract_id}`);
+  console.log(`    Contrato creado: ${odooResult.contract_id}`);
   console.log(`   👤 Cliente: ${odooResult.customer_id}`);
-  console.log(`   💰 Monto: $${Math.round(odooResult.amount).toLocaleString()}`);
-  console.log(`   ⏱️ Tiempo respuesta: ${Math.round(odooResult.response_time_ms)}ms`);
+  console.log(`    Monto: $${Math.round(odooResult.amount).toLocaleString()}`);
+  console.log(`    Tiempo respuesta: ${Math.round(odooResult.response_time_ms)}ms`);
   testResults.push(odooResult);
   
   await new Promise(resolve => setTimeout(resolve, 150));
@@ -69,11 +69,11 @@ async function simulateIntegrationFlow() {
     odoo_reference: odooResult.contract_id
   };
   
-  console.log(`   ✅ Cuenta creada: ${neonResult.account_id}`);
+  console.log(`    Cuenta creada: ${neonResult.account_id}`);
   console.log(`   💳 Préstamo: ${neonResult.loan_id}`);
-  console.log(`   📊 Tasa: ${(neonResult.interest_rate * 100).toFixed(2)}%`);
+  console.log(`    Tasa: ${(neonResult.interest_rate * 100).toFixed(2)}%`);
   console.log(`   💵 Pago mensual: $${Math.round(neonResult.monthly_payment).toLocaleString()}`);
-  console.log(`   ⏱️ Tiempo respuesta: ${Math.round(neonResult.response_time_ms)}ms`);
+  console.log(`    Tiempo respuesta: ${Math.round(neonResult.response_time_ms)}ms`);
   testResults.push(neonResult);
   
   await new Promise(resolve => setTimeout(resolve, 100));
@@ -106,7 +106,7 @@ async function simulateIntegrationFlow() {
   ];
   
   webhookResults.forEach(webhook => {
-    const icon = webhook.status === 'success' ? '✅' : '❌';
+    const icon = webhook.status === 'success' ? '' : '';
     console.log(`   ${icon} ${webhook.service}: ${webhook.event} (${Math.round(webhook.response_time_ms)}ms)`);
   });
   
@@ -126,7 +126,7 @@ function calculatePMT(principal, rate, periods) {
 
 // Análisis de performance del flujo
 function analyzeFlowPerformance(results) {
-  console.log('\n📊 ANÁLISIS DE PERFORMANCE:');
+  console.log('\n ANÁLISIS DE PERFORMANCE:');
   
   const steps = results.filter(r => r.step);
   const totalTime = steps.reduce((sum, step) => sum + step.response_time_ms, 0);
@@ -156,17 +156,17 @@ function analyzeFlowPerformance(results) {
 }
 
 // Ejecutar test de integración
-console.log('🚀 Iniciando test de integración completo...\n');
+console.log(' Iniciando test de integración completo...\n');
 
 simulateIntegrationFlow().then(results => {
   const analysis = analyzeFlowPerformance(results);
   
   console.log('\n' + '='.repeat(50));
-  console.log('🎯 RESUMEN DE INTEGRACIÓN:');
+  console.log(' RESUMEN DE INTEGRACIÓN:');
   console.log(`   Performance Grade: ${analysis.performance_grade}`);
   console.log(`   Tiempo Total: ${Math.round(analysis.total_time_ms)}ms`);
   console.log(`   Success Rate: ${analysis.webhook_success_rate}%`);
-  console.log(`   Status: ${analysis.all_steps_successful ? '✅ EXITOSO' : '⚠️ CON ERRORES'}`);
+  console.log(`   Status: ${analysis.all_steps_successful ? ' EXITOSO' : ' CON ERRORES'}`);
   
   // Casos de falla simulados
   const failureScenarios = [
@@ -177,14 +177,14 @@ simulateIntegrationFlow().then(results => {
     'Network connectivity issues'
   ];
   
-  console.log('\n🔥 ESCENARIOS DE FALLA IDENTIFICADOS:');
+  console.log('\n ESCENARIOS DE FALLA IDENTIFICADOS:');
   failureScenarios.forEach((scenario, index) => {
     const probability = Math.random();
     const risk = probability > 0.8 ? '🔴 ALTO' : probability > 0.6 ? '🟡 MEDIO' : '🟢 BAJO';
     console.log(`   ${index + 1}. ${scenario}: ${risk}`);
   });
   
-  console.log('\n💡 RECOMENDACIONES:');
+  console.log('\n RECOMENDACIONES:');
   console.log('   1. Implementar circuit breaker para APIs externas');
   console.log('   2. Configurar retry logic con backoff exponencial');
   console.log('   3. Monitoreo de health checks cada 30s');
@@ -194,5 +194,5 @@ simulateIntegrationFlow().then(results => {
   console.log('\n🔗 INTEGRATION FLOW VALIDATION COMPLETADO');
   
 }).catch(error => {
-  console.error('❌ Error en test de integración:', error);
+  console.error(' Error en test de integración:', error);
 });

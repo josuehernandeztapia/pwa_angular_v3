@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { IconComponent } from '../../../shared/icon/icon.component';
 import { Quote } from '../../../../models/business';
 import { CotizadorEngineService, ProductPackage } from '../../../../services/cotizador-engine.service';
 import { PdfExportService } from '../../../../services/pdf-export.service';
@@ -11,7 +12,7 @@ import { ToastService } from '../../../../services/toast.service';
 @Component({
   selector: 'app-ags-individual',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, IconComponent],
   templateUrl: './ags-individual.component.html',
   styleUrls: ['./ags-individual.component.scss']
 })

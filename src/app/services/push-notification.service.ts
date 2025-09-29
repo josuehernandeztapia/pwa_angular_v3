@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { NotificationPayload, NotificationHistory } from '../models/notification';
 
-// ✅ Using SSOT NotificationPayload from models/notification.ts
+//  Using SSOT NotificationPayload from models/notification.ts
 
 interface PushSubscription {
   subscription_id?: string;
@@ -25,7 +25,7 @@ interface PushSubscription {
   active: boolean;
 }
 
-// ✅ Using SSOT NotificationHistory from models/notification.ts
+//  Using SSOT NotificationHistory from models/notification.ts
 
 @Injectable({
   providedIn: 'root'

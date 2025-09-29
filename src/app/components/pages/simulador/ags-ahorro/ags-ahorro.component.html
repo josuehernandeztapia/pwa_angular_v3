@@ -1,41 +1,41 @@
 <!-- Skip Link for Accessibility -->
 <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
 
-<div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+<div class="ags-ahorro">
   <!-- Header -->
-  <header class="border-b border-border bg-surface">
-    <div class="max-w-6xl mx-auto px-6 py-4">
-      <div class="flex items-center gap-4">
-        <button (click)="goBack()" class="ui-btn ui-btn-ghost ui-btn-sm" data-cy="back-button">
+  <header class="ags-ahorro__header">
+    <div class="ags-ahorro__container">
+      <div class="ags-ahorro__header-content">
+        <button (click)="goBack()" class="btn btn-ghost btn-sm" data-cy="back-button">
           ← Volver
         </button>
-        <div>
-          <h1 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Simulador AGS Ahorro</h1>
-          <p class="text-sm text-slate-600 dark:text-slate-400">Proyecta tu ahorro, calcula liquidación en entrega</p>
+        <div class="ags-ahorro__header-text">
+          <h1 class="ags-ahorro__title">Simulador AGS Ahorro</h1>
+          <p class="ags-ahorro__subtitle">Proyecta tu ahorro, calcula liquidación en entrega</p>
         </div>
       </div>
     </div>
   </header>
 
-  <main id="main-content" class="max-w-6xl mx-auto px-6 py-8">
+  <main id="main-content" class="ags-ahorro__body">
     <!-- KPIs -->
-    <div class="ui-card mb-6" *ngIf="!isLoading">
-      <div class="grid grid-cols-3 gap-6">
-        <div class="text-center">
-          <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="sim-ahorro-label">Mensualidad</div>
-          <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="sim-ahorro">
+    <div class="card ags-ahorro__kpi-card" *ngIf="!isLoading">
+      <div class="ags-ahorro__kpi-grid">
+        <div class="ags-ahorro__kpi-item">
+          <div class="ags-ahorro__kpi-label" data-cy="sim-ahorro-label">Mensualidad</div>
+          <div class="ags-ahorro__kpi-value" data-cy="sim-ahorro">
             {{ formatCurrency(currentScenario?.monthlyContribution || 0) }}
           </div>
         </div>
-        <div class="text-center">
-          <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="sim-plazo-label">Tiempo</div>
-          <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="sim-plazo">
+        <div class="ags-ahorro__kpi-item">
+          <div class="ags-ahorro__kpi-label" data-cy="sim-plazo-label">Tiempo</div>
+          <div class="ags-ahorro__kpi-value" data-cy="sim-plazo">
             {{ (currentScenario?.monthsToTarget || simuladorForm.value.deliveryMonths) }} meses
           </div>
         </div>
-        <div class="text-center">
-          <div class="text-xs text-slate-500 dark:text-slate-400 mb-1" data-cy="sim-pmt-label">Meta Total</div>
-          <div class="text-2xl font-bold text-slate-900 dark:text-slate-100" data-cy="sim-pmt">
+        <div class="ags-ahorro__kpi-item">
+          <div class="ags-ahorro__kpi-label" data-cy="sim-pmt-label">Meta Total</div>
+          <div class="ags-ahorro__kpi-value" data-cy="sim-pmt">
             {{ formatCurrency(currentScenario?.targetAmount || simuladorForm.value.unitValue) }}
           </div>
         </div>
@@ -43,54 +43,54 @@
     </div>
 
     <!-- Main Content -->
-    <div class="grid lg:grid-cols-2 gap-8" *ngIf="!isLoading">
+    <div class="ags-ahorro__content" *ngIf="!isLoading">
       <!-- Configuration Panel -->
-      <div class="ui-card">
-        <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Configuración</h2>
+      <div class="card ags-ahorro__panel">
+        <h2 class="ags-ahorro__section-title">Configuración</h2>
 
-        <form [formGroup]="simuladorForm" class="space-y-6">
+        <form [formGroup]="simuladorForm" class="ags-ahorro__form">
           <!-- Unidad -->
-          <div class="space-y-4">
-            <h3 class="text-sm font-medium text-slate-700 dark:text-slate-300">Unidad</h3>
+          <div class="ags-ahorro__fieldset">
+            <h3 class="ags-ahorro__fieldset-title">Unidad</h3>
 
             <div>
-              <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Valor Total de la Unidad</label>
-              <div class="relative">
-                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500">$</span>
+              <label class="ags-ahorro__label">Valor Total de la Unidad</label>
+              <div class="input-affix-wrapper">
+                <span class="input-affix input-affix--prefix" aria-hidden="true" style="color: var(--color-text-tertiary)">$</span>
                 <input
                   type="number"
                   formControlName="unitValue"
-                  class="ui-input pl-8"
+                  class="input input-has-prefix"
                   placeholder="799000"
                   min="700000"
                   max="1000000"
                   (input)="onConfigChange()"
                   data-cy="unit-value">
               </div>
-              <p class="text-xs text-slate-500 mt-1">Precio típico AGS: $799,000 (vagoneta + GNV)</p>
+              <p class="ags-ahorro__hint">Precio típico AGS: $799,000 (vagoneta + GNV)</p>
             </div>
 
             <div>
-              <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Enganche Inicial Disponible</label>
-              <div class="relative">
-                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500">$</span>
+              <label class="ags-ahorro__label">Enganche Inicial Disponible</label>
+              <div class="input-affix-wrapper">
+                <span class="input-affix input-affix--prefix" aria-hidden="true" style="color: var(--color-text-tertiary)">$</span>
                 <input
                   type="number"
                   formControlName="initialDownPayment"
-                  class="ui-input pl-8"
+                  class="input input-has-prefix"
                   placeholder="400000"
                   min="0"
                   (input)="onConfigChange()"
                   data-cy="initial-down">
               </div>
-              <p class="text-xs text-slate-500 mt-1">Monto que tienes disponible ahora</p>
+              <p class="ags-ahorro__hint">Monto que tienes disponible ahora</p>
             </div>
 
             <div>
-              <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Meses Estimados para Entrega</label>
+              <label class="ags-ahorro__label">Meses Estimados para Entrega</label>
               <select
                 formControlName="deliveryMonths"
-                class="ui-input"
+                class="input"
                 (change)="onConfigChange()"
                 data-cy="delivery-months">
                 <option value="">Seleccionar</option>
@@ -103,44 +103,44 @@
           </div>
 
           <!-- Consumo -->
-          <div class="space-y-4">
-            <h3 class="text-sm font-medium text-slate-700 dark:text-slate-300">Consumo</h3>
+          <div class="ags-ahorro__fieldset">
+            <h3 class="ags-ahorro__fieldset-title">Consumo</h3>
 
             <div>
-              <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Placas de Unidades Actuales</label>
-              <div class="flex gap-2 mb-2">
+              <label class="ags-ahorro__label">Placas de Unidades Actuales</label>
+              <div class="ags-ahorro__plate-inputs">
                 <input
                   type="text"
                   [(ngModel)]="newPlate"
                   placeholder="ABC-1234"
-                  class="ui-input flex-1"
+                  class="input"
                   (keyup.enter)="addPlate()"
                   #plateInput
                   data-cy="new-plate">
                 <button
                   type="button"
                   (click)="addPlate(); plateInput.value=''"
-                  class="ui-btn ui-btn-secondary"
+                  class="btn btn-secondary"
                   data-cy="add-plate">
                   Agregar
                 </button>
               </div>
 
-              <div class="space-y-2" *ngIf="plates.length > 0">
-                <div *ngFor="let plate of plates; let i = index" class="flex items-center gap-2 p-2 bg-slate-50 dark:bg-slate-800 rounded-md">
-                  <span class="text-sm font-medium text-slate-900 dark:text-slate-100">{{ plate }}</span>
+              <div class="ags-ahorro__plate-list" *ngIf="plates.length > 0">
+                <div *ngFor="let plate of plates; let i = index" class="ags-ahorro__plate-row">
+                  <span class="ags-ahorro__plate-label">{{ plate }}</span>
                   <input
                     type="number"
                     [(ngModel)]="consumptions[i]"
                     placeholder="Litros/mes"
-                    class="ui-input ui-input-sm flex-1"
+                    class="input input-sm"
                     min="0"
                     max="10000"
                     data-cy="plate-consumption">
                   <button
                     type="button"
                     (click)="removePlate(i)"
-                    class="text-red-500 hover:text-red-700 w-6 h-6 flex items-center justify-center"
+                    class="ags-ahorro__plate-remove"
                     aria-label="Eliminar placa"
                     data-cy="remove-plate">
                     ×
@@ -150,13 +150,13 @@
             </div>
 
             <div>
-              <label class="block text-xs text-slate-600 dark:text-slate-400 mb-1">Sobreprecio por Litro</label>
-              <div class="relative">
-                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500">$</span>
+              <label class="ags-ahorro__label">Sobreprecio por Litro</label>
+              <div class="input-affix-wrapper">
+                <span class="input-affix input-affix--prefix" aria-hidden="true" style="color: var(--color-text-tertiary)">$</span>
                 <input
                   type="number"
                   formControlName="overpricePerLiter"
-                  class="ui-input pl-8"
+                  class="input input-has-prefix"
                   placeholder="5.00"
                   min="1"
                   max="20"
@@ -164,7 +164,7 @@
                   (input)="onConfigChange()"
                   data-cy="overprice-per-liter">
               </div>
-              <p class="text-xs text-slate-500 mt-1">Cantidad extra por litro que vas a ahorrar</p>
+              <p class="ags-ahorro__hint">Cantidad extra por litro que vas a ahorrar</p>
             </div>
           </div>
 
@@ -173,7 +173,7 @@
             type="button"
             (click)="simulateScenario()"
             [disabled]="!canSimulate()"
-            class="ui-btn ui-btn-primary w-full"
+            class="btn btn-primary ags-ahorro__submit"
             data-cy="simulate-btn">
             {{ isSimulating ? 'Simulando...' : 'Simular Escenario' }}
           </button>
@@ -181,67 +181,78 @@
       </div>
 
       <!-- Results Panel -->
-      <div class="ui-card" *ngIf="currentScenario">
-        <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Proyección de Ahorro AGS</h2>
+      <div class="card ags-ahorro__panel" *ngIf="currentScenario">
+        <h2 class="ags-ahorro__section-title">Proyección de Ahorro AGS</h2>
 
         <!-- Key Metrics -->
-        <div class="grid grid-cols-2 gap-4 mb-6">
-          <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
-            <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Meta Total</div>
-            <div class="text-xl font-bold text-slate-900 dark:text-slate-100">
+        <div class="ags-ahorro__metrics">
+          <div class="ags-ahorro__metric-card">
+            <div class="ags-ahorro__metric-label">Meta Total</div>
+            <div class="ags-ahorro__metric-value">
               {{ formatCurrency(currentScenario.targetAmount) }}
             </div>
           </div>
 
-          <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
-            <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Tiempo</div>
-            <div class="text-xl font-bold text-slate-900 dark:text-slate-100">
+          <div class="ags-ahorro__metric-card">
+            <div class="ags-ahorro__metric-label">Tiempo</div>
+            <div class="ags-ahorro__metric-value">
               {{ currentScenario.monthsToTarget }} meses
             </div>
           </div>
 
-          <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
-            <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Recaudación Mensual</div>
-            <div class="text-xl font-bold text-slate-900 dark:text-slate-100">
+          <div class="ags-ahorro__metric-card">
+            <div class="ags-ahorro__metric-label">Recaudación Mensual</div>
+            <div class="ags-ahorro__metric-value">
               {{ formatCurrency(currentScenario.monthlyContribution) }}
             </div>
           </div>
 
-          <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg"
-               [class]="remainderAmount <= 0 ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' : 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800'">
-            <div class="text-xs mb-1"
-                 [class]="remainderAmount <= 0 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'">
+          <div
+            class="ags-ahorro__metric-card"
+            [class.ags-ahorro__metric-card--complete]="remainderAmount <= 0"
+            [class.ags-ahorro__metric-card--warning]="remainderAmount > 0">
+            <div class="ags-ahorro__metric-label">
               {{ remainderAmount <= 0 ? 'Ahorro Completo' : 'Remanente' }}
             </div>
-            <div class="text-xl font-bold"
-                 [class]="remainderAmount <= 0 ? 'text-green-900 dark:text-green-100' : 'text-amber-900 dark:text-amber-100'">
+            <div
+              class="ags-ahorro__metric-value"
+              [class.ags-ahorro__metric-value--positive]="remainderAmount <= 0"
+              [class.ags-ahorro__metric-value--negative]="remainderAmount > 0">
               {{ formatCurrency(remainderAmount) }}
             </div>
           </div>
         </div>
 
         <!-- Charts -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="ags-ahorro__chart-grid">
           <!-- Ahorro Chart -->
-          <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+          <div class="ags-ahorro__chart-card">
+            <h3 class="ags-ahorro__chart-title">Ahorro acumulado</h3>
             <canvas #ahorroChart width="300" height="200"></canvas>
           </div>
 
           <!-- PMT Distribution Chart -->
-          <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+          <div class="ags-ahorro__chart-card">
+            <h3 class="ags-ahorro__chart-title">PMT mensual</h3>
             <canvas #pmtChart width="300" height="200"></canvas>
           </div>
         </div>
 
         <!-- Timeline -->
-        <div class="mb-6" *ngIf="displayTimeline.length > 0">
-          <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Cronología de Ahorro</h4>
-          <div class="space-y-2 max-h-48 overflow-y-auto">
-            <div *ngFor="let event of displayTimeline" class="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-800 rounded-md">
-              <div class="text-sm text-slate-600 dark:text-slate-400">Mes {{ event.month }}</div>
-              <div class="text-sm text-slate-900 dark:text-slate-100">{{ event.event }}</div>
-              <div class="text-sm font-medium"
-                   [class]="event.amount > 0 ? 'text-green-600' : 'text-red-600'">
+        <div *ngIf="displayTimeline.length > 0">
+          <h4 class="ags-ahorro__section-title" style="font-size: var(--text-sm);">Cronología de Ahorro</h4>
+          <div class="ags-ahorro__timeline">
+            <div *ngFor="let event of displayTimeline" class="ags-ahorro__timeline-item">
+              <div class="ags-ahorro__metric-label">Mes {{ event.month }}</div>
+              <div class="ags-ahorro__metric-value" style="font-size: var(--text-sm); font-weight: var(--font-medium);">
+                {{ event.event }}
+              </div>
+              <div
+                class="ags-ahorro__timeline-amount"
+                [ngClass]="{
+                  'ags-ahorro__timeline-amount--positive': event.amount >= 0,
+                  'ags-ahorro__timeline-amount--negative': event.amount < 0
+                }">
                 {{ formatCurrency(event.amount) }}
               </div>
             </div>
@@ -249,32 +260,32 @@
         </div>
 
         <!-- Comparison Table -->
-        <div class="mb-6">
-          <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Comparación de Escenarios</h4>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+        <div>
+          <h4 class="ags-ahorro__section-title" style="font-size: var(--text-sm);">Comparación de Escenarios</h4>
+          <div class="ags-ahorro__table-wrapper">
+            <table class="ags-ahorro__table">
               <thead>
-                <tr class="border-b border-slate-200 dark:border-slate-700">
-                  <th class="text-left py-2 text-slate-600 dark:text-slate-400">Concepto</th>
-                  <th class="text-right py-2 text-slate-600 dark:text-slate-400">Con Ahorro Programado</th>
-                  <th class="text-right py-2 text-slate-600 dark:text-slate-400">Sin Ahorro</th>
+                <tr>
+                  <th>Concepto</th>
+                  <th class="ags-ahorro__table-cell--right">Con Ahorro Programado</th>
+                  <th class="ags-ahorro__table-cell--right">Sin Ahorro</th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="border-b border-slate-100 dark:border-slate-800">
-                  <td class="py-2 text-slate-900 dark:text-slate-100">Enganche</td>
-                  <td class="py-2 text-right text-slate-900 dark:text-slate-100">{{ formatCurrency(simuladorForm.value.initialDownPayment + (currentScenario.monthlyContribution * currentScenario.monthsToTarget)) }}</td>
-                  <td class="py-2 text-right text-slate-900 dark:text-slate-100">{{ formatCurrency(simuladorForm.value.initialDownPayment) }}</td>
-                </tr>
-                <tr class="border-b border-slate-100 dark:border-slate-800">
-                  <td class="py-2 text-slate-900 dark:text-slate-100">Remanente a financiar</td>
-                  <td class="py-2 text-right font-medium text-green-600">{{ formatCurrency(remainderAmount) }}</td>
-                  <td class="py-2 text-right font-medium text-red-600">{{ formatCurrency(simuladorForm.value.unitValue - simuladorForm.value.initialDownPayment) }}</td>
+                <tr>
+                  <td>Enganche</td>
+                  <td class="ags-ahorro__table-cell--right">{{ formatCurrency(simuladorForm.value.initialDownPayment + (currentScenario.monthlyContribution * currentScenario.monthsToTarget)) }}</td>
+                  <td class="ags-ahorro__table-cell--right">{{ formatCurrency(simuladorForm.value.initialDownPayment) }}</td>
                 </tr>
                 <tr>
-                  <td class="py-2 text-slate-900 dark:text-slate-100 font-medium">Ahorro estimado</td>
-                  <td class="py-2 text-right font-bold text-green-600">{{ formatCurrency((simuladorForm.value.unitValue - simuladorForm.value.initialDownPayment) - remainderAmount) }}</td>
-                  <td class="py-2 text-right font-bold text-slate-500">$0</td>
+                  <td>Remanente a financiar</td>
+                  <td class="ags-ahorro__table-cell--right ags-ahorro__metric-value--positive">{{ formatCurrency(remainderAmount) }}</td>
+                  <td class="ags-ahorro__table-cell--right ags-ahorro__metric-value--negative">{{ formatCurrency(simuladorForm.value.unitValue - simuladorForm.value.initialDownPayment) }}</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: var(--font-semibold);">Ahorro estimado</td>
+                  <td class="ags-ahorro__table-cell--right ags-ahorro__metric-value--positive">{{ formatCurrency((simuladorForm.value.unitValue - simuladorForm.value.initialDownPayment) - remainderAmount) }}</td>
+                  <td class="ags-ahorro__table-cell--right" style="color: var(--color-text-tertiary); font-weight: var(--font-semibold);">$0</td>
                 </tr>
               </tbody>
             </table>
@@ -282,29 +293,29 @@
         </div>
 
         <!-- Enhanced Actions -->
-        <div class="border-t border-slate-200 dark:border-slate-700 pt-6 mt-6">
+        <div class="ags-ahorro__actions">
           <!-- View Mode Toggle -->
-          <div class="flex justify-center mb-4">
+          <div class="ags-ahorro__view-toggle">
             <button
               (click)="toggleViewMode()"
-              class="ui-btn ui-btn-ghost ui-btn-sm"
+              class="btn btn-ghost btn-sm"
               data-cy="toggle-view-mode">
               {{ currentViewMode === 'simple' ? 'Vista Avanzada' : 'Vista Simple' }}
             </button>
           </div>
 
           <!-- Simple Actions -->
-          <div *ngIf="currentViewMode === 'simple'" class="grid grid-cols-2 gap-3 mb-4">
+          <div *ngIf="currentViewMode === 'simple'" class="ags-ahorro__quick-actions">
             <button
               (click)="speakSummary()"
-              class="ui-btn ui-btn-secondary"
+              class="btn btn-secondary"
               title="Leer resumen"
               data-cy="ags-voice">
               Escuchar
             </button>
             <button
               (click)="shareWhatsApp()"
-              class="ui-btn ui-btn-secondary"
+              class="btn btn-secondary"
               title="Compartir por WhatsApp"
               data-cy="ags-wa">
               WhatsApp
@@ -312,143 +323,136 @@
             <button
               (click)="saveDraft()"
               [disabled]="!currentScenario"
-              class="ui-btn ui-btn-secondary"
+              class="btn btn-secondary"
               data-cy="save-scenario"
               title="Guardar simulación">
               Guardar
             </button>
             <button
               (click)="resetSimulation()"
-              class="ui-btn ui-btn-secondary">
+              class="btn btn-secondary">
               Nuevo
             </button>
           </div>
 
           <!-- Advanced Actions -->
-          <div *ngIf="currentViewMode === 'advanced'" class="space-y-4 mb-4">
-            <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300">Herramientas Avanzadas</h4>
+          <div *ngIf="currentViewMode === 'advanced'" class="ags-ahorro__advanced-actions">
+            <h4 class="ags-ahorro__section-title" style="font-size: var(--text-sm);">Herramientas Avanzadas</h4>
 
             <!-- Amortization Section -->
-            <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
-              <div class="flex justify-between items-center mb-2">
-                <span class="text-sm font-medium text-slate-900 dark:text-slate-100">Financiamiento del Remanente</span>
-                <span class="text-xs bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 px-2 py-1 rounded">
-                  {{ formatCurrency(remainderAmount) }}
-                </span>
+            <div class="ags-ahorro__advanced-card">
+              <div class="ags-ahorro__advanced-card-header">
+                <span class="ags-ahorro__metric-value" style="font-size: var(--text-sm);">Financiamiento del Remanente</span>
+                <span class="ags-ahorro__tag ags-ahorro__tag--warning">{{ formatCurrency(remainderAmount) }}</span>
               </div>
               <button
                 (click)="calculateAmortization()"
                 [disabled]="remainderAmount <= 0"
-                class="ui-btn ui-btn-primary ui-btn-sm w-full"
+                class="btn btn-primary btn-sm"
                 data-cy="calculate-amortization">
                 Calcular Tabla de Amortización
               </button>
             </div>
 
-            <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
-              <div class="flex justify-between items-center mb-2">
-                <span class="text-sm font-medium text-slate-900 dark:text-slate-100">Simulador de Protección</span>
-                <span class="text-xs bg-sky-100 dark:bg-sky-900 text-sky-800 dark:text-sky-200 px-2 py-1 rounded">
-                  Para imprevistos
-                </span>
+            <div class="ags-ahorro__advanced-card">
+              <div class="ags-ahorro__advanced-card-header">
+                <span class="ags-ahorro__metric-value" style="font-size: var(--text-sm);">Simulador de Protección</span>
+                <span class="ags-ahorro__tag ags-ahorro__tag--info">Para imprevistos</span>
               </div>
               <button
                 (click)="showProtectionDemo = true"
-                class="ui-btn ui-btn-primary ui-btn-sm w-full">
+                class="btn btn-primary btn-sm">
                 Ver Protección Conductores
               </button>
             </div>
           </div>
 
           <!-- Main Actions -->
-          <div class="flex gap-3">
+          <div class="ags-ahorro__cta">
             <button
               (click)="generatePDF()"
-              class="ui-btn ui-btn-secondary"
+              class="btn btn-secondary"
               data-cy="generate-pdf">
               PDF
             </button>
             <button
               (click)="proceedWithScenario()"
-              class="ui-btn ui-btn-primary flex-1"
+              class="btn btn-primary ags-ahorro__cta-primary"
               data-cy="proceed-scenario">
               Continuar con este Plan
             </button>
           </div>
 
-          <p class="text-xs text-slate-500 dark:text-slate-400 text-center mt-4">
+          <p class="ags-ahorro__note">
             ¿Qué sigue? Puedes pasar al Cotizador o generar un PDF con tu plan.
           </p>
         </div>
 
         <!-- Amortization Table Modal -->
         <div *ngIf="showAmortizationTable"
-             class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+             class="ags-ahorro__modal-backdrop"
              (click)="showAmortizationTable = false">
-          <div class="ui-card max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+          <div class="card ags-ahorro__modal"
                (click)="$event.stopPropagation()"
                role="dialog"
                aria-modal="true"
                aria-labelledby="amortization-title">
-            <div class="flex justify-between items-center mb-6">
-              <h4 id="amortization-title" class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+            <div class="ags-ahorro__modal-header">
+              <h4 id="amortization-title" class="ags-ahorro__section-title" style="margin-bottom: 0;">
                 Tabla de Amortización del Remanente
               </h4>
               <button
                 (click)="showAmortizationTable = false"
-                class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                class="ags-ahorro__modal-close"
                 aria-label="Cerrar">
                 ×
               </button>
             </div>
 
-            <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg mb-6">
-              <div class="grid grid-cols-2 gap-4 text-sm">
-                <div class="flex justify-between">
-                  <span class="text-slate-600 dark:text-slate-400">Monto a financiar:</span>
-                  <strong class="text-slate-900 dark:text-slate-100">{{ formatCurrency(remainderAmount) }}</strong>
+            <div class="ags-ahorro__modal-summary">
+              <div class="ags-ahorro__modal-summary-grid">
+                <div class="ags-ahorro__modal-summary-row">
+                  <span>Monto a financiar:</span>
+                  <strong class="ags-ahorro__modal-summary-value">{{ formatCurrency(remainderAmount) }}</strong>
                 </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-600 dark:text-slate-400">Tasa anual AGS:</span>
-                  <strong class="text-slate-900 dark:text-slate-100">25.5%</strong>
+                <div class="ags-ahorro__modal-summary-row">
+                  <span>Tasa anual AGS:</span>
+                  <strong class="ags-ahorro__modal-summary-value">25.5%</strong>
                 </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-600 dark:text-slate-400">Plazo típico:</span>
-                  <strong class="text-slate-900 dark:text-slate-100">24 meses</strong>
+                <div class="ags-ahorro__modal-summary-row">
+                  <span>Plazo típico:</span>
+                  <strong class="ags-ahorro__modal-summary-value">24 meses</strong>
                 </div>
-                <div class="flex justify-between font-medium">
-                  <span class="text-slate-900 dark:text-slate-100">Pago mensual estimado:</span>
-                  <strong class="text-green-600 dark:text-green-400">{{ formatCurrency(amortizationTable[0]?.monthlyPayment || 0) }}</strong>
+                <div class="ags-ahorro__modal-summary-row">
+                  <span>Pago mensual estimado:</span>
+                  <strong class="ags-ahorro__metric-value--positive">{{ formatCurrency(amortizationTable[0]?.monthlyPayment || 0) }}</strong>
                 </div>
               </div>
             </div>
 
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm">
+            <div class="ags-ahorro__table-wrapper">
+              <table class="ags-ahorro__modal-table">
                 <thead>
-                  <tr class="border-b border-slate-200 dark:border-slate-700">
-                    <th class="text-left py-2 text-slate-600 dark:text-slate-400"># Pago</th>
-                    <th class="text-right py-2 text-slate-600 dark:text-slate-400">Pago Mensual</th>
-                    <th class="text-right py-2 text-slate-600 dark:text-slate-400">Capital</th>
-                    <th class="text-right py-2 text-slate-600 dark:text-slate-400">Interés</th>
-                    <th class="text-right py-2 text-slate-600 dark:text-slate-400">Saldo</th>
+                  <tr>
+                    <th># Pago</th>
+                    <th class="ags-ahorro__modal-table-cell--right">Pago Mensual</th>
+                    <th class="ags-ahorro__modal-table-cell--right">Capital</th>
+                    <th class="ags-ahorro__modal-table-cell--right">Interés</th>
+                    <th class="ags-ahorro__modal-table-cell--right">Saldo</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let row of amortizationTable.slice(0, 12)"
-                      class="border-b border-slate-100 dark:border-slate-800"
-                      [ngClass]="{
-                        'bg-amber-50 dark:bg-amber-900/20': row.paymentNumber === 1
-                      }">
-                    <td class="py-2 text-slate-900 dark:text-slate-100">{{ row.paymentNumber }}</td>
-                    <td class="py-2 text-right text-slate-900 dark:text-slate-100">{{ formatCurrency(row.monthlyPayment) }}</td>
-                    <td class="py-2 text-right font-medium text-green-600">{{ formatCurrency(row.principal) }}</td>
-                    <td class="py-2 text-right font-medium text-red-600">{{ formatCurrency(row.interest) }}</td>
-                    <td class="py-2 text-right text-slate-900 dark:text-slate-100">{{ formatCurrency(row.balance) }}</td>
+                      [class.ags-ahorro__modal-table-row--highlight]="row.paymentNumber === 1">
+                    <td>{{ row.paymentNumber }}</td>
+                    <td class="ags-ahorro__modal-table-cell--right">{{ formatCurrency(row.monthlyPayment) }}</td>
+                    <td class="ags-ahorro__modal-table-cell--right ags-ahorro__metric-value--positive">{{ formatCurrency(row.principal) }}</td>
+                    <td class="ags-ahorro__modal-table-cell--right ags-ahorro__metric-value--negative">{{ formatCurrency(row.interest) }}</td>
+                    <td class="ags-ahorro__modal-table-cell--right">{{ formatCurrency(row.balance) }}</td>
                   </tr>
                 </tbody>
               </table>
-              <p class="text-xs text-slate-500 dark:text-slate-400 text-center mt-4">
+              <p class="ags-ahorro__modal-footnote">
                 * Se muestran los primeros 12 pagos. Total: 24 meses
               </p>
             </div>
@@ -458,7 +462,7 @@
     </div>
 
     <!-- Loading State -->
-    <div *ngIf="isLoading" class="flex justify-center py-12">
+    <div *ngIf="isLoading" class="ags-ahorro__loading">
       <app-skeleton-card
         ariaLabel="Calculando escenario de ahorro AGS"
         [titleWidth]="70"

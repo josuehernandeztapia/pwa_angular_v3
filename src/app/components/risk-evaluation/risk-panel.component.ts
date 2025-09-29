@@ -90,367 +90,7 @@ export interface RiskEvaluation {
     UiIconComponent,
     HumanMessageComponent
   ],
-  template: `
-    <div class="risk-panel" 
-         [attr.data-testid]="'risk-panel'"
-         [class.animate-fadeIn]="isVisible()"
-         [class.loading]="isLoading()">
-      
-      <!-- Loading State -->
-      <div *ngIf="isLoading()" 
-           class="loading-state animate-pulse"
-           [attr.data-testid]="'evaluation-loading'">
-        <app-ui-icon 
-          name="refresh"
-          size="md">
-        </app-ui-icon>
-        <app-human-message 
-          message-context="loading-evaluation"
-          [show-animation]="true">
-        </app-human-message>
-      </div>
-
-      <!-- Risk Evaluation Results -->
-      <div *ngIf="!isLoading() && riskEvaluation()" class="evaluation-results">
-        
-        <!-- Header Section -->
-        <div class="evaluation-header">
-          <div class="score-section">
-            <h3 class="section-title">
-              <app-ui-icon 
-                name="proteccion">
-              </app-ui-icon>
-              Evaluación de Riesgo KIBAN/HASE
-            </h3>
-            
-            <div class="processing-info">
-              <span class="processing-time">
-                Procesado en {{ riskEvaluation()?.processingTimeMs }}ms
-              </span>
-              <span class="algorithm-version">
-                {{ riskEvaluation()?.algorithmVersion }}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- KIBAN Score Display -->
-        <div class="kiban-section card-section">
-          <div class="score-display">
-            <div class="score-main">
-              <span class="score-value" 
-                    [attr.data-testid]="'kiban-score'"
-                    [class]="getScoreClass()">
-                {{ riskEvaluation()?.kiban.scoreRaw || 'N/A' }}
-              </span>
-              <span class="score-band" 
-                    [attr.data-testid]="'score-band'"
-                    [class]="getBandClass()">
-                Banda {{ riskEvaluation()?.kiban.scoreBand }}
-              </span>
-            </div>
-            
-            <div class="score-breakdown">
-              <app-ui-icon 
-                name="cotizador">
-              </app-ui-icon>
-              <div class="breakdown-details">
-                <div class="breakdown-item">
-                  <span>Score Final:</span>
-                  <span class="breakdown-value">{{ riskEvaluation()?.scoreBreakdown.finalScore }}/100</span>
-                </div>
-                <div class="breakdown-item">
-                  <span>Confianza:</span>
-                  <span class="breakdown-value">{{ riskEvaluation()?.confidenceLevel }}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Score Visualization -->
-          <div class="score-visualization" [attr.data-testid]="'score-visualization'">
-            <div class="score-bar">
-              <div class="score-progress" 
-                   [style.width.%]="getScorePercentage()"
-                   [class]="getScoreProgressClass()">
-              </div>
-            </div>
-            <div class="score-labels">
-              <span>0</span>
-              <span>300</span>
-              <span>500</span>
-              <span>700</span>
-              <span>850</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- HASE Risk Category -->
-        <div class="hase-section card-section">
-          <div class="hase-header">
-            <app-ui-icon 
-              name="simulador">
-            </app-ui-icon>
-            <h4>HASE - Análisis Integral</h4>
-          </div>
-          
-          <div class="hase-category" 
-               [attr.data-testid]="'hase-category'"
-               [class]="getHaseCategoryClass()">
-            <span class="category-label">{{ riskEvaluation()?.hase.category }}</span>
-            <span class="category-score">{{ (riskEvaluation()?.hase.riskScore01 * 100 | number:'1.1-1') }}%</span>
-          </div>
-
-          <!-- HASE Factors Breakdown -->
-          <div class="hase-factors">
-            <div *ngFor="let factor of riskEvaluation()?.hase.explain" 
-                 class="factor-item"
-                 [class]="getFactorImpactClass(factor.impact)">
-              <app-ui-icon 
-                [name]="getFactorIcon(factor.factor)">
-              </app-ui-icon>
-              <div class="factor-details">
-                <span class="factor-name">{{ getFactorDisplayName(factor.factor) }}</span>
-                <div class="factor-weight">
-                  <span class="weight-value">{{ (factor.weight * 100 | number:'1.0-0') }}%</span>
-                  <span class="impact-indicator" [class]="'impact-' + factor.impact.toLowerCase()">
-                    {{ getImpactDisplay(factor.impact) }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Risk Factors -->
-        <div class="risk-factors-section card-section" 
-             *ngIf="riskEvaluation()?.riskFactors && riskEvaluation()?.riskFactors.length > 0">
-          <div class="factors-header">
-            <app-ui-icon name="alert-triangle"></app-ui-icon>
-            <h4>Factores de Riesgo Identificados</h4>
-          </div>
-          
-          <div class="factors-list">
-            <div *ngFor="let factor of getDisplayRiskFactors(); let i = index" 
-                 class="factor-card"
-                 [class]="getSeverityClass(factor.severity)"
-                 [attr.data-testid]="'risk-reason'">
-              
-              <div class="factor-icon">
-                <app-ui-icon 
-                  [name]="getSeverityIcon(factor.severity)">
-                </app-ui-icon>
-              </div>
-              
-              <div class="factor-content">
-                <h5 class="factor-name">{{ factor.factorName }}</h5>
-                <p class="factor-description">{{ factor.description }}</p>
-                
-                <div class="factor-impact">
-                  <span class="impact-label">Impacto en Score:</span>
-                  <span class="impact-value" [class]="factor.scoreImpact >= 0 ? 'positive' : 'negative'">
-                    {{ factor.scoreImpact >= 0 ? '+' : '' }}{{ factor.scoreImpact }}
-                  </span>
-                </div>
-                
-                <!-- Mitigation recommendations -->
-                <div *ngIf="factor.mitigationRecommendations && factor.mitigationRecommendations.length > 0" 
-                     class="mitigation-recommendations">
-                  <h6>Recomendaciones:</h6>
-                  <ul>
-                    <li *ngFor="let rec of factor.mitigationRecommendations">{{ rec }}</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Decision Section -->
-        <div class="decision-section card-section">
-          <div class="decision-header">
-            <app-ui-icon 
-              [name]="getDecisionIcon()">
-            </app-ui-icon>
-            <h4>Decisión Final</h4>
-          </div>
-          
-          <div class="decision-result">
-            <div class="decision-chip" 
-                 [attr.data-testid]="'decision-chip'"
-                 [class]="getDecisionClass()">
-              <span class="decision-label" [attr.data-testid]="'decision-gate'">
-                {{ getDecisionDisplay() }}
-              </span>
-            </div>
-            
-            <div class="decision-confidence">
-              Confianza: {{ riskEvaluation()?.confidenceLevel }}%
-            </div>
-          </div>
-
-          <!-- Human Message for Decision -->
-          <div class="decision-message">
-            <app-human-message 
-              [message-context]="getDecisionMessageContext()"
-              [personalization-data]="getPersonalizationData()"
-              [show-animation]="true">
-            </app-human-message>
-          </div>
-
-          <!-- Decision Reasons -->
-          <div class="decision-reasons" *ngIf="riskEvaluation()?.decisionReasons">
-            <h5>Razones de la Decisión:</h5>
-            <ul>
-              <li *ngFor="let reason of riskEvaluation()?.decisionReasons">{{ reason }}</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Financial Recommendations -->
-        <div class="financial-recommendations card-section" 
-             *ngIf="riskEvaluation()?.financialRecommendations">
-          <div class="recommendations-header">
-            <app-ui-icon name="cotizador"></app-ui-icon>
-            <h4>Recomendaciones Financieras</h4>
-          </div>
-          
-          <div class="recommendations-grid">
-            <div class="recommendation-item">
-              <span class="label">Monto Máximo:</span>
-              <span class="value currency">
-                {{ getFormattedMaxLoanAmount() }}
-              </span>
-            </div>
-
-            <div class="recommendation-item">
-              <span class="label">Enganche Mínimo:</span>
-              <span class="value currency">
-                {{ getFormattedMinDownPayment() }}
-              </span>
-            </div>
-            
-            <div class="recommendation-item">
-              <span class="label">Plazo Máximo:</span>
-              <span class="value">
-                {{ riskEvaluation()?.financialRecommendations.maxTermMonths }} meses
-              </span>
-            </div>
-            
-            <div class="recommendation-item">
-              <span class="label">Tasa Sugerida:</span>
-              <span class="value">
-                {{ riskEvaluation()?.financialRecommendations.suggestedInterestRate }}% anual
-              </span>
-            </div>
-            
-            <div class="recommendation-item">
-              <span class="label">Pago Mensual:</span>
-              <span class="value currency">
-                {{ getFormattedEstimatedMonthlyPayment() }}
-              </span>
-            </div>
-            
-            <div class="recommendation-item">
-              <span class="label">Ratio Deuda/Ingreso:</span>
-              <span class="value" [class]="getDebtRatioClass()">
-                {{ riskEvaluation()?.financialRecommendations.resultingDebtToIncomeRatio }}%
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Next Steps & Actions -->
-        <div class="next-steps-section card-section" 
-             *ngIf="riskEvaluation()?.nextSteps || getSuggestions().length > 0">
-          <div class="steps-header">
-            <app-ui-icon name="check-circle"></app-ui-icon>
-            <h4>Siguientes Pasos</h4>
-          </div>
-          
-          <div class="steps-list">
-            <div *ngFor="let step of riskEvaluation()?.nextSteps; let i = index" 
-                 class="step-item animate-slideUp"
-                 [style.animation-delay]="(i * 100) + 'ms'">
-              <div class="step-number">{{ i + 1 }}</div>
-              <div class="step-content">{{ step }}</div>
-            </div>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="action-buttons" *ngIf="getSuggestions().length > 0">
-            <div *ngFor="let suggestion of getSuggestions()" 
-                 class="action-button-container"
-                 [attr.data-testid]="'mitigation-cta'">
-              
-              <button *ngIf="suggestion.includes('aval')" 
-                      class="btn btn-premium-hover"
-                      [attr.data-testid]="'add-guarantor-btn'"
-                      (click)="onAddGuarantor()">
-                <app-ui-icon name="check-circle"></app-ui-icon>
-                Agregar Aval
-              </button>
-              
-              <button *ngIf="suggestion.includes('plazo')" 
-                      class="btn btn-secondary"
-                      [attr.data-testid]="'reduce-term-btn'"
-                      (click)="onReduceTerm()">
-                <app-ui-icon name="clock"></app-ui-icon>
-                Ajustar Plazo
-              </button>
-              
-              <button *ngIf="suggestion.includes('comprobantes')" 
-                      class="btn btn-outline"
-                      [attr.data-testid]="'upload-documents-btn'"
-                      (click)="onUploadDocuments()">
-                <app-ui-icon name="scan"></app-ui-icon>
-                Cargar Documentos
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Error/Fallback Messages -->
-        <div *ngIf="riskEvaluation()?.kiban.status === 'NOT_FOUND'" 
-             class="fallback-message card-section"
-             [attr.data-testid]="'fallback-message'">
-          <app-ui-icon name="info"></app-ui-icon>
-          <app-human-message 
-            message-context="not-found-fallback"
-            [personalization-data]="getPersonalizationData()">
-          </app-human-message>
-        </div>
-
-        <div *ngIf="riskEvaluation()?.decision === 'NO-GO'" 
-             class="rejection-message card-section"
-             [attr.data-testid]="'rejection-message'">
-          <app-ui-icon name="alert-circle"></app-ui-icon>
-          <app-human-message 
-            message-context="rejection-explanation"
-            [personalization-data]="getPersonalizationData()">
-          </app-human-message>
-        </div>
-      </div>
-
-      <!-- Error States -->
-      <div *ngIf="hasError()" 
-           class="error-state"
-           [attr.data-testid]="'api-error-message'">
-        <app-ui-icon name="alert-triangle"></app-ui-icon>
-        <app-human-message 
-          message-context="evaluation-error"
-          [show-retry]="true"
-          (retry)="onRetryEvaluation()">
-        </app-human-message>
-        
-        <button class="btn btn-primary" 
-                [attr.data-testid]="'retry-evaluation-btn'"
-                (click)="onRetryEvaluation()">
-          Reintentar Evaluación
-        </button>
-      </div>
-    </div>
-  `,
+  templateUrl: './risk-panel.component.html',
   styleUrls: ['./risk-panel.component.scss']
 })
 export class RiskPanelComponent implements OnInit, OnDestroy {
@@ -480,15 +120,16 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
   // Score-related methods
   getScoreClass(): string {
     const score = this.riskEvaluation()?.kiban.scoreRaw || 0;
-    if (score >= 750) return 'score-excellent';
-    if (score >= 650) return 'score-good';
-    if (score >= 550) return 'score-fair';
-    return 'score-poor';
+    if (score >= 750) return 'risk-panel__score-value--excellent';
+    if (score >= 650) return 'risk-panel__score-value--good';
+    if (score >= 550) return 'risk-panel__score-value--fair';
+    return 'risk-panel__score-value--poor';
   }
 
   getBandClass(): string {
     const band = this.riskEvaluation()?.kiban.scoreBand || '';
-    return `band-${band.toLowerCase()}`;
+    const normalized = this.normalizeClassSegment(band || '');
+    return normalized ? `risk-panel__score-band--${normalized}` : '';
   }
 
   getScorePercentage(): number {
@@ -498,13 +139,15 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
 
   getScoreProgressClass(): string {
     const category = this.riskEvaluation()?.riskCategory || '';
-    return `progress-${category.toLowerCase()}`;
+    const normalized = this.normalizeClassSegment(category || '');
+    return normalized ? `risk-panel__score-progress--${normalized}` : '';
   }
 
   // HASE-related methods
   getHaseCategoryClass(): string {
     const category = this.riskEvaluation()?.hase.category || '';
-    return `hase-category-${category.toLowerCase()}`;
+    const normalized = this.normalizeClassSegment(category || '');
+    return normalized ? `risk-panel__hase-category--${normalized}` : '';
   }
 
   getFactorIcon(factor: string): string {
@@ -528,7 +171,13 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
   }
 
   getFactorImpactClass(impact: string): string {
-    return `factor-impact-${impact.toLowerCase()}`;
+    const normalized = this.normalizeClassSegment(impact || '');
+    return normalized ? `risk-panel__explain-item--impact-${normalized}` : '';
+  }
+
+  getImpactClass(impact: string): string {
+    const normalized = this.normalizeClassSegment(impact || '');
+    return normalized ? `risk-panel__impact-badge--${normalized}` : '';
   }
 
   getImpactDisplay(impact: string): string {
@@ -548,7 +197,8 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
   }
 
   getSeverityClass(severity: string): string {
-    return `severity-${severity.toLowerCase()}`;
+    const normalized = this.normalizeClassSegment(severity || '');
+    return normalized ? `risk-panel__risk-factor--severity-${normalized}` : '';
   }
 
   getSeverityIcon(severity: string): string {
@@ -574,7 +224,8 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
 
   getDecisionClass(): string {
     const decision = this.riskEvaluation()?.decision || '';
-    return `chip-${decision.toLowerCase().replace('-', '')}`;
+    const normalized = this.normalizeClassSegment(decision || '');
+    return normalized ? `risk-panel__decision-chip--${normalized}` : '';
   }
 
   getDecisionDisplay(): string {
@@ -592,12 +243,16 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
     return `decision-${decision.toLowerCase().replace('-', '')}`;
   }
 
+  private normalizeClassSegment(value: string): string {
+    return value.toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  }
+
   // Financial methods
   getDebtRatioClass(): string {
     const ratio = this.riskEvaluation()?.financialRecommendations.resultingDebtToIncomeRatio || 0;
-    if (ratio <= 35) return 'ratio-good';
-    if (ratio <= 45) return 'ratio-acceptable';
-    return 'ratio-high';
+    if (ratio <= 35) return 'risk-panel__financial-value--ratio-good';
+    if (ratio <= 45) return 'risk-panel__financial-value--ratio-acceptable';
+    return 'risk-panel__financial-value--ratio-high';
   }
 
   // Action methods

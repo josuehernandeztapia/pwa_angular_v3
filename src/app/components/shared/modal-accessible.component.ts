@@ -6,44 +6,8 @@ import { FocusTrapService } from '../../services/focus-trap.service';
   selector: 'app-modal-accessible',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div
-      class="overlay"
-      *ngIf="open"
-      (click)="onBackdrop($event)"
-      [attr.aria-hidden]="!open"
-    >
-      <div
-        class="dialog premium-card"
-        role="dialog"
-        [attr.aria-modal]="true"
-        [attr.aria-labelledby]="ariaLabelledby || null"
-        [attr.aria-describedby]="ariaDescribedby || null"
-        (click)="$event.stopPropagation()"
-        #dialog
-      >
-        <header class="section-header">
-          <h2 class="section-title" [id]="ariaLabelledby || null">{{ title }}</h2>
-          <button type="button" class="btn-secondary btn-sm" aria-label="Cerrar" (click)="close()">✕</button>
-        </header>
-        <div class="content">
-          <ng-content></ng-content>
-        </div>
-        <footer class="footer">
-          <ng-content select="[modal-actions]"></ng-content>
-        </footer>
-      </div>
-    </div>
-  `,
-  styles: [
-    `
-      :host { display: block; }
-      .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: grid; place-items: center; z-index: 1000; }
-      .dialog { width: min(720px, calc(100vw - 32px)); max-height: calc(100vh - 64px); overflow: auto; }
-      .content { margin-top: var(--space-8); }
-      .footer { margin-top: var(--space-16); display: flex; justify-content: flex-end; gap: var(--space-12); }
-    `
-  ],
+  templateUrl: './modal-accessible.component.html',
+  styleUrls: ['./modal-accessible.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModalAccessibleComponent implements OnInit, OnDestroy, OnChanges {
@@ -112,4 +76,3 @@ export class ModalAccessibleComponent implements OnInit, OnDestroy, OnChanges {
     this.removeTrap = undefined;
   }
 }
-

@@ -39,6 +39,7 @@ export interface ProtectionScenario {
   // Legacy compatibility fields for migration
   id?: string;
   title?: string;
+  score?: number;
   newPayment?: number;
   newTerm?: number;
   totalCost?: number;
@@ -245,31 +246,31 @@ export function getRequiredRole(from: ProtectionState, to: ProtectionState, acti
 export const PROTECTION_TYPE_DESCRIPTIONS: Record<ProtectionType, {
   title: string;
   description: string;
-  icon: string;
+  iconType: string;
   maxDuration: string;
 }> = {
   DEFER: {
     title: 'Diferimiento',
     description: 'Suspende pagos temporalmente, capitaliza interés',
-    icon: '⏸️',
+    iconType: 'pause-circle',
     maxDuration: '6 meses'
   },
   STEPDOWN: {
     title: 'Reducción Temporal',
     description: 'Reduce el pago mensual por período limitado',
-    icon: '📉',
+    iconType: 'trending-down',
     maxDuration: '12 meses'
   },
   RECALENDAR: {
     title: 'Recalendarización',
     description: 'Extiende el plazo del contrato',
-    icon: '📅',
+    iconType: 'calendar-extension',
     maxDuration: '24 meses adicionales'
   },
   COLLECTIVE: {
     title: 'Fondo Colectivo',
     description: 'Usa fondo grupal para cubrir pagos',
-    icon: '👥',
+    iconType: 'user-group',
     maxDuration: 'Según disponibilidad'
   }
 };
@@ -279,54 +280,54 @@ export const PROTECTION_STATE_DESCRIPTIONS: Record<ProtectionState, {
   title: string;
   description: string;
   color: string;
-  icon: string;
+  iconType: string;
 }> = {
   IDLE: {
     title: 'Inactivo',
     description: 'Protección disponible si es necesaria',
-    color: '#6b7280',
-    icon: '💤'
+    color: 'var(--color-text-secondary, #737373)', /* OpenAI neutral */
+    iconType: 'moon'
   },
   ELIGIBLE: {
     title: 'Elegible',
     description: 'Puede activar protección ahora',
-    color: '#f59e0b',
-    icon: '🟡'
+    color: 'var(--color-text-secondary, #737373)', /* OpenAI neutral */
+    iconType: 'exclamation-circle'
   },
   PENDING_APPROVAL: {
     title: 'Pendiente Aprobación',
     description: 'Esperando revisión administrativa',
-    color: '#3b82f6',
-    icon: '⏳'
+    color: 'var(--color-text-secondary, #737373)', /* OpenAI neutral */
+    iconType: 'clock'
   },
   READY_TO_SIGN: {
     title: 'Listo para Firmar',
     description: 'Aprobado, esperando firma digital',
-    color: '#10b981',
-    icon: '✍️'
+    color: 'var(--color-text-secondary, #737373)', /* OpenAI neutral */
+    iconType: 'pencil'
   },
   SIGNED: {
     title: 'Firmado',
     description: 'Documento firmado, aplicando cambios',
-    color: '#8b5cf6',
-    icon: '📝'
+    color: 'var(--color-text-secondary, #737373)', /* OpenAI neutral */
+    iconType: 'document-check'
   },
   APPLIED: {
     title: 'Aplicado',
     description: 'Protección activa en el contrato',
-    color: '#059669',
-    icon: '✅'
+    color: 'var(--color-text-secondary, #737373)', /* OpenAI neutral */
+    iconType: 'check-circle'
   },
   REJECTED: {
     title: 'Rechazado',
     description: 'Solicitud denegada por políticas',
-    color: '#dc2626',
-    icon: '❌'
+    color: 'var(--color-text-secondary, #737373)', /* OpenAI neutral */
+    iconType: 'x-circle'
   },
   EXPIRED: {
     title: 'Expirado',
     description: 'Ventana de oportunidad cerrada',
-    color: '#6b7280',
-    icon: '⌛'
+    color: 'var(--color-text-secondary, #737373)', /* OpenAI neutral */
+    iconType: 'clock'
   }
 };

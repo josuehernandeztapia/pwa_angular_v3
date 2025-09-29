@@ -301,11 +301,11 @@ export class AVIDualEngineService {
     const scoreDiff = Math.abs(scientific.totalScore - heuristic.totalScore);
     
     if (scoreDiff <= 100) {
-      recommendations.push(`✅ CONSENSO ALTO: Ambos engines coinciden (diferencia: ${scoreDiff} pts)`);
+      recommendations.push(`CONSENSO ALTO: Ambos engines coinciden (diferencia: ${scoreDiff} pts)`);
     } else if (scoreDiff <= 200) {
-      recommendations.push(`⚠️ CONSENSO MEDIO: Revisar discrepancias (diferencia: ${scoreDiff} pts)`);
+      recommendations.push(`CONSENSO MEDIO: Revisar discrepancias (diferencia: ${scoreDiff} pts)`);
     } else {
-      recommendations.push(`🚨 CONSENSO BAJO: Análisis manual requerido (diferencia: ${scoreDiff} pts)`);
+      recommendations.push(`CONSENSO BAJO: Análisis manual requerido (diferencia: ${scoreDiff} pts)`);
     }
     
     // Recomendaciones específicas por engine
@@ -317,13 +317,13 @@ export class AVIDualEngineService {
     
     // Recomendación final
     if (consolidated.riskLevel === 'CRITICAL') {
-      recommendations.push('🔴 RECOMENDACIÓN: RECHAZAR - Ambos engines indican riesgo crítico');
+      recommendations.push('RECOMENDACIÓN: RECHAZAR - Ambos engines indican riesgo crítico');
     } else if (consolidated.riskLevel === 'HIGH') {
-      recommendations.push('🟡 RECOMENDACIÓN: Solicitar garantías adicionales antes de aprobar');
+      recommendations.push('RECOMENDACIÓN: Solicitar garantías adicionales antes de aprobar');
     } else if (consolidated.riskLevel === 'MEDIUM') {
-      recommendations.push('🟢 RECOMENDACIÓN: Aprobar con monitoreo cercano');
+      recommendations.push('RECOMENDACIÓN: Aprobar con monitoreo cercano');
     } else {
-      recommendations.push('✅ RECOMENDACIÓN: Aprobar - Cliente de bajo riesgo');
+      recommendations.push('RECOMENDACIÓN: Aprobar - Cliente de bajo riesgo');
     }
     
     return recommendations;

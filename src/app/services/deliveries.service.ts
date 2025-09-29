@@ -377,14 +377,14 @@ export class DeliveriesService {
    * Get status color for UI components
    */
   getStatusColor(status: DeliveryStatus): string {
-    return DELIVERY_STATUS_DESCRIPTIONS[status]?.color || '#6b7280';
+    return DELIVERY_STATUS_DESCRIPTIONS[status]?.color || '#737373'; /* OpenAI neutral */
   }
 
   /**
    * Get status icon for UI components
    */
   getStatusIcon(status: DeliveryStatus): string {
-    return DELIVERY_STATUS_DESCRIPTIONS[status]?.icon || '📦';
+    return DELIVERY_STATUS_DESCRIPTIONS[status]?.iconType || 'package';
   }
 
   /**
@@ -418,9 +418,9 @@ export class DeliveriesService {
     ).pipe(
       map(response => {
         if (response.success) {
-          this.logger.log('✅ NEON database initialized successfully');
+          this.logger.log(' NEON database initialized successfully');
         } else {
-          this.logger.error('❌ Failed to initialize NEON database');
+          this.logger.error(' Failed to initialize NEON database');
         }
         return response;
       }),
@@ -447,9 +447,9 @@ export class DeliveriesService {
         const synced = results.filter(r => r.success).length;
         const errors = results.filter(r => !r.success).length;
         
-        this.logger.log(`✅ Synced ${synced} deliveries to NEON`);
+        this.logger.log(` Synced ${synced} deliveries to NEON`);
         if (errors > 0) {
-          this.logger.warn(`⚠️ ${errors} deliveries failed to sync`);
+          this.logger.warn(` ${errors} deliveries failed to sync`);
         }
         
         return { synced, errors };
@@ -477,7 +477,7 @@ export class DeliveriesService {
     ).pipe(
       map(response => {
         if (response.success) {
-          this.logger.log(`✅ ETA adjusted for delivery ${deliveryId}`);
+          this.logger.log(` ETA adjusted for delivery ${deliveryId}`);
         }
         return response;
       }),
@@ -519,7 +519,7 @@ export class DeliveriesService {
     sampleDataCount: number;
     message: string;
   }> {
-    this.logger.log('🧪 Testing NEON database integration...');
+    this.logger.log(' Testing NEON database integration...');
     
     // Test by creating a sample delivery order
     const testDelivery = {
@@ -548,17 +548,17 @@ export class DeliveriesService {
             databaseConnected: true,
             etaPersistenceWorking: history.length > 0,
             sampleDataCount: history.length,
-            message: `✅ NEON integration test successful. ETA history entries: ${history.length}`
+            message: ` NEON integration test successful. ETA history entries: ${history.length}`
           }))
         );
       }),
       catchError((error) => {
-        this.logger.error('❌ NEON integration test failed:', error);
+        this.logger.error(' NEON integration test failed:', error);
         return of({
           databaseConnected: false,
           etaPersistenceWorking: false,
           sampleDataCount: 0,
-          message: `❌ NEON integration test failed: ${error.message}`
+          message: ` NEON integration test failed: ${error.message}`
         });
       })
     );
@@ -573,7 +573,7 @@ export class DeliveriesService {
     accuracyPercentage: number;
     issues: string[];
   }> {
-    this.logger.log('🧪 Validating ETA calculation accuracy...');
+    this.logger.log(' Validating ETA calculation accuracy...');
     
     const testStatuses: DeliveryStatus[] = [
       'PO_ISSUED', 'IN_PRODUCTION', 'READY_AT_FACTORY',
@@ -599,7 +599,7 @@ export class DeliveriesService {
           issues.push(`Status ${status}: ETA calculation resulted in ${daysDiff} days (expected 0-77)`);
         }
         
-        this.logger.log(`Status ${status}: ${daysDiff} days from creation ${isValid ? '✅' : '❌'}`);
+        this.logger.log(`Status ${status}: ${daysDiff} days from creation ${isValid ? '' : ''}`);
       } catch (error) {
         validationResults.push(false);
         issues.push(`Status ${status}: Calculation error - ${error instanceof Error ? error.message : String(error)}`);

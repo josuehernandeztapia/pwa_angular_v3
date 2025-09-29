@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "verify:ux": "bash scripts/verify-ux.sh",
+    "audit:tailwind": "python3 scripts/audit_tailwind.py --output reports/tailwind-audit.csv",
+    "lint:tailwind": "python3 scripts/audit_tailwind.py --fail-on-violation",
     "assets:app-icons": "node scripts/generate-app-icons.js",
     "prebuild:prod": "npm run assets:app-icons",
     "ng": "ng",
@@ -23,7 +25,7 @@
     "avi-lab:start": "cd avi-lab && npm start",
     "dev:avi-lab": "concurrently \"npm run bff:dev\" \"npm run avi-lab:dev\"",
     "serve:test": "ng serve --configuration=development --port=4200",
-    "serve:prod": "npx http-server dist/conductores-pwa/browser -p 4200 --cors",
+    "serve:prod": "node scripts/serve-prod.js",
     "build": "ng build",
     "build:test": "ng build --configuration=development",
     "build:prod": "ng build --configuration production",
@@ -166,14 +168,14 @@
   },
   "lint-staged": {
     "*.{ts,js}": [
-      "echo '🔍 Linting TypeScript/JavaScript files...'",
+      "echo '[LINT] Validating TypeScript/JavaScript files...'",
       "git add"
     ],
     "*.{ts,html}": [
-      "echo '✅ TypeScript/HTML files validated'"
+      "echo '[PASS] TypeScript/HTML files validated'"
     ],
     "*.{ts,html,scss,css}": [
-      "echo '♿ Accessibility validation completed'"
+      "echo '[PASS] Accessibility validation completed'"
     ]
   },
   "private": true,
@@ -193,7 +195,6 @@
     "chart.js": "^4.5.0",
     "firebase": "^12.2.1",
     "jspdf": "^3.0.2",
-    "lucide-angular": "^0.544.0",
     "rxjs": "~7.8.0",
     "tesseract.js": "^6.0.1",
     "tslib": "^2.3.0",

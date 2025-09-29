@@ -91,44 +91,44 @@ export interface WhatsAppNotificationResult {
 // Notification type descriptions for UI
 export const NOTIFICATION_TYPE_DESCRIPTIONS: Record<string, {
   title: string;
-  icon: string;
+  iconType: string;
   color: string;
   priority: 'high' | 'medium' | 'low';
 }> = {
   payment_due: {
     title: 'Pago Pendiente',
-    icon: '💳',
-    color: '#f59e0b',
+    iconType: 'credit-card',
+    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
     priority: 'high'
   },
   gnv_overage: {
     title: 'Exceso de GNV',
-    icon: '⛽',
-    color: '#dc2626',
+    iconType: 'fuel',
+    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
     priority: 'high'
   },
   document_pending: {
     title: 'Documento Pendiente',
-    icon: '📄',
-    color: '#3b82f6',
+    iconType: 'document-text',
+    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
     priority: 'medium'
   },
   contract_approved: {
     title: 'Contrato Aprobado',
-    icon: '✅',
-    color: '#10b981',
+    iconType: 'check-circle',
+    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
     priority: 'low'
   },
   system_alert: {
     title: 'Alerta del Sistema',
-    icon: '🔔',
-    color: '#f59e0b',
+    iconType: 'bell',
+    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
     priority: 'medium'
   },
   general: {
     title: 'Notificación General',
-    icon: '📢',
-    color: '#6b7280',
+    iconType: 'announcement',
+    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
     priority: 'low'
   }
 };

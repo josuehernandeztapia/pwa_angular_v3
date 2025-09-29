@@ -45,7 +45,7 @@ export interface Contract {
   legalNotes?: string[];
   attachments?: ContractAttachment[];
   
-  // 🚛 NUEVA PROPIEDAD: Unidad específica asignada al contrato
+  //  NUEVA PROPIEDAD: Unidad específica asignada al contrato
   assignedVehicle?: VehicleUnit;
   vehicleAssignedDate?: Date;
 }

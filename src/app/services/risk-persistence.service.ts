@@ -1,5 +1,5 @@
 /**
- * 🛡️ Risk Evaluation Persistence Service
+ *  Risk Evaluation Persistence Service
  * P0.2 SURGICAL FIX - KIBAN/HASE persistence layer
  */
 
@@ -56,7 +56,7 @@ export class RiskPersistenceService {
   }
 
   /**
-   * 💾 Store risk evaluation with full persistence
+   *  Store risk evaluation with full persistence
    */
   storeEvaluation(
     clientId: string,
@@ -141,7 +141,7 @@ export class RiskPersistenceService {
   }
 
   /**
-   * 🔍 Get specific evaluation by ID
+   *  Get specific evaluation by ID
    */
   getEvaluationById(evaluationId: string): Observable<StoredRiskEvaluation | null> {
     if (!this.enabled) {
@@ -172,7 +172,7 @@ export class RiskPersistenceService {
   }
 
   /**
-   * 📊 Get evaluation summary statistics
+   *  Get evaluation summary statistics
    */
   getEvaluationSummary(dateRange?: { start: Date; end: Date }): Observable<RiskEvaluationSummary> {
     if (!this.enabled) {
@@ -206,7 +206,7 @@ export class RiskPersistenceService {
   }
 
   /**
-   * 🔄 Update existing evaluation
+   *  Update existing evaluation
    */
   updateEvaluation(
     evaluationId: string,
@@ -247,7 +247,7 @@ export class RiskPersistenceService {
   }
 
   /**
-   * 🗑️ Delete evaluation
+   * DELETE Delete evaluation
    */
   deleteEvaluation(evaluationId: string): Observable<{ deleted: boolean }> {
     if (!this.enabled) {
@@ -279,7 +279,7 @@ export class RiskPersistenceService {
   }
 
   /**
-   * 📈 Get cached observables for reactive UI
+   *  Get cached observables for reactive UI
    */
   get evaluations$() {
     return this.evaluationsCache$.asObservable();
@@ -290,7 +290,7 @@ export class RiskPersistenceService {
   }
 
   /**
-   * 🔄 Sync local data with remote storage
+   *  Sync local data with remote storage
    */
   syncWithRemote(): Observable<{ synced: boolean; conflicts: number }> {
     if (!this.enabled || !this.shouldUseRemoteStorage()) {

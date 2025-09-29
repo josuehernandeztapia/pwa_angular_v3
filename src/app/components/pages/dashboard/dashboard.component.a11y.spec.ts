@@ -41,7 +41,7 @@ describe('DashboardComponent Accessibility Tests', () => {
       timestamp: new Date(),
       message: 'Nuevo cliente registrado: Ana García',
       clientName: 'Ana García',
-      icon: '👤'
+      iconType: 'user'
     }
   ];
 

@@ -1,5 +1,5 @@
 /**
- * 🔄 Vision OCR Service with Surgical Retry/Backoff
+ *  Vision OCR Service with Surgical Retry/Backoff
  * Implements exponential backoff and fallback strategies for OCR
  */
 

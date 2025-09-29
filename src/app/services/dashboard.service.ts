@@ -151,7 +151,7 @@ export class DashboardService {
         message: 'Pago de enganche recibido',
         clientName: 'Carlos Mendoza',
         amount: 150000,
-        icon: '💰'
+        iconType: 'money'
       },
       {
         id: 'activity-2',
@@ -159,7 +159,7 @@ export class DashboardService {
         timestamp: new Date(now.getTime() - 15 * 60000), // 15 min ago
         message: 'INE Aprobado por el sistema',
         clientName: 'María González',
-        icon: '✅'
+        iconType: 'check'
       },
       {
         id: 'activity-3',
@@ -167,7 +167,7 @@ export class DashboardService {
         timestamp: new Date(now.getTime() - 30 * 60000), // 30 min ago
         message: 'Nuevo cliente registrado',
         clientName: 'Roberto Silva',
-        icon: '👤'
+        iconType: 'user'
       },
       {
         id: 'activity-4',
@@ -176,7 +176,7 @@ export class DashboardService {
         message: 'Meta de ahorro alcanzada',
         clientName: 'Ana Ruiz',
         amount: 200000,
-        icon: '🎯'
+        iconType: 'target'
       },
       {
         id: 'activity-5',
@@ -184,7 +184,7 @@ export class DashboardService {
         timestamp: new Date(now.getTime() - 60 * 60000), // 1 hour ago
         message: 'Contrato firmado digitalmente',
         clientName: 'Luis Herrera',
-        icon: '📝'
+        iconType: 'document'
       }
     ];
   }
@@ -212,14 +212,14 @@ export class DashboardService {
           timestamp: new Date(),
           message: 'Nuevo pago recibido',
           amount: Math.floor(Math.random() * 100000) + 50000,
-          icon: '💰'
+          iconType: 'money'
         },
         {
           id: `activity-${Date.now()}`,
           type: 'doc_approved' as const,
           timestamp: new Date(),
           message: 'Documento aprobado automáticamente',
-          icon: '✅'
+          iconType: 'check'
         }
       ];
 

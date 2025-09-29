@@ -29,8 +29,8 @@ export interface CompleteBusinessScenario {
   seniorSummary: {
     title: string;
     description: string[];
-    keyMetrics: Array<{ label: string; value: string; emoji: string }>;
-    timeline: Array<{ month: number; event: string; emoji: string }>;
+    keyMetrics: Array<{ label: string; value: string; iconType: string }>;
+    timeline: Array<{ month: number; event: string; iconType: string }>;
     whatsAppMessage: string;
   };
 }
@@ -86,24 +86,24 @@ export class ScenarioOrchestratorService {
       quote,
       amortizationTable,
       seniorSummary: {
-        title: '🚐 Tu Unidad en Aguascalientes',
+        title: 'Tu Unidad en Aguascalientes',
         description: [
           `${clientName}, aquí está tu cotización para una unidad de ${this.financialCalc.formatCurrency(totalPrice)}.`,
           `Con un enganche de ${this.financialCalc.formatCurrency(downPayment)}, financiarás ${this.financialCalc.formatCurrency(quote.amountToFinance)}.`,
           `Tu pago mensual será de ${this.financialCalc.formatCurrency(quote.monthlyPayment)} por ${term} meses.`
         ],
         keyMetrics: [
-          { label: 'Precio Total', value: this.financialCalc.formatCurrency(totalPrice), emoji: '💰' },
-          { label: 'Enganche', value: this.financialCalc.formatCurrency(downPayment), emoji: '💸' },
-          { label: 'Pago Mensual', value: this.financialCalc.formatCurrency(quote.monthlyPayment), emoji: '📅' },
-          { label: 'Plazo', value: `${term} meses`, emoji: '⏱️' }
+          { label: 'Precio Total', value: this.financialCalc.formatCurrency(totalPrice), iconType: 'money' },
+          { label: 'Enganche', value: this.financialCalc.formatCurrency(downPayment), iconType: 'payment' },
+          { label: 'Pago Mensual', value: this.financialCalc.formatCurrency(quote.monthlyPayment), iconType: 'calendar' },
+          { label: 'Plazo', value: `${term} meses`, iconType: 'time' }
         ],
         timeline: [
-          { month: 0, event: 'Firma de Contrato y Enganche', emoji: '✍️' },
-          { month: 1, event: 'Primer Pago Mensual', emoji: '💳' },
-          { month: term, event: 'Último Pago - Unidad Liberada', emoji: '🎉' }
+          { month: 0, event: 'Firma de Contrato y Enganche', iconType: 'document' },
+          { month: 1, event: 'Primer Pago Mensual', iconType: 'credit-card' },
+          { month: term, event: 'Último Pago - Unidad Liberada', iconType: 'check' }
         ],
-        whatsAppMessage: `🚐 *Cotización AGS - ${clientName}*\n\n💰 Precio: ${this.financialCalc.formatCurrency(totalPrice)}\n💸 Enganche: ${this.financialCalc.formatCurrency(downPayment)}\n📅 Mensualidad: ${this.financialCalc.formatCurrency(quote.monthlyPayment)}\n⏱️ Plazo: ${term} meses\n\n*Tu nueva unidad te está esperando* ✨`
+        whatsAppMessage: `*Cotización AGS - ${clientName}*\n\nPrecio: ${this.financialCalc.formatCurrency(totalPrice)}\nEnganche: ${this.financialCalc.formatCurrency(downPayment)}\nMensualidad: ${this.financialCalc.formatCurrency(quote.monthlyPayment)}\nPlazo: ${term} meses\n\n*Tu nueva unidad te está esperando*`
       }
     };
   }
@@ -142,25 +142,25 @@ export class ScenarioOrchestratorService {
       quote,
       amortizationTable,
       seniorSummary: {
-        title: '🤝 Crédito Colectivo - Estado de México',
+        title: 'Crédito Colectivo - Estado de México',
         description: [
           `${clientName}, tu grupo de ${groupSize} personas puede acceder a unidades de ${this.financialCalc.formatCurrency(totalPrice)}.`,
           `Con un enganche colectivo de ${this.financialCalc.formatCurrency(downPayment)}, cada unidad se financia a ${this.financialCalc.formatCurrency(quote.monthlyPayment)} mensuales.`,
           `El plan colectivo les permite obtener mejores condiciones y apoyo mutuo entre miembros.`
         ],
         keyMetrics: [
-          { label: 'Precio por Unidad', value: this.financialCalc.formatCurrency(totalPrice), emoji: '🚐' },
-          { label: 'Enganche Grupal', value: this.financialCalc.formatCurrency(downPayment), emoji: '🤝' },
-          { label: 'Pago por Unidad', value: this.financialCalc.formatCurrency(quote.monthlyPayment), emoji: '💳' },
-          { label: 'Miembros Grupo', value: `${groupSize} personas`, emoji: '👥' }
+          { label: 'Precio por Unidad', value: this.financialCalc.formatCurrency(totalPrice), iconType: 'truck' },
+          { label: 'Enganche Grupal', value: this.financialCalc.formatCurrency(downPayment), iconType: 'handshake' },
+          { label: 'Pago por Unidad', value: this.financialCalc.formatCurrency(quote.monthlyPayment), iconType: 'credit-card' },
+          { label: 'Miembros Grupo', value: `${groupSize} personas`, iconType: 'users' }
         ],
         timeline: [
-          { month: 0, event: 'Formación del Grupo y Convenio', emoji: '🤝' },
-          { month: 1, event: 'Inicio de Aportaciones Colectivas', emoji: '💰' },
-          { month: 12, event: 'Primera Adjudicación Estimada', emoji: '🎯' },
-          { month: term, event: 'Última Entrega del Grupo', emoji: '🎉' }
+          { month: 0, event: 'Formación del Grupo y Convenio', iconType: 'handshake' },
+          { month: 1, event: 'Inicio de Aportaciones Colectivas', iconType: 'money' },
+          { month: 12, event: 'Primera Adjudicación Estimada', iconType: 'target' },
+          { month: term, event: 'Última Entrega del Grupo', iconType: 'check' }
         ],
-        whatsAppMessage: `🤝 *Crédito Colectivo EdoMex - ${clientName}*\n\n🚐 Precio: ${this.financialCalc.formatCurrency(totalPrice)}\n💰 Enganche Grupal: ${this.financialCalc.formatCurrency(downPayment)}\n💳 Pago por unidad: ${this.financialCalc.formatCurrency(quote.monthlyPayment)}\n👥 Grupo: ${groupSize} miembros\n\n*Juntos llegarán más lejos* 🌟`
+        whatsAppMessage: `*Crédito Colectivo EdoMex - ${clientName}*\n\nPrecio: ${this.financialCalc.formatCurrency(totalPrice)}\nEnganche Grupal: ${this.financialCalc.formatCurrency(downPayment)}\nPago por unidad: ${this.financialCalc.formatCurrency(quote.monthlyPayment)}\nGrupo: ${groupSize} miembros\n\n*Juntos llegarán más lejos*`
       }
     };
   }
@@ -198,19 +198,19 @@ export class ScenarioOrchestratorService {
       stage: 'SIMULACION',
       savingsScenario,
       seniorSummary: {
-        title: '💡 Plan de Ahorro AGS',
+        title: 'Plan de Ahorro AGS',
         description: seniorFormat.summary,
         keyMetrics: seniorFormat.keyNumbers.map(kn => ({
           label: kn.label,
           value: kn.value,
-          emoji: kn.label.includes('Meta') ? '🎯' : kn.label.includes('Tiempo') ? '⏰' : '💰'
+          iconType: kn.label.includes('Meta') ? 'target' : kn.label.includes('Tiempo') ? 'clock' : 'money'
         })),
         timeline: savingsScenario.timeline.slice(0, 4).map(t => ({
           month: t.month,
           event: t.event,
-          emoji: t.event.includes('Enganche') ? '💸' : t.event.includes('Recaudación') ? '⛽' : t.event.includes('Entrega') ? '🚐' : '💰'
+          iconType: t.event.includes('Enganche') ? 'payment' : t.event.includes('Recaudación') ? 'fuel' : t.event.includes('Entrega') ? 'truck' : 'money'
         })),
-        whatsAppMessage: `💡 *Plan Ahorro AGS - ${clientName}*\n\n🎯 Meta: ${this.financialCalc.formatCurrency(totalUnitValue)}\n💰 Con tu enganche: ${this.financialCalc.formatCurrency(initialDownPayment)}\n⛽ Recaudación mensual: ${this.financialCalc.formatCurrency(savingsScenario.collectionContribution)}\n⏰ Tiempo estimado: ${deliveryMonths} meses\n\n*¡Tu renovación está más cerca!* 🌟`
+        whatsAppMessage: `*Plan Ahorro AGS - ${clientName}*\n\nMeta: ${this.financialCalc.formatCurrency(totalUnitValue)}\nCon tu enganche: ${this.financialCalc.formatCurrency(initialDownPayment)}\nRecaudación mensual: ${this.financialCalc.formatCurrency(savingsScenario.collectionContribution)}\nTiempo estimado: ${deliveryMonths} meses\n\n*¡Tu renovación está más cerca!*`
       }
     };
   }
@@ -240,20 +240,20 @@ export class ScenarioOrchestratorService {
       stage: 'SIMULACION',
       savingsScenario,
       seniorSummary: {
-        title: '🏦 Plan Individual EdoMex - Enganche',
+        title: 'Plan Individual EdoMex - Enganche',
         description: seniorFormat.summary,
         keyMetrics: seniorFormat.keyNumbers.map(kn => ({
           label: kn.label,
           value: kn.value,
-          emoji: kn.label.includes('Meta') ? '🎯' : kn.label.includes('Tiempo') ? '⏰' : '💰'
+          iconType: kn.label.includes('Meta') ? 'target' : kn.label.includes('Tiempo') ? 'clock' : 'money'
         })),
         timeline: [
-          { month: 1, event: 'Inicio de Ahorros', emoji: '🏦' },
-          { month: Math.ceil(savingsScenario.monthsToTarget / 2), event: 'Mitad del Camino', emoji: '📈' },
-          { month: savingsScenario.monthsToTarget, event: 'Meta de Enganche Alcanzada', emoji: '🎯' },
-          { month: savingsScenario.monthsToTarget + 1, event: 'Inicio de Financiamiento', emoji: '🚐' }
+          { month: 1, event: 'Inicio de Ahorros', iconType: 'bank' },
+          { month: Math.ceil(savingsScenario.monthsToTarget / 2), event: 'Mitad del Camino', iconType: 'chart' },
+          { month: savingsScenario.monthsToTarget, event: 'Meta de Enganche Alcanzada', iconType: 'target' },
+          { month: savingsScenario.monthsToTarget + 1, event: 'Inicio de Financiamiento', iconType: 'truck' }
         ],
-        whatsAppMessage: `🏦 *Plan Individual EdoMex - ${clientName}*\n\n🎯 Meta enganche: ${this.financialCalc.formatCurrency(targetDownPayment)}\n⛽ Recaudación: ${this.financialCalc.formatCurrency(savingsScenario.collectionContribution)}\n💰 Aportación extra: ${this.financialCalc.formatCurrency(voluntaryMonthly)}\n⏰ Tiempo: ${savingsScenario.monthsToTarget} meses\n\n*Paso a paso hacia tu unidad* 🎯`
+        whatsAppMessage: `*Plan Individual EdoMex - ${clientName}*\n\nMeta enganche: ${this.financialCalc.formatCurrency(targetDownPayment)}\nRecaudación: ${this.financialCalc.formatCurrency(savingsScenario.collectionContribution)}\nAportación extra: ${this.financialCalc.formatCurrency(voluntaryMonthly)}\nTiempo: ${savingsScenario.monthsToTarget} meses\n\n*Paso a paso hacia tu unidad*`
       }
     };
   }
@@ -274,25 +274,25 @@ export class ScenarioOrchestratorService {
       savingsScenario,
       tandaSimulation: { tandaResult, snowballEffect },
       seniorSummary: {
-        title: '🌨️ Tanda Colectiva - Efecto Bola de Nieve',
+        title: 'Tanda Colectiva - Efecto Bola de Nieve',
         description: [
           `${clientName}, tu grupo de ${config.memberCount} miembros creará un efecto bola de nieve poderoso.`,
           `Con ${this.financialCalc.formatCurrency(savingsScenario.monthlyContribution)} mensuales del grupo, las entregas comenzarán pronto.`,
           `Cada entrega aumenta el poder de ahorro colectivo y acelera las siguientes adjudicaciones.`
         ],
         keyMetrics: [
-          { label: 'Miembros Activos', value: `${config.memberCount} personas`, emoji: '👥' },
-          { label: 'Aportación Grupal', value: this.financialCalc.formatCurrency(savingsScenario.monthlyContribution), emoji: '💰' },
-          { label: 'Primera Entrega', value: `Mes ${tandaResult.firstAwardT || 12}`, emoji: '🏆' },
-          { label: 'Unidades Total', value: `${config.memberCount} unidades`, emoji: '🚐' }
+          { label: 'Miembros Activos', value: `${config.memberCount} personas`, iconType: 'users' },
+          { label: 'Aportación Grupal', value: this.financialCalc.formatCurrency(savingsScenario.monthlyContribution), iconType: 'money' },
+          { label: 'Primera Entrega', value: `Mes ${tandaResult.firstAwardT || 12}`, iconType: 'trophy' },
+          { label: 'Unidades Total', value: `${config.memberCount} unidades`, iconType: 'truck' }
         ],
         timeline: [
-          { month: 1, event: 'Inicio de Tanda Colectiva', emoji: '🤝' },
-          { month: tandaResult.firstAwardT || 12, event: 'Primera Adjudicación', emoji: '🏆' },
-          { month: Math.floor((tandaResult.firstAwardT || 12) * 1.5), event: 'Aceleración del Efecto', emoji: '🌨️' },
-          { month: tandaResult.lastAwardT || 36, event: 'Última Entrega', emoji: '🎉' }
+          { month: 1, event: 'Inicio de Tanda Colectiva', iconType: 'handshake' },
+          { month: tandaResult.firstAwardT || 12, event: 'Primera Adjudicación', iconType: 'trophy' },
+          { month: Math.floor((tandaResult.firstAwardT || 12) * 1.5), event: 'Aceleración del Efecto', iconType: 'snowflake' },
+          { month: tandaResult.lastAwardT || 36, event: 'Última Entrega', iconType: 'check' }
         ],
-        whatsAppMessage: `🌨️ *Tanda EdoMex - ${clientName}*\n\n👥 Grupo: ${config.memberCount} miembros\n💰 Aportación grupal: ${this.financialCalc.formatCurrency(savingsScenario.monthlyContribution)}\n🏆 Primera entrega: Mes ${tandaResult.firstAwardT || 12}\n🚐 Total unidades: ${config.memberCount}\n\n*¡El efecto bola de nieve funciona!* ❄️`
+        whatsAppMessage: `*Tanda EdoMex - ${clientName}*\n\nGrupo: ${config.memberCount} miembros\nAportación grupal: ${this.financialCalc.formatCurrency(savingsScenario.monthlyContribution)}\nPrimera entrega: Mes ${tandaResult.firstAwardT || 12}\nTotal unidades: ${config.memberCount}\n\n*¡El efecto bola de nieve funciona!*`
       }
     };
   }
@@ -326,24 +326,24 @@ export class ScenarioOrchestratorService {
       stage: 'PROTECCION',
       protectionScenarios,
       seniorSummary: {
-        title: '🛡️ Opciones de Protección Financiera',
+        title: 'Opciones de Protección Financiera',
         description: [
           `${client.name}, tenemos ${protectionScenarios.length} opciones para ayudarte en este momento.`,
           `La opción recomendada es: ${bestScenario.title}.`,
           `${bestScenario.description} - Tu nuevo pago sería ${this.financialCalc.formatCurrency(bestScenario.newMonthlyPayment)}.`
         ],
         keyMetrics: [
-          { label: 'Opciones Disponibles', value: `${protectionScenarios.length} escenarios`, emoji: '🛡️' },
-          { label: 'Pago Actual', value: this.financialCalc.formatCurrency(originalPayment), emoji: '💳' },
-          { label: 'Pago Recomendado', value: this.financialCalc.formatCurrency(bestScenario.newMonthlyPayment), emoji: '✨' },
-          { label: 'Reestructuras Usadas', value: `${client.protectionPlan?.restructuresUsed || 0}/${client.protectionPlan?.restructuresAvailable || 3}`, emoji: '🔄' }
+          { label: 'Opciones Disponibles', value: `${protectionScenarios.length} escenarios`, iconType: 'shield' },
+          { label: 'Pago Actual', value: this.financialCalc.formatCurrency(originalPayment), iconType: 'credit-card' },
+          { label: 'Pago Recomendado', value: this.financialCalc.formatCurrency(bestScenario.newMonthlyPayment), iconType: 'star' },
+          { label: 'Reestructuras Usadas', value: `${client.protectionPlan?.restructuresUsed || 0}/${client.protectionPlan?.restructuresAvailable || 3}`, iconType: 'refresh' }
         ],
         timeline: [
-          { month: 0, event: 'Solicitud de Protección', emoji: '📋' },
-          { month: 1, event: 'Inicio de Nuevo Plan', emoji: '🛡️' },
-          { month: bestScenario.newTerm, event: 'Plan Completado', emoji: '✅' }
+          { month: 0, event: 'Solicitud de Protección', iconType: 'document' },
+          { month: 1, event: 'Inicio de Nuevo Plan', iconType: 'shield' },
+          { month: bestScenario.newTerm, event: 'Plan Completado', iconType: 'check' }
         ],
-        whatsAppMessage: `🛡️ *Protección ${client.name}*\n\n✨ Opción recomendada: ${bestScenario.title}\n💳 Pago actual: ${this.financialCalc.formatCurrency(originalPayment)}\n✨ Nuevo pago: ${this.financialCalc.formatCurrency(bestScenario.newMonthlyPayment)}\n🔄 Reestructuras: ${client.protectionPlan?.restructuresUsed || 0}/${client.protectionPlan?.restructuresAvailable || 3}\n\n*Estamos aquí para apoyarte* 💪`
+        whatsAppMessage: `*Protección ${client.name}*\n\nOpción recomendada: ${bestScenario.title}\nPago actual: ${this.financialCalc.formatCurrency(originalPayment)}\nNuevo pago: ${this.financialCalc.formatCurrency(bestScenario.newMonthlyPayment)}\nReestructuras: ${client.protectionPlan?.restructuresUsed || 0}/${client.protectionPlan?.restructuresAvailable || 3}\n\n*Estamos aquí para apoyarte*`
       }
     };
   }
@@ -373,18 +373,18 @@ export class ScenarioOrchestratorService {
       stage: 'PROTECCION',
       protectionScenarios: [],
       seniorSummary: {
-        title: '❄️ Tanda Enhanced – Escenarios con IRR de Mercado',
+        title: 'Tanda Enhanced – Escenarios con IRR de Mercado',
         description: [
           `Se evaluaron ${results.length} escenarios de contribución base y ±10%.`,
-          `Mejor escenario: ${best.name} | IRR ${(best.irrAnnual * 100).toFixed(2)}% | ${best.tirOK ? '✓ Cumple' : '✗ No cumple'}`
+          `Mejor escenario: ${best.name} | IRR ${(best.irrAnnual * 100).toFixed(2)}% | ${best.tirOK ? 'Cumple' : 'No cumple'}`
         ],
         keyMetrics: [
-          { label: 'Miembros', value: `${group.totalMembers}`, emoji: '👥' },
-          { label: 'Aportación Base', value: this.financialCalc.formatCurrency(group.monthlyAmount), emoji: '💰' },
-          { label: 'Horizonte', value: `${horizonMonths} meses`, emoji: '📆' },
+          { label: 'Miembros', value: `${group.totalMembers}`, iconType: 'users' },
+          { label: 'Aportación Base', value: this.financialCalc.formatCurrency(group.monthlyAmount), iconType: 'money' },
+          { label: 'Horizonte', value: `${horizonMonths} meses`, iconType: 'calendar' },
         ],
         timeline: [] as any,
-        whatsAppMessage: `❄️ *Tanda Enhanced*\n\nMejor escenario: ${best.name}\nIRR: ${(best.irrAnnual * 100).toFixed(2)}% ${best.tirOK ? '✓' : '✗'}\nMiembros: ${group.totalMembers} | Aportación: ${this.financialCalc.formatCurrency(group.monthlyAmount)} | Horizonte: ${horizonMonths}m`
+        whatsAppMessage: `*Tanda Enhanced*\n\nMejor escenario: ${best.name}\nIRR: ${(best.irrAnnual * 100).toFixed(2)}% ${best.tirOK ? 'Cumple' : 'No cumple'}\nMiembros: ${group.totalMembers} | Aportación: ${this.financialCalc.formatCurrency(group.monthlyAmount)} | Horizonte: ${horizonMonths}m`
       }
     };
   }

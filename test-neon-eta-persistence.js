@@ -1,5 +1,5 @@
-// 📊 NEON ETA PERSISTENCE VALIDATION SCRIPT
-console.log('📊 NEON ETA PERSISTENCE VALIDATION');
+//  NEON ETA PERSISTENCE VALIDATION SCRIPT
+console.log(' NEON ETA PERSISTENCE VALIDATION');
 console.log('='.repeat(60));
 
 // Mock implementation to demonstrate the NEON integration without actual database
@@ -61,7 +61,7 @@ class MockNeonEtaIntegration {
     this.stats.etaCalculations++;
     this.stats.persistenceOperations++;
 
-    console.log(`✅ Created delivery ${id} with ETA: ${eta}`);
+    console.log(` Created delivery ${id} with ETA: ${eta}`);
     return delivery;
   }
 
@@ -272,7 +272,7 @@ async function testNeonEtaPersistence() {
       createdDeliveries.push(delivery);
     }
 
-    console.log(`✅ Created ${createdDeliveries.length} deliveries with ETA persistence\n`);
+    console.log(` Created ${createdDeliveries.length} deliveries with ETA persistence\n`);
 
     // Test 2: Status transitions with ETA recalculation
     console.log('📋 TEST 2: Status transitions with ETA updates');
@@ -291,7 +291,7 @@ async function testNeonEtaPersistence() {
       await new Promise(resolve => setTimeout(resolve, 100)); // Simulate async processing
     }
 
-    console.log(`✅ Completed ${transitions.length} status transitions with ETA updates\n`);
+    console.log(` Completed ${transitions.length} status transitions with ETA updates\n`);
 
     // Test 3: Manual ETA adjustment
     console.log('📋 TEST 3: Manual ETA adjustments');
@@ -308,7 +308,7 @@ async function testNeonEtaPersistence() {
       'ops-manager-001'
     );
 
-    console.log('✅ Manual ETA adjustment completed\n');
+    console.log(' Manual ETA adjustment completed\n');
 
     // Test 4: Retrieve delivery with complete history
     console.log('📋 TEST 4: Retrieve delivery with ETA history');
@@ -322,13 +322,13 @@ async function testNeonEtaPersistence() {
     console.log(`   Event History Entries: ${fullDeliveryData.events.length}`);
 
     // Show ETA evolution
-    console.log('\n   📊 ETA Evolution:');
+    console.log('\n    ETA Evolution:');
     fullDeliveryData.etaHistory.forEach((entry, index) => {
       const prefix = entry.calculationMethod === 'manual' ? '✏️ ' : '⚙️ ';
       console.log(`      ${index + 1}. ${prefix}${entry.newEta.split('T')[0]} (${entry.statusWhenCalculated})`);
     });
 
-    console.log('\n✅ ETA history retrieval successful\n');
+    console.log('\n ETA history retrieval successful\n');
 
     // Test 5: Performance metrics
     console.log('📋 TEST 5: Performance metrics and statistics');
@@ -337,23 +337,23 @@ async function testNeonEtaPersistence() {
     const perfStats = neonIntegration.getPerformanceStats();
     const opStats = neonIntegration.getOperationalStats();
 
-    console.log('📊 DELIVERY PERFORMANCE METRICS:');
+    console.log(' DELIVERY PERFORMANCE METRICS:');
     console.log(`   📦 Total Deliveries: ${perfStats.totalDeliveries}`);
-    console.log(`   ✅ Completed Deliveries: ${perfStats.completedDeliveries}`);
+    console.log(`    Completed Deliveries: ${perfStats.completedDeliveries}`);
     console.log(`   ⏰ On-Time Deliveries: ${perfStats.onTimeDeliveries}`);
-    console.log(`   📈 On-Time Percentage: ${perfStats.onTimePercentage}%`);
-    console.log(`   ⏱️ Average Transit Days: ${perfStats.avgTransitDays}`);
-    console.log(`   🎯 ETA Accuracy: ${perfStats.etaAccuracy}%`);
+    console.log(`    On-Time Percentage: ${perfStats.onTimePercentage}%`);
+    console.log(`    Average Transit Days: ${perfStats.avgTransitDays}`);
+    console.log(`    ETA Accuracy: ${perfStats.etaAccuracy}%`);
 
-    console.log('\n📊 OPERATIONAL STATISTICS:');
+    console.log('\n OPERATIONAL STATISTICS:');
     console.log(`   🏗️ Total Created: ${opStats.totalCreated}`);
     console.log(`   🔄 Status Transitions: ${opStats.totalTransitions}`);
     console.log(`   🧮 ETA Calculations: ${opStats.etaCalculations}`);
-    console.log(`   💾 Persistence Operations: ${opStats.persistenceOperations}`);
+    console.log(`    Persistence Operations: ${opStats.persistenceOperations}`);
     console.log(`   📚 ETA History Entries: ${opStats.etaHistoryEntries}`);
     console.log(`   📋 Total Events: ${opStats.totalEvents}`);
 
-    console.log('\n✅ Performance metrics validation successful\n');
+    console.log('\n Performance metrics validation successful\n');
 
     // Test 6: Data integrity validation
     console.log('📋 TEST 6: Data integrity validation');
@@ -365,13 +365,13 @@ async function testNeonEtaPersistence() {
     createdDeliveries.forEach(delivery => {
       const history = neonIntegration.etaHistory.get(delivery.id);
       if (!history || history.length === 0) {
-        console.error(`❌ Delivery ${delivery.id} has no ETA history`);
+        console.error(` Delivery ${delivery.id} has no ETA history`);
         integrityIssues++;
       }
 
       const events = neonIntegration.events.get(delivery.id);
       if (!events || events.length === 0) {
-        console.error(`❌ Delivery ${delivery.id} has no event history`);
+        console.error(` Delivery ${delivery.id} has no event history`);
         integrityIssues++;
       }
     });
@@ -383,19 +383,19 @@ async function testNeonEtaPersistence() {
       const daysDiff = Math.floor((etaDate - createdDate) / (1000 * 60 * 60 * 24));
 
       if (daysDiff < 0 || daysDiff > 90) {
-        console.error(`❌ Delivery ${delivery.id} has unreasonable ETA: ${daysDiff} days`);
+        console.error(` Delivery ${delivery.id} has unreasonable ETA: ${daysDiff} days`);
         integrityIssues++;
       }
     });
 
     if (integrityIssues === 0) {
-      console.log('✅ All data integrity checks passed');
+      console.log(' All data integrity checks passed');
     } else {
-      console.warn(`⚠️ Found ${integrityIssues} data integrity issues`);
+      console.warn(` Found ${integrityIssues} data integrity issues`);
     }
 
     console.log('\n' + '='.repeat(60));
-    console.log('🏆 NEON ETA PERSISTENCE VALIDATION RESULTS');
+    console.log(' NEON ETA PERSISTENCE VALIDATION RESULTS');
     console.log('='.repeat(60));
 
     const summary = {
@@ -409,31 +409,31 @@ async function testNeonEtaPersistence() {
       overall: integrityIssues === 0 ? 'SUCCESS' : 'PARTIAL SUCCESS'
     };
 
-    console.log(`✅ Tests Passed: ${summary.testsPassed}/${summary.totalTests}`);
+    console.log(` Tests Passed: ${summary.testsPassed}/${summary.totalTests}`);
     console.log(`📦 Deliveries Created: ${summary.deliveriesCreated}`);
     console.log(`🔄 Status Transitions: ${summary.transitionsCompleted}`);
     console.log(`🧮 ETA Calculations: ${summary.etaCalculations}`);
-    console.log(`💾 Persistence Operations: ${summary.persistenceOperations}`);
-    console.log(`🔍 Data Integrity Issues: ${summary.dataIntegrityIssues}`);
-    console.log(`🏆 Overall Result: ${summary.overall}`);
+    console.log(` Persistence Operations: ${summary.persistenceOperations}`);
+    console.log(` Data Integrity Issues: ${summary.dataIntegrityIssues}`);
+    console.log(` Overall Result: ${summary.overall}`);
 
-    console.log('\n✨ Key Features Validated:');
-    console.log('   • ✅ NEON database schema creation and persistence');
-    console.log('   • ✅ Automatic ETA calculation based on delivery status');
-    console.log('   • ✅ ETA history tracking with calculation method');
-    console.log('   • ✅ Status transition events with timestamps');
-    console.log('   • ✅ Manual ETA adjustments with audit trail');
-    console.log('   • ✅ Performance metrics and operational statistics');
-    console.log('   • ✅ Data integrity validation and error handling');
+    console.log('\n Key Features Validated:');
+    console.log('   •  NEON database schema creation and persistence');
+    console.log('   •  Automatic ETA calculation based on delivery status');
+    console.log('   •  ETA history tracking with calculation method');
+    console.log('   •  Status transition events with timestamps');
+    console.log('   •  Manual ETA adjustments with audit trail');
+    console.log('   •  Performance metrics and operational statistics');
+    console.log('   •  Data integrity validation and error handling');
 
-    console.log('\n🎯 Production Readiness: NEON ETA persistence is ready for deployment!');
+    console.log('\n Production Readiness: NEON ETA persistence is ready for deployment!');
     console.log('   • 77-day delivery cycle with accurate ETA calculations');
     console.log('   • Complete audit trail of all ETA changes and reasons');
     console.log('   • Performance monitoring and operational insights');
     console.log('   • Reliable data persistence with integrity validation');
 
   } catch (error) {
-    console.error('❌ NEON ETA persistence validation failed:', error);
+    console.error(' NEON ETA persistence validation failed:', error);
     return false;
   }
 
@@ -443,7 +443,7 @@ async function testNeonEtaPersistence() {
 // Run the validation
 testNeonEtaPersistence().then(success => {
   if (success) {
-    console.log('\n🎉 NEON ETA persistence validation completed successfully!');
+    console.log('\n NEON ETA persistence validation completed successfully!');
     process.exit(0);
   } else {
     console.log('\n💥 NEON ETA persistence validation failed!');

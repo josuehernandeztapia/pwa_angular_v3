@@ -30,9 +30,9 @@ export const environment = {
     enablePostSalesAddToQuote: true,
     // Integraciones BFF (activar cuando haya backend real)
     enableOdooQuoteBff: false,
-    // ⛽ P0.2 SURGICAL FIX - GNV T+1 BFF Activation
+    // P0.2 SURGICAL FIX - GNV T+1 BFF Activation
     enableGnvBff: true,
-    // 🛡️ P0.2 SURGICAL FIX - KIBAN/HASE System Activation
+    //  P0.2 SURGICAL FIX - KIBAN/HASE System Activation
     enableKibanHase: true,
     enableRiskEvaluation: true,
     enableRiskPanel: true,
@@ -56,9 +56,9 @@ export const environment = {
     enablePaymentsBff: false,
     enableContractsBff: false,
     enableAutomationBff: false,
-    // 🛡️ KIBAN/HASE BFF activation
+    //  KIBAN/HASE BFF activation
     enableRiskBff: true,
-    // 🚚 P0.2 SURGICAL FIX - Delivery Tracking BFF
+    // P0.2 SURGICAL FIX - Delivery Tracking BFF
     enableDeliveryBff: true,
     // New feature flags for parity
     enableLabs: true,

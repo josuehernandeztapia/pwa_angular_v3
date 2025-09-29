@@ -261,15 +261,15 @@ export class MockApiService {
           'Envía por WhatsApp al cliente'
         ],
         keyMetrics: [
-          { label: 'Precio Total', value: '$850,000', emoji: '💰' },
-          { label: 'Enganche', value: '$170,000', emoji: '💸' },
-          { label: 'Mensualidad', value: '$18,500', emoji: '📅' }
+          { label: 'Precio Total', value: '$850,000', emoji: '' },
+          { label: 'Enganche', value: '$170,000', emoji: '' },
+          { label: 'Mensualidad', value: '$18,500', emoji: '' }
         ],
         timeline: [
-          { month: 0, event: 'Firma de Contrato', emoji: '✍️' },
-          { month: 1, event: 'Primer Pago', emoji: '💳' }
+          { month: 0, event: 'Firma de Contrato', emoji: '' },
+          { month: 1, event: 'Primer Pago', emoji: '' }
         ],
-        whatsAppMessage: 'Tu cotización está lista 🚐'
+        whatsAppMessage: 'Tu cotización está lista'
       }
     };
 
@@ -295,15 +295,15 @@ export class MockApiService {
           'Meta alcanzable identificada'
         ],
         keyMetrics: [
-          { label: 'Meta Ahorro', value: '$200,000', emoji: '🎯' },
+          { label: 'Meta Ahorro', value: '$200,000', emoji: '' },
           { label: 'Tiempo', value: '18 meses', emoji: '⏰' },
-          { label: 'Aportación', value: '$12,000/mes', emoji: '💰' }
+          { label: 'Aportación', value: '$12,000/mes', emoji: '' }
         ],
         timeline: [
-          { month: 6, event: '30% de Meta', emoji: '📈' },
-          { month: 18, event: 'Meta Completa', emoji: '🎉' }
+          { month: 6, event: '30% de Meta', emoji: '' },
+          { month: 18, event: 'Meta Completa', emoji: '' }
         ],
-        whatsAppMessage: 'Tu plan de ahorro está listo 🎯'
+        whatsAppMessage: 'Tu plan de ahorro está listo '
       }
     };
 

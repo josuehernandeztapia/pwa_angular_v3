@@ -3,66 +3,83 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* ===== OPENAI DESIGN SYSTEM ===== */
+@import 'styles/design-system-openai.scss';
+@import 'styles/components-openai.scss';
+
 /* UI Helpers - Enterprise Components */
 @import './app/styles/ui-helpers.scss';
-
-/* Inter Font - Enterprise Typography */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* Performance-Critical Styles */
 @import 'styles/performance.scss';
 
 /* Removed Premium FinTech Theme imports (migrated to Minimal Dark) */
 
-/* ===== CSS VARIABLES (Common tokens) ===== */
+/* ===== 100% OPENAI AUTHENTIC DESIGN TOKENS ===== */
 :root {
-  --neutral-950: #0b0f14; /* FIXED (verify-ux) */
-  --neutral-900: #111827; /* FIXED (verify-ux) */
-  --neutral-800: #1f2937; /* FIXED (verify-ux) */
-  --neutral-700: #374151; /* FIXED (verify-ux) */
-  --neutral-600: #4b5563; /* FIXED (verify-ux) */
-  --neutral-500: #6b7280; /* FIXED (verify-ux) */
-  --neutral-400: #9ca3af; /* FIXED (verify-ux) */
-  --neutral-300: #d1d5db; /* FIXED (verify-ux) */
-  --neutral-200: #e5e7eb; /* FIXED (verify-ux) */
-  --neutral-100: #e5e7eb; /* FIXED (verify-ux) */
-  --flat-surface-bg: var(--neutral-900); /* FIXED (verify-ux) */
+  /* OpenAI 2024 Authentic Color Palette */
+  --openai-black: #080808;        /* Cod Gray - OpenAI primary */
+  --openai-white: #ffffff;        /* Pure white - OpenAI surface */
+  --openai-gray-50: #fafafa;      /* Lightest gray */
+  --openai-gray-100: #f5f5f5;     /* Light gray base */
+  --openai-gray-200: #e5e5e5;     /* Border gray */
+  --openai-gray-300: #d4d4d4;     /* Disabled gray */
+  --openai-gray-400: #a3a3a3;     /* Secondary text */
+  --openai-gray-500: #737373;     /* Medium text */
+  --openai-gray-600: #525252;     /* Primary text */
+  --openai-gray-700: #404040;     /* Dark text */
+  --openai-gray-800: #262626;     /* Darker background */
+  --openai-gray-900: #171717;     /* Darkest background */
+  --openai-blue: #737373;         /* OpenAI neutral */
+  --openai-blue-hover: #525252;   /* OpenAI dark gray */
+
+  /* Semantic Colors - 100% OpenAI Mapping */
+  --neutral-950: var(--openai-gray-900);   /* Darkest */
+  --neutral-900: var(--openai-gray-800);   /* Dark background */
+  --neutral-800: var(--openai-gray-700);   /* Card background */
+  --neutral-700: var(--openai-gray-600);   /* Primary text */
+  --neutral-600: var(--openai-gray-500);   /* Medium text */
+  --neutral-500: var(--openai-gray-400);   /* Secondary text */
+  --neutral-400: var(--openai-gray-300);   /* Disabled */
+  --neutral-300: var(--openai-gray-200);   /* Borders */
+  --neutral-200: var(--openai-gray-100);   /* Light background */
+  --neutral-100: var(--openai-gray-50);    /* Lightest */
+  --flat-surface-bg: var(--openai-white);  /* Pure white surface */
   --font-scale: 1;
-  /* Palette */
-  /* FIXED (verify-ux) removed legacy gray tokens */
 
-  --primary-cyan-300: #94a3b8;
-  --primary-cyan-400: #64748b;
-  --primary-cyan-500: #475569;
-  --primary-cyan-600: #334155;
+  /* Primary Colors - OpenAI Blue System */
+  --primary-cyan-300: var(--openai-blue);
+  --primary-cyan-400: var(--openai-blue);
+  --primary-cyan-500: var(--openai-blue-hover);
+  --primary-cyan-600: var(--openai-blue-hover);
 
-  --accent-amber-300: #cbd5e1;
-  --accent-amber-400: #94a3b8;
-  --accent-amber-500: #64748b;
-  --accent-amber-600: #475569;
+  /* OpenAI Accent Colors - Minimal */
+  --accent-primary: var(--openai-blue);
+  --accent-hover: var(--openai-blue-hover);
+  --accent-muted: var(--openai-gray-400);
 
-  --success-500: #22c55e;
-  --success-600: #16a34a;
+  /* Status Colors - OpenAI Minimal */
+  --success-500: var(--openai-gray-600);   /* Success = dark gray */
+  --success-600: var(--openai-gray-700);
 
-  --error-500: #ef4444;
-  --error-600: #dc2626;
+  --error-500: var(--openai-black);       /* Error = black */
+  --error-600: var(--openai-gray-900);
 
-  /* Surfaces */
-  /* FIXED (verify-ux): removed frosted tokens */
-  --flat-surface-bg: var(--neutral-900);
-  --command-center-bg: radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,0.07), transparent), radial-gradient(1000px 480px at 100% 0%, rgba(255,193,7,0.06), transparent), linear-gradient(180deg, #0b0f14 0%, #0b0f14 100%);
+  /* OpenAI Surfaces - Pure Minimalism */
+  --flat-surface-bg: var(--openai-white);
+  --command-center-bg: var(--openai-gray-50);
 
-  /* Shadows */
-  --shadow-card: 0 10px 24px rgba(0, 0, 0, 0.4);
-  --shadow-elevated: 0 14px 32px rgba(0, 0, 0, 0.5);
+  /* OpenAI Shadows - Ultra Minimal */
+  --shadow-card: 0 1px 2px rgba(8, 8, 8, 0.1);
+  --shadow-elevated: 0 2px 4px rgba(8, 8, 8, 0.08);
 
-  /* Focus */
-  --focus-ring-color: #94a3b8;
+  /* OpenAI Focus - Blue Accent */
+  --focus-ring-color: var(--openai-blue);
 
-  /* Spacing, radii, motion */
-  --space-button-padding: 12px 24px;
-  --radius-md: 12px;
-  --transition-fast: all 0.3s ease;
+  /* OpenAI Spacing & Motion */
+  --space-button-padding: 12px 24px;  /* OpenAI generous padding */
+  --radius-md: 8px;  /* OpenAI uses 8px radius */
+  --transition-fast: all 0.2s ease;   /* OpenAI smooth timing */
   --transition-quick: all 0.2s ease;
 
   /* UX Tokens - Spacing scale */
@@ -72,14 +89,14 @@
   --space-24: 24px;
   --space-32: 32px;
 
-  /* UX Tokens - Radius */
+  /* UX Tokens - Radius - OpenAI 8px Standard */
   --radius-sm: 8px;
-  --radius-lg: 12px;
+  --radius-lg: 8px;
 
-  /* UX Tokens - Shadows */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.25), 0 1px 1px rgba(0,0,0,0.12);
-  --shadow-md: 0 6px 16px rgba(0,0,0,0.35);
-  --shadow-lg: 0 12px 28px rgba(0,0,0,0.45);
+  /* UX Tokens - Shadows - OpenAI Minimal */
+  --shadow-sm: 0 1px 2px rgba(8,8,8,0.1);
+  --shadow-md: 0 2px 4px rgba(8,8,8,0.1);
+  --shadow-lg: 0 2px 4px rgba(8,8,8,0.1);
 
   /* UX Tokens - Typography scale */
   --font-h1-size: 1.75rem;
@@ -95,13 +112,87 @@
   --state-warning: var(--accent-amber-500);
   --state-error: var(--error-500);
   --state-info: var(--primary-cyan-400);
-  /* Minimal Dark tokens */
-  --color-surface: #0b1220;
-  --color-surface-2: #0f172a;
-  --color-border: #1f2937;
-  --color-text: #e5e7eb;
-  --color-text-muted: #94a3b8;
-  --shadow-elev-1: 0 1px 2px rgba(0,0,0,.3);
+  /* Accent Semantic Palettes */
+  --accent-blue-50: #eff6ff;
+  --accent-blue-100: #dbeafe;
+  --accent-blue-200: #bfdbfe;
+  --accent-blue-400: #60a5fa;
+  --accent-blue-500: #3b82f6;
+  --accent-blue-600: #2563eb;
+  --accent-blue-700: #1d4ed8;
+  --accent-blue-800: #1e3a8a;
+
+  --accent-green-50: #f0fdf4;
+  --accent-green-100: #bbf7d0;
+  --accent-green-200: #86efac;
+  --accent-green-300: #4ade80;
+  --accent-green-400: #34d399;
+  --accent-green-500: #16a34a;
+  --accent-green-600: #15803d;
+  --accent-green-700: #166534;
+  --accent-green-900: #064e3b;
+
+  --accent-amber-50: #fff7ed;
+  --accent-amber-100: #fed7aa;
+  --accent-amber-200: #fdba74;
+  --accent-amber-300: #fbbf24;
+  --accent-amber-400: #fb923c;
+  --accent-amber-500: #f59e0b;
+  --accent-amber-600: #d97706;
+  --accent-amber-700: #9a3412;
+  --accent-amber-800: #7c2d12;
+
+  --accent-red-50: #fef2f2;
+  --accent-red-100: #fecaca;
+  --accent-red-200: #fca5a5;
+  --accent-red-300: #f87171;
+  --accent-red-400: #ef4444;
+  --accent-red-500: #dc2626;
+  --accent-red-600: #b91c1c;
+  --accent-red-700: #991b1b;
+  --accent-red-800: #7f1d1d;
+  --accent-purple-50: #faf5ff;
+  --accent-purple-200: #ddd6fe;
+  --accent-purple-300: #c4b5fd;
+  --accent-purple-400: #a78bfa;
+  --accent-purple-500: #8b5cf6;
+  --accent-purple-600: #7c3aed;
+  --accent-purple-800: #581c87;
+
+  /* Accent Surface Utilities */
+  --surface-neutral-weak: color-mix(in srgb, var(--color-neutral-400) 16%, var(--openai-white));
+  --surface-neutral-strong: color-mix(in srgb, var(--color-neutral-500) 26%, var(--openai-white));
+  --surface-skeleton: color-mix(in srgb, var(--color-neutral-300) 22%, var(--openai-white));
+  --surface-skeleton-dark: color-mix(in srgb, var(--color-neutral-800) 65%, transparent);
+  --surface-blue-weak: color-mix(in srgb, var(--accent-blue-500) 14%, var(--openai-white));
+  --surface-green-weak: color-mix(in srgb, var(--accent-green-500) 14%, var(--openai-white));
+  --surface-green-strong: color-mix(in srgb, var(--accent-green-500) 28%, var(--openai-white));
+  --surface-amber-weak: color-mix(in srgb, var(--accent-amber-500) 14%, var(--openai-white));
+  --surface-amber-strong: color-mix(in srgb, var(--accent-amber-500) 28%, var(--openai-white));
+  --surface-red-weak: color-mix(in srgb, var(--accent-red-500) 14%, var(--openai-white));
+  --surface-red-strong: color-mix(in srgb, var(--accent-red-500) 28%, var(--openai-white));
+  --surface-purple-weak: color-mix(in srgb, var(--accent-purple-500) 14%, var(--openai-white));
+
+  --border-neutral-weak: color-mix(in srgb, var(--color-neutral-400) 36%, transparent);
+  --border-neutral-strong: color-mix(in srgb, var(--color-neutral-500) 54%, transparent);
+  --border-blue-weak: color-mix(in srgb, var(--accent-blue-500) 34%, transparent);
+  --border-green-weak: color-mix(in srgb, var(--accent-green-500) 34%, transparent);
+  --border-green-strong: color-mix(in srgb, var(--accent-green-500) 58%, transparent);
+  --border-amber-weak: color-mix(in srgb, var(--accent-amber-500) 34%, transparent);
+  --border-amber-strong: color-mix(in srgb, var(--accent-amber-500) 58%, transparent);
+  --border-red-weak: color-mix(in srgb, var(--accent-red-500) 34%, transparent);
+  --border-red-strong: color-mix(in srgb, var(--accent-red-500) 58%, transparent);
+  --border-purple-weak: color-mix(in srgb, var(--accent-purple-500) 34%, transparent);
+
+  --overlay-neutral-strong: color-mix(in srgb, var(--color-neutral-900) 76%, transparent);
+  --overlay-neutral-muted: color-mix(in srgb, var(--color-neutral-800) 56%, transparent);
+  /* Minimal Dark tokens - OpenAI Palette */
+  --color-surface: #080808; /* OpenAI black */
+  --color-surface-2: #1e293b; /* OpenAI very dark text */
+  --color-border: #525252; /* OpenAI dark gray */
+  --color-text: #ffffff; /* OpenAI white */
+  --color-text-muted: #94a3b8; /* OpenAI muted text */
+  --shadow-elev-1: 0 1px 2px rgba(8,8,8,0.1);
 }
 
 /* ===== GLOBAL RESET & BASE STYLES ===== */
@@ -118,10 +209,11 @@ html {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--neutral-950);
-  color: var(--neutral-100);
-  line-height: 1.6;
+  background: var(--openai-white);  /* OpenAI white background */
+  color: var(--openai-black);       /* OpenAI black text */
+  line-height: 1.5;                 /* OpenAI line height */
   font-size: calc(16px * var(--font-scale));
+  font-weight: 400;                 /* OpenAI normal weight */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -131,63 +223,63 @@ html.senior-sm { --font-scale: 1.2; }
 html.senior-lg { --font-scale: 1.45; }
 
 /* High contrast toggle */
-html.hc { --bg:#fff; --text:#000; --muted:#222; --border:#000; }
+html.hc { --bg:#ffffff; --text:#080808; --muted:#737373; --border:#e5e7eb; } /* OpenAI colors */
 html.hc body { background: var(--bg); color: var(--text); }
 
-/* ===== Remove Premium-specific styles (migrated to neutral tokens) ===== */
+/* ===== 100% OPENAI BUTTON SYSTEM ===== */
 
-/* Premium buttons */
+/* OpenAI Primary Button - Black */
 .btn-primary {
-  background: var(--gradient-primary);
-  background: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600));
-  color: white;
+  background: var(--openai-black);
+  color: var(--openai-white);
   border: none;
   padding: var(--space-button-padding);
   border-radius: var(--radius-md);
-  font-weight: 600;
+  font-weight: 400;  /* OpenAI uses normal weight */
+  font-size: 16px;   /* OpenAI uses 16px */
   cursor: pointer;
   transition: var(--transition-fast);
-  box-shadow: var(--shadow-card);
+  box-shadow: none;  /* OpenAI no shadows on buttons */
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-elevated);
-  background: linear-gradient(135deg, var(--primary-cyan-300), var(--primary-cyan-500));
+  background: var(--openai-gray-800);  /* Lighter black on hover */
+  transform: none; /* OpenAI no transforms */
 }
 
-.btn-accent {
-  background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
-  color: var(--neutral-950);
-  border: none;
+/* OpenAI Secondary Button - Outline */
+.btn-secondary {
+  background: transparent;
+  color: var(--openai-black);
+  border: 1px solid var(--openai-gray-300);
   padding: var(--space-button-padding);
   border-radius: var(--radius-md);
-  font-weight: 600;
+  font-weight: 400;
+  font-size: 16px;
   cursor: pointer;
   transition: var(--transition-fast);
-  box-shadow: var(--shadow-card);
 }
 
-.btn-accent:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-elevated);
-  background: linear-gradient(135deg, var(--accent-amber-300), var(--accent-amber-500));
+.btn-secondary:hover {
+  background: var(--openai-gray-50);
+  border-color: var(--openai-gray-400);
+  transform: none; /* OpenAI no transforms */
 }
 
-/* Premium cards */
+/* OpenAI Cards - Ultra Minimal */
 .premium-card {
-  background: var(--flat-surface-bg); /* FIXED (verify-ux) */
-  border: 1px solid var(--neutral-800); /* FIXED (verify-ux) */
-  border-radius: 16px;
-  padding: 24px;
+  background: var(--openai-white);
+  border: 1px solid var(--openai-gray-200);
+  border-radius: var(--radius-md);  /* 8px */
+  padding: 24px;  /* OpenAI generous padding */
   box-shadow: var(--shadow-card);
   transition: var(--transition-fast);
 }
 
 .premium-card:hover {
-  transform: translateY(-4px);
+  border-color: var(--openai-gray-300);
   box-shadow: var(--shadow-elevated);
-  border-color: var(--primary-cyan-400);
+  transform: none; /* OpenAI no transforms */
 }
 
 /* Command Center Layout */
@@ -224,7 +316,7 @@ html.hc body { background: var(--bg); color: var(--text); }
   color: white;
 }
 .status-good { 
-  background: linear-gradient(135deg, var(--primary-cyan-400), var(--primary-cyan-600));
+  background: var(--openai-black);  /* OpenAI solid black */
   color: white;
 }
 .status-warning { 
@@ -240,11 +332,11 @@ html.hc body { background: var(--bg); color: var(--text); }
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: none; /* OpenAI no transforms */
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none; /* OpenAI no transforms */
   }
 }
 
@@ -255,11 +347,11 @@ html.hc body { background: var(--bg); color: var(--text); }
 @keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translateX(30px);
+    transform: none; /* OpenAI no transforms */
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: none; /* OpenAI no transforms */
   }
 }
 
@@ -278,7 +370,7 @@ html.hc body { background: var(--bg); color: var(--text); }
 
 ::-webkit-scrollbar-thumb {
   background: var(--primary-cyan-600);
-  border-radius: 4px;
+  border-radius: 8px; /* OpenAI standard */
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -287,10 +379,7 @@ html.hc body { background: var(--bg); color: var(--text); }
 
 /* Utility classes */
 .text-gradient-primary {
-  background: linear-gradient(135deg, var(--primary-cyan-300), var(--primary-cyan-600));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--openai-black);  /* OpenAI solid black text */
 }
 
 /* ===== Helpers / Utility classes (global) ===== */
@@ -367,7 +456,7 @@ html.hc body { background: var(--bg); color: var(--text); }
 /* Table legibility and tabular numbers */
 .table-lg tr { height: 56px; }
 .table-lg td, .table-lg th { font-size: 18px; }
-.table-lg tr:nth-child(even){ background:#f6f6f6; }
+.table-lg tr:nth-child(even){ background:#f8fafc; } /* OpenAI very light gray */
 .num { font-variant-numeric: tabular-nums; text-align: right; }
 
 /* Print large text and hide nav */
@@ -416,7 +505,7 @@ html.hc body { background: var(--bg); color: var(--text); }
 }
 
 .btn-secondary:hover {
-  transform: translateY(-2px);
+  transform: none; /* OpenAI no transforms */
   box-shadow: var(--shadow-elevated);
   background: rgba(255, 255, 255, 0.1);
 }
@@ -480,7 +569,7 @@ html.hc body { background: var(--bg); color: var(--text); }
   align-items: center;
   padding: 4px 10px;
   font-size: 0.75rem;
-  border-radius: 9999px;
+  border-radius: 8px; /* OpenAI standard */
   background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   border: 1px solid var(--neutral-800); /* FIXED (verify-ux) */
   color: var(--neutral-100);
@@ -495,8 +584,8 @@ html.hc body { background: var(--bg); color: var(--text); }
 
 /* Animaciones Premium para Iconografía */
 @keyframes rotate-gear {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(20deg); }
+  0% { transform: none; /* OpenAI no transforms */ }
+  100% { transform: none; /* OpenAI no transforms */ }
 }
 
 @keyframes progress-radial {
@@ -542,31 +631,31 @@ html.hc body { background: var(--bg); color: var(--text); }
 @keyframes pulse-red {
   0%, 100% {
     stroke: var(--bad);
-    transform: scale(1);
+    transform: none; /* OpenAI no transforms */
   }
   50% {
     stroke: var(--bad);
-    transform: scale(1.1);
+    transform: none; /* OpenAI no transforms */
     filter: drop-shadow(0 0 8px var(--bad));
   }
 }
 
 @keyframes toolbox-open {
-  0% { transform: rotateX(0deg); }
-  50% { transform: rotateX(20deg); }
-  100% { transform: rotateX(0deg); }
+  0% { transform: none; /* OpenAI no transforms */ }
+  50% { transform: none; /* OpenAI no transforms */ }
+  100% { transform: none; /* OpenAI no transforms */ }
 }
 
 @keyframes truck-move-forward {
-  0% { transform: translateX(0px); }
-  50% { transform: translateX(10px); }
-  100% { transform: translateX(0px); }
+  0% { transform: none; /* OpenAI no transforms */ }
+  50% { transform: none; /* OpenAI no transforms */ }
+  100% { transform: none; /* OpenAI no transforms */ }
 }
 
 @keyframes truck-delay-shake {
-  0%, 100% { transform: translateX(0px); }
-  25% { transform: translateX(-3px); }
-  75% { transform: translateX(3px); }
+  0%, 100% { transform: none; /* OpenAI no transforms */ }
+  25% { transform: none; /* OpenAI no transforms */ }
+  75% { transform: none; /* OpenAI no transforms */ }
 }
 
 @keyframes leaf-glow {
@@ -592,17 +681,17 @@ html.hc body { background: var(--bg); color: var(--text); }
   }
 }
 
-/* Premium Icon System Variables - Conductores Design Tokens */
+/* Premium Icon System Variables - OpenAI Design Tokens */
 :root {
-  --bg: #0B1220;
-  --ink: #E6ECFF;
-  --muted: #A8B3CF;
-  --card: #101826;
-  --line: #1F2937;
-  --acc: #94A3B8;
-  --ok: #22C55E;
-  --warn: #94A3B8;
-  --bad: #EF4444;
+  --bg: #080808; /* OpenAI black */
+  --ink: #ffffff; /* OpenAI white */
+  --muted: #737373; /* OpenAI neutral */
+  --card: #1e293b; /* OpenAI very dark text */
+  --line: #525252; /* OpenAI dark gray */
+  --acc: #94a3b8; /* OpenAI muted text */
+  --ok: #737373; /* OpenAI neutral */
+  --warn: #737373; /* OpenAI neutral */
+  --bad: #737373; /* OpenAI neutral */
   --radius: 16px;
   --shadow: 0 6px 24px rgba(0,0,0,.25);
 }

@@ -1,5 +1,5 @@
 /**
- * 🎭 Premium Animations & Micro-Interactions
+ *  Premium Animations & Micro-Interactions
  * World-class mobility tech visual polish
  */
 
@@ -9,140 +9,131 @@
 @keyframes fluidSlideIn {
   0% {
     opacity: 0;
-    transform: translateY(24px) scale(0.96);
-    filter: blur(4px);
-  }
-  60% {
-    opacity: 0.8;
-    transform: translateY(-2px) scale(1.01);
-    filter: blur(1px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
   }
 }
 
 @keyframes staggeredSlideIn {
   0% {
     opacity: 0;
-    transform: translateX(-32px) rotate(-2deg);
+    transform: none; /* OpenAI no transforms */
   }
   100% {
     opacity: 1;
-    transform: translateX(0) rotate(0deg);
+    transform: none; /* OpenAI no transforms */
   }
 }
 
 @keyframes morphicEntry {
   0% {
     opacity: 0;
-    transform: scale(0.9) rotate(-1deg);
-    border-radius: 50%;
+    transform: none; /* OpenAI no transforms */
+    border-radius: 8px; /* OpenAI standard */
   }
   50% {
     opacity: 0.7;
-    transform: scale(1.02) rotate(0.5deg);
-    border-radius: 24px;
+    transform: none; /* OpenAI no transforms */
+    border-radius: 8px; /* OpenAI standard */
   }
   100% {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
-    border-radius: 16px;
+    transform: none; /* OpenAI no transforms */
+    border-radius: 8px;  /* OpenAI standard */
   }
 }
 
-/* 🎯 Success & Status Animations */
+/*  Success & Status Animations */
 @keyframes successPulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-    transform: scale(1);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-green-500) 70%, transparent);
+    transform: none; /* OpenAI no transforms */
   }
   50% {
-    box-shadow: 0 0 0 12px rgba(34, 197, 94, 0);
-    transform: scale(1.05);
+    box-shadow: 0 0 0 12px transparent;
+    transform: none; /* OpenAI no transforms */
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-    transform: scale(1);
+    box-shadow: 0 0 0 0 transparent;
+    transform: none; /* OpenAI no transforms */
   }
 }
 
 @keyframes paymentSuccess {
   0% {
-    transform: scale(1) rotateY(0deg);
+    transform: none; /* OpenAI no transforms */
   }
   30% {
-    transform: scale(1.1) rotateY(180deg);
+    transform: none; /* OpenAI no transforms */
     background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   }
   70% {
-    transform: scale(1.05) rotateY(360deg);
+    transform: none; /* OpenAI no transforms */
     background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   }
   100% {
-    transform: scale(1) rotateY(360deg);
+    transform: none; /* OpenAI no transforms */
     background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   }
 }
 
 @keyframes contractSigned {
   0% {
-    transform: translateX(0) rotateZ(0deg);
+    transform: none; /* OpenAI no transforms */
     filter: hue-rotate(0deg);
   }
   25% {
-    transform: translateX(-4px) rotateZ(-2deg);
+    transform: none; /* OpenAI no transforms */
     filter: hue-rotate(90deg);
   }
   75% {
-    transform: translateX(4px) rotateZ(2deg);
+    transform: none; /* OpenAI no transforms */
     filter: hue-rotate(270deg);
   }
   100% {
-    transform: translateX(0) rotateZ(0deg);
+    transform: none; /* OpenAI no transforms */
     filter: hue-rotate(360deg);
   }
 }
 
-/* ⚡ Interactive States */
+/*  Interactive States */
 @keyframes buttonPress {
   0% {
-    transform: scale(1);
+    transform: none; /* OpenAI no transforms */
   }
   50% {
-    transform: scale(0.96);
+    transform: none; /* OpenAI no transforms */
   }
   100% {
-    transform: scale(1);
+    transform: none; /* OpenAI no transforms */
   }
 }
 
 @keyframes cardHover {
   0% {
-    transform: translateY(0) scale(1);
+    transform: none; /* OpenAI no transforms */
     filter: brightness(1);
   }
   100% {
-    transform: translateY(-6px) scale(1.02);
+    /* OpenAI: no transform effects */
     filter: brightness(1.1);
   }
 }
 
 @keyframes iconBounce {
   0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0) scale(1);
+    transform: none; /* OpenAI no transforms */
   }
   40% {
-    transform: translateY(-8px) scale(1.1);
+    /* OpenAI: no transform effects */
   }
   60% {
-    transform: translateY(-4px) scale(1.05);
+    /* OpenAI: no transform effects */
   }
 }
 
-/* 🔄 Loading States */
+/*  Loading States */
 @keyframes shimmer {
   0% {
     background-position: -200px 0;
@@ -154,68 +145,68 @@
 
 @keyframes pulsingDot {
   0%, 80%, 100% {
-    transform: scale(0);
+    transform: none; /* OpenAI no transforms */
     opacity: 0.5;
   }
   40% {
-    transform: scale(1);
+    transform: none; /* OpenAI no transforms */
     opacity: 1;
   }
 }
 
 @keyframes loadingSpinner {
   0% {
-    transform: rotate(0deg) scale(1);
+    transform: none; /* OpenAI no transforms */
     opacity: 1;
   }
   50% {
-    transform: rotate(180deg) scale(1.1);
+    transform: none; /* OpenAI no transforms */
     opacity: 0.8;
   }
   100% {
-    transform: rotate(360deg) scale(1);
+    transform: none; /* OpenAI no transforms */
     opacity: 1;
   }
 }
 
-/* 🌟 Premium Data Visualization */
+/*  Premium Data Visualization */
 @keyframes chartGrow {
   0% {
-    transform: scaleY(0);
+    transform: none; /* OpenAI no transforms */
     transform-origin: bottom;
   }
   100% {
-    transform: scaleY(1);
+    transform: none; /* OpenAI no transforms */
     transform-origin: bottom;
   }
 }
 
 @keyframes kpiCountUp {
   0% {
-    transform: scale(0.8);
+    transform: none; /* OpenAI no transforms */
     opacity: 0;
   }
   50% {
-    transform: scale(1.1);
+    transform: none; /* OpenAI no transforms */
     opacity: 0.8;
   }
   100% {
-    transform: scale(1);
+    transform: none; /* OpenAI no transforms */
     opacity: 1;
   }
 }
 
 @keyframes healthScorePulse {
   0% {
-    transform: scale(1);
+    transform: none; /* OpenAI no transforms */
     filter: drop-shadow(0 0 0 transparent);
   }
   50% {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.6));
+    transform: none; /* OpenAI no transforms */
+    filter: drop-shadow(0 0 20px color-mix(in srgb, var(--accent-blue-400) 60%, transparent));
   }
   100% {
-    transform: scale(1);
+    transform: none; /* OpenAI no transforms */
     filter: drop-shadow(0 0 0 transparent);
   }
 }
@@ -235,7 +226,7 @@
   animation: morphicEntry 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
 
-/* ⚡ Interactive States */
+/*  Interactive States */
 .animate-button-press {
   animation: buttonPress 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -248,7 +239,7 @@
   animation: iconBounce 1s ease-in-out;
 }
 
-/* 🎯 Success States */
+/*  Success States */
 .animate-success-pulse {
   animation: successPulse 2s ease-in-out infinite;
 }
@@ -261,9 +252,14 @@
   animation: contractSigned 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-/* 🔄 Loading States */
+/*  Loading States */
 .animate-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--openai-white) 10%, transparent),
+    transparent
+  );
   background-size: 200px 100%;
   animation: shimmer 2s infinite;
 }
@@ -279,7 +275,7 @@
 .animate-pulsing-dots:nth-child(2) { animation-delay: 0.2s; }
 .animate-pulsing-dots:nth-child(3) { animation-delay: 0.4s; }
 
-/* 📊 Data Visualization */
+/*  Data Visualization */
 .animate-chart-grow {
   animation: chartGrow 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
@@ -308,9 +304,9 @@
   left: 50%;
   width: 0;
   height: 0;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
+  background: color-mix(in srgb, var(--openai-white) 10%, transparent);
+  border-radius: 8px; /* OpenAI standard */
+  transform: none; /* OpenAI no transforms */
   transition: width 0.6s, height 0.6s;
 }
 
@@ -320,7 +316,7 @@
 }
 
 .btn-premium-hover:active {
-  transform: scale(0.96);
+  transform: none; /* OpenAI no transforms */
 }
 
 /* Card Micro-Interactions */
@@ -330,14 +326,14 @@
 }
 
 .card-premium-interact:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: none; /* OpenAI no transforms */
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(34, 211, 238, 0.2);
+    0 20px 40px color-mix(in srgb, var(--openai-black) 40%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--accent-blue-400) 20%, transparent);
 }
 
 .card-premium-interact:active {
-  transform: translateY(-4px) scale(1.01);
+  transform: none; /* OpenAI no transforms */
 }
 
 /* Input Focus Animations */
@@ -347,10 +343,10 @@
 }
 
 .input-premium-focus:focus {
-  transform: scale(1.02);
+  transform: none; /* OpenAI no transforms */
   box-shadow: 
-    0 0 0 3px rgba(34, 211, 238, 0.1),
-    0 8px 16px rgba(0, 0, 0, 0.2);
+    0 0 0 3px color-mix(in srgb, var(--accent-blue-400) 10%, transparent),
+    0 8px 16px color-mix(in srgb, var(--openai-black) 20%, transparent);
 }
 
 /* Icon State Animations */
@@ -359,30 +355,30 @@
 }
 
 .icon-contextual:hover {
-  transform: scale(1.1) rotate(5deg);
+  transform: none; /* OpenAI no transforms */
   filter: brightness(1.2);
 }
 
 .icon-status-success {
-  color: #22c55e;
-  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.4));
+  color: var(--color-text-secondary);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent-green-500) 40%, transparent));
 }
 
 .icon-status-warning {
-  color: #f59e0b;
-  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4));
+  color: var(--color-text-secondary);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent-amber-500) 40%, transparent));
 }
 
 .icon-status-error {
-  color: #ef4444;
-  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));
+  color: var(--color-text-secondary);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent-red-500) 40%, transparent));
 }
 
 /* ===== STAGGERED ANIMATIONS ===== */
 
 .stagger-container .stagger-item {
   opacity: 0;
-  transform: translateY(20px);
+  transform: none; /* OpenAI no transforms */
   animation: fluidSlideIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
@@ -398,7 +394,7 @@
 /* GPU Acceleration Hints */
 .gpu-accelerated {
   will-change: transform, opacity;
-  transform: translateZ(0);
+  transform: none; /* OpenAI no transforms */
   backface-visibility: hidden;
   perspective: 1000px;
 }
@@ -441,14 +437,14 @@
   .card-premium-interact:hover,
   .input-premium-focus:focus,
   .icon-contextual:hover {
-    transform: none;
+    transform: none; /* OpenAI no transforms */
   }
 }
 
 /* High contrast mode adjustments */
 @media (prefers-contrast: high) {
   .animate-shimmer {
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--openai-white) 30%, transparent), transparent);
   }
   
   .icon-status-success,
@@ -503,6 +499,6 @@
   }
   
   .card-premium-interact:hover {
-    transform: translateY(-4px) scale(1.01);
+    transform: none; /* OpenAI no transforms */
   }
 }

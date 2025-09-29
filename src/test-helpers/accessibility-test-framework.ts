@@ -192,7 +192,7 @@ export class AccessibilityTestUtils {
    */
   static generateViolationSummary(result: AccessibilityTestResult): string {
     if (result.violations.length === 0) {
-      return `✅ No accessibility violations found in ${result.component}`;
+      return ` No accessibility violations found in ${result.component}`;
     }
 
     const counts = {
@@ -202,7 +202,7 @@ export class AccessibilityTestUtils {
       minor: this.filterViolationsByImpact(result.violations, 'minor').length
     };
 
-    return `🚨 ${result.violations.length} accessibility violations in ${result.component}:\n` +
+    return `[A11Y] ${result.violations.length} accessibility violations in ${result.component}:\n` +
            `Critical: ${counts.critical}, Serious: ${counts.serious}, ` +
            `Moderate: ${counts.moderate}, Minor: ${counts.minor}`;
   }

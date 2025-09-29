@@ -20,7 +20,7 @@ export class EcosystemUiService {
         id: 'centro',
         name: 'Centro Histórico',
         description: 'Zona céntrica con alta actividad comercial',
-        icon: '🏛️',
+        icon: 'building-office',
         activeClients: 45,
         avgSavings: 85
       },
@@ -28,7 +28,7 @@ export class EcosystemUiService {
         id: 'industrial',
         name: 'Zona Industrial',
         description: 'Área industrial con empresas manufactureras',
-        icon: '🏭',
+        icon: 'building-factory',
         activeClients: 32,
         avgSavings: 78
       },
@@ -36,7 +36,7 @@ export class EcosystemUiService {
         id: 'residencial',
         name: 'Zona Residencial',
         description: 'Área residencial con familias trabajadoras',
-        icon: '🏘️',
+        icon: 'building-residential',
         activeClients: 28,
         avgSavings: 92
       }

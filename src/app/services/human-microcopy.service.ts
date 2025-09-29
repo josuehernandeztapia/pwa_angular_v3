@@ -1,5 +1,5 @@
 /**
- * 📝 Human-First Microcopy Service - Mobility Tech Premium Experience
+ * Human-First Microcopy Service - Mobility Tech Premium Experience
  * Contextual, empathetic messaging that converts + delights users
  */
 
@@ -35,13 +35,13 @@ export interface MicrocopyConfig {
 })
 export class HumanMicrocopyService {
 
-  // 🚀 Onboarding & Welcome Messages
+  //  Onboarding & Welcome Messages
   private readonly onboardingMicrocopy: Record<string, MicrocopyConfig> = {
     'welcome-first-time': {
       id: 'welcome-first-time',
       context: 'onboarding',
       tone: 'friendly',
-      primaryText: '¡Bienvenido a Conductores! 🚗',
+      primaryText: '¡Bienvenido a Conductores! ',
       secondaryText: 'Estamos aquí para hacer tu gestión de movilidad más inteligente y eficiente.',
       actionText: 'Comenzar tour',
       accessibility: {
@@ -76,13 +76,13 @@ export class HumanMicrocopyService {
     }
   };
 
-  // ✅ Success & Celebration Messages
+  //  Success & Celebration Messages
   private readonly successMicrocopy: Record<string, MicrocopyConfig> = {
     'quote-generated-success': {
       id: 'quote-generated-success',
       context: 'success',
       tone: 'celebratory',
-      primaryText: '¡Cotización lista! 🎉',
+      primaryText: '¡Cotización lista! ',
       secondaryText: 'Tu propuesta personalizada está disponible. Compártela con tu cliente o conviértela en póliza.',
       actionText: 'Ver cotización',
       accessibility: {
@@ -94,7 +94,7 @@ export class HumanMicrocopyService {
       id: 'payment-processed',
       context: 'celebration',
       tone: 'celebratory',
-      primaryText: '¡Pago procesado exitosamente! 💳',
+      primaryText: '¡Pago procesado exitosamente!',
       secondaryText: 'Tu cliente recibirá la confirmación por email. La póliza estará disponible en breve.',
       accessibility: {
         screenReader: 'Pago procesado exitosamente. El cliente recibirá confirmación por email.',
@@ -105,7 +105,7 @@ export class HumanMicrocopyService {
       id: 'kyc-approved',
       context: 'success',
       tone: 'professional',
-      primaryText: 'Verificación completada ✓',
+      primaryText: 'Verificación completada',
       secondaryText: 'El cliente ha sido verificado exitosamente. Puede proceder con la contratación.',
       personalization: {
         businessContext: true
@@ -115,13 +115,13 @@ export class HumanMicrocopyService {
       id: 'contract-signed',
       context: 'celebration',
       tone: 'celebratory',
-      primaryText: '¡Contrato firmado digitalmente! ✍️',
+      primaryText: '¡Contrato firmado digitalmente!',
       secondaryText: 'La protección está activa. Tu cliente recibirá todos los documentos por email.',
       actionText: 'Ver póliza'
     }
   };
 
-  // ⚠️ Error & Recovery Messages
+  //  Error & Recovery Messages
   private readonly errorMicrocopy: Record<string, MicrocopyConfig> = {
     'payment-failed-recoverable': {
       id: 'payment-failed-recoverable',
@@ -171,13 +171,13 @@ export class HumanMicrocopyService {
     }
   };
 
-  // 🎯 Guidance & Help Messages  
+  //  Guidance & Help Messages  
   private readonly guidanceMicrocopy: Record<string, MicrocopyConfig> = {
     'quote-optimization-tip': {
       id: 'quote-optimization-tip',
       context: 'guidance',
       tone: 'professional',
-      primaryText: '💡 Tip para maximizar valor',
+      primaryText: 'lightbulb Tip para maximizar valor',
       secondaryText: 'Considera incluir protección de cristales. El 80% de nuestros clientes lo agradecen.',
       triggerCondition: 'quote.windowProtection === false'
     },
@@ -202,13 +202,13 @@ export class HumanMicrocopyService {
       id: 'seasonal-opportunity',
       context: 'encouragement',
       tone: 'friendly',
-      primaryText: '🌟 Oportunidad estacional',
+      primaryText: ' Oportunidad estacional',
       secondaryText: 'Es temporada alta para seguros de viaje. Perfecto para cross-selling.',
       triggerCondition: 'date.month in [6,7,12]'
     }
   };
 
-  // 🔄 Loading & Progress Messages
+  //  Loading & Progress Messages
   private readonly progressMicrocopy: Record<string, MicrocopyConfig> = {
     'quote-generating': {
       id: 'quote-generating',
@@ -245,7 +245,7 @@ export class HumanMicrocopyService {
     }
   };
 
-  // 🎯 KIBAN/HASE Risk Evaluation Microcopy
+  //  KIBAN/HASE Risk Evaluation Microcopy
   private readonly riskEvaluationMicrocopy: Record<string, MicrocopyConfig> = {
     'loading-evaluation': {
       id: 'loading-evaluation',
@@ -264,7 +264,7 @@ export class HumanMicrocopyService {
       id: 'decision-go',
       context: 'decision',
       tone: 'celebratory',
-      primaryText: '¡Excelente! Tu perfil ha sido aprobado 🎉',
+      primaryText: '¡Excelente! Tu perfil ha sido aprobado ',
       secondaryText: 'Tu score crediticio y análisis HASE muestran un riesgo bajo. Puedes continuar con tu solicitud.',
       actionText: 'Continuar con financiamiento',
       accessibility: {
@@ -405,13 +405,13 @@ export class HumanMicrocopyService {
     }
   };
 
-  // 📊 Performance & Achievement Messages
+  //  Performance & Achievement Messages
   private readonly achievementMicrocopy: Record<string, MicrocopyConfig> = {
     'monthly-goal-reached': {
       id: 'monthly-goal-reached',
       context: 'celebration',
       tone: 'celebratory',
-      primaryText: '🎯 ¡Meta del mes alcanzada!',
+      primaryText: ' ¡Meta del mes alcanzada!',
       secondaryText: 'Has superado tu objetivo de ventas. Excelente trabajo.',
       personalization: {
         includeUserName: true
@@ -421,7 +421,7 @@ export class HumanMicrocopyService {
       id: 'first-million-milestone',
       context: 'celebration',
       tone: 'celebratory',
-      primaryText: '🏆 ¡Primer millón en ventas!',
+      primaryText: ' ¡Primer millón en ventas!',
       secondaryText: 'Un logro extraordinario. Tu dedicación marca la diferencia.',
       triggerCondition: 'user.totalSales >= 1000000'
     },
@@ -429,13 +429,13 @@ export class HumanMicrocopyService {
       id: 'customer-satisfaction-high',
       context: 'celebration',
       tone: 'celebratory',
-      primaryText: '⭐ Excelencia en servicio',
+      primaryText: 'Excelencia en servicio',
       secondaryText: 'Tus clientes te califican 4.9/5. Sigues estableciendo el estándar.',
       triggerCondition: 'user.averageRating >= 4.9'
     }
   };
 
-  // 🎯 Consolidated Microcopy Registry
+  //  Consolidated Microcopy Registry
   private readonly microcopyRegistry: Record<string, MicrocopyConfig> = {
     ...this.onboardingMicrocopy,
     ...this.successMicrocopy,

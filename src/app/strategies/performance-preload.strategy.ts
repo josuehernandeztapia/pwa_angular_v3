@@ -1,5 +1,5 @@
 /**
- * 🚀 Performance-Optimized Preloading Strategy
+ *  Performance-Optimized Preloading Strategy
  * Intelligent route preloading based on user behavior and network conditions
  */
 

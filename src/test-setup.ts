@@ -143,7 +143,7 @@ console.log = (...args) => {
     originalConsole.log(...args);
     logCount++;
   } else if (logCount === MAX_LOGS) {
-    originalConsole.log('🔇 Console output limited to prevent memory issues');
+    originalConsole.log('[INFO] Console output limited to prevent memory issues');
     logCount++;
   }
 };

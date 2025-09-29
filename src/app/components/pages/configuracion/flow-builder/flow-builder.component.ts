@@ -1,13 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { IconComponent } from '../../../shared/icon/icon.component';
+import { IconName } from '../../../shared/icon/icon-definitions';
 import { Subject } from 'rxjs';
 
 export interface FlowNode {
   id: string;
   type: NodeType;
   name: string;
-  icon: string;
+  icon?: string;
+  iconType?: string;
   color: string;
   position: { x: number; y: number };
   config: any;
@@ -46,7 +49,8 @@ export enum NodeType {
 export interface NodeTemplate {
   type: NodeType;
   name: string;
-  icon: string;
+  icon?: string;
+  iconType?: string;
   color: string;
   category: string;
   description: string;
@@ -68,990 +72,9 @@ export interface MarketProductCompatibility {
 @Component({
   selector: 'app-flow-builder',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  template: `
-    <div class="flow-builder-container container-neutral">
-      
-      <!-- Header -->
-      <div class="flow-builder-header premium-card">
-        <div class="header-left">
-          <h1>🎨 Flow Builder</h1>
-          <span class="subtitle">Crear ciudad/flujo visualmente</span>
-        </div>
-        <div class="header-right">
-          <button class="btn-secondary" (click)="clearFlow()">🗑️ Limpiar</button>
-          <button class="btn-secondary" (click)="saveFlow()">💾 Guardar</button>
-          <button class="btn-primary" (click)="deployFlow()" [disabled]="!canDeploy">🚀 Deploy</button>
-        </div>
-      </div>
-
-      <div class="flow-builder-content">
-        
-        <!-- Nodes Palette Sidebar -->
-        <div class="nodes-palette premium-card">
-          <div class="palette-header">
-            <h3>📦 Componentes</h3>
-            <input 
-              type="text" 
-              placeholder="Buscar nodos..."
-              [(ngModel)]="searchTerm"
-              class="search-input"
-            />
-          </div>
-
-          <div class="palette-content">
-            <!-- Market Compatibility Info -->
-            <div *ngIf="getSelectedMarketCode()" class="market-info-panel">
-              <div class="market-info-header">
-                <span class="market-icon">🏙️</span>
-                <div class="market-details">
-                  <div class="market-name">{{ getSelectedMarketName() }}</div>
-                  <div class="market-products">{{ getAvailableProductsForMarket().length }} productos disponibles</div>
-                </div>
-              </div>
-              <div class="market-restrictions">
-                <div class="restrictions-title">⚠️ Restricciones:</div>
-                <div *ngFor="let restriction of getMarketRestrictions(getSelectedMarketCode())" class="restriction-item">
-                  • {{ restriction }}
-                </div>
-              </div>
-            </div>
-
-            <div *ngFor="let category of getFilteredCategories()" class="node-category">
-              <div class="category-header" (click)="toggleCategory(category.name)">
-                <span class="category-icon">{{ category.expanded ? '▼' : '▶' }}</span>
-                <span class="category-name">{{ category.name }}</span>
-                <span class="category-count">({{ category.templates.length }})</span>
-              </div>
-              
-              <div class="category-content" [class.expanded]="category.expanded">
-                <div 
-                  *ngFor="let template of getFilteredTemplates(category.templates)" 
-                  class="node-template"
-                  [style.border-left-color]="template.color"
-                  [class.template-disabled]="!isTemplateCompatible(template)"
-                  [attr.title]="getTemplateTooltip(template)"
-                  draggable="true"
-                  (dragstart)="onDragStart($event, template)"
-                >
-                  <div class="template-icon">{{ template.icon }}</div>
-                  <div class="template-info">
-                    <div class="template-name">{{ template.name }}</div>
-                    <div class="template-description">{{ template.description }}</div>
-                    <div *ngIf="!isTemplateCompatible(template)" class="template-warning">
-                      ❌ No compatible con {{ getSelectedMarketName() }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Main Canvas -->
-        <div class="flow-canvas-container premium-card">
-          <div class="canvas-toolbar">
-            <div class="zoom-controls">
-              <button class="zoom-btn" (click)="zoomOut()">➖</button>
-              <span class="zoom-level">{{ (zoomLevel * 100).toFixed(0) }}%</span>
-              <button class="zoom-btn" (click)="zoomIn()">➕</button>
-            </div>
-            <div class="canvas-controls">
-              <button class="canvas-btn" (click)="fitToView()">🎯 Ajustar</button>
-              <button class="canvas-btn" (click)="centerView()">📐 Centrar</button>
-            <button class="canvas-btn" (click)="openGenerationModal()">📦 Exportar</button>
-            </div>
-          </div>
-
-          <div 
-            #flowCanvas
-            class="flow-canvas"
-            [style.transform]="'scale(' + zoomLevel + ') translate(' + panX + 'px, ' + panY + 'px)'"
-            (drop)="onDrop($event)"
-            (dragover)="onDragOver($event)"
-            (mousedown)="onCanvasMouseDown($event)"
-            (mousemove)="onCanvasMouseMove($event)"
-            (mouseup)="onCanvasMouseUp($event)"
-          >
-            
-            <!-- SVG Layer for Connections -->
-            <svg class="connections-layer" [attr.viewBox]="'0 0 ' + canvasWidth + ' ' + canvasHeight">
-              <defs>
-                <marker id="arrowhead" markerWidth="10" markerHeight="7" 
-                        refX="10" refY="3.5" orient="auto">
-                  <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280" />
-                </marker>
-              </defs>
-              
-              <!-- Connection Lines -->
-              <path 
-                *ngFor="let connection of connections; trackBy: trackConnection"
-                [attr.d]="getConnectionPath(connection)"
-                class="connection-line"
-                [class.connection-selected]="selectedConnection?.id === connection.id"
-                [class.connection-invalid]="connection.isValid === false"
-                [attr.title]="connection.validationMessage"
-                (click)="selectConnection(connection)"
-                marker-end="url(#arrowhead)"
-              />
-              
-              <!-- Temporary Connection Line (during dragging) -->
-              <path 
-                *ngIf="tempConnection"
-                [attr.d]="tempConnection.path"
-                class="connection-temp"
-                marker-end="url(#arrowhead)"
-              />
-            </svg>
-
-            <!-- Nodes Layer -->
-            <div class="nodes-layer">
-              <div 
-                *ngFor="let node of nodes; trackBy: trackNode"
-                class="flow-node"
-                [class.node-selected]="selectedNode?.id === node.id"
-                [style.left.px]="node.position.x"
-                [style.top.px]="node.position.y"
-                [style.border-color]="node.color"
-                (click)="selectNode(node)"
-                (mousedown)="onNodeMouseDown($event, node)"
-              >
-                <!-- Node Header -->
-                <div class="node-header" [style.background-color]="node.color">
-                  <div class="node-icon">{{ node.icon }}</div>
-                  <div class="node-name">{{ node.name }}</div>
-                  <div class="node-actions">
-                    <button class="node-action-btn" (click)="duplicateNode(node)">📋</button>
-                    <button class="node-action-btn" (click)="deleteNode(node)">🗑️</button>
-                  </div>
-                </div>
-
-                <!-- Node Content -->
-                <div class="node-content">
-                  <div class="node-description">{{ getNodeDescription(node) }}</div>
-                  
-                  <!-- Quick Config -->
-                  <div class="node-quick-config" *ngIf="node.type === 'document'">
-                    <label class="config-checkbox">
-                      <input type="checkbox" [(ngModel)]="node.config.required">
-                      <span>Obligatorio</span>
-                    </label>
-                    <label class="config-checkbox">
-                      <input type="checkbox" [(ngModel)]="node.config.ocrEnabled">
-                      <span>OCR</span>
-                    </label>
-                  </div>
-                </div>
-
-                <!-- Input Ports -->
-                <div class="node-ports inputs">
-                  <div 
-                    *ngFor="let input of node.inputs"
-                    class="node-port input-port"
-                    [attr.data-port-id]="input.id"
-                    [attr.data-node-id]="node.id"
-                    (mousedown)="onPortMouseDown($event, node, input, 'input')"
-                    [title]="input.name"
-                  >
-                    <div class="port-connector"></div>
-                  </div>
-                </div>
-
-                <!-- Output Ports -->
-                <div class="node-ports outputs">
-                  <div 
-                    *ngFor="let output of node.outputs"
-                    class="node-port output-port"
-                    [attr.data-port-id]="output.id"
-                    [attr.data-node-id]="node.id"
-                    (mousedown)="onPortMouseDown($event, node, output, 'output')"
-                    [title]="output.name"
-                  >
-                    <div class="port-connector"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Properties Panel -->
-        <div class="properties-panel" [class.panel-collapsed]="!selectedNode && !selectedConnection">
-          <div class="panel-header">
-            <h3>⚙️ Propiedades</h3>
-            <button class="panel-toggle" (click)="togglePropertiesPanel()">
-              {{ propertiesPanelExpanded ? '→' : '←' }}
-            </button>
-          </div>
-
-          <div class="panel-content" *ngIf="selectedNode || selectedConnection">
-            
-            <!-- Node Properties -->
-            <div *ngIf="selectedNode" class="node-properties">
-              <h4>📦 {{ selectedNode.name }}</h4>
-              
-              <div class="property-group">
-                <label class="property-label">Nombre:</label>
-                <input 
-                  type="text" 
-                  [(ngModel)]="selectedNode.name"
-                  class="property-input"
-                  (ngModelChange)="onNodePropertyChange()"
-                />
-              </div>
-
-              <div class="property-group" *ngIf="selectedNode.type === 'document'">
-                <label class="property-label">Tipo de Documento:</label>
-                <select [(ngModel)]="selectedNode.config.documentType" class="property-select">
-                  <option value="identification">Identificación</option>
-                  <option value="vehicle">Vehículo</option>
-                  <option value="address">Comprobante Domicilio</option>
-                  <option value="financial">Financiero</option>
-                  <option value="legal">Legal</option>
-                  <option value="custom">Personalizado</option>
-                </select>
-              </div>
-
-              <div class="property-group" *ngIf="selectedNode.type === 'market'">
-                <label class="property-label">Código de Ciudad:</label>
-                <input 
-                  type="text" 
-                  [(ngModel)]="selectedNode.config.cityCode"
-                  class="property-input"
-                  placeholder="guadalajara"
-                />
-                
-                <label class="property-label">Regulaciones:</label>
-                <div class="regulations-list">
-                  <div *ngFor="let regulation of selectedNode.config.regulations; let i = index" class="regulation-item">
-                    <input 
-                      type="text" 
-                      [(ngModel)]="selectedNode.config.regulations[i]"
-                      class="regulation-input"
-                      placeholder="SEMOV, Verificación..."
-                    />
-                    <button class="remove-btn" (click)="removeRegulation(i)">✕</button>
-                  </div>
-                  <button class="add-regulation-btn" (click)="addRegulation()">+ Agregar</button>
-                </div>
-              </div>
-
-              <div class="property-group" *ngIf="selectedNode.type === 'verification'">
-                <label class="property-label">Tipo de Verificación:</label>
-                <select [(ngModel)]="selectedNode.config.verificationType" class="property-select">
-                  <option value="voice">Patrón de Voz</option>
-                  <option value="avi">Análisis AVI</option>
-                  <option value="biometric">Biométrica</option>
-                  <option value="document">Documento</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Connection Properties -->
-            <div *ngIf="selectedConnection" class="connection-properties">
-              <h4>🔗 Conexión</h4>
-              
-              <div class="property-group">
-                <label class="property-label">Condición:</label>
-                <select [(ngModel)]="selectedConnection.condition" class="property-select">
-                  <option value="always">Siempre</option>
-                  <option value="success">En éxito</option>
-                  <option value="failure">En fallo</option>
-                  <option value="custom">Personalizada</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Flow Generation Modal -->
-      <div class="flow-modal" *ngIf="showGenerationModal" (click)="closeGenerationModal()">
-        <div class="modal-content" (click)="$event.stopPropagation()">
-          <div class="modal-header">
-            <h3>🚀 Generar Flujo</h3>
-            <button class="modal-close" (click)="closeGenerationModal()">✕</button>
-          </div>
-          
-          <div class="modal-body">
-            <div class="generation-progress" *ngIf="isGenerating">
-              <div class="progress-bar">
-                <div class="progress-fill" [style.width.%]="generationProgress"></div>
-              </div>
-              <p class="progress-text">{{ generationStatus }}</p>
-            </div>
-
-            <div class="generation-preview" *ngIf="generatedCode && !isGenerating">
-              <h4>📋 Código Generado:</h4>
-              <div class="code-tabs">
-                <button 
-                  *ngFor="let file of getGeneratedFiles()"
-                  class="code-tab"
-                  [class.active]="activeCodeTab === file"
-                  (click)="activeCodeTab = file"
-                >
-                  {{ file }}
-                </button>
-              </div>
-              <div class="code-content">
-                <pre><code>{{ getGeneratedCode(activeCodeTab) }}</code></pre>
-              </div>
-            </div>
-          </div>
-
-          <div class="modal-actions">
-            <button class="btn-secondary" (click)="closeGenerationModal()">Cancelar</button>
-            <button 
-              class="btn-primary" 
-              (click)="downloadGeneratedCode()"
-              [disabled]="!generatedCode"
-            >
-              📥 Descargar Código
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .flow-builder-container {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: #f8fafc;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-
-    .flow-builder-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 24px;
-      background: white;
-      border-bottom: 1px solid #e2e8f0;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .header-left h1 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 700;
-      color: #1e293b;
-    }
-
-    .subtitle {
-      color: #64748b;
-      font-size: 14px;
-      margin-left: 12px;
-    }
-
-    .header-right {
-      display: flex;
-      gap: 12px;
-    }
-
-    .btn-primary,
-    .btn-secondary {
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: none;
-      font-size: 14px;
-    }
-
-    .btn-primary {
-      background: #3b82f6;
-      color: white;
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      background: #2563eb;
-    }
-
-    .btn-primary:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-    }
-
-    .btn-secondary {
-      background: #f1f5f9;
-      color: #475569;
-      border: 1px solid #e2e8f0;
-    }
-
-    .btn-secondary:hover {
-      background: #e2e8f0;
-    }
-
-    .flow-builder-content {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
-    }
-
-    /* Nodes Palette */
-    .nodes-palette {
-      width: 300px;
-      background: white;
-      border-right: 1px solid #e2e8f0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .palette-header {
-      padding: 16px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .palette-header h3 {
-      margin: 0 0 12px 0;
-      font-size: 16px;
-      font-weight: 600;
-      color: #1e293b;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    .palette-content {
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .node-category {
-      border-bottom: 1px solid #f1f5f9;
-    }
-
-    .category-header {
-      padding: 12px 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 500;
-      color: #374151;
-      transition: background 0.2s;
-    }
-
-    .category-header:hover {
-      background: #f8fafc;
-    }
-
-    .category-icon {
-      color: #6b7280;
-      font-size: 12px;
-    }
-
-    .category-count {
-      color: #9ca3af;
-      font-size: 12px;
-      margin-left: auto;
-    }
-
-    .category-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-    }
-
-    .category-content.expanded {
-      max-height: 500px;
-    }
-
-    .node-template {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 24px;
-      cursor: grab;
-      border-left: 3px solid transparent;
-      transition: all 0.2s;
-    }
-
-    .node-template:hover {
-      background: #f8fafc;
-      border-left-color: currentColor !important;
-    }
-
-    .node-template:active {
-      cursor: grabbing;
-    }
-
-    .template-icon {
-      font-size: 18px;
-      width: 24px;
-      text-align: center;
-    }
-
-    .template-info {
-      flex: 1;
-    }
-
-    .template-name {
-      font-weight: 500;
-      color: #374151;
-      font-size: 14px;
-    }
-
-    .template-description {
-      color: #6b7280;
-      font-size: 12px;
-      margin-top: 2px;
-    }
-
-    .template-disabled {
-      opacity: 0.5;
-      cursor: not-allowed !important;
-      background: #f8fafc;
-    }
-
-    .template-warning {
-      color: #ef4444;
-      font-size: 10px;
-      font-weight: 500;
-      margin-top: 4px;
-    }
-
-    .market-info-panel {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 16px;
-    }
-
-    .market-info-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .market-icon {
-      font-size: 16px;
-    }
-
-    .market-name {
-      font-weight: 600;
-      color: #374151;
-      font-size: 14px;
-    }
-
-    .market-products {
-      color: #6b7280;
-      font-size: 11px;
-    }
-
-    .market-restrictions {
-      border-top: 1px solid #e2e8f0;
-      padding-top: 8px;
-    }
-
-    .restrictions-title {
-      font-size: 11px;
-      font-weight: 600;
-      color: #f59e0b;
-      margin-bottom: 4px;
-    }
-
-    .restriction-item {
-      font-size: 10px;
-      color: #6b7280;
-      line-height: 1.3;
-    }
-
-    /* Flow Canvas */
-    .flow-canvas-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .canvas-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 16px;
-      background: white;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .zoom-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .zoom-btn {
-      width: 32px;
-      height: 32px;
-      border: 1px solid #e2e8f0;
-      background: white;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .zoom-level {
-      font-size: 12px;
-      color: #6b7280;
-      min-width: 40px;
-      text-align: center;
-    }
-
-    .canvas-controls {
-      display: flex;
-      gap: 8px;
-    }
-
-    .canvas-btn {
-      padding: 6px 12px;
-      border: 1px solid #e2e8f0;
-      background: white;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-      color: #6b7280;
-    }
-
-    .flow-canvas {
-      flex: 1;
-      position: relative;
-      background: 
-        radial-gradient(circle, #e2e8f0 1px, transparent 1px);
-      background-size: 20px 20px;
-      cursor: grab;
-      transform-origin: 0 0;
-      transition: transform 0.2s ease;
-    }
-
-    .flow-canvas.dragging {
-      cursor: grabbing;
-    }
-
-    .connections-layer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .connection-line {
-      fill: none;
-      stroke: #6b7280;
-      stroke-width: 2;
-      pointer-events: stroke;
-      cursor: pointer;
-    }
-
-    .connection-line:hover,
-    .connection-selected {
-      stroke: #3b82f6;
-      stroke-width: 3;
-    }
-
-    .connection-temp {
-      fill: none;
-      stroke: #94a3b8;
-      stroke-width: 2;
-      stroke-dasharray: 5,5;
-    }
-
-    .connection-invalid {
-      stroke: #ef4444 !important;
-      stroke-width: 3;
-      stroke-dasharray: 8,4;
-      animation: pulse-error 2s infinite;
-    }
-
-    @keyframes pulse-error {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-
-    .nodes-layer {
-      position: relative;
-      z-index: 2;
-    }
-
-    .flow-node {
-      position: absolute;
-      background: white;
-      border: 2px solid #e2e8f0;
-      border-radius: 8px;
-      min-width: 200px;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      transition: all 0.2s;
-    }
-
-    .flow-node:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-      transform: translateY(-1px);
-    }
-
-    .flow-node.node-selected {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    .node-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      color: white;
-      font-weight: 500;
-      font-size: 14px;
-      border-radius: 6px 6px 0 0;
-    }
-
-    .node-name {
-      flex: 1;
-    }
-
-    .node-actions {
-      display: flex;
-      gap: 4px;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .flow-node:hover .node-actions {
-      opacity: 1;
-    }
-
-    .node-action-btn {
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      color: white;
-      width: 20px;
-      height: 20px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 10px;
-    }
-
-    .node-content {
-      padding: 12px;
-    }
-
-    .node-description {
-      color: #6b7280;
-      font-size: 12px;
-      margin-bottom: 8px;
-    }
-
-    .node-quick-config {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .config-checkbox {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      color: #6b7280;
-    }
-
-    .node-ports {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .node-ports.inputs {
-      left: -6px;
-    }
-
-    .node-ports.outputs {
-      right: -6px;
-    }
-
-    .node-port {
-      position: relative;
-      margin: 8px 0;
-    }
-
-    .port-connector {
-      width: 12px;
-      height: 12px;
-      border: 2px solid #6b7280;
-      background: white;
-      border-radius: 50%;
-      cursor: crosshair;
-      transition: all 0.2s;
-    }
-
-    .port-connector:hover {
-      border-color: #3b82f6;
-      background: #3b82f6;
-      transform: scale(1.2);
-    }
-
-    /* Properties Panel */
-    .properties-panel {
-      width: 320px;
-      background: white;
-      border-left: 1px solid #e2e8f0;
-      display: flex;
-      flex-direction: column;
-      transition: width 0.3s ease;
-    }
-
-    .properties-panel.panel-collapsed {
-      width: 0;
-      overflow: hidden;
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .panel-header h3 {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 600;
-      color: #1e293b;
-    }
-
-    .panel-toggle {
-      background: none;
-      border: none;
-      color: #6b7280;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .panel-content {
-      flex: 1;
-      padding: 16px;
-      overflow-y: auto;
-    }
-
-    .property-group {
-      margin-bottom: 16px;
-    }
-
-    .property-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 500;
-      color: #374151;
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .property-input,
-    .property-select {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      font-size: 14px;
-      background: white;
-    }
-
-    .property-input:focus,
-    .property-select:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    /* Modal */
-    .flow-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background: white;
-      border-radius: 12px;
-      max-width: 80%;
-      max-height: 80%;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 24px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .modal-header h3 {
-      margin: 0;
-      font-size: 18px;
-      font-weight: 600;
-    }
-
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 20px;
-      color: #6b7280;
-      cursor: pointer;
-    }
-
-    .modal-body {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      padding: 20px 24px;
-      border-top: 1px solid #e2e8f0;
-      justify-content: flex-end;
-    }
-
-    @media (max-width: 1024px) {
-      .nodes-palette {
-        width: 250px;
-      }
-      
-      .properties-panel {
-        width: 280px;
-      }
-    }
-  `]
+  imports: [CommonModule, FormsModule, IconComponent],
+  templateUrl: './flow-builder.component.html',
+  styleUrls: ['./flow-builder.component.scss'],
 })
 export class FlowBuilderComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -1122,7 +145,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       marketCode: 'guadalajara',
       marketName: 'Guadalajara',
       availableProducts: ['venta_directa', 'venta_plazo', 'ahorro_programado', 'credito_colectivo'],
-      restrictions: ['No tanda colectiva', 'Regulación SEMOV especial', '⚠️ Hereda regulaciones EdoMex para Crédito Colectivo'],
+      restrictions: ['No tanda colectiva', 'Regulación SEMOV especial', 'Hereda regulaciones EdoMex para Crédito Colectivo'],
       isComplexMarket: true, // Has CreditoColectivo → inherits EdoMex complexity
       regulatoryInheritance: 'edomex' // Inherits EdoMex regulatory framework
     },
@@ -1137,7 +160,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       marketCode: 'monterrey',
       marketName: 'Monterrey',
       availableProducts: ['venta_directa', 'venta_plazo', 'ahorro_programado', 'credito_colectivo'],
-      restrictions: ['Regulación estatal NL', '⚠️ Hereda regulaciones EdoMex para Crédito Colectivo'],
+      restrictions: ['Regulación estatal NL', 'Hereda regulaciones EdoMex para Crédito Colectivo'],
       isComplexMarket: true, // Has CreditoColectivo → inherits EdoMex complexity  
       regulatoryInheritance: 'edomex'
     }
@@ -1149,9 +172,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     {
       type: NodeType.Market,
       name: 'Ciudad/Mercado',
-      icon: '🏙️',
-      color: '#3b82f6',
-      category: '🌍 Mercados',
+      iconType: 'building-office',
+      color: 'var(--color-accent-primary, #0284c7)',
+      category: 'Mercados',
       description: 'Define una nueva ciudad o mercado',
       defaultConfig: {
         cityCode: '',
@@ -1168,9 +191,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     {
       type: NodeType.Document,
       name: 'INE Vigente',
-      icon: '🆔',
-      color: '#10b981',
-      category: '📄 Documentos',
+      iconType: 'document-text',
+      color: 'var(--color-border-muted, #94a3b8)',
+      category: 'Documentos',
       description: 'Documento de identificación oficial',
       defaultConfig: {
         documentType: 'identification',
@@ -1185,9 +208,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     {
       type: NodeType.Document,
       name: 'Tarjeta de Circulación',
-      icon: '🚗',
-      color: '#10b981',
-      category: '📄 Documentos',
+      iconType: 'document-report',
+      color: 'var(--color-border-muted, #94a3b8)',
+      category: 'Documentos',
       description: 'Documento del vehículo',
       defaultConfig: {
         documentType: 'vehicle',
@@ -1202,9 +225,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     {
       type: NodeType.Document,
       name: 'Documento Personalizado',
-      icon: '📋',
-      color: '#10b981',
-      category: '📄 Documentos',
+      iconType: 'document',
+      color: 'var(--color-border-muted, #94a3b8)',
+      category: 'Documentos',
       description: 'Documento específico de la ciudad',
       defaultConfig: {
         documentType: 'custom',
@@ -1220,9 +243,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     {
       type: NodeType.Verification,
       name: 'Patrón de Voz',
-      icon: '🎤',
-      color: '#f59e0b',
-      category: '🔍 Verificaciones',
+      iconType: 'microphone',
+      color: 'var(--color-accent-secondary, #1d4ed8)',
+      category: 'Verificaciones',
       description: 'Verificación por patrón de voz',
       defaultConfig: {
         verificationType: 'voice',
@@ -1236,9 +259,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     {
       type: NodeType.Verification,
       name: 'Análisis AVI',
-      icon: '🤖',
-      color: '#f59e0b',
-      category: '🔍 Verificaciones',
+      iconType: 'monitor',
+      color: 'var(--color-accent-secondary, #1d4ed8)',
+      category: 'Verificaciones',
       description: 'Análisis automático de voz e inteligencia',
       defaultConfig: {
         verificationType: 'avi',
@@ -1254,9 +277,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     {
       type: NodeType.Product,
       name: 'Venta Directa',
-      icon: '💰',
-      color: '#8b5cf6',
-      category: '💼 Productos',
+      iconType: 'currency-dollar',
+      color: 'var(--color-success, #10b981)',
+      category: 'Productos',
       description: 'Producto de venta directa simplificado',
       defaultConfig: {
         productType: 'venta_directa',
@@ -1271,9 +294,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     {
       type: NodeType.Product,
       name: 'Venta a Plazo',
-      icon: '🏦',
-      color: '#8b5cf6',
-      category: '💼 Productos',
+      iconType: 'bank',
+      color: 'var(--color-accent-primary, #0284c7)',
+      category: 'Productos',
       description: 'Producto de financiamiento completo',
       defaultConfig: {
         productType: 'venta_plazo',
@@ -1288,9 +311,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     {
       type: NodeType.Product,
       name: 'Ahorro Programado',
-      icon: '🐷',
-      color: '#8b5cf6',
-      category: '💼 Productos',
+      iconType: 'chart',
+      color: 'var(--color-accent-secondary, #1d4ed8)',
+      category: 'Productos',
       description: 'Plan de ahorro para vehículo',
       defaultConfig: {
         productType: 'ahorro_programado',
@@ -1305,9 +328,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     {
       type: NodeType.Product,
       name: 'Crédito Colectivo',
-      icon: '👥',
-      color: '#8b5cf6',
-      category: '💼 Productos',
+      iconType: 'collection',
+      color: 'var(--color-accent-primary, #0284c7)',
+      category: 'Productos',
       description: 'Crédito grupal para vehículos',
       defaultConfig: {
         productType: 'credito_colectivo',
@@ -1318,15 +341,15 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       },
       inputs: [{ name: 'Entrada', type: 'input', dataType: 'flow' }],
       outputs: [{ name: 'Contrato', type: 'output', dataType: 'flow' }],
-      compatibleWith: ['edomex', 'guadalajara'] // ❌ NO disponible en Aguascalientes
+      compatibleWith: ['edomex', 'guadalajara'] //  NO disponible en Aguascalientes
     },
 
     {
       type: NodeType.Product,
       name: 'Tanda Colectiva',
-      icon: '🔄',
-      color: '#8b5cf6',
-      category: '💼 Productos',
+      iconType: 'sparkles',
+      color: 'var(--color-accent-secondary, #1d4ed8)',
+      category: 'Productos',
       description: 'Sistema de tanda para ahorro grupal',
       defaultConfig: {
         productType: 'tanda_colectiva',
@@ -1336,16 +359,16 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       },
       inputs: [{ name: 'Entrada', type: 'input', dataType: 'flow' }],
       outputs: [{ name: 'Contrato', type: 'output', dataType: 'flow' }],
-      compatibleWith: ['edomex'] // ❌ Solo EdoMex
+      compatibleWith: ['edomex'] //  Solo EdoMex
     }
     ,
     // Business rule nodes
     {
       type: NodeType.BusinessRule,
       name: 'Regla de Negocio',
-      icon: '🧠',
-      color: '#ef4444',
-      category: '⚙️ Reglas',
+      iconType: 'lightbulb',
+      color: 'var(--color-warning, #fbbf24)',
+      category: 'Reglas',
       description: 'Evalúa una condición para bifurcar el flujo',
       defaultConfig: {
         ruleName: 'eligibilidad_basica',
@@ -1362,9 +385,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     {
       type: NodeType.Route,
       name: 'Ruta Condicional',
-      icon: '🛣️',
-      color: '#0ea5e9',
-      category: '🧭 Rutas',
+      iconType: 'target',
+      color: 'var(--color-border-muted, #94a3b8)',
+      category: 'Rutas',
       description: 'Redirige según una condición del contexto',
       defaultConfig: {
         condition: 'resultado_documentos == "ok"',
@@ -1463,8 +486,8 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
     if (!this.draggedTemplate) return;
 
     const rect = this.flowCanvas.nativeElement.getBoundingClientRect();
-    const x = (event.clientX - rect.left - this.panX) / this.zoomLevel;
-    const y = (event.clientY - rect.top - this.panY) / this.zoomLevel;
+    const x = (event.clientX - rect.left) / this.zoomLevel;
+    const y = (event.clientY - rect.top) / this.zoomLevel;
 
     this.createNodeFromTemplate(this.draggedTemplate, { x, y });
     this.draggedTemplate = null;
@@ -1481,8 +504,9 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       id: `node_${this.nodeIdCounter++}`,
       type: template.type,
       name: template.name,
-      icon: template.icon,
-      color: template.color,
+      icon: template.icon ?? template.iconType ?? '',
+      iconType: template.iconType ?? template.icon ?? '',
+      color: template.color ?? 'var(--color-border-muted, #94a3b8)',
       position,
       config: JSON.parse(JSON.stringify(template.defaultConfig)),
       inputs: template.inputs.map((input, index) => ({
@@ -1979,7 +1003,7 @@ export class ${className}Component {
         
         return { 
           isValid: false, 
-          message: `❌ ${productNames[productType as keyof typeof productNames]} no disponible en ${marketConfig.marketName}` 
+          message: ` ${productNames[productType as keyof typeof productNames]} no disponible en ${marketConfig.marketName}` 
         };
       }
     }
@@ -2184,8 +1208,8 @@ export class ${className}Component {
         id: 'market_1',
         type: NodeType.Market,
         name: 'Guadalajara',
-        icon: '🏙️',
-        color: '#3b82f6',
+        iconType: 'building-office',
+        color: 'var(--color-accent-primary, #0284c7)',
         position: { x: 50, y: 100 },
         config: {
           cityCode: 'guadalajara',
@@ -2201,8 +1225,8 @@ export class ${className}Component {
         id: 'doc_1',
         type: NodeType.Document,
         name: 'INE Vigente',
-        icon: '🆔',
-        color: '#10b981',
+        iconType: 'document-text',
+        color: 'var(--color-border-muted, #94a3b8)',
         position: { x: 350, y: 50 },
         config: {
           documentType: 'identification',
@@ -2220,8 +1244,8 @@ export class ${className}Component {
         id: 'product_1',
         type: NodeType.Product,
         name: 'Venta Directa',
-        icon: '💰',
-        color: '#8b5cf6',
+        iconType: 'currency-dollar',
+        color: 'var(--color-success, #10b981)',
         position: { x: 650, y: 100 },
         config: {
           productType: 'venta_directa',
@@ -2235,5 +1259,15 @@ export class ${className}Component {
 
     this.nodes = sampleNodes;
     this.nodeIdCounter = 4;
+  }
+
+  getTemplateIconName(template: NodeTemplate): IconName {
+    const iconName = template.iconType || template.icon || 'document';
+    return iconName as IconName;
+  }
+
+  getNodeIconName(node: FlowNode): IconName {
+    const iconName = node.iconType || node.icon || 'document';
+    return iconName as IconName;
   }
 }

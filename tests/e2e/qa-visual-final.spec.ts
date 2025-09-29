@@ -91,6 +91,12 @@ test.describe('QA Visual Final - Screenshots & Accessibility', () => {
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(1000); // Additional stability wait
 
+        const headSnapshot = await page.evaluate(() => ({
+          title: document.title,
+          langAttr: document.documentElement.getAttribute('lang'),
+        }));
+        console.info('HEAD SNAPSHOT', module.name, headSnapshot);
+
         // Take light mode screenshot
         await expect(page).toHaveScreenshot(module.screenshot, {
           fullPage: true,

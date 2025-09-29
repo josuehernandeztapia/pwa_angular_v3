@@ -1,409 +1,738 @@
-/**
- * 🎤 AVI Interview - Minimalista Enterprise
- * Clean professional styling following OpenAI dashboard patterns
- * NO pitch deck gradients - pure enterprise design
- */
-
-// Skip link for accessibility
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 6px;
-  background: theme('colors.slate.900');
-  color: theme('colors.white');
-  padding: 8px;
-  text-decoration: none;
-  z-index: 1000;
-  border-radius: 4px;
-  font-size: 14px;
-
-  &:focus {
-    top: 6px;
-  }
+:host {
+  display: block;
 }
 
-// Animation for skeleton loader
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: .5;
-  }
-}
-
-// AVI Interview Container
-.avi-interview-container {
+.avi-interview-shell {
   min-height: 100vh;
-  @apply bg-slate-50 dark:bg-slate-950;
+  background: var(--color-bg-secondary);
+  transition: background 0.3s ease;
+}
 
-  &.is-recording {
-    .voice-btn.recording {
-      @apply bg-red-500 text-white;
-    }
-  }
-
-  &.is-processing {
-    pointer-events: none;
+@media (prefers-color-scheme: dark) {
+  .avi-interview-shell {
+    background: var(--color-neutral-950);
   }
 }
 
-// Interview Header and Progress
+.avi-interview-shell.is-processing {
+  pointer-events: none;
+}
+
 .interview-header {
-  @apply border-b border-border bg-surface;
+  background: var(--flat-surface-bg);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+  padding: var(--space-4) var(--space-5);
+}
 
-  .progress-section {
-    @apply max-w-6xl mx-auto px-6 py-4;
+.progress-section {
+  max-width: 960px;
+  margin: 0 auto;
+}
 
-    .progress-bar {
-      @apply w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 mb-2;
+.progress-bar {
+  width: 100%;
+  background: color-mix(in srgb, var(--color-border-secondary) 90%, transparent);
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
 
-      .progress-fill {
-        @apply bg-sky-500 h-2 rounded-full transition-all duration-300;
-      }
-    }
-
-    .progress-info {
-      @apply flex justify-between text-sm text-slate-600 dark:text-slate-400;
-    }
+@media (prefers-color-scheme: dark) {
+  .progress-bar {
+    background: color-mix(in srgb, var(--color-neutral-800) 70%, transparent);
   }
 }
 
-// Interview Start State
-.interview-start {
-  @apply max-w-2xl mx-auto px-6 py-12;
+.progress-fill {
+  height: 100%;
+  background: var(--accent-blue-500);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
 
-  .start-card {
-    @apply bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-8 text-center;
+.interview-start-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  text-align: center;
+}
 
-    .avi-logo {
-      @apply mb-6;
+.logo-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+  color: var(--accent-blue-500);
+  margin: 0 auto;
+  font-size: 32px;
+}
 
-      .logo-icon {
-        @apply text-4xl mb-3;
-      }
+.interview-logo h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
 
-      h1 {
-        @apply text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2;
-      }
+.interview-logo .subtitle {
+  margin: 0;
+  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  font-size: 14px;
+}
 
-      .subtitle {
-        @apply text-slate-600 dark:text-slate-400;
-      }
-    }
-
-    .interview-info {
-      @apply space-y-3 mb-6 text-left;
-
-      .info-item {
-        @apply flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400;
-
-        .icon {
-          @apply text-base;
-        }
-      }
-    }
-
-    .start-btn {
-      @apply w-full bg-sky-500 hover:bg-sky-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200;
-
-      &.secondary {
-        @apply bg-slate-500 hover:bg-slate-600 mt-3 text-sm;
-      }
-    }
+@media (prefers-color-scheme: dark) {
+  .interview-logo h1 {
+    color: var(--color-bg-secondary);
+  }
+  .interview-logo .subtitle {
+    color: var(--accent-blue-200);
   }
 }
 
-// Interview Active State
+.info-item span {
+  color: color-mix(in srgb, var(--color-text-secondary) 92%, transparent);
+  font-size: 14px;
+}
+
+.start-button {
+  width: 100%;
+  justify-content: center;
+  padding: var(--space-3) var(--space-4);
+}
+
+.guided-start {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
 .interview-active {
-  @apply max-w-4xl mx-auto px-6 py-8;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-5);
+}
 
-  .question-card {
-    @apply bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-6;
+.question-card {
+  gap: var(--space-6);
+}
 
-    .question-header {
-      @apply mb-6 pb-4 border-b border-slate-200 dark:border-slate-700;
+.question-header {
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border-secondary) 40%, transparent);
+  padding-bottom: var(--space-4);
+}
 
-      .question-meta {
-        @apply flex flex-wrap gap-3 text-xs;
+.question-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
 
-        .category {
-          @apply bg-sky-100 dark:bg-sky-900/50 text-sky-800 dark:text-sky-200 px-2 py-1 rounded;
-        }
+.audio-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
 
-        .weight {
-          @apply bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-1 rounded;
+.audio-indicator.ready {
+  color: var(--accent-green-700);
+}
 
-          &.critical {
-            @apply bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200;
-          }
-        }
+.question-text h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
 
-        .stress-level {
-          @apply bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200 px-2 py-1 rounded;
-        }
+.question-meta-time,
+.question-hint {
+  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+}
 
-        .audio-indicator {
-          @apply text-slate-500 dark:text-slate-400 px-2 py-1 rounded;
+.pill-feedback {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
 
-          &.ready {
-            @apply bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200;
-          }
-        }
-      }
-    }
+.pill-reason {
+  color: color-mix(in srgb, var(--color-text-secondary) 80%, transparent);
+}
 
-    .question-text {
-      @apply mb-6;
+.response-area {
+  gap: var(--space-4);
+}
 
-      h2 {
-        @apply text-xl font-medium text-slate-900 dark:text-slate-100 mb-3;
-      }
+.response-input {
+  width: 100%;
+  min-height: 120px;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 50%, transparent);
+  background: color-mix(in srgb, var(--color-bg-primary) 95%, transparent);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  resize: vertical;
+}
 
-      .question-time {
-        @apply text-sm text-slate-500 dark:text-slate-400 mb-2;
-      }
+.response-input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--accent-blue-500) 50%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+}
 
-      .question-hint {
-        @apply text-sm text-slate-600 dark:text-slate-400 italic;
-      }
+.voice-controls {
+  display: flex;
+  gap: var(--space-3);
+}
 
-      .pill-feedback {
-        @apply mt-4 flex items-center gap-2;
+.voice-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
 
-        .pill {
-          @apply text-xs px-2 py-1 rounded-full font-medium;
+.voice-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 
-          &.clear {
-            @apply bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200;
-          }
+.stress-indicators {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-          &.review {
-            @apply bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200;
-          }
+.indicator-list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
 
-          &.evasive {
-            @apply bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200;
-          }
-        }
+.action-buttons {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
 
-        .pill-reason {
-          @apply text-xs text-slate-500 dark:text-slate-400;
-        }
-      }
-    }
+.processing-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
 
-    .response-area {
-      .state-announcer {
-        @apply mb-4;
+.analysis-section {
+  display: grid;
+  gap: var(--space-4);
+}
 
-        .badge {
-          @apply inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full;
+.analysis-heading {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
 
-          &.idle {
-            @apply bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400;
-          }
+.analysis-description {
+  margin-top: var(--space-2);
+}
 
-          &.recording {
-            @apply bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200;
-          }
-
-          &.processing {
-            @apply bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200;
-          }
-
-          &.saved {
-            @apply bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200;
-          }
-        }
-      }
-
-      .input-container {
-        @apply relative;
-
-        .response-input {
-          @apply w-full border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 resize-vertical min-h-[100px];
-
-          &:focus {
-            @apply outline-none ring-2 ring-sky-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900 border-sky-300 dark:border-sky-600;
-          }
-
-          &:disabled {
-            @apply opacity-50 cursor-not-allowed;
-          }
-        }
-
-        .voice-controls {
-          @apply flex gap-2 mt-3;
-
-          .voice-btn {
-            @apply flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors duration-200;
-
-            &.recording {
-              @apply bg-red-500 text-white hover:bg-red-600;
-            }
-
-            &.stop {
-              @apply bg-red-500 text-white hover:bg-red-600;
-            }
-
-            &:disabled {
-              @apply opacity-50 cursor-not-allowed;
-            }
-          }
-        }
-      }
-
-      .stress-indicators {
-        @apply mt-4;
-
-        .indicator-list {
-          @apply flex flex-wrap gap-2;
-
-          .indicator-label {
-            @apply text-xs text-slate-600 dark:text-slate-400 font-medium;
-          }
-
-          .indicator {
-            @apply text-xs bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200 px-2 py-1 rounded;
-          }
-        }
-      }
-
-      .action-buttons {
-        @apply flex gap-3 mt-6 justify-end;
-
-        .skip-btn {
-          @apply px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors duration-200;
-        }
-
-        .submit-btn {
-          @apply px-6 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-lg transition-colors duration-200;
-        }
-      }
-
-      .processing-overlay {
-        @apply absolute inset-0 bg-black/60 flex items-center justify-center rounded-lg;
-
-        .processing-content {
-          @apply text-slate-600 dark:text-slate-400 font-medium;
-        }
-      }
-
-      .follow-up-questions {
-        @apply mt-6 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg;
-
-        .follow-up-header {
-          @apply text-sm font-medium text-slate-700 dark:text-slate-300 mb-2;
-        }
-
-        .follow-up-list {
-          @apply space-y-1;
-
-          li {
-            @apply text-sm text-slate-600 dark:text-slate-400;
-          }
-        }
-      }
-    }
+@media (prefers-color-scheme: dark) {
+  .analysis-heading {
+    color: var(--color-bg-secondary);
   }
 }
 
-// Analyzing State (already updated in HTML)
-.analyzing-state {
-  @apply max-w-2xl mx-auto px-6 py-8;
+.skeleton-stack {
+  margin-top: var(--space-2);
 }
 
-// Results State
-.results-state {
-  @apply max-w-6xl mx-auto px-6 py-8;
+.engine-result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
 
-  .results-container {
-    @apply space-y-6;
+.engine-result h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: 15px;
+  color: var(--color-text-primary);
+}
+
+.engine-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.engine-score {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.engine-risk,
+.engine-time {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+}
+
+.red-flags-section h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.red-flag-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--accent-red-500);
+}
+
+.red-flag-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--accent-red-300) 35%, transparent);
+  background: color-mix(in srgb, var(--accent-red-100) 25%, transparent);
+}
+
+.flag-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-red-700);
+}
+
+.flag-description {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+}
+
+.metrics-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-bg-secondary) 70%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  .metric {
+    background: color-mix(in srgb, var(--color-neutral-900) 55%, transparent);
   }
 }
 
-// Custom scrollbar
-.overflow-y-auto::-webkit-scrollbar {
-  width: 6px;
+.metric-label {
+  font-size: 12px;
+  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
 }
 
-.overflow-y-auto::-webkit-scrollbar-track {
-  @apply bg-slate-100 dark:bg-slate-800;
+.metric-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
 }
 
-.overflow-y-auto::-webkit-scrollbar-thumb {
-  @apply bg-slate-400 dark:bg-slate-600 rounded-full;
-}
-
-.overflow-y-auto::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-500 dark:bg-slate-500;
-}
-
-// Focus states for better accessibility
-button:focus,
-input:focus,
-select:focus,
-textarea:focus {
-  @apply outline-none ring-2 ring-sky-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900;
-}
-
-// Print styles for PDF generation
-@media print {
-  .voice-controls,
-  .action-buttons,
-  .skip-link {
-    display: none !important;
-  }
-
-  .ui-card {
-    @apply border border-slate-300;
-    border: 1px solid rgb(203 213 225) !important;
-    box-shadow: none !important;
+@media (prefers-color-scheme: dark) {
+  .metric-value {
+    color: var(--color-bg-secondary);
   }
 }
 
-// High contrast mode support
-@media (prefers-contrast: high) {
-  .ui-card {
-    @apply border-2 border-slate-900 dark:border-slate-100;
-  }
+.overlay-panel__content.processing-content {
+  min-height: 140px;
+}
 
-  .text-slate-500 {
-    @apply text-slate-900 dark:text-slate-100;
+.results-container {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.card {
+  background: var(--flat-surface-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+  padding: var(--space-5);
+}
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: color-mix(in srgb, var(--color-neutral-950) 85%, transparent);
+    border-color: color-mix(in srgb, var(--color-neutral-700) 60%, transparent);
   }
 }
 
-// Reduced motion support
-@media (prefers-reduced-motion: reduce) {
-  .animate-pulse {
-    animation: none;
-  }
-
-  * {
-    transition: none !important;
-  }
+.technical-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
-// Responsive design
+.technical-metrics h3 {
+  margin: 0;
+}
+
 @media (max-width: 768px) {
   .interview-active {
-    @apply px-4 py-6;
-
-    .question-card {
-      @apply p-4;
-
-      .question-header .question-meta {
-        @apply flex-col gap-2;
-      }
-    }
+    padding: var(--space-5) var(--space-3);
   }
 
-  .results-state {
-    @apply px-4;
+  .voice-controls {
+    flex-direction: column;
   }
+
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+
+.analyzing-state {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-6) var(--space-5);
+  text-align: center;
+}
+
+.results-state {
+  padding: var(--space-6) var(--space-5) var(--space-8);
+}
+
+.main-score-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.score-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.score-display {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+}
+
+.consolidated-score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-radius: 999px;
+}
+
+.score-number {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.score-label {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 70%, transparent);
+}
+
+.risk-level {
+  font-size: 13px;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+}
+
+.score-description {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+}
+
+.engine-advantages {
+  margin-top: var(--space-2);
+}
+
+.advantages-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--color-text-secondary) 75%, transparent);
+  margin-bottom: var(--space-1);
+}
+
+.engine-advantages ul {
+  margin: 0;
+  padding-left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+}
+
+.consensus-analysis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.consensus-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 160px;
+}
+
+.consensus-level,
+.consensus-agreement,
+.consensus-confidence {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+}
+
+.consensus-info {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.consensus-info .value {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.category-scores {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.categories-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-bg-secondary) 70%, transparent);
+}
+
+.category-name {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 95%, transparent);
+}
+
+.category-score {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.recommendations-section,
+.technical-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.recommendation-item {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-border-secondary) 45%, transparent);
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+}
+
+.final-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
+
+.final-actions .ui-btn {
+  min-width: 160px;
+  justify-content: center;
+}
+
+.label,
+.value {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  .category-score,
+  .score-label,
+  .score-description,
+  .engine-advantages ul,
+  .category-name,
+  .recommendation-item,
+  .label,
+  .value,
+  .consensus-level,
+  .consensus-agreement,
+  .consensus-confidence {
+    color: var(--accent-blue-200);
+  }
+
+  .category-item,
+  .recommendation-item {
+    background: color-mix(in srgb, var(--color-neutral-900) 60%, transparent);
+  }
+}
+
+.consensus-description {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  line-height: 1.5;
+}
+
+.chip.clear { background: color-mix(in srgb, var(--accent-green-500) 16%, transparent); color: var(--accent-green-700); }
+.chip.review { background: color-mix(in srgb, var(--accent-amber-100) 70%, transparent); color: var(--accent-amber-700); }
+.chip.evasive { background: color-mix(in srgb, var(--accent-red-100) 70%, transparent); color: var(--accent-red-600); }
+
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 80%, transparent);
+}
+
+.interview-info {
+  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.state-announcer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.engines-comparison {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.follow-up-questions {
+  gap: var(--space-3);
+}
+
+.follow-up-list {
+  margin: 0;
+  padding-left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+}
+
+.flag-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flag-severity {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.flag-impact,
+.flag-reason,
+.flag-question {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+}
+
+.result-decision {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.result-flag-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding-left: var(--space-4);
+}
+
+.result-flag {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  .progress-info,
+  .follow-up-list,
+  .flag-impact,
+  .flag-reason,
+  .flag-question,
+  .result-flag {
+    color: var(--accent-blue-200);
+  }
+
+  .result-decision {
+    color: var(--color-bg-secondary);
+  }
+}
+
+.red-flags-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.voice-button.recording {
+  background: color-mix(in srgb, var(--accent-red-300) 18%, transparent);
+  color: var(--accent-red-600);
+}
+
+.consolidated-score.risk-low { background: color-mix(in srgb, var(--accent-green-500) 18%, transparent); color: var(--accent-green-700); }
+.consolidated-score.risk-medium { background: color-mix(in srgb, var(--accent-amber-100) 70%, transparent); color: var(--accent-amber-700); }
+.consolidated-score.risk-high { background: color-mix(in srgb, var(--accent-red-100) 80%, transparent); color: var(--accent-red-600); }
+.consolidated-score.risk-critical { background: color-mix(in srgb, var(--accent-red-800) 25%, transparent); color: var(--accent-red-800); }
+
+.analysis-state {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }

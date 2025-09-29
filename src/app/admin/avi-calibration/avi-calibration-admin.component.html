@@ -1,0 +1,170 @@
+<div class="calibration-admin__container">
+  <header class="calibration-admin__header">
+    <div class="calibration-admin__header-content">
+      <div class="calibration-admin__title-group">
+        <app-ui-icon
+          name="voice-analysis"
+          [size]="32"
+          class="calibration-admin__title-icon"
+          aria-hidden="true"
+        ></app-ui-icon>
+        <div>
+          <h1 class="calibration-admin__title">AVI Calibration Center</h1>
+          <p class="calibration-admin__subtitle">Real-time voice analysis calibration metrics</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="calibration-admin__button calibration-admin__button--primary"
+        [ngClass]="getRunButtonClasses()"
+        (click)="runNewCalibration()"
+        [disabled]="runningCalibration"
+      >
+        <app-ui-icon
+          name="refresh"
+          [size]="20"
+          class="calibration-admin__button-icon"
+          [ngClass]="{ 'calibration-admin__button-icon--spin': runningCalibration }"
+          aria-hidden="true"
+        ></app-ui-icon>
+        {{ runningCalibration ? 'Running...' : 'Run New Calibration' }}
+      </button>
+    </div>
+  </header>
+
+  <section *ngIf="latestResult" class="calibration-admin__status" aria-label="Estado actual">
+    <article class="calibration-admin__status-card" [attr.data-status]="latestResult.gateStatus">
+      <div class="calibration-admin__status-header">
+        <div class="calibration-admin__status-indicator">
+          <app-ui-icon
+            [name]="getStatusIcon(latestResult.gateStatus)"
+            [size]="24"
+            class="calibration-admin__status-icon"
+            [ngClass]="getStatusIconClasses(latestResult.gateStatus)"
+            aria-hidden="true"
+          ></app-ui-icon>
+          <span class="calibration-admin__status-text">{{ latestResult.gateStatus }}</span>
+        </div>
+        <span class="calibration-admin__status-updated">Last updated: {{ formatTimestamp(latestResult.timestamp) }}</span>
+      </div>
+
+      <div class="calibration-admin__metrics">
+        <div class="calibration-admin__metric">
+          <div class="calibration-admin__metric-value">{{ latestResult.sampleCount }}</div>
+          <div class="calibration-admin__metric-label">Samples</div>
+          <span
+            class="calibration-admin__metric-gate"
+            [ngClass]="getMetricGateClasses(latestResult.sampleCount >= latestResult.qualityGates.minSamples)"
+          >
+            ≥{{ latestResult.qualityGates.minSamples }}
+          </span>
+        </div>
+
+        <div class="calibration-admin__metric">
+          <div class="calibration-admin__metric-value">{{ latestResult.accuracy }}%</div>
+          <div class="calibration-admin__metric-label">Accuracy</div>
+          <span
+            class="calibration-admin__metric-gate"
+            [ngClass]="getMetricGateClasses(latestResult.accuracy >= latestResult.qualityGates.minAccuracy * 100)"
+          >
+            ≥{{ latestResult.qualityGates.minAccuracy * 100 }}%
+          </span>
+        </div>
+
+        <div class="calibration-admin__metric">
+          <div class="calibration-admin__metric-value">{{ latestResult.f1Score }}%</div>
+          <div class="calibration-admin__metric-label">F1 Score</div>
+          <span
+            class="calibration-admin__metric-gate"
+            [ngClass]="getMetricGateClasses(latestResult.f1Score >= latestResult.qualityGates.minF1 * 100)"
+          >
+            ≥{{ latestResult.qualityGates.minF1 * 100 }}%
+          </span>
+        </div>
+
+        <div class="calibration-admin__metric">
+          <div class="calibration-admin__metric-value">{{ latestResult.consistency }}%</div>
+          <div class="calibration-admin__metric-label">Consistency</div>
+          <span
+            class="calibration-admin__metric-gate"
+            [ngClass]="getMetricGateClasses(latestResult.consistency >= latestResult.qualityGates.minConsistency * 100)"
+          >
+            ≥{{ latestResult.qualityGates.minConsistency * 100 }}%
+          </span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section *ngIf="latestResult" class="calibration-admin__matrix" aria-label="Matriz de confusión">
+    <h3 class="calibration-admin__section-title">Confusion Matrix</h3>
+    <div class="calibration-admin__matrix-grid">
+      <div class="calibration-admin__matrix-header"></div>
+      <div class="calibration-admin__matrix-header">Predicted APPROVED</div>
+      <div class="calibration-admin__matrix-header">Predicted REJECTED</div>
+
+      <div class="calibration-admin__matrix-label">Actual APPROVED</div>
+      <div class="calibration-admin__matrix-cell calibration-admin__matrix-cell--tp">
+        <div class="calibration-admin__matrix-value">{{ latestResult.confusionMatrix.truePositives }}</div>
+        <div class="calibration-admin__matrix-subtitle">True Positives</div>
+      </div>
+      <div class="calibration-admin__matrix-cell calibration-admin__matrix-cell--fn">
+        <div class="calibration-admin__matrix-value">{{ latestResult.confusionMatrix.falseNegatives }}</div>
+        <div class="calibration-admin__matrix-subtitle">False Negatives</div>
+      </div>
+
+      <div class="calibration-admin__matrix-label">Actual REJECTED</div>
+      <div class="calibration-admin__matrix-cell calibration-admin__matrix-cell--fp">
+        <div class="calibration-admin__matrix-value">{{ latestResult.confusionMatrix.falsePositives }}</div>
+        <div class="calibration-admin__matrix-subtitle">False Positives</div>
+      </div>
+      <div class="calibration-admin__matrix-cell calibration-admin__matrix-cell--tn">
+        <div class="calibration-admin__matrix-value">{{ latestResult.confusionMatrix.trueNegatives }}</div>
+        <div class="calibration-admin__matrix-subtitle">True Negatives</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="calibration-admin__history" aria-label="Historial de calibraciones">
+    <h3 class="calibration-admin__section-title">Calibration History</h3>
+    <div class="calibration-admin__history-list" *ngIf="calibrationHistory.length > 0">
+      <article
+        *ngFor="let result of calibrationHistory.slice(0, 10)"
+        class="calibration-admin__history-item"
+        [attr.data-status]="result.gateStatus"
+      >
+        <div class="calibration-admin__history-time">{{ formatTimestamp(result.timestamp) }}</div>
+        <div class="calibration-admin__history-metrics">
+          <span class="calibration-admin__history-metric">{{ result.accuracy }}% accuracy</span>
+          <span class="calibration-admin__history-metric">{{ result.f1Score }}% F1</span>
+          <span class="calibration-admin__history-metric">{{ result.sampleCount }} samples</span>
+        </div>
+        <span class="calibration-admin__history-status" [ngClass]="getHistoryStatusClasses(result.gateStatus)">
+          {{ result.gateStatus }}
+        </span>
+      </article>
+    </div>
+
+    <app-human-message
+      *ngIf="calibrationHistory.length === 0"
+      context="no-calibration-history"
+      [data]="{ action: 'Run your first calibration' }"
+    ></app-human-message>
+  </section>
+
+  <div *ngIf="runningCalibration" class="calibration-admin__overlay" aria-live="assertive">
+    <div class="calibration-admin__overlay-content">
+      <app-ui-icon
+        name="voice-analysis"
+        [size]="48"
+        class="calibration-admin__overlay-icon"
+        aria-hidden="true"
+      ></app-ui-icon>
+      <h3 class="calibration-admin__overlay-title">Running AVI Calibration...</h3>
+      <p class="calibration-admin__overlay-text">Analyzing voice samples and calculating metrics</p>
+      <div class="calibration-admin__progress">
+        <div class="calibration-admin__progress-fill" [style.width.%]="calibrationProgress"></div>
+      </div>
+    </div>
+  </div>
+</div>

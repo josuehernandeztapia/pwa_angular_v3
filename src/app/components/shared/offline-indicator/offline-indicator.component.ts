@@ -1,313 +1,15 @@
 import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IconComponent } from '../icon/icon.component';
+import { IconName } from '../icon/icon-definitions';
 import { OfflineService } from '../../../services/offline.service';
 
 @Component({
   selector: 'app-offline-indicator',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <!-- Connection Status Banner -->
-    <div
-      *ngIf="showIndicator()"
-      class="connection-banner"
-      [class]="getBannerClass()">
-
-      <div class="banner-content">
-        <div class="status-icon">
-          {{ getStatusIcon() }}
-        </div>
-
-        <div class="status-info">
-          <div class="status-title">{{ getStatusTitle() }}</div>
-          <div class="status-subtitle">{{ getStatusSubtitle() }}</div>
-        </div>
-
-        <!-- Pending Sync Indicator -->
-        <div class="sync-indicator" *ngIf="offlineService.pendingRequests$ | async as pending">
-          <span *ngIf="pending.length > 0" class="pending-count">
-            {{ pending.length }} pendiente{{ pending.length !== 1 ? 's' : '' }}
-          </span>
-        </div>
-
-        <!-- Connection Quality -->
-        <div class="connection-quality" *ngIf="isOnline()">
-          <div class="quality-dots">
-            <span
-              class="quality-dot"
-              [class.active]="getQualityLevel() >= 1"></span>
-            <span
-              class="quality-dot"
-              [class.active]="getQualityLevel() >= 2"></span>
-            <span
-              class="quality-dot"
-              [class.active]="getQualityLevel() >= 3"></span>
-            <span
-              class="quality-dot"
-              [class.active]="getQualityLevel() >= 4"></span>
-          </div>
-        </div>
-
-        <!-- Dismiss Button -->
-        <button
-          *ngIf="canDismiss()"
-          class="dismiss-btn"
-          (click)="dismiss()"
-          aria-label="Cerrar indicador">
-          ✕
-        </button>
-      </div>
-    </div>
-
-    <!-- Floating Status Pill (minimized) -->
-    <div
-      *ngIf="!showIndicator() && shouldShowPill()"
-      class="status-pill"
-      [class]="getPillClass()"
-      (click)="expand()">
-
-      <span class="pill-icon">{{ getStatusIcon() }}</span>
-      <span class="pill-text">{{ getPillText() }}</span>
-
-      <!-- Pending indicator dot -->
-      <span
-        *ngIf="hasPendingRequests()"
-        class="pending-dot">
-      </span>
-    </div>
-  `,
-  styles: [`
-    /* Connection Banner */
-    .connection-banner {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      padding: 12px 16px;
-      
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.3s ease;
-      animation: slideDown 0.3s ease;
-    }
-
-    .connection-banner.online {
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(22, 163, 74, 0.9));
-      color: white;
-    }
-
-    .connection-banner.offline {
-      background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(220, 38, 38, 0.95));
-      color: white;
-    }
-
-    .connection-banner.reconnecting {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.95));
-      color: white;
-    }
-
-    .connection-banner.poor {
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.95), rgba(245, 158, 11, 0.95));
-      color: white;
-    }
-
-    .banner-content {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .status-icon {
-      font-size: 20px;
-      animation: pulse 2s infinite;
-    }
-
-    .status-info {
-      flex: 1;
-    }
-
-    .status-title {
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .status-subtitle {
-      font-size: 12px;
-      opacity: 0.9;
-    }
-
-    .sync-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pending-count {
-      font-size: 12px;
-      background: rgba(255, 255, 255, 0.2);
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-weight: 500;
-    }
-
-    /* Connection Quality Dots */
-    .connection-quality {
-      display: flex;
-      align-items: center;
-    }
-
-    .quality-dots {
-      display: flex;
-      gap: 2px;
-    }
-
-    .quality-dot {
-      width: 4px;
-      height: 12px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 2px;
-      transition: all 0.2s ease;
-    }
-
-    .quality-dot.active {
-      background: rgba(255, 255, 255, 0.9);
-    }
-
-    .dismiss-btn {
-      background: none;
-      border: none;
-      color: inherit;
-      font-size: 16px;
-      cursor: pointer;
-      opacity: 0.7;
-      transition: opacity 0.2s ease;
-      padding: 4px;
-      border-radius: 4px;
-    }
-
-    .dismiss-btn:hover {
-      opacity: 1;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    /* Status Pill (floating) */
-    .status-pill {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 999;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      animation: slideUp 0.3s ease;
-    }
-
-    .status-pill:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    .status-pill.online {
-      background: rgba(34, 197, 94, 0.9);
-      color: white;
-    }
-
-    .status-pill.offline {
-      background: rgba(239, 68, 68, 0.95);
-      color: white;
-    }
-
-    .status-pill.poor {
-      background: rgba(245, 158, 11, 0.95);
-      color: white;
-    }
-
-    .pill-icon {
-      font-size: 14px;
-    }
-
-    .pill-text {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .pending-dot {
-      width: 8px;
-      height: 8px;
-      background: #fbbf24;
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-
-    /* Animations */
-    @keyframes slideDown {
-      from {
-        transform: translateY(-100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideUp {
-      from {
-        transform: translateY(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.5;
-      }
-    }
-
-    /* Mobile responsiveness */
-    @media (max-width: 640px) {
-      .connection-banner {
-        padding: 10px 12px;
-      }
-
-      .status-title {
-        font-size: 13px;
-      }
-
-      .status-subtitle {
-        font-size: 11px;
-      }
-
-      .status-pill {
-        bottom: 16px;
-        right: 16px;
-        padding: 6px 10px;
-      }
-
-      .quality-dots {
-        display: none; /* Hide on mobile to save space */
-      }
-    }
-  `]
+  imports: [CommonModule, IconComponent],
+  templateUrl: './offline-indicator.component.html',
+  styleUrls: ['./offline-indicator.component.scss']
 })
 export class OfflineIndicatorComponent {
   private expanded = signal(false);
@@ -352,17 +54,43 @@ export class OfflineIndicatorComponent {
     this.isOnline() && !this.hasPendingRequests()
   );
 
-  getStatusIcon(): string {
-    if (!this.isOnline()) return '📡';
+  readonly qualityLevels = [1, 2, 3, 4];
+
+  getStatusIconName(): IconName {
+    return this.isOnline() ? 'dot' : 'offline';
+  }
+
+  getStatusIconClasses(): string[] {
+    const classes: string[] = [];
+
+    if (!this.isOnline()) {
+      classes.push('offline-indicator__glyph--offline');
+      return classes;
+    }
 
     const quality = this.getConnectionQuality();
-    switch (quality) {
-      case 'excellent': return '🟢';
-      case 'good': return '🔵';
-      case 'fair': return '🟡';
-      case 'poor': return '🟠';
-      default: return '🔵';
+    classes.push('offline-indicator__glyph--online');
+
+    if (quality === 'excellent' || quality === 'good' || quality === 'fair' || quality === 'poor') {
+      classes.push(`offline-indicator__glyph--${quality}`);
     }
+
+    if (this.hasPendingRequests()) {
+      classes.push('offline-indicator__glyph--syncing');
+    }
+
+    return classes;
+  }
+
+  getStatusIconStroke(): string {
+    return this.isOnline() ? '0' : '2';
+  }
+
+  getStatusIconSize(isPill = false): number {
+    if (this.isOnline()) {
+      return isPill ? 10 : 12;
+    }
+    return isPill ? 14 : 20;
   }
 
   getStatusTitle(): string {
@@ -403,23 +131,18 @@ export class OfflineIndicatorComponent {
     }
   }
 
-  getBannerClass(): string {
-    if (!this.isOnline()) return 'offline';
-    if (this.hasPendingRequests()) return 'reconnecting';
-
-    const quality = this.getConnectionQuality();
-    if (quality === 'poor' || quality === 'fair') return 'poor';
-
-    return 'online';
+  getBannerClasses(): Record<string, boolean> {
+    const state = this.resolveConnectionState();
+    return {
+      [`offline-indicator__banner--${state}`]: true,
+    };
   }
 
-  getPillClass(): string {
-    if (!this.isOnline()) return 'offline';
-
-    const quality = this.getConnectionQuality();
-    if (quality === 'poor' || quality === 'fair') return 'poor';
-
-    return 'online';
+  getPillClasses(): Record<string, boolean> {
+    const state = this.resolveConnectionState();
+    return {
+      [`offline-indicator__pill--${state}`]: true,
+    };
   }
 
   getPillText(): string {
@@ -452,6 +175,23 @@ export class OfflineIndicatorComponent {
   hasPendingRequests(): boolean {
     const capabilities = this.offlineService.getOfflineCapabilities();
     return capabilities.pendingCount > 0;
+  }
+
+  private resolveConnectionState(): 'offline' | 'reconnecting' | 'poor' | 'online' {
+    if (!this.isOnline()) {
+      return 'offline';
+    }
+
+    if (this.hasPendingRequests()) {
+      return 'reconnecting';
+    }
+
+    const quality = this.getConnectionQuality();
+    if (quality === 'poor' || quality === 'fair') {
+      return 'poor';
+    }
+
+    return 'online';
   }
 
   expand(): void {

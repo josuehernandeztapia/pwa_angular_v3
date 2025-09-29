@@ -58,7 +58,7 @@ export interface ImportNotificationSettings {
   lastNotificationSent?: Date;
 }
 
-// ✅ Using SSOT WhatsAppNotificationResult from models/notification.ts
+//  Using SSOT WhatsAppNotificationResult from models/notification.ts
 
 @Injectable({
   providedIn: 'root'
@@ -72,27 +72,27 @@ export class ImportWhatsAppNotificationsService {
   private milestoneTemplates: { [K in keyof ImportStatus]: any } = {
     pedidoPlanta: {
       name: 'import_milestone_factory_order',
-      title: '📋 Pedido Enviado a Planta',
+      title: ' Pedido Enviado a Planta',
       description: 'Tu vagoneta ha sido solicitada a la planta manufacturera'
     },
     unidadFabricada: {
       name: 'import_milestone_unit_manufactured',
-      title: '🏭 Unidad Fabricada',
+      title: 'Unidad Fabricada',
       description: 'Tu vagoneta ha sido fabricada y está lista para envío'
     },
     transitoMaritimo: {
       name: 'import_milestone_maritime_transit',
-      title: '🚢 En Tránsito Marítimo',
+      title: 'En Tránsito Marítimo',
       description: 'Tu vagoneta está navegando hacia México'
     },
     enAduana: {
       name: 'import_milestone_in_customs',
-      title: '🛃 En Proceso Aduanal',
+      title: 'En Proceso Aduanal',
       description: 'Tu vagoneta está siendo procesada en aduana'
     },
     liberada: {
       name: 'import_milestone_customs_released',
-      title: '✅ Liberada de Aduana',
+      title: 'Liberada de Aduana',
       description: 'Tu vagoneta ha sido liberada y está lista para entrega'
     }
   };

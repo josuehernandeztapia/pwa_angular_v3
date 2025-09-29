@@ -13,19 +13,19 @@ module.exports = {
           muted: 'var(--color-text-muted)'
         },
         brand: {
-          primary: '#0EA5E9',
-          success: '#22C55E',
-          warn: '#F59E0B',
-          danger: '#EF4444'
+          primary: '#737373', /* OpenAI neutral */
+          success: '#737373', /* OpenAI neutral */
+          warn: '#737373', /* OpenAI neutral */
+          danger: '#737373' /* OpenAI neutral */
         },
         bg: {
-          light: '#F9FAFB',
-          dark: '#0F172A'
+          light: '#ffffff', /* OpenAI white */
+          dark: '#080808' /* OpenAI black */
         },
         text: {
-          primary: '#111827',
-          secondary: '#6B7280',
-          inverse: '#F3F4F6'
+          primary: '#080808', /* OpenAI black */
+          secondary: '#737373', /* OpenAI neutral */
+          inverse: '#ffffff' /* OpenAI white */
         }
       },
       fontFamily: {
