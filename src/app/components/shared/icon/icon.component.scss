@@ -1,0 +1,12 @@
+.app-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  flex-shrink: 0;
+
+  &__svg {
+    display: inline-flex;
+    stroke: currentColor;
+  }
+}

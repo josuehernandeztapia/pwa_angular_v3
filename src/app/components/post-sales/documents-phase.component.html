@@ -1,0 +1,384 @@
+<section class="documents-phase" aria-live="polite">
+  <header class="documents-phase__header">
+    <div class="documents-phase__phase">
+      <span class="documents-phase__phase-number">7</span>
+      <div class="documents-phase__phase-copy">
+        <h2 class="documents-phase__phase-title">Documentos Transferidos</h2>
+        <p class="documents-phase__phase-subtitle">Transferencia legal y documentación oficial</p>
+      </div>
+    </div>
+    <div class="documents-phase__client" *ngIf="clientInfo() as info">
+      <span class="documents-phase__client-name">{{ info.name }}</span>
+      <span class="documents-phase__client-vin">VIN: {{ info.vin }}</span>
+    </div>
+    <div class="documents-phase__actions">
+      <button
+        type="button"
+        class="ui-btn ui-btn-secondary documents-phase__action"
+        (click)="printOnePager()"
+        data-cy="postventa-pdf"
+      >
+        Imprimir/PDF
+      </button>
+    </div>
+  </header>
+
+  <section class="documents-phase__steps" aria-label="Progreso de postventa">
+    <div class="documents-phase__step documents-phase__step--completed">
+      <span class="documents-phase__step-number">✓</span>
+      <span class="documents-phase__step-label">Entrega</span>
+    </div>
+    <div class="documents-phase__step documents-phase__step--active">
+      <span class="documents-phase__step-number">7</span>
+      <span class="documents-phase__step-label">Documentos</span>
+    </div>
+    <div class="documents-phase__step">
+      <span class="documents-phase__step-number">8</span>
+      <span class="documents-phase__step-label">Placas</span>
+    </div>
+  </section>
+
+  <form [formGroup]="documentsForm" (ngSubmit)="onSubmit()" class="documents-phase__form">
+    <section class="documents-phase__section">
+      <h3 class="documents-phase__section-title">📋 Información Legal</h3>
+      <div class="documents-phase__legal-fields">
+        <div class="documents-phase__field">
+          <label class="documents-phase__label" for="fechaTransferencia">Fecha de Transferencia *</label>
+          <input
+            type="date"
+            id="fechaTransferencia"
+            formControlName="fechaTransferencia"
+            class="documents-phase__input"
+            [class.is-invalid]="documentsForm.get('fechaTransferencia')?.invalid && documentsForm.get('fechaTransferencia')?.touched"
+          />
+        </div>
+        <div class="documents-phase__field">
+          <label class="documents-phase__label" for="titular">Titular del Vehículo *</label>
+          <input
+            type="text"
+            id="titular"
+            formControlName="titular"
+            placeholder="Nombre completo del titular legal"
+            class="documents-phase__input"
+            [class.is-invalid]="documentsForm.get('titular')?.invalid && documentsForm.get('titular')?.touched"
+          />
+        </div>
+        <div class="documents-phase__field">
+          <label class="documents-phase__label" for="proveedorSeguro">Proveedor de Seguro *</label>
+          <select
+            id="proveedorSeguro"
+            formControlName="proveedorSeguro"
+            class="documents-phase__input"
+            [class.is-invalid]="documentsForm.get('proveedorSeguro')?.invalid && documentsForm.get('proveedorSeguro')?.touched"
+          >
+            <option value="">Seleccionar aseguradora...</option>
+            <option value="GNPAG">GNP Seguros</option>
+            <option value="ATIG">AXA Seguros</option>
+            <option value="HDI">HDI Seguros</option>
+            <option value="Mapfre">MAPFRE</option>
+            <option value="Qualitas">Quálitas</option>
+            <option value="Zurich">Zurich Seguros</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="documents-phase__field">
+          <label class="documents-phase__label" for="duracionPoliza">Duración de Póliza *</label>
+          <select
+            id="duracionPoliza"
+            formControlName="duracionPoliza"
+            class="documents-phase__input"
+            [class.is-invalid]="documentsForm.get('duracionPoliza')?.invalid && documentsForm.get('duracionPoliza')?.touched"
+          >
+            <option value="">Seleccionar duración...</option>
+            <option value="12">12 meses</option>
+            <option value="24">24 meses</option>
+            <option value="36">36 meses</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="documents-phase__section">
+      <h3 class="documents-phase__section-title">📄 Documentos Requeridos</h3>
+      <div class="documents-phase__documents">
+        <article class="documents-phase__document">
+          <header class="documents-phase__document-header">
+            <h4 class="documents-phase__document-title" title="Documento que acredita propiedad del vehículo. Requerido para la transferencia legal." data-cy="tip-factura">🧾 Factura Original</h4>
+            <span class="documents-phase__badge documents-phase__badge--required" title="Obligatorio para cerrar la fase de Documentos">REQUERIDO</span>
+          </header>
+          <div class="documents-phase__document-body">
+            @if (!uploadedDocuments().factura) {
+              <button
+                type="button"
+                class="documents-phase__upload"
+                (click)="triggerFileUpload('factura')"
+                title="Sube la factura original en PDF para proceder con la transferencia"
+                data-cy="upload-factura"
+              >
+                <span class="documents-phase__upload-icon">📄</span>
+                <p class="documents-phase__upload-title">Subir factura original (PDF)</p>
+                <small class="documents-phase__upload-hint">Máximo 10MB - Solo PDF</small>
+              </button>
+            } @else {
+              <div class="documents-phase__file">
+                <div class="documents-phase__file-info">
+                  <span class="documents-phase__file-icon">📄</span>
+                  <div class="documents-phase__file-meta">
+                    <span class="documents-phase__file-name">{{ uploadedDocuments().factura?.filename }}</span>
+                    <span class="documents-phase__file-size">{{ formatFileSize(uploadedDocuments().factura?.size || 0) }}</span>
+                    <span class="documents-phase__file-date">{{ formatDate(uploadedDocuments().factura?.uploadedAt) }}</span>
+                  </div>
+                </div>
+                <div class="documents-phase__file-actions">
+                  <button type="button" class="ui-btn ui-btn-ghost" (click)="viewDocument('factura')">Ver</button>
+                  <button type="button" class="ui-btn ui-btn-secondary" (click)="triggerFileUpload('factura')">Reemplazar</button>
+                  <button type="button" class="ui-btn ui-btn-ghost documents-phase__file-action--danger" (click)="removeDocument('factura')">Eliminar</button>
+                </div>
+              </div>
+            }
+          </div>
+        </article>
+
+        <article class="documents-phase__document">
+          <header class="documents-phase__document-header">
+            <h4 class="documents-phase__document-title" title="Comprobante de cobertura vigente para la unidad" data-cy="tip-poliza">🛡️ Póliza de Seguro</h4>
+            <span class="documents-phase__badge documents-phase__badge--required" title="Debe estar vigente y cubrir la unidad">REQUERIDO</span>
+          </header>
+          <div class="documents-phase__document-body">
+            @if (!uploadedDocuments().polizaSeguro) {
+              <button
+                type="button"
+                class="documents-phase__upload"
+                (click)="triggerFileUpload('polizaSeguro')"
+                title="Sube la póliza de seguro vigente (PDF)"
+                data-cy="upload-poliza"
+              >
+                <span class="documents-phase__upload-icon">🛡️</span>
+                <p class="documents-phase__upload-title">Subir póliza de seguro (PDF)</p>
+                <small class="documents-phase__upload-hint">Vigente y con cobertura completa</small>
+              </button>
+            } @else {
+              <div class="documents-phase__file">
+                <div class="documents-phase__file-info">
+                  <span class="documents-phase__file-icon">🛡️</span>
+                  <div class="documents-phase__file-meta">
+                    <span class="documents-phase__file-name">{{ uploadedDocuments().polizaSeguro?.filename }}</span>
+                    <span class="documents-phase__file-size">{{ formatFileSize(uploadedDocuments().polizaSeguro?.size || 0) }}</span>
+                    <span class="documents-phase__file-date">{{ formatDate(uploadedDocuments().polizaSeguro?.uploadedAt) }}</span>
+                  </div>
+                </div>
+                <div class="documents-phase__file-actions">
+                  <button type="button" class="ui-btn ui-btn-ghost" (click)="viewDocument('polizaSeguro')">Ver</button>
+                  <button type="button" class="ui-btn ui-btn-secondary" (click)="triggerFileUpload('polizaSeguro')">Reemplazar</button>
+                  <button type="button" class="ui-btn ui-btn-ghost documents-phase__file-action--danger" (click)="removeDocument('polizaSeguro')">Eliminar</button>
+                </div>
+              </div>
+            }
+          </div>
+        </article>
+
+        <article class="documents-phase__document">
+          <header class="documents-phase__document-header">
+            <h4 class="documents-phase__document-title" title="Contratos necesarios para formalizar la operación" data-cy="tip-contratos">📜 Contratos Firmados</h4>
+            <span class="documents-phase__badge documents-phase__badge--required" title="Obligatorios para la entrega final">REQUERIDO</span>
+          </header>
+          <div class="documents-phase__document-body">
+            @if (uploadedDocuments().contratos.length === 0) {
+              <button
+                type="button"
+                class="documents-phase__upload"
+                (click)="triggerFileUpload('contratos')"
+                title="Sube los contratos firmados (PDF); puedes seleccionar múltiples"
+                data-cy="upload-contratos"
+              >
+                <span class="documents-phase__upload-icon">📜</span>
+                <p class="documents-phase__upload-title">Subir contratos firmados (PDF)</p>
+                <small class="documents-phase__upload-hint">Puede seleccionar múltiples archivos</small>
+              </button>
+            } @else {
+              <div class="documents-phase__list">
+                @for (contract of uploadedDocuments().contratos; track contract.filename) {
+                  <div class="documents-phase__list-item">
+                    <div class="documents-phase__file-info">
+                      <span class="documents-phase__file-icon">📜</span>
+                      <div class="documents-phase__file-meta">
+                        <span class="documents-phase__file-name">{{ contract.filename }}</span>
+                        <span class="documents-phase__file-size">{{ formatFileSize(contract.size) }}</span>
+                      </div>
+                    </div>
+                    <div class="documents-phase__file-actions">
+                      <button type="button" class="ui-btn ui-btn-ghost" (click)="viewContractDocument(contract)">Ver</button>
+                      <button type="button" class="ui-btn ui-btn-ghost documents-phase__file-action--danger" (click)="removeContractDocument(contract)">Eliminar</button>
+                    </div>
+                  </div>
+                }
+                <button type="button" class="ui-btn ui-btn-secondary" (click)="triggerFileUpload('contratos')">
+                  Agregar más contratos
+                </button>
+              </div>
+            }
+          </div>
+        </article>
+
+        <article class="documents-phase__document documents-phase__document--optional">
+          <header class="documents-phase__document-header">
+            <h4 class="documents-phase__document-title" title="Documentos adicionales de transferencia (si aplica)" data-cy="tip-endosos">📃 Endosos</h4>
+            <span class="documents-phase__badge documents-phase__badge--optional" title="Solo si aplica">OPCIONAL</span>
+          </header>
+          <div class="documents-phase__document-body">
+            @if (uploadedDocuments().endosos.length === 0) {
+              <button
+                type="button"
+                class="documents-phase__upload"
+                (click)="triggerFileUpload('endosos')"
+                title="Sube endosos relacionados con la transferencia"
+                data-cy="upload-endosos"
+              >
+                <span class="documents-phase__upload-icon">📃</span>
+                <p class="documents-phase__upload-title">Subir endosos (si aplica)</p>
+                <small class="documents-phase__upload-hint">Documentos adicionales de transferencia</small>
+              </button>
+            } @else {
+              <div class="documents-phase__list">
+                @for (endoso of uploadedDocuments().endosos; track endoso.filename) {
+                  <div class="documents-phase__list-item">
+                    <div class="documents-phase__file-info">
+                      <span class="documents-phase__file-icon">📃</span>
+                      <div class="documents-phase__file-meta">
+                        <span class="documents-phase__file-name">{{ endoso.filename }}</span>
+                        <span class="documents-phase__file-size">{{ formatFileSize(endoso.size) }}</span>
+                      </div>
+                    </div>
+                    <div class="documents-phase__file-actions">
+                      <button type="button" class="ui-btn ui-btn-ghost" (click)="viewEndorsementDocument(endoso)">Ver</button>
+                      <button type="button" class="ui-btn ui-btn-ghost documents-phase__file-action--danger" (click)="removeEndorsementDocument(endoso)">Eliminar</button>
+                    </div>
+                  </div>
+                }
+                <button type="button" class="ui-btn ui-btn-secondary" (click)="triggerFileUpload('endosos')">
+                  Agregar más endosos
+                </button>
+              </div>
+            }
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="documents-phase__section" *ngIf="hasRequiredDocuments()">
+      <h3 class="documents-phase__section-title">✅ Verificación de Documentos</h3>
+      <div class="documents-phase__checklist">
+        <label class="documents-phase__check-item">
+          <input type="checkbox" formControlName="facturaValida" />
+          <span>La factura está completa y es legible</span>
+        </label>
+        <label class="documents-phase__check-item">
+          <input type="checkbox" formControlName="polizaVigente" />
+          <span>La póliza de seguro está vigente</span>
+        </label>
+        <label class="documents-phase__check-item">
+          <input type="checkbox" formControlName="contratosFirmados" />
+          <span>Todos los contratos están debidamente firmados</span>
+        </label>
+        <label class="documents-phase__check-item">
+          <input type="checkbox" formControlName="datosCorrectos" />
+          <span>Los datos del titular coinciden en todos los documentos</span>
+        </label>
+      </div>
+    </section>
+
+    <section class="documents-phase__section">
+      <h3 class="documents-phase__section-title">📝 Observaciones</h3>
+      <textarea
+        formControlName="observaciones"
+        class="documents-phase__textarea"
+        rows="4"
+        placeholder="Agrega cualquier observación sobre la documentación o el proceso de transferencia..."
+      ></textarea>
+    </section>
+
+    <div class="documents-phase__actions-bar">
+      <button type="button" class="ui-btn ui-btn-secondary" (click)="goBack()">
+        ← Volver a Entrega
+      </button>
+      <button type="button" class="ui-btn ui-btn-secondary" (click)="saveDraft()" [disabled]="isSaving()">
+        @if (isSaving()) {
+          <span class="documents-phase__spinner" aria-hidden="true"></span>
+          Guardando...
+        } @else {
+          💾 Guardar Borrador
+        }
+      </button>
+      <button type="submit" class="ui-btn ui-btn-primary" [disabled]="!canCompleteDocuments() || isSubmitting()">
+        @if (isSubmitting()) {
+          <span class="documents-phase__spinner" aria-hidden="true"></span>
+          Completando...
+        } @else {
+          📋 Completar Documentos
+        }
+      </button>
+    </div>
+
+    <div class="documents-phase__quote" *ngIf="features.enablePostSalesAddToQuote">
+      <button type="button" class="ui-btn ui-btn-ghost" (click)="addToQuote()" [disabled]="addingToQuote()">
+        {{ addingToQuote() ? 'Agregando...' : '➕ Agregar a cotización' }}
+      </button>
+      <span class="documents-phase__quote-status" *ngIf="quoteStatus()">{{ quoteStatus() }}</span>
+      <small class="documents-phase__quote-hint" *ngIf="!features.enableOdooQuoteBff">(Modo local: sin BFF)</small>
+    </div>
+
+    @if (validationErrors().length > 0) {
+      <div class="documents-phase__validation">
+        <h4 class="documents-phase__validation-title">⚠️ Campos requeridos:</h4>
+        <ul class="documents-phase__validation-list">
+          @for (error of validationErrors(); track error) {
+            <li>{{ error }}</li>
+          }
+        </ul>
+      </div>
+    }
+  </form>
+
+  <input
+    #fileInput
+    id="fileInput"
+    type="file"
+    accept=".pdf"
+    [multiple]="currentUploadType() === 'contratos' || currentUploadType() === 'endosos'"
+    (change)="onFileSelected($event)"
+    class="documents-phase__file-input"
+  />
+
+  @if (showSuccessModal()) {
+    <div class="documents-phase__modal-backdrop" role="dialog" aria-modal="true" (click)="closeSuccessModal()" (keydown)="onModalKeydown($event)">
+      <div class="documents-phase__modal" (click)="$event.stopPropagation()" (keydown)="onModalKeydown($event)">
+        <header class="documents-phase__modal-header">
+          <h3>✅ Documentos Transferidos</h3>
+        </header>
+        <div class="documents-phase__modal-body">
+          <p>La transferencia legal ha sido completada exitosamente.</p>
+          <div class="documents-phase__summary">
+            <h4>📄 Documentos procesados:</h4>
+            <ul>
+              <li>✅ Factura original</li>
+              <li>✅ Póliza de seguro ({{ documentsForm.get('duracionPoliza')?.value }} meses)</li>
+              <li>✅ {{ uploadedDocuments().contratos.length }} contrato(s) firmado(s)</li>
+              @if (uploadedDocuments().endosos.length > 0) {
+                <li>✅ {{ uploadedDocuments().endosos.length }} endoso(s) adicional(es)</li>
+              }
+            </ul>
+          </div>
+          <div class="documents-phase__next-step">
+            <h4>Próximo paso:</h4>
+            <p>📋 Gestionar entrega de placas oficiales</p>
+          </div>
+        </div>
+        <footer class="documents-phase__modal-actions">
+          <button type="button" class="ui-btn ui-btn-primary" (click)="goToPlatesPhase()" autofocus>
+            Continuar a Placas →
+          </button>
+        </footer>
+      </div>
+    </div>
+  }
+</section>

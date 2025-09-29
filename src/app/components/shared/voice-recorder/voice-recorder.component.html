@@ -1,0 +1,198 @@
+<section class="voice-recorder" [ngClass]="getRecorderStateClasses()">
+  <section class="voice-recorder__guide" *ngIf="showGuide && interviewGuide">
+    <header class="voice-recorder__guide-header">
+      <div class="voice-recorder__guide-heading">
+        <span class="voice-recorder__guide-icon" aria-hidden="true"></span>
+        <span class="voice-recorder__guide-title">Guía de Entrevista</span>
+      </div>
+      <button
+        type="button"
+        class="voice-recorder__guide-toggle"
+        (click)="toggleGuide()"
+        [attr.aria-expanded]="guideExpanded"
+      >
+        {{ guideExpanded ? 'Ocultar' : 'Mostrar' }}
+      </button>
+    </header>
+
+    <div class="voice-recorder__guide-content" *ngIf="guideExpanded">
+      <p class="voice-recorder__guide-intro">{{ interviewGuide.introduction }}</p>
+
+      <section class="voice-recorder__guide-section">
+        <h5 class="voice-recorder__section-title">Preguntas Obligatorias</h5>
+        <div class="voice-recorder__questions">
+          <article
+            class="voice-recorder__question"
+            *ngFor="let question of interviewGuide.questions"
+            [ngClass]="getQuestionClasses(question)"
+          >
+            <span class="voice-recorder__question-status">
+              {{ askedQuestions.includes(question.id) ? '' : (question.mandatory ? '●' : '○') }}
+            </span>
+            <span class="voice-recorder__question-text">{{ question.text }}</span>
+            <span class="voice-recorder__question-category">{{ getCategoryLabel(question.category) }}</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="voice-recorder__guide-section">
+        <h5 class="voice-recorder__section-title">Tips</h5>
+        <ul class="voice-recorder__tips">
+          <li class="voice-recorder__tip" *ngFor="let tip of interviewGuide.tips">{{ tip }}</li>
+        </ul>
+      </section>
+    </div>
+  </section>
+
+  <section class="voice-recorder__controls">
+    <div class="voice-recorder__status">
+      <div class="voice-recorder__status-indicator">
+        <span class="voice-recorder__status-dot" [ngClass]="getStatusDotClasses()"></span>
+        <span class="voice-recorder__status-text">{{ getStatusText() }}</span>
+      </div>
+      <span class="voice-recorder__duration" *ngIf="state.duration > 0">
+        {{ formatDuration(state.duration) }}
+      </span>
+    </div>
+
+    <div class="voice-recorder__main-actions">
+      <button
+        type="button"
+        class="voice-recorder__button voice-recorder__button--record"
+        [ngClass]="getRecordButtonClasses()"
+        [disabled]="state.isProcessing"
+        (click)="toggleRecording()"
+      >
+        <span class="voice-recorder__button-icon" aria-hidden="true">
+          <app-icon
+            class="voice-recorder__button-glyph"
+            [name]="state.isRecording ? 'stop' : 'microphone'"
+            [size]="24"
+            color="currentColor">
+          </app-icon>
+        </span>
+        <span class="voice-recorder__button-text">
+          {{ state.isRecording ? 'Detener' : 'Iniciar Entrevista' }}
+        </span>
+      </button>
+
+      <button
+        type="button"
+        class="voice-recorder__button voice-recorder__button--secondary"
+        *ngIf="state.hasRecording && !state.isRecording && !state.isProcessing"
+        (click)="resetRecording()"
+      >
+        <app-icon class="voice-recorder__button-icon" name="trash" [size]="16"></app-icon>
+        Nueva Grabación
+      </button>
+    </div>
+
+    <div class="voice-recorder__processing" *ngIf="state.isProcessing">
+      <div class="voice-recorder__processing-spinner" role="status" aria-label="Procesando audio"></div>
+      <p class="voice-recorder__processing-text">Procesando audio y validando entrevista...</p>
+    </div>
+
+    <div class="voice-recorder__error" *ngIf="state.error">
+      <span class="voice-recorder__error-icon" aria-hidden="true"></span>
+      <span class="voice-recorder__error-text">{{ state.error }}</span>
+      <button
+        type="button"
+        class="voice-recorder__dismiss"
+        aria-label="Descartar mensaje de error"
+        (click)="dismissError()"
+      >
+        ✕
+      </button>
+    </div>
+  </section>
+
+  <section class="voice-recorder__feedback" *ngIf="state.isRecording && showLiveFeedback">
+    <header class="voice-recorder__feedback-header">
+      <span class="voice-recorder__feedback-icon" aria-hidden="true"></span>
+      <span class="voice-recorder__feedback-title">Progreso de Entrevista</span>
+    </header>
+
+    <div class="voice-recorder__feedback-stats">
+      <div class="voice-recorder__feedback-stat">
+        <span class="voice-recorder__feedback-stat-value">{{ getCompletedQuestionsCount() }}</span>
+        <span class="voice-recorder__feedback-stat-label">/ {{ getTotalQuestionsCount() }} preguntas</span>
+      </div>
+      <div class="voice-recorder__feedback-stat">
+        <span class="voice-recorder__feedback-stat-value">{{ getMandatoryCompletedCount() }}</span>
+        <span class="voice-recorder__feedback-stat-label">/ {{ getMandatoryQuestionsCount() }} obligatorias</span>
+      </div>
+    </div>
+
+    <div class="voice-recorder__feedback-next" *ngIf="getNextQuestion() as nextQ">
+      <span class="voice-recorder__feedback-next-label">Siguiente pregunta obligatoria:</span>
+      <span class="voice-recorder__feedback-next-text">{{ nextQ.text }}</span>
+    </div>
+  </section>
+
+  <section class="voice-recorder__results" *ngIf="validationResult && !state.isProcessing">
+    <header class="voice-recorder__results-header">
+      <span class="voice-recorder__results-icon" aria-hidden="true"></span>
+      <span class="voice-recorder__results-title">Resultado de Validación</span>
+    </header>
+
+    <div class="voice-recorder__score">
+      <div
+        class="voice-recorder__score-circle"
+        [ngClass]="getScoreClasses(validationResult.compliance_score)"
+        [style.border-color]="getComplianceColor(validationResult.compliance_score)"
+      >
+        <span class="voice-recorder__score-value">{{ validationResult.compliance_score }}</span>
+        <span class="voice-recorder__score-unit">%</span>
+      </div>
+      <span class="voice-recorder__score-label">Cumplimiento</span>
+    </div>
+
+    <div class="voice-recorder__summary">
+      <div class="voice-recorder__summary-item" [ngClass]="getQuestionsSummaryClasses()">
+        <span class="voice-recorder__summary-text">
+          {{ validationResult.questions_missing.length === 0 ? 'Todas las preguntas realizadas' : validationResult.questions_missing.length + ' preguntas faltantes' }}
+        </span>
+      </div>
+
+      <div class="voice-recorder__summary-item" [ngClass]="getRiskSummaryClasses()">
+        <span class="voice-recorder__summary-text">
+          {{ validationResult.risk_flags.length === 0 ? 'Sin alertas de riesgo' : validationResult.risk_flags.length + ' alertas detectadas' }}
+        </span>
+      </div>
+
+      <div class="voice-recorder__summary-item">
+        <span class="voice-recorder__summary-text">
+          Coherencia: {{ validationResult.coherence_analysis.overall_score }}%
+        </span>
+      </div>
+    </div>
+
+    <div class="voice-recorder__results-actions">
+      <button
+        type="button"
+        class="voice-recorder__results-button voice-recorder__results-button--secondary"
+        (click)="viewDetailedResults()"
+      >
+        Ver Detalles Completos
+      </button>
+
+      <button
+        type="button"
+        class="voice-recorder__results-button voice-recorder__results-button--primary"
+        *ngIf="validationResult.compliance_score >= 70"
+        (click)="approveInterview()"
+      >
+        Aprobar Entrevista
+      </button>
+
+      <button
+        type="button"
+        class="voice-recorder__results-button voice-recorder__results-button--retry"
+        *ngIf="validationResult.compliance_score < 70"
+        (click)="retryInterview()"
+      >
+        Repetir Entrevista
+      </button>
+    </div>
+  </section>
+</section>

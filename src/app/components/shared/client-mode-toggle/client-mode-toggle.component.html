@@ -1,0 +1,67 @@
+<div class="client-mode-toggle__container">
+  <div [ngClass]="getIndicatorClasses()">
+    <div class="client-mode-toggle__label">
+      <span class="client-mode-toggle__label-icon" aria-hidden="true">
+        <app-icon
+          class="client-mode-toggle__label-glyph"
+          [name]="currentMode === 'advisor' ? advisorIcon : clientIcon"
+          [size]="16"
+          color="currentColor"
+        ></app-icon>
+      </span>
+      <span class="client-mode-toggle__label-text">
+        {{ currentMode === 'advisor' ? 'Modo Asesor' : 'Modo Cliente' }}
+      </span>
+    </div>
+
+    <button
+      type="button"
+      class="client-mode-toggle__toggle"
+      (click)="toggleMode()"
+      [attr.aria-label]="'Cambiar a ' + (currentMode === 'advisor' ? 'Modo Cliente' : 'Modo Asesor')"
+    >
+      <div [ngClass]="getSliderClasses()">
+        <div class="client-mode-toggle__handle">
+          <app-icon
+            class="client-mode-toggle__handle-icon"
+            [name]="currentMode === 'advisor' ? advisorIcon : clientIcon"
+            [size]="24"
+            color="currentColor"
+          ></app-icon>
+        </div>
+      </div>
+      <span class="client-mode-toggle__toggle-text">
+        {{ currentMode === 'advisor' ? 'Cambiar a Cliente' : 'Volver a Asesor' }}
+      </span>
+    </button>
+  </div>
+
+  <div [ngClass]="getDescriptionClasses()">
+    <p *ngIf="currentMode === 'advisor'">
+      Vista completa con herramientas de poder para análisis y gestión avanzada
+    </p>
+    <p *ngIf="currentMode === 'client'">
+      Vista simplificada y amigable para mostrar información al cliente
+    </p>
+  </div>
+</div>
+
+<div [ngClass]="getOverlayClasses()">
+  <div class="client-mode-toggle__overlay-content">
+    <div class="client-mode-toggle__overlay-icon" aria-hidden="true">
+      <app-icon
+        class="client-mode-toggle__overlay-glyph"
+        [name]="transitionIconName"
+        [size]="32"
+        color="currentColor"
+      ></app-icon>
+    </div>
+    <h3 class="client-mode-toggle__overlay-title">{{ transitionTitle }}</h3>
+    <p class="client-mode-toggle__overlay-description">{{ transitionDescription }}</p>
+    <div class="client-mode-toggle__loading">
+      <span class="client-mode-toggle__loading-dot"></span>
+      <span class="client-mode-toggle__loading-dot"></span>
+      <span class="client-mode-toggle__loading-dot"></span>
+    </div>
+  </div>
+</div>

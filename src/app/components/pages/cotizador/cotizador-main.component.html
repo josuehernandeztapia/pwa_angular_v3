@@ -1,0 +1,512 @@
+<!-- Skip Link for Accessibility -->
+<a class="skip-link" href="#cotizador-content">Saltar al contenido del cotizador</a>
+
+<div class="ui-container ui-section">
+  <!-- Header Section -->
+  <div class="cotizador-main__section cotizador-main__section--large">
+    <h1 class="cotizador-main__title">
+      {{ client ? 'Cotizador para ' + client.name : 'Cotizador de Soluciones' }}
+    </h1>
+    <p class="cotizador-main__subtitle">
+      Configuración de paquetes y simulaciones financieras
+    </p>
+  </div>
+
+  <!-- Financial Summary Cards -->
+  <div *ngIf="pkg" class="ui-grid-metrics cotizador-main__section cotizador-main__section--large" role="region" aria-label="Resumen financiero" data-cy="cotizador-summary">
+    <div class="ui-metric-card">
+      <div class="ui-metric-label">Precio Total</div>
+      <div class="ui-metric-value" data-cy="sum-precio">{{ formatCurrency(totalPrice) }}</div>
+    </div>
+    <div class="ui-metric-card">
+      <div class="ui-metric-label">Enganche</div>
+      <div class="ui-metric-value" data-cy="sum-enganche">{{ formatCurrency(downPayment) }}</div>
+      <div class="ui-metric-detail">
+        {{ (downPayment/Math.max(totalPrice,1) * 100) | number:'1.0-0' }}%
+      </div>
+    </div>
+    <div class="ui-metric-card">
+      <div class="ui-metric-label">A Financiar</div>
+      <div class="ui-metric-value ui-metric-value--primary" data-cy="sum-financiar">{{ formatCurrency(amountToFinance) }}</div>
+    </div>
+    <div class="ui-metric-card">
+      <div class="ui-metric-label">PMT Mensual</div>
+      <div class="ui-metric-value ui-metric-value--primary" data-cy="sum-pmt">{{ formatCurrency(monthlyPayment) }}</div>
+      <div class="ui-metric-detail">
+        {{ term }} meses
+      </div>
+    </div>
+  </div>
+
+  <!-- Insurance Configuration -->
+  <div *ngIf="!isVentaDirecta && pkg" class="ui-card cotizador-main__section cotizador-main__section--medium">
+    <h3 class="cotizador-main__section-title">Configuración de Seguros</h3>
+    <div class="cotizador-main__stack cotizador-main__stack--loose">
+      <label class="cotizador-main__checkbox-label">
+        <input type="checkbox" [(ngModel)]="includeInsurance" class="cotizador-main__checkbox" data-cy="toggle-insurance" />
+        Incluir seguros en la cotización
+      </label>
+      <div *ngIf="includeInsurance" class="cotizador-main__stack cotizador-main__stack--medium cotizador-main__stack--indented">
+        <div>
+          <label class="ui-label">Monto de Seguros</label>
+          <input type="number" min="0" [(ngModel)]="insuranceAmount" class="ui-input" placeholder="Ej: 15000" data-cy="insurance-amount" />
+        </div>
+        <div class="cotizador-main__stack cotizador-main__stack--tight">
+          <label class="cotizador-main__radio-label">
+            <input type="radio" name="insMode" value="financiado" [(ngModel)]="insuranceMode" class="cotizador-main__radio" data-cy="ins-financiado" />
+            Financiado (sumar al monto a financiar)
+          </label>
+          <label class="cotizador-main__radio-label">
+            <input type="radio" name="insMode" value="contado" [(ngModel)]="insuranceMode" class="cotizador-main__radio" data-cy="ins-contado" />
+            Contado (pago por separado)
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- First Payment Breakdown -->
+  <div *ngIf="!isVentaDirecta && amountToFinance>0 && term>0" class="ui-card cotizador-main__section cotizador-main__section--medium">
+    <h3 class="cotizador-main__section-title cotizador-main__section-title--compact">Desglose Primer Pago</h3>
+    <div class="cotizador-main__payment-breakdown">
+      <div>
+        <div class="cotizador-main__breakdown-label">Interés (I₁)</div>
+        <div class="cotizador-main__breakdown-value">{{ formatCurrency(firstInterest) }}</div>
+      </div>
+      <div>
+        <div class="cotizador-main__breakdown-label">Capital (K₁)</div>
+        <div class="cotizador-main__breakdown-value cotizador-main__breakdown-value--success">{{ formatCurrency(firstPrincipal) }}</div>
+      </div>
+      <div>
+        <div class="cotizador-main__breakdown-label">Saldo (S₁)</div>
+        <div class="cotizador-main__breakdown-value">{{ formatCurrency(firstBalance) }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="cotizador-content" class="cotizador-main__layout">
+
+    <!-- Left Panel: Configuration -->
+    <div class="cotizador-main__panel cotizador-main__panel--config">
+      <!-- Context Configuration -->
+      <div *ngIf="!client" class="ui-card cotizador-main__section cotizador-main__section--medium">
+        <h3 class="cotizador-main__section-title cotizador-main__section-title--large">1. Contexto del Cliente</h3>
+        <div class="cotizador-main__stack cotizador-main__stack--loose">
+          <div>
+            <label for="market" class="ui-label">Mercado</label>
+            <select id="market" [(ngModel)]="market" (change)="onMarketChange()" class="ui-select">
+              <option value="">-- Seleccionar mercado --</option>
+              <option value="aguascalientes">Aguascalientes</option>
+              <option value="edomex">Estado de México</option>
+            </select>
+          </div>
+          <div>
+            <label for="clientType" class="ui-label">Tipo de Cliente</label>
+            <select id="clientType" [(ngModel)]="clientType" (change)="onClientTypeChange()" [disabled]="!market" class="ui-select">
+              <option value="">-- Seleccionar tipo --</option>
+              <option value="individual">Individual</option>
+              <option value="colectivo" *ngIf="market === 'edomex'">Crédito Colectivo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="ui-card cotizador-main__section cotizador-main__section--medium cotizador-main__loading-card">
+        <div class="ui-spinner ui-spinner-lg cotizador-main__spinner"></div>
+        <p class="cotizador-main__loading-text">Cargando paquete...</p>
+      </div>
+
+      <!-- Package Components -->
+      <div *ngIf="pkg" class="ui-card cotizador-main__section cotizador-main__section--medium">
+        <h3 class="cotizador-main__section-title cotizador-main__section-title--large">2. Paquete de Producto</h3>
+        <div class="cotizador-main__stack cotizador-main__stack--medium">
+          <div *ngFor="let comp of pkg.components" class="cotizador-main__component-item">
+            <div class="cotizador-main__component-control">
+              <div class="cotizador-main__component-input">
+                <input
+                  *ngIf="comp.isOptional"
+                  type="checkbox"
+                  [id]="comp.id"
+                  [checked]="selectedOptions[comp.id]"
+                  (change)="toggleComponent(comp.id)"
+                  class="cotizador-main__component-checkbox"
+                />
+                <div *ngIf="!comp.isOptional" class="cotizador-main__component-indicator" title="Componente requerido"></div>
+              </div>
+              <label [for]="comp.id" class="cotizador-main__component-label">
+                {{ comp.name }}
+                <span *ngIf="!comp.isOptional" class="cotizador-main__component-required">(requerido)</span>
+              </label>
+            </div>
+            <span class="cotizador-main__component-price">{{ formatCurrency(comp.price) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial Configuration -->
+      <div *ngIf="pkg" class="ui-card cotizador-main__section cotizador-main__section--medium">
+        <!-- Acquisition Mode Controls -->
+        <div *ngIf="initialMode === 'acquisition'">
+          <div *ngIf="isVentaDirecta">
+            <h3 class="cotizador-main__section-title cotizador-main__section-title--large">3. Estructura de Pago</h3>
+            <div>
+              <label for="downPaymentAmount" class="ui-label ui-label-required">Pago Inicial</label>
+              <input
+                type="number"
+                id="downPaymentAmount"
+                [(ngModel)]="downPaymentAmountDirect"
+                (input)="onDownPaymentDirectChange()"
+                class="ui-input"
+                placeholder="Ej: 400,000"
+              />
+            </div>
+          </div>
+
+          <div *ngIf="!isVentaDirecta">
+            <h3 class="cotizador-main__section-title cotizador-main__section-title--large">3. Estructura Financiera</h3>
+            <div class="cotizador-main__stack cotizador-main__stack--loose">
+              <div>
+                <label for="downPayment" class="ui-label">Enganche: {{ downPaymentPercentage }}%</label>
+                <input
+                  type="range"
+                  id="downPayment"
+                  [min]="pkg.minDownPaymentPercentage * 100"
+                  max="90"
+                  [(ngModel)]="downPaymentPercentage"
+                  (input)="onDownPaymentSliderChange()"
+                  class="cotizador-main__slider"
+                  [attr.aria-describedby]="'dp-note'"
+                  [attr.title]="'Ajusta el % de enganche. Mínimo según política y paquete'"
+                />
+                <div class="ui-help-text" id="dp-note">
+                  Mínimo: {{ pkg.minDownPaymentPercentage * 100 }}% ({{ formatCurrency(minDownPaymentRequired) }})
+                </div>
+              </div>
+
+              <div>
+                <label for="term" class="ui-label ui-label-required">Plazo</label>
+                <select id="term" [(ngModel)]="term" (change)="onTermChange()" class="ui-select" title="Selecciona el plazo del financiamiento en meses">
+                  <option *ngFor="let t of pkg.terms" [value]="t">{{ t }} meses</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Savings Mode Controls -->
+        <div *ngIf="initialMode === 'savings'">
+          <h3 class="cotizador-main__section-title cotizador-main__section-title--large cotizador-main__section-title--savings">2. Simulación de Ahorro</h3>
+
+          <!-- Aguascalientes Individual -->
+          <div *ngIf="market === 'aguascalientes' && clientType === 'individual'" class="cotizador-main__stack cotizador-main__stack--loose">
+            <div>
+              <label for="initialDown" class="ui-label">Enganche Inicial (Aportación Fuerte)</label>
+              <input
+                type="number"
+                id="initialDown"
+                [(ngModel)]="initialDownPayment"
+                (input)="onSavingsConfigChange()"
+                class="ui-input" title="Monto de enganche disponible al inicio"
+                placeholder="Ej: 400,000"
+              />
+            </div>
+            <div>
+              <label for="deliveryTerm" class="ui-label">Fecha de Entrega Estimada: {{ deliveryTerm }} meses</label>
+              <input
+                type="range"
+                id="deliveryTerm"
+                min="3"
+                max="6"
+                [(ngModel)]="deliveryTerm"
+                (input)="onSavingsConfigChange()"
+                class="cotizador-main__slider" title="Mes estimado de entrega"
+              />
+            </div>
+          </div>
+
+          <!-- EdoMex Colectivo -->
+          <div *ngIf="market === 'edomex' && clientType === 'colectivo'" class="cotizador-main__stack cotizador-main__stack--loose">
+            <div>
+              <label for="tandaMembers" class="ui-label">Número de Integrantes: {{ tandaMembers }}</label>
+              <input
+                type="range"
+                id="tandaMembers"
+                min="2"
+                max="20"
+                [(ngModel)]="tandaMembers"
+                (input)="onTandaMembersChange()"
+                class="cotizador-main__slider" title="Número de integrantes del grupo"
+              />
+            </div>
+          </div>
+
+          <!-- Default Savings -->
+          <div *ngIf="!(market === 'aguascalientes' && clientType === 'individual') && !(market === 'edomex' && clientType === 'colectivo')" class="cotizador-main__stack cotizador-main__stack--loose">
+            <div>
+              <label for="voluntary" class="ui-label">Aportación Voluntaria Mensual</label>
+              <input
+                type="range"
+                min="0"
+                max="10000"
+                step="500"
+                [(ngModel)]="voluntaryContribution"
+                (input)="onSavingsConfigChange()"
+                class="cotizador-main__slider cotizador-main__slider--with-margin" title="Aportación voluntaria mensual"
+              />
+              <input
+                type="number"
+                id="voluntary"
+                [(ngModel)]="voluntaryContribution"
+                (input)="onSavingsConfigChange()"
+                class="ui-input"
+                placeholder="Monto mensual voluntario"
+              />
+              <div class="ui-help-text">Actual: {{ formatCurrency(toNumber(voluntaryContribution) || 0) }}</div>
+            </div>
+          </div>
+
+          <!-- Collection Configuration -->
+          <div class="cotizador-main__collection-section">
+            <h4 class="cotizador-main__section-title">Configurador de Recaudación</h4>
+            <div class="cotizador-main__stack cotizador-main__stack--medium">
+              <div *ngFor="let unit of collectionUnits" class="cotizador-main__collection-unit">
+                <input
+                  type="number"
+                  [placeholder]="'Consumo (L) - Unidad ' + unit.id"
+                  [(ngModel)]="unit.consumption"
+                  (input)="onSavingsConfigChange()"
+                  class="ui-input"
+                />
+                <input
+                  type="number"
+                  [placeholder]="'Sobreprecio ($) - Unidad ' + unit.id"
+                  [(ngModel)]="unit.overprice"
+                  (input)="onSavingsConfigChange()"
+                  class="ui-input"
+                />
+              </div>
+            </div>
+            <button class="ui-btn ui-btn-secondary cotizador-main__collection-add" (click)="addCollectionUnit()">
+              <span class="cotizador-main__button-icon cotizador-main__button-icon--large">+</span>
+              Agregar Unidad a Recaudar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel: Results -->
+    <div class="cotizador-main__panel cotizador-main__panel--results">
+      <div *ngIf="pkg">
+        <!-- Acquisition Mode Results -->
+        <div *ngIf="initialMode === 'acquisition'">
+          <div class="ui-card cotizador-main__section cotizador-main__section--medium">
+            <h2 class="cotizador-main__results-title">Resumen Financiero</h2>
+
+            <!-- Skeleton loader -->
+            <div *ngIf="isLoading" class="cotizador-main__skeleton-loader">
+              <div class="cotizador-main__skeleton-bar"></div>
+              <div class="cotizador-main__skeleton-bar"></div>
+              <div class="cotizador-main__skeleton-bar"></div>
+            </div>
+
+            <!-- Results Cards -->
+            <div *ngIf="!isLoading" class="cotizador-main__stack cotizador-main__stack--loose">
+              <!-- Pricing Summary for Direct Sale -->
+              <div *ngIf="isVentaDirecta" class="cotizador-main__summary-grid cotizador-main__summary-grid--triple">
+                <div class="cotizador-main__summary-card">
+                  <div class="cotizador-main__summary-label">Precio Total</div>
+                  <div class="cotizador-main__summary-value">{{ formatCurrency(totalPrice) }}</div>
+                </div>
+                <div class="cotizador-main__summary-card">
+                  <div class="cotizador-main__summary-label">Pago Inicial</div>
+                  <div class="cotizador-main__summary-value">{{ formatCurrency(downPayment) }}</div>
+                </div>
+                <div class="cotizador-main__summary-card">
+                  <div class="cotizador-main__summary-label">Remanente</div>
+                  <div class="cotizador-main__summary-value cotizador-main__summary-value--primary">{{ formatCurrency(amountToFinance) }}</div>
+                </div>
+              </div>
+
+              <!-- Pricing Summary for Financing -->
+              <div *ngIf="!isVentaDirecta" class="cotizador-main__summary-grid cotizador-main__summary-grid--quad">
+                <div class="cotizador-main__summary-card">
+                  <div class="cotizador-main__summary-label">Tasa Anual</div>
+                  <div class="cotizador-main__summary-value" data-cy="rate-display">{{ ((pkg.rate || 0) * 100).toFixed(1) }}%</div>
+                </div>
+                <div class="cotizador-main__summary-card">
+                  <div class="cotizador-main__summary-label">Enganche</div>
+                  <div class="cotizador-main__summary-value">{{ formatCurrency(downPayment) }}</div>
+                </div>
+                <div class="cotizador-main__summary-card">
+                  <div class="cotizador-main__summary-label">Monto a Financiar</div>
+                  <div class="cotizador-main__summary-value" data-cy="sum-financiar">{{ formatCurrency(amountToFinance) }}</div>
+                </div>
+                <div class="cotizador-main__summary-card">
+                  <div class="cotizador-main__summary-label">PMT Mensual</div>
+                  <div class="cotizador-main__summary-value cotizador-main__summary-value--primary" data-cy="sum-pmt">{{ formatCurrency(monthlyPayment) }}</div>
+                </div>
+              </div>
+
+              <!-- Insurance info if applicable -->
+              <div *ngIf="includeInsurance && insuranceMode==='contado'" class="cotizador-main__insurance-info">
+                <div class="cotizador-main__insurance-text">
+                  <strong>Seguro (pago por separado):</strong> {{ formatCurrency(toNumber(insuranceAmount) || 0) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Amortization Button -->
+          <div *ngIf="!isVentaDirecta" class="ui-card cotizador-main__section cotizador-main__section--medium">
+            <button
+              (click)="calculateAmortization()"
+              class="ui-btn ui-btn-primary cotizador-main__button--full" data-cy="calc-amort" title="Calcula la tabla de amortización para el monto a financiar"
+            >
+              Calcular Tabla de Amortización
+            </button>
+          </div>
+
+          <!-- Amortization Table -->
+          <div *ngIf="amortizationTable.length > 0 && !isVentaDirecta" class="ui-card cotizador-main__section cotizador-main__section--medium">
+            <h3 class="cotizador-main__results-title">Tabla de Amortización</h3>
+            <div class="cotizador-main__table-wrapper">
+              <div class="cotizador-main__table-scroll">
+                <table class="cotizador-main__table">
+                  <thead class="cotizador-main__table-header">
+                    <tr>
+                      <th class="cotizador-main__table-th"># Pago</th>
+                      <th class="cotizador-main__table-th">Pago Mensual</th>
+                      <th class="cotizador-main__table-th">Capital</th>
+                      <th class="cotizador-main__table-th">Interés</th>
+                      <th class="cotizador-main__table-th">Saldo</th>
+                    </tr>
+                  </thead>
+                  <tbody class="cotizador-main__table-body">
+                    <tr *ngFor="let row of amortizationTable" class="cotizador-main__table-row">
+                      <td class="cotizador-main__table-td">{{ row.paymentNumber }}</td>
+                      <td class="cotizador-main__table-td">{{ formatCurrency(row.monthlyPayment) }}</td>
+                      <td class="cotizador-main__table-td cotizador-main__table-td--success">{{ formatCurrency(row.principal) }}</td>
+                      <td class="cotizador-main__table-td cotizador-main__table-td--warning">{{ formatCurrency(row.interest) }}</td>
+                      <td class="cotizador-main__table-td cotizador-main__table-td--bold">{{ formatCurrency(row.balance) }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="monthlyPayment > 0 && !isVentaDirecta" class="ui-alert ui-alert-info">
+            <div class="cotizador-main__inline cotizador-main__inline--start">
+              <div class="cotizador-main__inline-icon"></div>
+              <div class="cotizador-main__inline-content">
+                <h4 class="cotizador-main__inline-title">Protección Conductores</h4>
+                <p class="cotizador-main__inline-description">Muestra al cliente cómo puede proteger sus pagos en caso de imprevistos. Un diferenciador clave de nuestra oferta.</p>
+                <button class="ui-btn ui-btn-secondary ui-btn-sm" (click)="openProtectionDemo()">
+                  Ver simulador de protección
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Savings Mode Results -->
+        <div *ngIf="initialMode === 'savings'">
+          <div class="ui-card cotizador-main__section cotizador-main__section--medium">
+            <h2 class="cotizador-main__results-title">Proyección de Ahorro</h2>
+
+            <!-- Aguascalientes Individual: Remainder Progress -->
+            <div *ngIf="market === 'aguascalientes' && clientType === 'individual'" class="cotizador-main__stack cotizador-main__stack--loose">
+              <div class="cotizador-main__status-row">
+                <span class="cotizador-main__savings-label">Total del Paquete:</span>
+                <span class="cotizador-main__savings-value cotizador-main__savings-value--primary">{{ formatCurrency(totalPrice) }}</span>
+              </div>
+
+              <!-- Progress Bar -->
+              <div class="cotizador-main__progress-bar">
+                <div class="cotizador-main__progress-track">
+                  <div
+                    class="cotizador-main__progress-segment cotizador-main__progress-segment--success"
+                    [style.width.%]="getDownPaymentPercentage()"
+                    [title]="'Enganche: ' + formatCurrency(toNumber(initialDownPayment) || 0)"
+                  >
+                    Enganche
+                  </div>
+                  <div
+                    class="cotizador-main__progress-segment cotizador-main__progress-segment--info"
+                    [style.width.%]="getSavedPercentage()"
+                    [title]="'Ahorro: ' + formatCurrency(projectedCollectionSavings)"
+                  >
+                    Ahorro
+                  </div>
+                </div>
+              </div>
+
+              <div class="cotizador-main__remainder-section">
+                <span class="cotizador-main__savings-label">Remanente a Liquidar:</span>
+                <span class="cotizador-main__savings-value cotizador-main__savings-value--warning">{{ formatCurrency(totalPrice - (toNumber(initialDownPayment) || 0) - projectedCollectionSavings) }}</span>
+              </div>
+            </div>
+
+            <!-- EdoMex Individual: Savings KPIs -->
+            <div *ngIf="market === 'edomex' && clientType === 'individual'" class="cotizador-main__stack cotizador-main__stack--loose">
+              <div class="cotizador-main__summary-grid cotizador-main__summary-grid--triple cotizador-main__summary-grid--wide">
+                <div class="cotizador-main__summary-card">
+                  <div class="cotizador-main__summary-label">Meta de Enganche</div>
+                  <div class="cotizador-main__summary-value cotizador-main__summary-value--warning">{{ formatCurrency(downPayment) }}</div>
+                </div>
+                <div class="cotizador-main__summary-card">
+                  <div class="cotizador-main__summary-label">Ahorro Mensual</div>
+                  <div class="cotizador-main__summary-value">{{ formatCurrency(monthlySavings) }}</div>
+                </div>
+                <div class="cotizador-main__summary-card">
+                  <div class="cotizador-main__summary-label">Tiempo Estimado</div>
+                  <div class="cotizador-main__summary-value cotizador-main__summary-value--primary">{{ timeToGoal > 0 ? timeToGoal.toFixed(1) + ' meses' : 'N/A' }}</div>
+                </div>
+              </div>
+              <app-savings-projection-chart [goal]="downPayment" [monthlySavings]="monthlySavings"></app-savings-projection-chart>
+            </div>
+
+            <!-- EdoMex Colectivo: Tanda Overview -->
+            <div *ngIf="market === 'edomex' && clientType === 'colectivo'" class="cotizador-main__stack cotizador-main__stack--loose">
+              <div class="cotizador-main__inline">
+                <div class="cotizador-main__tanda-icon">
+                  <app-icon
+                    class="cotizador-main__tanda-icon-svg"
+                    name="user-network"
+                    [size]="24"
+                    aria-hidden="true"
+                  ></app-icon>
+                </div>
+                <div>
+                  <h3 class="cotizador-main__summary-heading">Tanda Colectiva - {{ tandaMembers }} Miembros</h3>
+                  <p class="cotizador-main__tanda-description">Proyección del "efecto bola de nieve" para la entrega de unidades</p>
+                </div>
+              </div>
+              <app-tanda-timeline [milestones]="tandaTimeline"></app-tanda-timeline>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!pkg && !isLoading" class="ui-card cotizador-main__section cotizador-main__section--medium cotizador-main__empty-card">
+        <div class="cotizador-main__empty-icon"></div>
+        <p class="cotizador-main__empty-text">Selecciona el contexto para continuar con la cotización.</p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div *ngIf="pkg" class="cotizador-main__actions">
+        <button class="ui-btn ui-btn-secondary" (click)="generateOnePagePDF()" data-cy="cotizador-pdf">
+          Generar Propuesta PDF
+        </button>
+        <button class="ui-btn ui-btn-primary" (click)="handleFormalizeClick()">
+          <span class="cotizador-main__button-icon">[OK]</span>
+          Formalizar y Continuar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

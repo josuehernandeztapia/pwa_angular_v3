@@ -1,0 +1,221 @@
+<section class="collective-credit" aria-live="polite">
+  <header class="collective-credit__header">
+    <h2 class="collective-credit__title">
+      <app-icon class="collective-credit__title-icon" name="users" [size]="32" color="currentColor"></app-icon>
+      Crédito Colectivo
+    </h2>
+  </header>
+
+  <div class="collective-credit__layout">
+    <section class="collective-credit__panel collective-credit__panel--config">
+      <h3 class="collective-credit__panel-title">1. Configuración del Escenario</h3>
+
+      <div class="collective-credit__section">
+        <h4 class="collective-credit__section-title">Parámetros del Producto</h4>
+        <div class="collective-credit__input-grid">
+          <label class="collective-credit__field">
+            <span class="collective-credit__label">Precio Unidad</span>
+            <input
+              class="collective-credit__input"
+              type="number"
+              [(ngModel)]="draft.group.product.price"
+              (input)="onProductPriceChange($event)"
+              placeholder="Precio Unidad"
+            />
+          </label>
+          <label class="collective-credit__field">
+            <span class="collective-credit__label">% Enganche</span>
+            <input
+              class="collective-credit__input"
+              type="number"
+              [ngModel]="draft.group.product.dpPct * 100"
+              (input)="onDownPaymentPctChange($event)"
+              placeholder="% Enganche"
+            />
+          </label>
+          <label class="collective-credit__field">
+            <span class="collective-credit__label">Aporte Mensual</span>
+            <input
+              class="collective-credit__input"
+              type="number"
+              [ngModel]="draft.group.members[0]?.C || 5000"
+              (input)="onMonthlyContributionChange($event)"
+              placeholder="Aporte Mensual"
+            />
+          </label>
+          <label class="collective-credit__field">
+            <span class="collective-credit__label"># Miembros</span>
+            <input
+              class="collective-credit__input"
+              type="number"
+              [ngModel]="draft.group.members.length"
+              (input)="onMemberCountChange($event)"
+              placeholder="# Miembros"
+            />
+          </label>
+        </div>
+      </div>
+
+      <div class="collective-credit__section">
+        <h4 class="collective-credit__section-title">Añadir Evento "What-If"</h4>
+        <div class="collective-credit__event-form">
+          <div class="collective-credit__event-row">
+            <label class="collective-credit__field">
+              <span class="collective-credit__label">Mes</span>
+              <input
+                class="collective-credit__input"
+                type="number"
+                [(ngModel)]="newEvent.t"
+                placeholder="Mes"
+              />
+            </label>
+            <label class="collective-credit__field">
+              <span class="collective-credit__label">Tipo de Evento</span>
+              <select class="collective-credit__select" [(ngModel)]="newEvent.type">
+                <option value="extra">Aporte Extra</option>
+                <option value="miss">Atraso</option>
+              </select>
+            </label>
+          </div>
+          <div class="collective-credit__event-row">
+            <label class="collective-credit__field">
+              <span class="collective-credit__label">Miembro</span>
+              <select class="collective-credit__select" [(ngModel)]="newEvent.memberId">
+                <option *ngFor="let member of draft.group.members" [value]="member.id">
+                  {{ member.name }}
+                </option>
+              </select>
+            </label>
+            <label class="collective-credit__field">
+              <span class="collective-credit__label">Monto</span>
+              <input
+                class="collective-credit__input"
+                type="number"
+                [(ngModel)]="newEvent.amount"
+                placeholder="Monto"
+              />
+            </label>
+          </div>
+          <button
+            type="button"
+            class="collective-credit__button collective-credit__button--secondary"
+            (click)="handleAddEvent()"
+          >
+            <span class="collective-credit__button-icon">+</span>
+            Añadir Evento
+          </button>
+        </div>
+
+        <div class="collective-credit__event-list" *ngIf="draft.config.events.length > 0">
+          <div class="collective-credit__event-item" *ngFor="let event of draft.config.events">
+            <span class="collective-credit__event-description">
+              Mes {{ event.t }}: {{ getMemberName(event.data.memberId) }}
+              {{ event.type === 'extra' ? 'aportó' : 'se atrasó con' }}
+              {{ formatCurrency(event.data.amount) }}
+            </span>
+            <button
+              type="button"
+              class="collective-credit__icon-button"
+              aria-label="Eliminar evento"
+              (click)="handleRemoveEvent(event.id)"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="collective-credit__actions">
+        <button
+          type="button"
+          class="collective-credit__button collective-credit__button--primary"
+          (click)="handleSimulate()"
+          [disabled]="isLoading"
+        >
+          {{ isLoading ? 'Calculando…' : 'Simular Escenario' }}
+        </button>
+        <button
+          type="button"
+          class="collective-credit__button collective-credit__button--secondary"
+          (click)="handleFormalize()"
+          [disabled]="!result"
+        >
+          Formalizar Grupo
+        </button>
+      </footer>
+    </section>
+
+    <section class="collective-credit__panel collective-credit__panel--results">
+      <h3 class="collective-credit__panel-title">2. Resultados de la Simulación</h3>
+
+      <div *ngIf="isLoading" class="collective-credit__loading" aria-live="polite">
+        <div class="collective-credit__spinner" role="status"></div>
+        <span>Calculando proyección…</span>
+      </div>
+
+      <ng-container *ngIf="!isLoading">
+        <div *ngIf="result && kpis" class="collective-credit__results">
+          <div class="collective-credit__kpi-group">
+            <article class="collective-credit__kpi-card" *ngFor="let kpi of kpis">
+              <div class="collective-credit__kpi-icon">{{ kpi.icon }}</div>
+              <div class="collective-credit__kpi-copy">
+                <span class="collective-credit__kpi-label">{{ kpi.title }}</span>
+                <span class="collective-credit__kpi-value">{{ kpi.value }}</span>
+              </div>
+            </article>
+          </div>
+
+          <h4 class="collective-credit__timeline-title">Línea de Tiempo Mensual</h4>
+          <div class="collective-credit__timeline">
+            <article class="collective-credit__cycle" *ngFor="let month of result.months">
+              <header class="collective-credit__cycleHeader">
+                <h5 class="collective-credit__cycleName">Mes {{ month.t }}</h5>
+                <span *ngIf="month.riskBadge === 'debtDeficit'" class="collective-credit__cycleBadge">
+                  Déficit de Deuda
+                </span>
+              </header>
+
+              <dl class="collective-credit__cycleDetails">
+                <div class="collective-credit__detailGroup">
+                  <dt class="collective-credit__detail-label">Aportaciones</dt>
+                  <dd class="collective-credit__detail-value collective-credit__detail-value--positive">
+                    {{ formatCurrency(month.cashInflow) }}
+                  </dd>
+                </div>
+                <div class="collective-credit__detailGroup">
+                  <dt class="collective-credit__detail-label">Deuda del Mes</dt>
+                  <dd class="collective-credit__detail-value collective-credit__detail-value--debt">
+                    {{ formatCurrency(month.debtRequired) }}
+                  </dd>
+                </div>
+                <div class="collective-credit__detailGroup collective-credit__detailGroup--emphasis">
+                  <dt class="collective-credit__detail-label">Ahorro Neto</dt>
+                  <dd class="collective-credit__detail-value collective-credit__detail-value--savings">
+                    {{ formatCurrency(month.netSavings) }}
+                  </dd>
+                </div>
+              </dl>
+
+              <div *ngIf="month.awards.length > 0" class="collective-credit__awards">
+                <article class="collective-credit__award" *ngFor="let award of month.awards">
+                  <app-icon class="collective-credit__award-icon" name="badge-check" [size]="20" color="currentColor"></app-icon>
+                  <span class="collective-credit__award-text">
+                    {{ award.memberName }} recibió unidad {{ award.unit }}
+                  </span>
+                </article>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div *ngIf="!result" class="collective-credit__empty" aria-live="polite">
+          <div class="collective-credit__empty-icon" aria-hidden="true">
+            <app-icon name="users" [size]="40" color="currentColor"></app-icon>
+          </div>
+          <h4 class="collective-credit__empty-title">Los resultados aparecerán aquí.</h4>
+          <p class="collective-credit__empty-description">Configura tu escenario y presiona "Simular".</p>
+        </div>
+      </ng-container>
+    </section>
+  </div>
+</section>

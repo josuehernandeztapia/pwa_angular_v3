@@ -1,0 +1,162 @@
+<div
+  *ngIf="isVisible"
+  class="checkpoint-modal"
+  (click)="onOverlayClick($event)"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-labelledby]="modalTitleId"
+  [attr.aria-describedby]="modalDescId"
+>
+  <section
+    class="checkpoint-modal__panel"
+    (click)="$event.stopPropagation()"
+    tabindex="-1"
+    (keydown)="onKeydown($event)"
+  >
+    <header class="checkpoint-modal__header">
+      <span class="checkpoint-modal__header-icon" aria-hidden="true">🚫</span>
+      <div class="checkpoint-modal__header-copy">
+        <h2 class="checkpoint-modal__title" [attr.id]="modalTitleId">Entrevista Obligatoria</h2>
+        <p class="checkpoint-modal__subtitle" [attr.id]="modalDescId">{{ modalData.clientName }}</p>
+      </div>
+      <button
+        type="button"
+        class="checkpoint-modal__close"
+        (click)="closeModal()"
+        [disabled]="isInterviewInProgress"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+    </header>
+
+    <section class="checkpoint-modal__reason">
+      <span class="checkpoint-modal__reason-icon" aria-hidden="true"></span>
+      <div class="checkpoint-modal__reason-copy">
+        <strong>No puede subir "{{ modalData.documentType }}" sin completar la entrevista.</strong>
+        <p>{{ modalData.checkpoint?.requirement?.reason }}</p>
+      </div>
+    </section>
+
+    <section class="checkpoint-modal__status" [ngClass]="getStatusClass()">
+      <div class="checkpoint-modal__status-header">
+        <span class="checkpoint-modal__status-icon" aria-hidden="true">{{ getStatusIcon() }}</span>
+        <span class="checkpoint-modal__status-text">{{ getStatusText() }}</span>
+      </div>
+      <p class="checkpoint-modal__status-details" *ngIf="getStatusDetails()">{{ getStatusDetails() }}</p>
+    </section>
+
+    <section class="checkpoint-modal__requirements" *ngIf="modalData.checkpoint?.requirement">
+      <h3 class="checkpoint-modal__section-title">Requerimientos de Entrevista</h3>
+      <dl class="checkpoint-modal__requirements-grid">
+        <div class="checkpoint-modal__requirement">
+          <dt class="checkpoint-modal__requirement-label">Tipo:</dt>
+          <dd class="checkpoint-modal__requirement-value">
+            {{ getProductTypeLabel(modalData.checkpoint.product_type) }}
+          </dd>
+        </div>
+        <div class="checkpoint-modal__requirement">
+          <dt class="checkpoint-modal__requirement-label">Municipio:</dt>
+          <dd class="checkpoint-modal__requirement-value">
+            {{ getMunicipalityLabel(modalData.checkpoint.municipality) }}
+          </dd>
+        </div>
+        <div
+          class="checkpoint-modal__requirement"
+          *ngIf="modalData.checkpoint.requirement.min_duration_seconds"
+        >
+          <dt class="checkpoint-modal__requirement-label">Duración mínima:</dt>
+          <dd class="checkpoint-modal__requirement-value">
+            {{ formatDuration(modalData.checkpoint.requirement.min_duration_seconds) }}
+          </dd>
+        </div>
+        <div class="checkpoint-modal__requirement">
+          <dt class="checkpoint-modal__requirement-label">Intentos restantes:</dt>
+          <dd class="checkpoint-modal__requirement-value">{{ getRemainingAttempts() }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="checkpoint-modal__recorder" *ngIf="canStartInterview()">
+      <h3 class="checkpoint-modal__section-title">REC Grabación de Entrevista</h3>
+      <app-voice-recorder
+        #voiceRecorder
+        [advisorId]="advisorId"
+        [clientId]="modalData.clientId"
+        [sessionType]="'documentation'"
+        [municipality]="modalData.checkpoint.municipality"
+        [productType]="modalData.checkpoint.product_type"
+        [showGuide]="true"
+        [showLiveFeedback]="true"
+        [formData]="modalData.clientData"
+        (validationComplete)="onValidationComplete($event)"
+        (interviewApproved)="onInterviewApproved($event)"
+        (errorOccurred)="onRecorderError($event)"
+      ></app-voice-recorder>
+    </section>
+
+    <div class="checkpoint-modal__error" *ngIf="errorMessage">
+      <span class="checkpoint-modal__error-icon" aria-hidden="true"></span>
+      <span class="checkpoint-modal__error-text">{{ errorMessage }}</span>
+    </div>
+
+    <footer class="checkpoint-modal__actions">
+      <button
+        type="button"
+        class="checkpoint-modal__action checkpoint-modal__action--cancel"
+        (click)="closeModal()"
+        [disabled]="isInterviewInProgress"
+        *ngIf="!isMaxAttemptsReached()"
+      >
+        {{ isInterviewInProgress ? 'Grabando...' : 'Cancelar' }}
+      </button>
+      <button
+        type="button"
+        class="checkpoint-modal__action checkpoint-modal__action--retry"
+        (click)="retryInterview()"
+        *ngIf="canRetryInterview()"
+      >
+        Intentar Nuevamente
+      </button>
+      <button
+        type="button"
+        class="checkpoint-modal__action checkpoint-modal__action--continue"
+        (click)="continueToUpload()"
+        *ngIf="canContinue()"
+      >
+        Continuar con Documentos
+      </button>
+      <button
+        type="button"
+        class="checkpoint-modal__action checkpoint-modal__action--supervisor"
+        (click)="contactSupervisor()"
+        *ngIf="isMaxAttemptsReached()"
+      >
+        Contactar Supervisor
+      </button>
+    </footer>
+
+    <section class="checkpoint-modal__help" *ngIf="showHelp">
+      <button type="button" class="checkpoint-modal__help-toggle" (click)="toggleHelp()">
+        <span class="checkpoint-modal__help-icon" aria-hidden="true">{{ helpExpanded ? '▼' : '▶' }}</span>
+        <span class="checkpoint-modal__help-text">¿Necesita ayuda?</span>
+      </button>
+
+      <div class="checkpoint-modal__help-content" *ngIf="helpExpanded">
+        <h3 class="checkpoint-modal__help-title">Consejos para una entrevista exitosa:</h3>
+        <ul class="checkpoint-modal__help-list">
+          <li>Hable claro y pausadamente</li>
+          <li>Esté en un lugar silencioso</li>
+          <li>Responda todas las preguntas completamente</li>
+          <li>Mantenga consistencia con la información del formulario</li>
+          <li>Si no entiende una pregunta, pida que la repitan</li>
+        </ul>
+
+        <div class="checkpoint-modal__help-contact">
+          <strong>¿Problemas técnicos?</strong>
+          <span>Contacte a soporte: <a href="tel:+525555555555">55-5555-5555</a></span>
+        </div>
+      </div>
+    </section>
+  </section>
+</div>

@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { IconComponent } from '../../shared/icon/icon.component';
 import { ApiService } from '../../../services/api.service';
 import { CotizadorEngineService } from '../../../services/cotizador-engine.service';
 import { ToastService } from '../../../services/toast.service';
 import { Client, BusinessFlow, Market } from '../../../models/types';
 import { Quote } from '../../../models/business';
+import { getDataColor } from '../../../styles/design-tokens';
 
 interface Opportunity {
   id: string;
@@ -40,627 +42,12 @@ interface PipelineStats {
 @Component({
   selector: 'app-opportunities-pipeline',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
-  template: `
-    <div class="opportunities-container">
-      <header class="page-header">
-        <div class="header-content">
-          <h1>🎯 Pipeline de Oportunidades</h1>
-          <p class="page-description">Gestión de prospectos y seguimiento de ventas</p>
-        </div>
-        <div class="header-actions">
-          <button class="btn-secondary" (click)="refreshPipeline()">
-            🔄 Actualizar
-          </button>
-          <button class="btn-primary" (click)="createNewOpportunity()">
-            ➕ Nueva Oportunidad
-          </button>
-        </div>
-      </header>
-
-      <!-- Pipeline Stats -->
-      <div class="stats-grid">
-        <div class="stat-card total-opportunities">
-          <div class="stat-icon">🎯</div>
-          <div class="stat-content">
-            <div class="stat-value">{{ stats.totalOpportunities }}</div>
-            <div class="stat-label">Oportunidades Activas</div>
-          </div>
-        </div>
-        
-        <div class="stat-card total-value">
-          <div class="stat-icon">💰</div>
-          <div class="stat-content">
-            <div class="stat-value">{{ formatCurrency(stats.totalValue) }}</div>
-            <div class="stat-label">Valor Total Pipeline</div>
-          </div>
-        </div>
-        
-        <div class="stat-card average-deal">
-          <div class="stat-icon">📊</div>
-          <div class="stat-content">
-            <div class="stat-value">{{ formatCurrency(stats.averageDealSize) }}</div>
-            <div class="stat-label">Ticket Promedio</div>
-          </div>
-        </div>
-        
-        <div class="stat-card conversion-rate">
-          <div class="stat-icon">📈</div>
-          <div class="stat-content">
-            <div class="stat-value">{{ (stats.conversionRate * 100).toFixed(1) }}%</div>
-            <div class="stat-label">Tasa de Conversión</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pipeline Filters -->
-      <div class="filters-section">
-        <div class="filter-group">
-          <label>🏢 Mercado</label>
-          <select [(ngModel)]="selectedMarket" (change)="applyFilters()">
-            <option value="">Todos los mercados</option>
-            <option value="aguascalientes">Aguascalientes</option>
-            <option value="edomex">Estado de México</option>
-          </select>
-        </div>
-        
-        <div class="filter-group">
-          <label>📋 Tipo de Negocio</label>
-          <select [(ngModel)]="selectedFlow" (change)="applyFilters()">
-            <option value="">Todos los tipos</option>
-            <option value="VentaPlazo">Venta a Plazo</option>
-            <option value="VentaDirecta">Venta Directa</option>
-            <option value="AhorroProgramado">Plan de Ahorro</option>
-            <option value="CreditoColectivo">Crédito Colectivo</option>
-          </select>
-        </div>
-        
-        <div class="filter-group">
-          <label>🎚️ Etapa</label>
-          <select [(ngModel)]="selectedStage" (change)="applyFilters()">
-            <option value="">Todas las etapas</option>
-            <option value="prospecto">Prospecto</option>
-            <option value="cotizando">Cotizando</option>
-            <option value="negociando">Negociando</option>
-            <option value="documentando">Documentando</option>
-            <option value="cerrando">Cerrando</option>
-          </select>
-        </div>
-        
-        <div class="filter-group">
-          <label>⚡ Prioridad</label>
-          <select [(ngModel)]="selectedPriority" (change)="applyFilters()">
-            <option value="">Todas las prioridades</option>
-            <option value="alta">Alta</option>
-            <option value="media">Media</option>
-            <option value="baja">Baja</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Pipeline Kanban View -->
-      <div class="pipeline-kanban">
-        <div 
-          *ngFor="let stage of pipelineStages" 
-          class="pipeline-stage"
-        >
-          <div class="stage-header">
-            <h3>{{ stage.icon }} {{ stage.name }}</h3>
-            <span class="stage-count">{{ getStageOpportunities(stage.key).length }}</span>
-            <div class="stage-value">{{ formatCurrency(getStageValue(stage.key)) }}</div>
-          </div>
-          
-          <div class="opportunities-list">
-            <div 
-              *ngFor="let opportunity of getStageOpportunities(stage.key); trackBy: trackByOpportunityId"
-              class="opportunity-card"
-              [class.priority-alta]="opportunity.priority === 'alta'"
-              [class.priority-media]="opportunity.priority === 'media'"
-              [class.priority-baja]="opportunity.priority === 'baja'"
-              (click)="viewOpportunity(opportunity)"
-            >
-              <div class="opportunity-header">
-                <h4>{{ opportunity.clientName }}</h4>
-                <div class="priority-badge" [class]="'priority-' + opportunity.priority">
-                  {{ getPriorityIcon(opportunity.priority) }}
-                </div>
-              </div>
-              
-              <div class="opportunity-details">
-                <div class="detail-row">
-                  <span class="detail-label">📍 Mercado:</span>
-                  <span class="detail-value">{{ getMarketLabel(opportunity.market) }}</span>
-                </div>
-                
-                <div class="detail-row">
-                  <span class="detail-label">📊 Tipo:</span>
-                  <span class="detail-value">{{ getBusinessFlowLabel(opportunity.businessFlow) }}</span>
-                </div>
-                
-                <div class="detail-row">
-                  <span class="detail-label">💰 Valor:</span>
-                  <span class="detail-value">{{ formatCurrency(opportunity.estimatedValue) }}</span>
-                </div>
-                
-                <div class="detail-row">
-                  <span class="detail-label">📈 Probabilidad:</span>
-                  <span class="detail-value">{{ opportunity.probability }}%</span>
-                </div>
-              </div>
-              
-              <div class="opportunity-progress">
-                <div class="progress-bar">
-                  <div 
-                    class="progress-fill" 
-                    [style.width.%]="opportunity.probability"
-                  ></div>
-                </div>
-              </div>
-              
-              <div class="opportunity-meta">
-                <div class="next-action">
-                  <span class="action-icon">🎯</span>
-                  <span class="action-text">{{ opportunity.nextAction }}</span>
-                </div>
-                
-                <div class="last-activity">
-                  <span class="activity-time">{{ formatTimeAgo(opportunity.lastActivity) }}</span>
-                </div>
-              </div>
-              
-              <div class="opportunity-tags">
-                <span 
-                  *ngFor="let tag of opportunity.tags" 
-                  class="tag"
-                >
-                  {{ tag }}
-                </span>
-              </div>
-              
-              <div class="opportunity-actions">
-                <button 
-                  class="action-btn"
-                  (click)="advanceStage(opportunity); $event.stopPropagation()"
-                  *ngIf="canAdvanceStage(opportunity)"
-                >
-                  ➡️ Avanzar
-                </button>
-                <button 
-                  class="action-btn secondary"
-                  (click)="createQuote(opportunity); $event.stopPropagation()"
-                  *ngIf="opportunity.stage === 'cotizando' && !opportunity.quote"
-                >
-                  📋 Cotizar
-                </button>
-                <button 
-                  class="action-btn secondary"
-                  (click)="scheduleFollowUp(opportunity); $event.stopPropagation()"
-                >
-                  📅 Seguimiento
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Loading State -->
-      <div *ngIf="isLoading" class="loading-container">
-        <div class="loading-spinner"></div>
-        <p>Cargando pipeline de oportunidades...</p>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .opportunities-container {
-      padding: 24px;
-      max-width: 1600px;
-      margin: 0 auto;
-    }
-
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 32px;
-      padding-bottom: 24px;
-      border-bottom: 2px solid #e2e8f0;
-    }
-
-    .header-content h1 {
-      margin: 0 0 8px 0;
-      color: #2d3748;
-      font-size: 2.2rem;
-      font-weight: 700;
-    }
-
-    .page-description {
-      margin: 0;
-      color: #718096;
-      font-size: 1.1rem;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 12px;
-    }
-
-    .btn-primary, .btn-secondary {
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: none;
-      font-size: 0.9rem;
-    }
-
-    .btn-primary {
-      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
-      transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-      background: #f7fafc;
-      color: #4a5568;
-      border: 1px solid #e2e8f0;
-    }
-
-    .btn-secondary:hover {
-      background: #edf2f7;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 32px;
-    }
-
-    .stat-card {
-      background: white;
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      border: 1px solid #e2e8f0;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      transition: transform 0.2s;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-2px);
-    }
-
-    .stat-icon {
-      font-size: 2.5rem;
-      opacity: 0.8;
-    }
-
-    .stat-value {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #2d3748;
-      font-family: monospace;
-    }
-
-    .stat-label {
-      font-size: 0.9rem;
-      color: #718096;
-      font-weight: 500;
-    }
-
-    .filters-section {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-      padding: 20px;
-      background: white;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .filter-group label {
-      font-weight: 600;
-      color: #4a5568;
-      font-size: 0.9rem;
-    }
-
-    .filter-group select {
-      padding: 8px 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      background: white;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .filter-group select:focus {
-      outline: none;
-      border-color: #4299e1;
-      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
-    }
-
-    .pipeline-kanban {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 20px;
-      margin-bottom: 32px;
-    }
-
-    .pipeline-stage {
-      background: #f7fafc;
-      border-radius: 12px;
-      padding: 16px;
-      min-height: 400px;
-    }
-
-    .stage-header {
-      padding: 12px 16px;
-      background: white;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .stage-header h3 {
-      margin: 0 0 4px 0;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #2d3748;
-    }
-
-    .stage-count {
-      background: #4299e1;
-      color: white;
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-left: 8px;
-    }
-
-    .stage-value {
-      font-size: 0.9rem;
-      color: #48bb78;
-      font-weight: 600;
-      font-family: monospace;
-    }
-
-    .opportunities-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-height: 600px;
-      overflow-y: auto;
-    }
-
-    .opportunity-card {
-      background: white;
-      border-radius: 8px;
-      padding: 16px;
-      border: 1px solid #e2e8f0;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-    }
-
-    .opportunity-card:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .opportunity-card.priority-alta {
-      border-left: 4px solid #e53e3e;
-    }
-
-    .opportunity-card.priority-media {
-      border-left: 4px solid #ed8936;
-    }
-
-    .opportunity-card.priority-baja {
-      border-left: 4px solid #48bb78;
-    }
-
-    .opportunity-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
-    }
-
-    .opportunity-header h4 {
-      margin: 0;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #2d3748;
-    }
-
-    .priority-badge {
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .priority-badge.priority-alta {
-      background: #fed7d7;
-      color: #c53030;
-    }
-
-    .priority-badge.priority-media {
-      background: #feebc8;
-      color: #c05621;
-    }
-
-    .priority-badge.priority-baja {
-      background: #c6f6d5;
-      color: #22543d;
-    }
-
-    .opportunity-details {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-    }
-
-    .detail-label {
-      color: #718096;
-    }
-
-    .detail-value {
-      color: #2d3748;
-      font-weight: 500;
-    }
-
-    .opportunity-progress {
-      margin-bottom: 12px;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 6px;
-      background: #e2e8f0;
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--flat-surface-bg); /* FIXED (verify-ux) */
-      transition: width 0.3s ease;
-    }
-
-    .opportunity-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      font-size: 0.8rem;
-    }
-
-    .next-action {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: #4a5568;
-    }
-
-    .last-activity {
-      color: #718096;
-    }
-
-    .opportunity-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-bottom: 12px;
-    }
-
-    .tag {
-      background: #e6fffa;
-      color: #234e52;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-
-    .opportunity-actions {
-      display: flex;
-      gap: 6px;
-    }
-
-    .action-btn {
-      flex: 1;
-      padding: 6px 8px;
-      border: 1px solid #e2e8f0;
-      background: white;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: #4a5568;
-    }
-
-    .action-btn:hover {
-      background: #f7fafc;
-      border-color: #cbd5e0;
-    }
-
-    .action-btn.secondary {
-      background: #f7fafc;
-    }
-
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-      color: #718096;
-    }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid #e2e8f0;
-      border-left-color: #4299e1;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 20px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    @media (max-width: 768px) {
-      .opportunities-container {
-        padding: 16px;
-      }
-
-      .page-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-      }
-
-      .stats-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .filters-section {
-        grid-template-columns: 1fr;
-      }
-
-      .pipeline-kanban {
-        grid-template-columns: 1fr;
-      }
-    }
-  `]
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent],
+  templateUrl: './opportunities-pipeline.component.html',
+  styleUrls: ['./opportunities-pipeline.component.scss']
 })
 export class OpportunitiesPipelineComponent implements OnInit {
+  @HostBinding('class') readonly hostClass = 'pipeline-page';
   opportunities: Opportunity[] = [];
   filteredOpportunities: Opportunity[] = [];
   clients: Client[] = [];
@@ -681,11 +68,11 @@ export class OpportunitiesPipelineComponent implements OnInit {
   };
 
   pipelineStages = [
-    { key: 'prospecto', name: 'Prospecto', icon: '👤' },
-    { key: 'cotizando', name: 'Cotizando', icon: '💰' },
+    { key: 'prospecto', name: 'Prospecto', icon: '' },
+    { key: 'cotizando', name: 'Cotizando', icon: '' },
     { key: 'negociando', name: 'Negociando', icon: '🤝' },
-    { key: 'documentando', name: 'Documentando', icon: '📋' },
-    { key: 'cerrando', name: 'Cerrando', icon: '🎯' }
+    { key: 'documentando', name: 'Documentando', icon: '' },
+    { key: 'cerrando', name: 'Cerrando', icon: '' }
   ];
 
   constructor(
@@ -988,8 +375,24 @@ export class OpportunitiesPipelineComponent implements OnInit {
     return labels[flow] || flow;
   }
 
+  getPriorityClasses(priority: Opportunity['priority']): Record<string, boolean> {
+    return {
+      'opportunities-pipeline__card--priority-alta': priority === 'alta',
+      'opportunities-pipeline__card--priority-media': priority === 'media',
+      'opportunities-pipeline__card--priority-baja': priority === 'baja'
+    };
+  }
+
+  getPriorityBadgeClasses(priority: Opportunity['priority']): Record<string, boolean> {
+    return {
+      'opportunities-pipeline__card-priority--alta': priority === 'alta',
+      'opportunities-pipeline__card-priority--media': priority === 'media',
+      'opportunities-pipeline__card-priority--baja': priority === 'baja'
+    };
+  }
+
   getPriorityIcon(priority: string): string {
-    const icons = { alta: '🔴', media: '🟡', baja: '🟢' };
+    const icons = { alta: '<svg class="priority-icon priority-icon--high" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg>', media: '<svg class="priority-icon priority-icon--medium" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg>', baja: '<svg class="priority-icon priority-icon--low" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg>' };
     return icons[priority as keyof typeof icons] || '⚪';
   }
 
@@ -999,6 +402,19 @@ export class OpportunitiesPipelineComponent implements OnInit {
       currency: 'MXN',
       minimumFractionDigits: 0
     }).format(amount);
+  }
+
+  getProgressColor(probability: number): string {
+    // Use OpenAI data visualization colors based on probability ranges
+    if (probability >= 80) {
+      return getDataColor('secondary'); // Green for high probability
+    } else if (probability >= 50) {
+      return getDataColor('primary'); // Blue for medium probability
+    } else if (probability >= 25) {
+      return getDataColor('warning'); // Orange for low probability
+    } else {
+      return getDataColor('danger'); // Red for very low probability
+    }
   }
 
   formatTimeAgo(date: Date): string {

@@ -1,0 +1,123 @@
+<div class="connection-indicator">
+  <div class="connection-indicator__desktop" aria-live="polite">
+    <div
+      class="connection-indicator__card"
+      [ngClass]="getDesktopCardClasses()"
+    >
+      <span class="connection-indicator__icon" aria-hidden="true">
+        <app-icon
+          *ngIf="isOnline()"
+          class="connection-indicator__icon-symbol"
+          name="wifi"
+          [size]="24"
+          color="currentColor"
+        ></app-icon>
+        <app-icon
+          *ngIf="!isOnline()"
+          class="connection-indicator__icon-symbol"
+          name="offline"
+          [size]="24"
+          color="currentColor"
+        ></app-icon>
+        <span
+          *ngIf="connectionQuality() === 'poor' && isOnline()"
+          class="connection-indicator__pulse"
+        ></span>
+      </span>
+
+      <span class="connection-indicator__status-text">{{ statusText() }}</span>
+
+      <span
+        *ngIf="pendingCount() > 0"
+        class="connection-indicator__badge"
+        [attr.aria-label]="getPendingCountLabel(pendingCount())"
+      >
+        {{ pendingCount() }}
+      </span>
+    </div>
+  </div>
+
+  <div
+    *ngIf="!isOnline()"
+    class="connection-indicator__mobile"
+    [ngClass]="getMobileBannerClasses()"
+    role="status"
+    aria-live="assertive"
+  >
+    <div class="connection-indicator__mobile-content">
+      <div class="connection-indicator__mobile-status">
+        <app-icon
+          class="connection-indicator__mobile-icon"
+          name="shield-alert"
+          [size]="20"
+          color="currentColor"
+          aria-hidden="true"
+        ></app-icon>
+        <div class="connection-indicator__mobile-text">
+          <p class="connection-indicator__mobile-title">Sin conexión</p>
+          <p class="connection-indicator__mobile-subtitle">Los datos se guardan automáticamente</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="connection-indicator__mobile-dismiss"
+        (click)="dismissMobileBanner()"
+        aria-label="Cerrar aviso"
+      >
+        <app-icon
+          class="connection-indicator__mobile-dismiss-icon"
+          name="close"
+          [size]="16"
+          color="currentColor"
+          aria-hidden="true"
+        ></app-icon>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="connection-indicator__toast"
+    [ngClass]="getToastVisibilityClasses()"
+    [attr.aria-hidden]="showConnectionToast() ? 'false' : 'true'"
+    aria-live="polite"
+  >
+    <div class="connection-indicator__toast-card" [ngClass]="getToastCardClasses()">
+      <div class="connection-indicator__toast-icon" aria-hidden="true">
+        <app-icon
+          *ngIf="isOnline()"
+          class="connection-indicator__toast-symbol connection-indicator__toast-symbol--online"
+          name="check-circle"
+          [size]="20"
+          color="currentColor"
+        ></app-icon>
+        <app-icon
+          *ngIf="!isOnline()"
+          class="connection-indicator__toast-symbol connection-indicator__toast-symbol--offline"
+          name="shield-alert"
+          [size]="20"
+          color="currentColor"
+        ></app-icon>
+      </div>
+
+      <div class="connection-indicator__toast-body">
+        <p class="connection-indicator__toast-title">{{ toastTitle() }}</p>
+        <p class="connection-indicator__toast-message">{{ toastMessage() }}</p>
+      </div>
+
+      <button
+        type="button"
+        class="connection-indicator__toast-dismiss"
+        (click)="dismissToast()"
+        aria-label="Cerrar notificación"
+      >
+        <app-icon
+          class="connection-indicator__toast-dismiss-icon"
+          name="close"
+          [size]="16"
+          color="currentColor"
+          aria-hidden="true"
+        ></app-icon>
+      </button>
+    </div>
+  </div>
+</div>

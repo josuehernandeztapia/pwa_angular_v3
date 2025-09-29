@@ -1,0 +1,451 @@
+<!-- Skip Link for Accessibility -->
+<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+
+<div class="simulador-shell ui-container ui-section" *ngIf="!isRedirecting">
+  <!-- Header -->
+  <div class="simulador-header">
+    <button (click)="goBack()" class="ui-btn ui-btn-ghost simulador-header__back-btn">← Dashboard</button>
+    <h1 class="simulador-header__title">Hub de Simuladores</h1>
+    <p class="simulador-header__subtitle">Herramientas de simulación financiera para diferentes escenarios</p>
+  </div>
+
+  <!-- Hub de escenarios -->
+  <div id="main-content" class="scenarios-grid">
+    <div
+      *ngFor="let scenario of availableScenarios"
+      class="scenario-card ui-card"
+      [attr.data-cy]="'sim-' + scenario.id.replace('_', '-').toLowerCase()"
+      (click)="selectScenario(scenario)"
+    >
+      <div class="scenario-card__icon">{{ scenario.icon }}</div>
+      <h3 class="scenario-card__title">{{ scenario.title }}</h3>
+      <p class="scenario-card__subtitle">{{ scenario.subtitle }}</p>
+      <p class="scenario-card__description">{{ scenario.description }}</p>
+    </div>
+  </div>
+
+  <!-- Context Info -->
+  <div *ngIf="smartContext.hasContext" class="context-alert ui-alert ui-alert-info">
+    <div class="context-alert__content">
+      <span class="context-alert__icon">
+        <app-icon
+          class="context-alert__icon-svg"
+          name="beaker"
+          [size]="24"
+          aria-hidden="true"
+        ></app-icon>
+      </span>
+      <div>
+        <strong>Contexto detectado:</strong>
+        {{ smartContext.market }} • {{ smartContext.clientType }}
+        <span *ngIf="smartContext.clientName"> • {{ smartContext.clientName }}</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="results-section ui-card" *ngIf="simulationResults.selectedScenario">
+    <h2 class="results-section__title">Resultado de Simulación</h2>
+
+    <!-- Skeleton loader -->
+    <div *ngIf="simulationResults.loading" class="results-skeleton">
+      <div class="skeleton-bar"></div>
+      <div class="skeleton-bar"></div>
+      <div class="skeleton-bar"></div>
+    </div>
+
+    <!-- KPIs -->
+    <div *ngIf="!simulationResults.loading" class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-card__label">Ahorro</div>
+        <div class="kpi-card__value" data-cy="sim-ahorro">
+          {{ formatCurrency(simulationResults.data.ahorro) }}
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card__label">Plazo</div>
+        <div class="kpi-card__value" data-cy="sim-plazo">
+          {{ simulationResults.data.plazo }} meses
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card__label">PMT Proyectado</div>
+        <div class="kpi-card__value" data-cy="sim-pmt">
+          {{ formatCurrency(simulationResults.data.pmt) }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Charts -->
+  <div class="charts-grid" *ngIf="simulationResults.selectedScenario && !simulationResults.loading">
+    <div class="chart-card ui-card">
+      <h2 class="chart-card__title">Ahorro acumulado</h2>
+      <canvas id="chartAhorro" data-cy="chart-ahorro"></canvas>
+    </div>
+    <div class="chart-card ui-card">
+      <h2 class="chart-card__title">PMT mensual</h2>
+      <canvas id="chartPMT" data-cy="chart-pmt"></canvas>
+    </div>
+  </div>
+
+  <!-- Simulaciones Guardadas -->
+  <section class="saved-section" *ngIf="savedSimulations.length > 0">
+    <div class="saved-section__header">
+      <h2 class="saved-section__title">
+        <app-icon
+          class="saved-section__title-icon"
+          name="download-tray"
+          [size]="24"
+          aria-hidden="true"
+        ></app-icon>
+        Simulaciones Recientes
+      </h2>
+      <p class="saved-section__subtitle">Continúa donde lo dejaste</p>
+    </div>
+
+    <div class="saved-grid">
+      <div
+        *ngFor="let simulation of savedSimulations.slice(0, 5)"
+        class="simulation-card ui-card"
+        [class.simulation-card--selected]="selectedForComparison.has(simulation.id)"
+      >
+        <!-- Comparison Checkbox -->
+        <div class="simulation-card__checkbox" *ngIf="comparisonMode">
+          <input
+            type="checkbox"
+            [id]="'compare-' + simulation.id"
+            [checked]="selectedForComparison.has(simulation.id)"
+            [disabled]="!selectedForComparison.has(simulation.id) && selectedForComparison.size >= 3"
+            (change)="toggleSimulationSelection(simulation.id)"
+          />
+        </div>
+
+        <div class="simulation-card__header" [class.simulation-card__header--with-checkbox]="comparisonMode">
+          <div class="simulation-card__client-info">
+            <h4 class="simulation-card__client-name">{{ simulation.clientName || 'Cliente sin nombre' }}</h4>
+            <p class="simulation-card__scenario">{{ simulation.scenarioTitle }}</p>
+          </div>
+          <div class="simulation-card__actions" *ngIf="!comparisonMode">
+            <button
+              (click)="continueSimulation(simulation)"
+              class="ui-btn ui-btn-ghost ui-btn-xs"
+            >
+              Continuar
+            </button>
+            <button
+              (click)="deleteSimulation(simulation.id)"
+              class="simulation-card__delete-btn"
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+
+        <div class="simulation-card__details">
+          <div class="simulation-card__detail">
+            <span class="simulation-card__detail-label">Mercado:</span>
+            <span class="simulation-card__detail-value">{{ getMarketLabel(simulation.market) }}</span>
+          </div>
+          <div class="simulation-card__detail">
+            <span class="simulation-card__detail-label">Tipo:</span>
+            <span class="simulation-card__detail-value">{{ simulation.clientType }}</span>
+          </div>
+          <div class="simulation-card__detail" *ngIf="simulation.summary.targetAmount">
+            <span class="simulation-card__detail-label">Meta:</span>
+            <span class="simulation-card__detail-value simulation-card__detail-value--emphasized">{{ formatCurrency(simulation.summary.targetAmount) }}</span>
+          </div>
+          <div class="simulation-card__detail" *ngIf="simulation.summary.monthlyContribution">
+            <span class="simulation-card__detail-label">Mensual:</span>
+            <span class="simulation-card__detail-value simulation-card__detail-value--emphasized">{{ formatCurrency(simulation.summary.monthlyContribution) }}</span>
+          </div>
+        </div>
+
+        <div class="simulation-card__footer">
+          <span class="simulation-card__timestamp">
+            {{ formatLastModified(simulation.lastModified) }}
+          </span>
+          <span class="simulation-card__status"
+                [class.simulation-card__status--draft]="simulation.summary.status === 'draft'"
+                [class.simulation-card__status--completed]="simulation.summary.status === 'completed'">
+            {{ simulation.summary.status === 'draft' ? 'Borrador' : 'Completado' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison Controls -->
+    <div class="comparison-controls" *ngIf="savedSimulations.length > 1" data-cy="comparison-controls">
+      <div class="comparison-controls__header">
+        <button
+          (click)="toggleComparisonMode()"
+          class="ui-btn ui-btn-secondary"
+          [class.ui-btn-primary]="comparisonMode"
+          data-cy="toggle-compare"
+        >
+          <app-icon
+            class="comparison-controls__toggle-icon"
+            name="adjustments"
+            [size]="24"
+            aria-hidden="true"
+          ></app-icon>{{ comparisonMode ? 'Modo Comparación' : 'Comparar Escenarios' }}
+        </button>
+
+        <div class="comparison-controls__status" *ngIf="comparisonMode">
+          <span class="comparison-controls__count">
+            {{ selectedForComparison.size }}/3 seleccionados
+          </span>
+          <button
+            (click)="clearSelection()"
+            *ngIf="selectedForComparison.size > 0"
+            class="ui-btn ui-btn-ghost ui-btn-sm"
+          >
+            Limpiar
+          </button>
+        </div>
+      </div>
+
+      <div class="comparison-controls__actions" *ngIf="comparisonMode && selectedForComparison.size > 1">
+        <button
+          (click)="compareSelectedSimulations()"
+          [disabled]="selectedForComparison.size < 2"
+          class="ui-btn ui-btn-primary"
+          data-cy="open-comparison"
+        >
+           Comparar {{ selectedForComparison.size }} Escenarios
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="show-all-container" *ngIf="savedSimulations.length > 5">
+    <button (click)="showAllSimulations()" class="ui-btn ui-btn-ghost">
+      Ver todas las simulaciones ({{ savedSimulations.length }})
+    </button>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="savedSimulations.length === 0 && !smartContext.hasContext">
+    <div class="empty-state__icon">
+      <app-icon
+        class="empty-state__icon-svg"
+        name="support"
+        [size]="28"
+        aria-hidden="true"
+      ></app-icon>
+    </div>
+    <h3 class="empty-state__title">Primera vez en el Hub de Simuladores</h3>
+    <p class="empty-state__description">Selecciona un escenario arriba para comenzar tu primera simulación. Tus borradores aparecerán aquí para continuar más tarde.</p>
+  </div>
+</div>
+
+<!-- Smart Redirection Loading -->
+<div class="smart-redirect" *ngIf="isRedirecting">
+  <div class="redirect-content">
+    <div class="redirect-spinner"></div>
+    <h2><app-icon class="redirect-content__icon" name="beaker" [size]="24" aria-hidden="true"></app-icon> Analizando contexto...</h2>
+    <p>{{ redirectMessage }}</p>
+  </div>
+</div>
+
+<!-- Comparison Modal -->
+<div class="comparison-modal" *ngIf="showComparisonModal" data-cy="comparison-modal">
+  <div class="comparison-modal__container">
+    <div class="comparison-modal__backdrop" (click)="closeComparisonModal()"></div>
+
+    <div class="comparison-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="cmp-title" tabindex="-1" #cmpDialog>
+      <!-- Header -->
+      <div class="comparison-modal__header">
+        <div class="comparison-modal__header-content">
+          <h2 id="cmp-title" class="comparison-modal__title">
+            <app-icon
+              class="comparison-modal__title-icon"
+              name="adjustments"
+              [size]="24"
+              aria-hidden="true"
+            ></app-icon>
+            Comparación de Escenarios
+          </h2>
+          <button (click)="closeComparisonModal()" class="ui-btn ui-btn-ghost ui-btn-sm" #cmpClose aria-label="Cerrar">×</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="comparison-modal__content">
+        <div class="comparison-modal__table-container">
+          <table class="comparison-modal__table">
+            <thead>
+              <tr>
+                <th class="comparison-modal__table-header comparison-modal__table-header--metric">Métrica</th>
+                <th *ngFor="let sim of getSelectedSimulations()" class="comparison-modal__table-header">
+                  <div>
+                    <div class="comparison-modal__client-name">{{ sim.clientName }}</div>
+                    <div class="comparison-modal__scenario-title">{{ sim.scenarioTitle }}</div>
+                    <div class="comparison-modal__market-label">{{ getMarketLabel(sim.market) }}</div>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="comparison-modal__table-body">
+              <tr>
+                <td class="comparison-modal__table-cell comparison-modal__table-cell--metric">
+                  <app-icon
+                    class="comparison-modal__metric-icon"
+                    name="adjustments"
+                    [size]="24"
+                    aria-hidden="true"
+                  ></app-icon>
+                  Meta Total
+                </td>
+                <td *ngFor="let sim of getSelectedSimulations()" class="comparison-modal__table-cell comparison-modal__table-cell--value">
+                  {{ sim.summary.targetAmount ? formatCurrency(sim.summary.targetAmount) : 'N/D' }}
+                </td>
+              </tr>
+              <tr class="comparison-modal__table-row comparison-modal__table-row--alt">
+                <td class="comparison-modal__table-cell comparison-modal__table-cell--metric">
+                  <app-icon
+                    class="comparison-modal__metric-icon"
+                    name="currency-dollar"
+                    [size]="24"
+                    aria-hidden="true"
+                  ></app-icon>
+                  Aportación Mensual
+                </td>
+                <td *ngFor="let sim of getSelectedSimulations()" class="comparison-modal__table-cell comparison-modal__table-cell--value">
+                  {{ sim.summary.monthlyContribution ? formatCurrency(sim.summary.monthlyContribution) : 'N/D' }}
+                </td>
+              </tr>
+              <tr>
+                <td class="comparison-modal__table-cell comparison-modal__table-cell--metric">
+                  <app-icon
+                    class="comparison-modal__metric-icon"
+                    name="clock"
+                    [size]="24"
+                    aria-hidden="true"
+                  ></app-icon>
+                  Tiempo a la Meta
+                </td>
+                <td *ngFor="let sim of getSelectedSimulations()" class="comparison-modal__table-cell comparison-modal__table-cell--value">
+                  {{ sim.summary.timeToTarget ? (sim.summary.timeToTarget + ' meses') : 'N/D' }}
+                </td>
+              </tr>
+              <tr class="comparison-modal__table-row comparison-modal__table-row--alt">
+                <td class="comparison-modal__table-cell comparison-modal__table-cell--metric">
+                  <app-icon
+                    class="comparison-modal__metric-icon"
+                    name="adjustments"
+                    [size]="24"
+                    aria-hidden="true"
+                  ></app-icon>
+                  Tipo de Cliente
+                </td>
+                <td *ngFor="let sim of getSelectedSimulations()" class="comparison-modal__table-cell comparison-modal__table-cell--value">
+                  {{ sim.clientType }}
+                </td>
+              </tr>
+              <tr>
+                <td class="comparison-modal__table-cell comparison-modal__table-cell--metric">📅 Estado</td>
+                <td *ngFor="let sim of getSelectedSimulations()" class="comparison-modal__table-cell">
+                  <span class="comparison-modal__status-badge"
+                        [class.comparison-modal__status-badge--draft]="sim.summary.status === 'draft'"
+                        [class.comparison-modal__status-badge--completed]="sim.summary.status === 'completed'">
+                    {{ sim.summary.status === 'draft' ? 'Borrador' : 'Completado' }}
+                  </span>
+                </td>
+              </tr>
+              <tr class="comparison-modal__table-row comparison-modal__table-row--alt">
+                <td class="comparison-modal__table-cell comparison-modal__table-cell--metric">
+                  <app-icon
+                    class="comparison-modal__metric-icon"
+                    name="adjustments"
+                    [size]="24"
+                    aria-hidden="true"
+                  ></app-icon>
+                  Eficiencia
+                </td>
+                <td *ngFor="let sim of getSelectedSimulations()" class="comparison-modal__table-cell">
+                  <span class="comparison-modal__efficiency-badge"
+                        [class.comparison-modal__efficiency-badge--excellent]="getEfficiencyClass(sim) === 'excellent'"
+                        [class.comparison-modal__efficiency-badge--good]="getEfficiencyClass(sim) === 'good'"
+                        [class.comparison-modal__efficiency-badge--fair]="getEfficiencyClass(sim) === 'fair'"
+                        [class.comparison-modal__efficiency-badge--poor]="getEfficiencyClass(sim) === 'poor'">
+                    {{ getEfficiencyScore(sim) }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Insights -->
+      <div class="comparison-modal__insights">
+        <h3 class="comparison-modal__insights-title">
+          <app-icon
+            class="comparison-modal__insights-icon"
+            name="beaker"
+            [size]="24"
+            aria-hidden="true"
+          ></app-icon>
+          Insights Automáticos
+        </h3>
+        <div class="comparison-modal__insights-grid">
+          <div class="ui-card">
+            <div class="comparison-modal__insight-icon">
+              <app-icon
+                class="comparison-modal__insight-icon-svg"
+                name="sparkles"
+                [size]="24"
+                aria-hidden="true"
+              ></app-icon>
+            </div>
+            <div class="comparison-modal__insight-label">Mejor Opción</div>
+            <div class="comparison-modal__insight-value">{{ getBestOption() }}</div>
+          </div>
+          <div class="ui-card">
+            <div class="comparison-modal__insight-icon">
+              <app-icon
+                class="comparison-modal__insight-icon-svg comparison-modal__insight-icon-svg--warning"
+                name="lightning-bolt"
+                [size]="24"
+                aria-hidden="true"
+              ></app-icon>
+            </div>
+            <div class="comparison-modal__insight-label">Más Rápido</div>
+            <div class="comparison-modal__insight-value">{{ getFastestOption() }}</div>
+          </div>
+          <div class="ui-card">
+            <div class="comparison-modal__insight-icon">
+              <app-icon
+                class="comparison-modal__insight-icon-svg comparison-modal__insight-icon-svg--success"
+                name="currency-dollar"
+                [size]="24"
+                aria-hidden="true"
+              ></app-icon>
+            </div>
+            <div class="comparison-modal__insight-label">Menor Aportación</div>
+            <div class="comparison-modal__insight-value">{{ getLowestContributionOption() }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="comparison-modal__actions">
+        <button (click)="closeComparisonModal()" class="ui-btn ui-btn-primary comparison-modal__primary-action">
+          Cerrar
+        </button>
+        <button (click)="shareComparison()" class="ui-btn ui-btn-secondary comparison-modal__secondary-action">
+          <app-icon
+            class="comparison-modal__share-icon"
+            name="chat-bubble"
+            [size]="24"
+            aria-hidden="true"
+          ></app-icon>
+          Compartir WhatsApp
+        </button>
+        <button (click)="exportComparison()" class="ui-btn ui-btn-ghost comparison-modal__ghost-action">
+           Exportar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

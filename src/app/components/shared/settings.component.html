@@ -1,0 +1,38 @@
+<section class="settings">
+  <h2 class="settings__main-title">Configuración y Estado del Sistema</h2>
+
+  <div class="settings__tabs-container">
+    <nav class="settings__tabs-nav" aria-label="Pestañas de configuración">
+      <button
+        type="button"
+        class="settings__tab-button"
+        [ngClass]="getTabClasses('profile')"
+        (click)="setActiveTab('profile')"
+        [attr.aria-current]="activeTab === 'profile' ? 'page' : null"
+      >
+        <span class="settings__tab-icon">
+          <app-icon class="icon-20" name="user" [size]="20"></app-icon>
+        </span>
+        Perfil y Cuenta
+      </button>
+
+      <button
+        type="button"
+        class="settings__tab-button"
+        [ngClass]="getTabClasses('integrations')"
+        (click)="setActiveTab('integrations')"
+        [attr.aria-current]="activeTab === 'integrations' ? 'page' : null"
+      >
+        <span class="settings__tab-icon">
+          <app-icon class="icon-20" name="settings" [size]="20"></app-icon>
+        </span>
+        Estado de Integraciones
+      </button>
+    </nav>
+  </div>
+
+  <div class="settings__content">
+    <app-profile-settings *ngIf="activeTab === 'profile'" class="settings__panel"></app-profile-settings>
+    <app-integrations *ngIf="activeTab === 'integrations'" class="settings__panel"></app-integrations>
+  </div>
+</section>

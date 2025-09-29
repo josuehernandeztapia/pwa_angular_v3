@@ -1,0 +1,28 @@
+<aside class="summary-panel" aria-labelledby="summary-panel-title">
+  <header class="summary-panel__header">
+    <h2 id="summary-panel-title" class="summary-panel__title">Resumen</h2>
+  </header>
+
+  <div class="summary-panel__metrics" role="list">
+    <div *ngFor="let metric of metrics" class="summary-panel__metric" role="listitem">
+      <span class="summary-panel__metric-label">{{ metric.label }}</span>
+      <span class="summary-panel__metric-value">
+        <span class="summary-panel__metric-primary">{{ metric.value }}</span>
+        <span *ngIf="metric.badge" class="summary-panel__metric-badge" [ngClass]="getBadgeClasses(metric.badge)">
+          {{ metric.badge | titlecase }}
+        </span>
+      </span>
+    </div>
+  </div>
+
+  <div *ngIf="actions?.length" class="summary-panel__actions">
+    <button
+      *ngFor="let action of actions"
+      type="button"
+      class="summary-panel__action"
+      (click)="onAction(action)"
+    >
+      {{ action.label }}
+    </button>
+  </div>
+</aside>

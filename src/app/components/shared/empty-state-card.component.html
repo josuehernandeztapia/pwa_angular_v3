@@ -1,0 +1,18 @@
+<section class="empty-state-card" role="status" aria-live="polite">
+  <div class="empty-state-card__media" aria-hidden="true">
+    <ng-container *ngIf="iconName; else noIcon">
+      <app-icon class="empty-state-card__icon" [name]="iconName!" [size]="40" color="currentColor"></app-icon>
+    </ng-container>
+    <ng-template #noIcon></ng-template>
+  </div>
+  <h3 class="empty-state-card__title">{{ title }}</h3>
+  <p class="empty-state-card__subtitle">{{ subtitle }}</p>
+  <div class="empty-state-card__actions" *ngIf="primaryCtaLabel || secondaryCtaLabel">
+    <button *ngIf="primaryCtaLabel" type="button" class="empty-state-card__action empty-state-card__action--primary" (click)="primary.emit()">
+      {{ primaryCtaLabel }}
+    </button>
+    <button *ngIf="secondaryCtaLabel" type="button" class="empty-state-card__action empty-state-card__action--secondary" (click)="secondary.emit()">
+      {{ secondaryCtaLabel }}
+    </button>
+  </div>
+</section>

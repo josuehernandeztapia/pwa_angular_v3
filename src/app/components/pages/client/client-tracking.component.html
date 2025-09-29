@@ -1,0 +1,253 @@
+<section class="client-tracking" aria-live="polite">
+  <header class="client-tracking__header">
+    <div class="client-tracking__heading">
+      <div class="client-tracking__title-group">
+        <app-icon
+          class="client-tracking__title-icon"
+          name="cube"
+          [size]="24"
+          aria-hidden="true"
+        ></app-icon>
+        <div class="client-tracking__title-text">
+          <h1 class="client-tracking__title">Seguimiento de tu Vagoneta</h1>
+          <p class="client-tracking__subtitle" *ngIf="clientName() as name">
+            Hola {{ name }}, aquí puedes ver el estado de tu pedido
+          </p>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="ui-btn ui-btn-secondary client-tracking__refresh"
+        (click)="refreshTracking()"
+        [disabled]="loading()"
+      >
+        Actualizar
+      </button>
+    </div>
+  </header>
+
+  <section *ngIf="loading()" class="client-tracking__loading" aria-busy="true">
+    <div class="client-tracking__spinner"></div>
+    <p>Consultando el estado de tu pedido...</p>
+  </section>
+
+  <section
+    *ngIf="!loading() && deliveryInfo().length === 0"
+    class="client-tracking__empty"
+    aria-live="polite"
+  >
+    <div class="client-tracking__empty-icon" aria-hidden="true"></div>
+    <h2 class="client-tracking__empty-title">Aún no hay entregas registradas</h2>
+    <p class="client-tracking__empty-subtitle">
+      Cuando tu pedido avance te mostraremos el progreso aquí.
+    </p>
+  </section>
+
+  <section *ngIf="!loading() && deliveryInfo().length > 0" class="client-tracking__list">
+    <article
+      *ngFor="let info of deliveryInfo(); trackBy: trackByOrderId"
+      class="client-tracking__card"
+    >
+      <header class="client-tracking__card-header">
+        <div class="client-tracking__order">
+          <h3 class="client-tracking__order-title">Tu Vagoneta</h3>
+          <span class="client-tracking__order-id">Pedido {{ info.orderId }}</span>
+        </div>
+        <div class="client-tracking__card-actions">
+          <span class="client-tracking__status" [ngClass]="'is-' + getStatusClass(info.status)">
+            {{ info.status }}
+          </span>
+          <button
+            type="button"
+            class="ui-btn ui-btn-ghost client-tracking__action"
+            (click)="printOnePager(info)"
+            data-cy="entregas-pdf"
+          >
+            Imprimir/PDF
+          </button>
+        </div>
+      </header>
+
+      <section class="client-tracking__progress" aria-label="Progreso de la entrega">
+        <div class="client-tracking__progress-bar">
+          <div
+            class="client-tracking__progress-fill"
+            [style.width.%]="getProgressPercentage(info.status)"
+          ></div>
+        </div>
+        <div class="client-tracking__progress-labels">
+          <span>Pedido realizado</span>
+          <span>Entregada</span>
+        </div>
+      </section>
+
+      <section class="client-tracking__summary">
+        <p class="client-tracking__message">{{ info.message }}</p>
+
+        <div class="client-tracking__eta" *ngIf="!info.isDelivered">
+          <span class="client-tracking__eta-icon" aria-hidden="true">📅</span>
+          <div class="client-tracking__eta-content">
+            <span class="client-tracking__eta-label">Fecha estimada de entrega</span>
+            <span class="client-tracking__eta-value">{{ info.estimatedDate }}</span>
+          </div>
+        </div>
+
+        <div class="client-tracking__delivered" *ngIf="info.isDelivered">
+          <div class="client-tracking__delivered-icon" aria-hidden="true"></div>
+          <p class="client-tracking__delivered-message">
+            ¡Listo! Tu vehículo fue entregado exitosamente.
+          </p>
+        </div>
+      </section>
+
+      <section
+        class="client-tracking__handover"
+        *ngIf="info.canScheduleHandover && !info.isDelivered"
+      >
+        <div class="client-tracking__handover-notice">
+          <div class="client-tracking__handover-icon" aria-hidden="true"></div>
+          <div class="client-tracking__handover-copy">
+            <h4>Agenda tu entrega</h4>
+            <p>Nos pondremos en contacto para coordinar el mejor horario.</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="ui-btn ui-btn-primary"
+          (click)="requestCallback(info.orderId)"
+        >
+          Solicitar contacto
+        </button>
+      </section>
+
+      <section class="client-tracking__timeline" aria-label="Línea de tiempo de la entrega">
+        <div
+          class="client-tracking__timeline-step"
+          [ngClass]="{
+            'is-completed': isTimelineStepCompleted(info.status, 'ordered'),
+            'is-current': isTimelineStepCurrent(info.status, 'ordered')
+          }"
+        >
+          <span class="client-tracking__timeline-dot"></span>
+          <div class="client-tracking__timeline-body">
+            <h4>Pedido confirmado</h4>
+            <p>Estamos preparando tu unidad.</p>
+          </div>
+        </div>
+
+        <div
+          class="client-tracking__timeline-step"
+          [ngClass]="{
+            'is-completed': isTimelineStepCompleted(info.status, 'production'),
+            'is-current': isTimelineStepCurrent(info.status, 'production')
+          }"
+        >
+          <span class="client-tracking__timeline-dot"></span>
+          <div class="client-tracking__timeline-body">
+            <h4>En producción</h4>
+            <p>Realizamos ajustes y verificaciones.</p>
+          </div>
+        </div>
+
+        <div
+          class="client-tracking__timeline-step"
+          [ngClass]="{
+            'is-completed': isTimelineStepCompleted(info.status, 'shipping'),
+            'is-current': isTimelineStepCurrent(info.status, 'shipping')
+          }"
+        >
+          <span class="client-tracking__timeline-dot"></span>
+          <div class="client-tracking__timeline-body">
+            <h4>En ruta</h4>
+            <p>Tu vehículo está camino a tu ciudad.</p>
+          </div>
+        </div>
+
+        <div
+          class="client-tracking__timeline-step"
+          [ngClass]="{
+            'is-completed': isTimelineStepCompleted(info.status, 'ready'),
+            'is-current': isTimelineStepCurrent(info.status, 'ready')
+          }"
+        >
+          <span class="client-tracking__timeline-dot"></span>
+          <div class="client-tracking__timeline-body">
+            <h4>Listo para entrega</h4>
+            <p>Coordinamos la fecha contigo.</p>
+          </div>
+        </div>
+
+        <div
+          class="client-tracking__timeline-step"
+          [ngClass]="{
+            'is-completed': isTimelineStepCompleted(info.status, 'delivered')
+          }"
+        >
+          <span class="client-tracking__timeline-dot"></span>
+          <div class="client-tracking__timeline-body">
+            <h4>Entregado</h4>
+            <p>¡Disfruta la conducción!</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="client-tracking__faq" *ngIf="!info.isDelivered">
+        <button
+          type="button"
+          class="client-tracking__faq-toggle"
+          (click)="toggleFaq(info.orderId)"
+          [class.is-open]="openFaq() === info.orderId"
+        >
+          Preguntas frecuentes
+        </button>
+        <div class="client-tracking__faq-content" *ngIf="openFaq() === info.orderId">
+          <article class="client-tracking__faq-item">
+            <h4>¿Qué pasa si no puedo recibir el vehículo?</h4>
+            <p>Podemos reprogramar la entrega sin costo adicional.</p>
+          </article>
+          <article class="client-tracking__faq-item">
+            <h4>¿Puedo designar a otra persona?</h4>
+            <p>Sí, solo necesitamos su identificación oficial y carta poder.</p>
+          </article>
+          <article class="client-tracking__faq-item">
+            <h4>¿Dónde puedo ver mis documentos?</h4>
+            <p>Tu asesor puede reenviarte el expediente digital cuando lo necesites.</p>
+          </article>
+          <article class="client-tracking__faq-item">
+            <h4>¿Cómo solicito soporte?</h4>
+            <p>Usa las opciones de contacto al final de la página.</p>
+          </article>
+        </div>
+      </section>
+    </article>
+  </section>
+
+  <footer class="client-tracking__contact" aria-label="Opciones de contacto">
+    <div class="client-tracking__contact-card">
+      <h2>Estamos listos para ayudarte</h2>
+      <div class="client-tracking__contact-list">
+        <div class="client-tracking__contact-item">
+          <span class="client-tracking__contact-icon" aria-hidden="true">📞</span>
+          <div>
+            <span class="client-tracking__contact-label">Teléfono</span>
+            <span class="client-tracking__contact-value">449 123 4567</span>
+          </div>
+        </div>
+        <div class="client-tracking__contact-item">
+          <span class="client-tracking__contact-icon" aria-hidden="true">💬</span>
+          <div>
+            <span class="client-tracking__contact-label">WhatsApp</span>
+            <span class="client-tracking__contact-value">449 123 4567</span>
+          </div>
+        </div>
+        <div class="client-tracking__contact-item">
+          <span class="client-tracking__contact-icon" aria-hidden="true">✉️</span>
+          <div>
+            <span class="client-tracking__contact-label">Email</span>
+            <span class="client-tracking__contact-value">soporte&#64;conductores.mx</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</section>

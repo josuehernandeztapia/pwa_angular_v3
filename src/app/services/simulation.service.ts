@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
-import { Client, EventLog, PaymentLinkDetails, Actor, EventType, Document } from '../models/types';
+import { Client, EventLog, PaymentLinkDetails, Actor, EventType, Document, ProtectionScenario } from '../models/types';
+import { MockApiService } from './mock-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -111,7 +112,10 @@ export class SimulationService {
   }
 
   // Port exacto de simulateProtectionDemo desde React líneas 748-807
-  async simulateProtectionDemo(baseQuote: { amountToFinance: number; monthlyPayment: number; term: number }, monthsToSimulate: number): Promise<any[]> {
+  async simulateProtectionDemo(
+    baseQuote: { amountToFinance: number; monthlyPayment: number; term: number },
+    monthsToSimulate: number
+  ): Promise<ProtectionScenario[]> {
     const { amountToFinance: P, monthlyPayment: M, term: originalTerm } = baseQuote;
     
     const r = 0.255 / 12; 
@@ -127,13 +131,14 @@ export class SimulationService {
     
     // Get the outstanding balance after 12 payments
     const B_k = this.getBalance(P, M, r, monthsPaid);
-    const scenarios: any[] = [];
+    const scenarios: ProtectionScenario[] = [];
 
     // Scenario A: Deferral
     const newRemainingTerm_A = remainingTerm - monthsToSimulate;
     const newPayment_A = this.annuity(B_k, r, newRemainingTerm_A);
     scenarios.push({
-      type: 'defer',
+      type: 'DEFER',
+      params: { deferMonths: monthsToSimulate },
       title: 'Pausa y Prorrateo',
       description: 'Pausa los pagos y distribuye el monto en las mensualidades restantes.',
       newMonthlyPayment: newPayment_A,
@@ -150,7 +155,8 @@ export class SimulationService {
     const principalAfterStepDown = this.getBalance(B_k, reducedPayment, r, monthsToSimulate);
     const compensationPayment = this.annuity(principalAfterStepDown, r, remainingTerm - monthsToSimulate);
     scenarios.push({
-      type: 'step-down',
+      type: 'STEPDOWN',
+      params: { reduction: 0.5, months: monthsToSimulate },
       title: 'Reducción y Compensación',
       description: 'Reduce el pago a la mitad y compensa la diferencia más adelante.',
       newMonthlyPayment: compensationPayment,
@@ -165,7 +171,8 @@ export class SimulationService {
     // Scenario C: Recalendar (Term Extension)
     const newTerm_C = originalTerm + monthsToSimulate;
     scenarios.push({
-      type: 'recalendar',
+      type: 'RECALENDAR',
+      params: { extendMonths: monthsToSimulate },
       title: 'Extensión de Plazo',
       description: 'Pausa los pagos y extiende el plazo del crédito para compensar.',
       newMonthlyPayment: M,

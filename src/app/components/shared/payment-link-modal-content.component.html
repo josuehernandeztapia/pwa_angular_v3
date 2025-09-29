@@ -1,0 +1,113 @@
+<section class="payment-link-modal" [ngClass]="getContainerClasses()">
+  <div *ngIf="isLoading" class="payment-link-modal__loading" aria-live="polite">
+    <div class="payment-link-modal__spinner" role="status" aria-label="Procesando"></div>
+    <p class="payment-link-modal__loading-text">Procesando...</p>
+  </div>
+
+  <div *ngIf="!isLoading && paymentDetails" class="payment-link-modal__details">
+    <p class="payment-link-modal__intro">
+      Información de pago generada. Compártela con el cliente y simula el pago una vez confirmado.
+    </p>
+
+    <section
+      *ngIf="paymentDetails.type === 'Conekta'"
+      class="payment-link-modal__payment-block payment-link-modal__payment-block--conekta"
+      aria-label="Liga de pago Conekta"
+    >
+      <label class="payment-link-modal__field-label" for="paymentLink">Liga de Pago Conekta</label>
+      <div class="payment-link-modal__clipboard-field">
+        <input
+          id="paymentLink"
+          class="payment-link-modal__input payment-link-modal__input--readonly"
+          type="text"
+          readonly
+          [value]="paymentDetails.details.link"
+        />
+        <button
+          type="button"
+          class="payment-link-modal__clipboard-btn"
+          (click)="handleCopy(getDetailsToCopy())"
+        >
+          Copiar
+        </button>
+      </div>
+    </section>
+
+    <section
+      *ngIf="paymentDetails.type === 'SPEI'"
+      class="payment-link-modal__payment-block payment-link-modal__payment-block--spei"
+      aria-label="Datos bancarios SPEI"
+    >
+      <div class="payment-link-modal__spei-row">
+        <span class="payment-link-modal__spei-label">Banco:</span>
+        <span class="payment-link-modal__spei-value">{{ paymentDetails.details.bank }}</span>
+      </div>
+      <div class="payment-link-modal__spei-row">
+        <span class="payment-link-modal__spei-label">CLABE:</span>
+        <span class="payment-link-modal__spei-value">{{ paymentDetails.details.clabe }}</span>
+      </div>
+      <div class="payment-link-modal__spei-row">
+        <span class="payment-link-modal__spei-label">Referencia:</span>
+        <span class="payment-link-modal__spei-value">{{ paymentDetails.details.reference }}</span>
+      </div>
+      <button
+        type="button"
+        class="payment-link-modal__clipboard-btn payment-link-modal__clipboard-btn--block"
+        (click)="handleCopy(getDetailsToCopy())"
+      >
+        Copiar datos
+      </button>
+    </section>
+
+    <div class="payment-link-modal__actions">
+      <button
+        type="button"
+        class="payment-link-modal__action-btn payment-link-modal__action-btn--primary"
+        (click)="handleSimulatePayment()"
+      >
+        Simular Pago del Cliente
+      </button>
+      <button
+        type="button"
+        class="payment-link-modal__action-btn payment-link-modal__action-btn--ghost"
+        (click)="handleClose()"
+      >
+        Cerrar
+      </button>
+    </div>
+  </div>
+
+  <form
+    *ngIf="!isLoading && !paymentDetails"
+    class="payment-link-modal__form"
+    (ngSubmit)="handleGenerateLink($event)"
+  >
+    <p class="payment-link-modal__intro">
+      Introduce el monto del pago para generar la liga de pago o los datos de transferencia correspondientes.
+    </p>
+
+    <div class="payment-link-modal__amount-field">
+      <label class="payment-link-modal__field-label" for="amount">Monto (MXN)</label>
+      <div class="payment-link-modal__currency-input">
+        <span class="payment-link-modal__currency-symbol">$</span>
+        <input
+          id="amount"
+          name="amount"
+          type="number"
+          class="payment-link-modal__input payment-link-modal__input--currency"
+          [(ngModel)]="amount"
+          placeholder="0.00"
+          min="1"
+          step="any"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="payment-link-modal__submit">
+      <button type="submit" class="payment-link-modal__action-btn payment-link-modal__action-btn--primary">
+        Generar
+      </button>
+    </div>
+  </form>
+</section>

@@ -1,0 +1,368 @@
+<div class="triggers-monitor">
+  <!-- Header (compact) -->
+  <div class="triggers-monitor__header">
+    <div class="triggers-monitor__header-layout">
+      <div class="triggers-monitor__header-info">
+        <h1 class="triggers-monitor__title">Monitor de Triggers</h1>
+        <p class="triggers-monitor__subtitle">Actividad reciente y pendientes según filtros</p>
+      </div>
+
+      <div class="triggers-monitor__header-meta">
+        <!-- Estado del monitoreo -->
+        <div class="triggers-monitor__monitoring-indicator" [ngClass]="monitoringStatusModifier()">
+          <div class="triggers-monitor__monitoring-content">
+            <span class="triggers-monitor__monitoring-dot"></span>
+            <span class="triggers-monitor__monitoring-label">
+              {{ monitoringStatus() === 'active' ? 'Monitoreo Activo' : 'Monitoreo Inactivo' }}
+            </span>
+          </div>
+        </div>
+        
+        <!-- Última actualización -->
+        <div class="triggers-monitor__monitoring-timestamp">
+          Última actualización: {{ lastUpdate() | date:'HH:mm:ss' }}
+        </div>
+        
+        <!-- Botón de refresh manual -->
+        <button
+          (click)="forceRefresh()"
+          [disabled]="loading()"
+          class="triggers-monitor__refresh"
+          aria-label="Actualizar"
+        >
+          <app-icon name="refresh" [size]="24" class="triggers-monitor__reload-icon" [class.triggers-monitor__reload-icon--spin]="loading()" aria-hidden="true"></app-icon>
+          <span>{{ loading() ? 'Actualizando...' : 'Actualizar' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Métricas rápidas -->
+  <div class="triggers-monitor__summary">
+    <div class="triggers-monitor__summary-card triggers-monitor__summary-card--total">
+      <div class="triggers-monitor__summary-content">
+        <div>
+          <p class="triggers-monitor__summary-label">Total Triggers</p>
+          <p class="triggers-monitor__summary-value">{{ metrics()?.totalTriggers || 0 }}</p>
+        </div>
+      </div>
+      <div class="triggers-monitor__summary-icon triggers-monitor__summary-icon--primary">
+        <app-icon name="lightning-bolt" [size]="24" aria-hidden="true"></app-icon>
+      </div>
+    </div>
+
+    <div class="triggers-monitor__summary-card triggers-monitor__summary-card--success">
+      <div class="triggers-monitor__summary-content">
+        <p class="triggers-monitor__summary-label">Exitosos</p>
+        <p class="triggers-monitor__summary-value triggers-monitor__summary-value--success">{{ metrics()?.successfulTriggers || 0 }}</p>
+      </div>
+      <div class="triggers-monitor__summary-icon triggers-monitor__summary-icon--success">
+        <app-icon name="check-circle" [size]="24" aria-hidden="true"></app-icon>
+      </div>
+    </div>
+
+    <div class="triggers-monitor__summary-card triggers-monitor__summary-card--error">
+      <div class="triggers-monitor__summary-content">
+        <p class="triggers-monitor__summary-label">Fallidos</p>
+        <p class="triggers-monitor__summary-value triggers-monitor__summary-value--error">{{ metrics()?.failedTriggers || 0 }}</p>
+      </div>
+      <div class="triggers-monitor__summary-icon triggers-monitor__summary-icon--error">
+        <app-icon name="exclamation-circle" [size]="24" aria-hidden="true"></app-icon>
+      </div>
+    </div>
+
+    <div class="triggers-monitor__summary-card triggers-monitor__summary-card--warning">
+      <div class="triggers-monitor__summary-content">
+        <p class="triggers-monitor__summary-label">Pendientes</p>
+        <p class="triggers-monitor__summary-value triggers-monitor__summary-value--warning">{{ metrics()?.pendingAnalysis || 0 }}</p>
+      </div>
+      <div class="triggers-monitor__summary-icon triggers-monitor__summary-icon--warning">
+        <app-icon name="clock" [size]="24" aria-hidden="true"></app-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="triggers-monitor__filters">
+    <div class="triggers-monitor__filter">
+      <label class="triggers-monitor__filter-label">
+        <app-icon name="location-marker" [size]="24" class="triggers-monitor__filter-icon triggers-monitor__filter-icon--market" />
+        Mercado
+      </label>
+      <select
+        class="triggers-monitor__filter-control"
+        [(ngModel)]="selectedMarket"
+        (ngModelChange)="applyFilters()"
+        aria-label="Seleccionar mercado">
+        <option value="">Todos</option>
+        <option value="aguascalientes">Aguascalientes</option>
+        <option value="edomex">Estado de México</option>
+      </select>
+    </div>
+
+    <div class="triggers-monitor__filter">
+      <label class="triggers-monitor__filter-label">
+        <app-icon name="menu" [size]="24" class="triggers-monitor__filter-icon" />
+        Flujo
+      </label>
+      <select
+        class="triggers-monitor__filter-control"
+        [(ngModel)]="selectedFlow"
+        (ngModelChange)="applyFilters()"
+        aria-label="Seleccionar flujo">
+        <option value="">Todos</option>
+        <option value="Venta Directa">Venta Directa</option>
+        <option value="Venta a Plazo">Venta a Plazo</option>
+        <option value="Plan de Ahorro">Plan de Ahorro</option>
+        <option value="Crédito Colectivo">Crédito Colectivo</option>
+      </select>
+    </div>
+
+    <div class="triggers-monitor__filter">
+      <label class="triggers-monitor__filter-label">
+        <app-icon name="cube" [size]="24" class="triggers-monitor__filter-icon triggers-monitor__filter-icon--status" />
+        Estado
+      </label>
+      <select
+        class="triggers-monitor__filter-control"
+        [(ngModel)]="selectedStatus"
+        (ngModelChange)="applyFilters()"
+        aria-label="Seleccionar estado">
+        <option value="">Todos</option>
+        <option value="success">Exitoso</option>
+        <option value="error">Error</option>
+        <option value="pending">Pendiente</option>
+      </select>
+    </div>
+
+    <div class="triggers-monitor__filters-summary">
+      <span class="triggers-monitor__filters-count">
+        {{ filteredEvents().length }} trigger{{ filteredEvents().length !== 1 ? 's' : '' }} encontrado{{ filteredEvents().length !== 1 ? 's' : '' }}
+      </span>
+      <button
+        *ngIf="hasActiveFilters()"
+        class="triggers-monitor__filters-clear"
+        (click)="clearFilters()"
+        aria-label="Limpiar filtros activos">
+        Limpiar filtros
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <nav class="triggers-monitor__tabs">
+    <button
+      type="button"
+      class="triggers-monitor__tab"
+      [class.triggers-monitor__tab--active]="activeTab === 'recent'"
+      (click)="activeTab = 'recent'">
+      Triggers Recientes
+      <span class="triggers-monitor__tab-badge">{{ filteredEvents().length }}</span>
+    </button>
+    <button
+      type="button"
+      class="triggers-monitor__tab"
+      [class.triggers-monitor__tab--active]="activeTab === 'pending'"
+      (click)="activeTab = 'pending'">
+      Análisis Pendientes
+      <span class="triggers-monitor__tab-badge">{{ pendingContracts().length + pendingTandas().length }}</span>
+    </button>
+    <button
+      type="button"
+      class="triggers-monitor__tab"
+      [class.triggers-monitor__tab--active]="activeTab === 'rules'"
+      (click)="activeTab = 'rules'">
+      Reglas de Trigger
+      <span class="triggers-monitor__tab-badge">{{ triggerRules().length }}</span>
+    </button>
+  </nav>
+
+  <!-- Contenido de tabs -->
+  <div class="triggers-monitor__content">
+    <!-- Tab: Triggers Recientes -->
+    <section *ngIf="activeTab === 'recent'" class="triggers-monitor__panel">
+      <app-skeleton-card *ngIf="loading()" [titleWidth]="50" [subtitleWidth]="80" [buttonWidth]="30"></app-skeleton-card>
+
+      <article *ngFor="let event of filteredEvents()" class="triggers-monitor__event-card">
+        <header class="triggers-monitor__event-header">
+          <div class="triggers-monitor__event-summary">
+            <span class="triggers-monitor__status-dot" [ngClass]="getEventStatusClass(event)"></span>
+            <h3 class="triggers-monitor__event-title">{{ getEventTitle(event) }}</h3>
+            <span [ngClass]="getFlowBadgeClass(getEventFlow(event))">{{ getEventFlow(event) }}</span>
+            <span class="triggers-monitor__meta-tag triggers-monitor__meta-tag--neutral">{{ getEventMarket(event) }}</span>
+          </div>
+        </header>
+
+        <div class="triggers-monitor__event-metrics">
+          <div class="triggers-monitor__event-metric">
+            <p class="triggers-monitor__event-metric-label">Umbral Objetivo</p>
+            <p class="triggers-monitor__event-metric-value">\${{ event.thresholdAmount | number:'1.2-2' }}</p>
+          </div>
+          <div class="triggers-monitor__event-metric">
+            <p class="triggers-monitor__event-metric-label">Monto Actual</p>
+            <p class="triggers-monitor__event-metric-value">\${{ event.actualAmount | number:'1.2-2' }}</p>
+          </div>
+          <div class="triggers-monitor__event-metric">
+            <p class="triggers-monitor__event-metric-label">Porcentaje</p>
+            <p class="triggers-monitor__event-metric-value">{{ event.triggerPercentage.toFixed(1) }}%</p>
+          </div>
+        </div>
+
+        <footer class="triggers-monitor__event-footer">
+          <div class="triggers-monitor__event-meta">
+            <span class="triggers-monitor__event-timestamp">{{ event.triggerDate | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span class="triggers-monitor__event-meta-item">Procesado: {{ event.processedBy === 'system' ? 'Automático' : 'Manual' }}</span>
+          </div>
+          <div class="triggers-monitor__event-actions">
+            <button
+              *ngIf="event.deliveryOrderId"
+              class="triggers-monitor__event-button triggers-monitor__event-button--primary"
+              (click)="viewDeliveryOrder(event.deliveryOrderId!)"
+              aria-label="Ver orden de entrega">
+              Ver Orden
+            </button>
+            <button
+              *ngIf="event.errorMessage"
+              class="triggers-monitor__event-button triggers-monitor__event-button--danger"
+              (click)="viewError(event)"
+              aria-label="Ver error">
+              Ver Error
+            </button>
+          </div>
+        </footer>
+      </article>
+
+      <div *ngIf="filteredEvents().length === 0 && !loading()" class="triggers-monitor__empty">
+        <p class="triggers-monitor__empty-message">No hay registros con los filtros seleccionados.</p>
+      </div>
+    </section>
+
+    <!-- Tab: Análisis Pendientes -->
+    <section *ngIf="activeTab === 'pending'" class="triggers-monitor__panel">
+      <article *ngFor="let contract of pendingContracts()" class="triggers-monitor__pending-card">
+        <header class="triggers-monitor__pending-header">
+          <span class="triggers-monitor__pulse-dot triggers-monitor__pulse-dot--orange"></span>
+          <h3 class="triggers-monitor__pending-title">{{ contract.clientName }}</h3>
+          <span [ngClass]="getFlowBadgeClass(contract.flow)">{{ contract.flow }}</span>
+          <span class="triggers-monitor__meta-tag triggers-monitor__meta-tag--neutral">{{ contract.market }}</span>
+        </header>
+        <div class="triggers-monitor__pending-metrics">
+          <div class="triggers-monitor__pending-metric">
+            <p class="triggers-monitor__pending-metric-label">Umbral Requerido</p>
+            <p class="triggers-monitor__pending-metric-value">\${{ contract.thresholdAmount | number:'1.2-2' }}</p>
+          </div>
+          <div class="triggers-monitor__pending-metric">
+            <p class="triggers-monitor__pending-metric-label">Pagado Actualmente</p>
+            <p class="triggers-monitor__pending-metric-value">\${{ contract.currentPaidAmount | number:'1.2-2' }}</p>
+          </div>
+          <div class="triggers-monitor__pending-metric">
+            <p class="triggers-monitor__pending-metric-label">Progreso</p>
+            <div class="triggers-monitor__pending-progress">
+              <div class="triggers-monitor__pending-progress-bar">
+                <div class="triggers-monitor__pending-progress-fill" [style.width.%]="contract.thresholdPercentage"></div>
+              </div>
+              <span class="triggers-monitor__pending-progress-value">{{ contract.thresholdPercentage.toFixed(1) }}%</span>
+            </div>
+          </div>
+          <div class="triggers-monitor__pending-metric">
+            <p class="triggers-monitor__pending-metric-label">Estado</p>
+            <p class="triggers-monitor__pending-metric-value triggers-monitor__pending-metric-value--warning">
+              {{ contract.thresholdReached ? 'Listo para Trigger' : 'Esperando Pagos' }}
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article *ngFor="let tanda of pendingTandas()" class="triggers-monitor__pending-card triggers-monitor__pending-card--tanda">
+        <header class="triggers-monitor__pending-header">
+          <span class="triggers-monitor__pulse-dot triggers-monitor__pulse-dot--purple"></span>
+          <h3 class="triggers-monitor__pending-title">{{ tanda.groupName }}</h3>
+          <span class="triggers-monitor__meta-tag triggers-monitor__meta-tag--purple">Tanda Colectiva</span>
+        </header>
+        <div class="triggers-monitor__pending-metrics">
+          <div class="triggers-monitor__pending-metric">
+            <p class="triggers-monitor__pending-metric-label">Miembros Activos</p>
+            <p class="triggers-monitor__pending-metric-value">{{ tanda.activeMembersCount }}</p>
+          </div>
+          <div class="triggers-monitor__pending-metric">
+            <p class="triggers-monitor__pending-metric-label">Meses Colectando</p>
+            <p class="triggers-monitor__pending-metric-value">{{ tanda.monthsCollecting }}</p>
+          </div>
+          <div class="triggers-monitor__pending-metric">
+            <p class="triggers-monitor__pending-metric-label">Total Colectado</p>
+            <p class="triggers-monitor__pending-metric-value">\${{ tanda.totalCollected | number:'1.2-2' }}</p>
+          </div>
+          <div class="triggers-monitor__pending-metric">
+            <p class="triggers-monitor__pending-metric-label">Confianza</p>
+            <p class="triggers-monitor__pending-metric-value">{{ (tanda.confidenceLevel * 100).toFixed(1) }}%</p>
+          </div>
+        </div>
+        <div class="triggers-monitor__pending-checks">
+          <div class="triggers-monitor__pending-check" [ngClass]="tanda.meetsMinimumMembers ? 'triggers-monitor__pending-check--ok' : 'triggers-monitor__pending-check--alert'">
+            <span class="triggers-monitor__pending-check-dot"></span>
+            <span>{{ tanda.meetsMinimumMembers ? '✓' : '✗' }} Mín. 5 miembros</span>
+          </div>
+          <div class="triggers-monitor__pending-check" [ngClass]="tanda.meetsMinimumDuration ? 'triggers-monitor__pending-check--ok' : 'triggers-monitor__pending-check--alert'">
+            <span class="triggers-monitor__pending-check-dot"></span>
+            <span>{{ tanda.meetsMinimumDuration ? '✓' : '✗' }} Mín. 1 mes</span>
+          </div>
+          <div class="triggers-monitor__pending-check" [ngClass]="tanda.meetsThreshold ? 'triggers-monitor__pending-check--ok' : 'triggers-monitor__pending-check--alert'">
+            <span class="triggers-monitor__pending-check-dot"></span>
+            <span>{{ tanda.meetsThreshold ? '✓' : '✗' }} Umbral 50%</span>
+          </div>
+        </div>
+      </article>
+
+      <div *ngIf="pendingContracts().length === 0 && pendingTandas().length === 0 && !loading()" class="triggers-monitor__empty">
+        <p class="triggers-monitor__empty-message">No hay registros con los filtros seleccionados.</p>
+      </div>
+    </section>
+
+    <!-- Tab: Reglas de Trigger -->
+    <section *ngIf="activeTab === 'rules'" class="triggers-monitor__panel">
+      <article *ngFor="let rule of triggerRules()" class="triggers-monitor__rule-card">
+        <header class="triggers-monitor__rule-header">
+          <div class="triggers-monitor__rule-summary">
+            <h3 class="triggers-monitor__rule-title">{{ rule.description }}</h3>
+            <div class="triggers-monitor__rule-tags">
+              <span [ngClass]="getFlowBadgeClass(rule.flow)">{{ rule.flow }}</span>
+              <span class="triggers-monitor__meta-tag triggers-monitor__meta-tag--neutral">{{ rule.market }}</span>
+              <span class="triggers-monitor__meta-tag triggers-monitor__meta-tag--success">{{ rule.thresholdPercentage * 100 }}% umbral</span>
+            </div>
+            <p class="triggers-monitor__rule-description">{{ rule.triggerLogic }}</p>
+          </div>
+          <div class="triggers-monitor__rule-status">
+            <span class="triggers-monitor__status-dot triggers-monitor__status-dot--success"></span>
+            <span class="triggers-monitor__rule-status-label">Activo</span>
+          </div>
+        </header>
+        <div *ngIf="rule.additionalCriteria" class="triggers-monitor__rule-criteria">
+          <p class="triggers-monitor__rule-criteria-title">Criterios Adicionales:</p>
+          <ul class="triggers-monitor__rule-criteria-list">
+            <li *ngIf="rule.additionalCriteria.minimumMembers">• Mínimo {{ rule.additionalCriteria.minimumMembers }} miembros</li>
+            <li *ngIf="rule.additionalCriteria.minimumDuration">• Mínimo {{ rule.additionalCriteria.minimumDuration }} mes(es) de duración</li>
+            <li *ngIf="rule.additionalCriteria.predictiveAnalysis">• Análisis predictivo activado</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+  </div>
+</div>
+
+<!-- Modal de error (accesible) -->
+<div *ngIf="showErrorModal" class="triggers-monitor__modal-backdrop">
+  <div class="triggers-monitor__modal" role="dialog" aria-modal="true" aria-labelledby="trigger-error-title">
+    <h3 id="trigger-error-title" class="triggers-monitor__modal-title">Error en Trigger</h3>
+    <p class="triggers-monitor__modal-message">{{ selectedErrorMessage }}</p>
+    <div class="triggers-monitor__modal-actions">
+      <button
+        type="button"
+        class="triggers-monitor__modal-button"
+        (click)="showErrorModal = false"
+        aria-label="Cerrar">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>
+  

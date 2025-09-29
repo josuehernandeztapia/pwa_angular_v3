@@ -1,0 +1,27 @@
+<div
+  class="overlay"
+  *ngIf="open"
+  (click)="onBackdrop($event)"
+  [attr.aria-hidden]="!open"
+>
+  <div
+    class="dialog premium-card"
+    role="dialog"
+    [attr.aria-modal]="true"
+    [attr.aria-labelledby]="ariaLabelledby || null"
+    [attr.aria-describedby]="ariaDescribedby || null"
+    (click)="$event.stopPropagation()"
+    #dialog
+  >
+    <header class="section-header">
+      <h2 class="section-title" [id]="ariaLabelledby || null">{{ title }}</h2>
+      <button type="button" class="btn-secondary btn-sm" aria-label="Cerrar" (click)="close()">✕</button>
+    </header>
+    <div class="content">
+      <ng-content></ng-content>
+    </div>
+    <footer class="footer">
+      <ng-content select="[modal-actions]"></ng-content>
+    </footer>
+  </div>
+</div>

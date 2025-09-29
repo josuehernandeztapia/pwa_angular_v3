@@ -1,0 +1,66 @@
+.update-banner {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-16, 16px);
+  transform: translate(-50%, 12px);
+  display: inline-flex;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-blue-500, #3b82f6) 92%, transparent);
+  color: var(--flat-surface-bg, #ffffff);
+  box-shadow: 0 12px 24px rgba(8, 8, 8, 0.24);
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast, 0.3s ease), transform var(--transition-fast, 0.3s ease);
+  z-index: 1100;
+
+  &--visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+  }
+
+  &--hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-12, 12px);
+    padding: var(--space-8, 8px) var(--space-16, 16px);
+  }
+
+  &__message {
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-semibold, 600);
+  }
+
+  &__action {
+    border: none;
+    border-radius: 999px;
+    background: var(--flat-surface-bg, #ffffff);
+    color: var(--accent-blue-600, #2563eb);
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-semibold, 600);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: transform var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
+  }
+
+  &__action:hover,
+  &__action:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md, 0 2px 4px rgba(8, 8, 8, 0.16));
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    &__action {
+      transition: none;
+    }
+  }
+}

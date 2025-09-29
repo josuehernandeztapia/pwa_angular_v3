@@ -1,0 +1,87 @@
+<section class="plan-config-form" [ngClass]="getContainerClasses()">
+  <div class="plan-config-form__group">
+    <label class="plan-config-form__label" for="goal">{{ title }}</label>
+    <div class="plan-config-form__currency-input">
+      <span class="plan-config-form__currency-symbol">$</span>
+      <input
+        id="goal"
+        type="number"
+        class="plan-config-form__input plan-config-form__input--currency"
+        [(ngModel)]="goal"
+        [placeholder]="placeholder"
+      />
+    </div>
+  </div>
+
+  <div class="plan-config-form__group">
+    <span class="plan-config-form__label">Métodos de {{ isSavings ? 'Ahorro' : 'Pago' }}</span>
+    <div class="plan-config-form__methods">
+      <label class="plan-config-form__method">
+        <input
+          type="checkbox"
+          class="plan-config-form__checkbox"
+          [(ngModel)]="methods.voluntary"
+        />
+        <span class="plan-config-form__method-label">Permitir Aportaciones Voluntarias</span>
+      </label>
+
+      <label class="plan-config-form__method">
+        <input
+          type="checkbox"
+          class="plan-config-form__checkbox"
+          [(ngModel)]="methods.collection"
+        />
+        <span class="plan-config-form__method-label">
+          Activar {{ isSavings ? 'Ahorro' : 'Pago' }} por Recaudación
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="methods.collection" class="plan-config-form__collection">
+    <div class="plan-config-form__group plan-config-form__group--compact">
+      <label class="plan-config-form__label" for="plates">
+        Placas de las Unidades (separadas por coma)
+      </label>
+      <input
+        id="plates"
+        type="text"
+        class="plan-config-form__input"
+        [(ngModel)]="plates"
+        placeholder="XYZ-123, ABC-456"
+      />
+    </div>
+
+    <div class="plan-config-form__group plan-config-form__group--compact">
+      <label class="plan-config-form__label" for="overprice">
+        Sobreprecio por Litro (MXN)
+      </label>
+      <input
+        id="overprice"
+        type="number"
+        class="plan-config-form__input"
+        [(ngModel)]="overprice"
+        placeholder="5.00"
+      />
+    </div>
+  </div>
+
+  <div class="plan-config-form__actions">
+    <button
+      *ngIf="onBack.observed"
+      type="button"
+      class="plan-config-form__button plan-config-form__button--secondary"
+      (click)="handleBack()"
+    >
+      Volver
+    </button>
+
+    <button
+      type="button"
+      class="plan-config-form__button plan-config-form__button--primary"
+      (click)="handleSubmit()"
+    >
+      {{ buttonText }}
+    </button>
+  </div>
+</section>

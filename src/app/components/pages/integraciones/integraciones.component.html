@@ -1,0 +1,196 @@
+<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+
+<div class="integraciones">
+  <header class="integraciones__header">
+    <div class="integraciones__header-bar">
+      <div class="integraciones__heading">
+        <div class="integraciones__heading-icon" aria-hidden="true">
+          <app-icon class="icon-24" name="link" [size]="24" color="currentColor"></app-icon>
+        </div>
+        <div>
+          <h1 class="integraciones__main-title">Integraciones</h1>
+          <p class="integraciones__subtitle">Gestión de APIs externas y sincronizaciones</p>
+        </div>
+      </div>
+      <div class="integraciones__header-meta">
+        <span class="integraciones__timestamp">Última actualización: {{ lastUpdate() | date:'short' }}</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="integraciones__main">
+    <section class="card integraciones__section">
+      <div class="integraciones__section-header">
+        <h2 class="integraciones__section-title">Estado del Sistema</h2>
+        <button class="btn btn-secondary btn-sm" type="button" (click)="refreshStatus()">
+          Actualizar
+        </button>
+      </div>
+
+      <div class="integraciones__stats-grid">
+        <div class="integraciones__stat-card integraciones__stat-card--neutral">
+          <div class="integraciones__stat-number">{{ getTotalIntegrations() }}</div>
+          <div class="integraciones__stat-label">Total Integraciones</div>
+        </div>
+        <div class="integraciones__stat-card integraciones__stat-card--success">
+          <div class="integraciones__stat-number">{{ getActiveIntegrations() }}</div>
+          <div class="integraciones__stat-label">Activas</div>
+        </div>
+        <div class="integraciones__stat-card integraciones__stat-card--error">
+          <div class="integraciones__stat-number">{{ getTotalErrors() }}</div>
+          <div class="integraciones__stat-label">Errores 24h</div>
+        </div>
+        <div class="integraciones__stat-card integraciones__stat-card--info">
+          <div class="integraciones__stat-number">{{ getTotalRequests() }}</div>
+          <div class="integraciones__stat-label">Requests 24h</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card integraciones__section">
+      <div class="integraciones__section-header">
+        <h2 class="integraciones__section-title">Integraciones Configuradas</h2>
+        <button class="btn btn-primary btn-sm" type="button">
+          <app-icon class="btn-icon" name="plus" [size]="16" color="currentColor"></app-icon> Nueva Integración
+        </button>
+      </div>
+
+      <div class="integraciones__list">
+        <article
+          class="integraciones__integration-card"
+          *ngFor="let integration of integrations(); trackBy: trackByIntegration"
+        >
+          <div class="integraciones__integration-header">
+            <div class="integraciones__integration-heading">
+              <span
+                class="integraciones__status-indicator"
+                [class.integraciones__status-indicator--active]="integration.status === 'active'"
+                [class.integraciones__status-indicator--testing]="integration.status === 'testing'"
+                [class.integraciones__status-indicator--error]="integration.status === 'error'"
+                [class.integraciones__status-indicator--inactive]="integration.status === 'inactive'"
+                aria-hidden="true"
+              ></span>
+              <h3 class="integraciones__integration-title">{{ integration.name }}</h3>
+              <span
+                class="integraciones__type-badge"
+                [ngClass]="{
+                  'integraciones__type-badge--api': integration.type === 'api',
+                  'integraciones__type-badge--webhook': integration.type === 'webhook',
+                  'integraciones__type-badge--sync': integration.type === 'sync'
+                }"
+              >
+                {{ integration.type.toUpperCase() }}
+              </span>
+            </div>
+            <div class="integraciones__integration-actions">
+              <button class="btn btn-secondary btn-sm" type="button" (click)="testIntegration(integration)">
+                Test
+              </button>
+              <button class="btn btn-secondary btn-sm" type="button" (click)="editIntegration(integration)">
+                <span class="btn-icon" aria-hidden="true">
+                  <app-icon class="icon-16" name="settings" [size]="16" color="var(--color-text-secondary)"></app-icon>
+                </span>
+                Config
+              </button>
+            </div>
+          </div>
+
+          <div class="integraciones__integration-details">
+            <div class="integraciones__detail-group">
+              <span class="integraciones__detail-label">Descripción</span>
+              <span class="integraciones__primary-text">{{ integration.description }}</span>
+            </div>
+            <div class="integraciones__detail-group">
+              <span class="integraciones__detail-label">Última Sincronización</span>
+              <span class="integraciones__primary-text">
+                {{ integration.lastSync ? (integration.lastSync | date:'short') : 'Nunca' }}
+              </span>
+            </div>
+            <div class="integraciones__detail-group">
+              <span class="integraciones__detail-label">Requests / Errores</span>
+              <span class="integraciones__primary-text">
+                <span class="integraciones__metric integraciones__metric--success">{{ integration.requests }}</span>
+                /
+                <span class="integraciones__metric integraciones__metric--error">{{ integration.errors }}</span>
+              </span>
+            </div>
+          </div>
+
+          <div *ngIf="integration.endpoint" class="integraciones__endpoint">
+            <span class="integraciones__detail-label">Endpoint</span>
+            <code class="integraciones__code-block">{{ integration.endpoint }}</code>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="card integraciones__section">
+      <div class="integraciones__section-header">
+        <h2 class="integraciones__section-title">Logs de API</h2>
+        <div class="integraciones__filters">
+          <label class="integraciones__filter">
+            <span class="integraciones__filter-label">Filtrar por integración</span>
+            <select class="integraciones__select" [(ngModel)]="selectedIntegration">
+              <option value="">Todas</option>
+              <option *ngFor="let integration of integrations()" [value]="integration.id">
+                {{ integration.name }}
+              </option>
+            </select>
+          </label>
+          <button class="btn btn-secondary btn-sm" type="button" (click)="refreshLogs()">
+            Actualizar
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="isLoading()" class="integraciones__skeleton-list">
+        <div *ngFor="let i of [1,2,3,4,5]" class="integraciones__skeleton-item"></div>
+      </div>
+
+      <div *ngIf="!isLoading()" class="integraciones__logs-list">
+        <article
+          class="integraciones__log-entry"
+          *ngFor="let log of getFilteredLogs(); trackBy: trackByLog"
+        >
+          <div class="integraciones__log-header">
+            <div class="integraciones__log-meta">
+              <span
+                class="integraciones__log-status"
+                [class.integraciones__log-status--success]="log.status < 300"
+                [class.integraciones__log-status--warning]="log.status >= 300 && log.status < 400"
+                [class.integraciones__log-status--error]="log.status >= 400"
+              >
+                {{ log.status }}
+              </span>
+              <span class="integraciones__method-badge">{{ log.method }}</span>
+              <span class="integraciones__primary-text">{{ log.integration }}</span>
+            </div>
+            <div class="integraciones__log-context">
+              <span>{{ log.duration }}ms</span>
+              <span>{{ log.timestamp | date:'short' }}</span>
+            </div>
+          </div>
+
+          <div class="integraciones__log-endpoint">
+            <code class="integraciones__code-block">{{ log.endpoint }}</code>
+          </div>
+
+          <div *ngIf="expandedLog === log.id" class="integraciones__log-details">
+            <div *ngIf="log.request" class="integraciones__log-payload">
+              <span class="integraciones__detail-label">Request</span>
+              <pre class="integraciones__code-block integraciones__code-block--scroll">{{ log.request | json }}</pre>
+            </div>
+            <div *ngIf="log.response" class="integraciones__log-payload">
+              <span class="integraciones__detail-label">Response</span>
+              <pre class="integraciones__code-block integraciones__code-block--scroll">{{ log.response | json }}</pre>
+            </div>
+          </div>
+
+          <button class="integraciones__view-more-button" type="button" (click)="toggleLogExpansion(log.id)">
+            {{ expandedLog === log.id ? '🔼 Ocultar detalles' : '🔽 Ver detalles' }}
+          </button>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>

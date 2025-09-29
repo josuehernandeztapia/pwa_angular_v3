@@ -1,0 +1,45 @@
+<div class="tanda-timeline__items">
+  <div *ngFor="let milestone of milestones; let index = index" class="tanda-timeline__item">
+    <div class="tanda-timeline__marker">
+      <div [ngClass]="getMarkerCircleClasses(milestone)">
+        <span class="tanda-timeline__marker-emoji">{{ milestone.emoji }}</span>
+      </div>
+      <div
+        *ngIf="index < milestones.length - 1"
+        [ngClass]="getMarkerLineClasses(milestone)"
+      ></div>
+    </div>
+
+    <div class="tanda-timeline__content">
+      <div class="tanda-timeline__header">
+        <h3 class="tanda-timeline__title">{{ milestone.title }}</h3>
+        <span class="tanda-timeline__month">Mes {{ milestone.month }}</span>
+      </div>
+
+      <p class="tanda-timeline__description">{{ milestone.description }}</p>
+
+      <div *ngIf="milestone.details?.length" class="tanda-timeline__details">
+        <div *ngFor="let detail of milestone.details" class="tanda-timeline__detail">
+          {{ detail }}
+        </div>
+      </div>
+
+      <div *ngIf="milestone.amount" class="tanda-timeline__amount">
+        <span class="tanda-timeline__amount-label">Monto:</span>
+        <span class="tanda-timeline__amount-value">{{ formatCurrency(milestone.amount) }}</span>
+      </div>
+
+      <div *ngIf="milestone.memberName" class="tanda-timeline__member">
+        <span class="tanda-timeline__member-label">Beneficiario:</span>
+        <span class="tanda-timeline__member-value">{{ milestone.memberName }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="milestones.length === 0" class="tanda-timeline__empty">
+    <div class="tanda-timeline__empty-icon" aria-hidden="true">
+      <app-icon class="tanda-timeline__empty-glyph" name="calendar" [size]="24" color="currentColor" aria-hidden="true"></app-icon>
+    </div>
+    <p class="tanda-timeline__empty-text">No hay hitos programados</p>
+  </div>
+</div>

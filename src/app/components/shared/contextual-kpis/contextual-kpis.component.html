@@ -1,0 +1,43 @@
+<div class="contextual-kpis">
+  <header class="contextual-kpis__header">
+    <h3 class="contextual-kpis__title">KPIs Clave</h3>
+    <p class="contextual-kpis__subtitle">vs. Semana Pasada</p>
+  </header>
+
+  <div class="contextual-kpis__grid">
+    <article
+      *ngFor="let kpi of kpis; trackBy: trackByKPI"
+      class="contextual-kpis__card"
+      [ngClass]="getCardClasses(kpi)"
+    >
+      <header class="contextual-kpis__card-header">
+        <span class="contextual-kpis__icon" aria-hidden="true">{{ kpi.icon }}</span>
+        <span
+          *ngIf="showTrends"
+          class="contextual-kpis__trend"
+          [ngClass]="getTrendClasses(kpi)"
+        >
+          <span class="contextual-kpis__trend-icon">{{ getTrendIcon(kpi.trend) }}</span>
+          <span class="contextual-kpis__trend-percentage">{{ kpi.trendPercentage }}%</span>
+        </span>
+      </header>
+
+      <div class="contextual-kpis__card-body">
+        <div class="contextual-kpis__value" [ngClass]="getValueClasses(kpi)">
+          {{ formatValue(kpi.value, kpi.format) }}
+        </div>
+        <div class="contextual-kpis__label">{{ kpi.title }}</div>
+        <div *ngIf="kpi.subtitle" class="contextual-kpis__subtitle-text">{{ kpi.subtitle }}</div>
+      </div>
+
+      <div class="contextual-kpis__trend-bar">
+        <span
+          class="contextual-kpis__trend-fill"
+          [ngClass]="getTrendFillClasses(kpi)"
+          [style.width.%]="Math.abs(kpi.trendPercentage)"
+          aria-hidden="true"
+        ></span>
+      </div>
+    </article>
+  </div>
+</div>

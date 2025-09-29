@@ -1,0 +1,468 @@
+:host {
+  display: block;
+}
+
+.dashboard-shell {
+  min-height: 100vh;
+  background: var(--color-bg-secondary);
+}
+
+@media (prefers-color-scheme: dark) {
+  .dashboard-shell {
+    background: color-mix(in srgb, var(--color-neutral-900) 92%, transparent);
+  }
+}
+
+.dashboard-header {
+  background: var(--color-bg-primary);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-neutral-400) 35%, transparent);
+  padding: 16px 20px;
+}
+
+@media (min-width: 640px) {
+  .dashboard-header {
+    padding: 20px 28px;
+  }
+}
+
+.dashboard-header-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .dashboard-header-content {
+    flex-wrap: nowrap;
+  }
+}
+
+.dashboard-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.dashboard-title {
+  margin: 0 0 4px;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.dashboard-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+@media (prefers-color-scheme: dark) {
+  .dashboard-title {
+    color: var(--openai-black);
+  }
+  .dashboard-subtitle {
+    color: var(--color-text-tertiary);
+  }
+}
+
+@media (min-width: 640px) {
+  .dashboard-title {
+    font-size: 28px;
+  }
+}
+
+.dashboard-actions {
+  display: none;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .dashboard-actions {
+    display: flex;
+  }
+}
+
+.dashboard-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.dashboard-action-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.dashboard-mobile-toggle {
+  display: flex;
+  margin-left: auto;
+}
+
+@media (min-width: 640px) {
+  .dashboard-mobile-toggle {
+    display: none;
+  }
+}
+
+.dashboard-mobile-button {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  justify-content: center;
+}
+
+.dashboard-mobile-actions {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, var(--color-neutral-400) 35%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .dashboard-mobile-actions {
+    display: none;
+  }
+}
+
+.dashboard-mobile-actions .ui-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.dashboard-main {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+@media (min-width: 640px) {
+  .dashboard-main {
+    padding: 28px;
+  }
+}
+
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.section-subtitle {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+@media (prefers-color-scheme: dark) {
+  .section-title,
+  .section-subtitle {
+    color: var(--openai-black);
+  }
+}
+
+.dashboard-kpi-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.dashboard-kpi-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.kpi-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.kpi-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.kpi-label {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.kpi-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.kpi-subvalue {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+@media (prefers-color-scheme: dark) {
+  .kpi-label {
+    color: color-mix(in srgb, var(--openai-black) 68%, transparent);
+  }
+  .kpi-value {
+    color: var(--openai-black);
+  }
+  .kpi-subvalue {
+    color: color-mix(in srgb, var(--openai-black) 72%, transparent);
+  }
+}
+
+.kpi-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px; /* OpenAI standard */
+  background: var(--surface-neutral-weak);
+}
+
+.kpi-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.kpi-icon--money {
+  background: var(--surface-blue-weak);
+  color: var(--accent-blue-600);
+}
+
+.kpi-icon--chart-up {
+  background: var(--surface-purple-weak);
+  color: var(--accent-purple-500);
+}
+
+.kpi-icon--target {
+  background: var(--surface-red-weak);
+  color: var(--accent-red-500);
+}
+
+.kpi-icon--delivery {
+  background: var(--surface-green-weak);
+  color: var(--accent-green-600);
+}
+
+.kpi-trend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.kpi-trend-indicator {
+  font-size: 14px;
+}
+
+.kpi-trend--up {
+  color: var(--accent-green-600);
+}
+
+.kpi-trend--down {
+  color: var(--accent-red-600);
+}
+
+.kpi-trend--stable {
+  color: var(--color-text-secondary);
+}
+
+.kpi-trend-caption {
+  color: var(--color-text-tertiary);
+}
+
+.dashboard-chart-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-chart-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.dashboard-chart-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-container {
+  position: relative;
+  height: 250px;
+}
+
+.dashboard-action-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-action-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.action-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.action-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.action-description {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.action-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  min-width: 32px;
+  padding: 0 10px;
+  border-radius: 8px; /* OpenAI standard */
+  background: color-mix(in srgb, var(--accent-blue-700) 16%, transparent);
+  color: var(--accent-blue-700);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.action-clients {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-client {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--color-text-primary);
+}
+
+.client-status {
+  color: var(--color-text-secondary);
+}
+
+.action-more {
+  border: none;
+  background: transparent;
+  color: var(--accent-blue-500);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+}
+
+.action-more:hover {
+  color: var(--accent-blue-600);
+}
+
+.dashboard-activity-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-neutral-300) 70%, transparent);
+}
+
+.activity-item--last {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.activity-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-blue-400) 18%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.activity-icon-symbol {
+  width: 18px;
+  height: 18px;
+  color: var(--accent-blue-500);
+}
+
+.activity-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-message {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-primary);
+}
+
+.activity-timestamp {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+@media (prefers-color-scheme: dark) {
+  .action-title,
+  .activity-message {
+    color: var(--openai-black);
+  }
+  .action-description,
+  .client-status,
+  .activity-timestamp,
+  .kpi-trend-caption {
+    color: color-mix(in srgb, var(--openai-black) 68%, transparent);
+  }
+  .activity-item {
+    border-bottom-color: color-mix(in srgb, var(--color-neutral-600) 60%, transparent);
+  }
+}

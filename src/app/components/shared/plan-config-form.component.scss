@@ -1,0 +1,232 @@
+:host {
+  display: block;
+}
+
+.plan-config-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 1rem);
+  padding: var(--space-4, 1rem);
+  border-radius: var(--radius-lg, 16px);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 35%, transparent);
+  background: var(--flat-surface-bg);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--openai-black) 8%, transparent);
+  color: var(--color-text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.plan-config-form--collection-enabled {
+  border-color: color-mix(in srgb, var(--accent-blue-500) 45%, transparent);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--accent-blue-500) 16%, transparent);
+}
+
+.plan-config-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+}
+
+.plan-config-form__group--compact {
+  margin-bottom: 0;
+}
+
+.plan-config-form__label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.plan-config-form__currency-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.plan-config-form__currency-symbol {
+  position: absolute;
+  inset-inline-start: var(--space-3, 0.75rem);
+  color: var(--color-text-tertiary);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.plan-config-form__input {
+  width: 100%;
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  border-radius: var(--radius-md, 12px);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 50%, transparent);
+  background: var(--flat-surface-bg);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.plan-config-form__input::placeholder {
+  color: color-mix(in srgb, var(--color-text-tertiary) 70%, transparent);
+}
+
+.plan-config-form__input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--accent-blue-500) 60%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
+}
+
+.plan-config-form__input--currency {
+  padding-inline-start: calc(var(--space-5, 1.25rem) + 12px);
+}
+
+.plan-config-form__methods {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 0.75rem);
+  margin-top: var(--space-2, 0.5rem);
+}
+
+.plan-config-form__method {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-3, 0.75rem);
+  border-radius: var(--radius-md, 12px);
+  background: color-mix(in srgb, var(--surface-neutral-weak) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 28%, transparent);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.plan-config-form__method:hover {
+  background: color-mix(in srgb, var(--surface-neutral-weak) 90%, transparent);
+  border-color: color-mix(in srgb, var(--border-neutral-weak) 50%, transparent);
+}
+
+.plan-config-form__checkbox {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--accent-blue-500);
+}
+
+.plan-config-form__method-label {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.plan-config-form__collection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 1rem);
+  padding: var(--space-4, 1rem);
+  margin-top: var(--space-2, 0.5rem);
+  border-radius: var(--radius-lg, 16px);
+  background: color-mix(in srgb, var(--accent-blue-500) 12%, var(--surface-neutral-weak) 88%);
+  border: 1px solid color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+}
+
+.plan-config-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3, 0.75rem);
+  padding-top: var(--space-3, 0.75rem);
+}
+
+.plan-config-form__button {
+  flex: 1 1 160px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2, 0.5rem);
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  border-radius: var(--radius-md, 12px);
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.plan-config-form__button--secondary {
+  background: color-mix(in srgb, var(--surface-neutral-weak) 85%, transparent);
+  color: var(--color-text-secondary);
+}
+
+.plan-config-form__button--secondary:hover {
+  background: color-mix(in srgb, var(--surface-neutral-weak) 95%, transparent);
+}
+
+.plan-config-form__button--primary {
+  background: var(--accent-blue-500);
+  color: var(--flat-surface-bg);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--accent-blue-500) 30%, transparent);
+}
+
+.plan-config-form__button--primary:hover {
+  background: color-mix(in srgb, var(--accent-blue-500) 85%, var(--accent-blue-400) 15%);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--accent-blue-500) 36%, transparent);
+}
+
+@media (max-width: 768px) {
+  .plan-config-form {
+    padding: var(--space-4, 1rem) var(--space-3, 0.75rem);
+  }
+
+  .plan-config-form__actions {
+    flex-direction: column;
+  }
+
+  .plan-config-form__button {
+    width: 100%;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .plan-config-form {
+    background: color-mix(in srgb, var(--color-neutral-900) 88%, transparent);
+    border-color: color-mix(in srgb, var(--border-neutral-strong) 45%, transparent);
+    box-shadow: 0 16px 40px color-mix(in srgb, var(--openai-black) 45%, transparent);
+    color: var(--color-neutral-100);
+  }
+
+  .plan-config-form__label,
+  .plan-config-form__method-label {
+    color: var(--color-neutral-200);
+  }
+
+  .plan-config-form__input {
+    background: color-mix(in srgb, var(--color-neutral-900) 70%, transparent);
+    border-color: color-mix(in srgb, var(--border-neutral-strong) 55%, transparent);
+    color: var(--color-neutral-100);
+  }
+
+  .plan-config-form__input::placeholder {
+    color: color-mix(in srgb, var(--color-neutral-400) 70%, transparent);
+  }
+
+  .plan-config-form__currency-symbol {
+    color: var(--color-neutral-400);
+  }
+
+  .plan-config-form__method {
+    background: color-mix(in srgb, var(--color-neutral-900) 60%, transparent);
+    border-color: color-mix(in srgb, var(--border-neutral-strong) 40%, transparent);
+  }
+
+  .plan-config-form__method:hover {
+    background: color-mix(in srgb, var(--color-neutral-900) 70%, transparent);
+  }
+
+  .plan-config-form__collection {
+    background: color-mix(in srgb, var(--accent-blue-500) 10%, var(--color-neutral-900) 90%);
+    border-color: color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+  }
+
+  .plan-config-form__button--secondary {
+    background: color-mix(in srgb, var(--color-neutral-800) 70%, transparent);
+    color: var(--color-neutral-200);
+  }
+
+  .plan-config-form__button--secondary:hover {
+    background: color-mix(in srgb, var(--color-neutral-800) 85%, transparent);
+  }
+}

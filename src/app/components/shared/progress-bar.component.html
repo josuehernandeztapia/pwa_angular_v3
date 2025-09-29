@@ -1,0 +1,78 @@
+<div class="progress-bar" [ngClass]="getContainerModifiers()">
+  <header class="progress-bar__header" *ngIf="label || showPercentage || showValues">
+    <div class="progress-bar__header-content">
+      <span class="progress-bar__label" *ngIf="label" [ngClass]="getLabelModifiers()">
+        {{ label }}
+      </span>
+      <div class="progress-bar__header-info">
+        <span class="progress-bar__percentage" *ngIf="showPercentage" [ngClass]="getPercentageModifiers()">
+          {{ getPercentage() }}%
+        </span>
+        <span class="progress-bar__values" *ngIf="showValues && currency">
+          {{ formatValue(progress) }} / {{ formatValue(goal) }}
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <div class="progress-bar__track" [ngClass]="getTrackModifiers()">
+    <div class="progress-bar__track-background"></div>
+    <div class="progress-bar__fill" [ngClass]="getFillModifiers()" [style.width.%]="getPercentage()">
+      <div class="progress-bar__fill-shimmer" *ngIf="animated"></div>
+      <div class="progress-bar__fill-stripes" *ngIf="striped"></div>
+    </div>
+
+    <div
+      *ngIf="goalMarker && goal < max"
+      class="progress-bar__goal"
+      [style.left.%]="(goal / max) * 100"
+    >
+      <div class="progress-bar__goal-tooltip">Meta: {{ formatValue(goal) }}</div>
+      <span class="progress-bar__goal-line"></span>
+    </div>
+
+    <div
+      *ngFor="let milestone of milestones"
+      class="progress-bar__milestone"
+      [style.left.%]="(milestone.value / max) * 100"
+    >
+      <div class="progress-bar__milestone-tooltip">{{ milestone.label }}</div>
+      <span class="progress-bar__milestone-line"></span>
+    </div>
+  </div>
+
+  <div class="progress-bar__segments" *ngIf="segments?.length">
+    <div class="progress-bar__segments-list">
+      <div
+        *ngFor="let segment of segments; let i = index"
+        class="progress-bar__segment"
+        [ngClass]="getSegmentModifiers(segment, i)"
+        [style.background-color]="segment.color"
+        [attr.title]="segment.label"
+      ></div>
+    </div>
+  </div>
+
+  <div class="progress-bar__messages" *ngIf="showMessages">
+    <div class="progress-bar__messages-content">
+      <span class="progress-bar__status" [ngClass]="getStatusMessageClass()">
+        {{ getStatusMessage() }}
+      </span>
+      <span class="progress-bar__remaining" *ngIf="showRemaining">
+        {{ getRemainingMessage() }}
+      </span>
+    </div>
+  </div>
+
+  <div class="progress-bar__action" *ngIf="actionLabel && actionCallback">
+    <button
+      type="button"
+      class="progress-bar__action-button"
+      [ngClass]="getActionButtonClass()"
+      (click)="onActionClick()"
+      [disabled]="actionDisabled"
+    >
+      {{ actionLabel }}
+    </button>
+  </div>
+</div>

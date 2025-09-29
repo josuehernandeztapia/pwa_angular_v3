@@ -1,0 +1,706 @@
+// Import Tracker Component - Minimal Dark compliant
+:host {
+  display: block;
+  color: inherit;
+}
+
+.import-tracker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  border-radius: var(--radius-lg, 12px);
+  background: var(--neutral-900);
+  border: 1px solid var(--neutral-800);
+  color: var(--neutral-100);
+  overflow: hidden;
+
+  @media (prefers-color-scheme: light) {
+    background: var(--color-bg-primary);
+    border-color: var(--color-border-secondary);
+    color: var(--openai-black);
+  }
+}
+
+.import-tracker::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--neutral-600);
+  opacity: 0.35;
+}
+
+.import-tracker__header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.import-tracker__header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.import-tracker__heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.import-tracker__lead-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--color-border-secondary) 12%, transparent);
+  color: var(--neutral-500);
+}
+
+.import-tracker__lead-icon app-icon,
+.import-tracker__milestone-icon app-icon,
+.import-tracker__stat-icon app-icon {
+  color: inherit;
+}
+
+.import-tracker__icon--info {
+  color: var(--accent-blue-600);
+}
+
+.import-tracker__lead-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.import-tracker__title {
+  font-size: var(--text-lg, 1.125rem);
+  font-weight: var(--font-semibold, 600);
+  margin: 0;
+}
+
+.import-tracker__subtitle {
+  margin: 0;
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--neutral-500);
+}
+
+.import-tracker__order-id {
+  margin: 0;
+  font-size: var(--text-xs, 0.75rem);
+  color: var(--accent-blue-600);
+}
+
+.import-tracker__status {
+  display: flex;
+  align-items: center;
+}
+
+.import-tracker__status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: var(--font-medium, 500);
+  border: 1px solid transparent;
+  background: color-mix(in srgb, var(--color-border-secondary) 10%, transparent);
+  color: var(--openai-black);
+}
+
+.import-tracker__status-chip--completed {
+  background: color-mix(in srgb, var(--accent-green-500) 12%, transparent);
+  border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
+  color: var(--accent-green-400);
+}
+
+.import-tracker__status-chip--in-transit {
+  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+  border-color: color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+  color: var(--accent-blue-400);
+}
+
+.import-tracker__status-chip--delayed {
+  background: color-mix(in srgb, var(--accent-red-300) 12%, transparent);
+  border-color: color-mix(in srgb, var(--accent-red-300) 35%, transparent);
+  color: var(--accent-red-300);
+}
+
+.import-tracker__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--neutral-400);
+  transition: opacity 150ms ease;
+}
+
+.import-tracker__status-dot--completed {
+  background: var(--accent-green-400);
+}
+
+.import-tracker__status-dot--active {
+  background: var(--accent-blue-400);
+  animation: trackerPulse 1.2s ease-in-out infinite;
+}
+
+.import-tracker__status-dot--delayed {
+  background: var(--accent-red-300);
+}
+
+.import-tracker__status-text {
+  white-space: nowrap;
+}
+
+.import-tracker__timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.import-tracker__progress {
+  position: relative;
+}
+
+.import-tracker__progress-track {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--color-border-secondary) 20%, transparent);
+}
+
+.import-tracker__progress-fill {
+  position: absolute;
+  inset: 0;
+  width: 0;
+  border-radius: inherit;
+  background: var(--neutral-600);
+  transition: width 0.5s ease-in-out;
+}
+
+.import-tracker__progress-label {
+  position: absolute;
+  top: -28px;
+  right: 0;
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: var(--font-medium, 500);
+  color: var(--accent-blue-600);
+}
+
+.import-tracker__milestones {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.import-tracker__milestone {
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 18%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--color-neutral-950) 35%, transparent);
+  padding: 16px;
+  transition: border-color 150ms ease, background-color 150ms ease;
+  cursor: pointer;
+
+  @media (prefers-color-scheme: light) {
+    background: color-mix(in srgb, var(--color-border-secondary) 8%, transparent);
+  }
+}
+
+.import-tracker__milestone--selected {
+  border-color: var(--neutral-600);
+  background: color-mix(in srgb, var(--neutral-600) 12%, transparent);
+}
+
+.import-tracker__milestone--completed {
+  border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
+  background: color-mix(in srgb, var(--accent-green-500) 12%, transparent);
+}
+
+.import-tracker__milestone--in-progress {
+  border-color: color-mix(in srgb, var(--accent-amber-500) 35%, transparent);
+  background: color-mix(in srgb, var(--accent-amber-500) 12%, transparent);
+}
+
+.import-tracker__milestone-body {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.import-tracker__milestone-circle-wrapper {
+  position: relative;
+}
+
+.import-tracker__milestone-circle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  width: 48px;
+  height: 48px;
+  background: color-mix(in srgb, var(--color-border-secondary) 18%, transparent);
+  border: 2px solid transparent;
+  color: var(--neutral-100);
+}
+
+.import-tracker__milestone-circle--completed {
+  border-color: var(--accent-green-400);
+  background: color-mix(in srgb, var(--accent-green-500) 18%, transparent);
+}
+
+.import-tracker__milestone-circle--in-progress {
+  border-color: var(--accent-amber-500);
+  background: color-mix(in srgb, var(--accent-amber-500) 18%, transparent);
+}
+
+.import-tracker__milestone-circle--pending {
+  border-color: color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+}
+
+.import-tracker__milestone-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+}
+
+.import-tracker__milestone-indicator--progress {
+  background: color-mix(in srgb, var(--accent-amber-500) 60%, transparent);
+  animation: trackerPulse 1.2s ease-in-out infinite;
+}
+
+.import-tracker__milestone-indicator--completed {
+  background: var(--accent-green-400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--openai-white);
+}
+
+.import-tracker__milestone-indicator-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.import-tracker__milestone-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.import-tracker__milestone-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.import-tracker__milestone-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.import-tracker__milestone-title {
+  margin: 0;
+  font-size: var(--text-base, 1rem);
+  font-weight: var(--font-semibold, 600);
+}
+
+.import-tracker__milestone-description {
+  margin: 0;
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--neutral-500);
+}
+
+.import-tracker__milestone-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.import-tracker__milestone-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: var(--font-medium, 500);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.import-tracker__milestone-action--update {
+  background: color-mix(in srgb, var(--accent-blue-500) 16%, transparent);
+  color: var(--accent-blue-400);
+  border-color: color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+}
+
+.import-tracker__milestone-action--update:hover {
+  background: color-mix(in srgb, var(--accent-blue-500) 28%, transparent);
+}
+
+.import-tracker__milestone-action--complete {
+  background: color-mix(in srgb, var(--accent-green-500) 16%, transparent);
+  color: var(--accent-green-400);
+  border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
+}
+
+.import-tracker__milestone-action--complete:hover {
+  background: color-mix(in srgb, var(--accent-green-500) 28%, transparent);
+}
+
+.import-tracker__milestone-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.import-tracker__milestone-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--neutral-500);
+}
+
+.import-tracker__time-icon {
+  color: var(--accent-blue-600);
+}
+
+.import-tracker__time-label {
+  color: inherit;
+}
+
+.import-tracker__milestone-completed,
+.import-tracker__milestone-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-sm, 0.875rem);
+}
+
+.import-tracker__milestone-completed {
+  color: var(--accent-green-400);
+}
+
+.import-tracker__milestone-progress {
+  color: var(--accent-amber-500);
+}
+
+.import-tracker__progress-spinner {
+  width: 16px;
+  height: 16px;
+  color: inherit;
+}
+
+.import-tracker__milestone-badge {
+  display: flex;
+  align-items: flex-start;
+}
+
+.import-tracker__status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: var(--text-xs, 0.75rem);
+  font-weight: var(--font-medium, 500);
+  border: 1px solid transparent;
+  background: color-mix(in srgb, var(--color-border-secondary) 14%, transparent);
+  color: var(--neutral-500);
+}
+
+.import-tracker__status-badge--completed {
+  background: color-mix(in srgb, var(--accent-green-500) 18%, transparent);
+  border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
+  color: var(--accent-green-400);
+}
+
+.import-tracker__status-badge--in-progress {
+  background: color-mix(in srgb, var(--accent-amber-500) 18%, transparent);
+  border-color: color-mix(in srgb, var(--accent-amber-500) 35%, transparent);
+  color: var(--accent-amber-500);
+}
+
+.import-tracker__status-badge--pending {
+  background: color-mix(in srgb, var(--color-border-secondary) 18%, transparent);
+  border-color: color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+}
+
+.import-tracker__details {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, var(--color-border-secondary) 25%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.import-tracker__details-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.import-tracker__detail-card {
+  padding: 16px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--color-neutral-950) 45%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 20%, transparent);
+
+  @media (prefers-color-scheme: light) {
+    background: color-mix(in srgb, var(--color-border-secondary) 10%, transparent);
+  }
+}
+
+.import-tracker__detail-title {
+  margin: 0 0 8px;
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: var(--font-medium, 500);
+}
+
+.import-tracker__detail-list {
+  margin: 0;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--neutral-500);
+  font-size: var(--text-sm, 0.875rem);
+}
+
+.import-tracker__detail-item {
+  list-style: disc;
+}
+
+.import-tracker__contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--neutral-500);
+}
+
+.import-tracker__contact {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.import-tracker__contact-role {
+  font-weight: var(--font-medium, 500);
+  color: var(--openai-black);
+}
+
+.import-tracker__contact-info {
+  color: inherit;
+}
+
+.import-tracker__actions-log {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.import-tracker__actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.import-tracker__action {
+  padding: 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--color-neutral-950) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 20%, transparent);
+  font-size: var(--text-sm, 0.875rem);
+}
+
+.import-tracker__action-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.import-tracker__action-text {
+  color: var(--openai-black);
+}
+
+.import-tracker__action-timestamp {
+  font-size: var(--text-xs, 0.75rem);
+  color: var(--neutral-500);
+}
+
+.import-tracker__summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.import-tracker__stat-card {
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 20%, transparent);
+  background: color-mix(in srgb, var(--color-neutral-950) 30%, transparent);
+}
+
+.import-tracker__stat-card--info {
+  border-color: color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+}
+
+.import-tracker__stat-card--warning {
+  border-color: color-mix(in srgb, var(--accent-amber-500) 35%, transparent);
+  background: color-mix(in srgb, var(--accent-amber-500) 12%, transparent);
+}
+
+.import-tracker__stat-card--success {
+  border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
+  background: color-mix(in srgb, var(--accent-green-500) 12%, transparent);
+}
+
+.import-tracker__stat-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.import-tracker__stat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--color-neutral-950) 25%, transparent);
+}
+
+.import-tracker__stat-value {
+  font-size: var(--text-xl, 1.25rem);
+  font-weight: var(--font-bold, 700);
+}
+
+.import-tracker__stat-label {
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--neutral-500);
+}
+
+.import-tracker__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.import-tracker__report-button,
+.import-tracker__notify {
+  flex: 1;
+  min-width: 200px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: var(--font-medium, 500);
+  border: none;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.import-tracker__report-button {
+  background: color-mix(in srgb, var(--accent-blue-500) 16%, transparent);
+  color: var(--accent-blue-400);
+}
+
+.import-tracker__report-button:hover {
+  background: color-mix(in srgb, var(--accent-blue-500) 28%, transparent);
+}
+
+.import-tracker__notify {
+  background: color-mix(in srgb, var(--accent-green-500) 16%, transparent);
+  color: var(--accent-green-400);
+}
+
+.import-tracker__notify:hover {
+  background: color-mix(in srgb, var(--accent-green-500) 28%, transparent);
+}
+
+@keyframes trackerPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 900px) {
+  .import-tracker__header-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .import-tracker__milestone-body {
+    grid-template-columns: auto 1fr;
+    row-gap: 12px;
+  }
+
+  .import-tracker__milestone-badge {
+    justify-content: flex-start;
+  }
+
+  .import-tracker__milestone-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .import-tracker__milestone-actions {
+    width: 100%;
+  }
+
+  .import-tracker__milestone-action {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .import-tracker__actions {
+    flex-direction: column;
+  }
+
+  .import-tracker__report-button,
+  .import-tracker__notify {
+    width: 100%;
+  }
+}

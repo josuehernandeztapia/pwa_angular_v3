@@ -1,0 +1,110 @@
+.summary-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 24px);
+  border-radius: 20px;
+  background: var(--flat-surface-bg, #ffffff);
+  padding: var(--space-6, 24px);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.08));
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--neutral-700, #525252);
+  }
+
+  &__metrics {
+    display: grid;
+    gap: var(--space-4, 16px);
+  }
+
+  &__metric {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4, 16px);
+  }
+
+  &__metric-label {
+    font-size: 0.875rem;
+    color: var(--neutral-500, #737373);
+  }
+
+  &__metric-value {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3, 12px);
+  }
+
+  &__metric-primary {
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--neutral-800, #404040);
+  }
+
+  &__metric-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semibold, 600);
+    text-transform: uppercase;
+  }
+
+  &__metric-badge--success {
+    background: color-mix(in srgb, var(--accent-green-500, #16a34a) 15%, transparent);
+    color: var(--accent-green-600, #15803d);
+  }
+
+  &__metric-badge--warning {
+    background: color-mix(in srgb, var(--accent-amber-500, #f59e0b) 18%, transparent);
+    color: var(--accent-amber-700, #9a3412);
+  }
+
+  &__metric-badge--error {
+    background: color-mix(in srgb, var(--accent-red-500, #dc2626) 18%, transparent);
+    color: var(--accent-red-600, #b91c1c);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3, 12px);
+  }
+
+  &__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--neutral-300, #d4d4d4) 60%, transparent);
+    background: color-mix(in srgb, var(--neutral-100, #f5f5f5) 80%, transparent);
+    color: var(--neutral-600, #737373);
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-semibold, 600);
+    cursor: pointer;
+    transition: background var(--transition-quick, 0.2s ease), border-color var(--transition-quick, 0.2s ease);
+
+    &:hover {
+      background: color-mix(in srgb, var(--neutral-200, #e5e5e5) 70%, transparent);
+      border-color: color-mix(in srgb, var(--neutral-400, #a3a3a3) 65%, transparent);
+    }
+  }
+}
+
+@media (max-width: 40rem) {
+  .summary-panel {
+    padding: var(--space-5, 20px);
+  }
+}

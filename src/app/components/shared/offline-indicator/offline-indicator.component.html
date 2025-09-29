@@ -1,0 +1,73 @@
+<div class="offline-indicator">
+  <section
+    *ngIf="showIndicator()"
+    class="offline-indicator__banner"
+    [ngClass]="getBannerClasses()"
+    aria-live="polite"
+  >
+    <div class="offline-indicator__banner-content">
+      <span class="offline-indicator__status-icon" aria-hidden="true">
+        <app-icon
+          class="offline-indicator__glyph"
+          [ngClass]="getStatusIconClasses()"
+          [name]="getStatusIconName()"
+          [size]="getStatusIconSize()"
+          [strokeWidth]="getStatusIconStroke()"
+        ></app-icon>
+      </span>
+
+      <div class="offline-indicator__status-copy">
+        <p class="offline-indicator__status-title">{{ getStatusTitle() }}</p>
+        <p class="offline-indicator__status-subtitle">{{ getStatusSubtitle() }}</p>
+      </div>
+
+      <div class="offline-indicator__sync" *ngIf="offlineService.pendingRequests$ | async as pending">
+        <span *ngIf="pending.length > 0" class="offline-indicator__sync-count">
+          {{ pending.length }} pendiente{{ pending.length !== 1 ? 's' : '' }}
+        </span>
+      </div>
+
+      <div class="offline-indicator__quality" *ngIf="isOnline()">
+        <span
+          class="offline-indicator__quality-dot"
+          *ngFor="let level of qualityLevels"
+          [ngClass]="{ 'offline-indicator__quality-dot--active': getQualityLevel() >= level }"
+        ></span>
+      </div>
+
+      <button
+        *ngIf="canDismiss()"
+        type="button"
+        class="offline-indicator__dismiss"
+        (click)="dismiss()"
+        aria-label="Cerrar indicador de conexión"
+      >
+        ✕
+      </button>
+    </div>
+  </section>
+
+  <div
+    *ngIf="!showIndicator() && shouldShowPill()"
+    class="offline-indicator__pill"
+    [ngClass]="getPillClasses()"
+    (click)="expand()"
+    role="button"
+    tabindex="0"
+    (keyup.enter)="expand()"
+    (keyup.space)="expand()"
+    aria-label="Estado de conexión"
+  >
+    <span class="offline-indicator__pill-icon" aria-hidden="true">
+      <app-icon
+        class="offline-indicator__glyph"
+        [ngClass]="getStatusIconClasses()"
+        [name]="getStatusIconName()"
+        [size]="getStatusIconSize(true)"
+        [strokeWidth]="getStatusIconStroke()"
+      ></app-icon>
+    </span>
+    <span class="offline-indicator__pill-text">{{ getPillText() }}</span>
+    <span *ngIf="hasPendingRequests()" class="offline-indicator__pill-pending" aria-hidden="true"></span>
+  </div>
+</div>

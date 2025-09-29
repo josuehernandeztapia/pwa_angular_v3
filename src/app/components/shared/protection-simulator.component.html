@@ -1,0 +1,148 @@
+<section class="protection-simulator">
+  <header class="protection-simulator__hero">
+    <div class="protection-simulator__header-row">
+      <div class="protection-simulator__title-group">
+        <div class="protection-simulator__heading-icon" aria-hidden="true">
+          <app-icon class="icon-24" name="badge-check" [size]="24"></app-icon>
+        </div>
+        <div class="protection-simulator__heading-copy">
+          <h2 class="protection-simulator__heading">Protección para Conductores</h2>
+          <p class="protection-simulator__subtitle">Encuentra la mejor solución para situaciones imprevistas</p>
+          <p *ngIf="client" class="protection-simulator__client-info">
+            Cliente: <strong>{{ client.name }}</strong> • Pago actual: <strong>{{ formatCurrency(getCurrentMonthlyPayment()) }}</strong>
+          </p>
+        </div>
+      </div>
+      <button type="button" class="protection-simulator__close" (click)="onClose.emit()" aria-label="Cerrar simulador">×</button>
+    </div>
+  </header>
+
+  <div class="protection-simulator__body">
+    <section class="protection-simulator__config">
+      <h3 class="protection-simulator__section-title">Configura tu situación:</h3>
+
+      <form [formGroup]="configForm" class="protection-simulator__form">
+        <div class="protection-simulator__form-grid">
+          <div class="protection-simulator__field">
+            <label for="ps-months" class="protection-simulator__label">Meses que necesitas protección *</label>
+            <select id="ps-months" formControlName="monthsAffected" class="protection-simulator__select" (change)="calculateScenarios()">
+              <option value="">-- Seleccionar --</option>
+              <option value="1">1 mes</option>
+              <option value="2">2 meses</option>
+              <option value="3">3 meses</option>
+              <option value="4">4 meses</option>
+              <option value="6">6 meses</option>
+            </select>
+          </div>
+
+          <div class="protection-simulator__field">
+            <label for="ps-difficulty" class="protection-simulator__label">Tipo de dificultad</label>
+            <select id="ps-difficulty" formControlName="difficultyType" class="protection-simulator__select">
+              <option value="temporary">Dificultad temporal (enfermedad)</option>
+              <option value="economic">Situación económica difícil</option>
+              <option value="work_loss">Pérdida de trabajo</option>
+              <option value="family">Emergencia familiar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="protection-simulator__form-actions">
+          <button type="button" class="protection-simulator__calculate" (click)="calculateScenarios()" [disabled]="!configForm.get('monthsAffected')?.value || isCalculating">
+            <span class="protection-simulator__calculate-content">
+              <app-icon
+                *ngIf="isCalculating"
+                class="icon-16 protection-simulator__spinner"
+                name="refresh"
+                [size]="16"
+              ></app-icon>
+              <app-icon
+                *ngIf="!isCalculating"
+                class="icon-16 protection-simulator__lookup"
+                name="search"
+                [size]="16"
+              ></app-icon>
+              {{ isCalculating ? 'Calculando...' : 'Buscar Opciones' }}
+            </span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section *ngIf="isCalculating && scenarios.length === 0" class="protection-simulator__loading" aria-live="polite">
+      <span class="protection-simulator__loading-spinner" aria-hidden="true"></span>
+    </section>
+
+    <section *ngIf="scenarios.length > 0 && !isCalculating" class="protection-simulator__results">
+      <div class="protection-simulator__results-header">
+        <app-icon class="icon-24" name="lightbulb" [size]="24"></app-icon>
+        <h3 class="protection-simulator__section-title">Opciones Disponibles:</h3>
+      </div>
+
+      <div class="protection-simulator__scenario-list">
+        <article
+          *ngFor="let scenario of scenarios"
+          class="protection-simulator__scenario"
+          [ngClass]="getScenarioCardClasses(scenario)"
+          (click)="selectScenario(scenario)"
+        >
+          <div class="protection-simulator__scenario-header">
+            <div>
+              <h4 class="protection-simulator__scenario-title">
+                {{ scenario.title }}
+                <span *ngIf="scenario.recommended" class="protection-simulator__recommended">
+                  <app-icon class="icon-16" name="star" [size]="16"></app-icon>
+                  RECOMENDADO
+                </span>
+              </h4>
+              <p class="protection-simulator__scenario-description">{{ scenario.description }}</p>
+            </div>
+            <div class="protection-simulator__scenario-savings">
+              <span class="protection-simulator__savings-amount">{{ formatCurrency(scenario.savings) }}</span>
+              <span class="protection-simulator__savings-label">de ahorro</span>
+            </div>
+          </div>
+
+          <div class="protection-simulator__benefits">
+            <div class="protection-simulator__benefits-column">
+              <h5 class="protection-simulator__benefits-title">
+                <app-icon class="icon-16" name="check-circle" [size]="16"></app-icon>
+                Beneficios:
+              </h5>
+              <ul class="protection-simulator__list">
+                <li *ngFor="let benefit of scenario.benefits" class="protection-simulator__list-item">
+                  <span class="protection-simulator__bullet">•</span>
+                  <span>{{ benefit }}</span>
+                </li>
+              </ul>
+            </div>
+            <div class="protection-simulator__benefits-column">
+              <h5 class="protection-simulator__considerations-title">
+                <app-icon class="icon-16" name="shield-alert" [size]="16"></app-icon>
+                Consideraciones:
+              </h5>
+              <ul class="protection-simulator__list">
+                <li *ngFor="let drawback of scenario.drawbacks" class="protection-simulator__list-item">
+                  <span class="protection-simulator__bullet">•</span>
+                  <span>{{ drawback }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer *ngIf="scenarios.length > 0" class="protection-simulator__footer">
+      <button type="button" class="protection-simulator__footer-btn" (click)="onClose.emit()">Cancelar</button>
+      <button type="button" class="protection-simulator__footer-btn protection-simulator__footer-btn--ghost" (click)="shareWhatsApp()">Compartir</button>
+      <button
+        type="button"
+        class="protection-simulator__footer-btn protection-simulator__footer-btn--primary"
+        (click)="applyProtection()"
+        [disabled]="!selectedScenario"
+      >
+        Aplicar Protección
+      </button>
+    </footer>
+  </div>
+</section>

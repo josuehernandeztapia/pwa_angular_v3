@@ -1,0 +1,152 @@
+<div class="tanda-consensus">
+  <header class="tanda-consensus__header">
+    <h1 class="tanda-consensus__title">LAB – Transferencia de Turno (Consenso)</h1>
+    <p class="tanda-consensus__subtitle">
+      Inicia solicitudes de transferencia, recolecta votos, aprueba como empresa y ejecuta la transferencia en el calendario.
+    </p>
+  </header>
+
+  <section class="tanda-consensus__card">
+    <h2 class="tanda-consensus__card-title">Crear solicitud</h2>
+    <div class="tanda-consensus__form-grid">
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Tanda ID</span>
+        <input class="tanda-consensus__input" [(ngModel)]="tandaId" name="tandaId">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">De (memberId)</span>
+        <input class="tanda-consensus__input" [(ngModel)]="fromMemberId" name="fromMemberId">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">A (memberId)</span>
+        <input class="tanda-consensus__input" [(ngModel)]="toMemberId" name="toMemberId">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Razón</span>
+        <input class="tanda-consensus__input" [(ngModel)]="reason" name="reason">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Solicitado por</span>
+        <input class="tanda-consensus__input" [(ngModel)]="requestedBy" name="requestedBy">
+      </label>
+      <div class="tanda-consensus__actions">
+        <button type="button" class="tanda-consensus__button" (click)="createRequest()">Crear solicitud</button>
+      </div>
+    </div>
+    <p *ngIf="message" class="tanda-consensus__feedback">{{ message }}</p>
+  </section>
+
+  <section class="tanda-consensus__card">
+    <h2 class="tanda-consensus__card-title">Votar solicitud</h2>
+    <div class="tanda-consensus__form-grid">
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Consensus ID</span>
+        <input class="tanda-consensus__input" [(ngModel)]="consensusId" name="consensusId">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Miembro (id)</span>
+        <input class="tanda-consensus__input" [(ngModel)]="voterId" name="voterId">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Nombre</span>
+        <input class="tanda-consensus__input" [(ngModel)]="voterName" name="voterName">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Voto</span>
+        <select class="tanda-consensus__input" [(ngModel)]="vote" name="vote">
+          <option value="approve">approve</option>
+          <option value="reject">reject</option>
+          <option value="abstain">abstain</option>
+        </select>
+      </label>
+      <div class="tanda-consensus__actions">
+        <button type="button" class="tanda-consensus__button" (click)="castVote()">Votar</button>
+      </div>
+    </div>
+    <p *ngIf="voteMessage" class="tanda-consensus__feedback">{{ voteMessage }}</p>
+  </section>
+
+  <section class="tanda-consensus__card">
+    <h2 class="tanda-consensus__card-title">Aprobación de empresa</h2>
+    <div class="tanda-consensus__form-grid">
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Consensus ID</span>
+        <input class="tanda-consensus__input" [(ngModel)]="consensusId" name="consensusId2">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Aprobado por</span>
+        <input class="tanda-consensus__input" [(ngModel)]="companyApprover" name="companyApprover">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">¿Aprobar?</span>
+        <select class="tanda-consensus__input" [(ngModel)]="companyApprove" name="companyApprove">
+          <option [ngValue]="true">Sí</option>
+          <option [ngValue]="false">No</option>
+        </select>
+      </label>
+      <div class="tanda-consensus__actions">
+        <button type="button" class="tanda-consensus__button" (click)="companyApproval()">Aprobar/Rechazar</button>
+      </div>
+    </div>
+    <p *ngIf="companyMessage" class="tanda-consensus__feedback">{{ companyMessage }}</p>
+  </section>
+
+  <section class="tanda-consensus__card">
+    <h2 class="tanda-consensus__card-title">Ejecutar transferencia</h2>
+    <div class="tanda-consensus__form-grid">
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Tanda ID</span>
+        <input class="tanda-consensus__input" [(ngModel)]="tandaId" name="tandaId2">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Transfer Event ID</span>
+        <input class="tanda-consensus__input" [(ngModel)]="transferEventId" name="transferEventId">
+      </label>
+      <div class="tanda-consensus__actions">
+        <button type="button" class="tanda-consensus__button" (click)="executeTransfer()">Ejecutar</button>
+      </div>
+    </div>
+    <p *ngIf="execMessage" class="tanda-consensus__feedback">{{ execMessage }}</p>
+  </section>
+
+  <section class="tanda-consensus__card">
+    <h2 class="tanda-consensus__card-title">Impacto IRR (previo)</h2>
+    <div class="tanda-consensus__form-grid tanda-consensus__form-grid--aligned">
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Tanda ID</span>
+        <input class="tanda-consensus__input" [(ngModel)]="tandaId" name="tandaId3">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Horizonte (m)</span>
+        <input type="number" class="tanda-consensus__input" [(ngModel)]="horizon" name="horizon">
+      </label>
+      <label class="tanda-consensus__field">
+        <span class="tanda-consensus__field-label">Colectivo</span>
+        <input class="tanda-consensus__input" [(ngModel)]="collectiveId" name="collectiveIdPrev" placeholder="colectivo_edomex_01">
+      </label>
+      <div class="tanda-consensus__actions">
+        <button type="button" class="tanda-consensus__button" (click)="previewIrr()">Calcular</button>
+      </div>
+    </div>
+    <p class="tanda-consensus__meta">Target IRR: <strong>{{ (currentTargetIrr * 100) | number:'1.2-2' }}%</strong></p>
+
+    <div *ngIf="irrResults.length" class="tanda-consensus__table-wrapper">
+      <table class="tanda-consensus__table" role="grid">
+        <thead>
+          <tr>
+            <th>Escenario</th>
+            <th>IRR%</th>
+            <th>TIR OK</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let result of irrResults">
+            <td>{{ result.name }}</td>
+            <td>{{ (result.irrAnnual * 100) | number:'1.2-2' }}</td>
+            <td>{{ result.tirOK ? '✓' : '✗' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

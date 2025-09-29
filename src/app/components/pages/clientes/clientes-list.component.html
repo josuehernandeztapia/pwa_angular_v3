@@ -1,0 +1,285 @@
+<section class="clientes-list__layout">
+  <header class="clientes-list__header">
+    <div class="clientes-list__heading">
+      <h1 class="clientes-list__title command-title">Portafolio de Clientes Inteligente</h1>
+      <p class="clientes-list__subtitle intelligence-subtitle">Administra todos tus clientes y sus expedientes</p>
+    </div>
+    <button type="button" routerLink="/clientes/nuevo" class="premium-button clientes-list__cta">
+      <app-icon class="icon-16" name="plus" [size]="16"></app-icon>
+      Nuevo Cliente
+    </button>
+  </header>
+
+  <section class="clientes-list__segmentation premium-card">
+    <div class="clientes-list__finder-card premium-card">
+      <div class="clientes-list__finder-field">
+        <span class="clientes-list__finder-icon" aria-hidden="true"></span>
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+          placeholder="¿Dónde está el cliente...?"
+          class="premium-input"
+          aria-label="Buscar clientes"
+        >
+      </div>
+    </div>
+
+    <div class="clientes-list__filters">
+      <div class="clientes-list__filter clientes-list__filter--priority premium-card">
+        <label class="clientes-list__filter-label">
+          <svg class="clientes-list__filter-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.314 14.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+          Estado
+        </label>
+        <select [(ngModel)]="filterStatus" (change)="applyFilters()" class="premium-select">
+          <option value="">Todos los estados</option>
+          <option value="Activo">Activo</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="En Expediente">En Expediente</option>
+          <option value="Documentos Incompletos">Documentos incompletos</option>
+          <option value="En Riesgo">En Riesgo</option>
+          <option value="Inactivo">Inactivo</option>
+        </select>
+      </div>
+
+      <div class="clientes-list__filter clientes-list__filter--health premium-card">
+        <label class="clientes-list__filter-label">
+          <svg class="clientes-list__filter-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          Health Score
+        </label>
+        <select [(ngModel)]="filterHealthScore" (change)="applyFilters()" class="premium-select">
+          <option value="">Todos los scores</option>
+          <option value="critical">Crítico (&lt; 40)</option>
+          <option value="poor">Regular (40-59)</option>
+          <option value="good">Bueno (60-79)</option>
+          <option value="excellent">Excelente (80+)</option>
+        </select>
+      </div>
+
+      <div class="clientes-list__filter premium-card">
+        <label class="clientes-list__filter-label">Mercado</label>
+        <select [(ngModel)]="filterMarket" (change)="applyFilters()" class="premium-select">
+          <option value="">Todos los mercados</option>
+          <option value="aguascalientes">Aguascalientes</option>
+          <option value="edomex">Estado de México</option>
+        </select>
+      </div>
+
+      <div class="clientes-list__filter premium-card">
+        <label class="clientes-list__filter-label">Producto</label>
+        <select [(ngModel)]="filterFlow" (change)="applyFilters()" class="premium-select">
+          <option value="">Todos los productos</option>
+          <option value="Venta a Plazo">Venta a Plazo</option>
+          <option value="Plan de Ahorro">Plan de Ahorro</option>
+          <option value="Crédito Colectivo">Crédito Colectivo</option>
+          <option value="Venta Directa">Venta Directa</option>
+        </select>
+      </div>
+
+      <button
+        *ngIf="hasActiveFilters()"
+        type="button"
+        (click)="clearAllFilters()"
+        class="premium-button outline clientes-list__filters-reset"
+      >
+        <app-icon class="icon-16" name="trash" [size]="16"></app-icon>
+        Limpiar
+      </button>
+    </div>
+
+    <div *ngIf="hasActiveFilters()" class="clientes-list__filters-summary premium-card">
+      <span class="clientes-list__summary-label">Segmentación activa:</span>
+      <span class="clientes-list__summary-tag" *ngIf="filterStatus">Estado: {{ filterStatus }}</span>
+      <span class="clientes-list__summary-tag" *ngIf="filterHealthScore">Score: {{ getHealthScoreLabel(filterHealthScore) }}</span>
+      <span class="clientes-list__summary-tag" *ngIf="filterMarket">{{ getMarketName(filterMarket) }}</span>
+      <span class="clientes-list__summary-tag" *ngIf="filterFlow">{{ filterFlow }}</span>
+      <span class="clientes-list__summary-count">{{ filteredClientes.length }} cliente{{ filteredClientes.length !== 1 ? 's' : '' }}</span>
+    </div>
+  </section>
+
+  <div *ngIf="isLoading" class="clientes-list__loading premium-card">
+    <div class="premium-loading" aria-hidden="true"></div>
+    <p>Cargando clientes...</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredClientes.length === 0" class="clientes-list__empty premium-card">
+    <div class="clientes-list__empty-icon">
+      <app-icon class="icon-24" name="document" [size]="24"></app-icon>
+    </div>
+    <h3 class="clientes-list__empty-title">
+      {{ searchTerm ? 'No se encontraron clientes' : 'No hay clientes registrados' }}
+    </h3>
+    <p class="clientes-list__empty-description">
+      {{ searchTerm ? 'Intenta con otros términos de búsqueda' : 'Comienza creando tu primer cliente' }}
+    </p>
+    <button *ngIf="!searchTerm" routerLink="/clientes/nuevo" class="premium-button clientes-list__empty-action">
+      Crear primer cliente
+    </button>
+  </div>
+
+  <div *ngIf="!isLoading && filteredClientes.length > 0" class="clientes-list__bulk premium-card">
+    <div class="clientes-list__bulk-select">
+      <label class="clientes-list__select-all">
+        <input
+          type="checkbox"
+          [checked]="allSelected"
+          [indeterminate]="someSelected && !allSelected"
+          (change)="toggleSelectAll()"
+          class="clientes-list__checkbox"
+          aria-label="Seleccionar todos los clientes visibles"
+        >
+        <span class="clientes-list__select-label">Seleccionar página actual</span>
+      </label>
+    </div>
+
+    <div class="clientes-list__bulk-actions" *ngIf="selectedClientes.size > 0">
+      <button type="button" (click)="exportSelected()" class="premium-button">
+        Exportar ({{ selectedClientes.size }})
+      </button>
+      <button type="button" (click)="clearSelection()" class="premium-button outline">
+        <app-icon class="icon-16" name="trash" [size]="16"></app-icon>
+        Limpiar
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && filteredClientes.length > 0" class="clientes-list__grid">
+    <div
+      *ngFor="let cliente of paginatedClientes; trackBy: trackByClientId"
+      class="premium-card"
+      [ngClass]="getCardClasses(cliente)"
+    >
+      <div class="clientes-list__select" (click)="toggleClientSelection(cliente.id, $event)">
+        <input
+          type="checkbox"
+          [checked]="selectedClientes.has(cliente.id)"
+          class="clientes-list__checkbox"
+          (click)="$event.stopPropagation()"
+          aria-label="Seleccionar cliente"
+        >
+      </div>
+
+      <a class="clientes-list__content" [routerLink]="['/clientes', cliente.id]">
+        <div class="clientes-list__card-header">
+          <div [ngClass]="getAvatarClasses(cliente.healthScore)">
+            {{ getClientInitials(cliente.name) }}
+          </div>
+          <div class="clientes-list__identity">
+            <h3 class="clientes-list__client-name">{{ cliente.name }}</h3>
+            <p class="clientes-list__client-email">{{ cliente.email || 'Sin email' }}</p>
+          </div>
+          <div class="clientes-list__metrics">
+            <div class="clientes-list__health" *ngIf="cliente.healthScore !== undefined">
+              <span class="clientes-list__score-label">Health</span>
+              <span [ngClass]="getScoreValueClasses(cliente.healthScore)">
+                {{ cliente.healthScore }}%
+              </span>
+            </div>
+            <div class="clientes-list__status">
+              <span [ngClass]="getStatusClasses(cliente.status)">
+                {{ cliente.status }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <dl class="clientes-list__details">
+          <div class="clientes-list__detail">
+            <dt class="clientes-list__detail-label">Teléfono</dt>
+            <dd class="clientes-list__detail-value">{{ cliente.phone || 'No registrado' }}</dd>
+          </div>
+          <div class="clientes-list__detail">
+            <dt class="clientes-list__detail-label">Mercado</dt>
+            <dd class="clientes-list__detail-value">{{ getMarketName(cliente.market || '') }}</dd>
+          </div>
+          <div class="clientes-list__detail">
+            <dt class="clientes-list__detail-label">Producto</dt>
+            <dd class="clientes-list__detail-value">{{ cliente.flow }}</dd>
+          </div>
+          <div class="clientes-list__detail">
+            <dt class="clientes-list__detail-label">Creado</dt>
+            <dd class="clientes-list__detail-value">{{ formatDate(cliente.createdAt) }}</dd>
+          </div>
+        </dl>
+
+        <div class="clientes-list__indicators">
+          <span class="clientes-list__indicator clientes-list__indicator--urgent" *ngIf="isClientUrgent(cliente)">
+            Urgente
+          </span>
+          <span class="clientes-list__indicator clientes-list__indicator--opportunity" *ngIf="isHighValueClient(cliente)">
+            Premium
+          </span>
+          <span class="clientes-list__indicator clientes-list__indicator--risk" *ngIf="isAtRisk(cliente)">
+            Riesgo
+          </span>
+          <span class="clientes-list__indicator clientes-list__indicator--protection" *ngIf="hasProtectionAvailable(cliente)">
+            Protección
+          </span>
+        </div>
+      </a>
+
+      <div class="clientes-list__actions">
+        <button type="button" class="clientes-list__action clientes-list__action--call" (click)="$event.stopPropagation(); callClient(cliente)" aria-label="Llamar cliente">
+          <app-icon class="icon-16" name="phone" [size]="16"></app-icon>
+        </button>
+        <button type="button" class="clientes-list__action clientes-list__action--email" (click)="$event.stopPropagation(); emailClient(cliente)" aria-label="Enviar correo">
+          <app-icon class="icon-16" name="mail" [size]="16"></app-icon>
+        </button>
+        <button type="button" class="clientes-list__action clientes-list__action--view" (click)="$event.stopPropagation(); viewClientDetails(cliente.id)" aria-label="Ver detalles">
+          <app-icon class="icon-16" name="external-link" [size]="16"></app-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && filteredClientes.length > 0" class="clientes-list__pagination">
+    <div class="clientes-list__pagination-info">
+      <span class="clientes-list__results">
+        Mostrando {{ getDisplayRange() }} de {{ filteredClientes.length }} cliente{{ filteredClientes.length !== 1 ? 's' : '' }}
+        {{ hasActiveFilters() ? '(filtrados)' : '' }}
+      </span>
+      <label class="clientes-list__page-size">
+        Mostrar
+        <select [(ngModel)]="pageSize" (change)="onPageSizeChange()" class="premium-select clientes-list__page-size-select">
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+        por página
+      </label>
+    </div>
+
+    <nav *ngIf="totalPages > 1" class="clientes-list__pager" aria-label="Paginación de clientes">
+      <button type="button" class="clientes-list__page-btn clientes-list__page-btn--first" [disabled]="currentPage === 1" (click)="goToPage(1)" aria-label="Primera página">
+        <app-icon class="icon-16" name="chevrons-left" [size]="16"></app-icon>
+      </button>
+      <button type="button" class="clientes-list__page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)" aria-label="Página anterior">
+        <app-icon class="icon-16" name="chevron-left" [size]="16"></app-icon>
+      </button>
+
+      <div class="clientes-list__page-group">
+        <button
+          type="button"
+          *ngFor="let page of getVisiblePages()"
+          class="clientes-list__page-btn"
+          [class.clientes-list__page-btn--active]="page === currentPage"
+          [disabled]="page === '...'"
+          (click)="page !== '...' && goToPage(+page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+
+      <button type="button" class="clientes-list__page-btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)" aria-label="Página siguiente">
+        <app-icon class="icon-16" name="chevron-right" [size]="16"></app-icon>
+      </button>
+      <button type="button" class="clientes-list__page-btn clientes-list__page-btn--last" [disabled]="currentPage === totalPages" (click)="goToPage(totalPages)" aria-label="Última página">
+        <app-icon class="icon-16" name="chevrons-right" [size]="16"></app-icon>
+      </button>
+    </nav>
+  </div>
+</section>

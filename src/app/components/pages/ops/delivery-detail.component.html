@@ -1,0 +1,371 @@
+<div class="delivery-detail">
+  <div class="delivery-header">
+    <div class="delivery-header__primary">
+      <button class="delivery-back" routerLink="/ops/deliveries">
+        ← Volver al Dashboard
+      </button>
+      <h1 class="delivery-title" *ngIf="delivery()">
+        <app-icon
+          class="delivery-title__icon"
+          name="cube"
+          [size]="20"
+          aria-hidden="true"
+        ></app-icon>
+        Entrega {{ delivery()!.id }}
+      </h1>
+      <div class="delivery-status" *ngIf="delivery()">
+        <span class="delivery-status__badge" [style.background]="getStatusColor(delivery()!.status)">
+          <app-icon
+            class="delivery-status__icon"
+            [name]="getStatusIcon(delivery()!.status)"
+            [size]="16"
+            aria-hidden="true"
+          ></app-icon>
+          {{ getStatusTitle(delivery()!.status) }}
+        </span>
+        <span class="delivery-status__progress">{{ getProgress(delivery()!.status) }}% completado</span>
+      </div>
+    </div>
+    <div class="delivery-header__actions">
+      <button class="delivery-action" (click)="refreshData()" [disabled]="loading()">
+        Actualizar
+      </button>
+      <button *ngIf="canAdvanceStatus()" class="delivery-action delivery-action--primary" (click)="showAdvanceModal()">
+        Avanzar Estado
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading()" class="delivery-loading">
+    <div class="delivery-loading__spinner"></div>
+    <p>Cargando detalles de la entrega...</p>
+  </div>
+
+  <div *ngIf="!loading() && delivery()" class="delivery-content">
+    <div class="delivery-overview">
+      <div class="delivery-overview__grid">
+        <div class="delivery-card">
+          <div class="delivery-card__header">
+            <h3>Cliente</h3>
+          </div>
+          <div class="delivery-card__body">
+            <div class="delivery-info">
+              <span class="delivery-info__label">Nombre:</span>
+              <span class="delivery-info__value">{{ delivery()!.client.name }}</span>
+            </div>
+            <div class="delivery-info">
+              <span class="delivery-info__label">ID:</span>
+              <span class="delivery-info__value">{{ delivery()!.client.id }}</span>
+            </div>
+            <div class="delivery-info">
+              <span class="delivery-info__label">Mercado:</span>
+              <span class="delivery-info__value">{{ getMarketName(delivery()!.market) }}</span>
+            </div>
+            <div class="delivery-info" *ngIf="delivery()!.route">
+              <span class="delivery-info__label">Ruta:</span>
+              <span class="delivery-info__value">{{ delivery()!.route!.name }}</span>
+            </div>
+            <div class="delivery-info" *ngIf="getRouteRiskPremiumBps() > 0">
+              <span class="delivery-info__label">Riesgo Ruta:</span>
+              <span class="delivery-info__value">+{{ getRouteRiskPremiumBps() }} bps</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="delivery-card">
+          <div class="delivery-card__header">
+            <h3>Pedido</h3>
+          </div>
+          <div class="delivery-card__body">
+            <div class="delivery-info">
+              <span class="delivery-info__label">Contrato:</span>
+              <span class="delivery-info__value">{{ delivery()!.contract.id }}</span>
+            </div>
+            <div class="delivery-info">
+              <span class="delivery-info__label">Producto/Paquete:</span>
+              <span class="delivery-info__value">{{ delivery()!.sku }}</span>
+            </div>
+            <div class="delivery-info">
+              <span class="delivery-info__label">Cantidad:</span>
+              <span class="delivery-info__value">{{ delivery()!.qty }}</span>
+            </div>
+            <div class="delivery-info" *ngIf="delivery()!.contract.amount">
+              <span class="delivery-info__label">Monto:</span>
+              <span class="delivery-info__value">{{ formatCurrency(delivery()!.contract.amount!) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="delivery-card">
+          <div class="delivery-card__header">
+            <h3>⏰ Tiempos</h3>
+          </div>
+          <div class="delivery-card__body">
+            <div class="delivery-info">
+              <span class="delivery-info__label">Creado:</span>
+              <span class="delivery-info__value">{{ formatDate(delivery()!.createdAt) }}</span>
+            </div>
+            <div class="delivery-info">
+              <span class="delivery-info__label">ETA:</span>
+              <span class="delivery-info__value" [class.delivery-info__value--overdue]="isOverdue(delivery()!.eta)">
+                {{ formatETA(delivery()!.eta) }}
+              </span>
+            </div>
+            <div class="delivery-info" *ngIf="delayInfo as di">
+              <span class="delivery-info__label">Retraso:</span>
+              <span class="delivery-info__value delivery-info__value--overdue">+{{ di.daysLate }} días</span>
+            </div>
+            <div class="delivery-info" *ngIf="delayInfo?.newCommitment as nc">
+              <span class="delivery-info__label">Nuevo compromiso:</span>
+              <span class="delivery-info__value delivery-info__value--new">{{ nc }}</span>
+            </div>
+            <div class="delivery-info">
+              <span class="delivery-info__label">Días estimados:</span>
+              <span class="delivery-info__value">{{ delivery()!.estimatedTransitDays }}</span>
+            </div>
+            <div class="delivery-info" *ngIf="delivery()!.actualTransitDays">
+              <span class="delivery-info__label">Días reales:</span>
+              <span class="delivery-info__value">{{ delivery()!.actualTransitDays }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="delivery-card" *ngIf="hasShippingInfo()">
+          <div class="delivery-card__header">
+            <h3>
+              <app-icon
+                class="delivery-section-icon"
+                name="truck"
+                [size]="20"
+                aria-hidden="true"
+              ></app-icon>
+              Envío
+            </h3>
+          </div>
+          <div class="delivery-card__body">
+            <div class="delivery-info" *ngIf="delivery()!.containerNumber">
+              <span class="delivery-info__label">Contenedor:</span>
+              <span class="delivery-info__value">{{ delivery()!.containerNumber }}</span>
+            </div>
+            <div class="delivery-info" *ngIf="delivery()!.billOfLading">
+              <span class="delivery-info__label">Bill of Lading:</span>
+              <span class="delivery-info__value">{{ delivery()!.billOfLading }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <h3>Progreso de Entrega</h3>
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="getProgress(delivery()!.status)"></div>
+        </div>
+        <div class="progress-labels">
+          <span>Inicio</span>
+          <span>{{ getProgress(delivery()!.status) }}%</span>
+          <span>Completado</span>
+        </div>
+      </div>
+      <div class="client-toggle">
+        <label>
+          <input type="checkbox" [(ngModel)]="clientView" /> Vista cliente (simplificada)
+        </label>
+        <div class="client-panel" *ngIf="clientView">
+          <div class="client-status">{{ clientInfo?.status }}</div>
+          <div class="client-message">{{ clientInfo?.message }}</div>
+          <div class="client-eta" *ngIf="clientInfo?.estimatedDate">ETA: {{ clientInfo?.estimatedDate }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-section">
+      <div class="timeline-header">
+        <h3>
+          <app-icon
+            class="timeline-title__icon"
+            name="calendar"
+            [size]="20"
+            aria-hidden="true"
+          ></app-icon>
+          Línea de Tiempo
+        </h3>
+        <button class="timeline-refresh" (click)="loadEvents()" [disabled]="eventsLoading()">
+          {{ eventsLoading() ? '' : '' }} Actualizar Timeline
+        </button>
+      </div>
+
+      <div *ngIf="eventsLoading()" class="timeline-loading">
+        <div class="timeline-loading__spinner"></div>
+        <span>Cargando eventos...</span>
+      </div>
+
+      <div *ngIf="!eventsLoading()" class="timeline">
+        <div *ngFor="let event of events(); trackBy: trackEvent" class="timeline-item">
+          <div class="timeline-marker">
+            <div class="timeline-dot" [class]="'event-' + event.event.toLowerCase()">
+              {{ getEventIcon(event.event) }}
+            </div>
+            <div class="timeline-line" *ngIf="!isLastEvent(event)"></div>
+          </div>
+
+          <div class="timeline-content">
+            <div class="event-header">
+              <h4 class="event-title">{{ getEventTitle(event.event) }}</h4>
+              <span class="event-time">{{ formatEventTime(event.at) }}</span>
+            </div>
+
+            <p class="event-description">{{ getEventDescription(event.event) }}</p>
+
+            <div class="event-meta" *ngIf="event.meta || event.actorName">
+              <div class="meta-item" *ngIf="event.actorName">
+                <span class="meta-label">Ejecutado por:</span>
+                <span class="meta-value">{{ event.actorName }}</span>
+              </div>
+
+              <div class="meta-item" *ngIf="event.meta?.containerNumber">
+                <span class="meta-label">Contenedor:</span>
+                <span class="meta-value">{{ event.meta?.containerNumber }}</span>
+              </div>
+
+              <div class="meta-item" *ngIf="event.meta?.portName">
+                <span class="meta-label">Puerto:</span>
+                <span class="meta-value">{{ event.meta?.portName }}</span>
+              </div>
+
+              <div class="meta-item" *ngIf="event.meta?.vesselName">
+                <span class="meta-label">Embarcación:</span>
+                <span class="meta-value">{{ event.meta?.vesselName }}</span>
+              </div>
+
+              <div class="meta-item" *ngIf="event.meta?.customsReference">
+                <span class="meta-label">Ref. Aduanal:</span>
+                <span class="meta-value">{{ event.meta?.customsReference }}</span>
+              </div>
+
+              <div class="meta-item" *ngIf="event.meta?.warehouseLocation">
+                <span class="meta-label">Bodega:</span>
+                <span class="meta-value">{{ event.meta?.warehouseLocation }}</span>
+              </div>
+
+              <div class="meta-item meta-item--full" *ngIf="event.meta?.notes">
+                <span class="meta-label">Notas:</span>
+                <span class="meta-value">{{ event.meta?.notes }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="events().length === 0" class="timeline-empty">
+          <p>No hay eventos registrados aún.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-section" *ngIf="availableActions().length > 0">
+      <h3>
+        <app-icon
+          class="actions-title__icon"
+          name="sparkles"
+          [size]="20"
+          aria-hidden="true"
+        ></app-icon>
+        Acciones Disponibles
+      </h3>
+      <div class="actions-grid">
+        <div *ngFor="let action of availableActions()" class="action-card">
+          <div class="action-info">
+            <h4>{{ action.label }}</h4>
+            <p>{{ action.description }}</p>
+          </div>
+          <button
+            class="action-card__button"
+            (click)="executeAction(action.event)"
+            [class.requires-confirmation]="action.requiresConfirmation"
+          >
+            Ejecutar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showAdvanceStateModal()" class="modal-overlay" (click)="hideAdvanceModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Avanzar Estado de Entrega</h3>
+        <button class="modal-close" (click)="hideAdvanceModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="current-status" *ngIf="delivery()">
+          <p><strong>Pedido:</strong> {{ delivery()!.id }}</p>
+          <p><strong>Estado actual:</strong> {{ getStatusTitle(delivery()!.status) }}</p>
+        </div>
+
+        <div class="action-selection">
+          <h4>Selecciona la acción a realizar:</h4>
+          <div class="action-options">
+            <div *ngFor="let action of availableActions()" class="action-option">
+              <button
+                class="action-option__button"
+                (click)="selectAction(action.event)"
+              >
+                {{ action.label }}
+              </button>
+              <span class="action-description">{{ action.description }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-form" *ngIf="selectedAction()">
+          <h4>{{ getActionLabel(selectedAction()!) }}</h4>
+
+          <div class="form-fields">
+            <div class="field-group" *ngIf="requiresContainerNumber(selectedAction()!)">
+              <label>Número de contenedor:</label>
+              <input type="text" [(ngModel)]="actionMeta.containerNumber" placeholder="TCLU1234567" />
+            </div>
+
+            <div class="field-group" *ngIf="requiresPortName(selectedAction()!)">
+              <label>Puerto:</label>
+              <input type="text" [(ngModel)]="actionMeta.portName" placeholder="Puerto de Veracruz" />
+            </div>
+
+            <div class="field-group" *ngIf="requiresVesselName(selectedAction()!)">
+              <label>Nombre de embarcación:</label>
+              <input type="text" [(ngModel)]="actionMeta.vesselName" placeholder="MSC Diana" />
+            </div>
+
+            <div class="field-group" *ngIf="requiresCustomsRef(selectedAction()!)">
+              <label>Referencia aduanal:</label>
+              <input type="text" [(ngModel)]="actionMeta.customsReference" placeholder="ADU-2024-001234" />
+            </div>
+
+            <div class="field-group" *ngIf="requiresWarehouseLocation(selectedAction()!)">
+              <label>Ubicación de bodega:</label>
+              <input type="text" [(ngModel)]="actionMeta.warehouseLocation" placeholder="Bodega Central AGS" />
+            </div>
+
+            <div class="field-group">
+              <label>Notas (opcional):</label>
+              <textarea [(ngModel)]="actionMeta.notes" placeholder="Información adicional..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-button modal-button--secondary" (click)="hideAdvanceModal()">Cancelar</button>
+        <button
+          class="modal-button modal-button--primary"
+          [disabled]="!selectedAction() || submitting()"
+          (click)="confirmAction()"
+        >
+          {{ submitting() ? 'Procesando...' : 'Confirmar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

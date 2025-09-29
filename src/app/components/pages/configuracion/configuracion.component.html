@@ -1,0 +1,157 @@
+<a class="skip-link" href="#configuracion-main">Saltar al contenido principal</a>
+
+<section class="configuracion card">
+  <h2 class="configuracion__title">Configuración de Flujos y Productos</h2>
+
+  <div class="configuracion__mode" data-cy="config-mode-toggle">
+    <button
+      class="configuracion__mode-btn"
+      type="button"
+      [class.configuracion__mode-btn--active]="config().mode === 'cotizador'"
+      (click)="setMode('cotizador')"
+    >
+      Cotizador
+    </button>
+    <button
+      class="configuracion__mode-btn"
+      type="button"
+      [class.configuracion__mode-btn--active]="config().mode === 'simulador'"
+      (click)="setMode('simulador')"
+    >
+      Simulador
+    </button>
+  </div>
+
+  <div class="configuracion__form" id="configuracion-main">
+    <div class="configuracion__form-grid">
+      <label class="configuracion__field">
+        <span class="configuracion__field-label">Precio</span>
+        <input
+          class="configuracion__input"
+          type="number"
+          data-cy="config-precio"
+          [value]="config().precio"
+          (input)="updateConfig('precio', $event)"
+          placeholder="$0"
+        >
+        <span *ngIf="config().errors['precio']" class="configuracion__field-error">
+          {{ config().errors['precio'] }}
+        </span>
+      </label>
+
+      <label class="configuracion__field">
+        <span class="configuracion__field-label">% Enganche</span>
+        <input
+          class="configuracion__input"
+          type="number"
+          data-cy="config-eng"
+          [value]="config().enganche"
+          (input)="updateConfig('enganche', $event)"
+          placeholder="20"
+          min="0"
+          max="100"
+        >
+        <span *ngIf="config().errors['enganche']" class="configuracion__field-error">
+          {{ config().errors['enganche'] }}
+        </span>
+      </label>
+
+      <label class="configuracion__field">
+        <span class="configuracion__field-label">Plazo (meses)</span>
+        <select
+          class="configuracion__input"
+          data-cy="config-plazo"
+          [value]="config().plazo"
+          (change)="updateConfigFromSelect('plazo', $event)"
+        >
+          <option value="12">12 meses</option>
+          <option value="24">24 meses</option>
+          <option value="36">36 meses</option>
+          <option value="48">48 meses</option>
+          <option value="60">60 meses</option>
+        </select>
+      </label>
+
+      <label class="configuracion__field">
+        <span class="configuracion__field-label">Tipo de Cliente</span>
+        <select
+          class="configuracion__input"
+          data-cy="config-cliente"
+          [value]="config().tipoCliente"
+          (change)="updateConfigFromSelect('tipoCliente', $event)"
+        >
+          <option value="nuevo">Nuevo</option>
+          <option value="existente">Existente</option>
+          <option value="vip">VIP</option>
+        </select>
+      </label>
+
+      <label class="configuracion__field configuracion__field--wide">
+        <span class="configuracion__field-label">Mercado</span>
+        <select
+          class="configuracion__input"
+          data-cy="config-mercado"
+          [value]="config().mercado"
+          (change)="updateConfigFromSelect('mercado', $event)"
+        >
+          <option value="nacional">Nacional</option>
+          <option value="internacional">Internacional</option>
+          <option value="premium">Premium</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <section class="configuracion__packages" aria-label="Paquetes de productos">
+    <h3 class="configuracion__section-title">Paquetes de Productos</h3>
+    <div class="configuracion__package-grid">
+      <article
+        class="configuracion__package"
+        *ngFor="let pkg of productPackages"
+        [class.configuracion__package--selected]="config().selectedPackage === pkg.id"
+        [class.configuracion__package--recommended]="pkg.recommended"
+        (click)="selectPackage(pkg.id)"
+        data-cy="product-package"
+      >
+        <header class="configuracion__package-header">
+          <span class="configuracion__package-icon" [innerHTML]="pkg.icon"></span>
+          <div class="configuracion__package-meta">
+            <span class="configuracion__package-name">{{ pkg.name }}</span>
+            <span class="configuracion__package-price">{{ '$' + pkg.price }}</span>
+          </div>
+        </header>
+        <p class="configuracion__package-description">{{ pkg.description }}</p>
+        <ul class="configuracion__package-features">
+          <li *ngFor="let feature of pkg.features">{{ feature }}</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="configuracion__results" data-cy="config-result">
+    <div *ngIf="config().isCalculating" class="configuracion__results-loading">
+      <div class="configuracion__skeleton configuracion__skeleton--full"></div>
+      <div class="configuracion__skeleton configuracion__skeleton--partial"></div>
+      <div class="configuracion__skeleton configuracion__skeleton--small"></div>
+    </div>
+
+    <div *ngIf="!config().isCalculating && financialResults()" class="configuracion__results-grid">
+      <div class="configuracion__result-item">
+        <span class="configuracion__result-label">PMT Mensual</span>
+        <span class="configuracion__result-value">{{ '$' + financialResults()?.pmt?.toFixed(2) }}</span>
+      </div>
+      <div class="configuracion__result-item">
+        <span class="configuracion__result-label">Tasa Efectiva</span>
+        <span class="configuracion__result-value">{{ financialResults()?.tasa?.toFixed(2) }}%</span>
+      </div>
+      <div class="configuracion__result-item">
+        <span class="configuracion__result-label">Ahorro Total</span>
+        <span class="configuracion__result-value configuracion__result-value--success">{{ '$' + financialResults()?.ahorro?.toFixed(2) }}</span>
+      </div>
+      <div class="configuracion__result-item configuracion__result-item--wide">
+        <span class="configuracion__result-label">Total a Pagar</span>
+        <span class="configuracion__result-value configuracion__result-value--highlight">{{ '$' + financialResults()?.total?.toFixed(2) }}</span>
+      </div>
+    </div>
+  </section>
+</section>

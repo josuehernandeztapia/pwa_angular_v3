@@ -1,0 +1,140 @@
+<div class="notifications-panel" [ngClass]="getPanelStateClasses()">
+  <header class="notifications-panel__header">
+    <div class="notifications-panel__title-group">
+      <h3 class="notifications-panel__heading">Notificaciones</h3>
+      <span *ngIf="unreadCount > 0" class="notifications-panel__count" aria-label="Notificaciones sin leer">
+        {{ unreadCount }}
+      </span>
+    </div>
+
+    <div class="notifications-panel__controls">
+      <button
+        type="button"
+        class="notifications-panel__filter"
+        [ngClass]="getFilterButtonClasses()"
+        (click)="toggleUnreadFilter()"
+        title="Solo no leídas"
+      >
+        {{ showUnreadOnly ? 'No leídas' : 'Todas' }}
+      </button>
+
+      <button
+        *ngIf="unreadCount > 0"
+        type="button"
+        class="notifications-panel__mark-all"
+        (click)="markAllAsRead()"
+        title="Marcar todas como leídas"
+      >
+        <span aria-hidden="true">✓</span>
+        <span class="notifications-panel__sr-only">Marcar todas como leídas</span>
+      </button>
+
+      <button
+        type="button"
+        class="notifications-panel__close"
+        (click)="closePanel()"
+        title="Cerrar panel"
+      >
+        <span aria-hidden="true">×</span>
+        <span class="notifications-panel__sr-only">Cerrar panel</span>
+      </button>
+    </div>
+  </header>
+
+  <section *ngIf="isLoading" class="notifications-panel__status" aria-live="polite">
+    <div class="notifications-panel__spinner" aria-hidden="true"></div>
+    <p class="notifications-panel__status-text">Cargando notificaciones...</p>
+  </section>
+
+  <section *ngIf="!isLoading" class="notifications-panel__list" aria-live="polite">
+    <article
+      *ngFor="let notification of filteredNotifications; trackBy: trackByNotificationId"
+      class="notifications-panel__item"
+      [ngClass]="getNotificationItemClasses(notification)"
+      (click)="onNotificationClick(notification)"
+    >
+      <div class="notifications-panel__item-icon" aria-hidden="true">
+        {{ getNotificationIcon(notification.type) }}
+      </div>
+
+      <div class="notifications-panel__item-body">
+        <header class="notifications-panel__item-header">
+          <h4 class="notifications-panel__item-title">{{ notification.title }}</h4>
+          <span class="notifications-panel__item-time">{{ formatTime(notification.timestamp) }}</span>
+        </header>
+
+        <p class="notifications-panel__item-message">{{ notification.message }}</p>
+
+        <div class="notifications-panel__item-meta" *ngIf="notification.clientId || notification.actionLabel">
+          <span *ngIf="notification.clientId" class="notifications-panel__item-tag">
+            {{ getClientName(notification.clientId) }}
+          </span>
+          <span *ngIf="notification.actionLabel" class="notifications-panel__item-tag notifications-panel__item-tag--action">
+            {{ notification.actionLabel }}
+          </span>
+        </div>
+      </div>
+
+      <div class="notifications-panel__item-actions">
+        <button
+          *ngIf="!notification.isRead"
+          type="button"
+          class="notifications-panel__mark-read"
+          (click)="markAsRead(notification.id); $event.stopPropagation()"
+          title="Marcar como leída"
+        >
+          <span aria-hidden="true">✓</span>
+          <span class="notifications-panel__sr-only">Marcar como leída</span>
+        </button>
+
+        <div class="notifications-panel__priority" [ngClass]="getPriorityClasses(notification)">
+          {{ getPriorityIcon(notification.priority) }}
+        </div>
+      </div>
+    </article>
+
+    <div *ngIf="filteredNotifications.length === 0" class="notifications-panel__empty">
+      <div class="notifications-panel__empty-icon" aria-hidden="true">
+        {{ showUnreadOnly ? '•' : '∅' }}
+      </div>
+      <p class="notifications-panel__empty-text">
+        {{ showUnreadOnly ? 'No hay notificaciones sin leer' : 'No hay notificaciones pendientes' }}
+      </p>
+    </div>
+  </section>
+
+  <section *ngIf="!isLoading" class="notifications-panel__quick-actions">
+    <button
+      type="button"
+      class="notifications-panel__quick-action"
+      (click)="refreshNotifications()"
+      [disabled]="isLoading"
+    >
+      Actualizar
+    </button>
+
+    <button
+      type="button"
+      class="notifications-panel__quick-action"
+      routerLink="/clientes"
+      (click)="closePanel()"
+    >
+      Ver Clientes
+    </button>
+
+    <button
+      type="button"
+      class="notifications-panel__quick-action"
+      routerLink="/dashboard"
+      (click)="closePanel()"
+    >
+      Dashboard
+    </button>
+  </section>
+</div>
+
+<div
+  class="notifications-panel__backdrop"
+  *ngIf="isOpen"
+  (click)="closePanel()"
+></div>

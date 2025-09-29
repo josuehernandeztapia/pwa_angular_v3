@@ -1,66 +1,274 @@
-/**
- * 📄 Documents Upload - Minimalista Enterprise
- * Lightweight styling leveraging global helpers (.ui-card, .ui-btn) and Tailwind tokens
- */
-
 :host {
-  @apply block space-y-4;
+  display: block;
+}
 
-  // Documents table styling
-  table {
-    @apply w-full text-sm border-collapse;
+.document-upload {
+  display: block;
 
-    thead {
-      @apply text-slate-500 border-b dark:text-slate-400 dark:border-slate-700;
+  &__card {
+    padding: var(--space-24, 24px);
+    border-radius: 16px;
+    background: var(--flat-surface-bg, #ffffff);
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.08));
+    border: 1px solid color-mix(in srgb, var(--neutral-300, #e5e5e5) 60%, transparent);
+  }
+
+  &__title {
+    margin: 0 0 var(--space-12, 12px);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--neutral-700, #525252);
+  }
+
+  &__dropzone-wrapper {
+    margin-bottom: var(--space-24, 24px);
+  }
+
+  &__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  &__dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 128px;
+    border: 2px dashed color-mix(in srgb, var(--neutral-400, #a3a3a3) 60%, transparent);
+    border-radius: 12px;
+    cursor: pointer;
+    background: color-mix(in srgb, var(--neutral-100, #f5f5f5) 70%, transparent);
+    transition: background var(--transition-quick, 0.2s ease), border-color var(--transition-quick, 0.2s ease);
+    text-align: center;
+  }
+
+  &__dropzone:hover {
+    background: color-mix(in srgb, var(--neutral-100, #f5f5f5) 85%, transparent);
+    border-color: color-mix(in srgb, var(--neutral-400, #a3a3a3) 85%, transparent);
+  }
+
+  &__dropzone-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8, 8px);
+    padding: var(--space-16, 16px);
+  }
+
+  &__dropzone-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--neutral-500, #737373);
+  }
+
+  &__dropzone-text {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--neutral-600, #737373);
+  }
+
+  &__status {
+    margin-bottom: var(--space-24, 24px);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12, 12px);
+  }
+
+  &__status-line {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8, 8px);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  &__status-line--processing {
+    color: var(--accent-amber-600, #d97706);
+  }
+
+  &__status-line--validated {
+    color: var(--accent-green-600, #15803d);
+  }
+
+  &__status-line--error {
+    color: var(--accent-red-500, #dc2626);
+  }
+
+  &__status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    animation: document-upload-pulse 2s ease-in-out infinite;
+  }
+
+  &__status-dot--processing {
+    background: var(--accent-amber-500, #f59e0b);
+  }
+
+  &__status-dot--validated {
+    background: var(--accent-green-400, #34d399);
+  }
+
+  &__status-dot--error {
+    background: var(--accent-red-400, #f87171);
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12, 12px);
+    animation: document-upload-pulse 2s ease-in-out infinite;
+  }
+
+  &__loading-line {
+    height: 12px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--neutral-300, #d4d4d4) 70%, transparent);
+  }
+
+  &__loading-line--wide {
+    width: 75%;
+  }
+
+  &__loading-line--narrow {
+    width: 50%;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12, 12px);
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-16, 16px);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--neutral-100, #f5f5f5) 90%, transparent);
+    border: 1px solid color-mix(in srgb, var(--neutral-300, #d4d4d4) 70%, transparent);
+  }
+
+  &__item-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12, 12px);
+  }
+
+  &__item-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--neutral-200, #e5e5e5) 60%, transparent);
+  }
+
+  &__item-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__item-name {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--neutral-700, #525252);
+  }
+
+  &__item-type {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--neutral-500, #737373);
+  }
+
+  &__item-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 88px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+
+  &__item-status--validated {
+    background: color-mix(in srgb, var(--accent-green-500, #16a34a) 18%, transparent);
+    color: var(--accent-green-700, #166534);
+  }
+
+  &__item-status--pending {
+    background: color-mix(in srgb, var(--accent-amber-500, #f59e0b) 18%, transparent);
+    color: var(--accent-amber-700, #9a3412);
+  }
+
+  &__item-status--error {
+    background: color-mix(in srgb, var(--accent-red-500, #dc2626) 18%, transparent);
+    color: var(--accent-red-700, #b91c1c);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &__card {
+      background: color-mix(in srgb, var(--neutral-900, #171717) 85%, transparent);
+      border-color: color-mix(in srgb, var(--neutral-700, #404040) 65%, transparent);
     }
 
-    th, td {
-      @apply text-left py-2 px-2;
+    &__title {
+      color: var(--neutral-100, #f5f5f5);
     }
 
-    tbody tr {
-      @apply border-b border-slate-200 dark:border-slate-700;
+    &__dropzone {
+      background: color-mix(in srgb, var(--neutral-900, #171717) 35%, transparent);
+      border-color: color-mix(in srgb, var(--neutral-700, #404040) 80%, transparent);
+    }
+
+    &__dropzone:hover {
+      background: color-mix(in srgb, var(--neutral-900, #171717) 55%, transparent);
+      border-color: color-mix(in srgb, var(--neutral-600, #525252) 65%, transparent);
+    }
+
+    &__dropzone-icon,
+    &__dropzone-text {
+      color: var(--accent-blue-200, #bfdbfe);
+    }
+
+    &__loading-line {
+      background: color-mix(in srgb, var(--neutral-800, #262626) 60%, transparent);
+    }
+
+    &__item {
+      background: color-mix(in srgb, var(--neutral-900, #171717) 55%, transparent);
+      border-color: color-mix(in srgb, var(--neutral-700, #404040) 60%, transparent);
+    }
+
+    &__item-name {
+      color: var(--neutral-100, #f5f5f5);
+    }
+
+    &__item-type {
+      color: var(--neutral-300, #d4d4d4);
     }
   }
+}
 
-  // OCR Status states - sobrios, solo color de texto
-  .estado-pendiente {
-    @apply text-slate-500 dark:text-slate-400;
+@keyframes document-upload-pulse {
+  0%,
+  100% {
+    opacity: 1;
   }
-
-  .estado-validado {
-    @apply text-emerald-600 dark:text-emerald-400;
-  }
-
-  .estado-error {
-    @apply text-red-600 dark:text-red-400;
-  }
-
-  // Skeleton loader row
-  .loader-row {
-    @apply animate-pulse text-slate-400 dark:text-slate-500;
-  }
-
-  // Upload section minimal styling
-  .upload-section {
-    transition: all 0.2s ease-in-out;
-
-    &:hover {
-      transform: translateY(-1px);
-    }
-  }
-
-  // Minimal animation for pulsing status
-  .animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: .5;
-    }
+  50% {
+    opacity: 0.5;
   }
 }

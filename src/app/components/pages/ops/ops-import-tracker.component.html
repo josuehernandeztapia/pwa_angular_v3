@@ -1,0 +1,246 @@
+<div class="ops-import-tracker">
+  <header class="ops-import-tracker__header">
+    <div class="ops-import-tracker__heading">
+      <h1 class="ops-import-tracker__title">Import Tracker</h1>
+      <p class="ops-import-tracker__subtitle">Estado de importación, entregas y triggers</p>
+    </div>
+    <div class="ops-import-tracker__header-actions">
+      <div class="ops-import-tracker__search-wrapper">
+        <app-icon
+          class="ops-import-tracker__search-icon"
+          name="search"
+          [size]="18"
+          aria-hidden="true"
+        ></app-icon>
+        <input
+          class="ops-import-tracker__search"
+          [formControl]="clientIdCtrl"
+          placeholder="Buscar por Client ID"
+          type="search"
+        />
+      </div>
+      <button class="ops-import-tracker__refresh" (click)="refresh()">
+        <app-icon
+          class="ops-import-tracker__refresh-icon"
+          name="refresh"
+          [size]="18"
+          aria-hidden="true"
+        ></app-icon>
+        Actualizar
+      </button>
+    </div>
+  </header>
+
+  <section class="ops-import-tracker__kpi-grid">
+    <article class="ops-import-tracker__kpi-card">
+      <div class="ops-import-tracker__kpi-header">
+        <app-icon
+          class="ops-import-tracker__kpi-icon"
+          name="collection"
+          [size]="20"
+          aria-hidden="true"
+        ></app-icon>
+        <span class="ops-import-tracker__kpi-label">Importaciones activas</span>
+      </div>
+      <span class="ops-import-tracker__kpi-value">{{ (metrics$ | async)?.totalActiveImports ?? 0 }}</span>
+    </article>
+    <article class="ops-import-tracker__kpi-card">
+      <div class="ops-import-tracker__kpi-header">
+        <app-icon
+          class="ops-import-tracker__kpi-icon ops-import-tracker__kpi-icon--success"
+          name="badge-check"
+          [size]="20"
+          aria-hidden="true"
+        ></app-icon>
+        <span class="ops-import-tracker__kpi-label">On-time rate</span>
+      </div>
+      <span class="ops-import-tracker__kpi-value">
+        {{ ((metrics$ | async)?.onTimeDeliveryRate ?? 0) | number: '1.0-0' }}%
+      </span>
+    </article>
+    <article class="ops-import-tracker__kpi-card">
+      <div class="ops-import-tracker__kpi-header">
+        <app-icon
+          class="ops-import-tracker__kpi-icon ops-import-tracker__kpi-icon--transit"
+          name="ship"
+          [size]="20"
+          aria-hidden="true"
+        ></app-icon>
+        <span class="ops-import-tracker__kpi-label">Tiempo medio en tránsito</span>
+      </div>
+      <span class="ops-import-tracker__kpi-value">{{ (metrics$ | async)?.averageTransitTime ?? 0 }} d</span>
+    </article>
+    <article class="ops-import-tracker__kpi-card">
+      <div class="ops-import-tracker__kpi-header">
+        <app-icon
+          class="ops-import-tracker__kpi-icon ops-import-tracker__kpi-icon--warning"
+          name="alert-triangle"
+          [size]="20"
+          aria-hidden="true"
+        ></app-icon>
+        <span class="ops-import-tracker__kpi-label">Retrasadas</span>
+      </div>
+      <span class="ops-import-tracker__kpi-value">{{ (metrics$ | async)?.delayedImports ?? 0 }}</span>
+    </article>
+  </section>
+
+  <section class="ops-import-tracker__status-card" *ngIf="(status$ | async) as status">
+    <div class="ops-import-tracker__status-header">
+      <h2 class="ops-import-tracker__status-title">Cliente: {{ currentClientId || '—' }}</h2>
+      <div class="ops-import-tracker__status-sync" *ngIf="status?.lastSyncDate">
+        <app-icon
+          class="ops-import-tracker__status-sync-icon"
+          name="clock"
+          [size]="16"
+          aria-hidden="true"
+        ></app-icon>
+        Última sync: {{ status.lastSyncDate | date: 'short' }}
+      </div>
+    </div>
+
+    <ng-container *ngIf="status; else emptyState">
+      <div class="ops-import-tracker__summary-grid">
+        <div class="ops-import-tracker__summary-card">
+          <app-icon
+            class="ops-import-tracker__summary-icon"
+            name="truck"
+            [size]="20"
+            aria-hidden="true"
+          ></app-icon>
+          <div class="ops-import-tracker__summary-content">
+            <span class="ops-import-tracker__summary-label">Orden de entrega</span>
+            <span class="ops-import-tracker__summary-value">{{ status.deliveryOrderId || '—' }}</span>
+          </div>
+        </div>
+        <div class="ops-import-tracker__summary-card">
+          <app-icon
+            class="ops-import-tracker__summary-icon"
+            name="document-text"
+            [size]="20"
+            aria-hidden="true"
+          ></app-icon>
+          <div class="ops-import-tracker__summary-content">
+            <span class="ops-import-tracker__summary-label">Contrato</span>
+            <span class="ops-import-tracker__summary-value">{{ status.contractId || '—' }}</span>
+          </div>
+        </div>
+        <div class="ops-import-tracker__summary-card">
+          <app-icon
+            class="ops-import-tracker__summary-icon"
+            name="calendar"
+            [size]="20"
+            aria-hidden="true"
+          ></app-icon>
+          <div class="ops-import-tracker__summary-content">
+            <span class="ops-import-tracker__summary-label">Entrega estimada</span>
+            <span class="ops-import-tracker__summary-value">
+              {{ status.estimatedDeliveryDate ? (status.estimatedDeliveryDate | date: 'mediumDate') : '—' }}
+            </span>
+          </div>
+        </div>
+        <div class="ops-import-tracker__summary-card">
+          <app-icon
+            class="ops-import-tracker__summary-icon"
+            name="refresh"
+            [size]="20"
+            aria-hidden="true"
+          ></app-icon>
+          <div class="ops-import-tracker__summary-content">
+            <span class="ops-import-tracker__summary-label">Sync status</span>
+            <span class="ops-import-tracker__summary-value">{{ status.syncStatus || '—' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="ops-import-tracker__milestones">
+        <h3 class="ops-import-tracker__section-title">Milestones de Importación</h3>
+        <div class="ops-import-tracker__milestone-grid">
+          <article class="ops-import-tracker__milestone" *ngFor="let m of milestoneKeys">
+            <div class="ops-import-tracker__milestone-heading">
+              <app-icon
+                class="ops-import-tracker__milestone-icon"
+                [name]="milestoneIcons[m] || 'check-circle'"
+                [size]="20"
+                aria-hidden="true"
+              ></app-icon>
+              <div class="ops-import-tracker__milestone-details">
+                <span class="ops-import-tracker__milestone-name">{{ m }}</span>
+                <span class="ops-import-tracker__milestone-status">
+                  {{ ($any(status)[m]?.status) || 'pending' }}
+                </span>
+              </div>
+            </div>
+            <div class="ops-import-tracker__milestone-actions">
+              <button class="ops-import-tracker__milestone-action" (click)="setMilestone(m, 'in_progress')">
+                <app-icon
+                  class="ops-import-tracker__milestone-action-icon"
+                  name="clock"
+                  [size]="16"
+                  aria-hidden="true"
+                ></app-icon>
+                En curso
+              </button>
+              <button
+                class="ops-import-tracker__milestone-action ops-import-tracker__milestone-action--primary"
+                (click)="setMilestone(m, 'completed')"
+              >
+                <app-icon
+                  class="ops-import-tracker__milestone-action-icon"
+                  name="check"
+                  [size]="16"
+                  aria-hidden="true"
+                ></app-icon>
+                Completar
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="ops-import-tracker__triggers">
+        <h3 class="ops-import-tracker__section-title">Triggers recientes</h3>
+        <div class="ops-import-tracker__trigger-history" *ngIf="status.triggerHistory?.length; else noTriggers">
+          <article class="ops-import-tracker__trigger-entry" *ngFor="let t of status.triggerHistory | slice: 0:5">
+            <div class="ops-import-tracker__trigger-header">
+              <app-icon
+                class="ops-import-tracker__trigger-icon"
+                name="lightning-bolt"
+                [size]="18"
+                aria-hidden="true"
+              ></app-icon>
+              <div class="ops-import-tracker__trigger-meta">
+                {{ t.triggerDate | date: 'short' }} — {{ t.eventType }}
+              </div>
+            </div>
+            <div class="ops-import-tracker__trigger-details">
+              Umbral: {{ t.triggerPercentage }}% • Orden creada: {{ t.deliveryOrderCreated ? 'Sí' : 'No' }}
+            </div>
+          </article>
+        </div>
+        <ng-template #noTriggers>
+          <div class="ops-import-tracker__empty-message">
+            <app-icon
+              class="ops-import-tracker__empty-icon"
+              name="information-circle"
+              [size]="18"
+              aria-hidden="true"
+            ></app-icon>
+            Sin triggers recientes.
+          </div>
+        </ng-template>
+      </section>
+    </ng-container>
+
+    <ng-template #emptyState>
+      <div class="ops-import-tracker__empty-message">
+        <app-icon
+          class="ops-import-tracker__empty-icon"
+          name="search"
+          [size]="18"
+          aria-hidden="true"
+        ></app-icon>
+        Ingresa un Client ID para ver el estado integrado.
+      </div>
+    </ng-template>
+  </section>
+</div>

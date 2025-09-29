@@ -1,0 +1,42 @@
+<div class="protection-demo">
+  <p class="protection-demo__description">
+    Esta es una demostración de cómo funciona nuestra Protección para Conductores. La simulación asume que el cliente solicita la protección 1 año después de iniciar su crédito.
+  </p>
+
+  <form (ngSubmit)="handleSimulate($event)" class="protection-demo__form">
+    <div class="protection-demo__form-group">
+      <label class="protection-demo__form-label" for="sim-months">Meses de atraso</label>
+      <input
+        id="sim-months"
+        type="number"
+        [(ngModel)]="months"
+        name="months"
+        min="1"
+        max="6"
+        required
+        class="protection-demo__input"
+      />
+    </div>
+    <button type="submit" class="protection-demo__submit" [disabled]="isLoading">
+      {{ getSimulateButtonText() }}
+    </button>
+  </form>
+
+  <div *ngIf="isLoading && scenarios.length === 0" class="protection-demo__loading">
+    <span class="protection-demo__spinner" aria-hidden="true"></span>
+  </div>
+
+  <section *ngIf="scenarios.length > 0" class="protection-demo__scenarios">
+    <h3 class="protection-demo__scenarios-title">Resultados de la Simulación:</h3>
+    <app-scenario-card
+      *ngFor="let scenario of scenarios; trackBy: trackScenario"
+      [scenario]="scenario"
+    ></app-scenario-card>
+  </section>
+
+  <div class="protection-demo__actions">
+    <button type="button" class="protection-demo__close" (click)="handleClose()">
+      Cerrar
+    </button>
+  </div>
+</div>

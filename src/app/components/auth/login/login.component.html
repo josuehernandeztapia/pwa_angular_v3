@@ -1,0 +1,155 @@
+<!-- Skip Link for Accessibility -->
+<a class="skip-link" href="#login-form">Saltar al formulario de inicio de sesión</a>
+
+<!-- Minimalista Enterprise Login Container -->
+<div class="login-shell">
+
+  <!-- Login Card - Enterprise Style -->
+  <div class="ui-card ui-card-spacious login-card">
+
+    <!-- Header -->
+    <div class="login-header">
+      <div class="login-brand-icon">
+        <app-icon class="login-logo-icon" name="badge-check-solid" [size]="24" aria-hidden="true"></app-icon>
+      </div>
+      <h1 class="login-title" id="login-title">
+        Conductores
+      </h1>
+      <p class="login-subtitle">
+        Sistema de Gestión Empresarial
+      </p>
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" id="login-form" role="form" aria-labelledby="login-title">
+
+      <!-- Email Field -->
+      <div class="field-block">
+        <label for="email" class="ui-label" [class.ui-label-required]="true">
+          Correo electrónico
+        </label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          class="ui-input"
+          [class.ui-input-error]="isFieldInvalid('email')"
+          placeholder="usuario@empresa.com"
+          autocomplete="email"
+          required
+          aria-required="true"
+          data-cy="email-input"
+        >
+        <div *ngIf="isFieldInvalid('email')" class="ui-error-text" role="alert">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">
+            El correo electrónico es requerido
+          </span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">
+            Formato de correo inválido
+          </span>
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="field-block field-block--spaced">
+        <label for="password" class="ui-label" [class.ui-label-required]="true">
+          Contraseña
+        </label>
+        <div class="password-field">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            class="ui-input"
+            [class.ui-input-error]="isFieldInvalid('password')"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+            aria-required="true"
+            data-cy="password-input"
+          >
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePassword()"
+            [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            data-cy="password-toggle"
+          >
+            <app-icon
+              class="password-toggle-icon"
+              [name]="showPassword ? 'eye-off' : 'eye'"
+              [size]="24"
+              aria-hidden="true"
+            ></app-icon>
+          </button>
+        </div>
+        <div *ngIf="isFieldInvalid('password')" class="ui-error-text" role="alert">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">
+            La contraseña es requerida
+          </span>
+          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">
+            Mínimo 6 caracteres
+          </span>
+        </div>
+      </div>
+
+      <!-- Form Options -->
+      <div class="form-options">
+        <label class="remember-option">
+          <input
+            type="checkbox"
+            formControlName="rememberMe"
+            class="remember-checkbox"
+            data-cy="remember-me"
+          >
+          Recordarme
+        </label>
+        <button
+          type="button"
+          class="link-button"
+          data-cy="forgot-password"
+        >
+          ¿Olvidaste tu contraseña?
+        </button>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="ui-btn ui-btn-primary submit-button"
+        [disabled]="loginForm.invalid || isLoading"
+        data-cy="login-submit"
+      >
+        <span *ngIf="!isLoading">Iniciar Sesión</span>
+        <span *ngIf="isLoading" class="loading-indicator">
+          <div class="ui-spinner ui-spinner-sm"></div>
+          Iniciando sesión...
+        </span>
+      </button>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="ui-alert ui-alert-error form-error" role="alert">
+        {{ errorMessage }}
+      </div>
+    </form>
+
+    <!-- Footer -->
+    <div class="login-footer">
+
+      <!-- Register Link -->
+      <div class="footer-note">
+        ¿Nuevo usuario?
+        <a href="/register" class="footer-link" data-cy="register-link">
+          Crear cuenta
+        </a>
+      </div>
+
+      <div class="ui-alert ui-alert-info login-tip">
+        <div class="tip-title">Credenciales de prueba:</div>
+        <div class="tip-body">
+          <div><span class="tip-label">Contraseña:</span> demo123</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

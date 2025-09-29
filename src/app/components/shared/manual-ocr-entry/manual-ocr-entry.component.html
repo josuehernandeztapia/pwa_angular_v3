@@ -1,0 +1,131 @@
+<div *ngIf="isOpen" class="manual-entry" role="dialog" [attr.aria-labelledby]="titleId" [attr.aria-describedby]="descriptionId" aria-modal="true">
+  <article class="manual-entry__dialog">
+    <header class="manual-entry__header">
+      <h3 class="manual-entry__title" [attr.id]="titleId">
+        <app-icon class="icon-16" name="document-text" [size]="16" aria-hidden="true"></app-icon>
+        Ingresar Manualmente
+      </h3>
+      <button type="button" class="manual-entry__close" (click)="close()" aria-label="Cerrar">
+        ×
+      </button>
+    </header>
+
+    <section class="manual-entry__banner" [attr.aria-describedby]="descriptionId">
+      <strong>OCR no pudo detectar {{ getDocumentLabel(documentType) }}</strong>
+      <p [attr.id]="descriptionId">Por favor, ingresa la información manualmente mirando la imagen.</p>
+    </section>
+
+    <form [formGroup]="manualForm" class="manual-entry__form" novalidate>
+      <div *ngIf="documentType === 'vin'" class="manual-entry__fieldset">
+        <div class="manual-entry__field">
+          <label class="manual-entry__label">VIN (17 caracteres) *</label>
+          <input
+            type="text"
+            formControlName="vin"
+            placeholder="1HGBH41JXMN109186"
+            maxlength="17"
+            class="manual-entry__input"
+            [class.manual-entry__input--invalid]="isFieldInvalid('vin')"
+          />
+          <p class="manual-entry__hint">Busca el VIN en el dashboard o la puerta del conductor</p>
+          <p class="manual-entry__error" *ngIf="isFieldInvalid('vin')">
+            VIN debe tener exactamente 17 caracteres
+          </p>
+        </div>
+
+        <div class="manual-entry__field">
+          <label class="manual-entry__label">Año del Vehículo</label>
+          <input
+            type="number"
+            formControlName="year"
+            placeholder="2021"
+            min="1980"
+            max="2025"
+            class="manual-entry__input"
+          />
+        </div>
+
+        <div class="manual-entry__field">
+          <label class="manual-entry__label">Marca</label>
+          <input
+            type="text"
+            formControlName="make"
+            placeholder="Honda, Toyota, Ford..."
+            class="manual-entry__input"
+          />
+        </div>
+      </div>
+
+      <div *ngIf="documentType === 'odometer'" class="manual-entry__fieldset">
+        <div class="manual-entry__field">
+          <label class="manual-entry__label">Kilómetros *</label>
+          <input
+            type="number"
+            formControlName="kilometers"
+            placeholder="45230"
+            min="0"
+            max="999999"
+            class="manual-entry__input"
+            [class.manual-entry__input--invalid]="isFieldInvalid('kilometers')"
+          />
+          <p class="manual-entry__hint">Lectura actual del odómetro</p>
+          <p class="manual-entry__error" *ngIf="isFieldInvalid('kilometers')">
+            Kilómetros es requerido
+          </p>
+        </div>
+
+        <div class="manual-entry__field">
+          <label class="manual-entry__label">Unidad</label>
+          <select formControlName="unit" class="manual-entry__input manual-entry__input--select">
+            <option value="km">Kilómetros</option>
+            <option value="mi">Millas</option>
+          </select>
+        </div>
+      </div>
+
+      <div *ngIf="documentType === 'plate'" class="manual-entry__fieldset">
+        <div class="manual-entry__field">
+          <label class="manual-entry__label">Número de Placa *</label>
+          <input
+            type="text"
+            formControlName="plate"
+            placeholder="ABC-123-DEF"
+            maxlength="15"
+            class="manual-entry__input"
+            [class.manual-entry__input--invalid]="isFieldInvalid('plate')"
+            (input)="formatPlate($event)"
+          />
+          <p class="manual-entry__hint">Formato: ABC-123-DEF o similar</p>
+          <p class="manual-entry__error" *ngIf="isFieldInvalid('plate')">
+            Número de placa es requerido
+          </p>
+        </div>
+
+        <div class="manual-entry__field">
+          <label class="manual-entry__label">Estado</label>
+          <select formControlName="state" class="manual-entry__input manual-entry__input--select">
+            <option value="EDOMEX">Estado de México</option>
+            <option value="AGS">Aguascalientes</option>
+            <option value="CDMX">Ciudad de México</option>
+            <option value="OTHER">Otro</option>
+          </select>
+        </div>
+      </div>
+    </form>
+
+    <footer class="manual-entry__actions">
+      <button type="button" class="ui-btn ui-btn-ghost manual-entry__action" (click)="close()">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="ui-btn ui-btn-primary manual-entry__action"
+        (click)="saveManualData()"
+        [disabled]="!manualForm.valid || isSaving"
+      >
+        <span *ngIf="isSaving">Guardando...</span>
+        <span *ngIf="!isSaving">Guardar</span>
+      </button>
+    </footer>
+  </article>
+</div>

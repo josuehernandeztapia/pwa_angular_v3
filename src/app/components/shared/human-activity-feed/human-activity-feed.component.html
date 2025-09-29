@@ -1,0 +1,132 @@
+
+<div class="activity-feed">
+  <header class="activity-feed__header">
+    <h3 class="activity-feed__title">
+      <app-icon
+        class="icon-24 activity-feed__title-icon"
+        name="star"
+        [size]="24"
+        color="currentColor"
+        aria-hidden="true">
+      </app-icon>
+      Feed de Actividad en Tiempo Real
+    </h3>
+    <div class="activity-feed__filters">
+      <button
+        type="button"
+        [ngClass]="getFilterClasses('all')"
+        (click)="setFilter('all')"
+      >
+        Todos
+      </button>
+      <button
+        type="button"
+        [ngClass]="getFilterClasses('actions')"
+        (click)="setFilter('actions')"
+      >
+        Acciones
+      </button>
+      <button
+        type="button"
+        [ngClass]="getFilterClasses('achievements')"
+        (click)="setFilter('achievements')"
+      >
+        Logros
+      </button>
+    </div>
+  </header>
+
+  <section class="activity-feed__stream">
+    <article
+      *ngFor="let activity of filteredActivities; trackBy: trackByActivity"
+      [ngClass]="getItemClasses(activity)"
+    >
+      <div class="activity-feed__timeline">
+        <div [ngClass]="getMarkerClasses(activity)" aria-hidden="true">
+          <app-icon
+            class="icon-16"
+            [name]="getCategoryIconName(activity.category)"
+            [size]="16"
+            color="currentColor"
+            aria-hidden="true">
+          </app-icon>
+        </div>
+        <div *ngIf="!isLastItem(activity)" class="activity-feed__line" aria-hidden="true"></div>
+      </div>
+
+      <div class="activity-feed__content">
+        <div class="activity-feed__meta">
+          <div class="activity-feed__meta-group">
+            <span [ngClass]="getTypeClasses(activity.type)">
+              {{ getTypeLabel(activity.type) }}
+            </span>
+            <span class="activity-feed__time">{{ formatTime(activity.timestamp) }}</span>
+          </div>
+          <div class="activity-feed__priority" *ngIf="activity.priority === 'high'">
+            <app-icon class="icon-16 activity-feed__priority-icon" name="shield-alert" [size]="16" color="currentColor" aria-hidden="true"></app-icon>
+            <span class="activity-feed__priority-label">Prioridad Alta</span>
+          </div>
+        </div>
+
+        <div class="activity-feed__body">
+          <h4 class="activity-feed__heading">{{ activity.title }}</h4>
+          <p class="activity-feed__description">
+            <ng-container *ngIf="activity.client?.name as clientName; else plainDescription">
+              {{ activity.description.replace(clientName, '') || activity.description }}
+              <span class="activity-feed__client">{{ clientName }}</span>
+            </ng-container>
+            <ng-template #plainDescription>{{ activity.description }}</ng-template>
+          </p>
+
+          <div class="activity-feed__metadata" *ngIf="hasMetadata(activity)">
+            <div class="activity-feed__metadata-item" *ngIf="activity.metadata?.amount">
+              <app-icon class="icon-16 activity-feed__metadata-icon" name="chart" [size]="16" color="currentColor" aria-hidden="true"></app-icon>
+              <span class="activity-feed__metadata-text">${{ formatCurrency(activity.metadata.amount || 0) }}</span>
+            </div>
+            <div class="activity-feed__metadata-item" *ngIf="activity.metadata?.documentType">
+              <app-icon class="icon-16 activity-feed__metadata-icon" name="document" [size]="16" color="currentColor" aria-hidden="true"></app-icon>
+              <span class="activity-feed__metadata-text">{{ activity.metadata.documentType }}</span>
+            </div>
+            <div class="activity-feed__metadata-item" *ngIf="activity.metadata?.channel">
+              <app-icon class="icon-16 activity-feed__metadata-icon" name="link" [size]="16" color="currentColor" aria-hidden="true"></app-icon>
+              <span class="activity-feed__metadata-text">{{ activity.metadata.channel }}</span>
+            </div>
+          </div>
+
+          <button
+            *ngIf="activity.suggestedAction"
+            type="button"
+            class="activity-feed__action"
+            (click)="executeSuggestedAction(activity)"
+          >
+            <app-icon
+              class="icon-16 activity-feed__action-icon"
+              [name]="getSuggestedActionIconName(activity.category)"
+              [size]="16"
+              color="currentColor"
+              aria-hidden="true">
+            </app-icon>
+            <span class="activity-feed__action-text">{{ activity.suggestedAction.label }}</span>
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <div class="activity-feed__empty" *ngIf="filteredActivities.length === 0">
+      <div class="activity-feed__empty-icon" aria-hidden="true">
+        <app-icon class="icon-32" name="collection" [size]="32" color="currentColor" aria-hidden="true"></app-icon>
+      </div>
+      <h4 class="activity-feed__empty-title">Sin actividad reciente</h4>
+      <p class="activity-feed__empty-description">
+        Las nuevas actividades aparecerán aquí en tiempo real
+      </p>
+    </div>
+  </section>
+
+  <footer class="activity-feed__footer" *ngIf="activities.length > 0">
+    <button type="button" class="activity-feed__more" (click)="loadMoreActivities()">
+      <app-icon class="icon-16" name="chevron-down" [size]="16" color="currentColor" aria-hidden="true"></app-icon>
+      Cargar más actividades
+    </button>
+  </footer>
+</div>

@@ -1,0 +1,154 @@
+<section class="guarantee-panel">
+  <header class="guarantee-panel__header">
+    <div class="guarantee-panel__header-row">
+      <div class="guarantee-panel__lead-icon">
+        <app-icon class="guarantee-panel__lead-icon-symbol" name="shield" [size]="24" color="currentColor"></app-icon>
+      </div>
+      <div class="guarantee-panel__lead-copy">
+        <h3 class="guarantee-panel__title">Panel de Garantías</h3>
+        <p class="guarantee-panel__subtitle">Documentos específicos para garantizar el crédito</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="guarantee-panel__documents">
+    <article *ngFor="let document of documents" class="guarantee-panel__document">
+      <div class="guarantee-panel__document-row">
+        <div class="guarantee-panel__document-main">
+          <div class="guarantee-panel__status-icon">
+            <div class="guarantee-panel__status-indicator" [ngSwitch]="document.status">
+              <span
+                *ngSwitchCase="'Aprobado'"
+                class="guarantee-panel__status-symbol guarantee-panel__status-symbol--approved"
+                aria-label="Documento aprobado"
+              ></span>
+              <span
+                *ngSwitchCase="'En Revisión'"
+                class="guarantee-panel__status-symbol guarantee-panel__status-symbol--review"
+                aria-label="Documento en revisión"
+              ></span>
+              <span
+                *ngSwitchCase="'Pendiente'"
+                class="guarantee-panel__status-symbol guarantee-panel__status-symbol--pending"
+                aria-label="Documento pendiente"
+              ></span>
+              <span
+                *ngSwitchCase="'Rechazado'"
+                class="guarantee-panel__status-symbol guarantee-panel__status-symbol--rejected"
+                aria-label="Documento rechazado"
+              ></span>
+              <span class="guarantee-panel__status-symbol guarantee-panel__status-symbol--neutral" *ngSwitchDefault>?</span>
+            </div>
+          </div>
+
+          <div class="guarantee-panel__document-info">
+            <h4 class="guarantee-panel__document-name">{{ document.name }}</h4>
+            <p *ngIf="getDocumentDescription(document.name)" class="guarantee-panel__document-description">
+              {{ getDocumentDescription(document.name) }}
+            </p>
+            <div class="guarantee-panel__document-meta">
+              <span class="guarantee-panel__status-badge" [ngClass]="getStatusBadgeClass(document.status)">
+                {{ document.status }}
+              </span>
+              <span *ngIf="document.isOptional" class="guarantee-panel__optional-badge">Opcional</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="guarantee-panel__document-actions">
+          <button
+            *ngIf="document.status === 'Pendiente'"
+            type="button"
+            class="guarantee-panel__action-btn guarantee-panel__action-btn--upload"
+            (click)="onUpload.emit(document.id)"
+          >
+            <app-icon class="guarantee-panel__action-icon" name="cloud-upload" [size]="16" color="var(--color-success, #10b981)"></app-icon>
+            Subir
+          </button>
+          <button
+            *ngIf="document.status === 'Aprobado'"
+            type="button"
+            class="guarantee-panel__action-btn guarantee-panel__action-btn--view"
+            (click)="viewDocument(document)"
+          >
+            <app-icon class="guarantee-panel__action-icon" name="eye" [size]="16" color="var(--color-info, #3b82f6)"></app-icon>
+            Ver
+          </button>
+          <button
+            *ngIf="document.status === 'Rechazado'"
+            type="button"
+            class="guarantee-panel__action-btn guarantee-panel__action-btn--resubmit"
+            (click)="onUpload.emit(document.id)"
+          >
+            <app-icon class="guarantee-panel__action-icon" name="refresh" [size]="16" color="var(--color-warning, #f59e0b)"></app-icon>
+            Re-subir
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="document.name === 'Convenio de Dación en Pago'" class="guarantee-panel__document-progress">
+        <div class="guarantee-panel__progress-content">
+          <div class="guarantee-panel__progress-header">
+            <span class="guarantee-panel__progress-label">Progreso del Convenio</span>
+            <span class="guarantee-panel__progress-value">{{ getConvenioProgress() }}%</span>
+          </div>
+          <div class="guarantee-panel__progress-bar">
+            <div class="guarantee-panel__progress-fill" [style.width.%]="getConvenioProgress()"></div>
+          </div>
+          <p class="guarantee-panel__progress-hint">
+            Este convenio formalizará la transferencia de propiedad como garantía
+          </p>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <section class="guarantee-panel__summary">
+    <header class="guarantee-panel__summary-header">
+      <div class="guarantee-panel__summary-copy">
+        <h4 class="guarantee-panel__summary-title">Resumen de Garantías</h4>
+        <p class="guarantee-panel__summary-description">Estado general de documentos de garantía</p>
+      </div>
+      <div class="guarantee-panel__summary-stats">
+        <span class="guarantee-panel__summary-value">{{ getApprovedCount() }}/{{ documents.length }}</span>
+        <span class="guarantee-panel__summary-caption">Aprobados</span>
+      </div>
+    </header>
+
+    <div class="guarantee-panel__summary-progress">
+      <div class="guarantee-panel__summary-progress-meta">
+        <span class="guarantee-panel__summary-label">Completado</span>
+        <span class="guarantee-panel__summary-value--highlight">{{ getOverallProgress() }}%</span>
+      </div>
+      <div class="guarantee-panel__summary-progress-bar">
+        <div class="guarantee-panel__summary-progress-fill" [style.width.%]="getOverallProgress()"></div>
+      </div>
+    </div>
+
+    <div class="guarantee-panel__risk" [ngClass]="getRiskAssessmentClass()">
+      <div class="guarantee-panel__risk-content">
+        <span class="guarantee-panel__risk-dot" [ngClass]="getRiskToneClass()" aria-hidden="true"></span>
+        <div>
+          <h5 class="guarantee-panel__risk-title">{{ getRiskLevel() }}</h5>
+          <p class="guarantee-panel__risk-description">{{ getRiskDescription() }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="guarantee-panel__actions">
+    <button
+      type="button"
+      class="guarantee-panel__primary-action"
+      (click)="generateGuaranteeReport()"
+      [disabled]="getOverallProgress() < 100"
+    >
+      Generar Reporte de Garantías
+    </button>
+
+    <button type="button" class="guarantee-panel__secondary-action" (click)="requestLegalReview()">
+      <app-icon class="guarantee-panel__secondary-icon" name="scale" [size]="20" color="currentColor"></app-icon>
+      Revisión Legal
+    </button>
+  </footer>
+</section>

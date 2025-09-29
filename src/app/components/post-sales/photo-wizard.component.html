@@ -1,0 +1,260 @@
+<section class="photo-wizard" aria-live="polite" *ngIf="enabled; else disabledTpl">
+  <header class="photo-wizard__header">
+    <h2 class="photo-wizard__title">Postventa · Wizard de 4 Fotos</h2>
+    @if (!caseId) {
+      <p class="photo-wizard__hint">Se creará un caso al iniciar. Las fotos se subirán y evaluarán automáticamente.</p>
+    }
+  </header>
+
+  <div class="photo-wizard__steps" data-cy="photo-steps">
+    @for (step of steps; track step.id; let index = $index) {
+      <article
+        class="photo-wizard__step"
+        [class.photo-wizard__step--completed]="step.done"
+        [class.photo-wizard__step--warning]="step.done && (step.confidence || 0) < threshold"
+        data-cy="step-card"
+      >
+        <header class="photo-wizard__step-header">
+          <div class="photo-wizard__step-summary">
+            <span
+              class="photo-wizard__indicator"
+              [class.photo-wizard__indicator--complete]="step.done && (step.confidence || 0) >= threshold && (!step.missing || step.missing.length === 0)"
+              [class.photo-wizard__indicator--warning]="step.done && ((step.confidence || 0) < threshold || (step.missing && step.missing.length > 0))"
+            >
+              {{ step.done && (step.confidence || 0) >= threshold && (!step.missing || step.missing.length === 0) ? 'OK' : index + 1 }}
+            </span>
+            <div class="photo-wizard__step-heading">
+              <h3 class="photo-wizard__step-title">{{ step.title }}</h3>
+              <p class="photo-wizard__step-copy">{{ step.hint }}</p>
+            </div>
+          </div>
+
+          <div class="photo-wizard__step-status">
+            @if (step.uploading) {
+              <span class="photo-wizard__status-chip">
+                <span class="photo-wizard__spinner" aria-hidden="true"></span>
+                Procesando…
+              </span>
+            } @else if (step.done && (step.confidence || 0) >= threshold && (!step.missing || step.missing.length === 0)) {
+              <span class="photo-wizard__badge photo-wizard__badge--success">
+                Validado ({{ (step.confidence!*100) | number:'1.0-0' }}%)
+              </span>
+            } @else if (step.done) {
+              <span class="photo-wizard__badge photo-wizard__badge--warning">Revisar</span>
+            }
+          </div>
+        </header>
+
+        <div class="photo-wizard__step-body">
+          <div class="photo-wizard__actions">
+            <label class="ui-btn ui-btn-ghost photo-wizard__action" [class.is-disabled]="step.uploading">
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                class="photo-wizard__input"
+                [disabled]="step.uploading"
+                (change)="onFileSelected($event, step.id)"
+              />
+              <app-icon class="photo-wizard__action-icon" [name]="getIcon('camera')" [size]="18" color="currentColor"></app-icon>
+              Tomar foto
+            </label>
+
+            @if (step.done) {
+              <button type="button" class="ui-btn ui-btn-secondary photo-wizard__action" (click)="retake(step.id)">
+                Repetir
+              </button>
+            }
+          </div>
+
+          @if (step.example) {
+            <figure class="photo-wizard__example">
+              <img
+                [ngSrc]="step.example"
+                width="320"
+                height="180"
+                class="photo-wizard__example-image"
+                alt="Ejemplo de captura para {{ step.title }}"
+                (error)="onExampleError($event)"
+              />
+              <figcaption class="photo-wizard__example-caption">Ejemplo de captura ideal</figcaption>
+            </figure>
+          }
+
+          @if (step.uploading) {
+            <div class="photo-wizard__loader">
+              <div class="photo-wizard__skeleton">
+                <span class="photo-wizard__skeleton-line photo-wizard__skeleton-line--wide"></span>
+                <span class="photo-wizard__skeleton-line photo-wizard__skeleton-line--narrow"></span>
+              </div>
+              @if (step.id === 'vin' && vinRetryAttempt > 0) {
+                <p class="photo-wizard__retry">Intento {{ vinRetryAttempt }} de 3 (análisis VIN extendido)</p>
+              }
+            </div>
+          }
+
+          @if (step.done) {
+            <section class="photo-wizard__review">
+              @if ((step.confidence || 0) >= threshold && (!step.missing || step.missing.length === 0)) {
+                <div class="photo-wizard__review-card photo-wizard__review-card--success">
+                  <span class="photo-wizard__review-dot" aria-hidden="true"></span>
+                  Documento procesado correctamente
+                </div>
+              } @else {
+                <div class="photo-wizard__review-card photo-wizard__review-card--warning">
+                  <div class="photo-wizard__review-status">
+                    <span class="photo-wizard__review-dot" aria-hidden="true"></span>
+                    Requiere revisión manual
+                  </div>
+
+                  @if (step.missing && step.missing.length > 0) {
+                    <div class="photo-wizard__review-missing">
+                      <p>Campos faltantes:</p>
+                      <ul>
+                        @for (missingField of step.missing; track missingField) {
+                          <li>{{ missingField | titlecase }}</li>
+                        }
+                      </ul>
+                    </div>
+                  }
+
+                  <div class="photo-wizard__review-actions">
+                    <button type="button" class="ui-btn ui-btn-secondary" (click)="retake(step.id)">
+                      Repetir captura
+                    </button>
+                    @if (step.id === 'vin' || step.id === 'odometer') {
+                      <button
+                        type="button"
+                        class="ui-btn ui-btn-primary"
+                        (click)="openManualEntry(step.id)"
+                        data-testid="manual-entry-btn"
+                      >
+                        <app-icon [name]="getIcon('edit')" [size]="16" color="currentColor"></app-icon>
+                        Ingresar manualmente
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </section>
+          }
+
+          @if (step.error) {
+            <p class="photo-wizard__error">{{ step.error }}</p>
+          }
+        </div>
+      </article>
+    }
+  </div>
+
+  @if (showVinDetectionBanner) {
+    <aside class="photo-wizard__banner" role="status">
+      <div class="photo-wizard__banner-content">
+        <app-icon [name]="getIcon('camera')" [size]="20" color="currentColor"></app-icon>
+        <div>
+          <strong>Revisión adicional de VIN requerida</strong>
+          <p>Vuelve a capturar el VIN con mejor iluminación o enfoca el cuadro completo.</p>
+        </div>
+      </div>
+      <button type="button" class="ui-btn ui-btn-secondary" (click)="retakeVinWithRetry()">
+        Reintentar captura VIN
+      </button>
+    </aside>
+  }
+
+  @if (caseId) {
+    <section class="photo-wizard__summary">
+      @if (isAllGood) {
+        <article class="photo-wizard__summary-card photo-wizard__summary-card--success">
+          <span class="photo-wizard__summary-dot" aria-hidden="true"></span>
+          <div>
+            <h3 class="photo-wizard__summary-title">Validación completa</h3>
+            <p class="photo-wizard__summary-text">Todos los documentos procesados correctamente</p>
+          </div>
+        </article>
+      }
+
+      @if (firstRecommendationMs !== null) {
+        <p class="photo-wizard__timing">Tiempo de procesamiento: {{ (firstRecommendationMs!/1000) | number:'1.1-1' }}s</p>
+      }
+
+      @if (!isAllGood) {
+        <article class="photo-wizard__summary-card photo-wizard__summary-card--warning">
+          <header class="photo-wizard__summary-header">
+            <span class="photo-wizard__summary-dot" aria-hidden="true"></span>
+            <h3 class="photo-wizard__summary-title">Estado pendiente</h3>
+          </header>
+          <p class="photo-wizard__summary-text">Algunos documentos requieren revisión manual antes de continuar</p>
+        </article>
+
+        <div class="photo-wizard__review-list">
+          <h4 class="photo-wizard__review-heading">Acciones sugeridas</h4>
+          <ul>
+            @for (step of steps; track step.id) {
+              <li class="photo-wizard__review-item" [class.photo-wizard__review-item--alert]="step.missing && step.missing.length">
+                <div class="photo-wizard__review-label">
+                  <span class="photo-wizard__chip" [class.photo-wizard__chip--alert]="step.missing && step.missing.length">{{ step.title }}</span>
+                  <span class="photo-wizard__confidence">Confianza: {{ (step.confidence || 0) * 100 | number:'1.0-0' }}%</span>
+                </div>
+                @if (step.missing && step.missing.length) {
+                  <div class="photo-wizard__review-note">{{ step.missing.length }} elementos por validar manualmente.</div>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </section>
+  }
+
+  @if (enableAddToQuote) {
+    <section class="photo-wizard__quote">
+      <header class="photo-wizard__quote-header">
+        <h3 class="photo-wizard__quote-title">Recomendaciones de Postventa</h3>
+        <span class="photo-wizard__draft-count" *ngIf="draftCount > 0">Borrador: {{ draftCount }} ítem{{ draftCount === 1 ? '' : 's' }}</span>
+      </header>
+      <p class="photo-wizard__quote-hint">Agrega piezas sugeridas directamente al borrador de cotización.</p>
+      <ul class="photo-wizard__quote-list">
+        @for (part of recommendedParts; track part.id) {
+          <li class="photo-wizard__quote-item">
+            <div class="photo-wizard__quote-info">
+              <span class="photo-wizard__quote-name">{{ part.name }}</span>
+              <span class="photo-wizard__quote-meta">OEM {{ part.oem }} · Eq. {{ part.equivalent }}</span>
+              <span class="photo-wizard__quote-meta">${{ part.priceMXN | number:'1.0-0' }} MXN · Stock {{ part.stock }}</span>
+            </div>
+            <button type="button" class="ui-btn ui-btn-primary photo-wizard__quote-action" (click)="addToQuote(part)">
+              Agregar a borrador
+            </button>
+          </li>
+        }
+      </ul>
+      <button type="button" class="ui-btn ui-btn-ghost photo-wizard__quote-clear" (click)="clearDraft()" [disabled]="draftCount === 0">
+        Vaciar borrador
+      </button>
+    </section>
+  }
+
+  <footer class="photo-wizard__footer">
+    <button type="button" class="ui-btn ui-btn-primary" (click)="next()">
+      {{ ctaText }}
+    </button>
+  </footer>
+</section>
+
+<ng-template #disabledTpl>
+  <section class="photo-wizard photo-wizard--disabled">
+    <div class="photo-wizard__placeholder">
+      <h2 class="photo-wizard__placeholder-title">Wizard deshabilitado</h2>
+      <p class="photo-wizard__placeholder-text">
+        Activa la captura asistida desde la configuración de Postventa para habilitar este flujo.
+      </p>
+    </div>
+  </section>
+</ng-template>
+
+<app-manual-ocr-entry
+  [documentType]="manualEntryType || ''"
+  [isOpen]="showManualEntry"
+  (save)="onManualOCRSave($event)"
+  (cancel)="onManualCancel()"
+></app-manual-ocr-entry>

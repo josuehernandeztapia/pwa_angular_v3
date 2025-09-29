@@ -1,0 +1,18 @@
+<div class="savings-chart-container">
+  <div class="chart-bars">
+    <div
+      *ngFor="let month of months; let i = index"
+      class="bar-container"
+    >
+      <div class="bar-tooltip">
+        {{ formatCurrency(month.saved) }}
+      </div>
+      <div
+        class="bar"
+        [style.background-color]="month.saved >= goal ? completeColor : progressColor"
+        [style.height.%]="getBarHeight(month.saved)"
+      ></div>
+      <div class="bar-label">{{ getMonthNumber(month.name) }}</div>
+    </div>
+  </div>
+</div>

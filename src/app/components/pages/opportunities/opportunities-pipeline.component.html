@@ -1,0 +1,189 @@
+<div class="opportunities-pipeline">
+  <header class="opportunities-pipeline__header">
+    <div class="opportunities-pipeline__header-content">
+      <h1 class="opportunities-pipeline__title">Pipeline de Oportunidades</h1>
+      <p class="opportunities-pipeline__subtitle">Gestión de prospectos y seguimiento de ventas</p>
+    </div>
+    <div class="opportunities-pipeline__header-actions">
+      <button type="button" class="opportunities-pipeline__button opportunities-pipeline__button--secondary" (click)="refreshPipeline()">
+        Actualizar
+      </button>
+      <button type="button" class="opportunities-pipeline__button opportunities-pipeline__button--primary" (click)="createNewOpportunity()">
+        <span aria-hidden="true">➕</span> Nueva Oportunidad
+      </button>
+    </div>
+  </header>
+
+  <section class="opportunities-pipeline__stats" aria-label="Resumen del pipeline">
+    <article class="opportunities-pipeline__stat opportunities-pipeline__stat--count">
+      <div class="opportunities-pipeline__stat-icon" aria-hidden="true"></div>
+      <div class="opportunities-pipeline__stat-content">
+        <span class="opportunities-pipeline__stat-value">{{ stats.totalOpportunities }}</span>
+        <span class="opportunities-pipeline__stat-label">Oportunidades Activas</span>
+      </div>
+    </article>
+    <article class="opportunities-pipeline__stat opportunities-pipeline__stat--value">
+      <div class="opportunities-pipeline__stat-icon" aria-hidden="true"></div>
+      <div class="opportunities-pipeline__stat-content">
+        <span class="opportunities-pipeline__stat-value">{{ formatCurrency(stats.totalValue) }}</span>
+        <span class="opportunities-pipeline__stat-label">Valor Total Pipeline</span>
+      </div>
+    </article>
+    <article class="opportunities-pipeline__stat opportunities-pipeline__stat--average">
+      <div class="opportunities-pipeline__stat-icon" aria-hidden="true"></div>
+      <div class="opportunities-pipeline__stat-content">
+        <span class="opportunities-pipeline__stat-value">{{ formatCurrency(stats.averageDealSize) }}</span>
+        <span class="opportunities-pipeline__stat-label">Ticket Promedio</span>
+      </div>
+    </article>
+    <article class="opportunities-pipeline__stat opportunities-pipeline__stat--conversion">
+      <div class="opportunities-pipeline__stat-icon" aria-hidden="true"></div>
+      <div class="opportunities-pipeline__stat-content">
+        <span class="opportunities-pipeline__stat-value">{{ (stats.conversionRate * 100).toFixed(1) }}%</span>
+        <span class="opportunities-pipeline__stat-label">Tasa de Conversión</span>
+      </div>
+    </article>
+  </section>
+
+  <section class="opportunities-pipeline__filters" aria-label="Filtros del pipeline">
+    <div class="opportunities-pipeline__filter">
+      <label class="opportunities-pipeline__filter-label" for="filter-market">Mercado</label>
+      <select id="filter-market" class="opportunities-pipeline__select" [(ngModel)]="selectedMarket" (change)="applyFilters()">
+        <option value="">Todos los mercados</option>
+        <option value="aguascalientes">Aguascalientes</option>
+        <option value="edomex">Estado de México</option>
+      </select>
+    </div>
+    <div class="opportunities-pipeline__filter">
+      <label class="opportunities-pipeline__filter-label" for="filter-flow">Tipo de Negocio</label>
+      <select id="filter-flow" class="opportunities-pipeline__select" [(ngModel)]="selectedFlow" (change)="applyFilters()">
+        <option value="">Todos los tipos</option>
+        <option value="VentaPlazo">Venta a Plazo</option>
+        <option value="VentaDirecta">Venta Directa</option>
+        <option value="AhorroProgramado">Plan de Ahorro</option>
+        <option value="CreditoColectivo">Crédito Colectivo</option>
+      </select>
+    </div>
+    <div class="opportunities-pipeline__filter">
+      <label class="opportunities-pipeline__filter-label" for="filter-stage">Etapa</label>
+      <select id="filter-stage" class="opportunities-pipeline__select" [(ngModel)]="selectedStage" (change)="applyFilters()">
+        <option value="">Todas las etapas</option>
+        <option value="prospecto">Prospecto</option>
+        <option value="cotizando">Cotizando</option>
+        <option value="negociando">Negociando</option>
+        <option value="documentando">Documentando</option>
+        <option value="cerrando">Cerrando</option>
+      </select>
+    </div>
+    <div class="opportunities-pipeline__filter">
+      <label class="opportunities-pipeline__filter-label" for="filter-priority">Prioridad</label>
+      <select id="filter-priority" class="opportunities-pipeline__select" [(ngModel)]="selectedPriority" (change)="applyFilters()">
+        <option value="">Todas las prioridades</option>
+        <option value="alta">Alta</option>
+        <option value="media">Media</option>
+        <option value="baja">Baja</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="opportunities-pipeline__kanban" aria-live="polite">
+    <div *ngFor="let stage of pipelineStages" class="opportunities-pipeline__stage">
+      <header class="opportunities-pipeline__stage-header">
+        <h2 class="opportunities-pipeline__stage-title">{{ stage.icon }} {{ stage.name }}</h2>
+        <span class="opportunities-pipeline__stage-count">{{ getStageOpportunities(stage.key).length }}</span>
+        <span class="opportunities-pipeline__stage-value">{{ formatCurrency(getStageValue(stage.key)) }}</span>
+      </header>
+
+      <div class="opportunities-pipeline__stage-list">
+        <article
+          *ngFor="let opportunity of getStageOpportunities(stage.key); trackBy: trackByOpportunityId"
+          class="opportunities-pipeline__card"
+          [ngClass]="getPriorityClasses(opportunity.priority)"
+          (click)="viewOpportunity(opportunity)"
+        >
+          <header class="opportunities-pipeline__card-header">
+            <h3 class="opportunities-pipeline__card-title">{{ opportunity.clientName }}</h3>
+            <span
+              class="opportunities-pipeline__card-priority"
+              [ngClass]="getPriorityBadgeClasses(opportunity.priority)"
+              [innerHTML]="getPriorityIcon(opportunity.priority)"
+            ></span>
+          </header>
+
+          <dl class="opportunities-pipeline__card-details">
+            <div class="opportunities-pipeline__detail">
+              <dt class="opportunities-pipeline__detail-label">Mercado</dt>
+              <dd class="opportunities-pipeline__detail-value">{{ getMarketLabel(opportunity.market) }}</dd>
+            </div>
+            <div class="opportunities-pipeline__detail">
+              <dt class="opportunities-pipeline__detail-label">Tipo</dt>
+              <dd class="opportunities-pipeline__detail-value">{{ getBusinessFlowLabel(opportunity.businessFlow) }}</dd>
+            </div>
+            <div class="opportunities-pipeline__detail">
+              <dt class="opportunities-pipeline__detail-label">Valor</dt>
+              <dd class="opportunities-pipeline__detail-value">{{ formatCurrency(opportunity.estimatedValue) }}</dd>
+            </div>
+            <div class="opportunities-pipeline__detail">
+              <dt class="opportunities-pipeline__detail-label">Probabilidad</dt>
+              <dd class="opportunities-pipeline__detail-value">{{ opportunity.probability }}%</dd>
+            </div>
+          </dl>
+
+          <div class="opportunities-pipeline__progress">
+            <div class="opportunities-pipeline__progress-track">
+              <div
+                class="opportunities-pipeline__progress-fill"
+                [style.width.%]="opportunity.probability"
+                [style.background-color]="getProgressColor(opportunity.probability)"
+              ></div>
+            </div>
+          </div>
+
+          <div class="opportunities-pipeline__meta">
+            <div class="opportunities-pipeline__next-action">
+              <span class="opportunities-pipeline__next-action-icon" aria-hidden="true"></span>
+              <span class="opportunities-pipeline__next-action-text">{{ opportunity.nextAction }}</span>
+            </div>
+            <time class="opportunities-pipeline__last-activity">{{ formatTimeAgo(opportunity.lastActivity) }}</time>
+          </div>
+
+          <ul class="opportunities-pipeline__tags">
+            <li *ngFor="let tag of opportunity.tags" class="opportunities-pipeline__tag">{{ tag }}</li>
+          </ul>
+
+          <div class="opportunities-pipeline__card-actions">
+            <button
+              type="button"
+              class="opportunities-pipeline__action"
+              (click)="advanceStage(opportunity); $event.stopPropagation()"
+              *ngIf="canAdvanceStage(opportunity)"
+            >
+              <app-icon name="arrow-right" [size]="24" class="opportunities-pipeline__action-icon" />
+              Avanzar
+            </button>
+            <button
+              type="button"
+              class="opportunities-pipeline__action opportunities-pipeline__action--secondary"
+              (click)="createQuote(opportunity); $event.stopPropagation()"
+              *ngIf="opportunity.stage === 'cotizando' && !opportunity.quote"
+            >
+              Cotizar
+            </button>
+            <button
+              type="button"
+              class="opportunities-pipeline__action opportunities-pipeline__action--secondary"
+              (click)="scheduleFollowUp(opportunity); $event.stopPropagation()"
+            >
+              📅 Seguimiento
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="isLoading" class="opportunities-pipeline__loading">
+    <div class="opportunities-pipeline__spinner"></div>
+    <p>Cargando pipeline de oportunidades...</p>
+  </section>
+</div>

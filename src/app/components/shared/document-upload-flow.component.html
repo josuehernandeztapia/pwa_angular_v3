@@ -1,0 +1,91 @@
+<div class="document-upload" *ngIf="flowContext">
+  <section class="document-upload__card ui-card">
+    <h2 class="document-upload__title">Documentos</h2>
+
+    <div class="document-upload__dropzone-wrapper">
+      <input
+        type="file"
+        #fileInput
+        class="document-upload__input"
+        id="document-upload"
+        accept="image/*,application/pdf"
+        (change)="onFileSelected($event)"
+      />
+
+      <label
+        for="document-upload"
+        class="document-upload__dropzone"
+        data-cy="document-upload"
+      >
+        <div class="document-upload__dropzone-inner">
+          <app-icon
+            class="document-upload__dropzone-icon"
+            name="cloud-upload"
+            [size]="24"
+            aria-hidden="true"
+          ></app-icon>
+          <p class="document-upload__dropzone-text">Subir documento</p>
+        </div>
+      </label>
+    </div>
+
+    <div *ngIf="showOCRStatus" class="document-upload__status" data-cy="ocr-status">
+      <div
+        *ngIf="ocrStatus === 'processing'"
+        class="document-upload__status-line"
+        [ngClass]="getStatusLineClasses('processing')"
+      >
+        <span class="document-upload__status-dot" [ngClass]="getStatusDotClasses('processing')"></span>
+        <span data-cy="ocr-pendiente">Pendiente</span>
+      </div>
+
+      <div
+        *ngIf="ocrStatus === 'validated'"
+        class="document-upload__status-line"
+        [ngClass]="getStatusLineClasses('validated')"
+      >
+        <span class="document-upload__status-dot" [ngClass]="getStatusDotClasses('validated')"></span>
+        <span data-cy="ocr-validado">Validado</span>
+      </div>
+
+      <div
+        *ngIf="ocrStatus === 'error'"
+        class="document-upload__status-line"
+        [ngClass]="getStatusLineClasses('error')"
+      >
+        <span class="document-upload__status-dot" [ngClass]="getStatusDotClasses('error')"></span>
+        <span data-cy="ocr-error">Error</span>
+      </div>
+    </div>
+
+    <div *ngIf="isProcessingDocument" class="document-upload__loading" data-cy="documents-loading">
+      <span class="document-upload__loading-line document-upload__loading-line--wide"></span>
+      <span class="document-upload__loading-line document-upload__loading-line--narrow"></span>
+    </div>
+
+    <div *ngIf="!isProcessingDocument && processedDocuments.length > 0" data-cy="documents-table">
+      <div class="document-upload__list">
+        <div
+          *ngFor="let doc of processedDocuments"
+          class="document-upload__item"
+        >
+          <div class="document-upload__item-meta">
+            <span class="document-upload__item-icon" aria-hidden="true"></span>
+            <div class="document-upload__item-copy">
+              <p class="document-upload__item-name">{{ doc.name }}</p>
+              <p class="document-upload__item-type">{{ doc.type }}</p>
+            </div>
+          </div>
+
+          <span
+            class="document-upload__item-status"
+            [ngClass]="getDocumentStatusClasses(doc.status)"
+            data-cy="doc-status"
+          >
+            {{ getDocumentStatusLabel(doc.status) }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

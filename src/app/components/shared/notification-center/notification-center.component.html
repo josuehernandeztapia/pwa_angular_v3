@@ -1,0 +1,137 @@
+<div
+  class="notification-center"
+  [ngClass]="getPanelClasses()"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Centro de notificaciones"
+>
+  <header class="notification-center__header">
+    <div class="notification-center__title-group">
+      <h3 class="notification-center__title">Notificaciones</h3>
+      <ng-container *ngIf="unreadCount$ | async as unreadCount">
+        <span
+          *ngIf="unreadCount > 0"
+          class="notification-center__count"
+          aria-label="Notificaciones sin leer"
+        >
+          {{ unreadCount }}
+        </span>
+      </ng-container>
+    </div>
+
+    <div class="notification-center__actions">
+      <ng-container *ngIf="unreadCount$ | async as unreadCount">
+        <button
+          *ngIf="unreadCount > 0"
+          type="button"
+          class="notification-center__mark-all"
+          (click)="markAllAsRead()"
+        >
+          Marcar todas
+        </button>
+      </ng-container>
+      <button
+        type="button"
+        class="notification-center__close"
+        (click)="close()"
+        title="Cerrar centro de notificaciones"
+      >
+        <span aria-hidden="true">×</span>
+        <span class="notification-center__sr-only">Cerrar centro de notificaciones</span>
+      </button>
+    </div>
+  </header>
+
+  <section
+    *ngIf="!permissionGranted && showPermissionBanner"
+    class="notification-center__permission"
+    aria-live="polite"
+  >
+    <div class="notification-center__permission-content">
+      <span class="notification-center__permission-icon" aria-hidden="true">
+        <app-icon name="bell" [size]="20"></app-icon>
+      </span>
+      <div class="notification-center__permission-copy">
+        <div class="notification-center__permission-title">Activar Notificaciones</div>
+        <p class="notification-center__permission-description">
+          Recibe alertas de pagos y actualizaciones importantes
+        </p>
+      </div>
+      <div class="notification-center__permission-actions">
+        <button type="button" class="notification-center__permission-primary" (click)="requestPermission()">
+          Activar
+        </button>
+        <button type="button" class="notification-center__permission-secondary" (click)="dismissPermissionBanner()">
+          Después
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="permissionGranted" class="notification-center__status" aria-live="polite">
+    <div class="notification-center__status-item">
+      <span class="notification-center__status-indicator" aria-hidden="true"></span>
+      <span class="notification-center__status-text">Notificaciones activadas</span>
+      <button type="button" class="notification-center__status-test" (click)="sendTestNotification()">
+        Prueba
+      </button>
+    </div>
+  </section>
+
+  <section class="notification-center__list" aria-live="polite">
+    <ng-container *ngIf="notifications$ | async as notifications">
+      <div *ngIf="notifications.length === 0" class="notification-center__empty">
+        <span class="notification-center__empty-icon" aria-hidden="true">
+          <app-icon name="inbox" [size]="32"></app-icon>
+        </span>
+        <p class="notification-center__empty-title">No hay notificaciones</p>
+        <p class="notification-center__empty-description">Las notificaciones aparecerán aquí</p>
+      </div>
+
+      <article
+        *ngFor="let notification of notifications; trackBy: trackByNotificationId"
+        class="notification-center__item"
+        [ngClass]="getNotificationItemClasses(notification)"
+        (click)="handleNotificationClick(notification)"
+      >
+        <div class="notification-center__item-icon" aria-hidden="true">
+          <app-icon
+            class="notification-center__icon-glyph"
+            [name]="getNotificationIcon(notification.type)"
+            [size]="20"
+            [ariaLabel]="getTypeLabel(notification.type)"
+          ></app-icon>
+        </div>
+
+        <div class="notification-center__item-content">
+          <h4 class="notification-center__item-title">{{ notification.title }}</h4>
+          <p class="notification-center__item-body">{{ notification.body }}</p>
+          <div class="notification-center__item-meta">
+            <span class="notification-center__item-time">{{ formatTime(getTimeString(notification)) }}</span>
+            <span class="notification-center__item-type">{{ getTypeLabel(notification.type) }}</span>
+          </div>
+        </div>
+
+        <div class="notification-center__item-actions">
+          <button
+            *ngIf="hasAction(notification)"
+            type="button"
+            class="notification-center__action-button notification-center__action-button--primary"
+            (click)="executeAction(notification); $event.stopPropagation()"
+          >
+            {{ getActionLabel(notification) }}
+          </button>
+          <span *ngIf="!notification.clicked" class="notification-center__item-unread-dot" aria-hidden="true"></span>
+        </div>
+      </article>
+    </ng-container>
+  </section>
+
+  <footer *ngIf="(notifications$ | async)?.length! > 0" class="notification-center__footer">
+    <button type="button" class="notification-center__clear" (click)="clearAll()">
+      Limpiar historial
+    </button>
+  </footer>
+</div>
+
+<div class="notification-center__backdrop" *ngIf="isOpen" (click)="close()"></div>

@@ -1,0 +1,8 @@
+<div class="form-field" [ngClass]="getContainerClasses()">
+  <label *ngIf="label" [for]="id" class="form-field__label">{{ label }}</label>
+  <div class="form-field__control">
+    <ng-content></ng-content>
+  </div>
+  <div class="form-field__helper" *ngIf="helper && !error" [id]="helperId">{{ helper }}</div>
+  <div class="form-field__error" *ngIf="error" [id]="errorId">{{ error }}</div>
+</div>

@@ -1,0 +1,99 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+.profile-settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px;
+  border-radius: 16px;
+  background: var(--flat-surface-bg);
+  border: 1px solid var(--border-neutral-weak);
+  box-shadow: var(--shadow-sm);
+  max-width: 32rem;
+  width: 100%;
+
+  @media (prefers-color-scheme: dark) {
+    background: var(--surface-neutral-strong);
+    border-color: var(--border-neutral-strong);
+  }
+
+  &__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__avatar-image {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: var(--text-2xl, 2rem);
+    font-weight: var(--font-bold, 700);
+    color: var(--color-text-primary);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-text-primary-inverted);
+    }
+  }
+
+  &__role {
+    margin: 0;
+    font-size: var(--text-sm, 0.875rem);
+    color: var(--color-text-secondary);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-text-tertiary);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  &__action {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: var(--font-medium, 500);
+    font-size: var(--text-sm, 0.875rem);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &--primary {
+      background: var(--accent-blue-500);
+      color: var(--color-surface-primary);
+
+      &:hover {
+        background: var(--accent-blue-600);
+      }
+    }
+
+    &--danger {
+      background: color-mix(in srgb, var(--accent-red-500) 18%, transparent);
+      color: var(--accent-red-600);
+      border-color: color-mix(in srgb, var(--accent-red-500) 32%, transparent);
+
+      &:hover {
+        background: color-mix(in srgb, var(--accent-red-500) 32%, transparent);
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-settings {
+    padding: 24px;
+  }
+}

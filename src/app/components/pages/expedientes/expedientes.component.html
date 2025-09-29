@@ -1,0 +1,117 @@
+<div class="expedientes command-container">
+  <header class="expedientes__header">
+    <div class="expedientes__header-content">
+      <h1 class="expedientes__title">
+        <app-icon class="icon-20" name="document" [size]="20" color="currentColor"></app-icon>
+        Expedientes
+      </h1>
+      <p class="expedientes__subtitle">Gestión de documentos y expedientes de clientes</p>
+    </div>
+    <div class="expedientes__header-actions">
+      <button type="button" class="expedientes__button expedientes__button--primary" (click)="newExpediente()">
+        <app-icon class="icon-16" name="plus" [size]="16" color="currentColor"></app-icon>
+        Nuevo Expediente
+      </button>
+    </div>
+  </header>
+
+  <section class="expedientes__filters" aria-label="Filtros de expedientes">
+    <div class="expedientes__filters-row">
+      <div class="expedientes__filter">
+        <label class="expedientes__filter-label" for="expediente-search">Buscar expediente</label>
+        <input
+          id="expediente-search"
+          type="text"
+          class="expedientes__input"
+          placeholder="Nombre, RFC, o número de expediente..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+        >
+      </div>
+      <div class="expedientes__filter">
+        <label class="expedientes__filter-label" for="expediente-status">Estado</label>
+        <select
+          id="expediente-status"
+          class="expedientes__select"
+          [(ngModel)]="statusFilter"
+          (change)="onFilterChange()"
+        >
+          <option value="">Todos</option>
+          <option value="completo">Completo</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="revision">En Revisión</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section class="expedientes__grid" aria-live="polite">
+    <article
+      *ngFor="let expediente of filteredExpedientes"
+      class="expedientes__card premium-card"
+    >
+      <header class="expedientes__card-header">
+        <div class="expedientes__card-info">
+          <h2 class="expedientes__card-title">{{ expediente.clientName }}</h2>
+          <p class="expedientes__card-id">ID: {{ expediente.id }}</p>
+        </div>
+        <span class="expedientes__status" [ngClass]="getStatusClasses(expediente.status)">
+          {{ getStatusText(expediente.status) }}
+        </span>
+      </header>
+
+      <div class="expedientes__card-body">
+        <div class="expedientes__documents">
+          <div class="expedientes__document">
+            <span class="expedientes__document-count">{{ expediente.totalDocuments }}</span>
+            <span class="expedientes__document-label">Documentos</span>
+          </div>
+          <div class="expedientes__document">
+            <span class="expedientes__document-count expedientes__document-count--complete">{{ expediente.completedDocuments }}</span>
+            <span class="expedientes__document-label">Completos</span>
+          </div>
+          <div class="expedientes__document">
+            <span class="expedientes__document-count expedientes__document-count--pending">{{ expediente.pendingDocuments }}</span>
+            <span class="expedientes__document-label">Pendientes</span>
+          </div>
+        </div>
+
+        <div class="expedientes__progress">
+          <div class="expedientes__progress-track">
+            <div
+              class="expedientes__progress-fill"
+              [style.width.%]="expediente.completionPercentage"
+            ></div>
+          </div>
+          <span class="expedientes__progress-text">{{ expediente.completionPercentage }}% completo</span>
+        </div>
+      </div>
+
+      <footer class="expedientes__card-actions">
+        <button type="button" class="expedientes__button expedientes__button--secondary" (click)="viewExpediente(expediente.id)">
+          Ver Detalles
+        </button>
+        <button type="button" class="expedientes__button expedientes__button--ghost" (click)="uploadDocument(expediente.id)">
+          <app-icon class="icon-16" name="cloud-upload" [size]="16"></app-icon>
+          Subir Documento
+        </button>
+      </footer>
+    </article>
+  </section>
+
+  <section *ngIf="filteredExpedientes.length === 0" class="expedientes__empty premium-card" role="status" aria-live="polite">
+    <div class="expedientes__empty-icon">
+      <svg class="icon-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-5L9 5H5a2 2 0 00-2 2z" />
+      </svg>
+    </div>
+    <h2 class="expedientes__empty-title">{{ searchTerm ? 'No se encontraron expedientes' : 'No hay expedientes' }}</h2>
+    <p class="expedientes__empty-description">
+      {{ searchTerm ? 'Intenta con otros términos de búsqueda' : 'Comienza creando tu primer expediente' }}
+    </p>
+    <button type="button" class="expedientes__button expedientes__button--primary" (click)="newExpediente()">
+      <app-icon class="icon-16" name="document" [size]="16" color="currentColor"></app-icon>
+      Crear Primer Expediente
+    </button>
+  </section>
+</div>

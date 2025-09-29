@@ -1,0 +1,371 @@
+// Progress Bar Component - BEM styling using design tokens
+
+.progress-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+
+    &--dark {
+      color: var(--color-neutral-200);
+    }
+  }
+
+  &__header-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__percentage {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+
+    &--success {
+      color: var(--accent-green-500);
+    }
+
+    &--primary {
+      color: var(--color-text-primary);
+    }
+
+    &--neutral {
+      color: var(--color-text-secondary);
+    }
+
+    &--warning {
+      color: var(--accent-amber-600);
+    }
+
+    &--danger {
+      color: var(--accent-red-500);
+    }
+  }
+
+  &__values {
+    font-size: 0.8125rem;
+    color: var(--color-text-tertiary);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-neutral-400);
+    }
+  }
+
+  &__track {
+    position: relative;
+    height: 0.5rem;
+    border-radius: 10px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-neutral-400) 20%, transparent);
+
+    &--dark {
+      background: color-mix(in srgb, var(--color-neutral-500) 30%, transparent);
+    }
+  }
+
+  &__track-background {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: transparent;
+  }
+
+  &__fill {
+    position: relative;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--color-text-primary);
+    transition: width 0.4s ease-out;
+
+    &--success {
+      background: var(--accent-green-500);
+    }
+
+    &--warning {
+      background: var(--accent-amber-500);
+    }
+
+    &--danger {
+      background: var(--accent-red-500);
+    }
+
+    &--info {
+      background: var(--accent-blue-500);
+    }
+
+    &--gradient {
+      background: linear-gradient(90deg, var(--color-text-primary), color-mix(in srgb, var(--color-text-primary) 80%, transparent));
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background: var(--color-neutral-50);
+
+      &--success {
+        background: var(--accent-green-200);
+      }
+
+      &--warning {
+        background: var(--accent-amber-400);
+      }
+
+      &--danger {
+        background: var(--accent-red-300);
+      }
+
+      &--info {
+        background: var(--accent-blue-300);
+      }
+
+      &--gradient {
+        background: linear-gradient(90deg, var(--color-neutral-50), var(--color-neutral-300));
+      }
+    }
+  }
+
+  &__fill-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--flat-surface-bg) 50%, transparent) 50%,
+      transparent 100%
+    );
+    animation: progress-bar-shimmer 1.8s ease infinite;
+    opacity: 0.4;
+  }
+
+  &__fill-stripes {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      color-mix(in srgb, var(--flat-surface-bg) 20%, transparent) 8px,
+      color-mix(in srgb, var(--flat-surface-bg) 20%, transparent) 16px
+    );
+    animation: progress-bar-stripes 1s linear infinite;
+    opacity: 0.6;
+  }
+
+  &__goal,
+  &__milestone {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 12px;
+    margin-left: -6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    pointer-events: none;
+  }
+
+  &__milestone {
+    pointer-events: auto;
+  }
+
+  &__goal-line,
+  &__milestone-line {
+    flex: 1;
+    width: 2px;
+    background: color-mix(in srgb, var(--color-neutral-900) 40%, transparent);
+
+    @media (prefers-color-scheme: dark) {
+      background: color-mix(in srgb, var(--color-neutral-50) 60%, transparent);
+    }
+  }
+
+  &__goal-tooltip,
+  &__milestone-tooltip {
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--color-text-primary);
+    color: var(--flat-surface-bg);
+    margin-bottom: 0.4rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    @media (prefers-color-scheme: dark) {
+      background: var(--color-neutral-200);
+      color: var(--color-text-primary);
+    }
+  }
+
+  &__goal-tooltip {
+    opacity: 1;
+  }
+
+  &__milestone:hover &__milestone-tooltip,
+  &__goal:hover &__goal-tooltip {
+    opacity: 1;
+  }
+
+  &__segments {
+    padding-top: 12px;
+  }
+
+  &__segments-list {
+    display: flex;
+    gap: 6px;
+  }
+
+  &__segment {
+    flex: 1;
+    height: 4px;
+    border-radius: 8px;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+
+    &--active,
+    &--completed {
+      opacity: 1;
+    }
+  }
+
+  &__messages {
+    margin-top: 6px;
+  }
+
+  &__messages-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  &__status {
+    &--completed {
+      color: var(--accent-green-500);
+    }
+
+    &--on-track {
+      color: var(--color-text-secondary);
+    }
+
+    &--behind {
+      color: var(--accent-amber-600);
+    }
+
+    &--at-risk {
+      color: var(--accent-red-500);
+    }
+  }
+
+  &__remaining {
+    color: var(--color-text-tertiary);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-neutral-400);
+    }
+  }
+
+  &__action {
+    margin-top: 10px;
+  }
+
+  &__action-button {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+
+    &--primary {
+      background: var(--color-text-primary);
+      color: var(--flat-surface-bg);
+
+      &:hover:not(:disabled) {
+        opacity: 0.9;
+      }
+    }
+
+    &--success {
+      background: var(--accent-green-500);
+      color: var(--flat-surface-bg);
+
+      &:hover:not(:disabled) {
+        opacity: 0.9;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &--size-sm &__track {
+    height: 0.375rem;
+  }
+
+  &--size-md &__track {
+    height: 0.5rem;
+  }
+
+  &--size-lg &__track {
+    height: 0.75rem;
+  }
+
+  &--size-xl &__track {
+    height: 1rem;
+  }
+}
+
+@keyframes progress-bar-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes progress-bar-stripes {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .progress-bar__header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .progress-bar__header-info {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

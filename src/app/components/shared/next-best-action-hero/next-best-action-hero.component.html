@@ -1,0 +1,85 @@
+<section *ngIf="actionData" class="next-best-hero">
+  <header class="next-best-hero__header">
+    <div class="next-best-hero__indicator">
+      <span class="next-best-hero__indicator-ring" [ngClass]="getPriorityClasses()" aria-hidden="true"></span>
+      <span class="next-best-hero__indicator-icon">{{ getActionIcon() }}</span>
+    </div>
+    <div class="next-best-hero__heading">
+      <h2 class="next-best-hero__title">{{ actionData.action.title }}</h2>
+      <p class="next-best-hero__subtitle">Tu próxima mejor acción para maximizar el impacto</p>
+    </div>
+    <div class="next-best-hero__time">
+      <span class="next-best-hero__time-icon" aria-hidden="true">timer</span>
+      <span class="next-best-hero__time-text">{{ actionData.action.timeEstimate }}</span>
+    </div>
+  </header>
+
+  <div class="next-best-hero__body">
+    <section class="next-best-hero__client" aria-label="Información del cliente">
+      <div class="next-best-hero__avatar">
+        <div class="next-best-hero__avatar-image" [ngStyle]="getAvatarStyle()">
+          {{ !actionData.client.avatar ? getInitials() : '' }}
+        </div>
+        <span class="next-best-hero__health" [ngClass]="getHealthScoreClasses()">
+          {{ actionData.client.healthScore }}
+        </span>
+      </div>
+      <div class="next-best-hero__client-details">
+        <h3 class="next-best-hero__client-name">{{ actionData.client.name }}</h3>
+        <div class="next-best-hero__client-meta" *ngIf="actionData.client.route">
+          <span class="next-best-hero__route-badge">{{ actionData.client.route }}</span>
+        </div>
+        <p class="next-best-hero__description">{{ actionData.action.description }}</p>
+      </div>
+    </section>
+
+    <section class="next-best-hero__insight" aria-label="Razón recomendada">
+      <div class="next-best-hero__insight-header">
+        <span class="next-best-hero__insight-icon" aria-hidden="true">🧠</span>
+        <span class="next-best-hero__insight-title">Inteligencia de Negocio</span>
+      </div>
+      <p class="next-best-hero__insight-text">{{ actionData.action.reasoning }}</p>
+
+      <div class="next-best-hero__metrics" *ngIf="hasContextMetrics()">
+        <div class="next-best-hero__metric" *ngIf="actionData.context.daysWaiting">
+          <span class="next-best-hero__metric-icon" aria-hidden="true">📅</span>
+          <span class="next-best-hero__metric-value">{{ actionData.context.daysWaiting }} días</span>
+          <span class="next-best-hero__metric-label">esperando</span>
+        </div>
+        <div class="next-best-hero__metric" *ngIf="actionData.context.amountInvolved">
+          <span class="next-best-hero__metric-icon" aria-hidden="true">💰</span>
+          <span class="next-best-hero__metric-value">{{ formatCurrency(actionData.context.amountInvolved) }}</span>
+          <span class="next-best-hero__metric-label">en juego</span>
+        </div>
+        <div class="next-best-hero__metric" *ngIf="actionData.context.expirationDate">
+          <span class="next-best-hero__metric-icon" aria-hidden="true">📆</span>
+          <span class="next-best-hero__metric-value">{{ formatDate(actionData.context.expirationDate) }}</span>
+          <span class="next-best-hero__metric-label">vencimiento</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="next-best-hero__actions">
+    <button
+      type="button"
+      class="next-best-hero__action next-best-hero__action--primary"
+      (click)="executeAction(actionData.suggestedActions.primary)"
+    >
+      <span class="next-best-hero__action-icon">{{ actionData.suggestedActions.primary.icon }}</span>
+      <span class="next-best-hero__action-text">{{ actionData.suggestedActions.primary.label }}</span>
+    </button>
+
+    <div class="next-best-hero__secondary-actions">
+      <button
+        type="button"
+        class="next-best-hero__action next-best-hero__action--secondary"
+        *ngFor="let action of actionData.suggestedActions.secondary"
+        (click)="executeAction(action)"
+      >
+        <span class="next-best-hero__action-icon">{{ action.icon }}</span>
+        <span class="next-best-hero__action-text">{{ action.label }}</span>
+      </button>
+    </div>
+  </footer>
+</section>

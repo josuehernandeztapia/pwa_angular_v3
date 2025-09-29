@@ -1,0 +1,419 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <div class="logo">
+        <div class="logo-container">
+          <app-icon class="logo-icon" name="badge-check-solid" [size]="24" aria-hidden="true"></app-icon>
+          <h1>Conductores PWA</h1>
+        </div>
+        <p>Registro de Nuevo Asesor</p>
+      </div>
+
+      <!-- Progress Steps -->
+      <div class="wizard-steps">
+        <div 
+          *ngFor="let step of steps; let i = index"
+          class="step"
+          [class.active]="step.active"
+          [class.completed]="step.completed"
+        >
+          <div class="step-circle">
+            <span *ngIf="!step.completed">{{ step.icon }}</span>
+            <app-icon
+              *ngIf="step.completed"
+              class="icon-20"
+              name="check-circle"
+              [size]="20"
+              aria-hidden="true"
+            ></app-icon>
+          </div>
+          <span class="step-title">{{ step.title }}</span>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+
+      <!-- Step 1: Información Personal -->
+      <div class="form-step" *ngIf="currentStep === 1">
+        <div class="section-header">
+          <app-icon
+            class="section-icon"
+            name="user"
+            [size]="24"
+            aria-hidden="true"
+          ></app-icon>
+          <h2>Información Personal</h2>
+        </div>
+        <p class="step-description">Ingresa tus datos personales básicos</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">Nombre *</label>
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+              class="form-input"
+              [class.error]="isFieldInvalid('firstName')"
+              placeholder="Juan"
+            >
+            <div *ngIf="isFieldInvalid('firstName')" class="error-message">
+              Nombre es requerido
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Apellidos *</label>
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              class="form-input"
+              [class.error]="isFieldInvalid('lastName')"
+              placeholder="Pérez García"
+            >
+            <div *ngIf="isFieldInvalid('lastName')" class="error-message">
+              Apellidos son requeridos
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label-with-icon">
+            <app-icon class="label-icon" name="mail" [size]="20" aria-hidden="true"></app-icon>
+            Correo Corporativo *
+          </label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="form-input"
+            [class.error]="isFieldInvalid('email')"
+            [class.checking]="isCheckingEmail"
+            placeholder="juan.perez@conductores.com"
+          >
+          <div *ngIf="isFieldInvalid('email')" class="error-message">
+            <span *ngIf="registerForm.get('email')?.errors?.['required']">
+              Correo es requerido
+            </span>
+            <span *ngIf="registerForm.get('email')?.errors?.['email']">
+              Formato de correo inválido
+            </span>
+            <span *ngIf="registerForm.get('email')?.errors?.['corporate']">
+              Debe ser un correo corporativo (&#64;conductores.com)
+            </span>
+            <span *ngIf="registerForm.get('email')?.errors?.['emailTaken']">
+              Este correo ya está registrado
+            </span>
+          </div>
+          <div *ngIf="isCheckingEmail" class="info-message">
+            <app-icon
+              class="icon-16 register-spinner register-spinner--inline"
+              name="spinner"
+              [size]="16"
+              strokeWidth="2.5"
+              aria-hidden="true"
+            ></app-icon>
+            Verificando disponibilidad...
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone" class="form-label-with-icon">
+            <app-icon class="label-icon" name="phone-classic" [size]="20" aria-hidden="true"></app-icon>
+            Teléfono *
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            formControlName="phone"
+            class="form-input"
+            [class.error]="isFieldInvalid('phone')"
+            placeholder="5555555555"
+          >
+          <div *ngIf="isFieldInvalid('phone')" class="error-message">
+            Teléfono mexicano válido es requerido
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Credenciales -->
+      <div class="form-step" *ngIf="currentStep === 2">
+        <div class="section-header">
+          <app-icon
+            class="section-icon"
+            name="lock"
+            [size]="24"
+            aria-hidden="true"
+          ></app-icon>
+          <h2>Credenciales de Acceso</h2>
+        </div>
+        <p class="step-description">Crea una contraseña segura para tu cuenta</p>
+
+        <div class="form-group">
+          <label for="password">Contraseña *</label>
+          <div class="password-input">
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              class="form-input"
+              [class.error]="isFieldInvalid('password')"
+              placeholder="••••••••"
+            >
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePassword()"
+            >
+              <app-icon
+                class="icon-20"
+                [name]="showPassword ? 'eye-off' : 'eye'"
+                [size]="20"
+                aria-hidden="true"
+              ></app-icon>
+            </button>
+          </div>
+          <div class="password-strength">
+            <div class="strength-bar">
+              <div 
+                class="strength-fill"
+                [class]="getPasswordStrengthClass()"
+                [style.width.%]="getPasswordStrength()"
+              ></div>
+            </div>
+            <span class="strength-text">{{ getPasswordStrengthText() }}</span>
+          </div>
+          <div class="password-requirements">
+            <div class="requirement" [class.met]="passwordRequirements.length">
+              <app-icon class="requirement-icon" name="check" [size]="20" aria-hidden="true"></app-icon>
+              Mínimo 8 caracteres
+            </div>
+            <div class="requirement" [class.met]="passwordRequirements.uppercase">
+              <app-icon class="requirement-icon" name="check" [size]="20" aria-hidden="true"></app-icon>
+              Al menos una mayúscula
+            </div>
+            <div class="requirement" [class.met]="passwordRequirements.number">
+              <app-icon class="requirement-icon" name="check" [size]="20" aria-hidden="true"></app-icon>
+              Al menos un número
+            </div>
+            <div class="requirement" [class.met]="passwordRequirements.symbol">
+              <app-icon class="requirement-icon" name="check" [size]="20" aria-hidden="true"></app-icon>
+              Al menos un símbolo
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar Contraseña *</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            formControlName="confirmPassword"
+            class="form-input"
+            [class.error]="isFieldInvalid('confirmPassword')"
+            placeholder="••••••••"
+          >
+          <div *ngIf="isFieldInvalid('confirmPassword')" class="error-message">
+            <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">
+              Confirmación de contraseña es requerida
+            </span>
+            <span *ngIf="registerForm.get('confirmPassword')?.errors?.['mismatch']">
+              Las contraseñas no coinciden
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Información Profesional -->
+      <div class="form-step" *ngIf="currentStep === 3">
+        <div class="section-header">
+          <app-icon
+            class="section-icon"
+            name="building-office"
+            [size]="24"
+            aria-hidden="true"
+          ></app-icon>
+          <h2>Información Profesional</h2>
+        </div>
+        <p class="step-description">Datos de tu posición en la empresa</p>
+
+        <div class="form-group">
+          <label for="empleadoId">ID de Empleado</label>
+          <input
+            id="empleadoId"
+            type="text"
+            formControlName="empleadoId"
+            class="form-input"
+            [class.error]="isFieldInvalid('empleadoId')"
+            placeholder="EMP-2024-001"
+          >
+          <div *ngIf="isFieldInvalid('empleadoId')" class="error-message">
+            ID de empleado inválido
+          </div>
+          <div class="info-message">
+            <app-icon class="info-icon icon-16" name="information-circle" [size]="16" aria-hidden="true"></app-icon>
+            Opcional: Si tienes ID de empleado, ingrésalo para validación automática
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sucursal">Sucursal *</label>
+          <select
+            id="sucursal"
+            formControlName="sucursal"
+            class="form-select"
+            [class.error]="isFieldInvalid('sucursal')"
+          >
+            <option value="">Seleccionar sucursal</option>
+            <option value="aguascalientes">Aguascalientes</option>
+            <option value="edomex-norte">Estado de México - Norte</option>
+            <option value="edomex-sur">Estado de México - Sur</option>
+            <option value="oficina-central">Oficina Central</option>
+          </select>
+          <div *ngIf="isFieldInvalid('sucursal')" class="error-message">
+            Sucursal es requerida
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="supervisor">Email del Supervisor</label>
+          <input
+            id="supervisor"
+            type="email"
+            formControlName="supervisor"
+            class="form-input"
+            [class.error]="isFieldInvalid('supervisor')"
+            placeholder="supervisor@conductores.com"
+          >
+          <div *ngIf="isFieldInvalid('supervisor')" class="error-message">
+            Email de supervisor inválido
+          </div>
+          <div class="info-message">
+            <app-icon class="info-icon icon-16" name="information-circle" [size]="16" aria-hidden="true"></app-icon>
+            Opcional: Email del supervisor que aprobará tu registro
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Términos y Verificación -->
+      <div class="form-step" *ngIf="currentStep === 4">
+        <div class="section-header">
+          <app-icon
+            class="section-icon"
+            name="check-circle"
+            [size]="24"
+            aria-hidden="true"
+          ></app-icon>
+          <h2>Términos y Condiciones</h2>
+        </div>
+        <p class="step-description">Acepta los términos para completar tu registro</p>
+
+        <div class="terms-section">
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                formControlName="acceptTerms"
+                class="checkbox-input"
+              >
+              <span class="checkmark"></span>
+              Acepto los <a href="#" class="link">Términos y Condiciones</a> del servicio
+            </label>
+            <div *ngIf="isFieldInvalid('acceptTerms')" class="error-message">
+              Debes aceptar los términos y condiciones
+            </div>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                formControlName="acceptPrivacy"
+                class="checkbox-input"
+              >
+              <span class="checkmark"></span>
+              Acepto la <a href="#" class="link">Política de Privacidad</a>
+            </label>
+            <div *ngIf="isFieldInvalid('acceptPrivacy')" class="error-message">
+              Debes aceptar la política de privacidad
+            </div>
+          </div>
+        </div>
+
+        <div class="registration-summary">
+          <div class="summary-header">
+            <app-icon class="summary-icon" name="document-report" [size]="24" aria-hidden="true"></app-icon>
+            <h3>Resumen de Registro</h3>
+          </div>
+          <div class="summary-item">
+            <strong>Nombre:</strong> {{ getFormValue('firstName') }} {{ getFormValue('lastName') }}
+          </div>
+          <div class="summary-item">
+            <strong>Email:</strong> {{ getFormValue('email') }}
+          </div>
+          <div class="summary-item">
+            <strong>Teléfono:</strong> {{ getFormValue('phone') }}
+          </div>
+          <div class="summary-item">
+            <strong>Sucursal:</strong> {{ getSucursalLabel(getFormValue('sucursal')) }}
+          </div>
+          <div class="summary-item" *ngIf="getFormValue('supervisor')">
+            <strong>Supervisor:</strong> {{ getFormValue('supervisor') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="form-actions">
+        <button
+          type="button"
+          *ngIf="currentStep > 1"
+          (click)="previousStep()"
+          class="btn-secondary"
+        >
+          Anterior
+        </button>
+
+        <button
+          type="button"
+          *ngIf="currentStep < 4"
+          (click)="nextStep()"
+          class="btn-primary"
+          [disabled]="!canProceedToNext()"
+        >
+          Siguiente
+        </button>
+
+        <button
+          type="submit"
+          *ngIf="currentStep === 4"
+          class="btn-primary"
+          [disabled]="registerForm.invalid || isLoading"
+        >
+          <span *ngIf="!isLoading" class="btn-content btn-content--iconless">Crear Cuenta</span>
+          <span *ngIf="isLoading" class="loading">
+            <app-icon
+              class="btn-icon register-spinner"
+              name="spinner"
+              [size]="20"
+              strokeWidth="2.5"
+              aria-hidden="true"
+            ></app-icon>
+            Creando...
+          </span>
+        </button>
+      </div>
+
+      <div *ngIf="errorMessage" class="register-error">
+        <app-icon class="error-icon" name="alert-triangle" [size]="24" aria-hidden="true"></app-icon>
+        {{ errorMessage }}
+      </div>
+    </form>
+
+    <div class="register-footer">
+      <p>¿Ya tienes cuenta? <a routerLink="/login" class="link">Iniciar Sesión</a></p>
+    </div>
+  </div>
+</div>

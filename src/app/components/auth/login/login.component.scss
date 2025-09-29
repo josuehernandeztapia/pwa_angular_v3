@@ -1,0 +1,252 @@
+:host {
+  display: block;
+}
+
+.skip-link {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 8px 12px;
+  background: var(--color-text-muted, #737373);
+  color: var(--color-text-primary-inverted, #ffffff);
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 9999;
+}
+
+.login-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--color-bg-secondary, #f8fafc);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.login-brand-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  color: var(--color-accent-primary, #0284c7);
+  --icon-color: var(--color-accent-primary, #0284c7);
+}
+
+.login-logo-icon {
+  width: 64px;
+  height: 64px;
+}
+
+.login-title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-text-primary, #111827);
+}
+
+.login-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-secondary, #4b5563);
+}
+
+.field-block {
+  margin-bottom: 16px;
+}
+
+.field-block--spaced {
+  margin-bottom: 24px;
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-field .ui-input {
+  padding-right: 42px;
+}
+
+.password-toggle {
+  position: absolute;
+  inset: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 12px;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted, #64748b);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: var(--color-text-primary, #1f2937);
+}
+
+.password-toggle-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.remember-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-text-secondary, #4b5563);
+}
+
+.remember-checkbox {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--color-accent-primary, #0284c7);
+}
+
+.link-button {
+  border: 0;
+  background: transparent;
+  color: var(--color-accent-primary, #0284c7);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.link-button:hover {
+  color: var(--color-accent-primary-strong, #0369a1);
+}
+
+.submit-button {
+  margin-bottom: 16px;
+  width: 100%;
+  justify-content: center;
+}
+
+.loading-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.form-error {
+  margin-bottom: 16px;
+}
+
+.login-footer {
+  padding-top: 24px;
+  border-top: 1px solid color-mix(in srgb, var(--color-border-muted, #94a3b8) 35%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-note {
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-secondary, #4b5563);
+}
+
+.footer-link {
+  color: var(--color-accent-primary, #0284c7);
+  font-weight: 500;
+  margin-left: 4px;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: var(--color-accent-primary-strong, #0369a1);
+}
+
+.login-tip {
+  font-size: 14px;
+}
+
+.tip-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.tip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.tip-label {
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  .login-shell {
+    background: var(--color-bg-primary-inverted, #0b1120);
+  }
+
+  .login-brand-icon {
+    color: var(--color-accent-primary-light, #38bdf8);
+    --icon-color: var(--color-accent-primary-light, #38bdf8);
+  }
+
+  .login-title {
+    color: var(--color-text-primary-inverted, #f1f5f9);
+  }
+
+  .login-subtitle,
+  .remember-option,
+  .footer-note {
+    color: var(--color-text-secondary-inverted, #cbd5f5);
+  }
+
+  .password-toggle {
+    color: var(--color-text-muted-inverted, #94a3b8);
+  }
+
+  .password-toggle:hover {
+    color: var(--color-text-primary-inverted, #e2e8f0);
+  }
+
+  .login-footer {
+    border-top-color: color-mix(in srgb, var(--color-border-muted-inverted, #475569) 50%, transparent);
+  }
+
+  .footer-link,
+  .link-button {
+    color: var(--color-accent-primary-light, #38bdf8);
+  }
+
+  .footer-link:hover,
+  .link-button:hover {
+    color: var(--color-accent-primary, #0ea5e9);
+  }
+}

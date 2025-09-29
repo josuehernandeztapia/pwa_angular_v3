@@ -1,0 +1,218 @@
+    <div class="avi-verification" (click)="onOverlayClick($event)" role="dialog" aria-modal="true" [attr.aria-labelledby]="titleId" [attr.aria-describedby]="descId">
+      <div class="avi-verification__dialog" (click)="$event.stopPropagation()" tabindex="-1" (keydown)="onKeydown($event)">
+        
+        <!-- Header -->
+        <div class="avi-verification__header">
+          <div class="avi-verification__title">
+            <span class="avi-verification__title-icon">🎤</span>
+            <h2 [attr.id]="titleId">Verificación Inteligente AVI</h2>
+          </div>
+          <button class="avi-verification__close" (click)="closeModal()">✕</button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="avi-verification__content">
+          
+          <!-- Recording Status -->
+          <div class="avi-verification__recording" [ngClass]="getRecordingClasses()">
+            <div class="avi-verification__recording-indicator">
+              <span *ngIf="isRecording" class="avi-verification__recording-dot">
+                <app-icon
+                  class="avi-verification-modal__dot-icon avi-verification-modal__icon--error"
+                  name="dot"
+                  [size]="20"
+                ></app-icon>
+              </span>
+              <span class="avi-verification__recording-text">
+                {{ isRecording ? 'GRABANDO...' : (sessionData.status === 'completed' ? 'VERIFICACIÓN COMPLETADA' : 'LISTO PARA GRABAR') }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Microphone Button -->
+          <div class="avi-verification__mic" [attr.id]="descId">
+            <button 
+              #micButton
+              class="avi-verification__mic-button" 
+              [ngClass]="getMicButtonClasses()"
+              [disabled]="sessionData.status === 'completed'"
+              (click)="toggleRecording()">
+              <span class="avi-verification__mic-icon">🎤</span>
+            </button>
+            
+            <div class="avi-verification__instructions">
+              <p *ngIf="sessionData.status === 'initializing'">
+                Preparando verificación...
+              </p>
+              <p *ngIf="sessionData.status === 'asking_questions' && getCurrentTransportQuestion()">
+                <strong>Pregunta {{ sessionData.currentQuestionIndex + 1 }} de {{ sessionData.transportQuestions.length }}:</strong><br>
+                {{ getCurrentTransportQuestion()?.text }}
+              </p>
+              <p *ngIf="sessionData.status === 'micro_local_questions' && currentQuestion">
+                <strong>Pregunta de verificación local:</strong><br>
+                {{ currentQuestion.question }}
+              </p>
+              <p *ngIf="sessionData.status === 'completed'" class="avi-verification__message--success">
+                 Verificación completada exitosamente
+              </p>
+            </div>
+          </div>
+
+          <!-- Real-time Transcription -->
+          <div class="avi-verification__transcription" *ngIf="currentTranscript">
+            <h3>
+              <app-icon class="icon-16" name="document-text" [size]="16"></app-icon>
+              Transcripción en vivo:
+            </h3>
+            <div class="avi-verification__transcript">
+              {{ currentTranscript }}
+            </div>
+          </div>
+
+          <!--  NUEVO: Voice Evaluation Results (Semáforo Display) -->
+          <div class="avi-verification__evaluation" *ngIf="questionResults.length > 0">
+            <h3>🚦 Resultados de Análisis de Voz:</h3>
+            <div class="avi-verification__results">
+              <div class="avi-verification__result-card" 
+                   *ngFor="let result of questionResults; trackBy: trackByQuestionId"
+                   [ngClass]="getResultClasses(result)">
+                
+                <!-- Semáforo Icon -->
+                <div class="avi-verification__result-indicator" [attr.aria-label]="result.decision">
+                  <span class="avi-verification__result-icon">{{ result.icon }}</span>
+                </div>
+                
+                <!-- Question Info -->
+                <div class="avi-verification__result-info">
+                  <div class="avi-verification__result-id">{{ result.questionId }}</div>
+                  <div class="avi-verification__result-decision">{{ result.decision }}</div>
+                  <div class="avi-verification__result-score">Score: {{ result.score.toFixed(1) }}/10</div>
+                </div>
+                
+                <!-- Analysis Flags -->
+                <div class="avi-verification__result-flags" *ngIf="result.flags.length > 0">
+                  <span class="avi-verification__flag" *ngFor="let flag of result.flags">{{ flag }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Analysis Loading State -->
+            <div class="avi-verification__evaluation-loading" *ngIf="isAnalyzing">
+              <div class="avi-verification__loading-spinner"></div>
+              <span class="avi-verification__loading-text">Analizando respuesta de voz...</span>
+            </div>
+          </div>
+
+          <!--  NUEVO: Final Resilience Summary -->
+          <div class="avi-verification__resilience" *ngIf="resilienceSummary && sessionData.status === 'completed'">
+            <h3>
+              <app-icon
+                class="icon-16 avi-verification-modal__icon--info"
+                name="heart"
+                [size]="16"
+              ></app-icon>
+              Resumen de Resiliencia:
+            </h3>
+            <div class="avi-verification__resilience-overview">
+              <div class="avi-verification__resilience-score">
+                <div class="avi-verification__resilience-total">
+                  <span class="avi-verification__score-label">Puntuación Global:</span>
+                  <span class="avi-verification__score-value" [ngClass]="getScoreClasses(resilienceSummary.overallScore)">
+                    {{ resilienceSummary.overallScore.toFixed(1) }}/10
+                  </span>
+                </div>
+                <div class="avi-verification__resilience-level">
+                  {{ getResilienceLevel(resilienceSummary.overallScore) }}
+                </div>
+              </div>
+              
+              <!-- Category Breakdown -->
+              <div class="avi-verification__categories">
+                <div class="avi-verification__category">
+                  <span class="avi-verification__category-label">Estabilidad Financiera:</span>
+                  <span class="avi-verification__category-score">{{ resilienceSummary.categoryScores.financial_stability.toFixed(1) }}/10</span>
+                </div>
+                <div class="avi-verification__category">
+                  <span class="avi-verification__category-label">Adaptabilidad Operacional:</span>
+                  <span class="avi-verification__category-score">{{ resilienceSummary.categoryScores.operational_adaptability.toFixed(1) }}/10</span>
+                </div>
+                <div class="avi-verification__category">
+                  <span class="avi-verification__category-label">Conocimiento del Mercado:</span>
+                  <span class="avi-verification__category-score">{{ resilienceSummary.categoryScores.market_knowledge.toFixed(1) }}/10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Display -->
+          <div class="avi-verification__progress" *ngIf="sessionData.responses.length > 0">
+            <h3> Progreso de Verificación:</h3>
+            <div class="avi-verification__progress-details">
+              <div class="avi-verification__progress-item">
+                <span class="avi-verification__progress-label">Preguntas Respondidas:</span>
+                <span class="avi-verification__progress-value">{{ sessionData.responses.length }}</span>
+              </div>
+              <div class="avi-verification__progress-item">
+                <span class="avi-verification__progress-label">Preguntas Restantes:</span>
+                <span class="avi-verification__progress-value">
+                  {{ (sessionData.transportQuestions.length + sessionData.microLocalQuestions.length) - sessionData.responses.length }}
+                </span>
+              </div>
+            </div>
+            <div class="avi-verification__progress-bar">
+              <div class="avi-verification__progress-fill" [style.width.%]="getProgressPercentage()"></div>
+            </div>
+          </div>
+
+          <!-- Success Message (Client-Friendly) -->
+          <div class="avi-verification__completion" *ngIf="sessionData.status === 'completed'">
+            <div class="avi-verification__completion-message">
+              <div class="avi-verification__completion-icon"></div>
+              <h3>¡Verificación Completada!</h3>
+              <p class="avi-verification__completion-text">
+                Hemos procesado exitosamente su información de verificación.
+                Su puntuación AVI ha sido calculada y está lista para revisión.
+              </p>
+              <div class="avi-verification__completion-score">
+                <span class="avi-verification__score-label">Puntuación AVI:</span>
+                <span class="avi-verification__score-value">{{ getClientFriendlyScore() }}/100</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Indicator -->
+          <div class="avi-verification__steps-section">
+            <div class="avi-verification__steps">
+              <div class="avi-verification__step" 
+                   [ngClass]="getStepClasses('asking_questions')">
+                <span class="avi-verification__step-number">1</span>
+                <span class="avi-verification__step-label">Preguntas de Transporte</span>
+              </div>
+              <div class="avi-verification__step" 
+                   [ngClass]="getStepClasses('micro_local_questions')">
+                <span class="avi-verification__step-number">2</span>
+                <span class="avi-verification__step-label">Verificación Local</span>
+              </div>
+              <div class="avi-verification__step" 
+                   [ngClass]="getStepClasses('completed')">
+                <span class="avi-verification__step-number">3</span>
+                <span class="avi-verification__step-label">Completado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="avi-verification__footer">
+          <button class="avi-verification__action avi-verification__action--secondary" (click)="closeModal()" [disabled]="isRecording">
+            Cancelar
+          </button>
+          <button 
+            *ngIf="sessionData.status === 'completed'" 
+            class="avi-verification__action avi-verification__action--primary" 
+            (click)="completeVerification()">
+            Finalizar Verificación
+          </button>
+        </div>
+      </div>
+    </div>

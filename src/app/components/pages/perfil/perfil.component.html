@@ -1,0 +1,210 @@
+<div class="perfil-page__container">
+  <header class="perfil-page__header">
+    <div class="perfil-page__header-content">
+      <h1 class="perfil-page__title">Mi Perfil</h1>
+      <p class="perfil-page__description">Gestiona tu información personal y configuración de cuenta</p>
+    </div>
+    <div class="perfil-page__header-actions">
+      <button
+        type="button"
+        class="perfil-page__button perfil-page__button--primary"
+        (click)="saveProfile()"
+        [disabled]="!isEditing"
+      >
+        Guardar
+      </button>
+    </div>
+  </header>
+
+  <main class="perfil-page__main">
+    <div class="perfil-page__content">
+      <section class="perfil-page__summary premium-card">
+        <div class="perfil-page__avatar">
+          <div class="perfil-page__avatar-circle" [ngClass]="{ 'perfil-page__avatar-circle--image': !!userProfile.avatar }">
+            <img *ngIf="userProfile.avatar" [src]="userProfile.avatar" [alt]="userProfile.firstName" />
+            <span *ngIf="!userProfile.avatar" class="perfil-page__avatar-initials">{{ getInitials() }}</span>
+          </div>
+          <button type="button" class="perfil-page__avatar-button" (click)="changeAvatar()">
+            <svg class="perfil-page__icon perfil-page__icon--muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            Cambiar Foto
+          </button>
+        </div>
+
+        <div class="perfil-page__summary-info">
+          <h2 class="perfil-page__summary-name">{{ userProfile.firstName }} {{ userProfile.lastName }}</h2>
+          <p class="perfil-page__summary-position">{{ userProfile.position }}</p>
+          <p class="perfil-page__summary-company">{{ userProfile.company }}</p>
+
+          <dl class="perfil-page__stats">
+            <div class="perfil-page__stat-item">
+              <dt class="perfil-page__stat-label">Último acceso</dt>
+              <dd class="perfil-page__stat-value">{{ userProfile.lastLogin | date:'dd/MM/yyyy HH:mm' }}</dd>
+            </div>
+            <div class="perfil-page__stat-item">
+              <dt class="perfil-page__stat-label">Miembro desde</dt>
+              <dd class="perfil-page__stat-value">{{ userProfile.memberSince | date:'MMM yyyy' }}</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="perfil-page__panel premium-card">
+        <div class="perfil-page__panel-header">
+          <h3 class="perfil-page__panel-title">Información Personal</h3>
+          <button
+            type="button"
+            class="perfil-page__edit-toggle"
+            (click)="toggleEdit()"
+            [ngClass]="getEditToggleClasses()"
+          >
+            {{ isEditing ? 'Cancelar' : 'Editar' }}
+          </button>
+        </div>
+
+        <form class="perfil-page__form" (ngSubmit)="saveProfile()">
+          <div class="perfil-page__form-row">
+            <div class="perfil-page__form-group">
+              <label class="perfil-page__label" for="firstName">Nombre</label>
+              <input
+                id="firstName"
+                type="text"
+                name="firstName"
+                [(ngModel)]="userProfile.firstName"
+                [disabled]="!isEditing"
+                [ngClass]="getInputClasses(!isEditing)"
+              />
+            </div>
+            <div class="perfil-page__form-group">
+              <label class="perfil-page__label" for="lastName">Apellidos</label>
+              <input
+                id="lastName"
+                type="text"
+                name="lastName"
+                [(ngModel)]="userProfile.lastName"
+                [disabled]="!isEditing"
+                [ngClass]="getInputClasses(!isEditing)"
+              />
+            </div>
+          </div>
+
+          <div class="perfil-page__form-row">
+            <div class="perfil-page__form-group">
+              <label class="perfil-page__label" for="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                [(ngModel)]="userProfile.email"
+                [disabled]="!isEditing"
+                [ngClass]="getInputClasses(!isEditing)"
+              />
+            </div>
+            <div class="perfil-page__form-group">
+              <label class="perfil-page__label" for="phone">Teléfono</label>
+              <input
+                id="phone"
+                type="tel"
+                name="phone"
+                [(ngModel)]="userProfile.phone"
+                [disabled]="!isEditing"
+                [ngClass]="getInputClasses(!isEditing)"
+              />
+            </div>
+          </div>
+
+          <div class="perfil-page__form-row">
+            <div class="perfil-page__form-group">
+              <label class="perfil-page__label" for="position">Puesto</label>
+              <input
+                id="position"
+                type="text"
+                name="position"
+                [(ngModel)]="userProfile.position"
+                [disabled]="!isEditing"
+                [ngClass]="getInputClasses(!isEditing)"
+              />
+            </div>
+            <div class="perfil-page__form-group">
+              <label class="perfil-page__label" for="company">Empresa</label>
+              <input
+                id="company"
+                type="text"
+                name="company"
+                [(ngModel)]="userProfile.company"
+                [disabled]="!isEditing"
+                [ngClass]="getInputClasses(!isEditing)"
+              />
+            </div>
+          </div>
+
+          <div class="perfil-page__form-actions" *ngIf="isEditing">
+            <button type="button" class="perfil-page__button perfil-page__button--secondary" (click)="cancelEdit()">
+              Cancelar
+            </button>
+            <button type="submit" class="perfil-page__button perfil-page__button--primary">
+              Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="perfil-page__panel premium-card">
+        <h3 class="perfil-page__panel-title">
+          <app-icon class="perfil-page__icon perfil-page__icon--title" name="lock" [size]="20"></app-icon>
+          Seguridad de la Cuenta
+        </h3>
+        <div class="perfil-page__security-list">
+          <div class="perfil-page__security-item">
+            <div class="perfil-page__security-info">
+              <h4 class="perfil-page__security-title">Cambiar Contraseña</h4>
+              <p class="perfil-page__security-text">Actualiza tu contraseña por seguridad</p>
+            </div>
+            <button type="button" class="perfil-page__button perfil-page__button--tertiary" (click)="changePassword()">
+              Cambiar
+            </button>
+          </div>
+
+          <div class="perfil-page__security-item">
+            <div class="perfil-page__security-info">
+              <h4 class="perfil-page__security-title">Verificación en Dos Pasos</h4>
+              <p class="perfil-page__security-text">Agrega una capa extra de seguridad</p>
+            </div>
+            <button type="button" class="perfil-page__button perfil-page__button--tertiary" (click)="setup2FA()">
+              Configurar
+            </button>
+          </div>
+
+          <div class="perfil-page__security-item">
+            <div class="perfil-page__security-info">
+              <h4 class="perfil-page__security-title">Sesiones Activas</h4>
+              <p class="perfil-page__security-text">Revisa dónde has iniciado sesión</p>
+            </div>
+            <button type="button" class="perfil-page__button perfil-page__button--tertiary" (click)="viewSessions()">
+              Ver Sesiones
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="perfil-page__panel premium-card">
+        <h3 class="perfil-page__panel-title">
+          <app-icon class="perfil-page__icon perfil-page__icon--muted" name="settings" [size]="20"></app-icon>
+          Acciones de Cuenta
+        </h3>
+        <div class="perfil-page__account-actions">
+          <button type="button" class="perfil-page__button perfil-page__button--neutral" (click)="exportData()">
+            <app-icon class="perfil-page__icon perfil-page__icon--success" name="cloud-upload" [size]="20"></app-icon>
+            Exportar Mis Datos
+          </button>
+          <button type="button" class="perfil-page__button perfil-page__button--danger" (click)="deleteAccount()">
+            <app-icon class="perfil-page__icon perfil-page__icon--danger" name="trash" [size]="20"></app-icon>
+            Eliminar Cuenta
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,228 @@
+<div class="vehicle-assignment__panel">
+  <header class="vehicle-assignment__header">
+    <h3 class="vehicle-assignment__title">Asignar Unidad Específica</h3>
+    <p class="vehicle-assignment__client">Cliente: <strong>{{ clientName() || clientId() }}</strong></p>
+    <p class="vehicle-assignment__status">Unidad fabricada · Lista para asignación</p>
+  </header>
+
+  <form class="vehicle-assignment__form" [formGroup]="assignmentForm" (ngSubmit)="onSubmit()">
+    <section class="vehicle-assignment__section">
+      <h4 class="vehicle-assignment__section-title">Información de la Unidad</h4>
+
+      <div class="vehicle-assignment__row">
+        <div class="vehicle-assignment__field">
+          <label class="vehicle-assignment__label" for="vin">
+            VIN <span class="vehicle-assignment__required">*</span>
+          </label>
+          <input
+            id="vin"
+            type="text"
+            formControlName="vin"
+            placeholder="17 caracteres"
+            maxlength="17"
+            [ngClass]="getInputClasses('vin')"
+          />
+          <div class="vehicle-assignment__hint">Número de identificación del vehículo (17 caracteres)</div>
+          @if (isFieldInvalid('vin')) {
+            <div class="vehicle-assignment__error">{{ getFieldError('vin') }}</div>
+          }
+        </div>
+
+        <div class="vehicle-assignment__field">
+          <label class="vehicle-assignment__label" for="serie">
+            Serie <span class="vehicle-assignment__required">*</span>
+          </label>
+          <input
+            id="serie"
+            type="text"
+            formControlName="serie"
+            placeholder="Número de serie"
+            [ngClass]="getInputClasses('serie')"
+          />
+          @if (isFieldInvalid('serie')) {
+            <div class="vehicle-assignment__error">{{ getFieldError('serie') }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="vehicle-assignment__row">
+        <div class="vehicle-assignment__field">
+          <label class="vehicle-assignment__label" for="modelo">
+            Modelo <span class="vehicle-assignment__required">*</span>
+          </label>
+          <input
+            id="modelo"
+            type="text"
+            formControlName="modelo"
+            placeholder="Ej: Nissan Urvan"
+            [ngClass]="getInputClasses('modelo')"
+          />
+          @if (isFieldInvalid('modelo')) {
+            <div class="vehicle-assignment__error">{{ getFieldError('modelo') }}</div>
+          }
+        </div>
+
+        <div class="vehicle-assignment__field">
+          <label class="vehicle-assignment__label" for="year">
+            Año <span class="vehicle-assignment__required">*</span>
+          </label>
+          <input
+            id="year"
+            type="number"
+            formControlName="year"
+            [min]="2020"
+            [max]="2026"
+            [ngClass]="getInputClasses('year')"
+          />
+          @if (isFieldInvalid('year')) {
+            <div class="vehicle-assignment__error">{{ getFieldError('year') }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="vehicle-assignment__row">
+        <div class="vehicle-assignment__field">
+          <label class="vehicle-assignment__label" for="numeroMotor">
+            Número de Motor <span class="vehicle-assignment__required">*</span>
+          </label>
+          <input
+            id="numeroMotor"
+            type="text"
+            formControlName="numeroMotor"
+            placeholder="Número del motor"
+            [ngClass]="getInputClasses('numeroMotor')"
+          />
+          @if (isFieldInvalid('numeroMotor')) {
+            <div class="vehicle-assignment__error">{{ getFieldError('numeroMotor') }}</div>
+          }
+        </div>
+
+        <div class="vehicle-assignment__field">
+          <label class="vehicle-assignment__label" for="transmission">Transmisión</label>
+          <select id="transmission" formControlName="transmission" [ngClass]="getSelectClasses()">
+            <option value="">Seleccionar...</option>
+            <option value="Manual">Manual</option>
+            <option value="Automatica">Automática</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="vehicle-assignment__section">
+      <h4 class="vehicle-assignment__section-title">Información de Producción</h4>
+
+      <div class="vehicle-assignment__row">
+        <div class="vehicle-assignment__field">
+          <label class="vehicle-assignment__label" for="productionBatch">Lote de Producción</label>
+          <input
+            id="productionBatch"
+            type="text"
+            formControlName="productionBatch"
+            placeholder="Ej: BATCH-2024-001"
+            class="vehicle-assignment__input"
+          />
+        </div>
+
+        <div class="vehicle-assignment__field">
+          <label class="vehicle-assignment__label" for="factoryLocation">Ubicación de Fábrica</label>
+          <input
+            id="factoryLocation"
+            type="text"
+            formControlName="factoryLocation"
+            placeholder="Ej: Planta Aguascalientes"
+            class="vehicle-assignment__input"
+          />
+        </div>
+      </div>
+
+      <div class="vehicle-assignment__field vehicle-assignment__field--full">
+        <label class="vehicle-assignment__label" for="notes">Notas Adicionales</label>
+        <textarea
+          id="notes"
+          formControlName="notes"
+          rows="3"
+          placeholder="Observaciones sobre la unidad..."
+          class="vehicle-assignment__textarea"
+        ></textarea>
+      </div>
+    </section>
+
+    <section class="vehicle-assignment__section vehicle-assignment__section--muted">
+      <h4 class="vehicle-assignment__section-title">Especificaciones Estándar</h4>
+      <div class="vehicle-assignment__specs">
+        <div class="vehicle-assignment__spec-item">
+          <span class="vehicle-assignment__spec-label">Color:</span>
+          <span class="vehicle-assignment__spec-value">Blanco</span>
+        </div>
+        <div class="vehicle-assignment__spec-item">
+          <span class="vehicle-assignment__spec-label">Combustible:</span>
+          <span class="vehicle-assignment__spec-value">Gasolina</span>
+        </div>
+      </div>
+    </section>
+
+    @if (validationErrors().length > 0) {
+      <section class="vehicle-assignment__validation" aria-live="assertive">
+        <h4 class="vehicle-assignment__validation-title">Errores de Validación</h4>
+        <ul class="vehicle-assignment__validation-list">
+          @for (error of validationErrors(); track error) {
+            <li class="vehicle-assignment__validation-item">{{ error }}</li>
+          }
+        </ul>
+      </section>
+    }
+
+    <footer class="vehicle-assignment__actions">
+      <button
+        type="button"
+        class="vehicle-assignment__button vehicle-assignment__button--secondary"
+        (click)="onCancel()"
+        [disabled]="isSubmitting()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="vehicle-assignment__button vehicle-assignment__button--primary"
+        [disabled]="assignmentForm.invalid || isSubmitting()"
+      >
+        @if (isSubmitting()) {
+          <span class="vehicle-assignment__spinner" aria-hidden="true"></span>
+          Asignando...
+        } @else {
+          Asignar Unidad
+        }
+      </button>
+    </footer>
+
+    @if (assignmentResult()) {
+      <section [ngClass]="getResultClasses()">
+        @if (assignmentResult()?.success) {
+          <div class="vehicle-assignment__result-message">
+            <h4 class="vehicle-assignment__result-title">Unidad Asignada Exitosamente</h4>
+            <p class="vehicle-assignment__result-text">
+              La unidad {{ assignmentResult()?.assignedUnit?.modelo }} {{ assignmentResult()?.assignedUnit?.year }} ha sido asignada correctamente.
+            </p>
+            <div class="vehicle-assignment__summary">
+              <div class="vehicle-assignment__summary-item">
+                <strong>VIN:</strong> {{ assignmentResult()?.assignedUnit?.vin }}
+              </div>
+              <div class="vehicle-assignment__summary-item">
+                <strong>Serie:</strong> {{ assignmentResult()?.assignedUnit?.serie }}
+              </div>
+              <div class="vehicle-assignment__summary-item">
+                <strong>Motor:</strong> {{ assignmentResult()?.assignedUnit?.numeroMotor }}
+              </div>
+            </div>
+          </div>
+        } @else {
+          <div class="vehicle-assignment__result-message">
+            <h4 class="vehicle-assignment__result-title">Error en la Asignación</h4>
+            <p class="vehicle-assignment__result-text">{{ assignmentResult()?.error }}</p>
+          </div>
+        }
+      </section>
+    }
+  </form>
+</div>

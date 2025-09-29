@@ -1,0 +1,178 @@
+<section class="ocr-scanner" [attr.data-testid]="'ocr-scanner-' + mode">
+  <header class="ocr-scanner__header">
+    <div class="ocr-scanner__heading">
+      <app-ui-icon
+        class="ocr-scanner__heading-icon"
+        [name]="getScannerIcon()"
+        [size]="24"
+        color="currentColor"
+      ></app-ui-icon>
+      <h3 class="ocr-scanner__title">{{ getScannerTitle() }}</h3>
+    </div>
+    <span class="ocr-scanner__status" [attr.data-status]="currentStatus">{{ getStatusText() }}</span>
+  </header>
+
+  <section class="ocr-scanner__camera" *ngIf="!showManualEntry">
+    <input
+      #fileInput
+      class="ocr-scanner__file-input"
+      type="file"
+      accept="image/*"
+      capture="environment"
+      hidden
+      (change)="onImageSelected($event)"
+      [attr.data-testid]="mode + '-camera-input'"
+    />
+
+    @if (selectedImage) {
+      <figure class="ocr-scanner__preview">
+        <img [src]="selectedImage" alt="Imagen seleccionada" class="ocr-scanner__preview-image" />
+        <button type="button" class="ui-btn ui-btn-ghost ocr-scanner__retake" (click)="retakePhoto()">
+          <app-ui-icon name="camera" [size]="18" color="currentColor"></app-ui-icon>
+          Tomar otra foto
+        </button>
+      </figure>
+    }
+
+    <button
+      type="button"
+      class="ui-btn ui-btn-primary ocr-scanner__camera-trigger"
+      (click)="triggerCamera()"
+      [disabled]="isProcessing"
+      [attr.data-testid]="mode + '-camera-trigger'"
+    >
+      <app-ui-icon
+        [name]="selectedImage ? 'refresh' : 'camera'"
+        [size]="28"
+        color="currentColor"
+        [class.ocr-scanner__icon--spinning]="isProcessing"
+      ></app-ui-icon>
+      <span>{{ selectedImage ? 'Procesar imagen' : 'Tomar foto del ' + getScannerLabel() }}</span>
+    </button>
+  </section>
+
+  @if (isProcessing && ocrProgress) {
+    <section class="ocr-scanner__progress">
+      <div class="ocr-scanner__progress-header">
+        <span class="ocr-scanner__progress-status">{{ ocrProgress.message }}</span>
+        @if (ocrProgress.attempt) {
+          <span class="ocr-scanner__progress-attempt">Intento {{ ocrProgress.attempt }}/{{ ocrProgress.maxAttempts }}</span>
+        }
+      </div>
+      <div class="ocr-scanner__progress-bar">
+        <div
+          class="ocr-scanner__progress-fill"
+          [style.width.%]="ocrProgress.progress"
+          [attr.data-status]="ocrProgress.status"
+        ></div>
+      </div>
+    </section>
+  }
+
+  @if (ocrResult && !showManualEntry) {
+    <section class="ocr-scanner__results">
+      <header class="ocr-scanner__results-header">
+        <app-ui-icon
+          class="ocr-scanner__results-icon"
+          [name]="ocrResult.needsManualEntry ? 'alert-triangle' : 'check-circle'"
+          [size]="20"
+          color="currentColor"
+          [attr.data-state]="ocrResult.needsManualEntry ? 'warning' : 'success'"
+        ></app-ui-icon>
+        <span class="ocr-scanner__results-title">{{ ocrResult.needsManualEntry ? 'Verificación necesaria' : 'Detectado automáticamente' }}</span>
+      </header>
+
+      <div class="ocr-scanner__value">
+        <input
+          type="text"
+          class="ocr-scanner__input"
+          [(ngModel)]="detectedValue"
+          [attr.data-state]="ocrResult.needsManualEntry ? 'warning' : 'success'"
+          [attr.data-testid]="mode + '-detected-value'"
+          [placeholder]="getPlaceholderText()"
+        />
+        @if (ocrResult.confidence > 0) {
+          <span class="ocr-scanner__confidence">{{ ocrResult.confidence }}% confianza</span>
+        }
+      </div>
+
+      @if (ocrResult.needsManualEntry) {
+        <app-human-message
+          class="ocr-scanner__message"
+          [context]="'ocr-manual-verification'"
+          [data]="{ field: getScannerLabel(), confidence: ocrResult.confidence }"
+        ></app-human-message>
+      }
+    </section>
+  }
+
+  @if (showManualEntry) {
+    <section class="ocr-scanner__manual">
+      <header class="ocr-scanner__manual-header">
+        <app-ui-icon name="edit" [size]="18" color="currentColor"></app-ui-icon>
+        <span>Entrada manual</span>
+      </header>
+
+      <div class="ocr-scanner__manual-field">
+        <input
+          type="text"
+          class="ocr-scanner__input"
+          [(ngModel)]="manualValue"
+          [placeholder]="getPlaceholderText()"
+          [attr.data-testid]="mode + '-manual-input'"
+          (input)="onManualValueChange()"
+        />
+        @if (validationMessage) {
+          <div class="ocr-scanner__validation">
+            <app-ui-icon name="info" [size]="16" color="currentColor"></app-ui-icon>
+            <span>{{ validationMessage }}</span>
+          </div>
+        }
+      </div>
+
+      <app-human-message
+        class="ocr-scanner__message"
+        [context]="'manual-entry-guidance'"
+        [data]="{ field: getScannerLabel() }"
+      ></app-human-message>
+    </section>
+  }
+
+  <footer class="ocr-scanner__actions">
+    <button
+      type="button"
+      class="ui-btn ui-btn-secondary"
+      (click)="toggleManualEntry()"
+      [disabled]="isProcessing"
+      [attr.data-testid]="mode + '-toggle-manual'"
+    >
+      <app-ui-icon [name]="showManualEntry ? 'camera' : 'edit'" [size]="18" color="currentColor"></app-ui-icon>
+      {{ showManualEntry ? 'Usar cámara' : 'Entrada manual' }}
+    </button>
+
+    <button
+      type="button"
+      class="ui-btn ui-btn-primary"
+      (click)="confirmValue()"
+      [disabled]="!canConfirm()"
+      [attr.data-testid]="mode + '-confirm'"
+    >
+      <app-ui-icon name="check" [size]="18" color="currentColor"></app-ui-icon>
+      Confirmar {{ getScannerLabel() }}
+    </button>
+  </footer>
+
+  @if (errorMessage) {
+    <section class="ocr-scanner__error">
+      <app-human-message
+        class="ocr-scanner__message"
+        context="ocr-error"
+        [data]="{ error: errorMessage, canRetry: true }"
+      ></app-human-message>
+      <button type="button" class="ui-btn ui-btn-ghost" (click)="retry()">
+        <app-ui-icon name="refresh" [size]="18" color="currentColor"></app-ui-icon>
+        Reintentar
+      </button>
+    </section>
+  }
+</section>

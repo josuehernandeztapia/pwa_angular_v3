@@ -1,0 +1,75 @@
+<div
+  class="premium-loading"
+  [ngClass]="getContainerClasses()"
+  [attr.data-testid]="'loading-' + type"
+  [attr.aria-label]="ariaLabel"
+  role="status"
+>
+  <div *ngIf="type === 'spinner'" class="premium-loading__spinner">
+    <div
+      class="premium-loading__spinner-shell"
+      [style.width.px]="getSpinnerSize()"
+      [style.height.px]="getSpinnerSize()"
+    >
+      <div class="premium-loading__spinner-ring"></div>
+    </div>
+    <div *ngIf="showLabel" class="premium-loading__label">{{ label }}</div>
+  </div>
+
+  <div *ngIf="type === 'skeleton'" class="premium-loading__skeleton">
+    <span class="premium-loading__skeleton-line premium-loading__skeleton-line--title"></span>
+    <span class="premium-loading__skeleton-line premium-loading__skeleton-line--subtitle"></span>
+    <span class="premium-loading__skeleton-line premium-loading__skeleton-line--body"></span>
+    <span class="premium-loading__skeleton-line premium-loading__skeleton-line--body-short"></span>
+  </div>
+
+  <div *ngIf="type === 'pulse'" class="premium-loading__pulse">
+    <span class="premium-loading__pulse-circle"></span>
+    <div *ngIf="showLabel" class="premium-loading__label">{{ label }}</div>
+  </div>
+
+  <div *ngIf="type === 'wave'" class="premium-loading__wave">
+    <span
+      class="premium-loading__wave-bar"
+      *ngFor="let bar of waveBars; index as i"
+      [style.animation-delay]="(i * 0.1) + 's'"
+    ></span>
+  </div>
+
+  <div *ngIf="type === 'dots'" class="premium-loading__dots">
+    <div class="premium-loading__dots-track">
+      <span
+        class="premium-loading__dot"
+        *ngFor="let dot of dotItems; index as i"
+        [style.animation-delay]="(i * 0.2) + 's'"
+      ></span>
+    </div>
+    <div *ngIf="showLabel" class="premium-loading__label">{{ label }}</div>
+  </div>
+
+  <div *ngIf="type === 'bars'" class="premium-loading__bars">
+    <span
+      class="premium-loading__bar"
+      *ngFor="let bar of barItems; index as i"
+      [style.animation-delay]="(i * 0.15) + 's'"
+    ></span>
+  </div>
+
+  <div *ngIf="type === 'progress'" class="premium-loading__progress">
+    <div class="premium-loading__progress-track">
+      <div class="premium-loading__progress-fill" [style.width.%]="progress"></div>
+    </div>
+    <div *ngIf="showLabel" class="premium-loading__progress-label">
+      {{ label }} {{ progress }}%
+    </div>
+  </div>
+
+  <div *ngIf="type === 'fade'" class="premium-loading__fade">
+    <div class="premium-loading__fade-content">
+      <svg class="premium-loading__fade-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+      <div *ngIf="showLabel" class="premium-loading__label">{{ label }}</div>
+    </div>
+  </div>
+</div>

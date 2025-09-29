@@ -1,0 +1,78 @@
+<div class="unauthorized">
+  <div class="unauthorized__card">
+    <div class="unauthorized__illustration">
+      <span class="unauthorized__illustration-icon" aria-hidden="true">
+        <app-icon name="shield-alert" [size]="56" color="currentColor"></app-icon>
+      </span>
+      <p class="unauthorized__illustration-title">No Autorizado</p>
+    </div>
+
+    <section class="unauthorized__message">
+      <h1 class="unauthorized__heading">Acceso Restringido</h1>
+      <p class="unauthorized__copy">
+        No tienes los permisos necesarios para acceder a esta sección. Si crees que esto es un error, contacta a tu supervisor.
+      </p>
+    </section>
+
+    <section class="unauthorized__user" *ngIf="currentUser">
+      <div class="unauthorized__user-card">
+        <span class="unauthorized__avatar" aria-hidden="true">{{ getUserInitials() }}</span>
+        <div class="unauthorized__user-details">
+          <div class="unauthorized__user-name">{{ currentUser.name }}</div>
+          <div class="unauthorized__user-role">{{ getRoleLabel(currentUser.role) }}</div>
+          <div class="unauthorized__permissions">
+            <span
+              *ngFor="let permission of currentUser.permissions.slice(0, 3)"
+              class="unauthorized__permission-chip"
+            >
+              {{ getPermissionLabel(permission) }}
+            </span>
+            <span
+              *ngIf="currentUser.permissions.length > 3"
+              class="unauthorized__permission-chip unauthorized__permission-chip--more"
+            >
+              +{{ currentUser.permissions.length - 3 }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="unauthorized__actions">
+      <button type="button" class="unauthorized__btn unauthorized__btn--primary" (click)="goHome()">
+        <app-icon class="icon-16" name="home" [size]="16" color="currentColor" aria-hidden="true"></app-icon>
+        Volver al Dashboard
+      </button>
+      <button type="button" class="unauthorized__btn unauthorized__btn--secondary" (click)="goBack()">
+        <app-icon class="icon-16" name="arrow-left" [size]="16" color="currentColor" aria-hidden="true"></app-icon>
+        Regresar
+      </button>
+    </div>
+
+    <section class="unauthorized__help">
+      <h3 class="unauthorized__help-title">¿Necesitas más permisos?</h3>
+      <div class="unauthorized__help-actions">
+        <button type="button" class="unauthorized__help-btn" (click)="contactSupervisor()">
+          <app-icon class="icon-16" name="users" [size]="16" color="currentColor" aria-hidden="true"></app-icon>
+          Contactar Supervisor
+        </button>
+        <button type="button" class="unauthorized__help-btn" (click)="viewPermissions()">
+          <app-icon class="icon-16" name="badge-check" [size]="16" color="currentColor" aria-hidden="true"></app-icon>
+          Ver mis Permisos
+        </button>
+        <button type="button" class="unauthorized__help-btn" (click)="requestAccess()">
+          <app-icon class="icon-16" name="document" [size]="16" color="currentColor" aria-hidden="true"></app-icon>
+          Solicitar Acceso
+        </button>
+      </div>
+    </section>
+
+    <div class="unauthorized__logout">
+      <p class="unauthorized__logout-copy">¿No eres {{ currentUser?.name }}?</p>
+      <button type="button" class="unauthorized__logout-btn" (click)="logout()">
+        <app-icon class="icon-16" name="logout" [size]="16" color="currentColor" aria-hidden="true"></app-icon>
+        Cerrar Sesión
+      </button>
+    </div>
+  </div>
+</div>

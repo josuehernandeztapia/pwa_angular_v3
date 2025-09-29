@@ -1,0 +1,109 @@
+<section class="next-best-action">
+  <header class="next-best-action__header">
+    <div class="next-best-action__lead">
+      <div class="next-best-action__lead-icon" aria-hidden="true">
+        <span class="next-best-action__symbol"></span>
+      </div>
+      <div class="next-best-action__lead-copy">
+        <h3 class="next-best-action__title">Próximas Acciones Recomendadas</h3>
+        <p class="next-best-action__subtitle">IA-powered • {{ insights?.totalActions || 0 }} acciones</p>
+      </div>
+    </div>
+    <div class="next-best-action__loader" *ngIf="isLoading" aria-hidden="true">
+      <span class="next-best-action__spinner"></span>
+    </div>
+  </header>
+
+  <div class="next-best-action__insights" *ngIf="insights && !isLoading">
+    <div class="next-best-action__insight next-best-action__insight--critical" *ngIf="insights.criticalActions > 0">
+      <span class="next-best-action__insight-icon" aria-hidden="true"></span>
+      <span class="next-best-action__insight-text">{{ insights.criticalActions }} críticas</span>
+    </div>
+    <div class="next-best-action__insight next-best-action__insight--value">
+      <span class="next-best-action__insight-icon" aria-hidden="true"></span>
+      <span class="next-best-action__insight-text">{{ formatCurrency(insights.totalBusinessValue) }}</span>
+    </div>
+    <div class="next-best-action__insight next-best-action__insight--focus">
+      <span class="next-best-action__insight-icon" aria-hidden="true"></span>
+      <span class="next-best-action__insight-text">{{ insights.topCategory }}</span>
+    </div>
+  </div>
+
+  <div class="next-best-action__list" *ngIf="!isLoading; else loadingTemplate">
+    <a
+      *ngFor="let action of displayActions; trackBy: trackByActionId"
+      class="next-best-action__card"
+      [routerLink]="action.actionUrl"
+      [ngClass]="getCardModifierClasses(action)"
+    >
+      <span class="next-best-action__priority-dot" [ngClass]="getPriorityDotClass(action.priority)" aria-hidden="true"></span>
+
+      <div class="next-best-action__card-body">
+        <div class="next-best-action__card-header">
+          <span class="next-best-action__type-icon" aria-hidden="true">{{ getActionIcon(action.type) }}</span>
+          <h4 class="next-best-action__card-title">{{ action.title }}</h4>
+          <div class="next-best-action__confidence" *ngIf="action.confidence >= 70">
+            <span class="next-best-action__confidence-icon" aria-hidden="true">
+              <app-icon
+                class="next-best-action__confidence-icon-svg"
+                name="device-laptop"
+                [size]="20"
+              ></app-icon>
+            </span>
+            <span class="next-best-action__confidence-text">{{ action.confidence }}%</span>
+          </div>
+        </div>
+
+        <p class="next-best-action__description">{{ action.description }}</p>
+
+        <div class="next-best-action__client" *ngIf="action.clientName">
+          <span class="next-best-action__client-icon" aria-hidden="true"></span>
+          <span class="next-best-action__client-name">{{ action.clientName }}</span>
+        </div>
+
+        <dl class="next-best-action__meta">
+          <div class="next-best-action__meta-item next-best-action__meta-item--time">
+            <span class="next-best-action__meta-icon" aria-hidden="true">timer</span>
+            <span class="next-best-action__meta-text">{{ action.timeToComplete }} min</span>
+          </div>
+          <div class="next-best-action__meta-item next-best-action__meta-item--value" *ngIf="action.businessValue > 0">
+            <span class="next-best-action__meta-icon" aria-hidden="true"></span>
+            <span class="next-best-action__meta-text">{{ formatCurrency(action.businessValue) }}</span>
+          </div>
+          <div class="next-best-action__meta-item next-best-action__meta-item--due" *ngIf="action.dueDate">
+            <span class="next-best-action__meta-icon" aria-hidden="true">date</span>
+            <span class="next-best-action__meta-text">{{ formatDueDate(action.dueDate) }}</span>
+          </div>
+        </dl>
+
+        <div class="next-best-action__tags" *ngIf="action.tags.length > 0">
+          <span
+            *ngFor="let tag of action.tags.slice(0, 3); trackBy: trackByTag"
+            class="next-best-action__tag"
+            [ngClass]="'next-best-action__tag--' + getTagClass(tag)"
+          >
+            {{ tag }}
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <div class="next-best-action__toggle" *ngIf="allActions.length > maxDisplayActions">
+      <button type="button" class="next-best-action__toggle-btn" (click)="toggleShowAll()">
+        {{ showingAll ? 'Mostrar menos' : ('Ver todas (' + allActions.length + ')') }}
+        <span class="next-best-action__toggle-icon" aria-hidden="true">{{ showingAll ? '▲' : '▼' }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="next-best-action__empty" *ngIf="!isLoading && allActions.length === 0">
+    <div class="next-best-action__empty-icon" aria-hidden="true"></div>
+    <p class="next-best-action__empty-text">No hay acciones urgentes en este momento.</p>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div class="next-best-action__loading">
+      <div class="next-best-action__skeleton" *ngFor="let item of [1,2,3]; trackBy: trackByIndex"></div>
+    </div>
+  </ng-template>
+</section>

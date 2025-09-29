@@ -1,0 +1,143 @@
+<section class="avi-validation-runner" aria-live="polite">
+  <header class="avi-validation-runner__header">
+    <div class="avi-validation-runner__intro">
+      <h1 class="avi-validation-runner__title">Sistema de Validación AVI</h1>
+      <p class="avi-validation-runner__subtitle">
+        Validación completa del sistema de entrevistas automatizadas
+      </p>
+    </div>
+    <button
+      type="button"
+      class="ui-btn ui-btn-primary avi-validation-runner__run-btn"
+      (click)="runValidation()"
+      [disabled]="isRunning"
+    >
+      {{ isRunning ? 'Ejecutando…' : 'Ejecutar Validación Completa' }}
+    </button>
+  </header>
+
+  <section class="avi-validation-runner__progress" *ngIf="isRunning">
+    <div class="avi-validation-runner__spinner" role="status" aria-label="Validación en progreso"></div>
+    <p class="avi-validation-runner__progress-message">{{ currentTestMessage }}</p>
+  </section>
+
+  <section class="avi-validation-runner__results" *ngIf="validationReport as report">
+    <article class="avi-validation-runner__status-card" [ngClass]="getStatusModifier(report)">
+      <header class="avi-validation-runner__status-header">
+        <div class="avi-validation-runner__status-heading">
+          <app-icon *ngIf="getStatusIcon(report) as iconName" [name]="iconName" [size]="32" class="avi-validation-runner__status-icon" />
+          <h2 class="avi-validation-runner__status-title">{{ report.overallStatus }}</h2>
+        </div>
+        <time class="avi-validation-runner__timestamp">{{ report.timestamp | date:'medium' }}</time>
+      </header>
+
+      <dl class="avi-validation-runner__summary-board">
+        <div class="avi-validation-runner__summary-item">
+          <dt class="avi-validation-runner__summary-label">Tests Totales</dt>
+          <dd class="avi-validation-runner__summary-value">{{ report.summary.totalTests }}</dd>
+        </div>
+        <div class="avi-validation-runner__summary-item">
+          <dt class="avi-validation-runner__summary-label">Exitosos</dt>
+          <dd class="avi-validation-runner__summary-value">{{ report.summary.passedTests }}</dd>
+        </div>
+        <div class="avi-validation-runner__summary-item">
+          <dt class="avi-validation-runner__summary-label">Fallidos</dt>
+          <dd class="avi-validation-runner__summary-value">{{ report.summary.failedTests }}</dd>
+        </div>
+        <div class="avi-validation-runner__summary-item">
+          <dt class="avi-validation-runner__summary-label">Éxito</dt>
+          <dd class="avi-validation-runner__summary-value">{{ report.summary.successRate | number:'1.0-1' }}%</dd>
+        </div>
+        <div class="avi-validation-runner__summary-item">
+          <dt class="avi-validation-runner__summary-label">Duración</dt>
+          <dd class="avi-validation-runner__summary-value">{{ report.summary.totalDuration / 1000 | number:'1.1-1' }}s</dd>
+        </div>
+      </dl>
+    </article>
+
+    <section class="avi-validation-runner__categories">
+      <h3 class="avi-validation-runner__section-title">Resultados por Categoría</h3>
+      <div class="avi-validation-runner__categories-collection">
+        <article
+          class="avi-validation-runner__category-card"
+          *ngFor="let category of report.categories"
+          [ngClass]="getCategoryModifier(category)"
+        >
+          <header class="avi-validation-runner__category-header">
+            <app-icon *ngIf="getCategoryIcon(category.category) as iconName" [name]="iconName" [size]="24" class="avi-validation-runner__category-icon" />
+            <div class="avi-validation-runner__category-info">
+              <h4 class="avi-validation-runner__category-name">{{ category.category }}</h4>
+              <span
+                class="avi-validation-runner__category-status"
+                [ngClass]="category.passed ? 'is-passed' : 'is-failed'"
+              >
+                {{ category.passed ? 'PASÓ' : 'FALLÓ' }}
+              </span>
+            </div>
+            <span class="avi-validation-runner__category-duration">{{ category.duration }} ms</span>
+          </header>
+
+          <div class="avi-validation-runner__tests">
+            <div
+              class="avi-validation-runner__test-item"
+              *ngFor="let test of category.tests"
+              [ngClass]="getTestModifier(test)"
+            >
+              <span class="avi-validation-runner__test-indicator" aria-hidden="true"></span>
+              <div class="avi-validation-runner__test-content">
+                <span class="avi-validation-runner__test-name">{{ test.name }}</span>
+                <span class="avi-validation-runner__test-message">{{ test.message }}</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="avi-validation-runner__recommendations" *ngIf="report.recommendations?.length">
+      <h3 class="avi-validation-runner__section-title">Recomendaciones del Sistema</h3>
+      <ul class="avi-validation-runner__recommendations-list">
+        <li
+          class="avi-validation-runner__recommendation-item"
+          *ngFor="let recommendation of report.recommendations"
+          [ngClass]="getRecommendationModifier(recommendation)"
+        >
+          {{ recommendation }}
+        </li>
+      </ul>
+    </section>
+
+    <section class="avi-validation-runner__technical" *ngIf="showTechnicalDetails">
+      <h3 class="avi-validation-runner__section-title">Detalles Técnicos</h3>
+      <div class="avi-validation-runner__technical-content">
+        <pre>{{ report | json }}</pre>
+      </div>
+    </section>
+
+    <div class="avi-validation-runner__actions">
+      <button
+        type="button"
+        class="ui-btn ui-btn-ghost"
+        (click)="toggleTechnicalDetails()"
+      >
+        {{ showTechnicalDetails ? 'Ocultar' : 'Mostrar' }} Detalles Técnicos
+      </button>
+      <button
+        type="button"
+        class="ui-btn ui-btn-secondary"
+        (click)="runValidation()"
+        [disabled]="isRunning"
+      >
+        Ejecutar Nuevamente
+      </button>
+      <button
+        type="button"
+        class="ui-btn ui-btn-primary"
+        (click)="exportReport()"
+        [disabled]="isRunning"
+      >
+        Exportar Reporte
+      </button>
+    </div>
+  </section>
+</section>

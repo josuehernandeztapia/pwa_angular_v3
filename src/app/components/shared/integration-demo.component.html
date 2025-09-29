@@ -1,0 +1,185 @@
+<section class="integration-demo ui-card">
+  <header class="integration-demo__header">
+    <div class="integration-demo__header-row">
+      <div class="integration-demo__heading">
+        <div class="integration-demo__lead-icon">
+          <app-icon
+            class="icon-32 integration-demo__icon--info"
+            name="link-connected"
+            [size]="32"
+          ></app-icon>
+        </div>
+        <div class="integration-demo__lead-copy">
+          <h2 class="integration-demo__title">Integraciones Externas</h2>
+          <p class="integration-demo__subtitle">Panel de monitoreo y gestión de servicios externos e APIs</p>
+        </div>
+      </div>
+      <div class="integration-demo__status">
+        <div class="integration-demo__status-chip" [ngClass]="getOverallStatusClasses()">
+          <span class="integration-demo__status-dot" [ngClass]="getStatusDotClasses()"></span>
+          <span class="integration-demo__status-text">{{ getOverallStatusLabel() }}</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="integration-demo__status-grid">
+    <article class="integration-demo__status-card">
+      <div class="integration-demo__status-header">
+        <h3 class="integration-demo__status-title">
+          <app-icon
+            class="icon-16 integration-demo__icon--info"
+            name="academic-cap"
+            [size]="16"
+          ></app-icon>
+          Services
+        </h3>
+        <span class="integration-demo__indicator" [ngClass]="getIndicatorClasses(serviceStatus.initialized)"></span>
+      </div>
+      <dl class="integration-demo__status-list">
+        <div class="integration-demo__status-row">
+          <dt class="integration-demo__status-label">Initialized</dt>
+          <dd class="integration-demo__status-value" [ngClass]="getServiceInitializedClasses(serviceStatus.initialized)">
+            {{ serviceStatus.initialized ? 'Active' : 'Offline' }}
+          </dd>
+        </div>
+        <div class="integration-demo__status-row">
+          <dt class="integration-demo__status-label">Status</dt>
+          <dd class="integration-demo__status-value" [ngClass]="getServiceLoadingClasses(serviceStatus.loading)">
+            {{ serviceStatus.loading ? 'Loading' : 'Ready' }}
+          </dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="integration-demo__status-card">
+      <div class="integration-demo__status-header">
+        <h3 class="integration-demo__status-title">APIs</h3>
+        <span class="integration-demo__indicator" [ngClass]="getIndicatorClasses(apiStatus.authenticated)"></span>
+      </div>
+      <dl class="integration-demo__status-list">
+        <div class="integration-demo__status-row">
+          <dt class="integration-demo__status-label">Auth</dt>
+          <dd class="integration-demo__status-value" [ngClass]="getApiAuthClasses(apiStatus.authenticated)">
+            {{ apiStatus.authenticated ? 'Connected' : 'Disconnected' }}
+          </dd>
+        </div>
+        <div class="integration-demo__status-row">
+          <dt class="integration-demo__status-label">Session</dt>
+          <dd class="integration-demo__status-value integration-demo__status-value--mono">
+            {{ apiStatus.session || 'N/A' }}
+          </dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="integration-demo__status-card">
+      <div class="integration-demo__status-header">
+        <h3 class="integration-demo__status-title">Sync</h3>
+        <span class="integration-demo__indicator" [ngClass]="getIndicatorClasses(syncStatus.online)"></span>
+      </div>
+      <dl class="integration-demo__status-list">
+        <div class="integration-demo__status-row">
+          <dt class="integration-demo__status-label">Online</dt>
+          <dd class="integration-demo__status-value" [ngClass]="getSyncStatusClasses(syncStatus.online)">
+            {{ syncStatus.online ? 'Connected' : 'Offline' }}
+          </dd>
+        </div>
+        <div class="integration-demo__status-row">
+          <dt class="integration-demo__status-label">Pending</dt>
+          <dd class="integration-demo__status-value integration-demo__status-value--mono">
+            {{ syncStatus.pendingItems }}
+          </dd>
+        </div>
+      </dl>
+    </article>
+  </div>
+
+  <section class="integration-demo__panel">
+    <header class="integration-demo__panel-header">
+      <h3 class="integration-demo__panel-title">Integration Tests</h3>
+      <button
+        type="button"
+        class="ui-btn ui-btn-secondary integration-demo__run-tests"
+        [disabled]="isRunning()"
+        (click)="runAllTests()"
+      >
+        <ng-container *ngIf="!isRunning(); else runningState">
+          <app-icon
+            class="icon-16"
+            name="monitor"
+            [size]="16"
+          ></app-icon>
+          Ejecutar pruebas
+        </ng-container>
+        <ng-template #runningState>
+          <app-icon
+            class="icon-16 integration-demo__spinner"
+            name="spinner"
+            [size]="16"
+            strokeWidth="2.5"
+          ></app-icon>
+          Ejecutando...
+        </ng-template>
+      </button>
+    </header>
+
+    <div class="integration-demo__tests-grid">
+      <article
+        *ngFor="let test of testCategories; trackBy: trackByTest"
+        class="integration-demo__test-card"
+      >
+        <div class="integration-demo__test-header">
+          <div class="integration-demo__test-info">
+            <span class="integration-demo__test-icon">{{ getTestIcon(test.key) }}</span>
+            <span class="integration-demo__test-name">{{ test.name }}</span>
+          </div>
+          <span class="integration-demo__status" [ngClass]="getTestStatusClasses(testResults()[test.key])">
+            {{ getStatusText(testResults()[test.key]) }}
+          </span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section *ngIf="storageStats" class="integration-demo__panel">
+    <header class="integration-demo__panel-header">
+      <h3 class="integration-demo__panel-title">Storage Statistics</h3>
+    </header>
+    <div class="integration-demo__metrics">
+      <article class="integration-demo__metric">
+        <div class="integration-demo__metric-value">{{ storageStats.totalClients }}</div>
+        <div class="integration-demo__metric-label">Clients</div>
+      </article>
+      <article class="integration-demo__metric">
+        <div class="integration-demo__metric-value">{{ storageStats.totalDocuments }}</div>
+        <div class="integration-demo__metric-label">Documents</div>
+      </article>
+      <article class="integration-demo__metric">
+        <div class="integration-demo__metric-value">{{ (storageStats.totalSize / 1024 / 1024) | number: '1.1-1' }}MB</div>
+        <div class="integration-demo__metric-label">Storage</div>
+      </article>
+      <article class="integration-demo__metric">
+        <div class="integration-demo__metric-value">{{ storageStats.syncQueueSize }}</div>
+        <div class="integration-demo__metric-label">Queue</div>
+      </article>
+    </div>
+  </section>
+
+  <section *ngIf="isRunning()" class="integration-demo__skeleton">
+    <div class="integration-demo__skeleton-bar integration-demo__skeleton-bar--wide"></div>
+    <div class="integration-demo__skeleton-bar integration-demo__skeleton-bar--narrow"></div>
+  </section>
+
+  <section class="integration-demo__panel">
+    <header class="integration-demo__panel-header">
+      <h3 class="integration-demo__panel-title">Live Logs</h3>
+    </header>
+    <div class="integration-demo__logs">
+      <p *ngIf="logs().length === 0" class="integration-demo__muted-text">Waiting for test execution...</p>
+      <div *ngFor="let log of logs(); trackBy: trackByLog" class="integration-demo__log-entry">
+        {{ log }}
+      </div>
+    </div>
+  </section>
+</section>

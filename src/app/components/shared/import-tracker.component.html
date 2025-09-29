@@ -1,0 +1,195 @@
+<div class="import-tracker">
+  <header class="import-tracker__header">
+    <div class="import-tracker__header-row">
+      <div class="import-tracker__heading">
+        <div class="import-tracker__lead-icon">
+          <app-icon class="icon-32 import-tracker__icon--info" name="cube" [size]="32"></app-icon>
+        </div>
+        <div class="import-tracker__lead-copy">
+          <h3 class="import-tracker__title">Seguimiento de Importación</h3>
+          <p class="import-tracker__subtitle">Unidad: {{ client?.vehicleInfo?.model || 'N/A' }}</p>
+          <p *ngIf="integratedStatus()?.deliveryOrderId" class="import-tracker__order-id">
+            Orden: {{ integratedStatus()?.deliveryOrderId }}
+          </p>
+        </div>
+      </div>
+      <div class="import-tracker__status">
+        <div class="import-tracker__status-chip" [ngClass]="getOverallStatusClasses()">
+          <span class="import-tracker__status-dot" [ngClass]="getStatusDotClasses()"></span>
+          <span class="import-tracker__status-text">{{ getOverallStatus() }}</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="import-tracker__timeline" aria-label="Progreso de importación">
+    <div class="import-tracker__progress">
+      <div class="import-tracker__progress-track">
+        <div class="import-tracker__progress-fill" [style.width.%]="getOverallProgress()"></div>
+        <div class="import-tracker__progress-label">{{ getOverallProgress() }}% Completado</div>
+      </div>
+    </div>
+
+    <div class="import-tracker__milestones">
+      <article
+        *ngFor="let milestone of milestones"
+        class="import-tracker__milestone"
+        [ngClass]="getMilestoneClasses(milestone)"
+        (click)="onMilestoneClick(milestone)"
+      >
+        <div class="import-tracker__milestone-body">
+          <div class="import-tracker__milestone-circle-wrapper">
+            <div class="import-tracker__milestone-circle icon-32" [ngClass]="getMilestoneCircleClasses(milestone)">
+              <div class="import-tracker__milestone-icon">
+                <app-icon class="icon-24" [name]="milestone.icon" [size]="24"></app-icon>
+              </div>
+              <div
+                *ngIf="getMilestoneStatus(milestone) === 'in-progress'"
+                class="import-tracker__milestone-indicator import-tracker__milestone-indicator--progress"
+              ></div>
+              <div
+                *ngIf="getMilestoneStatus(milestone) === 'completed'"
+                class="import-tracker__milestone-indicator import-tracker__milestone-indicator--completed"
+              >
+                <app-icon class="import-tracker__milestone-indicator-icon" name="check" [size]="12" strokeWidth="3"></app-icon>
+              </div>
+            </div>
+          </div>
+
+          <div class="import-tracker__milestone-info">
+            <div class="import-tracker__milestone-toolbar">
+              <div class="import-tracker__milestone-heading">
+                <h4 class="import-tracker__milestone-title">{{ milestone.label }}</h4>
+                <p class="import-tracker__milestone-description">{{ milestone.description }}</p>
+              </div>
+              <div class="import-tracker__milestone-actions">
+                <button
+                  *ngIf="getMilestoneStatus(milestone) === 'pending' && canUpdate(milestone)"
+                  type="button"
+                  class="import-tracker__milestone-action import-tracker__milestone-action--update"
+                  (click)="updateMilestone(milestone.key); $event.stopPropagation()"
+                >
+                  Actualizar
+                </button>
+                <button
+                  *ngIf="getMilestoneStatus(milestone) === 'in-progress'"
+                  type="button"
+                  class="import-tracker__milestone-action import-tracker__milestone-action--complete"
+                  (click)="completeMilestone(milestone.key); $event.stopPropagation()"
+                >
+                  Completar
+                </button>
+              </div>
+            </div>
+
+            <div class="import-tracker__milestone-meta">
+              <div class="import-tracker__milestone-time">
+                <app-icon class="icon-16 import-tracker__time-icon" name="clock" [size]="16"></app-icon>
+                <span class="import-tracker__time-label">{{ milestone.estimatedDays }} días estimados</span>
+              </div>
+
+              <div *ngIf="getMilestoneStatus(milestone) === 'completed'" class="import-tracker__milestone-completed">
+                <app-icon class="icon-16" name="calendar" [size]="16"></app-icon>
+                <span>Completado {{ getCompletionDate(milestone.key) }}</span>
+              </div>
+
+              <div *ngIf="getMilestoneStatus(milestone) === 'in-progress'" class="import-tracker__milestone-progress">
+                <app-icon class="icon-16 import-tracker__progress-spinner" name="spinner" [size]="16"></app-icon>
+                <span>En progreso desde {{ getStartDate(milestone.key) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="import-tracker__milestone-badge">
+            <span class="import-tracker__status-badge" [ngClass]="getStatusBadgeClasses(milestone)">
+              {{ getStatusText(milestone) }}
+            </span>
+          </div>
+        </div>
+
+        <section *ngIf="selectedMilestone === milestone.key" class="import-tracker__details">
+          <div class="import-tracker__details-grid">
+            <article class="import-tracker__detail-card">
+              <h5 class="import-tracker__detail-title">Documentos Requeridos</h5>
+              <ul class="import-tracker__detail-list">
+                <li *ngFor="let doc of getMilestoneDocuments(milestone.key)" class="import-tracker__detail-item">{{ doc }}</li>
+              </ul>
+            </article>
+
+            <article class="import-tracker__detail-card">
+              <h5 class="import-tracker__detail-title">Contactos Relevantes</h5>
+              <div class="import-tracker__contacts">
+                <div *ngFor="let contact of getMilestoneContacts(milestone.key)" class="import-tracker__contact">
+                  <span class="import-tracker__contact-role">{{ contact.role }}:</span>
+                  <span class="import-tracker__contact-info">{{ contact.name }} - {{ contact.phone }}</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="import-tracker__actions-log">
+            <h5 class="import-tracker__detail-title">Historial de Acciones</h5>
+            <div class="import-tracker__actions-list">
+              <div *ngFor="let action of getMilestoneActions(milestone.key)" class="import-tracker__action">
+                <div class="import-tracker__action-header">
+                  <span class="import-tracker__action-text">{{ action.description }}</span>
+                  <span class="import-tracker__action-timestamp">{{ action.timestamp | date:'short' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </article>
+    </div>
+  </section>
+
+  <section class="import-tracker__summary" aria-label="Resumen de importación">
+    <article class="import-tracker__stat-card import-tracker__stat-card--info">
+      <div class="import-tracker__stat-content">
+        <div class="import-tracker__stat-icon">
+          <app-icon class="icon-32 import-tracker__icon--info" name="check-circle" [size]="32"></app-icon>
+        </div>
+        <div>
+          <div class="import-tracker__stat-value">{{ getCompletedMilestones() }}</div>
+          <div class="import-tracker__stat-label">Etapas Completadas</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="import-tracker__stat-card import-tracker__stat-card--warning">
+      <div class="import-tracker__stat-content">
+        <div class="import-tracker__stat-icon">
+          <app-icon class="icon-32" name="clock" [size]="32"></app-icon>
+        </div>
+        <div>
+          <div class="import-tracker__stat-value">{{ getEstimatedDaysRemaining() }}</div>
+          <div class="import-tracker__stat-label">Días Restantes</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="import-tracker__stat-card import-tracker__stat-card--success">
+      <div class="import-tracker__stat-content">
+        <div class="import-tracker__stat-icon">
+          <app-icon class="icon-32" name="calendar" [size]="32"></app-icon>
+        </div>
+        <div>
+          <div class="import-tracker__stat-value">{{ getExpectedDeliveryDate() }}</div>
+          <div class="import-tracker__stat-label">Entrega Estimada</div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <div class="import-tracker__actions">
+    <button type="button" class="import-tracker__report-button" (click)="generateTrackingReport()">
+      <app-icon class="icon-20" name="document" [size]="20"></app-icon>
+      Generar Reporte
+    </button>
+
+    <button type="button" class="import-tracker__notify" (click)="notifyClient()">
+      <app-icon class="icon-20" name="bell" [size]="20"></app-icon>
+      Notificar Cliente
+    </button>
+  </div>
+</div>

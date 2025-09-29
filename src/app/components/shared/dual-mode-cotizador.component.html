@@ -1,0 +1,509 @@
+<section class="dual-cotizador" aria-live="polite">
+  <header class="dual-cotizador__mode">
+    <h1 class="dual-cotizador__mode-title">
+      <span class="dual-cotizador__mode-icon" aria-hidden="true">{{ currentMode === 'acquisition' ? '🛒' : '💰' }}</span>
+      {{ client ? 'Simulador para ' + client.name : 'Simulador de Soluciones' }}
+    </h1>
+
+    <nav class="dual-cotizador__mode-tabs" aria-label="Seleccionar modo">
+      <button
+        type="button"
+        class="dual-cotizador__mode-tab"
+        [ngClass]="getModeTabClasses('acquisition')"
+        (click)="switchMode('acquisition')"
+      >
+        🛒 Cotizador (Compra)
+      </button>
+      <button
+        type="button"
+        class="dual-cotizador__mode-tab"
+        [ngClass]="getModeTabClasses('savings')"
+        (click)="switchMode('savings')"
+      >
+        💰 Simulador (Ahorro)
+      </button>
+    </nav>
+  </header>
+
+  <section class="dual-cotizador__content">
+    <div class="dual-cotizador__grid">
+      <aside class="dual-cotizador__panel dual-cotizador__panel--config">
+        <section class="dual-cotizador__section" *ngIf="!client">
+          <h2 class="dual-cotizador__section-title">1. Contexto</h2>
+          <div class="dual-cotizador__form-grid">
+            <label class="dual-cotizador__field">
+              <span class="dual-cotizador__label">Mercado</span>
+              <select
+                class="dual-cotizador__select"
+                [(ngModel)]="selectedMarket"
+                (change)="onContextChange()"
+              >
+                <option value="">-- Seleccionar --</option>
+                <option value="aguascalientes">Aguascalientes</option>
+                <option value="edomex">Estado de México</option>
+              </select>
+            </label>
+
+            <label class="dual-cotizador__field">
+              <span class="dual-cotizador__label">Tipo de Cliente</span>
+              <select
+                class="dual-cotizador__select"
+                [(ngModel)]="selectedClientType"
+                (change)="onContextChange()"
+                [disabled]="!selectedMarket"
+              >
+                <option value="">-- Seleccionar --</option>
+                <option value="individual">Individual</option>
+                <option value="colectivo" *ngIf="selectedMarket === 'edomex'">Crédito Colectivo</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section
+          class="dual-cotizador__section"
+          *ngIf="currentMode === 'acquisition' && packageData"
+        >
+          <h2 class="dual-cotizador__section-title">2. Paquete de Producto</h2>
+
+          <div class="dual-cotizador__component-list">
+            <label
+              class="dual-cotizador__component"
+              *ngFor="let comp of packageData.components"
+              [ngClass]="getComponentClasses(comp)"
+            >
+              <input
+                type="checkbox"
+                class="dual-cotizador__component-toggle"
+                [id]="comp.id"
+                [checked]="selectedComponents[comp.id]"
+                [disabled]="!comp.isOptional"
+                (change)="onComponentChange(comp.id, $event)"
+              />
+              <span class="dual-cotizador__component-required" *ngIf="!comp.isOptional" aria-hidden="true"></span>
+              <span class="dual-cotizador__component-name">{{ comp.name }}</span>
+              <span class="dual-cotizador__component-price">{{ comp.price | currency:'MXN':'symbol':'1.0-0' }}</span>
+            </label>
+          </div>
+
+          <section class="dual-cotizador__subsection">
+            <h3 class="dual-cotizador__subsection-title">3. Estructura Financiera</h3>
+
+            <div class="dual-cotizador__form-group" *ngIf="isVentaDirecta">
+              <label class="dual-cotizador__field">
+                <span class="dual-cotizador__label">Pago Inicial</span>
+                <div class="dual-cotizador__currency-field">
+                  <span class="dual-cotizador__currency-symbol">$</span>
+                  <input
+                    type="number"
+                    class="dual-cotizador__input"
+                    [(ngModel)]="directPaymentAmount"
+                    (input)="calculateResults()"
+                    placeholder="400000"
+                  />
+                </div>
+              </label>
+            </div>
+
+            <div class="dual-cotizador__form-group" *ngIf="!isVentaDirecta">
+              <label class="dual-cotizador__field">
+                <span class="dual-cotizador__label">Enganche ({{ downPaymentPercentage }}%)</span>
+                <input
+                  type="range"
+                  class="dual-cotizador__range"
+                  [min]="packageData.minDownPaymentPercentage * 100"
+                  max="90"
+                  [(ngModel)]="downPaymentPercentage"
+                  (input)="calculateResults()"
+                />
+                <div class="dual-cotizador__range-info">
+                  <span>Mínimo: {{ packageData.minDownPaymentPercentage * 100 }}%</span>
+                  <span class="dual-cotizador__range-value">{{ (totalPrice * (downPaymentPercentage / 100)) | currency:'MXN':'symbol':'1.0-0' }}</span>
+                </div>
+              </label>
+
+              <label class="dual-cotizador__field">
+                <span class="dual-cotizador__label">Plazo (meses)</span>
+                <select
+                  class="dual-cotizador__select"
+                  [(ngModel)]="selectedTerm"
+                  (change)="calculateResults()"
+                >
+                  <option *ngFor="let term of packageData.terms" [value]="term">
+                    {{ term }} meses
+                  </option>
+                </select>
+              </label>
+            </div>
+          </section>
+        </section>
+
+        <section
+          class="dual-cotizador__section"
+          *ngIf="currentMode === 'savings' && packageData"
+        >
+          <h2 class="dual-cotizador__section-title">2. Simulación de Ahorro</h2>
+
+          <div
+            class="dual-cotizador__form-group"
+            *ngIf="selectedMarket === 'aguascalientes' && selectedClientType === 'individual'"
+          >
+            <label class="dual-cotizador__field">
+              <span class="dual-cotizador__label">Enganche Inicial Disponible</span>
+              <div class="dual-cotizador__currency-field">
+                <span class="dual-cotizador__currency-symbol">$</span>
+                <input
+                  type="number"
+                  class="dual-cotizador__input"
+                  [(ngModel)]="initialDownPayment"
+                  (input)="calculateSavingsResults()"
+                  placeholder="400000"
+                />
+              </div>
+            </label>
+
+            <label class="dual-cotizador__field">
+              <span class="dual-cotizador__label">Fecha de Entrega Estimada</span>
+              <select
+                class="dual-cotizador__select"
+                [(ngModel)]="deliveryTerm"
+                (change)="calculateSavingsResults()"
+              >
+                <option [value]="3">3 meses</option>
+                <option [value]="6">6 meses</option>
+                <option [value]="9">9 meses</option>
+                <option [value]="12">12 meses</option>
+              </select>
+            </label>
+          </div>
+
+          <div
+            class="dual-cotizador__form-group"
+            *ngIf="selectedMarket === 'edomex' && selectedClientType === 'individual'"
+          >
+            <label class="dual-cotizador__field">
+              <span class="dual-cotizador__label">Aportación Voluntaria Mensual</span>
+              <div class="dual-cotizador__currency-field">
+                <span class="dual-cotizador__currency-symbol">$</span>
+                <input
+                  type="number"
+                  class="dual-cotizador__input"
+                  [(ngModel)]="voluntaryMonthly"
+                  (input)="calculateSavingsResults()"
+                  placeholder="500"
+                />
+              </div>
+            </label>
+          </div>
+
+          <div
+            class="dual-cotizador__form-group"
+            *ngIf="selectedMarket === 'edomex' && selectedClientType === 'colectivo'"
+          >
+            <label class="dual-cotizador__field">
+              <span class="dual-cotizador__label">Número de Integrantes</span>
+              <input
+                type="range"
+                class="dual-cotizador__range"
+                min="2"
+                max="20"
+                [(ngModel)]="tandaMembers"
+                (input)="calculateSavingsResults()"
+              />
+              <div class="dual-cotizador__range-info">
+                <span>{{ tandaMembers }} miembros</span>
+              </div>
+            </label>
+          </div>
+
+          <section class="dual-cotizador__collection">
+            <h3 class="dual-cotizador__collection-title">Configurador de Recaudación</h3>
+
+            <div
+              class="dual-cotizador__collection-row"
+              *ngFor="let unit of collectionUnits; let i = index"
+            >
+              <input
+                type="number"
+                class="dual-cotizador__input dual-cotizador__input--compact"
+                [(ngModel)]="unit.consumption"
+                (input)="calculateSavingsResults()"
+                placeholder="Litros/mes"
+              />
+              <input
+                type="number"
+                class="dual-cotizador__input dual-cotizador__input--compact"
+                [(ngModel)]="unit.overprice"
+                (input)="calculateSavingsResults()"
+                placeholder="Sobreprecio/L"
+              />
+              <button
+                type="button"
+                class="dual-cotizador__icon-button"
+                aria-label="Eliminar unidad de recaudación"
+                (click)="removeCollectionUnit(i)"
+              >
+                ×
+              </button>
+            </div>
+
+            <button
+              type="button"
+              class="dual-cotizador__add-button"
+              (click)="addCollectionUnit()"
+            >
+              + Agregar Unidad de Recaudación
+            </button>
+          </section>
+        </section>
+      </aside>
+
+      <section class="dual-cotizador__panel dual-cotizador__panel--results">
+        <div *ngIf="isLoading" class="dual-cotizador__loading">
+          <div class="dual-cotizador__loading-spinner" aria-hidden="true"></div>
+          <p class="dual-cotizador__loading-text">Calculando resultados...</p>
+        </div>
+
+        <section
+          *ngIf="currentMode === 'acquisition' && packageData && !isLoading"
+          class="dual-cotizador__results"
+        >
+          <h2 class="dual-cotizador__results-title">Resultados y Amortización</h2>
+
+          <div class="dual-cotizador__summary">
+            <div class="dual-cotizador__summary-item">
+              <span class="dual-cotizador__summary-label">Precio Total</span>
+              <span class="dual-cotizador__summary-value">{{ totalPrice | currency:'MXN':'symbol':'1.0-0' }}</span>
+            </div>
+
+            <ng-container *ngIf="isVentaDirecta">
+              <div class="dual-cotizador__summary-item">
+                <span class="dual-cotizador__summary-label">Pago Inicial</span>
+                <span class="dual-cotizador__summary-value">{{ downPayment | currency:'MXN':'symbol':'1.0-0' }}</span>
+              </div>
+              <div class="dual-cotizador__summary-item dual-cotizador__summary-item--highlight">
+                <span class="dual-cotizador__summary-label">Remanente a Liquidar</span>
+                <span class="dual-cotizador__summary-value">{{ amountToFinance | currency:'MXN':'symbol':'1.0-0' }}</span>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="!isVentaDirecta">
+              <div class="dual-cotizador__summary-item">
+                <span class="dual-cotizador__summary-label">Enganche</span>
+                <span class="dual-cotizador__summary-value">{{ downPayment | currency:'MXN':'symbol':'1.0-0' }}</span>
+              </div>
+              <div class="dual-cotizador__summary-item">
+                <span class="dual-cotizador__summary-label">Monto a Financiar</span>
+                <span class="dual-cotizador__summary-value">{{ amountToFinance | currency:'MXN':'symbol':'1.0-0' }}</span>
+              </div>
+              <div class="dual-cotizador__summary-item dual-cotizador__summary-item--highlight">
+                <span class="dual-cotizador__summary-label">Pago Mensual (Est.)</span>
+                <span class="dual-cotizador__summary-value">{{ monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</span>
+              </div>
+            </ng-container>
+          </div>
+
+          <div
+            class="dual-cotizador__amortization"
+            *ngIf="!isVentaDirecta && monthlyPayment > 0"
+          >
+            <button
+              type="button"
+              class="dual-cotizador__button dual-cotizador__button--outlined"
+              (click)="calculateAmortization()"
+            >
+              Calcular Tabla de Amortización
+            </button>
+          </div>
+        </section>
+
+        <section
+          *ngIf="currentMode === 'savings' && savingsScenario && !isLoading"
+          class="dual-cotizador__results"
+        >
+          <h2 class="dual-cotizador__results-title">Proyección de Ahorro</h2>
+
+          <div
+            class="dual-cotizador__savings-bars"
+            *ngIf="selectedMarket === 'aguascalientes'"
+          >
+            <div class="dual-cotizador__savings-bar">
+              <span
+                class="dual-cotizador__savings-segment dual-cotizador__savings-segment--down-payment"
+                [style.width.%]="getBarPercentage('downPayment')"
+              ></span>
+              <span
+                class="dual-cotizador__savings-segment dual-cotizador__savings-segment--savings"
+                [style.width.%]="getBarPercentage('savings')"
+              ></span>
+            </div>
+            <div class="dual-cotizador__savings-legend">
+              <span>Enganche: {{ initialDownPayment | currency:'MXN':'symbol':'1.0-0' }}</span>
+              <span>Ahorro: {{ getProjectedSavings() | currency:'MXN':'symbol':'1.0-0' }}</span>
+              <span>Remanente: {{ getRemainder() | currency:'MXN':'symbol':'1.0-0' }}</span>
+            </div>
+          </div>
+
+          <div
+            class="dual-cotizador__cards"
+            *ngIf="selectedMarket === 'edomex' && selectedClientType === 'individual'"
+          >
+            <article class="dual-cotizador__card dual-cotizador__card--highlight">
+              <span class="dual-cotizador__card-label">Meta de Enganche</span>
+              <span class="dual-cotizador__card-value">{{ savingsScenario.targetAmount | currency:'MXN':'symbol':'1.0-0' }}</span>
+            </article>
+            <article class="dual-cotizador__card">
+              <span class="dual-cotizador__card-label">Ahorro Mensual</span>
+              <span class="dual-cotizador__card-value">{{ savingsScenario.monthlyContribution | currency:'MXN':'symbol':'1.0-0' }}</span>
+            </article>
+            <article class="dual-cotizador__card dual-cotizador__card--success">
+              <span class="dual-cotizador__card-label">Tiempo Estimado</span>
+              <span class="dual-cotizador__card-value">{{ savingsScenario.monthsToTarget }} meses</span>
+            </article>
+          </div>
+
+          <div
+            class="dual-cotizador__chart"
+            *ngIf="selectedMarket === 'edomex' && selectedClientType === 'individual'"
+          >
+            <h3 class="dual-cotizador__chart-title">Proyección de Ahorro</h3>
+            <div class="dual-cotizador__chart-grid">
+              <div
+                class="dual-cotizador__chart-bar"
+                *ngFor="let month of savingsScenario.progress"
+              >
+                <div
+                  class="dual-cotizador__chart-bar-fill"
+                  [style.height.%]="month.progress * 100"
+                ></div>
+                <span class="dual-cotizador__chart-label">{{ month.month }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="dual-cotizador__timeline"
+            *ngIf="selectedMarket === 'edomex' && selectedClientType === 'colectivo'"
+          >
+            <header class="dual-cotizador__timeline-header">
+              <span class="dual-cotizador__timeline-icon" aria-hidden="true">
+                <app-icon name="user-network" [size]="24"></app-icon>
+              </span>
+              <h3 class="dual-cotizador__timeline-title">Línea de Tiempo de Tanda ({{ tandaMembers }} Miembros)</h3>
+            </header>
+
+            <div class="dual-cotizador__timeline-list">
+              <article
+                class="dual-cotizador__timeline-item"
+                *ngFor="let milestone of getTandaMilestones()"
+              >
+                <span class="dual-cotizador__timeline-marker" [ngClass]="getTimelineMarkerClasses(milestone.type)">
+                  {{ milestone.type === 'entrega' ? 'OK' : 'WAIT' }}
+                </span>
+                <div class="dual-cotizador__timeline-content">
+                  <span class="dual-cotizador__timeline-duration">{{ milestone.duration }}m</span>
+                  <span class="dual-cotizador__timeline-label">{{ milestone.label }}</span>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <footer
+          class="dual-cotizador__actions"
+          *ngIf="(packageData && currentMode === 'acquisition') || (savingsScenario && currentMode === 'savings')"
+        >
+          <button
+            type="button"
+            class="dual-cotizador__button dual-cotizador__button--secondary"
+            (click)="shareWhatsApp()"
+          >
+            Compartir por WhatsApp
+          </button>
+          <button
+            type="button"
+            class="dual-cotizador__button dual-cotizador__button--secondary"
+            (click)="speakSummary()"
+          >
+            🔊 Escuchar Resumen
+          </button>
+          <button
+            type="button"
+            class="dual-cotizador__button dual-cotizador__button--primary"
+            (click)="formalizeQuote()"
+          >
+            Formalizar {{ currentMode === 'acquisition' ? 'Cotización' : 'Simulación' }}
+          </button>
+        </footer>
+      </section>
+    </div>
+  </section>
+
+  <div
+    class="dual-cotizador__modal"
+    *ngIf="showAmortizationModal"
+    (click)="closeAmortizationModal()"
+  >
+    <div
+      class="dual-cotizador__modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="dual-cotizador-modal-title"
+      (click)="$event.stopPropagation()"
+    >
+      <header class="dual-cotizador__modal-header">
+        <h2 id="dual-cotizador-modal-title">Tabla de Amortización</h2>
+        <button
+          type="button"
+          class="dual-cotizador__icon-button"
+          aria-label="Cerrar"
+          (click)="closeAmortizationModal()"
+        >
+          ×
+        </button>
+      </header>
+
+      <section class="dual-cotizador__modal-summary">
+        <div class="dual-cotizador__summary-item">
+          <span class="dual-cotizador__summary-label">Monto a financiar</span>
+          <span class="dual-cotizador__summary-value">{{ amountToFinance | currency:'MXN':'symbol':'1.0-0' }}</span>
+        </div>
+        <div class="dual-cotizador__summary-item">
+          <span class="dual-cotizador__summary-label">Tasa anual</span>
+          <span class="dual-cotizador__summary-value">{{ (packageData?.rate || 0) * 100 }}%</span>
+        </div>
+        <div class="dual-cotizador__summary-item">
+          <span class="dual-cotizador__summary-label">Plazo</span>
+          <span class="dual-cotizador__summary-value">{{ selectedTerm }} meses</span>
+        </div>
+        <div class="dual-cotizador__summary-item dual-cotizador__summary-item--highlight">
+          <span class="dual-cotizador__summary-label">Pago mensual</span>
+          <span class="dual-cotizador__summary-value">{{ monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</span>
+        </div>
+      </section>
+
+      <div class="dual-cotizador__table-wrapper">
+        <table class="dual-cotizador__table">
+          <thead>
+            <tr>
+              <th># Pago</th>
+              <th>Pago Mensual</th>
+              <th>Capital</th>
+              <th>Interés</th>
+              <th>Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of amortizationTable.slice(0, 12)">
+              <td class="dual-cotizador__cell dual-cotizador__cell--numeric">{{ row.paymentNumber }}</td>
+              <td class="dual-cotizador__cell dual-cotizador__cell--numeric">{{ row.monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</td>
+              <td class="dual-cotizador__cell dual-cotizador__cell--numeric dual-cotizador__cell--positive">{{ row.principal | currency:'MXN':'symbol':'1.0-0' }}</td>
+              <td class="dual-cotizador__cell dual-cotizador__cell--numeric dual-cotizador__cell--warning">{{ row.interest | currency:'MXN':'symbol':'1.0-0' }}</td>
+              <td class="dual-cotizador__cell dual-cotizador__cell--numeric">{{ row.balance | currency:'MXN':'symbol':'1.0-0' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

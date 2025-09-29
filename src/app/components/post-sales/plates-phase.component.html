@@ -1,0 +1,355 @@
+<section class="plates-phase" aria-live="polite">
+  <header class="plates-phase__header">
+    <div class="plates-phase__phase">
+      <span class="plates-phase__phase-number">8</span>
+      <div class="plates-phase__phase-copy">
+        <h2 class="plates-phase__title">Placas Entregadas</h2>
+        <p class="plates-phase__subtitle">Finalización y activación del sistema post-venta</p>
+      </div>
+    </div>
+    @if (clientInfo() as info) {
+      <div class="plates-phase__client">
+        <span class="plates-phase__client-name">{{ info.name }}</span>
+        <span class="plates-phase__client-meta">
+          VIN: {{ info.vin }} • Placa: {{ platesForm.get('numeroPlacas')?.value || 'Pendiente' }}
+        </span>
+      </div>
+    }
+  </header>
+
+  <section class="plates-phase__steps" aria-label="Progreso post-venta">
+    <article class="plates-phase__step plates-phase__step--completed">
+      <span class="plates-phase__step-icon" aria-hidden="true">✓</span>
+      <span class="plates-phase__step-label">Entrega</span>
+    </article>
+    <article class="plates-phase__step plates-phase__step--completed">
+      <span class="plates-phase__step-icon" aria-hidden="true">✓</span>
+      <span class="plates-phase__step-label">Documentos</span>
+    </article>
+    <article class="plates-phase__step plates-phase__step--active" aria-current="step">
+      <span class="plates-phase__step-icon" aria-hidden="true">8</span>
+      <div class="plates-phase__step-body">
+        <span class="plates-phase__step-label">Placas</span>
+        <span class="plates-phase__step-badge">Handover</span>
+      </div>
+    </article>
+  </section>
+
+  <section class="plates-phase__notice" role="status">
+    <div class="plates-phase__notice-icon" aria-hidden="true">
+      <app-icon [name]="getIcon('alert')" [size]="28" color="currentColor"></app-icon>
+    </div>
+    <div class="plates-phase__notice-content">
+      <h3 class="plates-phase__notice-title">Paso final crítico</h3>
+      <p class="plates-phase__notice-copy">Al completar esta fase el sistema activará de inmediato:</p>
+      <ul class="plates-phase__notice-list">
+        <li>Expediente post-venta vinculado (VIN + Placa)</li>
+        <li>Recordatorios de mantenimiento y seguridad</li>
+        <li>Encuestas móviles de satisfacción</li>
+        <li>Integraciones con servicios y facturación</li>
+      </ul>
+    </div>
+  </section>
+
+  <form class="plates-phase__form" [formGroup]="platesForm" (ngSubmit)="onSubmit()">
+    <section class="plates-phase__section">
+      <h3 class="plates-phase__section-title">
+        <app-icon class="plates-phase__section-icon" [name]="getIcon('vehicle')" [size]="22" color="currentColor"></app-icon>
+        Identificación del vehículo
+      </h3>
+      <div class="plates-phase__id-grid">
+        <article class="plates-phase__id-item plates-phase__id-item--readonly">
+          <span class="plates-phase__label">VIN</span>
+          <span class="plates-phase__value">{{ vehicleInfo()?.vin || 'Cargando…' }}</span>
+          <span class="plates-phase__status-badge">Verificado</span>
+        </article>
+        <label class="plates-phase__field" for="numeroPlacas">
+          <span class="plates-phase__label">Número de placas *</span>
+          <div class="plates-phase__input-wrapper">
+            <input
+              type="text"
+              id="numeroPlacas"
+              formControlName="numeroPlacas"
+              placeholder="ABC-123-DEF"
+              class="plates-phase__input"
+              [class.is-invalid]="platesForm.get('numeroPlacas')?.invalid && platesForm.get('numeroPlacas')?.touched"
+              [attr.aria-invalid]="platesForm.get('numeroPlacas')?.invalid ? 'true' : null"
+              [attr.aria-describedby]="platesForm.get('numeroPlacas')?.invalid ? 'numeroPlacas-error' : null"
+              (input)="onPlacaInput($event)"
+            />
+          </div>
+          @if (platesForm.get('numeroPlacas')?.invalid && platesForm.get('numeroPlacas')?.touched) {
+            <span class="plates-phase__error" id="numeroPlacas-error">Formato de placa inválido (ej. ABC-123-DEF)</span>
+          }
+          @if (placaValidation().isValid && placaValidation().estado) {
+            <span class="plates-phase__helper">Placa válida • Estado: {{ placaValidation().estado }}</span>
+          }
+        </label>
+      </div>
+    </section>
+
+    @if (hasValidPlaca()) {
+      <section class="plates-phase__section">
+        <h3 class="plates-phase__section-title">
+          <app-icon class="plates-phase__section-icon" [name]="getIcon('identifier')" [size]="22" color="currentColor"></app-icon>
+          Identificador único post-venta
+        </h3>
+        <div class="plates-phase__identifier">
+          <span class="plates-phase__identifier-label">ID Sistema</span>
+          <span class="plates-phase__identifier-code">{{ getUniqueIdentifier() }}</span>
+        </div>
+      </section>
+    }
+
+    <section class="plates-phase__section">
+      <h3 class="plates-phase__section-title">
+        <app-icon class="plates-phase__section-icon" [name]="getIcon('plates')" [size]="22" color="currentColor"></app-icon>
+        Información de placas
+      </h3>
+      <div class="plates-phase__info-grid">
+        <label class="plates-phase__field" for="estado">
+          <span class="plates-phase__label">Estado de emisión *</span>
+          <select
+            id="estado"
+            formControlName="estado"
+            class="plates-phase__input"
+            [class.is-invalid]="platesForm.get('estado')?.invalid && platesForm.get('estado')?.touched"
+            (change)="onEstadoChange()"
+          >
+            <option value="">Seleccionar estado…</option>
+            <option value="AGUASCALIENTES">Aguascalientes</option>
+            <option value="BAJA_CALIFORNIA">Baja California</option>
+            <option value="BAJA_CALIFORNIA_SUR">Baja California Sur</option>
+            <option value="CAMPECHE">Campeche</option>
+            <option value="CHIAPAS">Chiapas</option>
+            <option value="CHIHUAHUA">Chihuahua</option>
+            <option value="CDMX">Ciudad de México</option>
+            <option value="COAHUILA">Coahuila</option>
+            <option value="COLIMA">Colima</option>
+            <option value="DURANGO">Durango</option>
+            <option value="GUANAJUATO">Guanajuato</option>
+            <option value="GUERRERO">Guerrero</option>
+            <option value="HIDALGO">Hidalgo</option>
+            <option value="JALISCO">Jalisco</option>
+            <option value="MEXICO">Estado de México</option>
+            <option value="MICHOACAN">Michoacán</option>
+            <option value="MORELOS">Morelos</option>
+            <option value="NAYARIT">Nayarit</option>
+            <option value="NUEVO_LEON">Nuevo León</option>
+            <option value="OAXACA">Oaxaca</option>
+            <option value="PUEBLA">Puebla</option>
+            <option value="QUERETARO">Querétaro</option>
+            <option value="QUINTANA_ROO">Quintana Roo</option>
+            <option value="SAN_LUIS_POTOSI">San Luis Potosí</option>
+            <option value="SINALOA">Sinaloa</option>
+            <option value="SONORA">Sonora</option>
+            <option value="TABASCO">Tabasco</option>
+            <option value="TAMAULIPAS">Tamaulipas</option>
+            <option value="TLAXCALA">Tlaxcala</option>
+            <option value="VERACRUZ">Veracruz</option>
+            <option value="YUCATAN">Yucatán</option>
+            <option value="ZACATECAS">Zacatecas</option>
+          </select>
+        </label>
+        <label class="plates-phase__field" for="fechaAlta">
+          <span class="plates-phase__label">Fecha de alta *</span>
+          <input
+            type="date"
+            id="fechaAlta"
+            formControlName="fechaAlta"
+            class="plates-phase__input"
+            [class.is-invalid]="platesForm.get('fechaAlta')?.invalid && platesForm.get('fechaAlta')?.touched"
+            [max]="today"
+          />
+        </label>
+        <label class="plates-phase__checkbox">
+          <input type="checkbox" formControlName="hologramas" class="plates-phase__checkbox-input" />
+          <span class="plates-phase__checkbox-label">Incluye hologramas de seguridad</span>
+        </label>
+      </div>
+    </section>
+
+    <section class="plates-phase__section">
+      <h3 class="plates-phase__section-title">
+        <app-icon class="plates-phase__section-icon" [name]="getIcon('document')" [size]="22" color="currentColor"></app-icon>
+        Tarjeta de circulación
+      </h3>
+      <div class="plates-phase__document">
+        @if (!tarjetaCirculacion()) {
+          <button type="button" class="ui-btn ui-btn-ghost plates-phase__document-upload" (click)="triggerDocumentUpload()">
+            <app-icon [name]="getIcon('upload')" [size]="24" color="currentColor"></app-icon>
+            <span class="plates-phase__document-title">Subir tarjeta de circulación (PDF)</span>
+            <small class="plates-phase__document-hint">Documento oficial con placas registradas</small>
+          </button>
+        } @else {
+          <article class="plates-phase__document-card">
+            <div class="plates-phase__document-info">
+              <app-icon class="plates-phase__document-icon" [name]="getIcon('document')" [size]="24" color="currentColor"></app-icon>
+              <div class="plates-phase__document-meta">
+                <span class="plates-phase__document-name">{{ tarjetaCirculacion()?.filename }}</span>
+                <span class="plates-phase__document-detail">{{ formatFileSize(tarjetaCirculacion()?.size || 0) }}</span>
+                <span class="plates-phase__document-detail">{{ formatDate(tarjetaCirculacion()?.uploadedAt) }}</span>
+              </div>
+            </div>
+            <div class="plates-phase__document-actions">
+              <button type="button" class="ui-btn ui-btn-ghost" (click)="viewDocument()">Ver</button>
+              <button type="button" class="ui-btn ui-btn-secondary" (click)="triggerDocumentUpload()">Reemplazar</button>
+              <button type="button" class="ui-btn ui-btn-ghost plates-phase__document-action--danger" (click)="removeDocument()">Eliminar</button>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+
+    <section class="plates-phase__section">
+      <h3 class="plates-phase__section-title">
+        <app-icon class="plates-phase__section-icon" [name]="getIcon('photos')" [size]="22" color="currentColor"></app-icon>
+        Fotografías de placas
+      </h3>
+      <div class="plates-phase__photos">
+        <div class="plates-phase__photos-copy">
+          <p class="plates-phase__photos-title">Requerido: fotos claras de ambas placas</p>
+          <small class="plates-phase__photos-hint">Asegura legibilidad, incluye hologramas si aplican</small>
+        </div>
+        <button type="button" class="ui-btn ui-btn-ghost plates-phase__photo-upload" (click)="triggerPhotoUpload()">
+          <app-icon [name]="getIcon('photos')" [size]="28" color="currentColor"></app-icon>
+          <span>Agregar fotos de placas</span>
+        </button>
+        @if (fotografiasPlacas().length > 0) {
+          <div class="plates-phase__photo-grid">
+            @for (photo of fotografiasPlacas(); track photo; let i = $index) {
+              <figure class="plates-phase__photo" [attr.data-label]="getPhotoLabel(i)">
+                <img [src]="photo" alt="{{ getPhotoLabel(i) }}" class="plates-phase__photo-image" />
+                <figcaption class="plates-phase__photo-caption">{{ getPhotoLabel(i) }}</figcaption>
+                <button type="button" class="ui-btn ui-btn-ghost plates-phase__photo-remove" (click)="removePhoto(photo)">
+                  <app-icon [name]="getIcon('remove')" [size]="16" color="currentColor"></app-icon>
+                  <span class="plates-phase__sr-only">Eliminar fotografía {{ getPhotoLabel(i) }}</span>
+                </button>
+              </figure>
+            }
+          </div>
+        }
+      </div>
+      <input #photoInput id="photoInput" type="file" accept="image/*" capture="environment" multiple class="plates-phase__file-input" (change)="onPhotoSelected($event)" />
+    </section>
+
+    @if (hasRequiredData()) {
+      <section class="plates-phase__section">
+        <h3 class="plates-phase__section-title">
+          <app-icon class="plates-phase__section-icon" [name]="getIcon('checklist')" [size]="22" color="currentColor"></app-icon>
+          Verificación final
+        </h3>
+        <div class="plates-phase__verification">
+          <label class="plates-phase__checkbox">
+            <input type="checkbox" id="placasInstaladas" formControlName="placasInstaladas" class="plates-phase__checkbox-input" />
+            <span class="plates-phase__checkbox-label">Las placas están correctamente instaladas</span>
+          </label>
+          <label class="plates-phase__checkbox">
+            <input type="checkbox" id="tarjetaEntregada" formControlName="tarjetaEntregada" class="plates-phase__checkbox-input" />
+            <span class="plates-phase__checkbox-label">La tarjeta de circulación fue entregada al cliente</span>
+          </label>
+          @if (platesForm.get('hologramas')?.value) {
+            <label class="plates-phase__checkbox">
+              <input type="checkbox" id="hologramasVerificados" formControlName="hologramasVerificados" class="plates-phase__checkbox-input" />
+              <span class="plates-phase__checkbox-label">Los hologramas de seguridad fueron verificados</span>
+            </label>
+          }
+          <label class="plates-phase__checkbox plates-phase__checkbox--critical">
+            <input type="checkbox" id="entregaCompleta" formControlName="entregaCompleta" class="plates-phase__checkbox-input" />
+            <span class="plates-phase__checkbox-label"><strong>Confirmo que el vehículo puede activarse en el sistema post-venta</strong></span>
+          </label>
+        </div>
+      </section>
+    }
+
+    <footer class="plates-phase__actions">
+      <button type="button" class="ui-btn ui-btn-secondary" (click)="goBack()">Volver a Documentos</button>
+      <button type="button" class="ui-btn ui-btn-secondary" (click)="saveDraft()" [disabled]="isSaving()">
+        {{ isSaving() ? 'Guardando…' : 'Guardar borrador' }}
+      </button>
+      <button type="submit" class="ui-btn ui-btn-primary plates-phase__action-critical" [disabled]="!canCompleteHandover() || isSubmitting()">
+        @if (isSubmitting()) {
+          <span class="plates-phase__loader" aria-hidden="true"></span>
+          Activando sistema…
+        } @else {
+          Activar sistema post-venta
+        }
+      </button>
+    </footer>
+
+    @if (validationErrors().length > 0) {
+      <section class="plates-phase__validation" aria-live="assertive">
+        <h4 class="plates-phase__validation-title">Campos requeridos</h4>
+        <ul class="plates-phase__validation-list">
+          @for (error of validationErrors(); track error) {
+            <li class="plates-phase__validation-item">{{ error }}</li>
+          }
+        </ul>
+        <button type="button" class="ui-btn ui-btn-secondary plates-phase__validation-action" (click)="goToNextError()">Ir al siguiente error</button>
+      </section>
+    }
+  </form>
+
+  <input #documentInput id="documentInput" type="file" accept=".pdf" class="plates-phase__file-input" (change)="onDocumentSelected($event)" />
+
+  @if (showSuccessModal()) {
+    <div class="plates-phase__modal-overlay" role="dialog" aria-modal="true" tabindex="-1" (keydown)="onModalKeydown($event)">
+      <article class="plates-phase__modal" tabindex="-1">
+        <header class="plates-phase__modal-header">
+          <div class="plates-phase__success-icon" aria-hidden="true"></div>
+          <h3 class="plates-phase__modal-title">¡Sistema post-venta activado!</h3>
+          <p class="plates-phase__modal-subtitle">VIN y placa registrados exitosamente</p>
+        </header>
+        <div class="plates-phase__modal-body">
+          <section class="plates-phase__summary">
+            <div class="plates-phase__summary-id">
+              <h4 class="plates-phase__summary-title">Identificador único</h4>
+              <span class="plates-phase__summary-code">{{ getUniqueIdentifier() }}</span>
+            </div>
+            <div class="plates-phase__activation">
+              <h4 class="plates-phase__summary-title">Sistemas activados</h4>
+              <div class="plates-phase__activation-grid">
+                <article class="plates-phase__activation-item">
+                  <app-icon [name]="getIcon('record')" [size]="20" color="currentColor"></app-icon>
+                  <div class="plates-phase__activation-copy">
+                    <strong>Expediente Post-Venta</strong>
+                    <small>ID: {{ postSalesRecordId() }}</small>
+                  </div>
+                </article>
+                <article class="plates-phase__activation-item">
+                  <app-icon [name]="getIcon('maintenance')" [size]="20" color="currentColor"></app-icon>
+                  <div class="plates-phase__activation-copy">
+                    <strong>Recordatorios de mantenimiento</strong>
+                    <small>Próximo: {{ nextMaintenanceDate() }}</small>
+                  </div>
+                </article>
+                <article class="plates-phase__activation-item">
+                  <app-icon [name]="getIcon('survey')" [size]="20" color="currentColor"></app-icon>
+                  <div class="plates-phase__activation-copy">
+                    <strong>Encuestas programadas</strong>
+                    <small>Primera en 30 días</small>
+                  </div>
+                </article>
+                <article class="plates-phase__activation-item">
+                  <app-icon [name]="getIcon('integration')" [size]="20" color="currentColor"></app-icon>
+                  <div class="plates-phase__activation-copy">
+                    <strong>Integración de servicios</strong>
+                    <small>Cliente y vehículo sincronizados</small>
+                  </div>
+                </article>
+              </div>
+            </div>
+            <div class="plates-phase__handover">
+              <span class="plates-phase__handover-badge">Handover completado</span>
+              <p>El vehículo se transfirió oficialmente del equipo de asesores al sistema post-venta.</p>
+            </div>
+          </section>
+        </div>
+        <footer class="plates-phase__modal-actions">
+          <button type="button" class="ui-btn ui-btn-secondary" (click)="viewPostSalesDashboard()">Ver dashboard post-venta</button>
+          <button type="button" class="ui-btn ui-btn-primary" (click)="completeProcess()">Proceso completado</button>
+        </footer>
+      </article>
+    </div>
+  }
+</section>

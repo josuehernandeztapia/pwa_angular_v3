@@ -1,0 +1,79 @@
+<div class="manual-entry" data-testid="manual-entry-modal">
+  <div class="manual-entry__overlay" (click)="onCancel()" aria-hidden="true"></div>
+
+  <div class="manual-entry__dialog" role="dialog" aria-modal="true" [attr.aria-labelledby]="fieldId + '-title'">
+    <header class="manual-entry__header">
+      <div class="manual-entry__title">
+        <app-icon class="manual-entry__title-icon" name="edit" [size]="24" color="currentColor"></app-icon>
+        <h3 class="manual-entry__heading" [attr.id]="fieldId + '-title'">Ingreso Manual</h3>
+      </div>
+      <button type="button" class="manual-entry__close" aria-label="Cerrar" (click)="onCancel()">×</button>
+    </header>
+
+    <div class="manual-entry__body">
+      <section class="manual-entry__banner" aria-live="polite">
+        <div class="manual-entry__banner-icon manual-entry__banner-icon--warning" aria-hidden="true">
+          <app-icon class="manual-entry__banner-glyph" name="shield-alert" [size]="24" color="currentColor"></app-icon>
+        </div>
+        <div class="manual-entry__banner-copy">
+          <strong class="manual-entry__banner-title">No se pudo detectar automáticamente</strong>
+          <p class="manual-entry__banner-subtitle">Ingresa manualmente el {{ getFieldLabel() }} de la imagen</p>
+        </div>
+      </section>
+
+      <form class="manual-entry__form" [formGroup]="manualForm" (ngSubmit)="onSave()">
+        <div class="manual-entry__field">
+          <label class="manual-entry__label" [for]="fieldId">{{ getFieldLabel() }}</label>
+          <input
+            class="manual-entry__input"
+            [id]="fieldId"
+            type="text"
+            formControlName="value"
+            [placeholder]="getPlaceholder()"
+            [maxlength]="getMaxLength()"
+            [pattern]="getPattern()"
+            data-testid="manual-input"
+            autocomplete="off"
+          />
+          <div class="manual-entry__hint">{{ getHint() }}</div>
+          <div
+            *ngIf="manualForm.get('value')?.invalid && manualForm.get('value')?.touched"
+            class="manual-entry__error"
+            data-testid="validation-error"
+          >
+            {{ getValidationError() }}
+          </div>
+        </div>
+
+        <div class="manual-entry__actions">
+          <button
+            type="button"
+            class="manual-entry__button manual-entry__button--ghost"
+            (click)="onCancel()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="button"
+            class="manual-entry__button manual-entry__button--retry"
+            (click)="onRetry()"
+          >
+            <app-icon class="manual-entry__button-icon" name="refresh" [size]="20" color="currentColor"></app-icon>
+            Reintentar OCR
+          </button>
+
+          <button
+            type="submit"
+            class="manual-entry__button manual-entry__button--primary"
+            [disabled]="manualForm.invalid"
+            data-testid="save-manual-entry"
+          >
+            <app-icon class="manual-entry__button-icon" name="check" [size]="20" color="currentColor" strokeWidth="3"></app-icon>
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,338 @@
+<div class="ops-deliveries command-container">
+      <!-- Header (compact) -->
+      <div class="ops-deliveries__header">
+        <div class="ops-deliveries__header-content">
+          <h1 class="ops-deliveries__title">Entregas</h1>
+          <p class="ops-deliveries__subtitle">Órdenes y stock por mercado</p>
+        </div>
+        <div class="ops-deliveries__header-actions">
+          <button class="ops-deliveries__action-button ops-deliveries__action-button--refresh" (click)="refreshData()" [disabled]="loading()" aria-label="Actualizar">
+            {{ loading() ? '⏳' : '🔄' }} Actualizar
+          </button>
+          <button class="ops-deliveries__action-button ops-deliveries__action-button--recompute" (click)="recomputeStock()" [disabled]="stockLoading()" aria-label="Recalcular stock">
+            📊 Recalcular Stock
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtros Jerárquicos: Mercado > Ruta > Cliente > Pedido -->
+      <div class="ops-deliveries__filters" role="region" aria-label="Filtros de entregas">
+        <div class="ops-deliveries__filters-item">
+          <label class="ops-deliveries__filters-label">📍 Mercado</label>
+          <select [(ngModel)]="selectedMarket" (change)="onMarketChange()" class="ops-deliveries__filters-select" aria-label="Seleccionar mercado">
+            <option value="">Todos los mercados</option>
+            <option value="AGS">Aguascalientes (CON asientos)</option>
+            <option value="EdoMex">Estado de México (SIN asientos)</option>
+          </select>
+        </div>
+
+        <div class="ops-deliveries__filters-item" *ngIf="selectedMarket() === 'EdoMex'">
+          <label class="ops-deliveries__filters-label">🛣️ Ruta</label>
+          <select [(ngModel)]="selectedRoute" (change)="onRouteChange()" class="ops-deliveries__filters-select" aria-label="Seleccionar ruta">
+            <option value="">Todas las rutas</option>
+            <option *ngFor="let route of availableRoutes()" [value]="route.id">
+              {{ route.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="ops-deliveries__filters-item">
+          <label class="ops-deliveries__filters-label">👤 Cliente</label>
+          <input 
+            type="text" 
+            [(ngModel)]="clientSearch" 
+            (input)="onClientSearch()"
+            placeholder="Buscar por nombre de cliente..."
+            class="ops-deliveries__filters-input"
+            aria-label="Buscar cliente">
+        </div>
+
+        <div class="ops-deliveries__filters-item">
+          <label class="ops-deliveries__filters-label">📦 Estado</label>
+          <select [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="ops-deliveries__filters-select" aria-label="Seleccionar estado">
+            <option value="">Todos los estados</option>
+            <option *ngFor="let status of deliveryStatuses" [value]="status">
+              {{ getStatusTitle(status) }}
+            </option>
+          </select>
+        </div>
+
+        <div class="ops-deliveries__filters-summary">
+          <span class="ops-deliveries__results">
+            {{ filteredDeliveries().length }} pedido{{ filteredDeliveries().length !== 1 ? 's' : '' }} encontrado{{ filteredDeliveries().length !== 1 ? 's' : '' }}
+          </span>
+          <button *ngIf="hasActiveFilters()" class="ops-deliveries__clear-button" (click)="clearFilters()" aria-label="Limpiar filtros activos">
+            🗑️ Limpiar filtros
+          </button>
+        </div>
+      </div>
+
+      <!-- Vista por Mercado (Stock + Resumen) -->
+      <div *ngIf="currentView() === 'market'" class="ops-deliveries__panel ops-deliveries__panel--market">
+        <div class="ops-deliveries__stock-grid">
+          <div class="ops-deliveries__stock-card" *ngFor="let position of stockPositions()">
+            <div class="ops-deliveries__stock-card-header">
+              <h3>{{ getMarketName(position.market) }}</h3>
+              <span class="ops-deliveries__sku-badge">{{ position.sku }}</span>
+            </div>
+            <div class="ops-deliveries__stock-metrics">
+              <div class="ops-deliveries__metric">
+                <span class="ops-deliveries__metric-label">En stock</span>
+                <span class="ops-deliveries__metric-value" [ngClass]="{ 'ops-deliveries__metric-value--low': position.onHand < position.reorderPoint }">
+                  {{ position.onHand }}
+                </span>
+              </div>
+              <div class="ops-deliveries__metric">
+                <span class="ops-deliveries__metric-label">En tránsito</span>
+                <span class="ops-deliveries__metric-value">{{ position.onOrder }}</span>
+              </div>
+              <div class="ops-deliveries__metric">
+                <span class="ops-deliveries__metric-label">Proyección</span>
+                <span class="ops-deliveries__metric-value">{{ position.forecast }}</span>
+              </div>
+            </div>
+            <div class="ops-deliveries__alerts" *ngIf="getMarketAlerts(position.market).length > 0">
+              <div *ngFor="let alert of getMarketAlerts(position.market)" class="ops-deliveries__alert" [ngClass]="'ops-deliveries__alert--' + alert.severity">
+                {{ alert.message }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ops-deliveries__market-summary">
+          <h3>📊 Resumen de Entregas por Mercado</h3>
+          <div class="ops-deliveries__summary-grid">
+            <div class="ops-deliveries__summary-card" *ngFor="let summary of marketSummary()">
+              <h4>{{ getMarketName(summary.market) }}</h4>
+              <div class="ops-deliveries__summary-stats">
+                <div class="ops-deliveries__summary-stat">
+                  <span class="ops-deliveries__summary-value">{{ summary.total }}</span>
+                  <span class="ops-deliveries__summary-label">Total pedidos</span>
+                </div>
+                <div class="ops-deliveries__summary-stat">
+                  <span class="ops-deliveries__summary-value">{{ summary.inTransit }}</span>
+                  <span class="ops-deliveries__summary-label">En tránsito</span>
+                </div>
+                <div class="ops-deliveries__summary-stat">
+                  <span class="ops-deliveries__summary-value">{{ summary.readyForDelivery }}</span>
+                  <span class="ops-deliveries__summary-label">Listas para entrega</span>
+                </div>
+                <div class="ops-deliveries__summary-stat">
+                  <span class="ops-deliveries__summary-value">{{ summary.delivered }}</span>
+                  <span class="ops-deliveries__summary-label">Entregadas</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista por Ruta (Solo EdoMex) -->
+      <div *ngIf="currentView() === 'route'" class="ops-deliveries__panel ops-deliveries__panel--route">
+        <h3>🛣️ Entregas por Ruta - {{ getSelectedRouteName() }}</h3>
+        <div class="ops-deliveries__route">
+          <div class="ops-deliveries__table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Pedido</th>
+                  <th>Estado</th>
+                  <th>ETA</th>
+                  <th>Progreso</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let delivery of filteredDeliveries()" class="ops-deliveries__table-row">
+                  <td>
+                    <div class="ops-deliveries__client-info">
+                      <span class="ops-deliveries__client-name">{{ delivery.client.name }}</span>
+                      <span class="ops-deliveries__client-id">{{ delivery.client.id }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="ops-deliveries__order-id">{{ delivery.id }}</span>
+                  </td>
+                  <td>
+                    <span class="ops-deliveries__status-badge" [style.background-color]="getStatusColor(delivery.status)">
+                      {{ getStatusIcon(delivery.status) }} {{ getStatusTitle(delivery.status) }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="ops-deliveries__eta" [ngClass]="{ 'ops-deliveries__eta--overdue': isOverdue(delivery.eta) }">
+                      {{ formatETA(delivery.eta) }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="ops-deliveries__progress">
+                      <div class="ops-deliveries__progress-fill" [style.width.%]="getProgress(delivery.status)"></div>
+                      <span class="ops-deliveries__progress-text">{{ getProgress(delivery.status) }}%</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="ops-deliveries__table-actions">
+                      <button 
+                        class="ops-deliveries__icon-button ops-deliveries__icon-button--view"
+                        [routerLink]="['/ops/deliveries', delivery.id]"
+                        title="Ver detalles" aria-label="Ver detalles">
+                        Ver
+                      </button>
+                      <button 
+                        *ngIf="canAdvanceStatus(delivery)"
+                        class="ops-deliveries__icon-button ops-deliveries__icon-button--advance"
+                        (click)="showAdvanceModal(delivery)"
+                        title="Avanzar estado" aria-label="Avanzar estado">
+                        Avanzar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista por Cliente -->
+      <div *ngIf="currentView() === 'client'" class="ops-deliveries__panel ops-deliveries__panel--client">
+        <h3>👤 Vista por Cliente</h3>
+        <div class="ops-deliveries__client-groups">
+          <div *ngFor="let client of groupedByClient()" class="ops-deliveries__client-group">
+            <div class="ops-deliveries__client-header">
+              <h4>{{ client.name }}</h4>
+              <span class="ops-deliveries__client-meta">{{ client.market }} - {{ client.deliveries.length }} pedido(s)</span>
+            </div>
+            <div class="ops-deliveries__client-delivery-list">
+              <div *ngFor="let delivery of client.deliveries" class="ops-deliveries__client-delivery">
+                <div class="ops-deliveries__client-summary">
+                  <span class="ops-deliveries__order-id">{{ delivery.id }}</span>
+                  <span class="ops-deliveries__status-badge" [style.background-color]="getStatusColor(delivery.status)">
+                    {{ getStatusIcon(delivery.status) }} {{ getStatusTitle(delivery.status) }}
+                  </span>
+                  <span class="ops-deliveries__eta">{{ formatETA(delivery.eta) }}</span>
+                  <button class="ops-deliveries__button ops-deliveries__button--view" [routerLink]="['/ops/deliveries', delivery.id]" aria-label="Ver detalles">Ver</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista General (Default) -->
+      <div *ngIf="currentView() === 'general'" class="ops-deliveries__panel ops-deliveries__panel--general">
+        <div class="ops-deliveries__delivery-grid">
+          <div *ngFor="let delivery of paginatedDeliveries()" class="ops-deliveries__delivery-card">
+            <div class="ops-deliveries__card-header">
+              <div class="ops-deliveries__client-info">
+                <h4>{{ delivery.client.name }}</h4>
+                <span class="ops-deliveries__market-badge">{{ delivery.market }}</span>
+                <span *ngIf="delivery.route" class="ops-deliveries__route-badge">{{ delivery.route.name }}</span>
+              </div>
+              <div class="ops-deliveries__order-meta">
+                <span class="ops-deliveries__order-id">{{ delivery.id }}</span>
+                <span class="ops-deliveries__created-date">{{ formatDate(delivery.createdAt) }}</span>
+              </div>
+            </div>
+            
+            <div class="ops-deliveries__card-body">
+              <div class="ops-deliveries__status-section">
+                <span class="ops-deliveries__status-badge" [style.background-color]="getStatusColor(delivery.status)">
+                  {{ getStatusIcon(delivery.status) }} {{ getStatusTitle(delivery.status) }}
+                </span>
+                <div class="ops-deliveries__progress">
+                  <div class="ops-deliveries__progress-fill" [style.width.%]="getProgress(delivery.status)"></div>
+                </div>
+                <span class="ops-deliveries__progress-text">{{ getProgress(delivery.status) }}% completado</span>
+              </div>
+              
+              <div class="ops-deliveries__eta-section">
+                <span class="ops-deliveries__eta-label">ETA:</span>
+                <span class="ops-deliveries__eta-value" [ngClass]="{ 'ops-deliveries__eta--overdue': isOverdue(delivery.eta) }">
+                  {{ formatETA(delivery.eta) }}
+                </span>
+              </div>
+              
+              <div class="ops-deliveries__contract">
+                <span class="ops-deliveries__contract-label">Contrato:</span>
+                <span class="ops-deliveries__contract-value">{{ delivery.contract.id }}</span>
+                <span *ngIf="delivery.contract.amount" class="ops-deliveries__contract-amount">
+                  {{ formatCurrency(delivery.contract.amount) }}
+                </span>
+              </div>
+            </div>
+            
+            <div class="ops-deliveries__card-actions">
+              <button 
+                class="ops-deliveries__button ops-deliveries__button--view"
+                [routerLink]="['/ops/deliveries', delivery.id]">
+                Ver Detalles
+              </button>
+              <button 
+                *ngIf="canAdvanceStatus(delivery)"
+                class="ops-deliveries__button ops-deliveries__button--advance"
+                (click)="showAdvanceModal(delivery)">
+                Avanzar Estado
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paginación -->
+        <div *ngIf="totalDeliveries() > pageSize()" class="ops-deliveries__pagination">
+          <button 
+            class="ops-deliveries__page-button"
+            [disabled]="currentPage() === 1"
+            (click)="previousPage()">
+            ← Anterior
+          </button>
+          <span class="ops-deliveries__page-info">
+            Página {{ currentPage() }} de {{ totalPages() }}
+          </span>
+          <button 
+            class="ops-deliveries__page-button"
+            [disabled]="currentPage() === totalPages()"
+            (click)="nextPage()">
+            Siguiente →
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State (placeholder estable) -->
+      <section *ngIf="loading()" class="premium-card ops-deliveries__loading" role="status" aria-live="polite" aria-busy="true">
+        Cargando entregas...
+      </section>
+
+      <!-- Empty State -->
+      <section *ngIf="!loading() && filteredDeliveries().length === 0" class="premium-card ops-deliveries__empty" role="status" aria-live="polite">
+        0 pedidos — ajusta los filtros para ver resultados.
+      </section>
+
+      <!-- Modal para Avanzar Estado -->
+      <div *ngIf="showAdvanceStateModal()" class="ops-deliveries__modal-overlay" (click)="hideAdvanceModal()">
+        <div class="ops-deliveries__modal" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="advance-title">
+          <h3>Avanzar Estado de Entrega</h3>
+          <div *ngIf="selectedDelivery()">
+            <p><strong>Pedido:</strong> {{ selectedDelivery()!.id }}</p>
+            <p><strong>Cliente:</strong> {{ selectedDelivery()!.client.name }}</p>
+            <p><strong>Estado actual:</strong> {{ getStatusTitle(selectedDelivery()!.status) }}</p>
+            
+            <div class="ops-deliveries__transition-options">
+              <div *ngFor="let action of availableActions()" class="ops-deliveries__transition">
+                <button 
+                  class="ops-deliveries__transition-button"
+                  (click)="executeTransition(action.event)">
+                  {{ action.label }}
+                </button>
+                <span class="ops-deliveries__transition-description">{{ action.description }}</span>
+              </div>
+            </div>
+            
+            <div class="ops-deliveries__modal-footer">
+              <button class="ops-deliveries__button ops-deliveries__button--cancel" (click)="hideAdvanceModal()" aria-label="Cerrar">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  

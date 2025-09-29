@@ -1,0 +1,47 @@
+<div
+  [ngClass]="getMessageClasses()"
+  [attr.role]="microcopy?.context === 'error' ? 'alert' : 'status'"
+  [attr.aria-live]="getAriaLive()"
+  [attr.data-microcopy-id]="microcopy?.id"
+  [attr.data-context]="microcopy?.context"
+  [attr.data-tone]="microcopy?.tone"
+>
+  <div *ngIf="showIcon" [ngClass]="getIconClasses()" aria-hidden="true">
+    <app-ui-icon
+      class="human-message__icon-symbol"
+      [name]="getContextIcon()"
+      [size]="iconSize"
+    ></app-ui-icon>
+  </div>
+
+  <div class="human-message__content">
+    <div class="human-message__primary" [innerHTML]="microcopy?.primaryText"></div>
+
+    <div
+      *ngIf="microcopy?.secondaryText"
+      class="human-message__secondary"
+      [innerHTML]="microcopy.secondaryText"
+    ></div>
+
+    <div *ngIf="microcopy?.actionText && showAction" class="human-message__action">
+      <button
+        type="button"
+        [ngClass]="getActionButtonClasses()"
+        (click)="onActionClick()"
+        [attr.aria-label]="microcopy.accessibility?.description || microcopy.actionText"
+      >
+        {{ microcopy.actionText }}
+      </button>
+    </div>
+  </div>
+
+  <button
+    *ngIf="dismissible"
+    type="button"
+    class="human-message__dismiss"
+    (click)="onDismiss()"
+    aria-label="Cerrar mensaje"
+  >
+    <app-ui-icon name="alert-circle" size="sm"></app-ui-icon>
+  </button>
+</div>

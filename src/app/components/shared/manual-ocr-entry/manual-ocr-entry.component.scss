@@ -1,0 +1,195 @@
+:host {
+  display: block;
+}
+
+.manual-entry {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--openai-black) 70%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 9999;
+
+  &__dialog {
+    width: min(520px, 100%);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: var(--flat-surface-bg);
+    border-radius: 20px;
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+
+    @media (prefers-color-scheme: dark) {
+      background: var(--surface-neutral-strong);
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px 0 28px;
+  }
+
+  &__title {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-lg, 1.125rem);
+    font-weight: var(--font-semibold, 600);
+    color: var(--color-text-primary);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-text-primary-inverted);
+    }
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    color: var(--color-text-tertiary);
+    font-size: 1.5rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:hover {
+      background: color-mix(in srgb, var(--color-neutral-400) 18%, transparent);
+      color: var(--color-text-primary);
+    }
+  }
+
+  &__banner {
+    margin: 0 28px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: var(--surface-amber-weak);
+    color: var(--accent-amber-700);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    strong {
+      font-weight: var(--font-semibold, 600);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background: color-mix(in srgb, var(--accent-amber-400) 22%, transparent);
+      color: var(--accent-amber-200);
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 28px 8px;
+    overflow-y: auto;
+  }
+
+  &__fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__label {
+    font-weight: var(--font-medium, 500);
+    color: var(--color-text-primary);
+    font-size: var(--text-sm, 0.875rem);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-text-primary-inverted);
+    }
+  }
+
+  &__input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border-neutral-weak);
+    font-size: var(--text-base, 1rem);
+    background: var(--surface-neutral-weak);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent-blue-500);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500) 20%, transparent);
+    }
+
+    &--select {
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, var(--color-text-secondary) 50%),
+        linear-gradient(135deg, var(--color-text-secondary) 50%, transparent 50%);
+      background-position: calc(100% - 18px) calc(1.2em), calc(100% - 12px) calc(1.2em);
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+    }
+
+    &--invalid {
+      border-color: var(--accent-red-500);
+      background: color-mix(in srgb, var(--accent-red-500) 12%, transparent);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background: color-mix(in srgb, var(--color-neutral-900) 85%, transparent);
+      border-color: var(--border-neutral-strong);
+      color: var(--color-text-primary-inverted);
+    }
+  }
+
+  &__hint {
+    margin: 0;
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--color-text-tertiary);
+  }
+
+  &__error {
+    margin: 0;
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--accent-red-500);
+    font-weight: var(--font-medium, 500);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 0 28px 28px;
+  }
+
+  &__action {
+    min-width: 120px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .manual-entry {
+    padding: 16px;
+
+    &__dialog {
+      border-radius: 16px;
+    }
+
+    &__header,
+    &__banner,
+    &__form,
+    &__actions {
+      padding: 16px;
+    }
+  }
+}

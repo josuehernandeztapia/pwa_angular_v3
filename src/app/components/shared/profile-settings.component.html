@@ -1,0 +1,19 @@
+<section class="profile-settings" aria-labelledby="profile-settings-title">
+  <div class="profile-settings__avatar">
+    <img
+      src="https://picsum.photos/seed/advisor/100/100"
+      alt="Avatar del Asesor"
+      class="profile-settings__avatar-image"
+    />
+  </div>
+  <h3 id="profile-settings-title" class="profile-settings__name">Ricardo Montoya</h3>
+  <p class="profile-settings__role">Asesor Senior</p>
+  <div class="profile-settings__actions">
+    <button type="button" class="profile-settings__action profile-settings__action--primary" (click)="editProfile()">
+      Editar Perfil
+    </button>
+    <button type="button" class="profile-settings__action profile-settings__action--danger" (click)="logout()">
+      Cerrar Sesión
+    </button>
+  </div>
+</section>

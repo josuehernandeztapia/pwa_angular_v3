@@ -1,0 +1,294 @@
+:host {
+  display: block;
+}
+
+.payment-link-modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 1rem);
+  padding: var(--space-4, 1rem);
+  border-radius: var(--radius-lg, 16px);
+  background: var(--flat-surface-bg);
+  color: var(--color-text-primary);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 30%, transparent);
+  box-shadow: 0 16px 44px color-mix(in srgb, var(--openai-black) 24%, transparent);
+  min-width: min(520px, 100%);
+}
+
+.payment-link-modal--loading {
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-link-modal__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3, 0.75rem);
+  min-height: 200px;
+}
+
+.payment-link-modal__spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--border-neutral-strong) 60%, transparent);
+  border-inline-start-color: var(--accent-blue-500);
+  animation: payment-link-modal-spin 1s linear infinite;
+}
+
+@keyframes payment-link-modal-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.payment-link-modal__loading-text {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+}
+
+.payment-link-modal__details,
+.payment-link-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 1rem);
+}
+
+.payment-link-modal__intro {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+}
+
+.payment-link-modal__payment-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-4, 1rem);
+  border-radius: var(--radius-lg, 16px);
+  background: color-mix(in srgb, var(--surface-neutral-weak) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 35%, transparent);
+}
+
+.payment-link-modal__payment-block--conekta {
+  background: color-mix(in srgb, var(--accent-blue-400) 14%, var(--surface-neutral-weak) 86%);
+}
+
+.payment-link-modal__payment-block--spei {
+  background: color-mix(in srgb, var(--color-neutral-900) 8%, var(--surface-neutral-weak) 92%);
+}
+
+.payment-link-modal__field-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.payment-link-modal__clipboard-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+}
+
+.payment-link-modal__input {
+  width: 100%;
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  border-radius: var(--radius-md, 12px);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 45%, transparent);
+  background: var(--flat-surface-bg);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.payment-link-modal__input:focus {
+  outline: none;
+  border-color: var(--accent-blue-500);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-blue-500) 25%, transparent);
+}
+
+.payment-link-modal__input--readonly {
+  background: color-mix(in srgb, var(--color-neutral-900) 8%, transparent);
+  color: var(--color-text-secondary);
+}
+
+.payment-link-modal__input--currency {
+  padding-inline-start: calc(var(--space-4, 1rem) + 18px);
+}
+
+.payment-link-modal__currency-input {
+  position: relative;
+}
+
+.payment-link-modal__currency-symbol {
+  position: absolute;
+  inset-inline-start: var(--space-3, 0.75rem);
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-tertiary);
+  pointer-events: none;
+  font-weight: 600;
+}
+
+.payment-link-modal__clipboard-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  border-radius: var(--radius-md, 12px);
+  border: none;
+  background: var(--accent-blue-500);
+  color: var(--flat-surface-bg);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.payment-link-modal__clipboard-btn:hover {
+  background: color-mix(in srgb, var(--accent-blue-500) 80%, var(--accent-blue-400) 20%);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--accent-blue-500) 22%, transparent);
+}
+
+.payment-link-modal__clipboard-btn--block {
+  width: 100%;
+  margin-top: var(--space-2, 0.5rem);
+}
+
+.payment-link-modal__spei-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3, 0.75rem);
+  font-size: 0.95rem;
+}
+
+.payment-link-modal__spei-label {
+  color: var(--color-text-secondary);
+}
+
+.payment-link-modal__spei-value {
+  font-family: 'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  color: var(--color-text-primary);
+}
+
+.payment-link-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3, 0.75rem);
+}
+
+.payment-link-modal__action-btn {
+  flex: 1 1 160px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  border-radius: var(--radius-md, 12px);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.payment-link-modal__action-btn--primary {
+  background: var(--accent-green-500);
+  color: var(--flat-surface-bg);
+  box-shadow: 0 14px 28px color-mix(in srgb, var(--accent-green-500) 26%, transparent);
+}
+
+.payment-link-modal__action-btn--primary:hover {
+  background: color-mix(in srgb, var(--accent-green-500) 85%, var(--accent-green-600) 15%);
+}
+
+.payment-link-modal__action-btn--ghost {
+  background: color-mix(in srgb, var(--surface-neutral-weak) 90%, transparent);
+  color: var(--color-text-secondary);
+}
+
+.payment-link-modal__action-btn--ghost:hover {
+  background: color-mix(in srgb, var(--surface-neutral-weak) 95%, transparent);
+  color: var(--color-text-primary);
+}
+
+.payment-link-modal__amount-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+}
+
+.payment-link-modal__submit {
+  padding-top: var(--space-2, 0.5rem);
+}
+
+@media (max-width: 640px) {
+  .payment-link-modal {
+    min-width: 100%;
+    padding: var(--space-4, 1rem) var(--space-3, 0.75rem);
+  }
+
+  .payment-link-modal__clipboard-field {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .payment-link-modal__clipboard-btn {
+    width: 100%;
+  }
+
+  .payment-link-modal__actions {
+    flex-direction: column;
+  }
+
+  .payment-link-modal__action-btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .payment-link-modal {
+    background: color-mix(in srgb, var(--color-neutral-900) 92%, transparent);
+    border-color: color-mix(in srgb, var(--border-neutral-strong) 55%, transparent);
+    color: var(--color-neutral-100);
+  }
+
+  .payment-link-modal__intro,
+  .payment-link-modal__field-label,
+  .payment-link-modal__spei-label,
+  .payment-link-modal__loading-text {
+    color: var(--color-neutral-300);
+  }
+
+  .payment-link-modal__input,
+  .payment-link-modal__input--readonly {
+    background: color-mix(in srgb, var(--color-neutral-900) 70%, transparent);
+    border-color: color-mix(in srgb, var(--border-neutral-strong) 60%, transparent);
+    color: var(--color-neutral-50);
+  }
+
+  .payment-link-modal__input::placeholder {
+    color: var(--color-neutral-400);
+  }
+
+  .payment-link-modal__currency-symbol {
+    color: var(--color-neutral-400);
+  }
+
+  .payment-link-modal__payment-block--spei {
+    background: color-mix(in srgb, var(--color-neutral-900) 85%, transparent);
+    border-color: color-mix(in srgb, var(--border-neutral-strong) 55%, transparent);
+  }
+
+  .payment-link-modal__action-btn--ghost {
+    background: color-mix(in srgb, var(--color-neutral-800) 75%, transparent);
+    color: var(--color-neutral-200);
+  }
+
+  .payment-link-modal__action-btn--ghost:hover {
+    background: color-mix(in srgb, var(--color-neutral-800) 85%, transparent);
+  }
+}

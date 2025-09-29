@@ -1,0 +1,444 @@
+<section class="delivery-phase" aria-live="polite">
+  <header class="delivery-phase__header">
+    <div class="delivery-phase__phase">
+      <span class="delivery-phase__phase-number">6</span>
+      <div class="delivery-phase__phase-copy">
+        <h2 class="delivery-phase__title">Entrega del Vehículo</h2>
+        <p class="delivery-phase__subtitle">Inspección final y entrega al cliente</p>
+      </div>
+    </div>
+    @if (clientInfo() as info) {
+      <div class="delivery-phase__client">
+        <span class="delivery-phase__client-name">{{ info.name }}</span>
+        <span class="delivery-phase__client-vin">VIN: {{ info.vin }}</span>
+      </div>
+    }
+  </header>
+
+  <section
+    class="delivery-phase__progress"
+    aria-label="Progreso de entrega"
+  >
+    <div
+      class="delivery-phase__progress-track"
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [attr.aria-valuenow]="progressPercentage()"
+    >
+      <div
+        class="delivery-phase__progress-fill"
+        [style.width.%]="progressPercentage()"
+      ></div>
+    </div>
+    <span class="delivery-phase__progress-label">
+      {{ progressPercentage() }}% completado
+    </span>
+  </section>
+
+  <form
+    class="delivery-phase__form"
+    [formGroup]="deliveryForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <section class="delivery-phase__section delivery-phase__section--summary">
+      <h3 class="delivery-phase__section-title">
+        <app-icon
+          class="delivery-phase__section-icon"
+          [name]="getSectionIcon('vehicle')"
+          [size]="22"
+          color="currentColor"
+        ></app-icon>
+        Información del Vehículo
+      </h3>
+      <div class="delivery-phase__info-grid" *ngIf="vehicleInfo() as vehicle; else vehicleLoading">
+        <div class="delivery-phase__info-item">
+          <span class="delivery-phase__info-label">Modelo</span>
+          <span class="delivery-phase__info-value">{{ vehicle.modelo }}</span>
+        </div>
+        <div class="delivery-phase__info-item">
+          <span class="delivery-phase__info-label">VIN</span>
+          <span class="delivery-phase__info-value">{{ vehicle.vin }}</span>
+        </div>
+        <div class="delivery-phase__info-item">
+          <span class="delivery-phase__info-label">Serie</span>
+          <span class="delivery-phase__info-value">{{ vehicle.serie }}</span>
+        </div>
+        <div class="delivery-phase__info-item">
+          <span class="delivery-phase__info-label">Año</span>
+          <span class="delivery-phase__info-value">{{ vehicle.year }}</span>
+        </div>
+      </div>
+      <ng-template #vehicleLoading>
+        <div class="delivery-phase__info-grid delivery-phase__info-grid--loading">
+          <div class="delivery-phase__skeleton" aria-hidden="true"></div>
+          <div class="delivery-phase__skeleton" aria-hidden="true"></div>
+          <div class="delivery-phase__skeleton" aria-hidden="true"></div>
+          <div class="delivery-phase__skeleton" aria-hidden="true"></div>
+        </div>
+      </ng-template>
+    </section>
+
+    <section class="delivery-phase__section">
+      <h3 class="delivery-phase__section-title">
+        <app-icon
+          class="delivery-phase__section-icon"
+          [name]="getSectionIcon('odometer')"
+          [size]="22"
+          color="currentColor"
+        ></app-icon>
+        Lectura de Odómetro
+      </h3>
+      <div class="delivery-phase__field delivery-phase__field--solo">
+        <label class="delivery-phase__label" for="odometro">Kilometraje de Entrega *</label>
+        <div class="delivery-phase__input-wrapper">
+          <input
+            type="number"
+            id="odometro"
+            formControlName="odometroEntrega"
+            placeholder="0"
+            min="0"
+            max="999999"
+            class="delivery-phase__input"
+            [class.is-invalid]="deliveryForm.get('odometroEntrega')?.invalid && deliveryForm.get('odometroEntrega')?.touched"
+          />
+          <span class="delivery-phase__input-unit" aria-hidden="true">km</span>
+        </div>
+        @if (deliveryForm.get('odometroEntrega')?.invalid && deliveryForm.get('odometroEntrega')?.touched) {
+          <p class="delivery-phase__error">El odómetro es requerido y debe ser válido</p>
+        }
+      </div>
+    </section>
+
+    <section class="delivery-phase__section">
+      <h3 class="delivery-phase__section-title">
+        <app-icon
+          class="delivery-phase__section-icon delivery-phase__section-icon--alert"
+          [name]="getSectionIcon('details')"
+          [size]="22"
+          color="currentColor"
+        ></app-icon>
+        Detalles de Entrega
+      </h3>
+      <div class="delivery-phase__field-group">
+        <div class="delivery-phase__field">
+          <label class="delivery-phase__label" for="fechaEntrega">Fecha de Entrega *</label>
+          <input
+            type="date"
+            id="fechaEntrega"
+            formControlName="fechaEntrega"
+            class="delivery-phase__input"
+            [class.is-invalid]="deliveryForm.get('fechaEntrega')?.invalid && deliveryForm.get('fechaEntrega')?.touched"
+          />
+        </div>
+        <div class="delivery-phase__field">
+          <label class="delivery-phase__label" for="horaEntrega">Hora de Entrega *</label>
+          <input
+            type="time"
+            id="horaEntrega"
+            formControlName="horaEntrega"
+            class="delivery-phase__input"
+            [class.is-invalid]="deliveryForm.get('horaEntrega')?.invalid && deliveryForm.get('horaEntrega')?.touched"
+          />
+        </div>
+        <div class="delivery-phase__field delivery-phase__field--full">
+          <label class="delivery-phase__label" for="domicilio">Domicilio de Entrega *</label>
+          <textarea
+            id="domicilio"
+            formControlName="domicilioEntrega"
+            placeholder="Dirección completa donde se entregó el vehículo..."
+            class="delivery-phase__textarea"
+            rows="3"
+            [class.is-invalid]="deliveryForm.get('domicilioEntrega')?.invalid && deliveryForm.get('domicilioEntrega')?.touched"
+          ></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="delivery-phase__section" aria-label="Checklist de entrega">
+      <h3 class="delivery-phase__section-title">
+        <app-icon
+          class="delivery-phase__section-icon"
+          [name]="getSectionIcon('checklist')"
+          [size]="22"
+          color="currentColor"
+        ></app-icon>
+        Lista de Verificación de Entrega
+      </h3>
+      <div class="delivery-phase__checklist">
+        @for (item of checklistItems(); track item.item) {
+          <article class="delivery-phase__checklist-item" [attr.data-status]="item.status">
+            <header class="delivery-phase__checklist-header">
+              <span class="delivery-phase__checklist-name">{{ item.item }}</span>
+              <div class="delivery-phase__status-actions">
+                <button
+                  type="button"
+                  class="ui-btn ui-btn-ghost delivery-phase__status-btn delivery-phase__status-btn--approved"
+                  [class.is-active]="item.status === 'approved'"
+                  (click)="updateChecklistItem(item.item, 'approved')"
+                >
+                  <app-icon
+                    class="delivery-phase__status-icon"
+                    [name]="getStatusIcon('approved')"
+                    [size]="16"
+                    color="currentColor"
+                  ></app-icon>
+                  Aprobado
+                </button>
+                <button
+                  type="button"
+                  class="ui-btn ui-btn-ghost delivery-phase__status-btn delivery-phase__status-btn--issues"
+                  [class.is-active]="item.status === 'with_issues'"
+                  (click)="updateChecklistItem(item.item, 'with_issues')"
+                >
+                  <app-icon
+                    class="delivery-phase__status-icon"
+                    [name]="getStatusIcon('with_issues')"
+                    [size]="16"
+                    color="currentColor"
+                  ></app-icon>
+                  Con Observaciones
+                </button>
+                <button
+                  type="button"
+                  class="ui-btn ui-btn-ghost delivery-phase__status-btn delivery-phase__status-btn--rejected"
+                  [class.is-active]="item.status === 'rejected'"
+                  (click)="updateChecklistItem(item.item, 'rejected')"
+                >
+                  <app-icon
+                    class="delivery-phase__status-icon"
+                    [name]="getStatusIcon('rejected')"
+                    [size]="16"
+                    color="currentColor"
+                  ></app-icon>
+                  Rechazado
+                </button>
+              </div>
+            </header>
+            @if (item.status === 'with_issues' || item.status === 'rejected') {
+              <div class="delivery-phase__notes">
+                <label class="delivery-phase__sr-only" for="notes-{{ item.item }}">Observaciones</label>
+                <textarea
+                  id="notes-{{ item.item }}"
+                  [(ngModel)]="item.notes"
+                  class="delivery-phase__textarea delivery-phase__textarea--notes"
+                  placeholder="Describe las observaciones o problemas encontrados..."
+                  rows="2"
+                ></textarea>
+              </div>
+            }
+          </article>
+        }
+      </div>
+    </section>
+
+    <section class="delivery-phase__section">
+      <h3 class="delivery-phase__section-title">
+        <app-icon
+          class="delivery-phase__section-icon"
+          [name]="getSectionIcon('photos')"
+          [size]="22"
+          color="currentColor"
+        ></app-icon>
+        Fotografías del Vehículo
+      </h3>
+      <div class="delivery-phase__upload">
+        <button
+          type="button"
+          class="ui-btn ui-btn-ghost delivery-phase__upload-area"
+          (click)="triggerPhotoUpload()"
+        >
+          <app-icon
+            class="delivery-phase__upload-icon"
+            [name]="getSectionIcon('photos')"
+            [size]="32"
+            color="currentColor"
+          ></app-icon>
+          <p class="delivery-phase__upload-title">Agregar fotos del vehículo</p>
+          <small class="delivery-phase__upload-hint">Recomendado: frente, atrás, laterales, interior</small>
+        </button>
+        <input
+          #photoInput
+          id="photoInput"
+          type="file"
+          accept="image/*"
+          multiple
+          class="delivery-phase__file-input"
+          (change)="onPhotoSelected($event)"
+        />
+      </div>
+      @if (uploadedPhotos().length > 0) {
+        <div class="delivery-phase__photo-gallery">
+          @for (photo of uploadedPhotos(); track photo) {
+            <figure class="delivery-phase__photo">
+              <img [src]="photo" alt="Fotografía del vehículo" class="delivery-phase__photo-image" />
+              <button
+                type="button"
+                class="ui-btn ui-btn-ghost delivery-phase__photo-remove"
+                (click)="removePhoto(photo)"
+              >
+                <app-icon
+                  class="delivery-phase__photo-remove-icon"
+                  [name]="getSectionIcon('remove')"
+                  [size]="16"
+                  color="currentColor"
+                ></app-icon>
+                <span class="delivery-phase__sr-only">Eliminar fotografía</span>
+              </button>
+            </figure>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="delivery-phase__section">
+      <h3 class="delivery-phase__section-title">
+        <app-icon
+          class="delivery-phase__section-icon"
+          [name]="getSectionIcon('signature')"
+          [size]="22"
+          color="currentColor"
+        ></app-icon>
+        Firma Digital del Cliente
+      </h3>
+      <div class="delivery-phase__signature">
+        @if (!digitalSignature()) {
+          <button
+            type="button"
+            class="ui-btn ui-btn-ghost delivery-phase__signature-placeholder"
+            (click)="openSignatureModal()"
+          >
+            <app-icon
+              class="delivery-phase__signature-icon"
+              [name]="getSectionIcon('signature')"
+              [size]="36"
+              color="currentColor"
+            ></app-icon>
+            <p class="delivery-phase__signature-text">Capturar firma del cliente</p>
+          </button>
+        } @else {
+          <div class="delivery-phase__signature-preview">
+            <img
+              [src]="digitalSignature()"
+              alt="Firma digital del cliente"
+              class="delivery-phase__signature-image"
+            />
+            <button
+              type="button"
+              class="ui-btn ui-btn-secondary delivery-phase__signature-action"
+              (click)="openSignatureModal()"
+            >
+              <app-icon
+                class="delivery-phase__status-icon"
+                name="document"
+                [size]="16"
+                color="currentColor"
+              ></app-icon>
+              Volver a firmar
+            </button>
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="delivery-phase__section">
+      <h3 class="delivery-phase__section-title">
+        <app-icon
+          class="delivery-phase__section-icon"
+          [name]="getSectionIcon('notes')"
+          [size]="22"
+          color="currentColor"
+        ></app-icon>
+        Observaciones Adicionales
+      </h3>
+      <textarea
+        formControlName="incidencias"
+        placeholder="Agrega cualquier observación especial sobre la entrega..."
+        class="delivery-phase__textarea"
+        rows="4"
+      ></textarea>
+    </section>
+
+    <footer class="delivery-phase__actions">
+      <button
+        type="button"
+        class="ui-btn ui-btn-secondary delivery-phase__action"
+        (click)="saveDraft()"
+        [disabled]="isSaving()"
+      >
+        {{ isSaving() ? 'Guardando…' : 'Guardar Borrador' }}
+      </button>
+      <button
+        type="submit"
+        class="ui-btn ui-btn-primary delivery-phase__action"
+        [disabled]="!canCompleteDelivery() || isSubmitting()"
+      >
+        @if (isSubmitting()) {
+          <span class="delivery-phase__loader" aria-hidden="true"></span>
+          Completando Entrega…
+        } @else {
+          <app-icon
+            class="delivery-phase__status-icon"
+            [name]="getSectionIcon('complete')"
+            [size]="18"
+            color="currentColor"
+          ></app-icon>
+          Completar Entrega
+        }
+      </button>
+    </footer>
+
+    @if (validationErrors().length > 0) {
+      <section class="delivery-phase__validation" aria-live="assertive">
+        <h4 class="delivery-phase__validation-title">Campos requeridos</h4>
+        <ul class="delivery-phase__validation-list">
+          @for (error of validationErrors(); track error) {
+            <li class="delivery-phase__validation-item">{{ error }}</li>
+          }
+        </ul>
+      </section>
+    }
+  </form>
+
+  @if (showSuccessModal()) {
+    <div
+      class="delivery-phase__modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      tabindex="-1"
+      (click)="closeSuccessModal()"
+      (keydown)="onModalKeydown($event)"
+    >
+      <article
+        class="delivery-phase__modal"
+        (click)="$event.stopPropagation()"
+        (keydown)="onModalKeydown($event)"
+      >
+        <header class="delivery-phase__modal-header">
+          <h3 class="delivery-phase__modal-title">Entrega Completada</h3>
+        </header>
+        <div class="delivery-phase__modal-body">
+          <p class="delivery-phase__modal-copy">El vehículo ha sido entregado exitosamente.</p>
+          <div class="delivery-phase__next-steps">
+            <h4 class="delivery-phase__next-steps-title">Próximos pasos</h4>
+            <ul class="delivery-phase__next-steps-list">
+              <li>Completar transferencia de documentos</li>
+              <li>Gestionar entrega de placas</li>
+              <li>Enviar encuesta de satisfacción al cliente</li>
+            </ul>
+          </div>
+        </div>
+        <footer class="delivery-phase__modal-actions">
+          <button
+            type="button"
+            class="ui-btn ui-btn-primary"
+            (click)="goToDocumentsPhase()"
+            autofocus
+          >
+            Continuar a Documentos
+          </button>
+        </footer>
+      </article>
+    </div>
+  }
+</section>

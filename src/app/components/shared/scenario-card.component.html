@@ -1,0 +1,49 @@
+<button
+  type="button"
+  class="scenario-card"
+  [ngClass]="getButtonClasses()"
+  (click)="handleSelect()"
+  [disabled]="!onSelect.observed"
+>
+  <span *ngIf="isSelected && onSelect.observed" class="scenario-card__selected">
+    <span class="scenario-card__selected-icon" aria-hidden="true">[OK]</span>
+  </span>
+
+  <h4 class="scenario-card__title">{{ scenario.title }}</h4>
+  <p class="scenario-card__description">{{ scenario.description }}</p>
+
+  <div class="scenario-card__details">
+    <p *ngFor="let detail of scenario.details" class="scenario-card__detail">{{ detail }}</p>
+
+    <div class="scenario-card__summary">
+      <span class="scenario-card__summary-label">Nuevo Plazo:</span>
+      <span class="scenario-card__summary-value">
+        {{ scenario.newTerm }} meses
+        <span class="scenario-card__term-change">({{ getTermChange() }}{{ scenario.termChange }})</span>
+      </span>
+    </div>
+
+    <div class="scenario-card__kpis" *ngIf="hasKpis()">
+      <div class="scenario-card__kpi" *ngIf="scenario['paymentChange'] !== undefined">
+        <span class="scenario-card__kpi-label">Δ Pago</span>
+        <span class="scenario-card__kpi-value">{{ formatCurrency(scenario['paymentChange']) }}</span>
+      </div>
+      <div class="scenario-card__kpi" *ngIf="scenario['paymentChangePercent'] !== undefined">
+        <span class="scenario-card__kpi-label">Δ Pago %</span>
+        <span class="scenario-card__kpi-value">{{ (scenario['paymentChangePercent']).toFixed(1) }}%</span>
+      </div>
+      <div class="scenario-card__kpi" *ngIf="scenario['totalCostChange'] !== undefined">
+        <span class="scenario-card__kpi-label">Δ Costo Total</span>
+        <span class="scenario-card__kpi-value">{{ formatCurrency(scenario['totalCostChange']) }}</span>
+      </div>
+      <div class="scenario-card__kpi" *ngIf="scenario['irr'] !== undefined">
+        <span class="scenario-card__kpi-label">TIR</span>
+        <span class="scenario-card__kpi-value">{{ (scenario['irr'] * 100).toFixed(2) }}%</span>
+      </div>
+      <div class="scenario-card__kpi" *ngIf="scenario['tirOK'] !== undefined">
+        <span class="scenario-card__kpi-label">Política</span>
+        <span class="scenario-card__kpi-value">{{ scenario['tirOK'] ? '[OK] Cumple' : '[NO] No cumple' }}</span>
+      </div>
+    </div>
+  </div>
+</button>

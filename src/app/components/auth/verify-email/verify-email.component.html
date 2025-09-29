@@ -1,0 +1,50 @@
+<div class="verify-container">
+  <div class="verify-card">
+    <div class="verify-content" *ngIf="!isLoading && !isVerified && !hasError">
+      <app-icon class="icon" name="mail" [size]="48" aria-hidden="true"></app-icon>
+      <h1>Verificar Email</h1>
+      <p>Verificando tu dirección de correo electrónico...</p>
+      <app-icon
+        class="loading-spinner verify-email__spinner"
+        name="spinner"
+        [size]="48"
+        strokeWidth="2.5"
+        aria-hidden="true"
+      ></app-icon>
+    </div>
+
+    <div class="verify-content" *ngIf="isVerified && !hasError">
+      <app-icon class="icon success" name="check-circle" [size]="48" aria-hidden="true"></app-icon>
+      <h1>¡Email Verificado!</h1>
+      <p>{{ verificationMessage }}</p>
+      <div class="actions">
+        <button 
+          class="btn-primary"
+          (click)="goToLogin()"
+        >
+          Ir al Login
+        </button>
+      </div>
+    </div>
+
+    <div class="verify-content" *ngIf="hasError">
+      <app-icon class="icon error" name="x-circle" [size]="48" aria-hidden="true"></app-icon>
+      <h1>Error de Verificación</h1>
+      <p>{{ errorMessage }}</p>
+      <div class="actions">
+        <button 
+          class="btn-secondary"
+          routerLink="/register"
+        >
+          Volver a Registro
+        </button>
+        <button 
+          class="btn-primary"
+          routerLink="/login"
+        >
+          Ir al Login
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

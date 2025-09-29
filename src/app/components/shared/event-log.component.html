@@ -1,0 +1,243 @@
+<section class="event-log" aria-live="polite">
+  <header class="event-log__header">
+    <div class="event-log__header-row">
+      <div class="event-log__heading">
+        <div class="event-log__lead-icon">
+          <app-icon class="event-log__icon" name="document" [size]="24" color="currentColor"></app-icon>
+        </div>
+        <div class="event-log__lead-copy">
+          <h3 class="event-log__title">Historial de Eventos</h3>
+          <p class="event-log__subtitle">Registro cronológico de actividades</p>
+        </div>
+      </div>
+
+      <div class="event-log__toolbar">
+        <div class="event-log__filters" *ngIf="showFilters">
+          <button
+            type="button"
+            class="event-log__filter-btn"
+            [ngClass]="getFilterButtonClasses('all')"
+            (click)="setEventFilter('all')"
+          >
+            Todos
+          </button>
+          <button
+            type="button"
+            class="event-log__filter-btn"
+            [ngClass]="getFilterButtonClasses('payments')"
+            (click)="setEventFilter('payments')"
+          >
+            Pagos
+          </button>
+          <button
+            type="button"
+            class="event-log__filter-btn"
+            [ngClass]="getFilterButtonClasses('documents')"
+            (click)="setEventFilter('documents')"
+          >
+            Documentos
+          </button>
+          <button
+            type="button"
+            class="event-log__filter-btn"
+            [ngClass]="getFilterButtonClasses('system')"
+            (click)="setEventFilter('system')"
+          >
+            Sistema
+          </button>
+        </div>
+
+        <div class="event-log__mode-toggle">
+          <button
+            type="button"
+            class="event-log__mode-btn"
+            [ngClass]="getViewModeClasses('timeline')"
+            (click)="setViewMode('timeline')"
+          >
+            Timeline
+          </button>
+          <button
+            type="button"
+            class="event-log__mode-btn"
+            [ngClass]="getViewModeClasses('list')"
+            (click)="setViewMode('list')"
+          >
+            Lista
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="event-log__timeline-view" *ngIf="viewMode === 'timeline' && filteredEvents.length > 0">
+    <div class="event-log__timeline">
+      <div class="event-log__timeline-line"></div>
+
+      <article class="event-log__date-group" *ngFor="let group of getEventGroups(); trackBy: trackByDate">
+        <header class="event-log__date-header">
+          <div class="event-log__date-row">
+            <span class="event-log__date-marker"></span>
+            <h4 class="event-log__date-title">{{ group.date }}</h4>
+            <div class="event-log__date-spacer"></div>
+            <span class="event-log__event-count">
+              {{ group.events.length }} evento{{ group.events.length !== 1 ? 's' : '' }}
+            </span>
+          </div>
+        </header>
+
+        <div class="event-log__items">
+          <article
+            class="event-log__item"
+            *ngFor="let event of group.events; trackBy: trackByEventId"
+          >
+            <span class="event-log__timeline-node" [ngClass]="getEventNodeClass(event)"></span>
+
+            <div class="event-log__card" [ngClass]="getEventCardClass(event)">
+              <header class="event-log__card-header">
+                <div class="event-log__card-meta">
+                  <div class="event-log__event-icon" [innerHTML]="getEventIcon(event)"></div>
+                  <div class="event-log__event-info">
+                    <h5 class="event-log__event-title">{{ event.message }}</h5>
+                    <div class="event-log__event-details">
+                      <span class="event-log__actor-badge" [ngClass]="getActorBadgeClass(event.actor)">
+                        {{ event.actor }}
+                      </span>
+                      <span class="event-log__meta-separator">•</span>
+                      <span class="event-log__event-time">{{ formatTime(event.timestamp) }}</span>
+                      <ng-container *ngIf="event.type !== 'System'">
+                        <span class="event-log__meta-separator">•</span>
+                        <span class="event-log__event-type">{{ getEventTypeLabel(event.type) }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="event.details?.amount" class="event-log__amount">
+                  <div class="event-log__amount-card" [ngClass]="getAmountDisplayClass(event)">
+                    <span class="event-log__amount-value">{{ formatCurrency(event.details?.amount || 0) }}</span>
+                    <span class="event-log__amount-label">{{ getAmountLabel(event.type) }}</span>
+                  </div>
+                </div>
+              </header>
+
+              <section *ngIf="hasEventDetails(event)" class="event-log__details">
+                <div class="event-log__detail-layout">
+                  <div *ngIf="event.details?.paymentMethod" class="event-log__detail-item">
+                    <span class="event-log__detail-value">{{ event.details?.paymentMethod }}</span>
+                  </div>
+                  <div *ngIf="event.details?.reference" class="event-log__detail-item">
+                    <span class="event-log__detail-label">Referencia:</span>
+                    <span class="event-log__detail-value event-log__detail-value--mono">{{ event.details?.reference }}</span>
+                  </div>
+                  <div *ngIf="event.details?.documentName" class="event-log__detail-item">
+                    <span class="event-log__detail-label">Documento:</span>
+                    <span class="event-log__detail-value">{{ event.details?.documentName }}</span>
+                  </div>
+                  <div *ngIf="event.details?.status" class="event-log__detail-item">
+                    <span class="event-log__detail-label">Estado:</span>
+                    <span class="event-log__detail-value">{{ event.details?.status }}</span>
+                  </div>
+                </div>
+              </section>
+
+              <footer class="event-log__actions" *ngIf="hasEventActions(event)">
+                <button
+                  *ngIf="canViewDetails(event)"
+                  type="button"
+                  class="event-log__action-btn event-log__action-btn--secondary"
+                  (click)="viewEventDetails(event)"
+                >
+                  Ver Detalles
+                </button>
+                <button
+                  *ngIf="canDownloadReceipt(event)"
+                  type="button"
+                  class="event-log__action-btn event-log__action-btn--primary"
+                  (click)="downloadReceipt(event)"
+                >
+                  Descargar Recibo
+                </button>
+                <button
+                  *ngIf="canReverseAction(event)"
+                  type="button"
+                  class="event-log__action-btn event-log__action-btn--danger"
+                  (click)="reverseAction(event)"
+                >
+                  Revertir
+                </button>
+              </footer>
+            </div>
+          </article>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="event-log__list-view" *ngIf="viewMode === 'list' && filteredEvents.length > 0">
+    <div class="event-log__table">
+      <div class="event-log__table-header">
+        <span class="event-log__table-heading event-log__table-heading--type">Tipo</span>
+        <span class="event-log__table-heading event-log__table-heading--event">Evento</span>
+        <span class="event-log__table-heading event-log__table-heading--actor">Actor</span>
+        <span class="event-log__table-heading event-log__table-heading--amount">Monto</span>
+        <span class="event-log__table-heading event-log__table-heading--date">Fecha</span>
+        <span class="event-log__table-heading event-log__table-heading--actions">Acciones</span>
+      </div>
+
+      <div class="event-log__table-body">
+        <div
+          class="event-log__table-row"
+          *ngFor="let event of filteredEvents; trackBy: trackByEventId"
+        >
+          <div class="event-log__cell event-log__cell--type" data-label="Tipo">
+            <span class="event-log__type-icon" [innerHTML]="getEventIcon(event)"></span>
+          </div>
+          <div class="event-log__cell event-log__cell--event" data-label="Evento">
+            <span class="event-log__table-text">{{ event.message }}</span>
+          </div>
+          <div class="event-log__cell event-log__cell--actor" data-label="Actor">
+            <span class="event-log__actor-badge" [ngClass]="getActorBadgeClass(event.actor)">
+              {{ event.actor }}
+            </span>
+          </div>
+          <div class="event-log__cell event-log__cell--amount" data-label="Monto">
+            <span *ngIf="event.details?.amount" class="event-log__amount-text" [ngClass]="getAmountTextClass(event)">
+              {{ formatCurrency(event.details?.amount || 0) }}
+            </span>
+            <span *ngIf="!event.details?.amount" class="event-log__muted">-</span>
+          </div>
+          <div class="event-log__cell event-log__cell--date" data-label="Fecha">
+            <span class="event-log__table-text">{{ formatDateTime(event.timestamp) }}</span>
+          </div>
+          <div class="event-log__cell event-log__cell--actions" data-label="Acciones">
+            <button
+              *ngIf="hasEventActions(event)"
+              type="button"
+              class="event-log__action-menu"
+              (click)="showEventActions(event)"
+            >
+              <span class="event-log__action-menu-icon">⋮</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="event-log__empty" *ngIf="filteredEvents.length === 0">
+    <div class="event-log__empty-icon">LOG</div>
+    <h4 class="event-log__empty-title">No hay eventos</h4>
+    <p class="event-log__muted">{{ getEmptyStateMessage() }}</p>
+  </section>
+
+  <div class="event-log__load-more" *ngIf="hasMoreEvents">
+    <button
+      type="button"
+      class="event-log__load-more-btn"
+      [disabled]="isLoadingMore"
+      (click)="loadMoreEvents()"
+    >
+      {{ isLoadingMore ? 'Cargando...' : 'Cargar Más Eventos' }}
+    </button>
+  </div>
+</section>

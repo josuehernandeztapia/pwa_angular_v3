@@ -1,0 +1,281 @@
+.offline-indicator {
+  pointer-events: none;
+
+  &__banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: var(--space-12, 12px) var(--space-16, 16px);
+    border-bottom: 1px solid color-mix(in srgb, var(--flat-surface-bg) 12%, transparent);
+    transition: opacity var(--transition-fast, 0.3s ease);
+    animation: offline-indicator-fade-down 0.3s ease;
+    pointer-events: auto;
+
+    &--online {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent-green-500) 88%, transparent), var(--accent-green-700));
+      color: var(--flat-surface-bg);
+    }
+
+    &--reconnecting {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent-amber-400) 92%, transparent), var(--accent-amber-600));
+      color: var(--flat-surface-bg);
+    }
+
+    &--poor {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent-amber-300) 88%, transparent), var(--accent-amber-500));
+      color: var(--color-text-primary);
+    }
+
+    &--offline {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent-red-500) 92%, transparent), var(--accent-red-700));
+      color: var(--flat-surface-bg);
+    }
+  }
+
+  &__banner-content {
+    max-width: 72rem;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space-16, 16px);
+  }
+
+  &__status-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--flat-surface-bg) 20%, transparent);
+  }
+
+  &__glyph {
+    color: currentColor;
+
+    &--offline {
+      color: var(--accent-red-200);
+    }
+
+    &--online {
+      color: var(--flat-surface-bg);
+    }
+
+    &--excellent {
+      color: var(--accent-green-200);
+    }
+
+    &--good {
+      color: var(--accent-green-100);
+    }
+
+    &--fair {
+      color: var(--accent-amber-200);
+    }
+
+    &--poor {
+      color: var(--accent-amber-500);
+    }
+
+    &--syncing {
+      filter: drop-shadow(0 0 10px color-mix(in srgb, currentColor 50%, transparent));
+    }
+  }
+
+  &__status-copy {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__status-title {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: var(--font-weight-semibold, 600);
+  }
+
+  &__status-subtitle {
+    margin: 0;
+    font-size: 0.8125rem;
+    opacity: 0.9;
+  }
+
+  &__sync {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8, 8px);
+  }
+
+  &__sync-count {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 var(--space-8, 8px);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--flat-surface-bg) 25%, transparent);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semibold, 600);
+  }
+
+  &__quality {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__quality-dot {
+    width: 4px;
+    height: 14px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--flat-surface-bg) 24%, transparent);
+    transition: opacity var(--transition-quick, 0.2s ease), background var(--transition-quick, 0.2s ease);
+
+    &--active {
+      opacity: 1;
+      background: var(--flat-surface-bg);
+    }
+  }
+
+  &__dismiss {
+    pointer-events: auto;
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0.75;
+    padding: 0.25rem;
+    border-radius: var(--radius-sm, 8px);
+    transition: opacity var(--transition-quick, 0.2s ease), background var(--transition-quick, 0.2s ease);
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      background: color-mix(in srgb, var(--flat-surface-bg) 20%, transparent);
+      outline: none;
+    }
+  }
+
+  &__pill {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 999;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8, 8px);
+    padding: 0.5rem 0.875rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semibold, 600);
+    border: 1px solid color-mix(in srgb, var(--flat-surface-bg) 20%, transparent);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--openai-black) 20%, transparent);
+    cursor: pointer;
+    pointer-events: auto;
+    transition: box-shadow var(--transition-quick, 0.2s ease);
+
+    &--online {
+      background: color-mix(in srgb, var(--accent-green-500) 88%, transparent);
+      color: var(--flat-surface-bg);
+    }
+
+    &--reconnecting {
+      background: color-mix(in srgb, var(--accent-amber-400) 90%, transparent);
+      color: var(--flat-surface-bg);
+    }
+
+    &--poor {
+      background: color-mix(in srgb, var(--accent-amber-300) 88%, transparent);
+      color: var(--color-text-primary);
+    }
+
+    &--offline {
+      background: color-mix(in srgb, var(--accent-red-500) 92%, transparent);
+      color: var(--flat-surface-bg);
+    }
+
+    &:hover,
+    &:focus-visible {
+      box-shadow: 0 8px 20px color-mix(in srgb, var(--openai-black) 28%, transparent);
+      outline: 2px solid var(--accent-blue-500);
+      outline-offset: 3px;
+    }
+  }
+
+  &__pill-icon {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__pill-text {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__pill-pending {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--accent-amber-400);
+    animation: offline-indicator-pulse 2s infinite;
+  }
+
+  @media (max-width: 40rem) {
+    &__banner {
+      padding: var(--space-12, 12px);
+    }
+
+    &__banner-content {
+      gap: var(--space-12, 12px);
+    }
+
+    &__status-title {
+      font-size: 0.875rem;
+    }
+
+    &__status-subtitle {
+      font-size: 0.75rem;
+    }
+
+    &__pill {
+      bottom: 1rem;
+      right: 1rem;
+      padding: 0.5rem 0.75rem;
+    }
+
+    &__quality {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__banner,
+    &__pill,
+    &__quality-dot,
+    &__pill-pending {
+      animation: none;
+      transition: none;
+    }
+  }
+}
+
+@keyframes offline-indicator-fade-down {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes offline-indicator-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}

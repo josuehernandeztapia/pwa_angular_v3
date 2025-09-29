@@ -1,0 +1,344 @@
+<div class="flow-builder-container">
+
+  <div class="flow-builder-header premium-card">
+    <div class="header-left">
+      <h1>Flow Builder</h1>
+      <span class="subtitle">Crear ciudad/flujo visualmente</span>
+    </div>
+    <div class="header-right">
+      <button class="btn-secondary" (click)="clearFlow()">Limpiar</button>
+      <button class="btn-secondary" (click)="saveFlow()">Guardar</button>
+      <button class="btn-primary" (click)="deployFlow()" [disabled]="!canDeploy">Deploy</button>
+    </div>
+  </div>
+
+  <div class="flow-builder-content">
+
+    <div class="nodes-palette premium-card">
+      <div class="palette-header">
+        <h3>Componentes</h3>
+        <input
+          type="text"
+          placeholder="Buscar nodos..."
+          [(ngModel)]="searchTerm"
+          class="search-input"
+        />
+      </div>
+
+      <div class="palette-content">
+        <div *ngIf="getSelectedMarketCode()" class="market-info-panel">
+          <div class="market-info-header">
+            <span class="market-icon"></span>
+            <div class="market-details">
+              <div class="market-name">{{ getSelectedMarketName() }}</div>
+              <div class="market-products">{{ getAvailableProductsForMarket().length }} productos disponibles</div>
+            </div>
+          </div>
+          <div class="market-restrictions">
+            <div class="restrictions-title">Restricciones:</div>
+            <div *ngFor="let restriction of getMarketRestrictions(getSelectedMarketCode())" class="restriction-item">
+              • {{ restriction }}
+            </div>
+          </div>
+        </div>
+
+        <div *ngFor="let category of getFilteredCategories()" class="node-category">
+          <div class="category-header" (click)="toggleCategory(category.name)">
+            <span class="category-icon">{{ category.expanded ? '▼' : '▶' }}</span>
+            <span class="category-name">{{ category.name }}</span>
+            <span class="category-count">({{ category.templates.length }})</span>
+          </div>
+
+          <div class="category-content" [class.expanded]="category.expanded">
+            <div
+              *ngFor="let template of getFilteredTemplates(category.templates)"
+              class="node-template"
+              [style.border-left-color]="template.color"
+              [class.template-disabled]="!isTemplateCompatible(template)"
+              [attr.title]="getTemplateTooltip(template)"
+              draggable="true"
+              (dragstart)="onDragStart($event, template)"
+            >
+              <app-icon class="template-icon" [name]="getTemplateIconName(template)" [size]="20" aria-hidden="true"></app-icon>
+              <div class="template-info">
+                <div class="template-name">{{ template.name }}</div>
+                <div class="template-description">{{ template.description }}</div>
+                <div *ngIf="!isTemplateCompatible(template)" class="template-warning">
+                  No compatible con {{ getSelectedMarketName() }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-canvas-container premium-card">
+      <div class="canvas-toolbar">
+        <div class="zoom-controls">
+          <button class="zoom-btn" (click)="zoomOut()">➖</button>
+          <span class="zoom-level">{{ (zoomLevel * 100).toFixed(0) }}%</span>
+          <button class="zoom-btn" (click)="zoomIn()">➕</button>
+        </div>
+        <div class="canvas-controls">
+          <button class="canvas-btn" (click)="fitToView()">Ajustar</button>
+          <button class="canvas-btn" (click)="centerView()">
+            <app-icon class="canvas-btn__icon" name="target" [size]="20" aria-hidden="true"></app-icon>
+            Centrar
+          </button>
+          <button class="canvas-btn" (click)="openGenerationModal()">Exportar</button>
+        </div>
+      </div>
+
+      <div
+        #flowCanvas
+        class="flow-canvas"
+        [style.zoom]="zoomLevel"
+        [style.marginLeft.px]="panX"
+        [style.marginTop.px]="panY"
+        (drop)="onDrop($event)"
+        (dragover)="onDragOver($event)"
+        (mousedown)="onCanvasMouseDown($event)"
+        (mousemove)="onCanvasMouseMove($event)"
+        (mouseup)="onCanvasMouseUp($event)"
+      >
+
+        <svg class="connections-layer" [attr.viewBox]="'0 0 ' + canvasWidth + ' ' + canvasHeight">
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7"
+                    refX="10" refY="3.5" orient="auto">
+              <polygon points="0,0 10,3.5 0,7" fill="var(--color-text-muted, #737373)"></polygon>
+            </marker>
+          </defs>
+
+          <path
+            *ngFor="let connection of connections; trackBy: trackConnection"
+            [attr.d]="getConnectionPath(connection)"
+            class="connection-line"
+            [class.connection-selected]="selectedConnection?.id === connection.id"
+            [class.connection-invalid]="connection.isValid === false"
+            [attr.title]="connection.validationMessage"
+            (click)="selectConnection(connection)"
+            marker-end="url(#arrowhead)"
+          />
+
+          <path
+            *ngIf="tempConnection"
+            [attr.d]="tempConnection.path"
+            class="connection-temp"
+            marker-end="url(#arrowhead)"
+          />
+        </svg>
+
+        <div class="nodes-layer">
+          <div
+            *ngFor="let node of nodes; trackBy: trackNode"
+            class="flow-node"
+            [class.node-selected]="selectedNode?.id === node.id"
+            [style.left.px]="node.position.x"
+            [style.top.px]="node.position.y"
+            [style.border-color]="node.color"
+            (click)="selectNode(node)"
+            (mousedown)="onNodeMouseDown($event, node)"
+          >
+            <div class="node-header" [style.background-color]="node.color">
+              <app-icon class="node-icon" [name]="getNodeIconName(node)" [size]="20" aria-hidden="true"></app-icon>
+              <div class="node-name">{{ node.name }}</div>
+              <div class="node-actions">
+                <button class="node-action-btn" (click)="duplicateNode(node)">Duplicar</button>
+                <button class="node-action-btn" (click)="deleteNode(node)">Eliminar</button>
+              </div>
+            </div>
+
+            <div class="node-content">
+              <div class="node-description">{{ getNodeDescription(node) }}</div>
+
+              <div class="node-quick-config" *ngIf="node.type === 'document'">
+                <label class="config-checkbox">
+                  <input type="checkbox" [(ngModel)]="node.config.required">
+                  <span>Obligatorio</span>
+                </label>
+                <label class="config-checkbox">
+                  <input type="checkbox" [(ngModel)]="node.config.ocrEnabled">
+                  <span>OCR</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="node-ports inputs">
+              <div
+                *ngFor="let input of node.inputs"
+                class="node-port input-port"
+                [attr.data-port-id]="input.id"
+                [attr.data-node-id]="node.id"
+                (mousedown)="onPortMouseDown($event, node, input, 'input')"
+                [title]="input.name"
+              >
+                <div class="port-connector"></div>
+              </div>
+            </div>
+
+            <div class="node-ports outputs">
+              <div
+                *ngFor="let output of node.outputs"
+                class="node-port output-port"
+                [attr.data-port-id]="output.id"
+                [attr.data-node-id]="node.id"
+                (mousedown)="onPortMouseDown($event, node, output, 'output')"
+                [title]="output.name"
+              >
+                <div class="port-connector"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="properties-panel" [class.panel-collapsed]="!selectedNode && !selectedConnection">
+      <div class="panel-header">
+        <h3>Propiedades</h3>
+        <button class="panel-toggle" (click)="togglePropertiesPanel()">
+          {{ propertiesPanelExpanded ? '→' : '←' }}
+        </button>
+      </div>
+
+      <div class="panel-content" *ngIf="selectedNode || selectedConnection">
+
+        <div *ngIf="selectedNode" class="node-properties">
+          <h4>{{ selectedNode.name }}</h4>
+
+          <div class="property-group">
+            <label class="property-label">Nombre:</label>
+            <input
+              type="text"
+              [(ngModel)]="selectedNode.name"
+              class="property-input"
+              (ngModelChange)="onNodePropertyChange()"
+            />
+          </div>
+
+          <div class="property-group" *ngIf="selectedNode.type === 'document'">
+            <label class="property-label">Tipo de Documento:</label>
+            <select [(ngModel)]="selectedNode.config.documentType" class="property-select">
+              <option value="identification">Identificación</option>
+              <option value="vehicle">Vehículo</option>
+              <option value="address">Comprobante Domicilio</option>
+              <option value="financial">Financiero</option>
+              <option value="legal">Legal</option>
+              <option value="custom">Personalizado</option>
+            </select>
+          </div>
+
+          <div class="property-group" *ngIf="selectedNode.type === 'market'">
+            <label class="property-label">Código de Ciudad:</label>
+            <input
+              type="text"
+              [(ngModel)]="selectedNode.config.cityCode"
+              class="property-input"
+              placeholder="guadalajara"
+            />
+
+            <label class="property-label">Regulaciones:</label>
+            <div class="regulations-list">
+              <div *ngFor="let regulation of selectedNode.config.regulations; let i = index" class="regulation-item">
+                <input
+                  type="text"
+                  [(ngModel)]="selectedNode.config.regulations[i]"
+                  class="regulation-input"
+                  placeholder="SEMOV, Verificación..."
+                />
+                <button class="remove-btn" (click)="removeRegulation(i)">✕</button>
+              </div>
+              <button class="add-regulation-btn" (click)="addRegulation()">+ Agregar</button>
+            </div>
+          </div>
+
+          <div class="property-group" *ngIf="selectedNode.type === 'verification'">
+            <label class="property-label">Tipo de Verificación:</label>
+            <select [(ngModel)]="selectedNode.config.verificationType" class="property-select">
+              <option value="voice">Patrón de Voz</option>
+              <option value="avi">Análisis AVI</option>
+              <option value="biometric">Biométrica</option>
+              <option value="document">Documento</option>
+            </select>
+          </div>
+        </div>
+
+        <div *ngIf="selectedConnection" class="connection-properties">
+              <h4>
+                <app-icon
+                  class="icon-16-block flow-builder__icon"
+                  name="link-connected"
+                  [size]="16"
+                  aria-hidden="true"
+                ></app-icon>
+                Conexión
+              </h4>
+
+          <div class="property-group">
+            <label class="property-label">Condición:</label>
+            <select [(ngModel)]="selectedConnection.condition" class="property-select">
+              <option value="always">Siempre</option>
+              <option value="success">En éxito</option>
+              <option value="failure">En fallo</option>
+              <option value="custom">Personalizada</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-modal" *ngIf="showGenerationModal" (click)="closeGenerationModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Generar Flujo</h3>
+        <button class="modal-close" (click)="closeGenerationModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="generation-progress" *ngIf="isGenerating">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="generationProgress"></div>
+          </div>
+          <p class="progress-text">{{ generationStatus }}</p>
+        </div>
+
+        <div class="generation-preview" *ngIf="generatedCode && !isGenerating">
+          <h4>Código Generado:</h4>
+          <div class="code-tabs">
+            <button
+              *ngFor="let file of getGeneratedFiles()"
+              class="code-tab"
+              [class.active]="activeCodeTab === file"
+              (click)="activeCodeTab = file"
+            >
+              {{ file }}
+            </button>
+          </div>
+          <div class="code-content">
+            <pre><code>{{ getGeneratedCode(activeCodeTab) }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="closeGenerationModal()">Cancelar</button>
+            <button
+              class="btn-primary"
+              (click)="downloadGeneratedCode()"
+              [disabled]="!generatedCode"
+            >
+              <app-icon
+                class="icon-16-block flow-builder__icon"
+                name="download-tray"
+                [size]="16"
+                aria-hidden="true"
+              ></app-icon>
+              Descargar Código
+            </button>
+      </div>
+    </div>
+  </div>
+</div>

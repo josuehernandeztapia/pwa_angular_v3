@@ -1,0 +1,264 @@
+<div class="cliente-shell">
+  <header class="cliente-header">
+    <div class="cliente-header__primary">
+      <h1 class="cliente-title">{{ client?.name || 'Cliente' }}</h1>
+      <div class="cliente-header__meta">
+        <span class="cliente-status-badge" [ngClass]="getStatusBadgeClass(client?.status)">
+          {{ client?.status || 'Sin estado' }}
+        </span>
+        <span class="cliente-meta" *ngIf="client?.flow">{{ getFlowDisplayName(client?.flow) }}</span>
+        <span class="cliente-meta" *ngIf="client?.market">{{ getMunicipalityName(client?.market) }}</span>
+      </div>
+    </div>
+
+    <div class="cliente-header__metrics" *ngIf="client?.healthScore !== null">
+      <span class="metric-label">Score de Salud</span>
+      <span class="metric-value" [ngClass]="getHealthScoreClass()">
+        {{ client?.healthScore }}%
+      </span>
+    </div>
+
+    <div class="cliente-header__metrics" *ngIf="isFinancialProduct()">
+      <span class="metric-label">Protección</span>
+      <span class="metric-pill metric-pill--available">Disponible</span>
+    </div>
+  </header>
+
+  <section class="cliente-summary">
+    <div class="summary-grid">
+      <article class="summary-card">
+        <h3 class="summary-label">Documentos</h3>
+        <p class="summary-value">{{ getDocumentStats() }}</p>
+      </article>
+      <article class="summary-card">
+        <h3 class="summary-label">Flujo</h3>
+        <p class="summary-value">{{ getFlowDisplayName(client?.flow) }}</p>
+      </article>
+      <article class="summary-card">
+        <h3 class="summary-label">Municipio</h3>
+        <p class="summary-value">{{ getMunicipalityName(client?.market) }}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="cliente-actions">
+    <div class="cliente-actions__group">
+      <header class="section-header">
+        <h2 class="section-title">Verificación y Validación</h2>
+        <p class="section-subtitle">Procesos inteligentes para validar identidad y riesgo</p>
+      </header>
+      <div class="cliente-actions__list">
+        <button
+          type="button"
+          class="action-card action-card--primary"
+          [disabled]="!canStartAviVerification()"
+          (click)="startAviVerification()">
+          <span class="action-card__icon">
+            <app-icon name="microphone" [size]="24" />
+          </span>
+          <span class="action-card__body">
+            <span class="action-card__title">Iniciar Verificación AVI</span>
+            <span class="action-card__subtitle">Preguntas micro-locales con análisis de voz</span>
+          </span>
+          <span class="action-card__chevron">→</span>
+        </button>
+
+        <button
+          type="button"
+          class="action-card action-card--secondary"
+          [disabled]="!canStartKyc()"
+          (click)="startTraditionalKyc()">
+          <span class="action-card__icon">
+            <app-icon name="user-network" [size]="24" />
+          </span>
+          <span class="action-card__body">
+            <span class="action-card__title">Verificación tradicional</span>
+            <span class="action-card__subtitle">Biometría y documentos estándar</span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="cliente-actions__group">
+      <header class="section-header">
+        <h2 class="section-title">Documentos y Contratos</h2>
+        <p class="section-subtitle">Gestión centralizada de expedientes</p>
+      </header>
+      <div class="cliente-actions__list">
+        <button type="button" class="action-card" (click)="viewDocuments()">
+          <span class="action-card__icon">
+            <app-icon name="collection" [size]="24" />
+          </span>
+          <span class="action-card__body">
+            <span class="action-card__title">Ver expediente</span>
+            <span class="action-card__subtitle">Revisión completa de documentos</span>
+          </span>
+        </button>
+        <button type="button" class="action-card" (click)="generateContract()">
+          <span class="action-card__icon">
+            <app-icon name="camera" [size]="24" />
+          </span>
+          <span class="action-card__body">
+            <span class="action-card__title">Generar contrato</span>
+            <span class="action-card__subtitle">Contrato actualizado listo para firma</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="cliente-details" *ngIf="client">
+    <div class="details-grid">
+      <article class="detail-card">
+        <h3 class="detail-title">Información personal</h3>
+        <dl class="detail-list">
+          <div class="detail-item">
+            <dt class="detail-label">Email</dt>
+            <dd class="detail-value">{{ client.email || 'No proporcionado' }}</dd>
+          </div>
+          <div class="detail-item">
+            <dt class="detail-label">Teléfono</dt>
+            <dd class="detail-value">{{ client.phone || 'No proporcionado' }}</dd>
+          </div>
+          <div class="detail-item">
+            <dt class="detail-label">RFC</dt>
+            <dd class="detail-value">{{ client.rfc || 'No proporcionado' }}</dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="detail-card">
+        <h3 class="detail-title">Información del proceso</h3>
+        <dl class="detail-list">
+          <div class="detail-item">
+            <dt class="detail-label">Creado</dt>
+            <dd class="detail-value">{{ client.createdAt | date:'medium' }}</dd>
+          </div>
+          <div class="detail-item">
+            <dt class="detail-label">Actualizado</dt>
+            <dd class="detail-value">{{ client.updatedAt | date:'medium' }}</dd>
+          </div>
+          <div class="detail-item">
+            <dt class="detail-label">Ecosistema</dt>
+            <dd class="detail-value">{{ client.ecosystemId || 'No asignado' }}</dd>
+          </div>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <section class="cliente-progress" *ngIf="client">
+    <header class="section-header">
+      <h2 class="section-title">Progreso financiero</h2>
+      <p class="section-subtitle">Seguimiento de planes de ahorro y pagos</p>
+    </header>
+
+    <div class="progress-grid">
+      <article class="progress-card">
+        <header class="progress-card__header">
+          <h3 class="progress-card__title">Plan de ahorro</h3>
+        </header>
+        <div data-savings-progress></div>
+        <footer class="progress-card__footer">
+          <div class="progress-meta">
+            <span class="progress-meta__label">Última aportación</span>
+            <span class="progress-meta__value">{{ getLastContributionDate() }}</span>
+          </div>
+          <div class="progress-meta">
+            <span class="progress-meta__label">Próximo vencimiento</span>
+            <span class="progress-meta__value">{{ getNextPaymentDue() }}</span>
+          </div>
+        </footer>
+      </article>
+
+      <article class="progress-card">
+        <header class="progress-card__header">
+          <h3 class="progress-card__title">Plan de pagos</h3>
+        </header>
+        <div data-payment-progress></div>
+        <footer class="progress-card__footer">
+          <div class="progress-meta">
+            <span class="progress-meta__label">Pagos restantes</span>
+            <span class="progress-meta__value">{{ getRemainingPayments() }}</span>
+          </div>
+          <div class="progress-meta">
+            <span class="progress-meta__label">Liquidación estimada</span>
+            <span class="progress-meta__value">{{ getEstimatedCompletion() }}</span>
+          </div>
+        </footer>
+      </article>
+    </div>
+  </section>
+
+  <section class="cliente-payment" *ngIf="client">
+    <header class="section-header">
+      <h2 class="section-title">Opciones de pago</h2>
+      <p class="section-subtitle">Genera enlaces de pago inmediatos</p>
+    </header>
+
+    <div class="payment-options">
+      <button type="button" class="payment-option" (click)="generatePaymentLink('spei')">
+        <span class="payment-option__icon payment-option__icon--spei">
+          <app-icon name="bank" [size]="24" />
+        </span>
+        <span class="payment-option__body">
+          <span class="payment-option__title">Transferencia SPEI</span>
+          <span class="payment-option__subtitle">Pago inmediato desde tu banco</span>
+          <span class="payment-option__note">Sin comisiones adicionales</span>
+        </span>
+      </button>
+
+      <button type="button" class="payment-option" (click)="generatePaymentLink('conekta')">
+        <span class="payment-option__icon payment-option__icon--card">
+          <app-icon name="currency-dollar" [size]="24" />
+        </span>
+        <span class="payment-option__body">
+          <span class="payment-option__title">Tarjeta de crédito/débito</span>
+          <span class="payment-option__subtitle">Procesado con Conekta</span>
+          <span class="payment-option__note">Meses sin intereses disponibles</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="account-card">
+      <div class="account-card__info">
+        <h3 class="account-card__title">Estado de cuenta</h3>
+        <p class="account-card__subtitle">Descarga tu estado actualizado con movimientos recientes</p>
+      </div>
+      <div class="account-card__actions">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="previewAccountStatement()">
+          Vista previa
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" (click)="generatePDF()" [disabled]="isGeneratingPDF">
+          {{ isGeneratingPDF ? 'Generando…' : 'Descargar PDF' }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="cliente-import" *ngIf="client?.importStatus">
+    <header class="section-header">
+      <h2 class="section-title">Seguimiento de importación</h2>
+      <p class="section-subtitle">Control de milestones y entregables críticos</p>
+    </header>
+    <div data-import-tracker class="cliente-placeholder"></div>
+  </section>
+
+  <section class="cliente-event">
+    <header class="section-header">
+      <h2 class="section-title">Historial de actividad</h2>
+      <p class="section-subtitle">Eventos operativos y auditoría en tiempo real</p>
+    </header>
+    <div data-event-log class="cliente-placeholder"></div>
+  </section>
+
+  <section class="cliente-protection" *ngIf="isFinancialProduct()">
+    <header class="section-header">
+      <h2 class="section-title">Protección financiera</h2>
+      <p class="section-subtitle">Herramientas dinámicas para restructuración y cobertura</p>
+    </header>
+    <div data-protection-container class="cliente-placeholder"></div>
+  </section>
+
+  <div data-avi-modal *ngIf="showAviModal"></div>
+</div>

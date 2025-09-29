@@ -1,0 +1,63 @@
+<ng-container *ngIf="icon">
+  <svg
+    class="app-icon__svg"
+    [attr.viewBox]="icon.viewBox"
+    [attr.fill]="icon.fill ?? defaults.fill"
+    [attr.stroke]="icon.stroke ?? defaults.stroke"
+    [attr.stroke-width]="icon.strokeWidth ?? strokeWidth"
+    [attr.role]="ariaLabel ? 'img' : 'presentation'"
+    [attr.aria-label]="ariaLabel ?? null"
+    [attr.aria-hidden]="ariaLabel ? null : 'true'"
+    [style.width.px]="size"
+    [style.height.px]="size"
+    [style.color]="color"
+  >
+    <ng-container *ngFor="let shape of icon.shapes">
+      <path
+        *ngIf="shape.type === 'path'"
+        [attr.d]="shape.d"
+        [attr.stroke-linecap]="shape.strokeLinecap ?? null"
+        [attr.stroke-linejoin]="shape.strokeLinejoin ?? null"
+        [attr.stroke-width]="shape.strokeWidth ?? icon.strokeWidth ?? strokeWidth"
+        [attr.fill]="shape.fill ?? null"
+      ></path>
+      <circle
+        *ngIf="shape.type === 'circle'"
+        [attr.cx]="shape.cx"
+        [attr.cy]="shape.cy"
+        [attr.r]="shape.r"
+        [attr.fill]="shape.fill ?? null"
+      ></circle>
+      <line
+        *ngIf="shape.type === 'line'"
+        [attr.x1]="shape.x1"
+        [attr.y1]="shape.y1"
+        [attr.x2]="shape.x2"
+        [attr.y2]="shape.y2"
+        [attr.stroke-linecap]="shape.strokeLinecap ?? null"
+        [attr.stroke-linejoin]="shape.strokeLinejoin ?? null"
+        [attr.stroke-width]="shape.strokeWidth ?? icon.strokeWidth ?? strokeWidth"
+      ></line>
+      <polyline
+        *ngIf="shape.type === 'polyline'"
+        [attr.points]="shape.points"
+        [attr.stroke-linecap]="shape.strokeLinecap ?? null"
+        [attr.stroke-linejoin]="shape.strokeLinejoin ?? null"
+        [attr.stroke-width]="shape.strokeWidth ?? icon.strokeWidth ?? strokeWidth"
+      ></polyline>
+      <polygon
+        *ngIf="shape.type === 'polygon'"
+        [attr.points]="shape.points"
+      ></polygon>
+      <rect
+        *ngIf="shape.type === 'rect'"
+        [attr.x]="shape.x"
+        [attr.y]="shape.y"
+        [attr.width]="shape.width"
+        [attr.height]="shape.height"
+        [attr.rx]="shape.rx ?? null"
+        [attr.ry]="shape.ry ?? null"
+      ></rect>
+    </ng-container>
+  </svg>
+</ng-container>

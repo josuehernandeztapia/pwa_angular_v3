@@ -1,0 +1,618 @@
+:host {
+  display: block;
+}
+
+.voice-recorder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5, 1.25rem);
+  padding: var(--space-6, 1.5rem);
+  border-radius: var(--radius-2xl, 24px);
+  border: 2px solid transparent;
+  background: var(--flat-surface-bg);
+  box-shadow: 0 20px 44px color-mix(in srgb, var(--openai-black) 18%, transparent);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.voice-recorder--recording {
+  border-color: var(--accent-red-500);
+  box-shadow: 0 16px 48px color-mix(in srgb, var(--accent-red-500) 28%, transparent);
+  background: color-mix(in srgb, var(--accent-red-500) 8%, var(--flat-surface-bg));
+}
+
+.voice-recorder--processing {
+  border-color: var(--accent-blue-500);
+  box-shadow: 0 16px 48px color-mix(in srgb, var(--accent-blue-500) 25%, transparent);
+  background: color-mix(in srgb, var(--accent-blue-500) 6%, var(--flat-surface-bg));
+}
+
+.voice-recorder__guide {
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 40%, transparent);
+  border-radius: var(--radius-xl, 20px);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--surface-neutral-weak) 95%, transparent);
+  box-shadow: var(--shadow-sm, 0 12px 28px rgba(15, 23, 42, 0.08));
+}
+
+.voice-recorder__guide-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4, 1rem);
+  padding: var(--space-4, 1rem) var(--space-5, 1.25rem);
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-50);
+}
+
+.voice-recorder__guide-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+}
+
+.voice-recorder__guide-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-blue-500) 30%, transparent);
+}
+
+.voice-recorder__guide-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.voice-recorder__guide-toggle {
+  border: none;
+  border-radius: var(--radius-md, 12px);
+  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  background: color-mix(in srgb, var(--flat-surface-bg) 10%, transparent);
+  color: inherit;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.voice-recorder__guide-toggle:hover {
+  background: color-mix(in srgb, var(--flat-surface-bg) 22%, transparent);
+}
+
+.voice-recorder__guide-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5, 1.25rem);
+  padding: var(--space-5, 1.25rem);
+  background: color-mix(in srgb, var(--flat-surface-bg) 92%, transparent);
+  color: var(--color-text-primary);
+}
+
+.voice-recorder__guide-intro {
+  margin: 0;
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  border-left: 4px solid var(--accent-blue-500);
+  border-radius: var(--radius-lg, 16px);
+  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+  font-weight: 500;
+}
+
+.voice-recorder__guide-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 0.75rem);
+}
+
+.voice-recorder__section-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.voice-recorder__questions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+}
+
+.voice-recorder__question {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  border-radius: var(--radius-lg, 16px);
+  background: color-mix(in srgb, var(--surface-neutral-weak) 88%, transparent);
+  border: 1px solid transparent;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.voice-recorder__question--asked {
+  background: color-mix(in srgb, var(--accent-green-500) 14%, transparent);
+  border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
+}
+
+.voice-recorder__question--mandatory {
+  border-left: 4px solid var(--accent-red-500);
+  background: color-mix(in srgb, var(--accent-red-500) 10%, transparent);
+}
+
+.voice-recorder__question-status {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+}
+
+.voice-recorder__question-text {
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+}
+
+.voice-recorder__question-category {
+  justify-self: end;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-neutral-900) 6%, transparent);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.voice-recorder__tips {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: var(--space-2, 0.5rem);
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.voice-recorder__tip {
+  line-height: 1.45;
+}
+
+.voice-recorder__controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 1rem);
+  padding: var(--space-5, 1.25rem);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 40%, transparent);
+  border-radius: var(--radius-xl, 20px);
+  background: color-mix(in srgb, var(--surface-neutral-weak) 92%, transparent);
+}
+
+.voice-recorder__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  border-radius: var(--radius-lg, 16px);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 50%, transparent);
+  background: color-mix(in srgb, var(--flat-surface-bg) 92%, transparent);
+}
+
+.voice-recorder__status-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+}
+
+.voice-recorder__status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-text-tertiary, #94a3b8);
+  transition: background 0.3s ease;
+}
+
+.voice-recorder__status-dot--active {
+  background: var(--accent-red-500);
+  animation: voice-recorder-pulse 1.5s infinite;
+}
+
+.voice-recorder__status-text {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.voice-recorder__duration {
+  font-family: 'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-weight: 600;
+  color: var(--accent-red-500);
+}
+
+.voice-recorder__main-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3, 0.75rem);
+  justify-content: center;
+}
+
+.voice-recorder__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3, 0.75rem);
+  border-radius: var(--radius-2xl, 24px);
+  padding: var(--space-3, 0.75rem) var(--space-5, 1.25rem);
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+.voice-recorder__button--record {
+  background: var(--accent-green-500);
+  color: var(--flat-surface-bg);
+  box-shadow: 0 16px 36px rgba(16, 185, 129, 0.32);
+}
+
+.voice-recorder__button--record.voice-recorder__button--recording {
+  background: var(--accent-red-500);
+  box-shadow: 0 16px 36px rgba(239, 68, 68, 0.32);
+}
+
+.voice-recorder__button--record:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.voice-recorder__button--secondary {
+  background: color-mix(in srgb, var(--color-neutral-900) 10%, var(--surface-neutral-weak) 90%);
+  color: var(--color-text-primary);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 45%, transparent);
+}
+
+.voice-recorder__button:hover:not(:disabled) {
+  box-shadow: 0 18px 42px rgba(2, 132, 199, 0.2);
+}
+
+.voice-recorder__button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voice-recorder__button-glyph {
+  width: 20px;
+  height: 20px;
+}
+
+.voice-recorder__processing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-3, 0.75rem);
+  border-radius: var(--radius-lg, 16px);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 40%, transparent);
+  background: color-mix(in srgb, var(--accent-blue-500) 14%, transparent);
+  color: var(--color-info-dark, #1e40af);
+}
+
+.voice-recorder__processing-spinner {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--accent-blue-500) 40%, transparent);
+  border-inline-start-color: var(--accent-blue-500);
+  animation: voice-recorder-spin 1s linear infinite;
+}
+
+.voice-recorder__error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  border-radius: var(--radius-lg, 16px);
+  border: 1px solid color-mix(in srgb, var(--accent-red-500) 40%, transparent);
+  background: color-mix(in srgb, var(--accent-red-500) 14%, transparent);
+  color: var(--color-danger-dark, #b91c1c);
+}
+
+.voice-recorder__dismiss {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.voice-recorder__dismiss:hover {
+  opacity: 0.7;
+}
+
+.voice-recorder__feedback {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-5, 1.25rem);
+  border-radius: var(--radius-xl, 20px);
+  border: 1px solid color-mix(in srgb, var(--accent-blue-500) 30%, transparent);
+  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+}
+
+.voice-recorder__feedback-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+  font-weight: 600;
+  color: var(--color-info-dark, #1e40af);
+}
+
+.voice-recorder__feedback-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-blue-500) 40%, transparent);
+}
+
+.voice-recorder__feedback-stats {
+  display: flex;
+  gap: var(--space-5, 1.25rem);
+  flex-wrap: wrap;
+}
+
+.voice-recorder__feedback-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1, 0.25rem);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.voice-recorder__feedback-stat-value {
+  font-size: 1.5rem;
+}
+
+.voice-recorder__feedback-stat-label {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.voice-recorder__feedback-next {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1, 0.25rem);
+  font-size: 0.95rem;
+}
+
+.voice-recorder__feedback-next-label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.voice-recorder__feedback-next-text {
+  color: var(--color-text-primary);
+}
+
+.voice-recorder__results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 1rem);
+  padding: var(--space-5, 1.25rem);
+  border-radius: var(--radius-xl, 20px);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 45%, transparent);
+  background: color-mix(in srgb, var(--flat-surface-bg) 96%, transparent);
+  box-shadow: var(--shadow-sm, 0 16px 32px color-mix(in srgb, var(--openai-black) 12%, transparent));
+}
+
+.voice-recorder__results-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.voice-recorder__results-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-green-500) 24%, transparent);
+}
+
+.voice-recorder__score {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4, 1rem);
+}
+
+.voice-recorder__score-circle {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 6px solid var(--accent-green-500);
+  background: color-mix(in srgb, var(--flat-surface-bg) 92%, transparent);
+}
+
+.voice-recorder__score-circle--excellent {
+  border-color: var(--accent-green-500);
+}
+
+.voice-recorder__score-circle--warning {
+  border-color: var(--color-warning, #f59e0b);
+}
+
+.voice-recorder__score-circle--critical {
+  border-color: var(--accent-red-500);
+}
+
+.voice-recorder__score-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.voice-recorder__score-unit {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.voice-recorder__score-label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.voice-recorder__summary {
+  display: grid;
+  gap: var(--space-3, 0.75rem);
+}
+
+.voice-recorder__summary-item {
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  border-radius: var(--radius-lg, 16px);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 35%, transparent);
+  background: color-mix(in srgb, var(--surface-neutral-weak) 88%, transparent);
+  color: var(--color-text-primary);
+}
+
+.voice-recorder__summary-item--success {
+  border-color: color-mix(in srgb, var(--accent-green-500) 40%, transparent);
+  background: color-mix(in srgb, var(--accent-green-500) 14%, transparent);
+}
+
+.voice-recorder__summary-item--alert {
+  border-color: color-mix(in srgb, var(--color-warning, #f59e0b) 45%, transparent);
+  background: color-mix(in srgb, var(--color-warning, #f59e0b) 18%, transparent);
+}
+
+.voice-recorder__summary-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.voice-recorder__results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3, 0.75rem);
+}
+
+.voice-recorder__results-button {
+  flex: 1 1 200px;
+  border-radius: var(--radius-lg, 16px);
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.voice-recorder__results-button--secondary {
+  background: color-mix(in srgb, var(--surface-neutral-weak) 90%, transparent);
+  color: var(--color-text-secondary);
+  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 45%, transparent);
+}
+
+.voice-recorder__results-button--secondary:hover {
+  background: color-mix(in srgb, var(--surface-neutral-weak) 96%, transparent);
+}
+
+.voice-recorder__results-button--primary {
+  background: var(--accent-green-500);
+  color: var(--flat-surface-bg);
+  box-shadow: 0 16px 32px rgba(16, 185, 129, 0.25);
+}
+
+.voice-recorder__results-button--primary:hover {
+  background: color-mix(in srgb, var(--accent-green-500) 85%, var(--color-success-strong, #059669) 15%);
+}
+
+.voice-recorder__results-button--retry {
+  background: var(--accent-red-500);
+  color: var(--flat-surface-bg);
+  box-shadow: 0 16px 32px rgba(239, 68, 68, 0.28);
+}
+
+.voice-recorder__results-button--retry:hover {
+  background: color-mix(in srgb, var(--accent-red-500) 85%, var(--color-danger-dark, #b91c1c) 15%);
+}
+
+@keyframes voice-recorder-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes voice-recorder-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .voice-recorder {
+    padding: var(--space-5, 1.25rem);
+  }
+
+  .voice-recorder__status,
+  .voice-recorder__main-actions,
+  .voice-recorder__feedback-stats,
+  .voice-recorder__results-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .voice-recorder__button,
+  .voice-recorder__results-button {
+    width: 100%;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .voice-recorder {
+    background: color-mix(in srgb, var(--color-neutral-900) 95%, transparent);
+    border-color: color-mix(in srgb, var(--color-border-secondary, #334155) 55%, transparent);
+    box-shadow: var(--shadow-xl, 0 32px 64px rgba(2, 6, 23, 0.6));
+  }
+
+  .voice-recorder__guide {
+    background: color-mix(in srgb, var(--color-neutral-900) 80%, transparent);
+    border-color: color-mix(in srgb, var(--color-border-secondary, #334155) 50%, transparent);
+  }
+
+  .voice-recorder__guide-content,
+  .voice-recorder__controls,
+  .voice-recorder__feedback,
+  .voice-recorder__results {
+    background: color-mix(in srgb, var(--color-neutral-900) 80%, transparent);
+    border-color: color-mix(in srgb, var(--color-border-secondary, #334155) 50%, transparent);
+    color: var(--color-neutral-100, #f8fafc);
+  }
+
+  .voice-recorder__question-category,
+  .voice-recorder__feedback-icon,
+  .voice-recorder__results-icon {
+    background: color-mix(in srgb, var(--color-neutral-800) 80%, transparent);
+    color: var(--color-neutral-100, #f8fafc);
+  }
+
+  .voice-recorder__button--secondary {
+    background: color-mix(in srgb, var(--color-neutral-800) 75%, transparent);
+    color: var(--color-neutral-100, #f8fafc);
+    border-color: color-mix(in srgb, var(--color-border-secondary, #475569) 55%, transparent);
+  }
+
+  .voice-recorder__results-button--secondary {
+    background: color-mix(in srgb, var(--color-neutral-800) 78%, transparent);
+    color: var(--color-neutral-100, #f8fafc);
+    border-color: color-mix(in srgb, var(--color-border-secondary, #475569) 55%, transparent);
+  }
+}

@@ -1,0 +1,93 @@
+<section class="offline" aria-live="polite">
+  <div class="offline__card ui-card">
+    <header class="offline__header">
+      <div class="offline__signal" aria-hidden="true">
+        <app-icon class="offline__signal-icon" name="offline" [size]="40"></app-icon>
+      </div>
+      <span class="offline__alert" aria-hidden="true">!</span>
+    </header>
+
+    <div class="offline__intro">
+      <h1 class="offline__title">Sin conexión a internet</h1>
+      <p class="offline__description">
+        No se pudo establecer conexión con el servidor. Verifica tu conexión a internet e inténtalo de nuevo.
+      </p>
+    </div>
+
+    <section class="offline__status" aria-label="Resumen de estado">
+      <div class="offline__status-item">
+        <span class="offline__status-dot offline__status-dot--error"></span>
+        <span class="offline__status-text">Estado: Desconectado</span>
+      </div>
+      <div class="offline__status-item">
+        <span class="offline__status-dot offline__status-dot--warning"></span>
+        <span class="offline__status-text">Pendientes: {{ offlineCapabilities().pendingCount }}</span>
+      </div>
+    </section>
+
+    <section class="offline__features" aria-label="Capacidades disponibles sin conexión">
+      <h2 class="offline__section-title">Mientras estás offline:</h2>
+      <ul class="offline__feature-list">
+        <li class="offline__feature">
+          <span class="offline__feature-dot offline__feature-dot--info"></span>
+          <span>Los datos se guardan automáticamente en tu dispositivo</span>
+        </li>
+        <li class="offline__feature">
+          <span class="offline__feature-dot offline__feature-dot--success"></span>
+          <span>Las acciones se sincronizarán cuando vuelvas a tener conexión</span>
+        </li>
+        <li class="offline__feature">
+          <span class="offline__feature-dot offline__feature-dot--warning"></span>
+          <span>Puedes seguir navegando con los datos almacenados</span>
+        </li>
+      </ul>
+    </section>
+
+    <div class="offline__actions">
+      <button
+        type="button"
+        class="ui-btn ui-btn-primary offline__action offline__action--primary"
+        (click)="checkConnection()"
+        [disabled]="isChecking()"
+      >
+        <app-icon
+          *ngIf="!isChecking()"
+          class="offline__action-icon"
+          name="refresh"
+          [size]="20"
+        ></app-icon>
+        <app-icon
+          *ngIf="isChecking()"
+          class="offline__action-icon offline__action-icon--spinner"
+          name="spinner"
+          [size]="20"
+        ></app-icon>
+        {{ isChecking() ? 'Verificando conexión...' : 'Verificar conexión' }}
+      </button>
+
+      <div class="offline__secondary-actions">
+        <button type="button" class="ui-btn ui-btn-secondary offline__action" (click)="goToDashboard()">
+          <app-icon class="offline__action-icon" name="home" [size]="20"></app-icon>
+          Dashboard
+        </button>
+        <button type="button" class="ui-btn ui-btn-secondary offline__action" (click)="clearOfflineData()">
+          <app-icon class="offline__action-icon" name="trash" [size]="20"></app-icon>
+          Limpiar caché
+        </button>
+      </div>
+    </div>
+
+    <section class="offline__helper" aria-label="Consejos para reconectar">
+      <h2 class="offline__helper-title">
+        <span aria-hidden="true">💡</span>
+        Consejos para mejorar tu conexión
+      </h2>
+      <ul class="offline__helper-list">
+        <li>Verifica que el Wi-Fi esté habilitado</li>
+        <li>Intenta cambiar a datos móviles</li>
+        <li>Acércate al router o busca mejor señal</li>
+        <li>Reinicia tu router si es necesario</li>
+      </ul>
+    </section>
+  </div>
+</section>

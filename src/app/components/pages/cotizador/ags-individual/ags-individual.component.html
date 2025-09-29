@@ -1,0 +1,210 @@
+<section class="ags-quote command-container">
+  <header class="ags-quote__header">
+    <button type="button" class="ags-quote__back" (click)="goBack()">
+      <app-icon class="icon-16" name="arrow-left" [size]="16"></app-icon>
+      Volver
+    </button>
+    <div class="ags-quote__heading">
+      <h1 class="ags-quote__title">
+        <svg class="ags-quote__title-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+        Cotizador AGS Individual
+      </h1>
+      <p class="ags-quote__subtitle">Aguascalientes • Venta a Plazo &amp; Compra de Contado</p>
+    </div>
+  </header>
+
+  <section class="ags-quote__summary premium-card" *ngIf="!isLoading">
+    <h2 class="ags-quote__section-title">Resumen</h2>
+    <div class="ags-quote__summary-grid">
+      <article class="ags-quote__summary-chip">
+        <span class="ags-quote__summary-label">Pago mensual</span>
+        <span class="ags-quote__summary-value">{{ (currentQuote?.monthlyPayment || 0) | currency:'MXN':'symbol':'1.0-0' }}</span>
+      </article>
+      <article class="ags-quote__summary-chip">
+        <span class="ags-quote__summary-label">Plazo</span>
+        <span class="ags-quote__summary-value">{{ isPlazoSale() ? (currentQuote?.term || cotizadorForm.value.term) + ' meses' : '—' }}</span>
+      </article>
+      <article class="ags-quote__summary-chip">
+        <span class="ags-quote__summary-label">Total</span>
+        <span class="ags-quote__summary-value">{{ (currentQuote?.totalPrice || totalPrice) | currency:'MXN':'symbol':'1.0-0' }}</span>
+      </article>
+    </div>
+  </section>
+
+  <div class="ags-quote__body" *ngIf="!isLoading">
+    <section class="ags-quote__config premium-card">
+      <form [formGroup]="cotizadorForm" class="ags-quote__form">
+        <fieldset class="ags-quote__group">
+          <legend class="ags-quote__group-title">Unidad</legend>
+          <div class="ags-quote__radio-group">
+            <label class="ags-quote__radio">
+              <input type="radio" formControlName="saleType" value="aguascalientes-plazo" (change)="onSaleTypeChange()">
+              <div class="ags-quote__radio-info">
+                <span class="ags-quote__radio-title">Venta a Plazo</span>
+                <span class="ags-quote__radio-copy">12-24 meses • Enganche 60% • Tasa 25.5%</span>
+              </div>
+            </label>
+            <label class="ags-quote__radio">
+              <input type="radio" formControlName="saleType" value="aguascalientes-directa" (change)="onSaleTypeChange()">
+              <div class="ags-quote__radio-info">
+                <span class="ags-quote__radio-title">Compra de Contado</span>
+                <span class="ags-quote__radio-copy">Sin financiamiento • Enganche 50%</span>
+              </div>
+            </label>
+          </div>
+        </fieldset>
+
+        <section class="ags-quote__group" *ngIf="packageData">
+          <h2 class="ags-quote__group-title">
+            <svg class="ags-quote__group-icon ags-quote__group-icon--accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+            Consumo
+          </h2>
+
+          <article class="ags-quote__vehicle">
+            <h3 class="ags-quote__vehicle-title">
+              <svg class="ags-quote__vehicle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 21l4-7 4 7M3 7l3.5 5.5L10 7M14 7l3.5 5.5L21 7M5 12h14M12 3L8 7h8l-4-4z" />
+              </svg>
+              Vagoneta H6C (19 Pasajeros)
+            </h3>
+            <span class="ags-quote__vehicle-price">$799,000 MXN</span>
+          </article>
+
+          <div class="ags-quote__components">
+            <div
+              *ngFor="let component of packageData.components"
+              class="ags-quote__component"
+              [ngClass]="{
+                'ags-quote__component--optional': component.isOptional,
+                'ags-quote__component--selected': component.isOptional && isOptionalSelected(component.id)
+              }"
+            >
+              <label *ngIf="component.isOptional" class="ags-quote__checkbox">
+                <input type="checkbox" [checked]="isOptionalSelected(component.id)" (change)="onOptionalToggle(component.id)">
+                <span>{{ component.name }}</span>
+                <strong>{{ component.price | currency:'MXN':'symbol':'1.0-0' }}</strong>
+              </label>
+              <div *ngIf="!component.isOptional" class="ags-quote__component-fixed">
+                <span>{{ component.name }}</span>
+                <strong>{{ component.price | currency:'MXN':'symbol':'1.0-0' }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="ags-quote__package-total">
+            <span>Total del paquete</span>
+            <strong>{{ totalPrice | currency:'MXN':'symbol':'1.0-0' }}</strong>
+          </div>
+        </section>
+
+        <section class="ags-quote__group" *ngIf="packageData">
+          <h2 class="ags-quote__group-title">
+            <svg class="ags-quote__group-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2l4 4V5l-4 4z" />
+            </svg>
+            Finanzas
+          </h2>
+
+          <div class="ags-quote__field" *ngIf="isPlazoSale()">
+            <label class="ags-quote__label" for="term">Plazo</label>
+            <select id="term" formControlName="term" (change)="onConfigChange()" class="premium-select">
+              <option value="">Seleccionar</option>
+              <option *ngFor="let term of availableTerms" [value]="term">{{ term }} meses</option>
+            </select>
+          </div>
+
+          <div class="ags-quote__field">
+            <label class="ags-quote__label" for="downPayment">Enganche (mínimo {{ minDownPaymentPct }}%)</label>
+            <div class="ags-quote__currency">
+              <span class="ags-quote__currency-symbol">$</span>
+              <input
+                id="downPayment"
+                type="number"
+                formControlName="downPayment"
+                [min]="minDownPayment"
+                (input)="onConfigChange()"
+                placeholder="Monto"
+              >
+            </div>
+            <span class="ags-quote__hint">Mínimo: {{ minDownPayment | currency:'MXN':'symbol':'1.0-0' }}</span>
+          </div>
+
+          <button type="button" class="premium-button ags-quote__calculate" (click)="calculateQuote()" [disabled]="!canCalculate()">
+            {{ isCalculating ? 'Calculando...' : 'Calcular' }}
+          </button>
+        </section>
+      </form>
+    </section>
+
+    <aside class="ags-quote__result premium-card" *ngIf="currentQuote">
+      <h2 class="ags-quote__section-title">Cotización AGS</h2>
+
+      <div class="ags-quote__result-cards">
+        <article class="ags-quote__result-card">
+          <span class="ags-quote__result-label">Pago mensual</span>
+          <span class="ags-quote__result-value">{{ (currentQuote.monthlyPayment || 0) | currency:'MXN':'symbol':'1.0-0' }}</span>
+        </article>
+        <article class="ags-quote__result-card">
+          <span class="ags-quote__result-label">Plazo</span>
+          <span class="ags-quote__result-value">{{ isPlazoSale() ? (currentQuote.term + ' meses') : '—' }}</span>
+        </article>
+        <article class="ags-quote__result-card">
+          <span class="ags-quote__result-label">Total</span>
+          <span class="ags-quote__result-value">{{ currentQuote.totalPrice | currency:'MXN':'symbol':'1.0-0' }}</span>
+        </article>
+      </div>
+
+      <dl class="ags-quote__breakdown">
+        <div class="ags-quote__breakdown-item">
+          <dt>Precio total</dt>
+          <dd>{{ currentQuote.totalPrice | currency:'MXN':'symbol':'1.0-0' }}</dd>
+        </div>
+        <div class="ags-quote__breakdown-item">
+          <dt>Enganche</dt>
+          <dd>{{ currentQuote.downPayment | currency:'MXN':'symbol':'1.0-0' }}</dd>
+        </div>
+        <div class="ags-quote__breakdown-item" *ngIf="isPlazoSale()">
+          <dt>A financiar</dt>
+          <dd>{{ currentQuote.amountToFinance | currency:'MXN':'symbol':'1.0-0' }}</dd>
+        </div>
+        <div class="ags-quote__breakdown-item ags-quote__breakdown-item--highlight" *ngIf="isPlazoSale()">
+          <dt>Pago mensual</dt>
+          <dd>{{ currentQuote.monthlyPayment | currency:'MXN':'symbol':'1.0-0' }}</dd>
+        </div>
+        <div class="ags-quote__breakdown-item" *ngIf="isPlazoSale()">
+          <dt>Plazo</dt>
+          <dd>{{ currentQuote.term }} meses</dd>
+        </div>
+        <div class="ags-quote__breakdown-item" *ngIf="isPlazoSale()">
+          <dt>Tasa anual</dt>
+          <dd>25.5%</dd>
+        </div>
+      </dl>
+
+      <div class="ags-quote__actions">
+        <button type="button" class="premium-button outline ags-quote__action" (click)="speakQuote()">
+          <app-icon class="icon-16" name="volume-2" [size]="16"></app-icon>
+          Escuchar
+        </button>
+        <button type="button" class="premium-button outline ags-quote__action" (click)="generatePDF()">
+          <app-icon class="icon-16" name="file-text" [size]="16"></app-icon>
+          Descargar PDF
+        </button>
+        <button type="button" class="premium-button ags-quote__action" (click)="proceedWithQuote()">
+          Continuar
+        </button>
+        <button type="button" class="premium-button ghost ags-quote__action" (click)="resetQuote()">
+          Nueva cotización
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <section *ngIf="isLoading" class="premium-card ags-quote__loading" role="status" aria-live="polite">
+    Cargando paquete AGS...
+  </section>
+</section>

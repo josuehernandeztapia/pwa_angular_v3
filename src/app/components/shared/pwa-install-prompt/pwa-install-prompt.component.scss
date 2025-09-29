@@ -1,0 +1,355 @@
+// PWA Install Prompt Component - BEM structure with design tokens
+
+.pwa-install {
+  &__banner {
+    position: fixed;
+    bottom: 0;
+    inset-inline: 0;
+    z-index: 999;
+    background: color-mix(in srgb, var(--color-neutral-900) 92%, transparent);
+    color: var(--flat-surface-bg);
+    padding: 16px;
+    box-shadow: 0 -4px 24px color-mix(in srgb, var(--openai-black) 18%, transparent);
+  }
+
+  &__banner-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 960px;
+    margin-inline: auto;
+  }
+
+  &__banner-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--accent-blue-400) 18%, transparent);
+  }
+
+  &__banner-copy {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__banner-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  &__banner-subtitle {
+    margin: 0;
+    font-size: 0.75rem;
+    color: color-mix(in srgb, var(--flat-surface-bg) 82%, transparent);
+  }
+
+  &__banner-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+    color: var(--flat-surface-bg);
+
+    &--primary {
+      background: color-mix(in srgb, var(--flat-surface-bg) 18%, transparent);
+
+      &:hover:not(:disabled) {
+        background: color-mix(in srgb, var(--flat-surface-bg) 26%, transparent);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    &--secondary {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: color-mix(in srgb, var(--flat-surface-bg) 10%, transparent);
+
+      &:hover {
+        background: color-mix(in srgb, var(--flat-surface-bg) 20%, transparent);
+      }
+    }
+  }
+
+  &__action-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__action-icon {
+    margin-inline-end: 2px;
+  }
+
+  &__spinner {
+    animation: pwaInstallSpin 1s linear infinite;
+  }
+
+  &__modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: color-mix(in srgb, var(--openai-black) 55%, transparent);
+  }
+
+  &__modal-content {
+    background: var(--flat-surface-bg);
+    color: var(--color-text-primary);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 420px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 24px 48px color-mix(in srgb, var(--openai-black) 18%, transparent);
+  }
+
+  &__modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px 0;
+  }
+
+  &__modal-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__modal-icon {
+    color: var(--accent-blue-500);
+  }
+
+  &__modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    padding: 6px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: color-mix(in srgb, var(--color-neutral-200) 70%, transparent);
+      color: var(--color-text-primary);
+    }
+  }
+
+  &__modal-body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+  }
+
+  &__instructions-intro {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+
+  &__instructions-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__instructions-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    background: var(--surface-neutral-weak);
+    border-radius: 10px;
+    border-left: 4px solid var(--accent-blue-600);
+  }
+
+  &__step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    background: var(--accent-blue-600);
+    color: var(--flat-surface-bg);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  &__step-text {
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    line-height: 1.45;
+  }
+
+  &__instructions-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent-blue-400) 10%, var(--flat-surface-bg));
+    border: 1px solid color-mix(in srgb, var(--accent-blue-400) 20%, transparent);
+    color: var(--accent-blue-700);
+    font-size: 0.8125rem;
+    text-align: center;
+  }
+
+  &__note-icon {
+    color: inherit;
+  }
+
+  &__modal-actions {
+    padding: 0 24px 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__modal-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &--primary {
+      background: var(--accent-blue-600);
+      color: var(--flat-surface-bg);
+
+      &:hover {
+        background: var(--accent-blue-700);
+      }
+    }
+  }
+
+  &__floating-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 998;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    background: color-mix(in srgb, var(--accent-blue-500) 95%, transparent);
+    color: var(--flat-surface-bg);
+    box-shadow: 0 12px 24px color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 16px 28px color-mix(in srgb, var(--accent-blue-500) 45%, transparent);
+    }
+  }
+
+  &__floating-icon {
+    display: inline-flex;
+  }
+
+  &__floating-text {
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+}
+
+@keyframes pwaInstallSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 640px) {
+  .pwa-install__banner {
+    padding: 12px;
+  }
+
+  .pwa-install__banner-content {
+    gap: 8px;
+  }
+
+  .pwa-install__banner-title {
+    font-size: 0.875rem;
+  }
+
+  .pwa-install__banner-subtitle {
+    font-size: 0.7rem;
+  }
+
+  .pwa-install__action-btn {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .pwa-install__floating-btn {
+    bottom: 16px;
+    right: 16px;
+    padding: 10px 14px;
+  }
+
+  .pwa-install__floating-text {
+    font-size: 0.7rem;
+  }
+
+  .pwa-install__modal-content {
+    max-height: calc(100vh - 32px);
+    margin: 0 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pwa-install__spinner {
+    animation: none;
+  }
+
+  .pwa-install__action-btn,
+  .pwa-install__floating-btn,
+  .pwa-install__modal-btn {
+    transition: none;
+  }
+}

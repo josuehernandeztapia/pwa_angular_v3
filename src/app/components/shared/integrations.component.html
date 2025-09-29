@@ -1,0 +1,23 @@
+<section class="integrations" aria-labelledby="integrations-title">
+  <h2 id="integrations-title" class="integrations__title">Mapa de Batalla de Integraciones</h2>
+  <p class="integrations__description">
+    Esta es la guía para el equipo técnico. Cada tarjeta representa una conexión externa que debe ser construida en el backend.
+    La PWA ya está preparada para consumir los endpoints correspondientes.
+  </p>
+
+  <div class="integrations__grid">
+    <article
+      *ngFor="let integration of integrations"
+      [ngClass]="getCardClasses(integration)"
+    >
+      <header class="integrations__card-header">
+        <h3 class="integrations__card-name">{{ integration.name }}</h3>
+        <span class="integrations__status-badge">SIMULADO</span>
+      </header>
+      <p class="integrations__role">{{ integration.role }}</p>
+      <div class="integrations__priority">
+        <span [ngClass]="getPriorityBadgeClasses(integration)">{{ integration.priority }}</span>
+      </div>
+    </article>
+  </div>
+</section>

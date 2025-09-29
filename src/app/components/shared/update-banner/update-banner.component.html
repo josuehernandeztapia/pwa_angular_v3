@@ -1,0 +1,18 @@
+<div
+  class="update-banner"
+  [ngClass]="getBannerStateClasses()"
+  role="status"
+  aria-live="polite"
+  [attr.aria-hidden]="show ? 'false' : 'true'"
+>
+  <div class="update-banner__content">
+    <span class="update-banner__message">Nueva versión disponible</span>
+    <button
+      type="button"
+      class="update-banner__action"
+      (click)="updateNow()"
+    >
+      Actualizar ahora
+    </button>
+  </div>
+</div>

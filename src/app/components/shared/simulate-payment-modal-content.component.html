@@ -1,0 +1,36 @@
+<div class="simulate-payment" [ngClass]="{ 'simulate-payment--loading': isLoading }">
+  <div *ngIf="isLoading" class="simulate-payment__loading" aria-live="polite">
+    <span class="simulate-payment__spinner" aria-hidden="true"></span>
+    <p class="simulate-payment__loading-text">Procesando simulación...</p>
+  </div>
+
+  <form *ngIf="!isLoading" (ngSubmit)="handleSimulatePayment($event)" class="simulate-payment__form">
+    <p class="simulate-payment__intro">
+      Introduce el monto que deseas simular como una aportación del cliente. Esto actualizará el estado del cliente y agregará un evento al historial.
+    </p>
+
+    <div class="simulate-payment__field">
+      <label for="simAmount" class="simulate-payment__label">Monto (MXN)</label>
+      <div class="simulate-payment__currency">
+        <span class="simulate-payment__symbol" aria-hidden="true">$</span>
+        <input
+          type="number"
+          id="simAmount"
+          name="simAmount"
+          [(ngModel)]="amount"
+          class="simulate-payment__input"
+          placeholder="0.00"
+          min="1"
+          step="any"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="simulate-payment__actions">
+      <button type="submit" class="simulate-payment__submit">
+        Confirmar Simulación
+      </button>
+    </div>
+  </form>
+</div>

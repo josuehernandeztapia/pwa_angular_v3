@@ -1,0 +1,29 @@
+<section class="delivery-tracker card">
+  <h2 class="delivery-tracker__title">Timeline de Entrega (77 días)</h2>
+
+  <ul *ngIf="loading" class="delivery-tracker__skeleton-list">
+    <li class="delivery-tracker__skeleton"></li>
+    <li class="delivery-tracker__skeleton"></li>
+    <li class="delivery-tracker__skeleton"></li>
+  </ul>
+
+  <ul *ngIf="!loading" class="delivery-tracker__timeline" data-cy="delivery-timeline">
+    <li class="delivery-tracker__timeline-step" data-cy="delivery-step">
+      <span class="delivery-tracker__timeline-day">Día 1</span>
+      <span class="delivery-tracker__timeline-description">Creación de entrega</span>
+    </li>
+    <li class="delivery-tracker__timeline-step" data-cy="delivery-step">
+      <span class="delivery-tracker__timeline-day">Día 30</span>
+      <span class="delivery-tracker__timeline-description">Pago programado</span>
+    </li>
+    <li class="delivery-tracker__timeline-step" data-cy="delivery-step">
+      <span class="delivery-tracker__timeline-day">Día 77</span>
+      <span class="delivery-tracker__timeline-description">Entrega final</span>
+    </li>
+  </ul>
+
+  <div *ngIf="!loading" class="delivery-tracker__eta">
+    ETA calculado:
+    <span class="delivery-tracker__eta-value" data-cy="delivery-eta">{{ eta }} días</span>
+  </div>
+</section>

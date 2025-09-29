@@ -1,0 +1,252 @@
+<section class="protection-real command-container">
+  <header class="protection-real__header">
+    <div class="protection-real__heading">
+      <h2 class="protection-real__title">Sistema de Protección Conductores</h2>
+      <p class="protection-real__subtitle" *ngIf="client">Gestión de protección para {{ client.name }}</p>
+    </div>
+    <div class="protection-real__status" *ngIf="statusInfo()">
+      <div class="protection-real__status-badge" [ngStyle]="getStatusBadgeStyles()">
+        <app-icon class="icon-16" name="shield-check" [size]="16"></app-icon>
+        <span>{{ statusInfo()!.title }}</span>
+      </div>
+      <p class="protection-real__status-message">{{ statusInfo()!.message }}</p>
+    </div>
+  </header>
+
+  <section *ngIf="protectionState.loading()" class="protection-real__state protection-real__state--loading" role="status" aria-live="polite">
+    <div class="protection-real__spinner" aria-hidden="true"></div>
+    <p class="protection-real__state-text">{{ getLoadingMessage() }}</p>
+  </section>
+
+  <section *ngIf="protectionState.error()" class="protection-real__state protection-real__state--error">
+    <app-icon class="icon-20" name="alert-circle" [size]="20"></app-icon>
+    <div class="protection-real__state-body">
+      <h3 class="protection-real__state-title">Error en protección</h3>
+      <p class="protection-real__state-text">{{ protectionState.error() }}</p>
+    </div>
+    <button type="button" class="premium-button outline" (click)="retryLastAction()">Reintentar</button>
+  </section>
+
+  <section
+    *ngIf="!protectionState.hasActivePlan() && !protectionState.loading() && !protectionState.error()"
+    class="protection-real__state protection-real__state--empty"
+  >
+    <app-icon class="icon-32" name="umbrella" [size]="32"></app-icon>
+    <h3 class="protection-real__state-title">Protección no activada</h3>
+    <p class="protection-real__state-text">Este contrato no tiene un plan de protección activo o no es elegible.</p>
+    <button type="button" class="premium-button" (click)="checkEligibility()" [disabled]="protectionState.loading()">
+      Verificar elegibilidad
+    </button>
+  </section>
+
+  <div *ngIf="protectionState.hasActivePlan() && !protectionState.loading()" class="protection-real__dashboard">
+    <section *ngIf="protectionState.isEligible()" class="protection-real__eligibility">
+      <app-icon class="icon-20" name="info" [size]="20"></app-icon>
+      <div class="protection-real__eligibility-copy">
+        <h3>¡Protección disponible!</h3>
+        <p>{{ eligibilityInfo()?.reason || 'Puedes activar tu protección ahora' }}</p>
+      </div>
+      <button type="button" class="premium-button outline" (click)="simulateScenarios()" [disabled]="protectionState.simulatingScenarios()">
+        {{ protectionState.simulatingScenarios() ? 'Simulando…' : 'Ver opciones' }}
+      </button>
+    </section>
+
+    <section class="protection-real__summary" *ngIf="currentPlan()">
+      <h3 class="protection-real__section-title">Estado del plan</h3>
+      <div class="protection-real__summary-grid">
+        <article class="protection-real__card">
+          <div class="protection-real__card-heading">
+            <app-icon class="icon-16" name="shield" [size]="16"></app-icon>
+            <h4 class="protection-real__card-title">Estado actual</h4>
+          </div>
+          <div class="protection-real__card-body">
+            <span class="protection-real__chip" [ngStyle]="getStatusBadgeStyles()">
+              {{ protectionState.currentState() }}
+            </span>
+            <p class="protection-real__muted">{{ statusInfo()?.description }}</p>
+          </div>
+        </article>
+        <article class="protection-real__card">
+          <div class="protection-real__card-heading">
+            <app-icon class="icon-16" name="activity" [size]="16"></app-icon>
+            <h4 class="protection-real__card-title">Uso anual</h4>
+          </div>
+          <dl class="protection-real__metrics" *ngIf="currentPlan()">
+            <div class="protection-real__metric">
+              <dt>Diferimientos</dt>
+              <dd>{{ currentPlan()!.used.defer }}/{{ currentPlan()!.policy.difMax }}</dd>
+            </div>
+            <div class="protection-real__metric">
+              <dt>Reducciones</dt>
+              <dd>{{ currentPlan()!.used.stepdown }}/3</dd>
+            </div>
+            <div class="protection-real__metric">
+              <dt>Recalendarizaciones</dt>
+              <dd>{{ currentPlan()!.used.recalendar }}/2</dd>
+            </div>
+          </dl>
+        </article>
+        <article class="protection-real__card">
+          <div class="protection-real__card-heading">
+            <app-icon class="icon-16" name="settings" [size]="16"></app-icon>
+            <h4 class="protection-real__card-title">Políticas</h4>
+          </div>
+          <dl class="protection-real__metrics" *ngIf="currentPlan()">
+            <div class="protection-real__metric">
+              <dt>Diferimiento máx.</dt>
+              <dd>{{ currentPlan()!.policy.difMax }} meses</dd>
+            </div>
+            <div class="protection-real__metric">
+              <dt>TIR mínima</dt>
+              <dd>{{ (currentPlan()!.policy.irrMin * 100).toFixed(1) }}%</dd>
+            </div>
+            <div class="protection-real__metric">
+              <dt>Pago mínimo</dt>
+              <dd>{{ formatCurrency(currentPlan()!.policy.mMin) }}</dd>
+            </div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section *ngIf="protectionState.availableScenarios().length" class="protection-real__scenarios">
+      <h3 class="protection-real__section-title">Opciones de protección disponibles</h3>
+      <div class="protection-real__scenarios-grid">
+        <article
+          *ngFor="let scenario of protectionState.availableScenarios(); trackBy: trackScenario"
+          class="protection-real__scenario"
+          [ngClass]="getScenarioClasses(scenario)"
+        >
+          <header class="protection-real__scenario-header">
+            <span class="protection-real__scenario-icon">{{ getScenarioIcon(scenario.type) }}</span>
+            <div class="protection-real__scenario-heading">
+              <h4 class="protection-real__scenario-title">{{ getScenarioTitle(scenario.type) }}</h4>
+              <span class="protection-real__scenario-chip" [ngClass]="getScenarioBadgeClasses(scenario)">
+                {{ scenario.tirOK ? 'TIR OK' : 'TIR bajo' }}
+              </span>
+            </div>
+          </header>
+          <p class="protection-real__scenario-description">{{ getScenarioDescription(scenario.type) }}</p>
+          <dl class="protection-real__scenario-details">
+            <div class="protection-real__scenario-detail" *ngIf="scenario.Mprime">
+              <dt>Nuevo pago</dt>
+              <dd>{{ formatCurrency(scenario.Mprime) }}</dd>
+            </div>
+            <div class="protection-real__scenario-detail" *ngIf="scenario.nPrime">
+              <dt>Nuevo plazo</dt>
+              <dd>{{ scenario.nPrime }} meses</dd>
+            </div>
+            <div class="protection-real__scenario-detail" *ngIf="scenario.balloon">
+              <dt>Pago global</dt>
+              <dd>{{ formatCurrency(scenario.balloon) }}</dd>
+            </div>
+            <div class="protection-real__scenario-detail" *ngIf="scenario.irr">
+              <dt>TIR</dt>
+              <dd>{{ (scenario.irr * 100).toFixed(2) }}%</dd>
+            </div>
+          </dl>
+          <ul class="protection-real__scenario-warnings" *ngIf="scenario.warnings?.length">
+            <li class="protection-real__scenario-warning" *ngFor="let warning of scenario.warnings">{{ warning }}</li>
+          </ul>
+          <footer class="protection-real__scenario-actions">
+            <button
+              type="button"
+              class="premium-button outline protection-real__scenario-action"
+              [ngClass]="{ 'protection-real__scenario-action--selected': isSelectedScenario(scenario) }"
+              (click)="selectScenario(scenario)"
+              [disabled]="!protectionState.canSelect() || !scenario.tirOK"
+            >
+              {{ isSelectedScenario(scenario) ? 'Seleccionado' : 'Seleccionar' }}
+            </button>
+          </footer>
+        </article>
+      </div>
+    </section>
+
+    <section *ngIf="protectionState.selectedScenario()" class="protection-real__selection">
+      <h3 class="protection-real__section-title">Escenario seleccionado</h3>
+      <div class="protection-real__selection-card">
+        <header class="protection-real__selection-header">
+          <span class="protection-real__selection-icon">{{ getScenarioIcon(protectionState.selectedScenario()!.type) }}</span>
+          <h4 class="protection-real__selection-title">{{ getScenarioTitle(protectionState.selectedScenario()!.type) }}</h4>
+        </header>
+        <div class="protection-real__selection-body">
+          <ng-container [ngSwitch]="protectionState.currentState()">
+            <div class="protection-real__selection-step" *ngSwitchCase="'PENDING_APPROVAL'">
+              <p class="protection-real__selection-copy">Esperando aprobación administrativa…</p>
+              <div class="protection-real__actions" *ngIf="canApprove">
+                <button type="button" class="premium-button" (click)="approveScenario()">Aprobar</button>
+                <button type="button" class="premium-button ghost" (click)="showDenyDialog()">Denegar</button>
+              </div>
+            </div>
+            <div class="protection-real__selection-step" *ngSwitchCase="'READY_TO_SIGN'">
+              <p class="protection-real__selection-copy">Aprobado - listo para firmar</p>
+              <button type="button" class="premium-button" (click)="signDocument()">Firmar documento</button>
+            </div>
+            <div class="protection-real__selection-step" *ngSwitchCase="'SIGNED'">
+              <p class="protection-real__selection-copy">Documento firmado - aplicando cambios…</p>
+              <div class="protection-real__progress">
+                <div class="protection-real__progress-bar">
+                  <div class="protection-real__progress-fill"></div>
+                </div>
+              </div>
+            </div>
+            <div class="protection-real__selection-step" *ngSwitchCase="'APPLIED'">
+              <p class="protection-real__selection-copy">¡Protección aplicada exitosamente!</p>
+              <button type="button" class="premium-button outline" (click)="viewNewSchedule()">
+                Ver nuevo calendario
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </section>
+
+    <section *ngIf="currentPlan()?.newPaymentSchedule" class="protection-real__schedule">
+      <h3 class="protection-real__section-title">Nuevo calendario de pagos</h3>
+      <div class="protection-real__table">
+        <table>
+          <thead>
+            <tr>
+              <th>Mes</th>
+              <th>Pago</th>
+              <th>Capital</th>
+              <th>Interés</th>
+              <th>Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let payment of getDisplaySchedule(); trackBy: trackPayment">
+              <td>{{ payment.month }}</td>
+              <td class="protection-real__table-number">{{ formatCurrency(payment.payment) }}</td>
+              <td class="protection-real__table-number">{{ formatCurrency(payment.principal) }}</td>
+              <td class="protection-real__table-number">{{ formatCurrency(payment.interest) }}</td>
+              <td class="protection-real__table-number">{{ formatCurrency(payment.balance) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="protection-real__primary-action" *ngIf="statusInfo()?.action">
+    <button type="button" class="premium-button" (click)="performStatusAction()" [disabled]="protectionState.loading()">
+      {{ statusInfo()!.actionLabel || 'Acción' }}
+    </button>
+  </div>
+
+  <div *ngIf="showDenyModal" class="protection-real__modal" role="dialog" aria-modal="true" aria-label="Motivo de rechazo">
+    <div class="protection-real__modal-body">
+      <h3 class="protection-real__modal-title">Denegar solicitud de protección</h3>
+      <textarea
+        class="protection-real__modal-textarea"
+        [(ngModel)]="denyReason"
+        placeholder="Motivo del rechazo…"
+      ></textarea>
+      <div class="protection-real__modal-actions">
+        <button type="button" class="premium-button ghost" (click)="hideDenyDialog()">Cancelar</button>
+        <button type="button" class="premium-button" (click)="confirmDeny()">Confirmar rechazo</button>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,141 @@
+<div class="dashboard-shell">
+  <app-connection-indicator></app-connection-indicator>
+
+  <header class="dashboard-header">
+    <div class="dashboard-header-content">
+      <div class="dashboard-header-info">
+        <h1 class="dashboard-title">Dashboard</h1>
+        <p class="dashboard-subtitle">Vista general de tu negocio, {{ userName }}</p>
+      </div>
+
+      <div class="dashboard-actions">
+        <button class="ui-btn ui-btn-secondary dashboard-action-btn">
+          <app-icon
+            class="dashboard-action-icon"
+            name="download"
+            [size]="24"
+            aria-hidden="true"
+          ></app-icon>
+          Exportar
+        </button>
+        <button class="ui-btn ui-btn-primary dashboard-action-btn" (click)="createNewOpportunity()">
+          <app-icon
+            class="dashboard-action-icon"
+            name="plus"
+            [size]="24"
+            aria-hidden="true"
+          ></app-icon>
+          Nueva Oportunidad
+        </button>
+      </div>
+
+      <div class="dashboard-mobile-toggle">
+        <button class="ui-btn ui-btn-secondary dashboard-mobile-button" (click)="toggleMobileActions()">
+          <app-icon
+            class="dashboard-action-icon"
+            name="menu"
+            [size]="24"
+            aria-hidden="true"
+          ></app-icon>
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="showMobileActions" class="dashboard-mobile-actions">
+      <button class="ui-btn ui-btn-secondary">Exportar</button>
+      <button class="ui-btn ui-btn-primary" (click)="createNewOpportunity()">Nueva Oportunidad</button>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+    <section class="dashboard-section">
+      <h2 class="section-title">Métricas Principales</h2>
+      <div class="dashboard-kpi-grid">
+        <div *ngFor="let kpi of kpiCards" class="dashboard-kpi-card ui-card">
+          <div class="kpi-card-header">
+            <div class="kpi-info">
+              <span class="kpi-label">{{ kpi.title }}</span>
+              <span class="kpi-value" [attr.data-cy]="kpi.dataCy">{{ kpi.value }}</span>
+              <span *ngIf="kpi.subValue" class="kpi-subvalue">{{ kpi.subValue }}</span>
+            </div>
+            <div class="kpi-icon-wrapper" [ngClass]="kpi.iconClass">
+              <app-icon
+                class="kpi-icon"
+                [name]="kpi.iconName"
+                [size]="28"
+                aria-hidden="true"
+              ></app-icon>
+            </div>
+          </div>
+          <div *ngIf="kpi.trend" class="kpi-trend" [ngClass]="{
+                'kpi-trend--up': kpi.trend === 'up',
+                'kpi-trend--down': kpi.trend === 'down',
+                'kpi-trend--stable': kpi.trend === 'stable'
+              }">
+            <span class="kpi-trend-indicator">{{ getTrendSymbol(kpi.trend) }}</span>
+            <span class="kpi-trend-value">{{ kpi.trendValue }}</span>
+            <span class="kpi-trend-caption">vs semana anterior</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard-section">
+      <div class="dashboard-chart-grid">
+        <div class="dashboard-chart-card ui-card">
+          <h3 class="section-subtitle">Evolución PMT (Últimos 6 meses)</h3>
+          <div class="chart-container">
+            <canvas #pmtChart data-cy="chart-pmt"></canvas>
+          </div>
+        </div>
+
+        <div class="dashboard-chart-card ui-card">
+          <h3 class="section-subtitle">Proyección de Ingresos</h3>
+          <div class="chart-container">
+            <canvas #revenueChart data-cy="chart-revenue"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section *ngIf="actionableGroups.length > 0" class="dashboard-section">
+      <h2 class="section-title">Acciones Requeridas</h2>
+      <div class="dashboard-action-grid">
+        <div *ngFor="let group of actionableGroups" class="action-card ui-card">
+          <div class="action-card-header">
+            <div>
+              <h3 class="action-title">{{ group.title }}</h3>
+              <p class="action-description">{{ group.description }}</p>
+            </div>
+            <span class="action-count">{{ group.clients.length }}</span>
+          </div>
+          <div class="action-clients">
+            <div *ngFor="let client of group.clients.slice(0, 3)" class="action-client">
+              <span class="client-name">{{ client.name }}</span>
+              <span class="client-status">{{ client.status }}</span>
+            </div>
+            <button *ngIf="group.clients.length > 3" class="action-more" (click)="navigateToClients()">
+              Ver {{ group.clients.length - 3 }} más...
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section *ngIf="activityFeed.length > 0" class="dashboard-section">
+      <h2 class="section-title">Actividad Reciente</h2>
+      <div class="dashboard-activity-card ui-card">
+        <div *ngFor="let activity of activityFeed.slice(0, 5); let last = last" class="activity-item" [class.activity-item--last]="last">
+          <div class="activity-icon">
+            <app-icon class="activity-icon-symbol" name="grid" [size]="24" aria-hidden="true"></app-icon>
+          </div>
+          <div class="activity-content">
+            <p class="activity-message">{{ activity.message }}</p>
+            <p class="activity-timestamp">{{ formatTimeAgo(activity.timestamp) }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>

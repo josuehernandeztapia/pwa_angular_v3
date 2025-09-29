@@ -1,0 +1,455 @@
+
+:host {
+  display: block;
+}
+
+.collective-credit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 1.5rem);
+  padding: var(--space-6, 1.5rem);
+  background: var(--color-bg-secondary, #f1f5f9);
+  color: var(--color-text-primary, #0f172a);
+}
+
+.collective-credit__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+}
+
+.collective-credit__title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.collective-credit__title-icon {
+  color: var(--color-accent-primary, #0ea5e9);
+}
+
+.collective-credit__layout {
+  display: grid;
+  gap: var(--space-6, 1.5rem);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.6fr);
+}
+
+.collective-credit__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5, 1.25rem);
+  padding: var(--space-5, 1.25rem);
+  border-radius: var(--radius-2xl, 24px);
+  background: var(--color-bg-primary, #ffffff);
+  box-shadow: var(--shadow-lg, 0 24px 54px rgba(15, 23, 42, 0.16));
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 45%, transparent);
+}
+
+.collective-credit__panel--results {
+  background: color-mix(in srgb, var(--color-bg-primary, #ffffff) 96%, transparent);
+}
+
+.collective-credit__panel-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.collective-credit__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 1rem);
+  padding-bottom: var(--space-4, 1rem);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 32%, transparent);
+}
+
+.collective-credit__section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.collective-credit__section-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #475569);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.collective-credit__input-grid {
+  display: grid;
+  gap: var(--space-4, 1rem);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.collective-credit__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+}
+
+.collective-credit__label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #475569);
+}
+
+.collective-credit__input,
+.collective-credit__select {
+  width: 100%;
+  border-radius: var(--radius-xl, 20px);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 55%, transparent);
+  background: var(--color-bg-primary, #ffffff);
+  color: var(--color-text-primary, #0f172a);
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.collective-credit__input:focus,
+.collective-credit__select:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--color-accent-primary, #0ea5e9) 60%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent-primary, #0ea5e9) 20%, transparent);
+}
+
+.collective-credit__event-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 1rem);
+  padding: var(--space-4, 1rem);
+  border-radius: var(--radius-xl, 20px);
+  background: color-mix(in srgb, var(--color-bg-secondary, #f1f5f9) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 38%, transparent);
+}
+
+.collective-credit__event-row {
+  display: grid;
+  gap: var(--space-4, 1rem);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.collective-credit__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2, 0.5rem);
+  border-radius: var(--radius-full, 999px);
+  padding: var(--space-3, 0.75rem) var(--space-5, 1.25rem);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.collective-credit__button--primary {
+  background: var(--color-accent-primary, #0ea5e9);
+  color: var(--color-bg-primary, #ffffff);
+  box-shadow: 0 16px 36px rgba(14, 165, 233, 0.28);
+}
+
+.collective-credit__button--primary:hover {
+  background: color-mix(in srgb, var(--color-accent-primary, #0ea5e9) 85%, var(--color-accent-secondary, #06b6d4) 15%);
+}
+
+.collective-credit__button--secondary {
+  background: color-mix(in srgb, var(--color-bg-secondary, #f1f5f9) 94%, transparent);
+  color: var(--color-text-primary, #0f172a);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 42%, transparent);
+}
+
+.collective-credit__button--secondary:hover {
+  background: color-mix(in srgb, var(--color-bg-secondary, #f1f5f9) 98%, transparent);
+}
+
+.collective-credit__button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.collective-credit__event-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 0.75rem);
+}
+
+.collective-credit__event-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  border-radius: var(--radius-xl, 20px);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 32%, transparent);
+  background: color-mix(in srgb, var(--color-bg-secondary, #f1f5f9) 90%, transparent);
+}
+
+.collective-credit__event-description {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.collective-credit__icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full, 999px);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 40%, transparent);
+  background: transparent;
+  color: var(--color-text-secondary, #475569);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.collective-credit__icon-button:hover {
+  background: color-mix(in srgb, var(--color-danger, #ef4444) 16%, transparent);
+  border-color: color-mix(in srgb, var(--color-danger, #ef4444) 45%, transparent);
+  color: var(--color-danger-dark, #b91c1c);
+}
+
+.collective-credit__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3, 0.75rem);
+}
+
+.collective-credit__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-6, 1.5rem);
+  border-radius: var(--radius-2xl, 24px);
+  border: 1px dashed color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 50%, transparent);
+  background: color-mix(in srgb, var(--color-bg-secondary, #f1f5f9) 92%, transparent);
+}
+
+.collective-credit__spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 60%, transparent);
+  border-inline-start-color: var(--color-accent-primary, #0ea5e9);
+  animation: collective-credit-spin 1s linear infinite;
+}
+
+.collective-credit__results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5, 1.25rem);
+}
+
+.collective-credit__kpi-group {
+  display: grid;
+  gap: var(--space-4, 1rem);
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.collective-credit__kpi-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-4, 1rem);
+  border-radius: var(--radius-xl, 20px);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 30%, transparent);
+  background: color-mix(in srgb, var(--color-bg-secondary, #f1f5f9) 92%, transparent);
+}
+
+.collective-credit__kpi-icon {
+  font-size: 1.5rem;
+}
+
+.collective-credit__kpi-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1, 0.25rem);
+}
+
+.collective-credit__kpi-label {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary, #475569);
+}
+
+.collective-credit__kpi-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.collective-credit__timeline {
+  display: grid;
+  gap: var(--space-4, 1rem);
+}
+
+.collective-credit__cycle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-4, 1rem);
+  border-radius: var(--radius-xl, 20px);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 35%, transparent);
+  background: color-mix(in srgb, var(--color-bg-secondary, #f1f5f9) 90%, transparent);
+}
+
+.collective-credit__cycleHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2, 0.5rem);
+}
+
+.collective-credit__cycleName {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.collective-credit__cycleBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--space-2, 0.5rem);
+  border-radius: var(--radius-full, 999px);
+  background: color-mix(in srgb, var(--color-danger, #ef4444) 16%, transparent);
+  color: var(--color-danger, #ef4444);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.collective-credit__cycleDetails {
+  display: grid;
+  gap: var(--space-2, 0.5rem);
+}
+
+.collective-credit__detailGroup {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  border-radius: var(--radius-lg, 16px);
+  background: color-mix(in srgb, var(--color-bg-primary, #ffffff) 90%, transparent);
+}
+
+.collective-credit__detail-label {
+  font-weight: 600;
+  color: var(--color-text-secondary, #475569);
+}
+
+.collective-credit__detail-value {
+  font-weight: 600;
+  color: var(--color-text-primary, #0f172a);
+}
+
+.collective-credit__detail-value--positive {
+  color: var(--color-success, #10b981);
+}
+
+.collective-credit__detail-value--debt {
+  color: var(--color-danger, #ef4444);
+}
+
+.collective-credit__detail-value--savings {
+  color: var(--color-accent-primary, #0ea5e9);
+}
+
+.collective-credit__detailGroup--emphasis {
+  border-inline-start: 4px solid color-mix(in srgb, var(--color-success, #10b981) 45%, transparent);
+  background: color-mix(in srgb, var(--color-success, #10b981) 12%, transparent);
+}
+
+.collective-credit__awards {
+  display: grid;
+  gap: var(--space-2, 0.5rem);
+}
+
+.collective-credit__award {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  font-weight: 600;
+  color: var(--color-text-secondary, #475569);
+}
+
+.collective-credit__empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 0.75rem);
+  align-items: center;
+  padding: var(--space-6, 1.5rem);
+  border-radius: var(--radius-2xl, 24px);
+  border: 1px dashed color-mix(in srgb, var(--color-border-secondary, #cbd5f5) 45%, transparent);
+  background: color-mix(in srgb, var(--color-bg-secondary, #f1f5f9) 88%, transparent);
+  text-align: center;
+}
+
+.collective-credit__empty-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.collective-credit__empty-description {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary, #475569);
+}
+
+@keyframes collective-credit-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 1080px) {
+  .collective-credit__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .collective-credit {
+    padding: var(--space-5, 1.25rem) var(--space-4, 1rem);
+  }
+
+  .collective-credit__actions {
+    flex-direction: column;
+  }
+
+  .collective-credit__button {
+    width: 100%;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .collective-credit {
+    background: color-mix(in srgb, var(--color-neutral-900, #0f172a) 92%, transparent);
+    color: var(--color-neutral-100, #f8fafc);
+  }
+
+  .collective-credit__panel,
+  .collective-credit__event-form,
+  .collective-credit__event-item,
+  .collective-credit__kpi-card,
+  .collective-credit__cycle,
+  .collective-credit__empty {
+    background: color-mix(in srgb, var(--color-neutral-900, #0f172a) 82%, transparent);
+    border-color: color-mix(in srgb, var(--color-border-secondary, #334155) 55%, transparent);
+  }
+
+  .collective-credit__input,
+  .collective-credit__select {
+    background: color-mix(in srgb, var(--color-neutral-900, #0f172a) 70%, transparent);
+    border-color: color-mix(in srgb, var(--color-border-secondary, #475569) 55%, transparent);
+    color: var(--color-neutral-50, #f8fafc);
+  }
+
+  .collective-credit__button--secondary {
+    background: color-mix(in srgb, var(--color-neutral-800, #1e293b) 70%, transparent);
+    color: var(--color-neutral-100, #f8fafc);
+  }
+}

@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4, 16px);
+  background: var(--overlay-neutral-strong, rgba(0, 0, 0, 0.5));
+  z-index: var(--z-overlay, 1300);
+  backdrop-filter: blur(2px);
+}
+
+.dialog {
+  width: min(720px, calc(100vw - var(--space-8, 32px)));
+  max-height: calc(100vh - var(--space-16, 64px));
+  overflow: auto;
+  background: var(--color-bg-primary, #ffffff);
+  color: var(--color-text-primary, #080808);
+  border-radius: var(--radius-xl, 16px);
+  box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3, 12px);
+}
+
+.section-title {
+  margin: 0;
+  font-size: var(--text-xl, 1.25rem);
+  font-weight: var(--font-semibold, 600);
+  color: inherit;
+}
+
+.content {
+  margin-top: var(--space-8, 32px);
+}
+
+.footer {
+  margin-top: var(--space-16, 64px);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3, 12px);
+}
+
+@media (max-width: 720px) {
+  .dialog {
+    width: 100%;
+  }
+}

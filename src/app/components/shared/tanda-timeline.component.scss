@@ -1,0 +1,223 @@
+:host {
+  display: block;
+}
+
+.tanda-timeline__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+}
+
+.tanda-timeline__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4, 16px);
+}
+
+.tanda-timeline__marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  min-width: 48px;
+}
+
+.tanda-timeline__marker-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: var(--surface-neutral-weak);
+  border: 1px solid var(--border-neutral-weak);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+
+  @media (prefers-color-scheme: dark) {
+    background: color-mix(in srgb, var(--color-neutral-900) 80%, transparent);
+    border-color: var(--border-neutral-strong);
+  }
+}
+
+.tanda-timeline__marker-circle--completed {
+  background: var(--accent-green-500);
+  border-color: var(--accent-green-600);
+  color: var(--flat-surface-bg);
+}
+
+.tanda-timeline__marker-circle--current {
+  background: var(--accent-blue-500);
+  border-color: var(--accent-blue-600);
+  color: var(--flat-surface-bg);
+}
+
+.tanda-timeline__marker-circle--pending {
+  background: var(--surface-neutral-weak);
+  border-color: var(--border-neutral-weak);
+
+  @media (prefers-color-scheme: dark) {
+    background: color-mix(in srgb, var(--color-neutral-900) 80%, transparent);
+    border-color: var(--border-neutral-strong);
+  }
+}
+
+.tanda-timeline__marker-emoji {
+  display: inline-flex;
+}
+
+.tanda-timeline__marker-line {
+  flex: 1;
+  width: 2px;
+  background: var(--border-neutral-weak);
+  border-radius: 9999px;
+
+  @media (prefers-color-scheme: dark) {
+    background: var(--border-neutral-strong);
+  }
+}
+
+.tanda-timeline__marker-line--completed {
+  background: var(--accent-green-500);
+}
+
+.tanda-timeline__content {
+  flex: 1;
+  background: var(--surface-neutral-weak);
+  border: 1px solid var(--border-neutral-weak);
+  border-radius: var(--radius-lg, 12px);
+  padding: var(--space-4, 16px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 12px);
+
+  @media (prefers-color-scheme: dark) {
+    background: color-mix(in srgb, var(--color-neutral-900) 80%, transparent);
+    border-color: var(--border-neutral-strong);
+  }
+}
+
+.tanda-timeline__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2, 8px);
+}
+
+.tanda-timeline__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--color-text-primary-inverted);
+  }
+}
+
+.tanda-timeline__month {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-blue-500);
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--accent-blue-400);
+  }
+}
+
+.tanda-timeline__description,
+.tanda-timeline__detail {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--color-text-tertiary);
+  }
+}
+
+.tanda-timeline__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1, 4px);
+}
+
+.tanda-timeline__amount,
+.tanda-timeline__member {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  font-size: 0.875rem;
+}
+
+.tanda-timeline__amount-label,
+.tanda-timeline__member-label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.tanda-timeline__amount-value,
+.tanda-timeline__member-value {
+  font-weight: 600;
+  color: var(--color-text-primary);
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--color-text-primary-inverted);
+  }
+}
+
+.tanda-timeline__empty {
+  margin-top: var(--space-4, 16px);
+  padding: var(--space-6, 24px);
+  border-radius: var(--radius-lg, 12px);
+  border: 1px dashed var(--border-neutral-weak);
+  text-align: center;
+  color: var(--color-text-secondary);
+
+  @media (prefers-color-scheme: dark) {
+    border-color: var(--border-neutral-strong);
+    color: var(--color-text-tertiary);
+  }
+}
+
+.tanda-timeline__empty-icon {
+  margin-bottom: var(--space-3, 12px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+}
+
+.tanda-timeline__empty-glyph {
+  width: 64px;
+  height: 64px;
+}
+
+.tanda-timeline__empty-text {
+  margin: 0;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .tanda-timeline__item {
+    flex-direction: column;
+  }
+
+  .tanda-timeline__marker {
+    flex-direction: row;
+    justify-content: flex-start;
+    min-width: auto;
+  }
+
+  .tanda-timeline__marker-line {
+    height: 2px;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tanda-timeline__marker-circle,
+  .tanda-timeline__content {
+    transition: none;
+  }
+}

@@ -1,0 +1,611 @@
+<section class="onboarding-main command-container">
+  <div
+    *ngIf="draftFound"
+    class="onboarding-main__draft-banner"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="onboarding-main__draft-content">
+      <app-icon class="onboarding-main__draft-icon" name="document" [size]="16" color="currentColor"></app-icon>
+      <span>Borrador encontrado de un onboarding anterior.</span>
+    </div>
+    <div class="onboarding-main__draft-actions">
+      <button type="button" class="ui-btn ui-btn-secondary" (click)="continueDraft()">Continuar</button>
+      <button type="button" class="ui-btn ui-btn-secondary" (click)="discardDraft()">Descartar</button>
+    </div>
+  </div>
+
+  <header class="onboarding-main__progress" aria-label="Progreso del Onboarding">
+    <div class="onboarding-main__steps">
+      <div
+        *ngFor="let step of steps; let i = index"
+        class="onboarding-main__step"
+        [ngClass]="{
+          'onboarding-main__step--active': currentStepIndex === i,
+          'onboarding-main__step--completed': currentStepIndex > i
+        }"
+        [attr.aria-current]="currentStepIndex === i ? 'step' : null"
+      >
+        <span class="onboarding-main__step-circle">{{ i + 1 }}</span>
+        <span class="onboarding-main__step-label">{{ step.label }}</span>
+      </div>
+    </div>
+    <div class="onboarding-main__progress-track">
+      <div class="onboarding-main__progress-fill" [style.width.%]="progressPercentage"></div>
+    </div>
+  </header>
+
+  <!-- Paso: Selección -->
+  <section *ngIf="currentStep === 'selection'" class="onboarding-main__section">
+    <header class="onboarding-main__section-header">
+      <h2 class="onboarding-main__section-title" tabindex="-1">
+        <app-icon name="check-circle-solid" [size]="24" class="onboarding-main__section-icon" aria-hidden="true" />
+        Onboarding Inteligente de Conductores
+      </h2>
+      <p class="onboarding-main__section-description">Selecciona el tipo de oportunidad que deseas crear</p>
+    </header>
+
+    <div class="onboarding-main__form-layout">
+      <div class="onboarding-main__form-field">
+        <label for="market" class="onboarding-main__label">Mercado</label>
+        <select
+          id="market"
+          class="onboarding-main__select"
+          [(ngModel)]="form.market"
+          (change)="onMarketChange()"
+          (ngModelChange)="onFormChange()"
+        >
+          <option value="">Selecciona un mercado</option>
+          <option value="aguascalientes">Aguascalientes</option>
+          <option value="edomex">Estado de México</option>
+        </select>
+      </div>
+
+      <div class="onboarding-main__form-field" *ngIf="form.market">
+        <label for="saleType" class="onboarding-main__label">Tipo de Venta</label>
+        <select
+          id="saleType"
+          class="onboarding-main__select"
+          [(ngModel)]="form.saleType"
+          (change)="onSaleTypeChange()"
+          (ngModelChange)="onFormChange()"
+        >
+          <option value="">Selecciona tipo de venta</option>
+          <option value="contado">Venta de Contado</option>
+          <option value="financiero">Venta a Plazo</option>
+        </select>
+      </div>
+
+      <div class="onboarding-main__form-field" *ngIf="form.market === 'edomex' && form.saleType === 'financiero'">
+        <label for="clientType" class="onboarding-main__label">Modalidad</label>
+        <select
+          id="clientType"
+          class="onboarding-main__select"
+          [(ngModel)]="form.clientType"
+          (ngModelChange)="onFormChange()"
+        >
+          <option value="">Selecciona modalidad</option>
+          <option value="individual">Individual</option>
+          <option value="colectivo">Crédito Colectivo</option>
+        </select>
+      </div>
+
+      <div class="onboarding-main__form-field" *ngIf="form.market === 'edomex'">
+        <label for="ecosystemId" class="onboarding-main__label">Ruta/Ecosistema *</label>
+        <select
+          id="ecosystemId"
+          class="onboarding-main__select"
+          [(ngModel)]="form.ecosystemId"
+          (change)="onEcosystemChange()"
+          (ngModelChange)="onFormChange()"
+        >
+          <option value="">Selecciona una ruta</option>
+          <option *ngFor="let ecosystem of availableEcosystems" [value]="ecosystem.id">
+            {{ ecosystem.name }} - {{ ecosystem.status }}
+          </option>
+          <option value="__NEW_ROUTE__">Nueva Ruta en Prospección</option>
+        </select>
+
+        <div *ngIf="form.ecosystemId === '__NEW_ROUTE__'" class="onboarding-main__new-route">
+          <input
+            type="text"
+            class="onboarding-main__input"
+            [(ngModel)]="newRouteName"
+            (ngModelChange)="onFormChange()"
+            placeholder="Nombre de la nueva ruta (ej: Ruta Valle Dorado)"
+          />
+          <small class="onboarding-main__help-text">
+            Esta ruta se registrará como "en prospección" y podrás cotizar inmediatamente
+          </small>
+        </div>
+      </div>
+
+      <div
+        class="onboarding-main__form-field onboarding-main__form-field--full"
+        *ngIf="form.market === 'edomex' && showRoutesPreview"
+      >
+        <div class="onboarding-main__routes">
+          <div class="onboarding-main__routes-header">
+            <h4 class="onboarding-main__routes-title">Rutas Disponibles en Estado de México</h4>
+            <button type="button" class="ui-btn ui-btn-ghost" (click)="toggleRoutesPreview()">
+              {{ showRoutesPreview ? 'Ocultar' : 'Ver Todas' }}
+            </button>
+          </div>
+          <div class="onboarding-main__routes-list">
+            <div
+              *ngFor="let ecosystem of availableEcosystems"
+              class="onboarding-main__route"
+              [ngClass]="{
+                'onboarding-main__route--active': ecosystem.status === 'Activo',
+                'onboarding-main__route--pending': ecosystem.status.includes('Pendiente')
+              }"
+            >
+              <div class="onboarding-main__route-info">
+                <span class="onboarding-main__route-name">{{ ecosystem.name }}</span>
+                <span class="onboarding-main__route-status">
+                  {{ ecosystem.status }}
+                </span>
+              </div>
+              <span class="onboarding-main__route-docs">{{ ecosystem.documents?.length || 0 }} documentos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="onboarding-main__actions">
+      <button
+        type="button"
+        class="ui-btn ui-btn-primary"
+        [disabled]="!canProceedFromSelection()"
+        (click)="nextStep()"
+      >
+        Continuar
+      </button>
+    </div>
+  </section>
+
+  <!-- Paso: Información del Cliente -->
+  <section *ngIf="currentStep === 'client_info'" class="onboarding-main__section">
+    <header class="onboarding-main__section-header">
+      <h2 class="onboarding-main__section-title" tabindex="-1">Información del Cliente</h2>
+      <p class="onboarding-main__section-description">Proporciona los datos básicos del cliente</p>
+    </header>
+
+    <div class="onboarding-main__form-layout" *ngIf="form.clientType !== 'colectivo'">
+      <div class="onboarding-main__form-field">
+        <label for="name" class="onboarding-main__label">Nombre Completo *</label>
+        <input
+          id="name"
+          class="onboarding-main__input"
+          type="text"
+          [(ngModel)]="form.name"
+          (ngModelChange)="onFormChange()"
+          required
+          aria-required="true"
+          [attr.aria-describedby]="'name-error'"
+        />
+        <div *ngIf="!form.name" id="name-error" class="onboarding-main__error" aria-live="polite">
+          El nombre es requerido.
+        </div>
+      </div>
+
+      <div class="onboarding-main__form-field">
+        <label for="email" class="onboarding-main__label">Email *</label>
+        <input
+          id="email"
+          class="onboarding-main__input"
+          type="email"
+          [(ngModel)]="form.email"
+          (ngModelChange)="onFormChange()"
+          required
+          aria-required="true"
+          [attr.aria-describedby]="'email-error'"
+        />
+        <div *ngIf="form.email && !isValidEmail(form.email)" id="email-error" class="onboarding-main__error" aria-live="polite">
+          Formato de email inválido.
+        </div>
+        <div *ngIf="!form.email" id="email-error" class="onboarding-main__error" aria-live="polite">
+          El email es requerido.
+        </div>
+      </div>
+
+      <div class="onboarding-main__form-field">
+        <label for="phone" class="onboarding-main__label">Teléfono *</label>
+        <input
+          id="phone"
+          class="onboarding-main__input"
+          type="tel"
+          [(ngModel)]="form.phone"
+          (ngModelChange)="onFormChange()"
+          required
+          aria-required="true"
+          [attr.aria-describedby]="'phone-error'"
+          pattern="^(\\+52\\s?)?(\\d{2}\\s?\\d{4}\\s?\\d{4}|\\d{3}\\s?\\d{3}\\s?\\d{4})$"
+          placeholder="55 1234 5678"
+        />
+        <div *ngIf="form.phone && !isValidMexicanPhone(form.phone)" id="phone-error" class="onboarding-main__error" aria-live="polite">
+          Formato inválido. Ej: 55 1234 5678
+        </div>
+        <div *ngIf="!form.phone" id="phone-error" class="onboarding-main__error" aria-live="polite">
+          El teléfono es requerido.
+        </div>
+      </div>
+
+      <div class="onboarding-main__form-field">
+        <label for="rfc" class="onboarding-main__label">RFC</label>
+        <input
+          id="rfc"
+          class="onboarding-main__input"
+          type="text"
+          [(ngModel)]="form.rfc"
+          (ngModelChange)="onFormChange()"
+          (input)="form.rfc = (form.rfc || '').toUpperCase()"
+          [attr.aria-describedby]="'rfc-error'"
+          placeholder="XAXX010101000"
+        />
+        <div *ngIf="form.rfc && !isValidRFC(form.rfc)" id="rfc-error" class="onboarding-main__error" aria-live="polite">
+          RFC inválido.
+        </div>
+      </div>
+
+      <div class="onboarding-main__form-field onboarding-main__form-field--full">
+        <label for="address" class="onboarding-main__label">Dirección</label>
+        <textarea
+          id="address"
+          class="onboarding-main__input onboarding-main__input--textarea"
+          [(ngModel)]="form.address"
+          (ngModelChange)="onFormChange()"
+          rows="3"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="onboarding-main__form-layout" *ngIf="form.clientType === 'colectivo'">
+      <div class="onboarding-main__form-field onboarding-main__form-field--full">
+        <label for="groupName" class="onboarding-main__label">Nombre del Grupo *</label>
+        <input
+          id="groupName"
+          class="onboarding-main__input"
+          type="text"
+          [(ngModel)]="form.groupName"
+          (ngModelChange)="onFormChange()"
+          required
+        />
+      </div>
+
+      <div class="onboarding-main__form-field onboarding-main__form-field--full">
+        <label class="onboarding-main__label">Miembros del Grupo (5 miembros requeridos)</label>
+        <div class="onboarding-main__member-list">
+          <div class="onboarding-main__member-item" *ngFor="let member of form.memberNames; let i = index">
+            <input
+              type="text"
+              class="onboarding-main__input"
+              [(ngModel)]="form.memberNames[i]"
+              (ngModelChange)="onFormChange()"
+              [placeholder]="'Nombre del miembro ' + (i + 1)"
+              required
+            />
+            <button
+              type="button"
+              class="onboarding-main__member-remove"
+              title="Eliminar miembro"
+              aria-label="Eliminar miembro"
+              *ngIf="form.memberNames.length > 5"
+              (click)="removeMember(i)"
+            >
+              ×
+            </button>
+          </div>
+          <button
+            type="button"
+            class="ui-btn ui-btn-ghost onboarding-main__member-add"
+            *ngIf="form.memberNames.length < 10"
+            (click)="addMember()"
+          >
+            + Agregar Miembro
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="onboarding-main__actions onboarding-main__actions--stack">
+      <button type="button" class="ui-btn ui-btn-secondary" aria-label="Volver" (click)="previousStep()">
+        Atrás
+      </button>
+      <div class="onboarding-main__actions-group">
+        <span class="onboarding-main__cta-pill">Siguiente: Carga de Documentos</span>
+        <div class="onboarding-main__actions-stack">
+          <button
+            type="button"
+            class="ui-btn ui-btn-primary"
+            [disabled]="!canProceedFromClientInfo()"
+            (click)="createClient()"
+          >
+            Crear Oportunidad
+          </button>
+          <small class="onboarding-main__cta-hint" *ngIf="!canProceedFromClientInfo()" aria-live="polite">
+            Completa los campos requeridos para continuar.
+          </small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Paso: Documentos -->
+  <section *ngIf="currentStep === 'documents'" class="onboarding-main__section">
+    <header class="onboarding-main__section-header">
+      <h2 class="onboarding-main__section-title" tabindex="-1">Documentos Requeridos</h2>
+      <p class="onboarding-main__section-description">{{ getDocumentRequirementsMessage() }}</p>
+    </header>
+
+    <div class="onboarding-main__documents" *ngIf="currentClient">
+      <article
+        class="onboarding-main__document"
+        *ngFor="let doc of currentClient.documents"
+        [ngClass]="{
+          'onboarding-main__document--approved': doc.status === 'Aprobado',
+          'onboarding-main__document--pending': doc.status === 'Pendiente',
+          'onboarding-main__document--review': doc.status === 'En Revisión',
+          'onboarding-main__document--rejected': doc.status === 'Rechazado'
+        }"
+      >
+        <header class="onboarding-main__document-header">
+          <div class="onboarding-main__document-icon">
+            <app-icon name="document" [size]="24" color="currentColor"></app-icon>
+          </div>
+          <div class="onboarding-main__document-info">
+            <h4 class="onboarding-main__document-title">{{ doc.name }}</h4>
+            <span class="onboarding-main__document-status">
+              {{ doc.status }}
+            </span>
+          </div>
+        </header>
+
+        <div class="onboarding-main__document-actions" *ngIf="doc.status === 'Pendiente'">
+          <input
+            type="file"
+            #fileInput
+            class="onboarding-main__document-input"
+            (change)="onFileSelected($event, doc.id)"
+          />
+          <button
+            type="button"
+            class="ui-btn ui-btn-secondary"
+            (click)="attemptDocumentUpload(fileInput, doc.id)"
+          >
+            Subir Documento
+          </button>
+          <span class="onboarding-main__upload-label" *ngIf="pendingDocumentUpload?.documentId === doc.id">
+            {{ pendingDocumentUpload?.fileInput?.files?.[0]?.name || 'Selecciona un archivo' }}
+          </span>
+        </div>
+
+        <div class="onboarding-main__document-progress" *ngIf="doc.status !== 'Pendiente'">
+          <span class="onboarding-main__document-meta">{{ getDocumentStatusLabel(doc.status) }}</span>
+          <span class="onboarding-main__document-meta">{{ doc.updatedAt | date:'medium' }}</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="onboarding-main__documents-progress" *ngIf="documentProgress.totalDocs > 0">
+      <div class="onboarding-main__documents-summary">
+        <span>Completados: {{ documentProgress.completedDocs }}/{{ documentProgress.totalDocs }}</span>
+        <span>Pendientes: {{ documentProgress.pendingDocs }}</span>
+      </div>
+      <div class="onboarding-main__progress-track onboarding-main__progress-track--documents">
+        <div class="onboarding-main__progress-fill" [style.width.%]="documentProgress.completionPercentage"></div>
+      </div>
+    </div>
+
+    <div class="onboarding-main__actions onboarding-main__actions--stack">
+      <button type="button" class="ui-btn ui-btn-secondary" aria-label="Volver" (click)="previousStep()">
+        Atrás
+      </button>
+      <div class="onboarding-main__actions-stack">
+        <button
+          type="button"
+          class="ui-btn ui-btn-primary"
+          [disabled]="!documentProgress.allComplete"
+          (click)="nextStep()"
+        >
+          Continuar a KYC
+        </button>
+        <small class="onboarding-main__cta-hint" *ngIf="!documentProgress.allComplete" aria-live="polite">
+          Aprueba INE y Comprobante para habilitar KYC.
+        </small>
+      </div>
+    </div>
+  </section>
+
+  <!-- Paso: KYC -->
+  <section *ngIf="currentStep === 'kyc'" class="onboarding-main__section">
+    <header class="onboarding-main__section-header">
+      <h2 class="onboarding-main__section-title" tabindex="-1">Verificación Biométrica</h2>
+      <p class="onboarding-main__section-description">{{ kycValidation.tooltipMessage }}</p>
+    </header>
+
+    <div class="onboarding-main__kyc" *ngIf="currentClient">
+      <div class="onboarding-main__kyc-status" [ngClass]="'onboarding-main__kyc-status--' + kycStatus.status">
+        <div class="onboarding-main__kyc-icon">
+          <app-icon *ngIf="kycStatus.status === 'completed'" name="check-circle-solid" [size]="24" class="icon-24" />
+          <app-icon *ngIf="kycStatus.status === 'ready'" name="search" [size]="24" class="icon-24" />
+          <app-icon *ngIf="kycStatus.status === 'prerequisites_missing'" name="exclamation-triangle" [size]="24" class="icon-24" />
+          <app-icon *ngIf="kycStatus.status === 'in_progress'" name="clock" [size]="24" class="icon-24" />
+          <app-icon *ngIf="kycStatus.status === 'failed'" name="x-circle" [size]="24" class="icon-24" />
+        </div>
+        <div class="onboarding-main__kyc-text">
+          <h3 class="onboarding-main__kyc-title">{{ kycStatus.statusMessage }}</h3>
+          <div *ngIf="kycValidation.missingDocs.length > 0" class="onboarding-main__missing-docs">
+            <p>Documentos faltantes:</p>
+            <ul>
+              <li *ngFor="let doc of kycValidation.missingDocs">{{ doc }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="metamap-container"
+        class="onboarding-main__metamap"
+        *ngIf="kycStatus.status === 'ready'"
+      >
+        <p class="onboarding-main__metamap-text">
+          Por favor, pasa el dispositivo al cliente para que complete su verificación de identidad biométrica.
+        </p>
+      </div>
+
+      <div *ngIf="kycStatus.status === 'completed'" class="onboarding-main__kyc-completed">
+        <p class="onboarding-main__kyc-completed-text">
+          <app-icon name="check-circle-solid" [size]="24" class="icon-24" />
+          Verificación biométrica completada exitosamente
+        </p>
+        <div *ngIf="kycStatus.completedAt" class="onboarding-main__kyc-completed-meta">
+          <small>Completado: {{ kycStatus.completedAt | date:'medium' }}</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="onboarding-main__actions onboarding-main__actions--stack">
+      <button type="button" class="ui-btn ui-btn-secondary" aria-label="Volver" (click)="previousStep()">
+        Atrás
+      </button>
+      <div class="onboarding-main__actions-group">
+        <span class="onboarding-main__cta-pill">Siguiente: Generar Contrato</span>
+        <div class="onboarding-main__actions-stack">
+          <button
+            type="button"
+            class="ui-btn ui-btn-primary"
+            [disabled]="!canProceedToContracts()"
+            (click)="nextStep()"
+          >
+            Continuar a Contratos
+          </button>
+          <small class="onboarding-main__cta-hint" *ngIf="!canProceedToContracts()" aria-live="polite">
+            Completa la verificación biométrica para continuar.
+          </small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Paso: Contratos -->
+  <section *ngIf="currentStep === 'contracts'" class="onboarding-main__section">
+    <header class="onboarding-main__section-header">
+      <h2 class="onboarding-main__section-title" tabindex="-1">Generación de Contratos</h2>
+      <p class="onboarding-main__section-description">Genera y envía los contratos correspondientes</p>
+    </header>
+
+    <div class="onboarding-main__contracts" *ngIf="currentClient">
+      <div
+        class="onboarding-main__contract-status"
+        [ngClass]="{
+          'onboarding-main__contract-status--ready': contractValidation.canGenerate,
+          'onboarding-main__contract-status--pending': !contractValidation.canGenerate
+        }"
+      >
+        <div class="onboarding-main__contract-icon">
+          <app-icon *ngIf="contractValidation.canGenerate" name="check-circle-solid" [size]="24" class="icon-24" />
+          <app-icon *ngIf="!contractValidation.canGenerate" name="exclamation-triangle" [size]="24" class="icon-24" />
+        </div>
+        <div class="onboarding-main__contract-info">
+          <h4 class="onboarding-main__contract-title" *ngIf="contractValidation.canGenerate">Listo para generar contratos</h4>
+          <h4 class="onboarding-main__contract-title" *ngIf="!contractValidation.canGenerate">Requisitos faltantes</h4>
+
+          <ul *ngIf="contractValidation.missingRequirements.length > 0" class="onboarding-main__contract-list">
+            <li *ngFor="let req of contractValidation.missingRequirements">{{ req }}</li>
+          </ul>
+          <ul *ngIf="contractValidation.warningMessages.length > 0" class="onboarding-main__contract-list">
+            <li *ngFor="let warning of contractValidation.warningMessages">{{ warning }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="onboarding-main__contract-actions" *ngIf="contractValidation.canGenerate">
+        <button
+          type="button"
+          class="ui-btn ui-btn-primary onboarding-main__contract-button"
+          [disabled]="isGeneratingContract"
+          (click)="generateContract()"
+        >
+          <span *ngIf="!isGeneratingContract">Generar y Enviar Contrato</span>
+          <span *ngIf="isGeneratingContract">Generando...</span>
+        </button>
+      </div>
+
+      <div class="onboarding-main__contract-message" *ngIf="contractMessage">
+        <div class="onboarding-main__status-chip">
+          {{ contractMessage }}
+        </div>
+      </div>
+    </div>
+
+    <div class="onboarding-main__actions onboarding-main__actions--stack">
+      <button type="button" class="ui-btn ui-btn-secondary" aria-label="Volver" (click)="previousStep()">
+        Atrás
+      </button>
+      <button
+        type="button"
+        class="ui-btn ui-btn-primary"
+        [disabled]="!contractMessage"
+        (click)="nextStep()"
+      >
+        Finalizar Onboarding
+      </button>
+    </div>
+  </section>
+
+  <!-- Paso: Finalizado -->
+  <section *ngIf="currentStep === 'completed'" class="onboarding-main__section onboarding-main__section--completion">
+    <div class="onboarding-main__completion">
+      <div class="onboarding-main__completion-icon">
+        <app-icon name="check-circle" [size]="32" class="icon-32" />
+      </div>
+      <h2 class="onboarding-main__completion-title" tabindex="-1">¡Onboarding Completado!</h2>
+      <p class="onboarding-main__section-description">La oportunidad ha sido creada exitosamente</p>
+
+      <div class="onboarding-main__completion-summary" *ngIf="currentClient">
+        <div class="onboarding-main__summary-item">
+          <span class="onboarding-main__summary-label">Cliente:</span>
+          <span class="onboarding-main__summary-value">{{ currentClient.name }}</span>
+        </div>
+        <div class="onboarding-main__summary-item">
+          <span class="onboarding-main__summary-label">Flujo:</span>
+          <span class="onboarding-main__summary-value">{{ getFlowDisplayName(currentClient.flow) }}</span>
+        </div>
+        <div class="onboarding-main__summary-item">
+          <span class="onboarding-main__summary-label">Estado:</span>
+          <span class="onboarding-main__summary-value">{{ currentClient.status }}</span>
+        </div>
+        <div class="onboarding-main__summary-item">
+          <span class="onboarding-main__summary-label">Score de Salud:</span>
+          <span class="onboarding-main__summary-value">{{ currentClient.healthScore }}%</span>
+        </div>
+      </div>
+
+      <div class="onboarding-main__completion-actions">
+        <button type="button" class="ui-btn ui-btn-primary" (click)="goToClient()">Ver Cliente</button>
+        <button type="button" class="ui-btn ui-btn-secondary" (click)="startNewOnboarding()">Nuevo Onboarding</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal de checkpoints -->
+  <app-interview-checkpoint-modal
+    *ngIf="showInterviewModal"
+    [isVisible]="showInterviewModal"
+    [modalData]="{
+      clientId: currentClient?.id || '',
+      clientName: currentClient?.name || '',
+      documentType: 'Documento',
+      checkpoint: null,
+      clientData: {
+        municipality: form.market,
+        productType: getProductType()
+      }
+    }"
+    (interviewCompleted)="onInterviewCompleted()"
+    (modalClosed)="onInterviewModalClosed()"
+    (continueUpload)="onInterviewCompleted()"
+  ></app-interview-checkpoint-modal>
+</section>

@@ -1,0 +1,79 @@
+<div class="tanda-enhanced">
+  <header class="tanda-enhanced__header">
+    <h1 class="tanda-enhanced__title">Tanda Enhanced – Panel LAB</h1>
+    <p class="tanda-enhanced__subtitle">Simula escenarios de Tanda con prioridades de entrega, eventos y validación de IRR objetivo.</p>
+  </header>
+
+  <form class="tanda-enhanced__form" (ngSubmit)="run()">
+    <label class="tanda-enhanced__field">
+      <span class="tanda-enhanced__field-label">Miembros</span>
+      <input type="number" [(ngModel)]="totalMembers" name="members" min="1" class="tanda-enhanced__input">
+    </label>
+    <label class="tanda-enhanced__field">
+      <span class="tanda-enhanced__field-label">Aportación mensual</span>
+      <input type="number" [(ngModel)]="monthlyAmount" name="amount" min="0" class="tanda-enhanced__input">
+    </label>
+    <label class="tanda-enhanced__field">
+      <span class="tanda-enhanced__field-label">Horizonte (meses)</span>
+      <input type="number" [(ngModel)]="horizonMonths" name="horizon" min="1" class="tanda-enhanced__input">
+    </label>
+    <label class="tanda-enhanced__field">
+      <span class="tanda-enhanced__field-label">Mercado</span>
+      <select [(ngModel)]="market" name="market" class="tanda-enhanced__input">
+        <option value="aguascalientes">Aguascalientes</option>
+        <option value="edomex">Edomex</option>
+      </select>
+    </label>
+    <label class="tanda-enhanced__field">
+      <span class="tanda-enhanced__field-label">Colectivo (opcional)</span>
+      <input type="text" [(ngModel)]="collectiveId" name="collectiveId" placeholder="colectivo_edomex_01" class="tanda-enhanced__input">
+    </label>
+    <label class="tanda-enhanced__field">
+      <span class="tanda-enhanced__field-label">Ecosistema/Ruta (opcional)</span>
+      <input type="text" [(ngModel)]="ecosystemId" name="ecosystemId" placeholder="ruta-centro-edomex" class="tanda-enhanced__input">
+    </label>
+    <button type="submit" class="tanda-enhanced__button">Ejecutar</button>
+    <button type="button" class="tanda-enhanced__button tanda-enhanced__button--secondary" (click)="exportCSV()" [disabled]="results.length === 0">
+      Export CSV
+    </button>
+  </form>
+
+  <p class="tanda-enhanced__meta">
+    Target IRR: <strong>{{ (currentTargetIrr * 100) | number:'1.2-2' }}%</strong>
+    · Tolerancia: <strong>{{ environment.finance.irrToleranceBps }} bps</strong>
+  </p>
+
+  <section *ngIf="results.length" class="tanda-enhanced__results">
+    <h2 class="tanda-enhanced__results-title">Resultados ({{ results.length }})</h2>
+    <div class="tanda-enhanced__table-wrapper">
+      <table class="tanda-enhanced__table" role="grid">
+        <thead>
+          <tr>
+            <th>Escenario</th>
+            <th>IRR %</th>
+            <th>TIR OK</th>
+            <th>Awards</th>
+            <th>First</th>
+            <th>Last</th>
+            <th>Active%</th>
+            <th>Deficits</th>
+            <th>Rescues</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let result of results">
+            <td>{{ result.name }}</td>
+            <td class="tanda-enhanced__cell--numeric">{{ (result.irrAnnual * 100) | number:'1.2-2' }}</td>
+            <td class="tanda-enhanced__cell--center">{{ result.tirOK ? '✓' : '✗' }}</td>
+            <td class="tanda-enhanced__cell--numeric">{{ result.metrics.awardsMade }}</td>
+            <td class="tanda-enhanced__cell--numeric">{{ result.metrics.firstAwardT || '-' }}</td>
+            <td class="tanda-enhanced__cell--numeric">{{ result.metrics.lastAwardT || '-' }}</td>
+            <td class="tanda-enhanced__cell--numeric">{{ (result.metrics.activeShareAvg * 100) | number:'1.0-0' }}%</td>
+            <td class="tanda-enhanced__cell--numeric">{{ result.metrics.deficitsDetected }}</td>
+            <td class="tanda-enhanced__cell--numeric">{{ result.metrics.rescuesUsed }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

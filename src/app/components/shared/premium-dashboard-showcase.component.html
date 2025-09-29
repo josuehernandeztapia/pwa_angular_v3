@@ -1,0 +1,195 @@
+<section class="premium-dashboard" aria-labelledby="premium-dashboard-title">
+  <header class="premium-dashboard__header">
+    <div class="premium-dashboard__welcome">
+      <h1 id="premium-dashboard-title" class="premium-dashboard__title">
+        Centro de Control Premium
+      </h1>
+      <app-human-message
+        microcopyId="welcome-first-time"
+        [context]="userContext"
+        [showAction]="false"
+        size="comfortable"
+        class="premium-dashboard__welcome-message"
+      ></app-human-message>
+    </div>
+
+    <div class="premium-dashboard__statuses" aria-label="Estado del sistema">
+      <div
+        *ngFor="let status of systemStatuses(); trackBy: trackByStatus"
+        class="premium-dashboard__status"
+        [ngClass]="getStatusClasses(status)"
+      >
+        <app-ui-icon class="premium-dashboard__status-icon" [name]="getStatusIcon(status.status)" size="sm"></app-ui-icon>
+        <div class="premium-dashboard__status-info">
+          <span class="premium-dashboard__status-name">{{ status.component }}</span>
+          <span class="premium-dashboard__status-meta">Actualizado {{ status.lastUpdate | date:'HH:mm:ss' }}</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="premium-dashboard__section premium-dashboard__section--metrics">
+    <header class="premium-dashboard__section-header">
+      <h2 class="premium-dashboard__section-title">
+        <app-ui-icon name="cotizador" size="md"></app-ui-icon>
+        Métricas en Tiempo Real
+      </h2>
+    </header>
+
+    <div class="premium-dashboard__metrics-layout">
+      <article
+        class="premium-dashboard__metric-card"
+        *ngFor="let metric of dashboardMetrics(); trackBy: trackByMetric"
+      >
+        <div class="premium-dashboard__metric-icon">
+          <app-ui-icon [name]="metric.iconName" size="lg"></app-ui-icon>
+        </div>
+        <div class="premium-dashboard__metric-body">
+          <span class="premium-dashboard__metric-value">{{ formatMetricValue(metric.value) }}</span>
+          <span class="premium-dashboard__metric-change" [ngClass]="getTrendClasses(metric.trend)">
+            <app-ui-icon [name]="getTrendIcon(metric.trend)" size="sm"></app-ui-icon>
+            {{ formatChange(metric.change) }}%
+          </span>
+          <span class="premium-dashboard__metric-label">{{ metric.label }}</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="premium-dashboard__section premium-dashboard__section--journeys">
+    <header class="premium-dashboard__section-header">
+      <h2 class="premium-dashboard__section-title">
+        <app-ui-icon name="refresh" size="md"></app-ui-icon>
+        Sistema de Experiencia Premium
+      </h2>
+    </header>
+
+    <div class="premium-dashboard__journey-layout">
+      <article class="premium-dashboard__journey-card">
+        <header class="premium-dashboard__journey-header">
+          <app-ui-icon name="check-circle" size="md"></app-ui-icon>
+          <h3>Procesamiento de Pagos</h3>
+        </header>
+        <app-human-message
+          microcopyId="payment-processed"
+          size="compact"
+          [dismissible]="false"
+        ></app-human-message>
+        <button
+          type="button"
+          class="premium-dashboard__journey-action"
+          (click)="triggerPaymentSuccess()"
+          [ngClass]="getJourneyActionClasses(paymentSuccessTriggered())"
+        >
+          <app-ui-icon name="check" size="sm"></app-ui-icon>
+          Simular Pago Exitoso
+        </button>
+      </article>
+
+      <article class="premium-dashboard__journey-card">
+        <header class="premium-dashboard__journey-header">
+          <app-ui-icon name="proteccion" size="md"></app-ui-icon>
+          <h3>Firma Digital</h3>
+        </header>
+        <app-human-message
+          microcopyId="contract-signed"
+          size="compact"
+          [dismissible]="false"
+        ></app-human-message>
+        <button
+          type="button"
+          class="premium-dashboard__journey-action"
+          (click)="triggerContractSigning()"
+          [ngClass]="getJourneyActionClasses(contractSignedTriggered())"
+        >
+          <app-ui-icon name="check-circle" size="sm"></app-ui-icon>
+          Simular Firma
+        </button>
+      </article>
+
+      <article class="premium-dashboard__journey-card">
+        <header class="premium-dashboard__journey-header">
+          <app-ui-icon name="check-circle" size="md"></app-ui-icon>
+          <h3>Verificación KYC</h3>
+        </header>
+        <app-human-message
+          microcopyId="kyc-approved"
+          size="compact"
+          [dismissible]="false"
+        ></app-human-message>
+        <button
+          type="button"
+          class="premium-dashboard__journey-action"
+          (click)="triggerKYCVerification()"
+          [ngClass]="getJourneyActionClasses(kycVerifiedTriggered())"
+        >
+          <app-ui-icon name="check-circle" size="sm"></app-ui-icon>
+          Verificar Cliente
+        </button>
+      </article>
+    </div>
+  </section>
+
+  <section class="premium-dashboard__section premium-dashboard__section--loaders">
+    <header class="premium-dashboard__section-header">
+      <h2 class="premium-dashboard__section-title">
+        <app-ui-icon name="refresh" size="md"></app-ui-icon>
+        Estados de Carga Premium
+      </h2>
+    </header>
+
+    <div class="premium-dashboard__loaders">
+      <article class="premium-dashboard__loader">
+        <h3 class="premium-dashboard__loader-title">Shimmer Effect</h3>
+        <div class="premium-dashboard__shimmer" aria-hidden="true">
+          <div class="premium-dashboard__shimmer-line"></div>
+          <div class="premium-dashboard__shimmer-line"></div>
+          <div class="premium-dashboard__shimmer-line premium-dashboard__shimmer-line--short"></div>
+        </div>
+      </article>
+
+      <article class="premium-dashboard__loader">
+        <h3 class="premium-dashboard__loader-title">Pulsing Dots</h3>
+        <div class="premium-dashboard__dots" aria-hidden="true">
+          <span class="premium-dashboard__dot"></span>
+          <span class="premium-dashboard__dot"></span>
+          <span class="premium-dashboard__dot"></span>
+        </div>
+      </article>
+
+      <article class="premium-dashboard__loader">
+        <h3 class="premium-dashboard__loader-title">Smart Spinner</h3>
+        <div class="premium-dashboard__spinner" role="status" aria-label="Cargando">
+          <app-ui-icon name="refresh" size="lg"></app-ui-icon>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="premium-dashboard__section premium-dashboard__section--guidance">
+    <header class="premium-dashboard__section-header">
+      <h2 class="premium-dashboard__section-title">
+        <app-ui-icon name="info" size="md"></app-ui-icon>
+        Mensajería Contextual
+      </h2>
+    </header>
+
+    <div class="premium-dashboard__guidance-list">
+      <app-human-message
+        microcopyId="quote-optimization-tip"
+        [context]="{ quote: { windowProtection: false } }"
+        size="normal"
+      ></app-human-message>
+
+      <app-human-message
+        microcopyId="seasonal-opportunity"
+        size="normal"
+      ></app-human-message>
+
+      <app-human-message
+        microcopyId="pipeline-optimization"
+        size="normal"
+      ></app-human-message>
+    </div>
+  </section>
+</section>

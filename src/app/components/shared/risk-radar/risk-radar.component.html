@@ -1,0 +1,101 @@
+<section class="risk-radar" aria-live="polite">
+  <header class="risk-radar__header">
+    <div class="risk-radar__intro">
+      <h2 class="risk-radar__title">Radar de Riesgo</h2>
+      <p class="risk-radar__subtitle">Visualización proactiva de la salud de tu cartera</p>
+    </div>
+    <ul class="risk-radar__legend">
+      <li class="risk-radar__legend-item" *ngFor="let level of riskLevels">
+        <span class="risk-radar__legend-dot" [ngClass]="getRiskBadgeClasses(level.key)" aria-hidden="true"></span>
+        <span class="risk-radar__legend-label">{{ level.label }}</span>
+      </li>
+    </ul>
+  </header>
+
+  <div class="risk-radar__layout">
+    <div class="risk-radar__grid" role="presentation">
+      <div class="risk-radar__circle" *ngFor="let ring of [1,2,3,4]" [style.width.%]="ring * 25" [style.height.%]="ring * 25"></div>
+      <div class="risk-radar__axis risk-radar__axis--horizontal"></div>
+      <div class="risk-radar__axis risk-radar__axis--vertical"></div>
+
+      <span class="risk-radar__zone risk-radar__zone--safe">Zona Segura</span>
+      <span class="risk-radar__zone risk-radar__zone--attention">Atención</span>
+      <span class="risk-radar__zone risk-radar__zone--danger">Riesgo Alto</span>
+      <span class="risk-radar__zone risk-radar__zone--critical">Crítico</span>
+
+      <button
+        type="button"
+        class="risk-radar__client"
+        *ngFor="let client of clients; trackBy: trackByClient"
+        [ngClass]="getClientClasses(client)"
+        [style.left.%]="client.position.x"
+        [style.top.%]="client.position.y"
+        [attr.aria-label]="getClientTooltip(client)"
+        (click)="selectClient(client)"
+      >
+        <span class="risk-radar__client-pulse" [ngClass]="getClientPulseClasses(client)" aria-hidden="true"></span>
+        <span class="risk-radar__client-initials">{{ getClientInitials(client.name) }}</span>
+      </button>
+    </div>
+
+    <aside class="risk-radar__details" *ngIf="selectedClient">
+      <header class="risk-radar__details-header">
+        <h3 class="risk-radar__details-name">{{ selectedClient.name }}</h3>
+        <button
+          type="button"
+          class="risk-radar__details-close"
+          aria-label="Cerrar detalle"
+          (click)="selectedClient = undefined"
+        >
+          ×
+        </button>
+      </header>
+
+      <section class="risk-radar__details-body">
+        <div class="risk-radar__health">
+          <span class="risk-radar__healthLabel">Health Score</span>
+          <span class="risk-radar__healthValue" [ngClass]="getHealthScoreClasses(selectedClient.healthScore)">
+            {{ selectedClient.healthScore }}
+          </span>
+        </div>
+
+        <dl class="risk-radar__metrics">
+          <div class="risk-radar__metric">
+            <dt class="risk-radar__metric-label">Valor cartera</dt>
+            <dd class="risk-radar__metric-value">\${{ formatCurrency(selectedClient.value) }}</dd>
+          </div>
+          <div class="risk-radar__metric">
+            <dt class="risk-radar__metric-label">Último contacto</dt>
+            <dd class="risk-radar__metric-value">{{ selectedClient.lastContact }}</dd>
+          </div>
+          <div class="risk-radar__metric">
+            <dt class="risk-radar__metric-label">Urgencia</dt>
+            <dd class="risk-radar__metric-value">{{ selectedClient.urgency }}/10</dd>
+          </div>
+        </dl>
+
+        <section class="risk-radar__issues" *ngIf="selectedClient.issues.length > 0">
+          <h4 class="risk-radar__issues-title">Issues identificados</h4>
+          <ul class="risk-radar__issues-list">
+            <li class="risk-radar__issues-item" *ngFor="let issue of selectedClient.issues">{{ issue }}</li>
+          </ul>
+        </section>
+
+        <button
+          type="button"
+          class="risk-radar__action"
+          (click)="takeAction(selectedClient)"
+        >
+          Tomar Acción
+        </button>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="risk-radar__stats">
+    <div class="risk-radar__stat" *ngFor="let stat of getRadarStats()">
+      <span class="risk-radar__stat-value" [style.color]="stat.color">{{ stat.value }}</span>
+      <span class="risk-radar__stat-label">{{ stat.label }}</span>
+    </div>
+  </footer>
+</section>

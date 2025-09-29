@@ -1,0 +1,71 @@
+<section *ngIf="shouldShowBanner()" class="pwa-install" aria-live="polite">
+  <div class="pwa-install__banner">
+    <div class="pwa-install__banner-icon" aria-hidden="true">
+      <app-icon class="icon-24" name="device-mobile" [size]="24"></app-icon>
+    </div>
+    <div class="pwa-install__banner-copy">
+      <h3 class="pwa-install__banner-title">¡Instala Conductores PWA!</h3>
+      <p class="pwa-install__banner-subtitle">Acceso rápido desde tu pantalla de inicio</p>
+    </div>
+    <div class="pwa-install__banner-actions">
+      <button type="button" class="pwa-install__banner-btn pwa-install__banner-btn--primary" (click)="install()" [disabled]="installing()">
+        <span *ngIf="!installing()" class="pwa-install__banner-label">
+          <app-icon class="icon-16-block pwa-install__banner-icon-inline" name="download" [size]="16"></app-icon>
+          Instalar
+        </span>
+        <span *ngIf="installing()" class="pwa-install__banner-label">
+          <app-icon class="icon-16-block pwa-install__spinner" name="spinner" [size]="16"></app-icon>
+          Instalando...
+        </span>
+      </button>
+      <button type="button" class="pwa-install__banner-btn pwa-install__banner-btn--ghost" (click)="dismiss()" aria-label="Cerrar prompt de instalación">
+        <app-icon class="icon-16" name="close" [size]="16"></app-icon>
+      </button>
+    </div>
+  </div>
+</section>
+
+<div *ngIf="showManualInstructions()" class="pwa-install__modal" (click)="closeManualInstructions()">
+  <div class="pwa-install__modal-card" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="pwa-install-modal-title">
+    <header class="pwa-install__modal-header">
+      <h3 class="pwa-install__modal-title" id="pwa-install-modal-title">
+        <app-icon class="icon-20-block pwa-install__modal-icon" name="device-mobile" [size]="20"></app-icon>
+        Instalar en {{ getInstructions().platform }}
+      </h3>
+      <button type="button" class="pwa-install__modal-close" (click)="closeManualInstructions()" aria-label="Cerrar instrucciones">
+        <app-icon class="icon-16" name="close" [size]="16"></app-icon>
+      </button>
+    </header>
+
+    <div class="pwa-install__modal-body">
+      <p class="pwa-install__modal-intro">Para instalar esta aplicación en tu dispositivo:</p>
+      <ol class="pwa-install__steps">
+        <li *ngFor="let instruction of getInstructions().instructions; let i = index" class="pwa-install__step">
+          <span class="pwa-install__step-index">{{ i + 1 }}</span>
+          <span class="pwa-install__step-text">{{ instruction }}</span>
+        </li>
+      </ol>
+      <div class="pwa-install__note">
+        <app-icon class="icon-16-block pwa-install__note-icon" name="lightbulb" [size]="16"></app-icon>
+        Una vez instalada, podrás acceder sin conexión a internet
+      </div>
+    </div>
+
+    <footer class="pwa-install__modal-actions">
+      <button type="button" class="pwa-install__modal-btn" (click)="closeManualInstructions()">Entendido</button>
+    </footer>
+  </div>
+</div>
+
+<button
+  *ngIf="shouldShowFloatingButton()"
+  type="button"
+  class="pwa-install__floating"
+  (click)="showInstallOptions()"
+  aria-label="Opciones de instalación"
+>
+  <span class="pwa-install__floating-icon" aria-hidden="true">
+    <app-icon class="icon-16" name="device-mobile" [size]="16"></app-icon>
+  </span>
+  <span class="pwa-install__floating-text">Instalar</span>
+</button>

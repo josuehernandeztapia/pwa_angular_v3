@@ -1,0 +1,188 @@
+.tanda-consensus {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5, 20px);
+  padding: var(--space-4, 16px);
+  color: var(--color-text-primary, #0f172a);
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--color-neutral-100, #f1f5f9);
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 8px);
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  &__subtitle {
+    margin: 0;
+    color: var(--color-text-secondary, #475569);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-neutral-300, #cbd5f5);
+    }
+  }
+
+  &__card {
+    background: var(--color-bg-primary, #ffffff);
+    border: 1px solid var(--color-border-primary, #e2e8f0);
+    border-radius: 12px;
+    padding: var(--space-4, 16px);
+    box-shadow: var(--shadow-sm, 0 1px 2px rgb(15 23 42 / 0.08));
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 12px);
+
+    @media (prefers-color-scheme: dark) {
+      background: var(--color-neutral-900, #0f172a);
+      border-color: color-mix(in srgb, var(--color-neutral-700, #334155) 80%, transparent);
+      box-shadow: none;
+    }
+  }
+
+  &__card-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #0f172a);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-neutral-100, #f8fafc);
+    }
+  }
+
+  &__form-grid {
+    display: grid;
+    gap: var(--space-3, 12px);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+    &--aligned {
+      align-items: end;
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 4px);
+  }
+
+  &__field-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary, #475569);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-neutral-300, #cbd5f5);
+    }
+  }
+
+  &__input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border-primary, #e2e8f0);
+    border-radius: 8px;
+    background: var(--color-bg-primary, #ffffff);
+    font: inherit;
+    color: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent-blue-500, #2563eb);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500, #2563eb) 15%, transparent);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background: color-mix(in srgb, var(--color-neutral-900, #0f172a) 90%, transparent);
+      border-color: color-mix(in srgb, var(--color-neutral-700, #334155) 80%, transparent);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &__button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background: var(--accent-blue-500, #2563eb);
+    color: var(--flat-surface-bg, #ffffff);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      background: var(--accent-blue-600, #1d4ed8);
+      transform: none;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500, #2563eb) 25%, transparent);
+    }
+  }
+
+  &__feedback {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--accent-blue-600, #1d4ed8);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--accent-blue-300, #93c5fd);
+    }
+  }
+
+  &__meta {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #475569);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-neutral-300, #cbd5f5);
+    }
+  }
+
+  &__table-wrapper {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+
+    th,
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--color-border-primary, #e2e8f0);
+      text-align: left;
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--color-text-secondary, #475569);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      th,
+      td {
+        border-color: color-mix(in srgb, var(--color-neutral-700, #334155) 70%, transparent);
+      }
+
+      th {
+        color: var(--color-neutral-200, #e2e8f0);
+      }
+    }
+  }
+}
