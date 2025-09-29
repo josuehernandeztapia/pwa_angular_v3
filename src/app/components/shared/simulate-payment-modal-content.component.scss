@@ -21,14 +21,14 @@
     height: 48px;
     border-radius: 50%;
     border: 2px solid var(--neutral-400, transparent);
-    border-top-color: var(--accent-green-500, #16a34a);
+    border-top-color: var(--accent-green-500, transparent);
     animation: simulate-payment-spin 1s linear infinite;
   }
 
   &__loading-text {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--neutral-500, #737373);
+    color: var(--neutral-500, transparent);
   }
 
   &__form {
@@ -41,7 +41,7 @@
     margin: 0;
     font-size: 0.95rem;
     line-height: 1.6;
-    color: var(--neutral-500, #737373);
+    color: var(--neutral-500, transparent);
   }
 
   &__field {
@@ -53,7 +53,7 @@
   &__label {
     font-size: 0.9rem;
     font-weight: var(--font-weight-medium, 500);
-    color: var(--neutral-500, #737373);
+    color: var(--neutral-500, transparent);
   }
 
   &__currency {
@@ -67,7 +67,7 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--neutral-500, #737373);
+    color: var(--neutral-500, transparent);
     font-size: 0.9rem;
     pointer-events: none;
   }
@@ -77,15 +77,15 @@
     padding: 10px 16px 10px 30px;
     border-radius: 8px;
     border: 1px solid var(--neutral-500, transparent);
-    background: var(--neutral-900, #111827);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--neutral-900, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-size: 1rem;
     transition: border-color var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
 
     &:focus {
       outline: none;
-      border-color: var(--accent-green-500, #16a34a);
-      box-shadow: 0 0 0 1px var(--accent-green-500, #16a34a);
+      border-color: var(--accent-green-500, transparent);
+      box-shadow: 0 0 0 1px var(--accent-green-500, transparent);
     }
   }
 
@@ -102,8 +102,8 @@
     padding: 10px 16px;
     border: none;
     border-radius: 10px;
-    background: var(--accent-green-500, #16a34a);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-green-500, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-size: 0.95rem;
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
@@ -111,7 +111,7 @@
     transition: background var(--transition-quick, 0.2s ease), opacity var(--transition-quick, 0.2s ease);
 
     &:hover {
-      background: var(--accent-green-600, #15803d);
+      background: var(--accent-green-600, transparent);
     }
 
     &:disabled {

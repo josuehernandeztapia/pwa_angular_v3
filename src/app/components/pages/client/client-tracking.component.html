@@ -85,7 +85,7 @@
         <p class="client-tracking__message">{{ info.message }}</p>
 
         <div class="client-tracking__eta" *ngIf="!info.isDelivered">
-          <span class="client-tracking__eta-icon" aria-hidden="true">📅</span>
+          <app-icon name="calendar" [size]="16" class="client-tracking__eta-icon" aria-hidden="true" />
           <div class="client-tracking__eta-content">
             <span class="client-tracking__eta-label">Fecha estimada de entrega</span>
             <span class="client-tracking__eta-value">{{ info.estimatedDate }}</span>
@@ -227,14 +227,14 @@
       <h2>Estamos listos para ayudarte</h2>
       <div class="client-tracking__contact-list">
         <div class="client-tracking__contact-item">
-          <span class="client-tracking__contact-icon" aria-hidden="true">📞</span>
+          <app-icon name="phone" [size]="16" class="client-tracking__contact-icon" aria-hidden="true" />
           <div>
             <span class="client-tracking__contact-label">Teléfono</span>
             <span class="client-tracking__contact-value">449 123 4567</span>
           </div>
         </div>
         <div class="client-tracking__contact-item">
-          <span class="client-tracking__contact-icon" aria-hidden="true">💬</span>
+          <app-icon name="chat" [size]="16" class="client-tracking__contact-icon" aria-hidden="true" />
           <div>
             <span class="client-tracking__contact-label">WhatsApp</span>
             <span class="client-tracking__contact-value">449 123 4567</span>

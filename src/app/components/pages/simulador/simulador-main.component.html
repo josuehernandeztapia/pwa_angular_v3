@@ -343,7 +343,7 @@
                 </td>
               </tr>
               <tr>
-                <td class="comparison-modal__table-cell comparison-modal__table-cell--metric">📅 Estado</td>
+                <td class="comparison-modal__table-cell comparison-modal__table-cell--metric"><app-icon name="calendar" [size]="16" class="comparison-modal__table-icon" /> Estado</td>
                 <td *ngFor="let sim of getSelectedSimulations()" class="comparison-modal__table-cell">
                   <span class="comparison-modal__status-badge"
                         [class.comparison-modal__status-badge--draft]="sim.summary.status === 'draft'"

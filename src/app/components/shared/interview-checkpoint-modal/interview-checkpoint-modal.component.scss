@@ -16,15 +16,15 @@
     max-height: 90vh;
     display: flex;
     flex-direction: column;
-    background: var(--color-surface-primary, #ffffff);
+    background: var(--color-surface-primary, transparent);
     border-radius: 18px;
     box-shadow: 0 32px 60px rgba(15, 23, 42, 0.35);
     overflow-y: auto;
     outline: none;
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-surface-primary-dark, #0f172a);
-      color: var(--openai-gray-100, #f3f4f6);
+      background: var(--color-surface-primary-dark, transparent);
+      color: var(--openai-gray-100, transparent);
       box-shadow: 0 32px 60px rgba(8, 15, 35, 0.6);
     }
   }
@@ -55,16 +55,16 @@
     margin: 0;
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--color-danger, #dc2626);
+    color: var(--color-danger, transparent);
   }
 
   &__subtitle {
     margin: 2px 0 0 0;
     font-size: 1rem;
-    color: var(--color-text-secondary, #6b7280);
+    color: var(--color-text-secondary, transparent);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--openai-gray-300, #d1d5db);
+      color: var(--openai-gray-300, transparent);
     }
   }
 
@@ -74,7 +74,7 @@
     border-radius: 50%;
     border: none;
     background: transparent;
-    color: var(--color-text-secondary, #6b7280);
+    color: var(--color-text-secondary, transparent);
     font-size: 1.5rem;
     display: flex;
     align-items: center;
@@ -84,7 +84,7 @@
 
     &:hover:not(:disabled) {
       background: rgba(248, 250, 252, 0.8);
-      color: var(--color-danger, #dc2626);
+      color: var(--color-danger, transparent);
     }
 
     &:disabled {
@@ -114,19 +114,19 @@
     strong {
       display: block;
       margin-bottom: 6px;
-      color: var(--color-warning-dark, #92400e);
+      color: var(--color-warning-dark, transparent);
     }
 
     p {
       margin: 0;
-      color: var(--color-warning-dark, #92400e);
+      color: var(--color-warning-dark, transparent);
     }
   }
 
   &__status {
     padding: 20px 24px;
     border-bottom: 1px solid rgba(209, 213, 219, 0.6);
-    background: var(--color-surface-secondary, #f9fafb);
+    background: var(--color-surface-secondary, transparent);
 
     &--pending {
       background: rgba(254, 243, 199, 0.6);
@@ -163,13 +163,13 @@
   &__status-text {
     font-weight: 600;
     font-size: 1rem;
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__status-details {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--color-text-secondary, #6b7280);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__requirements {
@@ -181,7 +181,7 @@
     margin: 0 0 16px 0;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__requirements-grid {
@@ -209,13 +209,13 @@
   &__requirement-label {
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--color-text-secondary, #6b7280);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__requirement-value {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__recorder {
@@ -229,7 +229,7 @@
     gap: 10px;
     padding: 16px 24px;
     background: rgba(254, 226, 226, 0.8);
-    color: var(--color-danger, #dc2626);
+    color: var(--color-danger, transparent);
     border-bottom: 1px solid rgba(252, 165, 165, 0.4);
   }
 
@@ -266,7 +266,7 @@
     &--cancel {
       background: #6b7280;
       border-color: #6b7280;
-      color: var(--openai-white, #ffffff);
+      color: var(--openai-white, transparent);
 
       &:hover:not(:disabled) {
         background: #4b5563;
@@ -282,7 +282,7 @@
     &--retry {
       background: #f59e0b;
       border-color: #f59e0b;
-      color: var(--openai-white, #ffffff);
+      color: var(--openai-white, transparent);
 
       &:hover {
         background: #d97706;
@@ -293,7 +293,7 @@
     &--continue {
       background: #22c55e;
       border-color: #22c55e;
-      color: var(--openai-white, #ffffff);
+      color: var(--openai-white, transparent);
 
       &:hover {
         background: #16a34a;
@@ -304,7 +304,7 @@
     &--supervisor {
       background: #dc2626;
       border-color: #dc2626;
-      color: var(--openai-white, #ffffff);
+      color: var(--openai-white, transparent);
 
       &:hover {
         background: #b91c1c;
@@ -331,7 +331,7 @@
     padding: 18px 24px;
     border: none;
     background: transparent;
-    color: var(--color-text-secondary, #6b7280);
+    color: var(--color-text-secondary, transparent);
     font-weight: 600;
     cursor: pointer;
     text-align: left;
@@ -359,7 +359,7 @@
   &__help-title {
     margin: 0;
     font-weight: 600;
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__help-list {
@@ -371,13 +371,13 @@
       position: relative;
       padding-left: 16px;
       margin-bottom: 6px;
-      color: var(--color-text-secondary, #6b7280);
+      color: var(--color-text-secondary, transparent);
 
       &::before {
         content: '•';
         position: absolute;
         left: 0;
-        color: var(--color-success, #22c55e);
+        color: var(--color-success, transparent);
       }
     }
   }
@@ -386,12 +386,12 @@
     padding: 12px;
     border-radius: 10px;
     border: 1px solid rgba(209, 213, 219, 0.8);
-    background: var(--color-surface-primary, #ffffff);
+    background: var(--color-surface-primary, transparent);
     font-size: 0.9rem;
     line-height: 1.5;
 
     a {
-      color: var(--color-success, #22c55e);
+      color: var(--color-success, transparent);
       font-weight: 600;
       text-decoration: none;
     }

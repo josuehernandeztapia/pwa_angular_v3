@@ -6,8 +6,8 @@
   width: min(26rem, 100vw);
   display: flex;
   flex-direction: column;
-  background: var(--flat-surface-bg, #ffffff);
-  border-left: 1px solid var(--neutral-300, #e5e5e5);
+  background: var(--flat-surface-bg, transparent);
+  border-left: 1px solid var(--neutral-300, transparent);
   box-shadow: var(--shadow-lg, -4px 0 20px rgba(8, 8, 8, 0.12));
   transform: translate3d(100%, 0, 0);
   transition: transform var(--transition-fast, 0.3s ease);
@@ -23,8 +23,8 @@
     justify-content: space-between;
     padding: var(--space-16, 16px) var(--space-24, 24px);
     gap: var(--space-16, 16px);
-    background: var(--neutral-100, var(--flat-surface-bg, #ffffff));
-    border-bottom: 1px solid var(--neutral-300, #e5e5e5);
+    background: var(--neutral-100, var(--flat-surface-bg, transparent));
+    border-bottom: 1px solid var(--neutral-300, transparent);
   }
 
   &__title-group {
@@ -37,7 +37,7 @@
     margin: 0;
     font-size: 1.125rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--neutral-700, #525252);
+    color: var(--neutral-700, transparent);
   }
 
   &__count {
@@ -47,8 +47,8 @@
     min-width: 2rem;
     padding: 0 var(--space-8, 8px);
     border-radius: 999px;
-    background: var(--accent-red-500, #dc2626);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-red-500, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
   }
@@ -71,30 +71,30 @@
     border: 1px solid transparent;
     border-radius: var(--radius-sm, 8px);
     background: var(--neutral-200, transparent);
-    color: var(--neutral-600, #737373);
+    color: var(--neutral-600, transparent);
     cursor: pointer;
     transition: background var(--transition-quick, 0.2s ease), color var(--transition-quick, 0.2s ease);
   }
 
   &__filter--active {
-    background: var(--accent-blue-500, #3b82f6);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-blue-500, transparent);
+    color: var(--flat-surface-bg, transparent);
   }
 
   &__mark-all {
-    background: var(--accent-green-500, #16a34a);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-green-500, transparent);
+    color: var(--flat-surface-bg, transparent);
   }
 
   &__close {
-    background: var(--accent-red-200, #fecaca);
-    color: var(--accent-red-700, #991b1b);
+    background: var(--accent-red-200, transparent);
+    color: var(--accent-red-700, transparent);
   }
 
   &__filter:hover,
   &__mark-all:hover,
   &__close:hover {
-    background: color-mix(in srgb, currentColor 10%, var(--flat-surface-bg, #ffffff));
+    background: color-mix(in srgb, currentColor 10%, var(--flat-surface-bg, transparent));
   }
 
   &__filter:focus-visible,
@@ -102,7 +102,7 @@
   &__close:focus-visible,
   &__mark-read:focus-visible,
   &__quick-action:focus-visible {
-    outline: 2px solid var(--focus-ring-color, #2563eb);
+    outline: 2px solid var(--focus-ring-color, transparent);
     outline-offset: 2px;
   }
 
@@ -113,7 +113,7 @@
     justify-content: center;
     padding: clamp(2.5rem, 8vw, 4rem) var(--space-24, 24px);
     gap: var(--space-16, 16px);
-    color: var(--neutral-600, #737373);
+    color: var(--neutral-600, transparent);
   }
 
   &__spinner {
@@ -121,7 +121,7 @@
     height: 2.25rem;
     border-radius: 999px;
     border: 2px solid var(--neutral-300, transparent);
-    border-top-color: var(--accent-blue-500, #3b82f6);
+    border-top-color: var(--accent-blue-500, transparent);
     animation: notifications-panel-spin 0.9s linear infinite;
   }
 
@@ -136,7 +136,7 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
   }
 
   &__item {
@@ -144,10 +144,10 @@
     grid-template-columns: auto 1fr auto;
     gap: var(--space-16, 16px);
     padding: var(--space-16, 16px) var(--space-24, 24px);
-    border-bottom: 1px solid var(--neutral-200, #e5e5e5);
+    border-bottom: 1px solid var(--neutral-200, transparent);
     transition: background var(--transition-quick, 0.2s ease);
     cursor: pointer;
-    color: var(--neutral-700, #525252);
+    color: var(--neutral-700, transparent);
 
     &:hover {
       background: var(--neutral-100, transparent);
@@ -155,26 +155,26 @@
 
     &--unread {
       background: var(--accent-blue-50, transparent);
-      border-left: 4px solid var(--accent-blue-500, #3b82f6);
+      border-left: 4px solid var(--accent-blue-500, transparent);
     }
 
     &--priority-high {
-      border-left-color: var(--accent-red-500, #dc2626);
+      border-left-color: var(--accent-red-500, transparent);
     }
 
     &--priority-medium {
-      border-left-color: var(--accent-amber-500, #f59e0b);
+      border-left-color: var(--accent-amber-500, transparent);
     }
 
     &--priority-low {
-      border-left-color: var(--accent-green-500, #16a34a);
+      border-left-color: var(--accent-green-500, transparent);
     }
   }
 
   &__item-icon {
     font-size: 1.5rem;
     line-height: 1;
-    color: var(--accent-primary, #737373);
+    color: var(--accent-primary, transparent);
   }
 
   &__item-body {
@@ -195,19 +195,19 @@
     margin: 0;
     font-size: 0.9375rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--neutral-700, #525252);
+    color: var(--neutral-700, transparent);
   }
 
   &__item-time {
     font-size: 0.75rem;
-    color: var(--neutral-500, #a3a3a3);
+    color: var(--neutral-500, transparent);
     white-space: nowrap;
   }
 
   &__item-message {
     margin: 0;
     font-size: 0.875rem;
-    color: var(--neutral-600, #737373);
+    color: var(--neutral-600, transparent);
     line-height: 1.5;
   }
 
@@ -224,13 +224,13 @@
     height: 1.5rem;
     border-radius: 999px;
     background: var(--neutral-200, transparent);
-    color: var(--neutral-600, #737373);
+    color: var(--neutral-600, transparent);
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
 
     &--action {
-      background: var(--accent-blue-500, var(--flat-surface-bg, #ffffff));
-      color: var(--accent-blue-700, #1d4ed8);
+      background: var(--accent-blue-500, var(--flat-surface-bg, transparent));
+      color: var(--accent-blue-700, transparent);
     }
   }
 
@@ -247,30 +247,30 @@
     border: 1px solid var(--neutral-300, transparent);
     border-radius: var(--radius-sm, 8px);
     background: var(--neutral-200, transparent);
-    color: var(--neutral-600, #737373);
+    color: var(--neutral-600, transparent);
     cursor: pointer;
     transition: background var(--transition-quick, 0.2s ease), color var(--transition-quick, 0.2s ease);
 
     &:hover {
       background: var(--neutral-200, transparent);
-      color: var(--neutral-700, #525252);
+      color: var(--neutral-700, transparent);
     }
   }
 
   &__priority {
     font-size: 0.75rem;
-    color: var(--neutral-500, #a3a3a3);
+    color: var(--neutral-500, transparent);
 
     &--high {
-      color: var(--accent-red-500, #dc2626);
+      color: var(--accent-red-500, transparent);
     }
 
     &--medium {
-      color: var(--accent-amber-500, #f59e0b);
+      color: var(--accent-amber-500, transparent);
     }
 
     &--low {
-      color: var(--accent-green-500, #16a34a);
+      color: var(--accent-green-500, transparent);
     }
   }
 
@@ -282,7 +282,7 @@
     padding: clamp(2.5rem, 10vw, 5rem) var(--space-24, 24px);
     gap: var(--space-16, 16px);
     text-align: center;
-    color: var(--neutral-500, #a3a3a3);
+    color: var(--neutral-500, transparent);
   }
 
   &__empty-icon {
@@ -299,8 +299,8 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-8, 8px);
     padding: var(--space-12, 12px) var(--space-16, 16px) calc(var(--space-12, 12px) + env(safe-area-inset-bottom));
-    border-top: 1px solid var(--neutral-200, #e5e5e5);
-    background: var(--neutral-100, var(--flat-surface-bg, #ffffff));
+    border-top: 1px solid var(--neutral-200, transparent);
+    background: var(--neutral-100, var(--flat-surface-bg, transparent));
   }
 
   &__quick-action {
@@ -310,8 +310,8 @@
     padding: 0.5rem;
     border: 1px solid var(--neutral-300, transparent);
     border-radius: var(--radius-sm, 8px);
-    background: var(--flat-surface-bg, #ffffff);
-    color: var(--neutral-600, #737373);
+    background: var(--flat-surface-bg, transparent);
+    color: var(--neutral-600, transparent);
     font-size: 0.8125rem;
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;

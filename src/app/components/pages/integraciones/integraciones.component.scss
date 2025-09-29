@@ -22,10 +22,10 @@
 
 .integraciones {
   min-height: 100vh;
-  background: var(--color-bg-secondary-light, #f8fafc);
+  background: var(--color-bg-secondary-light, transparent);
 
   @media (prefers-color-scheme: dark) {
-    background: var(--color-bg-primary-inverted, #020617);
+    background: var(--color-bg-primary-inverted, transparent);
   }
 
   &__header {
@@ -66,8 +66,8 @@
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-secondary-dark, #1e293b);
-      color: var(--color-text-secondary-dark, #94a3b8);
+      background: var(--color-bg-secondary-dark, transparent);
+      color: var(--color-text-secondary-dark, transparent);
     }
   }
 
@@ -78,7 +78,7 @@
     color: var(--color-text-primary);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-primary-inverted, #f8fafc);
+      color: var(--color-text-primary-inverted, transparent);
     }
   }
 
@@ -91,7 +91,7 @@
     text-overflow: ellipsis;
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-secondary-dark, #94a3b8);
+      color: var(--color-text-secondary-dark, transparent);
     }
   }
 
@@ -100,7 +100,7 @@
     color: var(--color-text-secondary);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-secondary-dark, #94a3b8);
+      color: var(--color-text-secondary-dark, transparent);
     }
   }
 
@@ -151,30 +151,30 @@
     background: var(--color-bg-primary);
 
     &--neutral {
-      background: var(--color-bg-secondary, #f1f5f9);
+      background: var(--color-bg-secondary, transparent);
     }
 
     &--success {
-      background: var(--color-bg-success-light, #ecfdf5);
-      border-color: var(--color-border-success, #10b981);
+      background: var(--color-bg-success-light, transparent);
+      border-color: var(--color-border-success, transparent);
     }
 
     &--error {
-      background: var(--color-bg-error-light, #fee2e2);
-      border-color: var(--color-border-error, #dc2626);
+      background: var(--color-bg-error-light, transparent);
+      border-color: var(--color-border-error, transparent);
     }
 
     &--info {
-      background: var(--color-bg-info-light, #eff6ff);
-      border-color: var(--color-border-info, #3b82f6);
+      background: var(--color-bg-info-light, transparent);
+      border-color: var(--color-border-info, transparent);
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-secondary-dark, #1e293b);
-      border-color: var(--color-border-secondary-dark, #475569);
+      background: var(--color-bg-secondary-dark, transparent);
+      border-color: var(--color-border-secondary-dark, transparent);
 
       &--neutral {
-        background: var(--color-bg-secondary-dark, #1e293b);
+        background: var(--color-bg-secondary-dark, transparent);
       }
 
       &--success {
@@ -225,8 +225,8 @@
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-secondary-dark, #1e293b);
-      border-color: var(--color-border-secondary-dark, #475569);
+      background: var(--color-bg-secondary-dark, transparent);
+      border-color: var(--color-border-secondary-dark, transparent);
 
       &:hover {
         background: var(--color-surface-primary-alpha, rgba(30, 41, 59, 0.5));
@@ -265,22 +265,22 @@
     width: var(--space-3);
     height: var(--space-3);
     border-radius: 50%;
-    background: var(--color-bg-secondary, #f1f5f9);
+    background: var(--color-bg-secondary, transparent);
 
     &--active {
-      background: var(--color-bg-success, #10b981);
+      background: var(--color-bg-success, transparent);
     }
 
     &--testing {
-      background: var(--color-bg-warning, #f59e0b);
+      background: var(--color-bg-warning, transparent);
     }
 
     &--error {
-      background: var(--color-bg-error, #dc2626);
+      background: var(--color-bg-error, transparent);
     }
 
     &--inactive {
-      background: var(--color-bg-disabled, #9ca3af);
+      background: var(--color-bg-disabled, transparent);
     }
   }
 
@@ -291,30 +291,30 @@
     padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-md);
     font-size: var(--text-xs);
-    background: var(--color-bg-secondary, #f1f5f9);
-    color: var(--color-text-secondary, #64748b);
+    background: var(--color-bg-secondary, transparent);
+    color: var(--color-text-secondary, transparent);
 
     &--api {
-      background: var(--color-bg-info-light, #eff6ff);
-      color: var(--color-text-info, #2563eb);
+      background: var(--color-bg-info-light, transparent);
+      color: var(--color-text-info, transparent);
     }
 
     &--webhook {
-      background: var(--color-bg-secondary, #f8fafc);
+      background: var(--color-bg-secondary, transparent);
     }
 
     &--sync {
-      background: var(--color-bg-warning-light, #fef3c7);
-      color: var(--color-text-warning, #b45309);
+      background: var(--color-bg-warning-light, transparent);
+      color: var(--color-text-warning, transparent);
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-secondary-dark, #475569);
-      color: var(--color-text-secondary-dark, #94a3b8);
+      background: var(--color-bg-secondary-dark, transparent);
+      color: var(--color-text-secondary-dark, transparent);
 
       &--api {
         background: var(--color-surface-info-subtle-light, rgba(59, 130, 246, 0.16));
-        color: var(--color-text-info-light, #60a5fa);
+        color: var(--color-text-info-light, transparent);
       }
 
       &--webhook {
@@ -323,7 +323,7 @@
 
       &--sync {
         background: var(--color-surface-warning-subtle, rgba(217, 119, 6, 0.16));
-        color: var(--color-text-warning-light, #fbbf24);
+        color: var(--color-text-warning-light, transparent);
       }
     }
   }
@@ -355,7 +355,7 @@
     color: var(--color-text-primary);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-primary-inverted, #f8fafc);
+      color: var(--color-text-primary-inverted, transparent);
     }
   }
 
@@ -363,7 +363,7 @@
     color: var(--color-text-secondary);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-secondary-dark, #94a3b8);
+      color: var(--color-text-secondary-dark, transparent);
     }
   }
 
@@ -371,11 +371,11 @@
     font-weight: var(--font-medium);
 
     &--success {
-      color: var(--color-text-success, #059669);
+      color: var(--color-text-success, transparent);
     }
 
     &--error {
-      color: var(--color-text-error, #dc2626);
+      color: var(--color-text-error, transparent);
     }
   }
 
@@ -391,8 +391,8 @@
     display: inline-block;
     padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-md);
-    background: var(--color-bg-secondary, #f1f5f9);
-    color: var(--color-text-secondary, #64748b);
+    background: var(--color-bg-secondary, transparent);
+    color: var(--color-text-secondary, transparent);
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
     font-size: var(--text-xs);
     max-width: 100%;
@@ -406,8 +406,8 @@
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-secondary-dark, #1e293b);
-      color: var(--color-text-secondary-dark, #94a3b8);
+      background: var(--color-bg-secondary-dark, transparent);
+      color: var(--color-text-secondary-dark, transparent);
     }
   }
 
@@ -446,9 +446,9 @@
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-primary-inverted, #0f172a);
-      border-color: var(--color-border-secondary-dark, #475569);
-      color: var(--color-text-primary-inverted, #f8fafc);
+      background: var(--color-bg-primary-inverted, transparent);
+      border-color: var(--color-border-secondary-dark, transparent);
+      color: var(--color-text-primary-inverted, transparent);
     }
   }
 
@@ -461,11 +461,11 @@
   &__skeleton-item {
     height: 64px;
     border-radius: var(--radius-lg);
-    background: var(--color-bg-skeleton, #e2e8f0);
+    background: var(--color-bg-skeleton, transparent);
     animation: pulse 1.6s ease-in-out infinite;
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-skeleton-dark, #475569);
+      background: var(--color-bg-skeleton-dark, transparent);
     }
   }
 
@@ -479,14 +479,14 @@
     border: 1px solid var(--color-border-secondary);
     border-radius: var(--radius-lg);
     padding: var(--space-3);
-    background: var(--color-bg-secondary-light, #f8fafc);
+    background: var(--color-bg-secondary-light, transparent);
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-secondary-dark, #1e293b);
-      border-color: var(--color-border-secondary-dark, #475569);
+      background: var(--color-bg-secondary-dark, transparent);
+      border-color: var(--color-border-secondary-dark, transparent);
     }
   }
 
@@ -517,41 +517,41 @@
     border-radius: var(--radius-md);
     font-size: var(--text-xs);
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-    background: var(--color-bg-secondary, #f1f5f9);
-    color: var(--color-text-secondary, #64748b);
+    background: var(--color-bg-secondary, transparent);
+    color: var(--color-text-secondary, transparent);
 
     &--success {
-      background: var(--color-bg-success-light, #ecfdf5);
-      color: var(--color-text-success, #059669);
+      background: var(--color-bg-success-light, transparent);
+      color: var(--color-text-success, transparent);
     }
 
     &--warning {
-      background: var(--color-bg-warning-light, #fef3c7);
-      color: var(--color-text-warning, #b45309);
+      background: var(--color-bg-warning-light, transparent);
+      color: var(--color-text-warning, transparent);
     }
 
     &--error {
-      background: var(--color-bg-error-light, #fee2e2);
-      color: var(--color-text-error, #dc2626);
+      background: var(--color-bg-error-light, transparent);
+      color: var(--color-text-error, transparent);
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-secondary-dark, #475569);
-      color: var(--color-text-secondary-dark, #94a3b8);
+      background: var(--color-bg-secondary-dark, transparent);
+      color: var(--color-text-secondary-dark, transparent);
     }
   }
 
   &__method-badge {
     padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-md);
-    background: var(--color-bg-secondary, #e2e8f0);
-    color: var(--color-text-secondary, #64748b);
+    background: var(--color-bg-secondary, transparent);
+    color: var(--color-text-secondary, transparent);
     font-size: var(--text-xs);
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-secondary-dark, #475569);
-      color: var(--color-text-secondary-dark, #94a3b8);
+      background: var(--color-bg-secondary-dark, transparent);
+      color: var(--color-text-secondary-dark, transparent);
     }
   }
 
@@ -580,18 +580,18 @@
     padding: var(--space-1) 0;
     font-size: var(--text-xs);
     font-weight: var(--font-medium);
-    color: var(--color-text-info, #2563eb);
+    color: var(--color-text-info, transparent);
     background: transparent;
     border: none;
     cursor: pointer;
     transition: color var(--duration-150) var(--ease-out);
 
     &:hover {
-      color: var(--color-text-info-hover, #1d4ed8);
+      color: var(--color-text-info-hover, transparent);
     }
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-info-light, #60a5fa);
+      color: var(--color-text-info-light, transparent);
     }
   }
 }

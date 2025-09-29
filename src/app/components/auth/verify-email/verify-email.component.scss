@@ -35,23 +35,23 @@
 }
 
 .icon.success {
-  color: var(--color-text-muted, #737373);
+  color: var(--color-text-muted, transparent);
 }
 
 .icon.error {
-  color: var(--color-text-muted, #737373);
+  color: var(--color-text-muted, transparent);
 }
 
 h1 {
   margin: 0;
-  color: var(--color-text-muted, #737373);
+  color: var(--color-text-muted, transparent);
   font-size: 2rem;
   font-weight: 700;
 }
 
 p {
   margin: 0;
-  color: var(--color-text-muted, #737373);
+  color: var(--color-text-muted, transparent);
   font-size: 1.1rem;
   line-height: 1.6;
   max-width: 400px;
@@ -100,7 +100,7 @@ p {
 
 .btn-primary {
   background: var(--flat-surface-bg); /* FIXED (verify-ux) */
-  color: var(--color-text-primary-inverted, #ffffff);
+  color: var(--color-text-primary-inverted, transparent);
 }
 
 .btn-primary:hover {
@@ -110,14 +110,14 @@ p {
 }
 
 .btn-secondary {
-  background: var(--color-text-muted, #737373);
-  color: var(--color-text-muted, #737373);
-  border: 2px solid var(--color-text-muted, #737373);
+  background: var(--color-text-muted, transparent);
+  color: var(--color-text-muted, transparent);
+  border: 2px solid var(--color-text-muted, transparent);
 }
 
 .btn-secondary:hover {
-  background: var(--color-text-muted, #737373);
-  border-color: var(--color-text-muted, #737373);
+  background: var(--color-text-muted, transparent);
+  border-color: var(--color-text-muted, transparent);
 }
 
 @keyframes verify-email-spin {

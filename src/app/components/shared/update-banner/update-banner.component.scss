@@ -6,7 +6,7 @@
   display: inline-flex;
   border-radius: 999px;
   background: var(--accent-blue-500, transparent);
-  color: var(--flat-surface-bg, #ffffff);
+  color: var(--flat-surface-bg, transparent);
   box-shadow: 0 12px 24px rgba(8, 8, 8, 0.24);
   padding: 0;
   opacity: 0;
@@ -40,8 +40,8 @@
   &__action {
     border: none;
     border-radius: 999px;
-    background: var(--flat-surface-bg, #ffffff);
-    color: var(--accent-blue-600, #2563eb);
+    background: var(--flat-surface-bg, transparent);
+    color: var(--accent-blue-600, transparent);
     font-size: 0.875rem;
     font-weight: var(--font-weight-semibold, 600);
     padding: 0.5rem 1rem;

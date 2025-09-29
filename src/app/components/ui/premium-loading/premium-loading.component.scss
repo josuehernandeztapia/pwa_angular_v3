@@ -1,7 +1,7 @@
 .premium-loading {
   --premium-loading-size: 24px;
   --premium-loading-font-size: var(--text-base, 1rem);
-  --premium-loading-color: var(--accent-blue-600, #2563eb);
+  --premium-loading-color: var(--accent-blue-600, transparent);
   --premium-loading-surface: color-mix(in srgb, var(--premium-loading-color) 16%, transparent);
   display: flex;
   flex-direction: column;
@@ -38,22 +38,22 @@
   }
 
   &--variant-primary {
-    --premium-loading-color: var(--accent-blue-600, #2563eb);
+    --premium-loading-color: var(--accent-blue-600, transparent);
     --premium-loading-surface: var(--accent-blue-500, transparent);
   }
 
   &--variant-secondary {
-    --premium-loading-color: var(--color-neutral-600, #525252);
+    --premium-loading-color: var(--color-neutral-600, transparent);
     --premium-loading-surface: var(--color-neutral-400, transparent);
   }
 
   &--variant-accent {
-    --premium-loading-color: var(--accent-amber-600, #d97706);
+    --premium-loading-color: var(--accent-amber-600, transparent);
     --premium-loading-surface: var(--accent-amber-500, transparent);
   }
 
   &--variant-neutral {
-    --premium-loading-color: var(--color-text-secondary, #737373);
+    --premium-loading-color: var(--color-text-secondary, transparent);
     --premium-loading-surface: var(--color-neutral-300, transparent);
   }
 
@@ -332,11 +332,11 @@
     --premium-loading-surface: color-mix(in srgb, var(--premium-loading-color) 28%, transparent);
 
     &--variant-secondary {
-      --premium-loading-color: var(--color-neutral-400, #a3a3a3);
+      --premium-loading-color: var(--color-neutral-400, transparent);
     }
 
     &--variant-neutral {
-      --premium-loading-color: var(--color-neutral-300, #d4d4d4);
+      --premium-loading-color: var(--color-neutral-300, transparent);
     }
   }
 }

@@ -187,7 +187,8 @@
           </div>
 
           <button class="integraciones__view-more-button" type="button" (click)="toggleLogExpansion(log.id)">
-            {{ expandedLog === log.id ? '🔼 Ocultar detalles' : '🔽 Ver detalles' }}
+            <app-icon [name]="expandedLog === log.id ? 'chevron-up' : 'chevron-down'" [size]="16" class="integraciones__toggle-icon" />
+            {{ expandedLog === log.id ? 'Ocultar detalles' : 'Ver detalles' }}
           </button>
         </article>
       </div>

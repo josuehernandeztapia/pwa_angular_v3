@@ -8,8 +8,8 @@
   flex-direction: column;
   gap: var(--space-6, 1.5rem);
   padding: var(--space-6, 1.5rem);
-  background: var(--color-bg-secondary, #f1f5f9);
-  color: var(--color-text-primary, #0f172a);
+  background: var(--color-bg-secondary, transparent);
+  color: var(--color-text-primary, transparent);
 }
 
 .collective-credit__header {
@@ -28,7 +28,7 @@
 }
 
 .collective-credit__title-icon {
-  color: var(--color-accent-primary, #0ea5e9);
+  color: var(--color-accent-primary, transparent);
 }
 
 .collective-credit__layout {
@@ -43,7 +43,7 @@
   gap: var(--space-5, 1.25rem);
   padding: var(--space-5, 1.25rem);
   border-radius: var(--radius-2xl, 24px);
-  background: var(--color-bg-primary, #ffffff);
+  background: var(--color-bg-primary, transparent);
   box-shadow: var(--shadow-lg, 0 24px 54px rgba(15, 23, 42, 0.16));
   border: 1px solid var(--color-border-secondary, transparent);
 }
@@ -75,7 +75,7 @@
   margin: 0;
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--color-text-secondary, #475569);
+  color: var(--color-text-secondary, transparent);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -95,7 +95,7 @@
 .collective-credit__label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--color-text-secondary, #475569);
+  color: var(--color-text-secondary, transparent);
 }
 
 .collective-credit__input,
@@ -103,8 +103,8 @@
   width: 100%;
   border-radius: var(--radius-xl, 20px);
   border: 1px solid var(--color-border-secondary, transparent);
-  background: var(--color-bg-primary, #ffffff);
-  color: var(--color-text-primary, #0f172a);
+  background: var(--color-bg-primary, transparent);
+  color: var(--color-text-primary, transparent);
   padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -147,18 +147,18 @@
 }
 
 .collective-credit__button--primary {
-  background: var(--color-accent-primary, #0ea5e9);
-  color: var(--color-bg-primary, #ffffff);
+  background: var(--color-accent-primary, transparent);
+  color: var(--color-bg-primary, transparent);
   box-shadow: 0 16px 36px rgba(14, 165, 233, 0.28);
 }
 
 .collective-credit__button--primary:hover {
-  background: var(--color-accent-primary, var(--color-accent-secondary, #06b6d4) 15%);
+  background: var(--color-accent-primary, var(--color-accent-secondary, transparent) 15%);
 }
 
 .collective-credit__button--secondary {
   background: var(--color-bg-secondary, transparent);
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
   border: 1px solid var(--color-border-secondary, transparent);
 }
 
@@ -203,7 +203,7 @@
   border-radius: var(--radius-full, 999px);
   border: 1px solid var(--color-border-secondary, transparent);
   background: transparent;
-  color: var(--color-text-secondary, #475569);
+  color: var(--color-text-secondary, transparent);
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
@@ -211,7 +211,7 @@
 .collective-credit__icon-button:hover {
   background: var(--color-danger, transparent);
   border-color: var(--color-danger, transparent);
-  color: var(--color-danger-dark, #b91c1c);
+  color: var(--color-danger-dark, transparent);
 }
 
 .collective-credit__actions {
@@ -237,7 +237,7 @@
   height: 42px;
   border-radius: 50%;
   border: 3px solid var(--color-border-secondary, transparent);
-  border-inline-start-color: var(--color-accent-primary, #0ea5e9);
+  border-inline-start-color: var(--color-accent-primary, transparent);
   animation: collective-credit-spin 1s linear infinite;
 }
 
@@ -275,7 +275,7 @@
 
 .collective-credit__kpi-label {
   font-size: 0.85rem;
-  color: var(--color-text-secondary, #475569);
+  color: var(--color-text-secondary, transparent);
 }
 
 .collective-credit__kpi-value {
@@ -317,7 +317,7 @@
   padding: 0 var(--space-2, 0.5rem);
   border-radius: var(--radius-full, 999px);
   background: var(--color-danger, transparent);
-  color: var(--color-danger, #ef4444);
+  color: var(--color-danger, transparent);
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -338,24 +338,24 @@
 
 .collective-credit__detail-label {
   font-weight: 600;
-  color: var(--color-text-secondary, #475569);
+  color: var(--color-text-secondary, transparent);
 }
 
 .collective-credit__detail-value {
   font-weight: 600;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
 }
 
 .collective-credit__detail-value--positive {
-  color: var(--color-success, #10b981);
+  color: var(--color-success, transparent);
 }
 
 .collective-credit__detail-value--debt {
-  color: var(--color-danger, #ef4444);
+  color: var(--color-danger, transparent);
 }
 
 .collective-credit__detail-value--savings {
-  color: var(--color-accent-primary, #0ea5e9);
+  color: var(--color-accent-primary, transparent);
 }
 
 .collective-credit__detailGroup--emphasis {
@@ -373,7 +373,7 @@
   align-items: center;
   gap: var(--space-2, 0.5rem);
   font-weight: 600;
-  color: var(--color-text-secondary, #475569);
+  color: var(--color-text-secondary, transparent);
 }
 
 .collective-credit__empty {
@@ -397,7 +397,7 @@
 .collective-credit__empty-description {
   margin: 0;
   font-size: 0.95rem;
-  color: var(--color-text-secondary, #475569);
+  color: var(--color-text-secondary, transparent);
 }
 
 @keyframes collective-credit-spin {
@@ -428,7 +428,7 @@
 @media (prefers-color-scheme: dark) {
   .collective-credit {
     background: var(--color-neutral-900, transparent);
-    color: var(--color-neutral-100, #f8fafc);
+    color: var(--color-neutral-100, transparent);
   }
 
   .collective-credit__panel,
@@ -445,11 +445,11 @@
   .collective-credit__select {
     background: var(--color-neutral-900, transparent);
     border-color: var(--color-border-secondary, transparent);
-    color: var(--color-neutral-50, #f8fafc);
+    color: var(--color-neutral-50, transparent);
   }
 
   .collective-credit__button--secondary {
     background: var(--color-neutral-800, transparent);
-    color: var(--color-neutral-100, #f8fafc);
+    color: var(--color-neutral-100, transparent);
   }
 }

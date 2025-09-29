@@ -8,8 +8,8 @@
   justify-content: space-between;
   gap: var(--space-8, 8px);
   padding: var(--space-8, 8px) var(--space-8, 8px) calc(var(--space-8, 8px) + env(safe-area-inset-bottom));
-  background: var(--flat-surface-bg, #ffffff);
-  border-top: 1px solid var(--neutral-300, #e5e5e5);
+  background: var(--flat-surface-bg, transparent);
+  border-top: 1px solid var(--neutral-300, transparent);
   box-shadow: 0 -4px 20px rgba(8, 8, 8, 0.12);
 
   &__item {
@@ -24,7 +24,7 @@
     border: none;
     border-radius: var(--radius-sm, 8px);
     background: transparent;
-    color: var(--neutral-500, #a3a3a3);
+    color: var(--neutral-500, transparent);
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
     letter-spacing: 0.02em;
@@ -37,12 +37,12 @@
     &:hover,
     &:focus-visible {
       background: var(--neutral-100, transparent);
-      color: var(--neutral-600, #737373);
+      color: var(--neutral-600, transparent);
       outline: none;
     }
 
     &--active {
-      color: var(--accent-green-600, #15803d);
+      color: var(--accent-green-600, transparent);
     }
   }
 
@@ -85,8 +85,8 @@
     justify-content: center;
     padding: 0 var(--space-4, 4px);
     border-radius: 999px;
-    background: var(--accent-red-500, #dc2626);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-red-500, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-size: 0.625rem;
     font-weight: var(--font-weight-semibold, 600);
     box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
@@ -102,7 +102,7 @@
   }
 
   &__item--active &__label {
-    color: var(--accent-green-600, #15803d);
+    color: var(--accent-green-600, transparent);
   }
 
   &__indicator {
@@ -113,7 +113,7 @@
     height: 0.1875rem;
     transform: translateX(-50%);
     border-radius: 999px;
-    background: var(--accent-green-500, #16a34a);
+    background: var(--accent-green-500, transparent);
     animation: bottom-nav-indicator 0.3s ease;
   }
 
@@ -122,7 +122,7 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    background: var(--neutral-900, #171717);
+    background: var(--neutral-900, transparent);
     border-top-color: var(--neutral-700, transparent);
     box-shadow: 0 -6px 24px rgba(8, 8, 8, 0.4);
   }

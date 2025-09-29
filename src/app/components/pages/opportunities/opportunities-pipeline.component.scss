@@ -12,7 +12,7 @@
     align-items: center;
     gap: var(--space-4, 16px);
     padding-bottom: var(--space-5, 20px);
-    border-bottom: 2px solid var(--color-border-primary, #e2e8f0);
+    border-bottom: 2px solid var(--color-border-primary, transparent);
   }
 
   &__header-content {
@@ -25,13 +25,13 @@
     margin: 0;
     font-size: 2.2rem;
     font-weight: 700;
-    color: var(--color-text-primary, #0f172a);
+    color: var(--color-text-primary, transparent);
   }
 
   &__subtitle {
     margin: 0;
     font-size: 1.1rem;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__header-actions {
@@ -49,18 +49,18 @@
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 
     &--primary {
-      background: var(--accent-blue-500, #2563eb);
-      color: var(--flat-surface-bg, #ffffff);
+      background: var(--accent-blue-500, transparent);
+      color: var(--flat-surface-bg, transparent);
 
       &:hover {
-        background: var(--accent-blue-600, #1d4ed8);
+        background: var(--accent-blue-600, transparent);
       }
     }
 
     &--secondary {
       background: var(--color-bg-secondary, transparent);
-      color: var(--color-text-secondary, #475569);
-      border-color: var(--color-border-primary, #e2e8f0);
+      color: var(--color-text-secondary, transparent);
+      border-color: var(--color-border-primary, transparent);
 
       &:hover {
         background: var(--color-bg-tertiary, transparent);
@@ -79,9 +79,9 @@
     align-items: center;
     gap: var(--space-4, 16px);
     padding: var(--space-5, 20px);
-    background: var(--color-bg-primary, #ffffff);
+    background: var(--color-bg-primary, transparent);
     border-radius: 16px;
-    border: 1px solid var(--color-border-primary, #e2e8f0);
+    border: 1px solid var(--color-border-primary, transparent);
     box-shadow: var(--shadow-md, 0 20px 40px rgba(15, 23, 42, 0.08));
     transition: box-shadow 0.2s ease;
 
@@ -106,13 +106,13 @@
   &__stat-value {
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--color-text-primary, #0f172a);
+    color: var(--color-text-primary, transparent);
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   }
 
   &__stat-label {
     font-size: 0.9rem;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
     font-weight: 500;
   }
 
@@ -120,10 +120,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--space-4, 16px);
-    background: var(--color-bg-primary, #ffffff);
+    background: var(--color-bg-primary, transparent);
     border-radius: 16px;
     padding: var(--space-5, 20px);
-    border: 1px solid var(--color-border-primary, #e2e8f0);
+    border: 1px solid var(--color-border-primary, transparent);
   }
 
   &__filter {
@@ -135,20 +135,20 @@
   &__filter-label {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__select {
     width: 100%;
     padding: 12px 14px;
     border-radius: 10px;
-    border: 1px solid var(--color-border-primary, #e2e8f0);
-    background: var(--color-bg-primary, #ffffff);
+    border: 1px solid var(--color-border-primary, transparent);
+    background: var(--color-bg-primary, transparent);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
     &:focus {
       outline: none;
-      border-color: var(--accent-blue-500, #2563eb);
+      border-color: var(--accent-blue-500, transparent);
       box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
     }
   }
@@ -163,7 +163,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-4, 16px);
-    background: var(--color-bg-secondary, #f8fafc);
+    background: var(--color-bg-secondary, transparent);
     border-radius: 18px;
     padding: var(--space-4, 16px);
     border: 1px solid var(--color-border-primary, transparent);
@@ -179,19 +179,19 @@
     margin: 0;
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--color-text-primary, #0f172a);
+    color: var(--color-text-primary, transparent);
   }
 
   &__stage-count {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__stage-value {
     font-size: 0.9rem;
     font-family: ui-monospace, monospace;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__stage-list {
@@ -204,9 +204,9 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-4, 16px);
-    background: var(--color-bg-primary, #ffffff);
+    background: var(--color-bg-primary, transparent);
     border-radius: 16px;
-    border: 1px solid var(--color-border-primary, #e2e8f0);
+    border: 1px solid var(--color-border-primary, transparent);
     padding: var(--space-4, 16px);
     box-shadow: var(--shadow-sm, 0 12px 24px rgba(15, 23, 42, 0.08));
     cursor: pointer;
@@ -241,7 +241,7 @@
     margin: 0;
     font-size: 1.05rem;
     font-weight: 600;
-    color: var(--color-text-primary, #0f172a);
+    color: var(--color-text-primary, transparent);
   }
 
   &__card-priority {
@@ -264,17 +264,17 @@
 
   &__card-priority--alta {
     background: var(--accent-red-100, transparent);
-    color: var(--accent-red-700, #b91c1c);
+    color: var(--accent-red-700, transparent);
   }
 
   &__card-priority--media {
     background: var(--accent-amber-100, transparent);
-    color: var(--accent-amber-700, #b45309);
+    color: var(--accent-amber-700, transparent);
   }
 
   &__card-priority--baja {
     background: var(--accent-green-100, transparent);
-    color: var(--accent-green-700, #047857);
+    color: var(--accent-green-700, transparent);
   }
 
   &__card-details {
@@ -292,13 +292,13 @@
   &__detail-label {
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--color-text-secondary, #64748b);
+    color: var(--color-text-secondary, transparent);
     text-transform: uppercase;
   }
 
   &__detail-value {
     font-size: 0.9rem;
-    color: var(--color-text-primary, #0f172a);
+    color: var(--color-text-primary, transparent);
   }
 
   &__progress {
@@ -333,19 +333,19 @@
     align-items: center;
     gap: var(--space-2, 8px);
     font-size: 0.85rem;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__next-action-icon {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--accent-blue-500, #2563eb);
+    background: var(--accent-blue-500, transparent);
   }
 
   &__last-activity {
     font-size: 0.8rem;
-    color: var(--color-text-muted, #94a3b8);
+    color: var(--color-text-muted, transparent);
   }
 
   &__tags {
@@ -363,7 +363,7 @@
     font-size: 0.75rem;
     font-weight: 600;
     background: var(--accent-blue-100, transparent);
-    color: var(--accent-blue-700, #1d4ed8);
+    color: var(--accent-blue-700, transparent);
   }
 
   &__card-actions {
@@ -379,8 +379,8 @@
     padding: 10px 14px;
     border-radius: 10px;
     border: 1px solid transparent;
-    background: var(--accent-blue-500, #2563eb);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-blue-500, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -388,8 +388,8 @@
 
     &--secondary {
       background: var(--color-bg-secondary, transparent);
-      color: var(--color-text-secondary, #475569);
-      border-color: var(--color-border-primary, #e2e8f0);
+      color: var(--color-text-secondary, transparent);
+      border-color: var(--color-border-primary, transparent);
     }
   }
 
@@ -405,9 +405,9 @@
     justify-content: center;
     gap: var(--space-3, 12px);
     padding: var(--space-6, 24px);
-    background: var(--color-bg-primary, #ffffff);
+    background: var(--color-bg-primary, transparent);
     border-radius: 16px;
-    border: 1px solid var(--color-border-primary, #e2e8f0);
+    border: 1px solid var(--color-border-primary, transparent);
   }
 
   &__spinner {
@@ -415,7 +415,7 @@
     height: 32px;
     border-radius: 50%;
     border: 3px solid var(--accent-blue-100, transparent);
-    border-top-color: var(--accent-blue-500, #2563eb);
+    border-top-color: var(--accent-blue-500, transparent);
     animation: opportunities-spinner 0.8s linear infinite;
   }
 

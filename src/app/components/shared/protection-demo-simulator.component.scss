@@ -3,15 +3,15 @@
   flex-direction: column;
   gap: var(--space-5, 20px);
   padding: var(--space-5, 20px);
-  background: var(--color-bg-secondary, #f8fafc);
+  background: var(--color-bg-secondary, transparent);
   border-radius: var(--radius-lg, 12px);
-  border: 1px solid var(--color-border-primary, #e5e7eb);
+  border: 1px solid var(--color-border-primary, transparent);
 }
 
 .protection-demo__description {
   margin: 0;
   font-size: var(--text-sm, 0.875rem);
-  color: var(--color-text-secondary, #4b5563);
+  color: var(--color-text-secondary, transparent);
   line-height: 1.5;
 }
 
@@ -20,8 +20,8 @@
   align-items: flex-end;
   gap: var(--space-4, 16px);
   padding: var(--space-4, 16px);
-  background: var(--color-bg-primary, #ffffff);
-  border: 1px solid var(--color-border-primary, #e5e7eb);
+  background: var(--color-bg-primary, transparent);
+  border: 1px solid var(--color-border-primary, transparent);
   border-radius: var(--radius-lg, 12px);
 }
 
@@ -33,7 +33,7 @@
   display: block;
   font-size: var(--text-sm, 0.875rem);
   font-weight: var(--font-weight-medium, 500);
-  color: var(--color-text-secondary, #4b5563);
+  color: var(--color-text-secondary, transparent);
   margin-bottom: var(--space-1, 4px);
 }
 
@@ -41,16 +41,16 @@
   width: 100%;
   padding: 8px 12px;
   border-radius: var(--radius-md, 8px);
-  border: 1px solid var(--color-border-primary, #e5e7eb);
-  background: var(--color-bg-primary, #ffffff);
-  color: var(--color-text-primary, #080808);
+  border: 1px solid var(--color-border-primary, transparent);
+  background: var(--color-bg-primary, transparent);
+  color: var(--color-text-primary, transparent);
   font-size: var(--text-base, 1rem);
   transition: border-color var(--transition-quick, 0.2s ease);
 }
 
 .protection-demo__input:focus {
   outline: none;
-  border-color: var(--accent-blue-600, #2563eb);
+  border-color: var(--accent-blue-600, transparent);
   box-shadow: 0 0 0 2px var(--accent-blue-500, transparent);
 }
 
@@ -58,8 +58,8 @@
   padding: 10px 18px;
   font-size: var(--text-sm, 0.875rem);
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--color-text-primary-inverted, #ffffff);
-  background: var(--accent-blue-600, #2563eb);
+  color: var(--color-text-primary-inverted, transparent);
+  background: var(--accent-blue-600, transparent);
   border: none;
   border-radius: var(--radius-md, 8px);
   cursor: pointer;
@@ -68,7 +68,7 @@
 }
 
 .protection-demo__submit:hover:not(:disabled) {
-  background: var(--accent-blue-700, #1d4ed8);
+  background: var(--accent-blue-700, transparent);
 }
 
 .protection-demo__submit:disabled {
@@ -86,8 +86,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 3px solid var(--color-border-primary, #e5e7eb);
-  border-top-color: var(--accent-blue-600, #2563eb);
+  border: 3px solid var(--color-border-primary, transparent);
+  border-top-color: var(--accent-blue-600, transparent);
   animation: protectionDemoSpin 0.8s linear infinite;
 }
 
@@ -101,23 +101,23 @@
   margin: 0;
   font-size: var(--font-h3-size, 1.25rem);
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--color-text-primary, #080808);
+  color: var(--color-text-primary, transparent);
 }
 
 .protection-demo__actions {
   display: flex;
   justify-content: flex-end;
   padding-top: var(--space-4, 16px);
-  border-top: 1px solid var(--color-border-primary, #e5e7eb);
+  border-top: 1px solid var(--color-border-primary, transparent);
 }
 
 .protection-demo__close {
   padding: 8px 16px;
   font-size: var(--text-sm, 0.875rem);
   font-weight: var(--font-weight-medium, 500);
-  color: var(--color-text-secondary, #4b5563);
-  background: var(--surface-neutral-weak, #f5f5f5);
-  border: 1px solid var(--color-border-primary, #e5e7eb);
+  color: var(--color-text-secondary, transparent);
+  background: var(--surface-neutral-weak, transparent);
+  border: 1px solid var(--color-border-primary, transparent);
   border-radius: var(--radius-md, 8px);
   cursor: pointer;
   transition: background var(--transition-quick, 0.2s ease),
@@ -125,8 +125,8 @@
 }
 
 .protection-demo__close:hover {
-  background: var(--color-border-muted, #e2e8f0);
-  color: var(--color-text-primary, #080808);
+  background: var(--color-border-muted, transparent);
+  color: var(--color-text-primary, transparent);
 }
 
 @keyframes protectionDemoSpin {
@@ -156,7 +156,7 @@
   }
 
   .protection-demo__description {
-    color: var(--neutral-400, #a3a3a3);
+    color: var(--neutral-400, transparent);
   }
 
   .protection-demo__form {
@@ -165,17 +165,17 @@
   }
 
   .protection-demo__form-label {
-    color: var(--neutral-300, #d4d4d4);
+    color: var(--neutral-300, transparent);
   }
 
   .protection-demo__input {
     background: var(--neutral-900, transparent);
     border-color: var(--neutral-700, transparent);
-    color: var(--neutral-100, #f5f5f5);
+    color: var(--neutral-100, transparent);
   }
 
   .protection-demo__scenarios-title {
-    color: var(--neutral-100, #f5f5f5);
+    color: var(--neutral-100, transparent);
   }
 
   .protection-demo__actions {
@@ -185,7 +185,7 @@
   .protection-demo__close {
     background: var(--neutral-900, transparent);
     border-color: var(--neutral-700, transparent);
-    color: var(--neutral-300, #d4d4d4);
+    color: var(--neutral-300, transparent);
   }
 
   .protection-demo__close:hover {

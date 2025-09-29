@@ -17,7 +17,7 @@
     gap: var(--space-4, 16px);
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--border-neutral-weak, #e2e8f0);
+    border-bottom: 1px solid var(--border-neutral-weak, transparent);
     padding-bottom: var(--space-4, 16px);
 
     @media (max-width: 768px) {
@@ -41,20 +41,20 @@
   &__title-icon {
     width: 28px;
     height: 28px;
-    color: var(--accent-blue-500, #3b82f6);
+    color: var(--accent-blue-500, transparent);
   }
 
   &__title {
     margin: 0;
     font-size: clamp(2rem, 2.6vw, 2.5rem);
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__description {
     margin: 0;
     font-size: 1.05rem;
-    color: var(--color-text-secondary, #4b5563);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__header-actions {
@@ -81,23 +81,23 @@
     }
 
     &--primary {
-      background: var(--accent-blue-600, #2563eb);
-      color: var(--flat-surface-bg, #ffffff);
+      background: var(--accent-blue-600, transparent);
+      color: var(--flat-surface-bg, transparent);
 
       &:hover:enabled,
       &:focus-visible {
-        background: var(--accent-blue-700, #1d4ed8);
+        background: var(--accent-blue-700, transparent);
       }
     }
 
     &--secondary {
-      background: var(--surface-neutral-weak, transparent);
-      color: var(--color-text-secondary, #4b5563);
-      border-color: var(--border-neutral-weak, #e2e8f0);
+      background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
+      color: var(--color-text-secondary, transparent);
+      border-color: var(--border-neutral-weak, transparent);
 
       &:hover:enabled,
       &:focus-visible {
-        background: var(--surface-neutral-weak, transparent);
+        background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
       }
     }
   }
@@ -108,8 +108,8 @@
     gap: var(--space-4, 16px);
     padding: var(--space-4, 16px);
     border-radius: var(--radius-xl, 16px);
-    border: 1px solid var(--border-neutral-weak, #e2e8f0);
-    background: var(--surface-neutral-weak, transparent);
+    border: 1px solid var(--border-neutral-weak, transparent);
+    background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
   }
 
   &__filter-group {
@@ -118,7 +118,7 @@
     gap: var(--space-2, 8px);
 
     &--types {
-      border-top: 1px solid var(--border-neutral-weak, transparent);
+      border-top: 1px solid var(--border-neutral-weak, var(--color-neutral-400, transparent));
       padding-top: var(--space-3, 12px);
     }
   }
@@ -126,9 +126,9 @@
   &__filter-button,
   &__type-button {
     border-radius: var(--radius-md, 8px);
-    border: 1px solid var(--border-neutral-weak, #e2e8f0);
-    background: var(--flat-surface-bg, #ffffff);
-    color: var(--color-text-secondary, #4b5563);
+    border: 1px solid var(--border-neutral-weak, transparent);
+    background: var(--flat-surface-bg, transparent);
+    color: var(--color-text-secondary, transparent);
     padding: var(--space-2, 8px) var(--space-3, 12px);
     font-weight: var(--font-weight-medium, 500);
     cursor: pointer;
@@ -137,7 +137,7 @@
     &--active {
       border-color: var(--accent-blue-500, transparent);
       background: var(--accent-blue-500, transparent);
-      color: var(--accent-blue-700, #1d4ed8);
+      color: var(--accent-blue-700, transparent);
     }
   }
 
@@ -149,14 +149,14 @@
   &__loading {
     padding: var(--space-6, 24px);
     border-radius: var(--radius-xl, 16px);
-    border: 1px dashed var(--border-neutral-weak, #d1d5db);
-    background: var(--surface-neutral-weak, transparent);
+    border: 1px dashed var(--border-neutral-weak, transparent);
+    background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
     text-align: center;
   }
 
   &__loading-text {
     margin: 0;
-    color: var(--color-text-secondary, #4b5563);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__grid {
@@ -172,9 +172,9 @@
   flex-direction: column;
   gap: var(--space-4, 16px);
   border-radius: var(--radius-xl, 16px);
-  border: 1px solid var(--border-neutral-weak, #e2e8f0);
+  border: 1px solid var(--border-neutral-weak, transparent);
   padding: var(--space-5, 20px);
-  background: var(--flat-surface-bg, #ffffff);
+  background: var(--flat-surface-bg, transparent);
   box-shadow: 0 12px 28px var(--openai-black, transparent);
   transition: transform var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
 
@@ -197,7 +197,7 @@
     padding: 4px 10px;
     border-radius: var(--radius-md, 8px);
     background: var(--accent-purple-500, transparent);
-    color: var(--accent-purple-700, #6b21a8);
+    color: var(--accent-purple-700, transparent);
     font-weight: var(--font-weight-semibold, 600);
     font-size: 0.85rem;
   }
@@ -224,12 +224,12 @@
     margin: 0;
     font-size: 1.35rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__market {
     font-size: 0.9rem;
-    color: var(--accent-blue-600, #2563eb);
+    color: var(--accent-blue-600, transparent);
     font-weight: var(--font-weight-medium, 500);
   }
 
@@ -243,12 +243,12 @@
   &__price-amount {
     font-size: 1.4rem;
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__price-label {
     font-size: 0.8rem;
-    color: var(--color-text-tertiary, #6b7280);
+    color: var(--color-text-tertiary, transparent);
   }
 
   &__body {
@@ -270,13 +270,13 @@
     gap: var(--space-2, 8px);
     font-size: 1rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__section-icon {
     width: 18px;
     height: 18px;
-    color: var(--accent-blue-500, #3b82f6);
+    color: var(--accent-blue-500, transparent);
   }
 
   &__components {
@@ -292,7 +292,7 @@
     gap: var(--space-3, 12px);
     padding: var(--space-2, 8px) var(--space-3, 12px);
     border-radius: var(--radius-md, 8px);
-    border: 1px solid var(--border-neutral-weak, #e2e8f0);
+    border: 1px solid var(--border-neutral-weak, transparent);
 
     &--optional {
       border-color: var(--accent-orange-500, transparent);
@@ -308,27 +308,27 @@
 
   &__component-name {
     font-weight: var(--font-weight-medium, 500);
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__component-pill {
     padding: 2px 8px;
     border-radius: var(--radius-md, 8px);
     background: var(--accent-purple-500, transparent);
-    color: var(--accent-purple-600, #7c3aed);
+    color: var(--accent-purple-600, transparent);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.02em;
 
     &--muted {
-      background: var(--surface-neutral-weak, transparent);
-      color: var(--color-text-tertiary, #6b7280);
+      background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
+      color: var(--color-text-tertiary, transparent);
     }
   }
 
   &__component-price {
     font-weight: var(--font-weight-medium, 500);
-    color: var(--color-text-secondary, #4b5563);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__features {
@@ -341,7 +341,7 @@
     padding: 4px 10px;
     border-radius: var(--radius-md, 8px);
     background: var(--accent-blue-500, transparent);
-    color: var(--accent-blue-700, #1d4ed8);
+    color: var(--accent-blue-700, transparent);
     font-size: 0.85rem;
     font-weight: var(--font-weight-medium, 500);
   }
@@ -360,14 +360,14 @@
 
   &__financial-label {
     font-size: 0.8rem;
-    color: var(--color-text-tertiary, #6b7280);
+    color: var(--color-text-tertiary, transparent);
     text-transform: uppercase;
     letter-spacing: 0.03em;
   }
 
   &__financial-value {
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__actions {

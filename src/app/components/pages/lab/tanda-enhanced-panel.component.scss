@@ -3,10 +3,10 @@
   flex-direction: column;
   gap: var(--space-5, 20px);
   padding: var(--space-4, 16px);
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
 
   @media (prefers-color-scheme: dark) {
-    color: var(--color-neutral-100, #f8fafc);
+    color: var(--color-neutral-100, transparent);
   }
 
   &__header {
@@ -23,10 +23,10 @@
 
   &__subtitle {
     margin: 0;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-neutral-300, #cbd5f5);
+      color: var(--color-neutral-300, transparent);
     }
   }
 
@@ -47,10 +47,10 @@
   &__field-label {
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-neutral-300, #cbd5f5);
+      color: var(--color-neutral-300, transparent);
     }
   }
 
@@ -58,15 +58,15 @@
     width: 100%;
     padding: 8px 12px;
     border-radius: 8px;
-    border: 1px solid var(--color-border-primary, #e2e8f0);
-    background: var(--color-bg-primary, #ffffff);
+    border: 1px solid var(--color-border-primary, transparent);
+    background: var(--color-bg-primary, transparent);
     font: inherit;
     color: inherit;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
     &:focus {
       outline: none;
-      border-color: var(--accent-blue-500, #2563eb);
+      border-color: var(--accent-blue-500, transparent);
       box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
     }
 
@@ -80,14 +80,14 @@
     padding: 10px 16px;
     border-radius: 10px;
     border: 1px solid transparent;
-    background: var(--accent-blue-500, #2563eb);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-blue-500, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s ease, transform 0.2s ease;
 
     &:hover {
-      background: var(--accent-blue-600, #1d4ed8);
+      background: var(--accent-blue-600, transparent);
       transform: none;
     }
 
@@ -98,8 +98,8 @@
 
     &--secondary {
       background: transparent;
-      color: var(--accent-blue-600, #1d4ed8);
-      border-color: var(--accent-blue-200, #bfdbfe);
+      color: var(--accent-blue-600, transparent);
+      border-color: var(--accent-blue-200, transparent);
 
       &:hover {
         background: var(--accent-blue-100, transparent);
@@ -116,14 +116,14 @@
   &__meta {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
 
     strong {
       font-weight: 600;
     }
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-neutral-300, #cbd5f5);
+      color: var(--color-neutral-300, transparent);
     }
   }
 
@@ -151,13 +151,13 @@
     th,
     td {
       padding: 8px 12px;
-      border-bottom: 1px solid var(--color-border-primary, #e2e8f0);
+      border-bottom: 1px solid var(--color-border-primary, transparent);
     }
 
     th {
       text-align: left;
       font-weight: 600;
-      color: var(--color-text-secondary, #475569);
+      color: var(--color-text-secondary, transparent);
     }
 
     @media (prefers-color-scheme: dark) {
@@ -167,7 +167,7 @@
       }
 
       th {
-        color: var(--color-neutral-200, #e2e8f0);
+        color: var(--color-neutral-200, transparent);
       }
     }
   }

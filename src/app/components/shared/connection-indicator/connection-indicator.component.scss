@@ -23,8 +23,8 @@
     padding: var(--space-8, 8px) var(--space-16, 16px);
     border-radius: 999px;
     border: 1px solid var(--neutral-300, transparent);
-    background: var(--neutral-100, var(--flat-surface-bg, #ffffff));
-    color: var(--neutral-600, #737373);
+    background: var(--neutral-100, var(--flat-surface-bg, transparent));
+    color: var(--neutral-600, transparent);
     font-size: 0.875rem;
     font-weight: var(--font-weight-semibold, 600);
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.08));
@@ -32,38 +32,38 @@
   }
 
   &__card--offline {
-    background: var(--accent-red-500, var(--flat-surface-bg, #ffffff));
+    background: var(--accent-red-500, var(--flat-surface-bg, transparent));
     border-color: var(--accent-red-500, transparent);
-    color: var(--accent-red-700, #b91c1c);
+    color: var(--accent-red-700, transparent);
   }
 
   &__card--excellent {
-    background: var(--accent-green-500, var(--flat-surface-bg, #ffffff));
+    background: var(--accent-green-500, var(--flat-surface-bg, transparent));
     border-color: var(--accent-green-500, transparent);
-    color: var(--accent-green-700, #166534);
+    color: var(--accent-green-700, transparent);
   }
 
   &__card--good {
-    background: var(--accent-blue-500, var(--flat-surface-bg, #ffffff));
+    background: var(--accent-blue-500, var(--flat-surface-bg, transparent));
     border-color: var(--accent-blue-500, transparent);
-    color: var(--accent-blue-700, #1d4ed8);
+    color: var(--accent-blue-700, transparent);
   }
 
   &__card--fair {
-    background: var(--accent-amber-400, var(--flat-surface-bg, #ffffff));
+    background: var(--accent-amber-400, var(--flat-surface-bg, transparent));
     border-color: var(--accent-amber-400, transparent);
-    color: var(--accent-amber-700, #9a3412);
+    color: var(--accent-amber-700, transparent);
   }
 
   &__card--poor {
-    background: var(--accent-amber-500, var(--flat-surface-bg, #ffffff));
+    background: var(--accent-amber-500, var(--flat-surface-bg, transparent));
     border-color: var(--accent-amber-500, transparent);
-    color: var(--accent-amber-700, #9a3412);
+    color: var(--accent-amber-700, transparent);
   }
 
   &__card--neutral {
-    background: var(--neutral-200, var(--flat-surface-bg, #ffffff));
-    color: var(--neutral-600, #737373);
+    background: var(--neutral-200, var(--flat-surface-bg, transparent));
+    color: var(--neutral-600, transparent);
   }
 
   &__icon {
@@ -110,7 +110,7 @@
     bottom: 0;
     padding: var(--space-12, 12px) var(--space-16, 16px);
     background: var(--accent-red-500, transparent);
-    color: var(--flat-surface-bg, #ffffff);
+    color: var(--flat-surface-bg, transparent);
     transition: opacity var(--transition-fast, 0.3s ease), max-height var(--transition-fast, 0.3s ease), padding var(--transition-fast, 0.3s ease);
     max-height: 160px;
     opacity: 1;
@@ -229,7 +229,7 @@
     gap: var(--space-12, 12px);
     padding: var(--space-12, 12px) var(--space-16, 16px);
     border-radius: var(--radius-md, 8px);
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
     border: 1px solid var(--neutral-300, transparent);
     box-shadow: var(--shadow-md, 0 2px 4px rgba(8, 8, 8, 0.12));
   }
@@ -256,11 +256,11 @@
   }
 
   &__toast-symbol--online {
-    color: var(--accent-green-600, #15803d);
+    color: var(--accent-green-600, transparent);
   }
 
   &__toast-symbol--offline {
-    color: var(--accent-red-500, #dc2626);
+    color: var(--accent-red-500, transparent);
   }
 
   &__toast-body {
@@ -274,13 +274,13 @@
     margin: 0;
     font-size: 0.875rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--neutral-700, #525252);
+    color: var(--neutral-700, transparent);
   }
 
   &__toast-message {
     margin: 0;
     font-size: 0.75rem;
-    color: var(--neutral-500, #a3a3a3);
+    color: var(--neutral-500, transparent);
   }
 
   &__toast-dismiss {
@@ -289,7 +289,7 @@
     justify-content: center;
     border: none;
     background: transparent;
-    color: var(--neutral-500, #a3a3a3);
+    color: var(--neutral-500, transparent);
     cursor: pointer;
     padding: 4px;
     border-radius: 999px;
@@ -298,7 +298,7 @@
 
   &__toast-dismiss:hover,
   &__toast-dismiss:focus-visible {
-    color: var(--neutral-700, #525252);
+    color: var(--neutral-700, transparent);
     background: var(--neutral-200, transparent);
     outline: none;
   }

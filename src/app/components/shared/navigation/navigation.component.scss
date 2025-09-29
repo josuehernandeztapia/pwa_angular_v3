@@ -6,9 +6,9 @@
   width: 280px;
   display: flex;
   flex-direction: column;
-  background: var(--flat-surface-bg, #ffffff);
+  background: var(--flat-surface-bg, transparent);
   border-right: 1px solid var(--neutral-300, transparent);
-  color: var(--neutral-700, #525252);
+  color: var(--neutral-700, transparent);
   transition: width 0.3s ease;
   z-index: 1000;
 
@@ -23,7 +23,7 @@
   @media (prefers-color-scheme: dark) {
     background: var(--neutral-900, transparent);
     border-right-color: var(--neutral-700, transparent);
-    color: var(--neutral-100, #f5f5f5);
+    color: var(--neutral-100, transparent);
   }
 
   &__header {
@@ -87,8 +87,8 @@
     min-width: 18px;
     height: 18px;
     border-radius: 999px;
-    background: var(--accent-red-500, #dc2626);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-red-500, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-size: 0.7rem;
     font-weight: var(--font-weight-semibold, 600);
     display: inline-flex;
@@ -131,8 +131,8 @@
     font-size: 0.75rem;
 
     &.is-active {
-      border-color: var(--accent-blue-500, #3b82f6);
-      color: var(--accent-blue-600, #2563eb);
+      border-color: var(--accent-blue-500, transparent);
+      color: var(--accent-blue-600, transparent);
     }
   }
 
@@ -156,8 +156,8 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: var(--accent-blue-500, #3b82f6);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-blue-500, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-weight: var(--font-weight-semibold, 600);
     display: inline-flex;
     align-items: center;
@@ -179,7 +179,7 @@
 
   &__user-role {
     font-size: 0.8rem;
-    color: var(--neutral-500, #737373);
+    color: var(--neutral-500, transparent);
   }
 
   &__cta {
@@ -194,8 +194,8 @@
     gap: var(--space-2);
     padding: 12px;
     border-radius: 12px;
-    background: var(--accent-green-500, #16a34a);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-green-500, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-weight: var(--font-weight-semibold, 600);
     border: 1px solid transparent;
     transition: background var(--transition-quick, 0.2s ease), opacity var(--transition-quick, 0.2s ease);
@@ -232,11 +232,11 @@
     &.is-active,
     &:hover {
       background: var(--accent-blue-500, transparent);
-      color: var(--accent-blue-600, #2563eb);
+      color: var(--accent-blue-600, transparent);
     }
 
     &--logout {
-      color: var(--accent-red-500, #dc2626);
+      color: var(--accent-red-500, transparent);
     }
   }
 
@@ -261,7 +261,7 @@
     padding: 0 8px;
     border-radius: 999px;
     background: var(--accent-blue-500, transparent);
-    color: var(--accent-blue-600, #2563eb);
+    color: var(--accent-blue-600, transparent);
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
   }
@@ -280,12 +280,12 @@
     gap: var(--space-2);
     padding: 6px 10px;
     border-radius: 10px;
-    color: var(--neutral-500, #737373);
+    color: var(--neutral-500, transparent);
     text-decoration: none;
 
     &.is-active {
       background: var(--accent-blue-500, transparent);
-      color: var(--accent-blue-600, #2563eb);
+      color: var(--accent-blue-600, transparent);
     }
   }
 
@@ -303,7 +303,7 @@
   }
 
   &__logout-btn {
-    color: var(--accent-red-500, #dc2626);
+    color: var(--accent-red-500, transparent);
   }
 
   &__overlay {
@@ -317,8 +317,8 @@
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background: var(--accent-blue-500, #3b82f6);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-blue-500, transparent);
+    color: var(--flat-surface-bg, transparent);
     display: grid;
     place-items: center;
     box-shadow: 0 12px 32px rgba(8, 8, 8, 0.24);

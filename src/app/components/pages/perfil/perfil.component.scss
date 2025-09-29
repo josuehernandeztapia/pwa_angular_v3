@@ -17,7 +17,7 @@
     justify-content: space-between;
     align-items: center;
     padding-bottom: var(--space-5, 20px);
-    border-bottom: 2px solid var(--border-neutral-weak, #e2e8f0);
+    border-bottom: 2px solid var(--border-neutral-weak, transparent);
   }
 
   &__header-content {
@@ -30,12 +30,12 @@
     margin: 0;
     font-size: clamp(2rem, 3vw, 2.5rem);
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__description {
     margin: 0;
-    color: var(--color-text-secondary, #4b5563);
+    color: var(--color-text-secondary, transparent);
     font-size: 1.05rem;
   }
 
@@ -60,8 +60,8 @@
     gap: var(--space-5, 20px);
     align-items: center;
     border-radius: var(--radius-xl, 16px);
-    border: 1px solid var(--border-neutral-weak, #e2e8f0);
-    background: var(--flat-surface-bg, #ffffff);
+    border: 1px solid var(--border-neutral-weak, transparent);
+    background: var(--flat-surface-bg, transparent);
     padding: var(--space-6, 24px);
     box-shadow: 0 12px 24px var(--openai-black, transparent);
   }
@@ -79,8 +79,8 @@
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: var(--surface-neutral-weak, #f8fafc);
-    border: 3px solid var(--border-neutral-weak, #e2e8f0);
+    background: var(--surface-neutral-weak, transparent);
+    border: 3px solid var(--border-neutral-weak, transparent);
     overflow: hidden;
     transition: border-color var(--transition-quick, 0.2s ease);
 
@@ -99,16 +99,16 @@
   &__avatar-initials {
     font-size: 2rem;
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-secondary, #4b5563);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__avatar-button {
-    border: 1px solid var(--border-neutral-weak, #e2e8f0);
-    background: var(--surface-neutral-weak, transparent);
+    border: 1px solid var(--border-neutral-weak, transparent);
+    background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
     border-radius: var(--radius-md, 8px);
     padding: var(--space-2, 8px) var(--space-3, 12px);
     font-size: 0.85rem;
-    color: var(--color-text-secondary, #4b5563);
+    color: var(--color-text-secondary, transparent);
     display: inline-flex;
     align-items: center;
     gap: var(--space-2, 8px);
@@ -116,31 +116,31 @@
     transition: background var(--transition-quick, 0.2s ease);
 
     &:hover {
-      background: var(--surface-neutral-weak, transparent);
+      background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
     }
   }
 
   &__icon {
     width: 16px;
     height: 16px;
-    color: var(--color-text-secondary, #4b5563);
+    color: var(--color-text-secondary, transparent);
 
     &--title {
       width: 20px;
       height: 20px;
-      color: var(--color-text-primary, #1f2937);
+      color: var(--color-text-primary, transparent);
     }
 
     &--muted {
-      color: var(--color-text-secondary, #4b5563);
+      color: var(--color-text-secondary, transparent);
     }
 
     &--success {
-      color: var(--accent-green-500, #22c55e);
+      color: var(--accent-green-500, transparent);
     }
 
     &--danger {
-      color: var(--accent-red-500, #ef4444);
+      color: var(--accent-red-500, transparent);
     }
   }
 
@@ -154,18 +154,18 @@
     margin: 0;
     font-size: clamp(1.8rem, 3vw, 2.2rem);
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__summary-position {
     margin: 0;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--accent-blue-500, #3b82f6);
+    color: var(--accent-blue-500, transparent);
   }
 
   &__summary-company {
     margin: 0;
-    color: var(--color-text-secondary, #4b5563);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__stats {
@@ -182,19 +182,19 @@
   &__stat-label {
     font-size: 0.75rem;
     text-transform: uppercase;
-    color: var(--color-text-tertiary, #6b7280);
+    color: var(--color-text-tertiary, transparent);
     font-weight: var(--font-weight-semibold, 600);
   }
 
   &__stat-value {
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__panel {
     border-radius: var(--radius-xl, 16px);
-    border: 1px solid var(--border-neutral-weak, #e2e8f0);
-    background: var(--flat-surface-bg, #ffffff);
+    border: 1px solid var(--border-neutral-weak, transparent);
+    background: var(--flat-surface-bg, transparent);
     padding: var(--space-5, 20px);
     display: flex;
     flex-direction: column;
@@ -206,32 +206,32 @@
     justify-content: space-between;
     align-items: center;
     padding-bottom: var(--space-3, 12px);
-    border-bottom: 1px solid var(--border-neutral-weak, transparent);
+    border-bottom: 1px solid var(--border-neutral-weak, var(--color-neutral-400, transparent));
   }
 
   &__panel-title {
     margin: 0;
     font-size: 1.35rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
     display: inline-flex;
     align-items: center;
     gap: var(--space-2, 8px);
   }
 
   &__edit-toggle {
-    border: 1px solid var(--border-neutral-weak, #e2e8f0);
+    border: 1px solid var(--border-neutral-weak, transparent);
     border-radius: var(--radius-md, 8px);
     padding: var(--space-2, 8px) var(--space-4, 16px);
-    background: var(--surface-neutral-weak, #f7fafc);
-    color: var(--color-text-secondary, #4b5563);
+    background: var(--surface-neutral-weak, transparent);
+    color: var(--color-text-secondary, transparent);
     cursor: pointer;
     transition: background var(--transition-quick, 0.2s ease), border-color var(--transition-quick, 0.2s ease);
 
     &--active {
       background: var(--accent-red-500, transparent);
       border-color: var(--accent-red-400, transparent);
-      color: var(--accent-red-700, #b91c1c);
+      color: var(--accent-red-700, transparent);
     }
   }
 
@@ -259,27 +259,27 @@
 
   &__label {
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--color-text-secondary, #4b5563);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__input {
     padding: var(--space-3, 12px) var(--space-4, 16px);
-    border: 1px solid var(--border-neutral-weak, #e2e8f0);
+    border: 1px solid var(--border-neutral-weak, transparent);
     border-radius: var(--radius-md, 8px);
     font-size: 1rem;
     transition: border-color var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
-    color: var(--color-text-primary, #1f2937);
-    background: var(--flat-surface-bg, #ffffff);
+    color: var(--color-text-primary, transparent);
+    background: var(--flat-surface-bg, transparent);
 
     &:focus-visible {
       outline: none;
-      border-color: var(--accent-blue-500, #3b82f6);
+      border-color: var(--accent-blue-500, transparent);
       box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
     }
 
     &--disabled {
-      background: var(--surface-neutral-weak, #f7fafc);
-      color: var(--color-text-tertiary, #6b7280);
+      background: var(--surface-neutral-weak, transparent);
+      color: var(--color-text-tertiary, transparent);
       cursor: not-allowed;
     }
   }
@@ -308,47 +308,47 @@
     }
 
     &--primary {
-      background: var(--accent-blue-600, #2563eb);
-      color: var(--flat-surface-bg, #ffffff);
+      background: var(--accent-blue-600, transparent);
+      color: var(--flat-surface-bg, transparent);
 
       &:hover:enabled,
       &:focus-visible {
-        background: var(--accent-blue-700, #1d4ed8);
+        background: var(--accent-blue-700, transparent);
       }
     }
 
     &--secondary {
-      background: var(--surface-neutral-weak, transparent);
-      color: var(--color-text-secondary, #4b5563);
-      border-color: var(--border-neutral-weak, #e2e8f0);
+      background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
+      color: var(--color-text-secondary, transparent);
+      border-color: var(--border-neutral-weak, transparent);
 
       &:hover:enabled,
       &:focus-visible {
-        background: var(--surface-neutral-weak, transparent);
+        background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
       }
     }
 
     &--tertiary {
       background: transparent;
-      color: var(--accent-blue-500, #3b82f6);
-      border-color: var(--accent-blue-500, #3b82f6);
+      color: var(--accent-blue-500, transparent);
+      border-color: var(--accent-blue-500, transparent);
 
       &:hover:enabled,
       &:focus-visible {
         background: var(--accent-blue-500, transparent);
-        color: var(--accent-blue-600, #2563eb);
+        color: var(--accent-blue-600, transparent);
       }
     }
 
     &--neutral {
-      background: var(--surface-neutral-weak, transparent);
-      color: var(--color-text-secondary, #4b5563);
-      border-color: var(--border-neutral-weak, #e2e8f0);
+      background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
+      color: var(--color-text-secondary, transparent);
+      border-color: var(--border-neutral-weak, transparent);
     }
 
     &--danger {
       background: var(--accent-red-400, transparent);
-      color: var(--accent-red-700, #b91c1c);
+      color: var(--accent-red-700, transparent);
       border-color: var(--accent-red-500, transparent);
 
       &:hover:enabled,
@@ -370,8 +370,8 @@
     align-items: center;
     padding: var(--space-4, 16px);
     border-radius: var(--radius-lg, 12px);
-    border: 1px solid var(--border-neutral-weak, #e2e8f0);
-    background: var(--surface-neutral-weak, #f7fafc);
+    border: 1px solid var(--border-neutral-weak, transparent);
+    background: var(--surface-neutral-weak, transparent);
   }
 
   &__security-info {
@@ -383,12 +383,12 @@
   &__security-title {
     margin: 0;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--color-text-primary, #1f2937);
+    color: var(--color-text-primary, transparent);
   }
 
   &__security-text {
     margin: 0;
-    color: var(--color-text-secondary, #4b5563);
+    color: var(--color-text-secondary, transparent);
     font-size: 0.95rem;
   }
 

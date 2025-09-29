@@ -14,8 +14,8 @@
   top: -48px;
   left: 16px;
   padding: 8px 12px;
-  background: var(--color-surface-primary-dark, #111827);
-  color: var(--color-text-primary-inverted, #ffffff);
+  background: var(--color-surface-primary-dark, transparent);
+  color: var(--color-text-primary-inverted, transparent);
   border-radius: 8px;
   font-size: 14px;
   text-decoration: none;
@@ -30,12 +30,12 @@
 /* Simulador shell */
 .simulador-shell {
   min-height: 100vh;
-  background: var(--color-surface-secondary, #f8fafc);
+  background: var(--color-surface-secondary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .simulador-shell {
-    background: var(--color-surface-primary-darker, #020618);
+    background: var(--color-surface-primary-darker, transparent);
   }
 }
 
@@ -51,21 +51,21 @@
 .simulador-header__title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
   margin-bottom: 0.5rem;
 }
 
 .simulador-header__subtitle {
   font-size: 0.875rem;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .simulador-header__title {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
   .simulador-header__subtitle {
-    color: var(--color-text-muted, #cbd5f5);
+    color: var(--color-text-muted, transparent);
   }
 }
 
@@ -88,7 +88,7 @@
   padding: 20px;
   border-radius: 8px;
   border: 1px solid var(--color-border-primary, rgba(148, 163, 184, 0.3));
-  background: var(--color-surface, #ffffff);
+  background: var(--color-surface, transparent);
   cursor: pointer;
   transition: all 0.2s ease;
 
@@ -116,29 +116,29 @@
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
 }
 
 .scenario-card__subtitle {
   font-size: 0.75rem;
-  color: var(--color-text-tertiary, #94a3b8);
+  color: var(--color-text-tertiary, transparent);
   margin-bottom: 0.5rem;
 }
 
 .scenario-card__description {
   font-size: 0.75rem;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .scenario-card__title {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
   .scenario-card__subtitle {
-    color: var(--color-text-muted, #cbd5f5);
+    color: var(--color-text-muted, transparent);
   }
   .scenario-card__description {
-    color: var(--color-text-tertiary, #94a3b8);
+    color: var(--color-text-tertiary, transparent);
   }
 }
 
@@ -172,12 +172,12 @@
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .results-section__title {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
 }
 
@@ -223,7 +223,7 @@
   padding: 0.75rem;
   border-radius: 8px;
   border: 1px solid var(--color-border-primary, rgba(148, 163, 184, 0.3));
-  background: var(--color-surface, #ffffff);
+  background: var(--color-surface, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -235,22 +235,22 @@
 
 .kpi-card__label {
   font-size: 0.75rem;
-  color: var(--color-text-tertiary, #94a3b8);
+  color: var(--color-text-tertiary, transparent);
   margin-bottom: 0.25rem;
 }
 
 .kpi-card__value {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .kpi-card__label {
-    color: var(--color-text-muted, #cbd5f5);
+    color: var(--color-text-muted, transparent);
   }
   .kpi-card__value {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
 }
 
@@ -274,12 +274,12 @@
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .chart-card__title {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
 }
 
@@ -309,21 +309,21 @@ canvas {
   gap: 0.5rem;
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
   margin-bottom: 0.5rem;
 }
 
 .saved-section__subtitle {
   font-size: 0.875rem;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .saved-section__title {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
   .saved-section__subtitle {
-    color: var(--color-text-muted, #cbd5f5);
+    color: var(--color-text-muted, transparent);
   }
 }
 
@@ -352,7 +352,7 @@ canvas {
   padding: 16px;
 
   &--selected {
-    box-shadow: 0 0 0 2px var(--color-accent-primary, #0ea5e9);
+    box-shadow: 0 0 0 2px var(--color-accent-primary, transparent);
   }
 }
 
@@ -365,12 +365,12 @@ canvas {
 .simulation-card__checkbox input {
   width: 1rem;
   height: 1rem;
-  color: var(--color-accent-primary-dark, #0284c7);
+  color: var(--color-accent-primary-dark, transparent);
   border-radius: 8px; /* OpenAI standard */
-  border: 1px solid var(--color-border-secondary, #d1d5db);
+  border: 1px solid var(--color-border-secondary, transparent);
 
   &:focus {
-    outline: 2px solid var(--color-accent-primary, #0ea5e9);
+    outline: 2px solid var(--color-accent-primary, transparent);
     outline-offset: 2px;
   }
 }
@@ -392,21 +392,21 @@ canvas {
 
 .simulation-card__client-name {
   font-weight: 500;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
   margin-bottom: 0.25rem;
 }
 
 .simulation-card__scenario {
   font-size: 0.75rem;
-  color: var(--color-text-tertiary, #94a3b8);
+  color: var(--color-text-tertiary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .simulation-card__client-name {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
   .simulation-card__scenario {
-    color: var(--color-text-muted, #cbd5f5);
+    color: var(--color-text-muted, transparent);
   }
 }
 
@@ -417,14 +417,14 @@ canvas {
 
 .simulation-card__delete-btn {
   font-size: 0.75rem;
-  color: var(--color-text-tertiary, #94a3b8);
+  color: var(--color-text-tertiary, transparent);
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
 
   &:hover {
-    color: var(--color-text-danger, #ef4444);
+    color: var(--color-text-danger, transparent);
   }
 }
 
@@ -442,11 +442,11 @@ canvas {
 }
 
 .simulation-card__detail-label {
-  color: var(--color-text-tertiary, #94a3b8);
+  color: var(--color-text-tertiary, transparent);
 }
 
 .simulation-card__detail-value {
-  color: var(--color-text-secondary, #475569);
+  color: var(--color-text-secondary, transparent);
   font-weight: 500;
 
   &--emphasized {
@@ -456,10 +456,10 @@ canvas {
 
 @media (prefers-color-scheme: dark) {
   .simulation-card__detail-label {
-    color: var(--color-text-muted, #cbd5f5);
+    color: var(--color-text-muted, transparent);
   }
   .simulation-card__detail-value {
-    color: var(--color-text-tertiary, #94a3b8);
+    color: var(--color-text-tertiary, transparent);
   }
 }
 
@@ -479,12 +479,12 @@ canvas {
 
 .simulation-card__timestamp {
   font-size: 0.75rem;
-  color: var(--color-text-tertiary, #94a3b8);
+  color: var(--color-text-tertiary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .simulation-card__timestamp {
-    color: var(--color-text-muted, #cbd5f5);
+    color: var(--color-text-muted, transparent);
   }
 }
 
@@ -551,12 +551,12 @@ canvas {
 
 .comparison-controls__count {
   font-size: 0.875rem;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .comparison-controls__count {
-    color: var(--color-text-muted, #cbd5f5);
+    color: var(--color-text-muted, transparent);
   }
 }
 
@@ -578,7 +578,7 @@ canvas {
 .empty-state__icon {
   font-size: 4rem;
   margin-bottom: 1rem;
-  color: var(--color-text-tertiary, #94a3b8);
+  color: var(--color-text-tertiary, transparent);
 }
 
 .empty-state__icon-svg {
@@ -589,23 +589,23 @@ canvas {
 .empty-state__title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
   margin-bottom: 0.5rem;
 }
 
 .empty-state__description {
   font-size: 0.875rem;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary, transparent);
   max-width: 28rem;
   margin: 0 auto;
 }
 
 @media (prefers-color-scheme: dark) {
   .empty-state__title {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
   .empty-state__description {
-    color: var(--color-text-muted, #cbd5f5);
+    color: var(--color-text-muted, transparent);
   }
 }
 
@@ -615,12 +615,12 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-surface-secondary, #f8fafc);
+  background: var(--color-surface-secondary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .smart-redirect {
-    background: var(--color-surface-primary-darker, #020618);
+    background: var(--color-surface-primary-darker, transparent);
   }
 }
 
@@ -657,13 +657,13 @@ canvas {
 .redirect-content h2 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
   margin-bottom: 0.75rem;
 }
 
 .redirect-content p {
   font-size: 0.875rem;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary, transparent);
 }
 
 .redirect-content__icon {
@@ -675,10 +675,10 @@ canvas {
 
 @media (prefers-color-scheme: dark) {
   .redirect-content h2 {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
   .redirect-content p {
-    color: var(--color-text-muted, #cbd5f5);
+    color: var(--color-text-muted, transparent);
   }
 }
 
@@ -809,7 +809,7 @@ input:focus,
 .comparison-modal__dialog {
   display: inline-block;
   vertical-align: bottom;
-  background: var(--color-surface, #ffffff);
+  background: var(--color-surface, transparent);
   border-radius: 8px; /* OpenAI standard */
   text-align: left;
   overflow: hidden;
@@ -856,7 +856,7 @@ input:focus,
 .comparison-modal__title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -864,7 +864,7 @@ input:focus,
 
 @media (prefers-color-scheme: dark) {
   .comparison-modal__title {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
 }
 
@@ -901,7 +901,7 @@ input:focus,
   text-align: left;
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--color-text-tertiary, #94a3b8);
+  color: var(--color-text-tertiary, transparent);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border-bottom: 1px solid var(--color-border-primary, rgba(226, 232, 240, 0.7));
@@ -921,36 +921,36 @@ input:focus,
 
 .comparison-modal__client-name {
   font-weight: 600;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
   margin-bottom: 0.25rem;
 }
 
 .comparison-modal__scenario-title {
   font-size: 0.75rem;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary, transparent);
   margin-bottom: 0.25rem;
 }
 
 .comparison-modal__market-label {
   font-size: 0.75rem;
-  color: var(--color-text-tertiary, #94a3b8);
+  color: var(--color-text-tertiary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .comparison-modal__client-name {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
   .comparison-modal__scenario-title {
     color: #cbd5e1;
   }
   .comparison-modal__market-label {
-    color: var(--color-text-tertiary, #94a3b8);
+    color: var(--color-text-tertiary, transparent);
   }
 }
 
 /* Table body */
 .comparison-modal__table-body {
-  background: var(--color-surface, #ffffff);
+  background: var(--color-surface, transparent);
 
   tr {
     border-bottom: 1px solid var(--color-border-primary, rgba(226, 232, 240, 0.4));
@@ -986,32 +986,32 @@ input:focus,
 .comparison-modal__table-cell {
   padding: 0.75rem;
   font-size: 0.875rem;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary, transparent);
 
   &--metric {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--color-text-primary, #0f172a);
+    color: var(--color-text-primary, transparent);
     font-weight: 500;
   }
 
   &--value {
     font-weight: 600;
-    color: var(--color-text-primary, #0f172a);
+    color: var(--color-text-primary, transparent);
   }
 }
 
 @media (prefers-color-scheme: dark) {
   .comparison-modal__table-cell {
-    color: var(--color-text-tertiary, #94a3b8);
+    color: var(--color-text-tertiary, transparent);
 
     &--metric {
-      color: var(--color-text-primary-inverted, #f8fafc);
+      color: var(--color-text-primary-inverted, transparent);
     }
 
     &--value {
-      color: var(--color-text-primary-inverted, #f8fafc);
+      color: var(--color-text-primary-inverted, transparent);
     }
   }
 }
@@ -1124,7 +1124,7 @@ input:focus,
 .comparison-modal__insights-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -1133,7 +1133,7 @@ input:focus,
 
 @media (prefers-color-scheme: dark) {
   .comparison-modal__insights-title {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
 }
 
@@ -1154,8 +1154,8 @@ input:focus,
 .comparison-modal__insight-icon {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
-  color: var(--color-text-tertiary, #94a3b8);
-  --icon-color: var(--color-text-tertiary, #94a3b8);
+  color: var(--color-text-tertiary, transparent);
+  --icon-color: var(--color-text-tertiary, transparent);
 }
 
 .comparison-modal__insight-icon-svg {
@@ -1176,18 +1176,18 @@ input:focus,
 .comparison-modal__insight-label {
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary, transparent);
   margin-bottom: 0.25rem;
 }
 
 .comparison-modal__insight-value {
   font-size: 0.75rem;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   .comparison-modal__insight-label {
-    color: var(--color-text-primary-inverted, #f8fafc);
+    color: var(--color-text-primary-inverted, transparent);
   }
   .comparison-modal__insight-value {
     color: #cbd5e1;

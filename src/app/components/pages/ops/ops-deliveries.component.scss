@@ -5,7 +5,7 @@
   padding: var(--space-24, 24px);
   min-height: 100vh;
   background: var(--neutral-950, transparent);
-  color: var(--neutral-100, #f5f5f5);
+  color: var(--neutral-100, transparent);
 
   &__header {
     display: flex;
@@ -30,7 +30,7 @@
     margin: 0;
     font-size: var(--font-h1-size, 1.75rem);
     font-weight: var(--font-weight-bold, 700);
-    color: var(--accent-blue-200, #bfdbfe);
+    color: var(--accent-blue-200, transparent);
   }
 
   &__subtitle {
@@ -54,7 +54,7 @@
     border-radius: var(--radius-md, 8px);
     border: 1px solid var(--neutral-700, transparent);
     background: var(--neutral-800, transparent);
-    color: var(--neutral-100, #f5f5f5);
+    color: var(--neutral-100, transparent);
     font-weight: var(--font-weight-semibold, 600);
     transition: var(--transition-quick, all 0.2s ease);
 
@@ -64,17 +64,17 @@
     }
 
     &:not(:disabled):hover {
-      border-color: var(--accent-blue-500, #3b82f6);
+      border-color: var(--accent-blue-500, transparent);
       background: var(--neutral-800, transparent);
     }
 
     &--recompute {
       border-color: transparent;
-      background: var(--accent-blue-500, #3b82f6);
-      color: var(--flat-surface-bg, #ffffff);
+      background: var(--accent-blue-500, transparent);
+      color: var(--flat-surface-bg, transparent);
 
       &:not(:disabled):hover {
-        background: var(--accent-blue-600, #2563eb);
+        background: var(--accent-blue-600, transparent);
       }
     }
   }
@@ -99,7 +99,7 @@
     gap: var(--space-8, 8px);
     font-size: var(--font-small-size, 0.875rem);
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--neutral-200, #f5f5f5);
+    color: var(--neutral-200, transparent);
   }
 
   &__filters-select,
@@ -109,13 +109,13 @@
     border-radius: var(--radius-md, 8px);
     border: 1px solid var(--neutral-700, transparent);
     background: var(--neutral-900, transparent);
-    color: var(--neutral-100, #f5f5f5);
+    color: var(--neutral-100, transparent);
     transition: border-color var(--transition-quick, 0.2s ease),
       box-shadow var(--transition-quick, 0.2s ease);
 
     &:focus {
       outline: none;
-      border-color: var(--accent-blue-500, #3b82f6);
+      border-color: var(--accent-blue-500, transparent);
       box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
     }
   }
@@ -130,7 +130,7 @@
 
   &__results {
     font-size: var(--font-small-size, 0.875rem);
-    color: var(--neutral-200, #f5f5f5);
+    color: var(--neutral-200, transparent);
   }
 
   &__clear-button {
@@ -138,7 +138,7 @@
     border-radius: var(--radius-md, 8px);
     background: var(--accent-red-500, transparent);
     border: 1px solid var(--accent-red-500, transparent);
-    color: var(--accent-red-200, #fecaca);
+    color: var(--accent-red-200, transparent);
     font-size: var(--font-small-size, 0.875rem);
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
@@ -181,7 +181,7 @@
     h3 {
       margin: 0;
       font-size: var(--font-h3-size, 1.25rem);
-      color: var(--neutral-100, #f5f5f5);
+      color: var(--neutral-100, transparent);
     }
   }
 
@@ -191,8 +191,8 @@
     justify-content: center;
     padding: 6px 12px;
     border-radius: 999px;
-    background: var(--accent-purple-500, #8b5cf6);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-purple-500, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
   }
@@ -220,10 +220,10 @@
   &__metric-value {
     font-size: 1.25rem;
     font-weight: var(--font-weight-bold, 700);
-    color: var(--neutral-100, #f5f5f5);
+    color: var(--neutral-100, transparent);
 
     &--low {
-      color: var(--accent-amber-400, #fb923c);
+      color: var(--accent-amber-400, transparent);
     }
   }
 
@@ -239,13 +239,13 @@
 
     &--high {
       background: var(--accent-red-500, transparent);
-      color: var(--accent-red-200, #fecaca);
+      color: var(--accent-red-200, transparent);
       border: 1px solid var(--accent-red-500, transparent);
     }
 
     &--medium {
       background: var(--accent-amber-500, transparent);
-      color: var(--accent-amber-200, #fdba74);
+      color: var(--accent-amber-200, transparent);
       border: 1px solid var(--accent-amber-500, transparent);
     }
 
@@ -264,7 +264,7 @@
     h3 {
       margin: 0;
       font-size: var(--font-h3-size, 1.25rem);
-      color: var(--neutral-100, #f5f5f5);
+      color: var(--neutral-100, transparent);
     }
   }
 
@@ -286,7 +286,7 @@
     h4 {
       margin: 0;
       font-size: var(--font-body-size, 1rem);
-      color: var(--neutral-100, #f5f5f5);
+      color: var(--neutral-100, transparent);
     }
   }
 
@@ -305,7 +305,7 @@
   &__summary-value {
     font-size: 1.25rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--neutral-100, #f5f5f5);
+    color: var(--neutral-100, transparent);
   }
 
   &__summary-label {
@@ -388,15 +388,15 @@
     border-radius: 999px;
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--flat-surface-bg, #ffffff);
+    color: var(--flat-surface-bg, transparent);
   }
 
   &__eta {
     font-size: var(--font-small-size, 0.875rem);
-    color: var(--neutral-200, #f5f5f5);
+    color: var(--neutral-200, transparent);
 
     &--overdue {
-      color: var(--accent-red-300, #fca5a5);
+      color: var(--accent-red-300, transparent);
       font-weight: var(--font-weight-semibold, 600);
     }
   }
@@ -418,7 +418,7 @@
     left: 0;
     top: 0;
     bottom: 0;
-    background: var(--accent-blue-500, #3b82f6);
+    background: var(--accent-blue-500, transparent);
     transition: width 0.3s ease;
   }
 
@@ -440,7 +440,7 @@
     border-radius: var(--radius-md, 8px);
     border: 1px solid var(--neutral-800, transparent);
     background: var(--neutral-900, transparent);
-    color: var(--neutral-100, #f5f5f5);
+    color: var(--neutral-100, transparent);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -449,11 +449,11 @@
 
     &:hover {
       background: var(--neutral-900, transparent);
-      border-color: var(--accent-blue-500, #3b82f6);
+      border-color: var(--accent-blue-500, transparent);
     }
 
     &--advance {
-      color: var(--accent-green-200, #86efac);
+      color: var(--accent-green-200, transparent);
     }
   }
 
@@ -509,7 +509,7 @@
     transition: border-color var(--transition-quick, 0.2s ease);
 
     &:hover {
-      border-color: var(--accent-blue-500, #3b82f6);
+      border-color: var(--accent-blue-500, transparent);
     }
   }
 
@@ -532,13 +532,13 @@
   }
 
   &__market-badge {
-    background: var(--accent-blue-500, #3b82f6);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-blue-500, transparent);
+    color: var(--flat-surface-bg, transparent);
   }
 
   &__route-badge {
-    background: var(--accent-purple-500, #8b5cf6);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-purple-500, transparent);
+    color: var(--flat-surface-bg, transparent);
   }
 
   &__order-meta {
@@ -585,7 +585,7 @@
 
   &__contract-amount {
     font-size: var(--font-small-size, 0.875rem);
-    color: var(--accent-green-200, #86efac);
+    color: var(--accent-green-200, transparent);
   }
 
   &__card-actions {
@@ -603,24 +603,24 @@
     border-radius: var(--radius-md, 8px);
     border: 1px solid var(--neutral-700, transparent);
     background: var(--neutral-900, transparent);
-    color: var(--neutral-100, #f5f5f5);
+    color: var(--neutral-100, transparent);
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
     text-decoration: none;
     transition: var(--transition-quick, all 0.2s ease);
 
     &:hover {
-      border-color: var(--accent-blue-500, #3b82f6);
+      border-color: var(--accent-blue-500, transparent);
       background: var(--neutral-900, transparent);
     }
 
     &--advance {
       border-color: transparent;
-      background: var(--accent-green-500, #16a34a);
-      color: var(--flat-surface-bg, #ffffff);
+      background: var(--accent-green-500, transparent);
+      color: var(--flat-surface-bg, transparent);
 
       &:hover {
-        background: var(--accent-green-600, #15803d);
+        background: var(--accent-green-600, transparent);
       }
     }
 
@@ -643,7 +643,7 @@
     border-radius: var(--radius-md, 8px);
     border: 1px solid var(--neutral-700, transparent);
     background: var(--neutral-900, transparent);
-    color: var(--neutral-100, #f5f5f5);
+    color: var(--neutral-100, transparent);
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
 
@@ -719,13 +719,13 @@
     padding: 10px 16px;
     border-radius: var(--radius-md, 8px);
     border: 1px solid transparent;
-    background: var(--accent-blue-500, #3b82f6);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-blue-500, transparent);
+    color: var(--flat-surface-bg, transparent);
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
 
     &:hover {
-      background: var(--accent-blue-600, #2563eb);
+      background: var(--accent-blue-600, transparent);
     }
   }
 

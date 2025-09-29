@@ -14,7 +14,7 @@
     (keydown)="onKeydown($event)"
   >
     <header class="checkpoint-modal__header">
-      <span class="checkpoint-modal__header-icon" aria-hidden="true">🚫</span>
+      <app-icon name="x-circle" [size]="32" class="checkpoint-modal__header-icon" aria-hidden="true" />
       <div class="checkpoint-modal__header-copy">
         <h2 class="checkpoint-modal__title" [attr.id]="modalTitleId">Entrevista Obligatoria</h2>
         <p class="checkpoint-modal__subtitle" [attr.id]="modalDescId">{{ modalData.clientName }}</p>

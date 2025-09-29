@@ -68,13 +68,13 @@
   }
 
   &__action-button--primary {
-    background: var(--accent-blue-600, #2563eb);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-blue-600, transparent);
+    color: var(--flat-surface-bg, transparent);
   }
 
   &__action-button--primary:hover,
   &__action-button--primary:focus-visible {
-    background: var(--accent-blue-700, #1d4ed8);
+    background: var(--accent-blue-700, transparent);
     outline: none;
   }
 
@@ -86,7 +86,7 @@
 
   &__action-button--secondary:hover,
   &__action-button--secondary:focus-visible {
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
     outline: none;
   }
 
@@ -129,19 +129,19 @@
   }
 
   &--context-onboarding {
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
     border-color: #0284c7;
     color: #0c4a6e;
   }
 
   &--context-success {
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
     border-color: #16a34a;
     color: #14532d;
   }
 
   &--context-celebration {
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
     border-color: #eab308;
     color: #713f12;
 
@@ -156,25 +156,25 @@
   }
 
   &--context-error {
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
     border-color: #dc2626;
     color: #7f1d1d;
   }
 
   &--context-guidance {
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
     border-color: #9333ea;
     color: #581c87;
   }
 
   &--context-encouragement {
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
     border-color: #2563eb;
     color: #1e3a8a;
   }
 
   &--context-reassurance {
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
     border-color: #6b7280;
     color: #374151;
   }

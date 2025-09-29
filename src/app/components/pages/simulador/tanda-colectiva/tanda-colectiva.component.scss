@@ -25,7 +25,7 @@
   background: var(--color-bg-secondary);
 
   @media (prefers-color-scheme: dark) {
-    background: var(--color-bg-primary-inverted, #020617);
+    background: var(--color-bg-primary-inverted, transparent);
   }
 
   &__header {
@@ -170,9 +170,9 @@
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-primary-inverted, #0f172a);
-      border-color: var(--color-border-secondary-dark, #475569);
-      color: var(--color-text-primary-inverted, #f8fafc);
+      background: var(--color-bg-primary-inverted, transparent);
+      border-color: var(--color-border-secondary-dark, transparent);
+      color: var(--color-text-primary-inverted, transparent);
     }
   }
 

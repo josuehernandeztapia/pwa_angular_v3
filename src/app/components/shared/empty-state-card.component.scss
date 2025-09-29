@@ -4,7 +4,7 @@
   gap: var(--space-4);
   padding: var(--space-6);
   border-radius: 20px;
-  background: var(--flat-surface-bg, #ffffff);
+  background: var(--flat-surface-bg, transparent);
   text-align: center;
   box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.08));
 
@@ -14,20 +14,20 @@
   }
 
   &__icon {
-    color: var(--accent-blue-500, #3b82f6);
+    color: var(--accent-blue-500, transparent);
   }
 
   &__title {
     margin: 0;
     font-size: 1.25rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--neutral-700, #525252);
+    color: var(--neutral-700, transparent);
   }
 
   &__subtitle {
     margin: 0;
     font-size: 0.95rem;
-    color: var(--neutral-500, #737373);
+    color: var(--neutral-500, transparent);
   }
 
   &__actions {
@@ -46,18 +46,18 @@
     transition: background var(--transition-quick, 0.2s ease), border-color var(--transition-quick, 0.2s ease);
 
     &--primary {
-      background: var(--accent-blue-500, #3b82f6);
-      color: var(--flat-surface-bg, #ffffff);
+      background: var(--accent-blue-500, transparent);
+      color: var(--flat-surface-bg, transparent);
     }
 
     &--primary:hover {
-      background: var(--accent-blue-600, #2563eb);
+      background: var(--accent-blue-600, transparent);
     }
 
     &--secondary {
       background: var(--neutral-100, transparent);
       border-color: var(--neutral-300, transparent);
-      color: var(--neutral-600, #737373);
+      color: var(--neutral-600, transparent);
     }
 
     &--secondary:hover {

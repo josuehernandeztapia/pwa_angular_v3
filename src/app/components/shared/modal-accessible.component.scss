@@ -17,8 +17,8 @@
   width: min(720px, calc(100vw - var(--space-8, 32px)));
   max-height: calc(100vh - var(--space-16, 64px));
   overflow: auto;
-  background: var(--color-bg-primary, #ffffff);
-  color: var(--color-text-primary, #080808);
+  background: var(--color-bg-primary, transparent);
+  color: var(--color-text-primary, transparent);
   border-radius: var(--radius-xl, 16px);
   box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
 }

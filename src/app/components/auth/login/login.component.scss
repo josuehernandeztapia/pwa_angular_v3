@@ -16,8 +16,8 @@
   width: auto;
   height: auto;
   padding: 8px 12px;
-  background: var(--color-text-muted, #737373);
-  color: var(--color-text-primary-inverted, #ffffff);
+  background: var(--color-text-muted, transparent);
+  color: var(--color-text-primary-inverted, transparent);
   text-decoration: none;
   border-radius: 8px;
   font-size: 14px;
@@ -31,7 +31,7 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: var(--color-bg-secondary, #f8fafc);
+  background: var(--color-bg-secondary, transparent);
 }
 
 .login-card {
@@ -48,8 +48,8 @@
   display: flex;
   justify-content: center;
   margin-bottom: 16px;
-  color: var(--color-accent-primary, #0284c7);
-  --icon-color: var(--color-accent-primary, #0284c7);
+  color: var(--color-accent-primary, transparent);
+  --icon-color: var(--color-accent-primary, transparent);
 }
 
 .login-logo-icon {
@@ -61,13 +61,13 @@
   margin: 0 0 8px;
   font-size: 28px;
   font-weight: 600;
-  color: var(--color-text-primary, #111827);
+  color: var(--color-text-primary, transparent);
 }
 
 .login-subtitle {
   margin: 0;
   font-size: 14px;
-  color: var(--color-text-secondary, #4b5563);
+  color: var(--color-text-secondary, transparent);
 }
 
 .field-block {
@@ -96,13 +96,13 @@
   padding-right: 12px;
   border: 0;
   background: transparent;
-  color: var(--color-text-muted, #64748b);
+  color: var(--color-text-muted, transparent);
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
 .password-toggle:hover {
-  color: var(--color-text-primary, #1f2937);
+  color: var(--color-text-primary, transparent);
 }
 
 .password-toggle-icon {
@@ -122,20 +122,20 @@
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: var(--color-text-secondary, #4b5563);
+  color: var(--color-text-secondary, transparent);
 }
 
 .remember-checkbox {
   width: 16px;
   height: 16px;
   margin: 0;
-  accent-color: var(--color-accent-primary, #0284c7);
+  accent-color: var(--color-accent-primary, transparent);
 }
 
 .link-button {
   border: 0;
   background: transparent;
-  color: var(--color-accent-primary, #0284c7);
+  color: var(--color-accent-primary, transparent);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -143,7 +143,7 @@
 }
 
 .link-button:hover {
-  color: var(--color-accent-primary-strong, #0369a1);
+  color: var(--color-accent-primary-strong, transparent);
 }
 
 .submit-button {
@@ -174,18 +174,18 @@
 .footer-note {
   text-align: center;
   font-size: 14px;
-  color: var(--color-text-secondary, #4b5563);
+  color: var(--color-text-secondary, transparent);
 }
 
 .footer-link {
-  color: var(--color-accent-primary, #0284c7);
+  color: var(--color-accent-primary, transparent);
   font-weight: 500;
   margin-left: 4px;
   text-decoration: none;
 }
 
 .footer-link:hover {
-  color: var(--color-accent-primary-strong, #0369a1);
+  color: var(--color-accent-primary-strong, transparent);
 }
 
 .login-tip {
@@ -210,30 +210,30 @@
 
 @media (prefers-color-scheme: dark) {
   .login-shell {
-    background: var(--color-bg-primary-inverted, #0b1120);
+    background: var(--color-bg-primary-inverted, transparent);
   }
 
   .login-brand-icon {
-    color: var(--color-accent-primary-light, #38bdf8);
-    --icon-color: var(--color-accent-primary-light, #38bdf8);
+    color: var(--color-accent-primary-light, transparent);
+    --icon-color: var(--color-accent-primary-light, transparent);
   }
 
   .login-title {
-    color: var(--color-text-primary-inverted, #f1f5f9);
+    color: var(--color-text-primary-inverted, transparent);
   }
 
   .login-subtitle,
   .remember-option,
   .footer-note {
-    color: var(--color-text-secondary-inverted, #cbd5f5);
+    color: var(--color-text-secondary-inverted, transparent);
   }
 
   .password-toggle {
-    color: var(--color-text-muted-inverted, #94a3b8);
+    color: var(--color-text-muted-inverted, transparent);
   }
 
   .password-toggle:hover {
-    color: var(--color-text-primary-inverted, #e2e8f0);
+    color: var(--color-text-primary-inverted, transparent);
   }
 
   .login-footer {
@@ -242,11 +242,11 @@
 
   .footer-link,
   .link-button {
-    color: var(--color-accent-primary-light, #38bdf8);
+    color: var(--color-accent-primary-light, transparent);
   }
 
   .footer-link:hover,
   .link-button:hover {
-    color: var(--color-accent-primary, #0ea5e9);
+    color: var(--color-accent-primary, transparent);
   }
 }

@@ -34,7 +34,7 @@
   position: absolute;
   top: -32px;
   background: var(--color-primary-900, transparent);
-  color: var(--color-bg-primary, #ffffff);
+  color: var(--color-bg-primary, transparent);
   padding: var(--space-1, 4px) var(--space-2, 8px);
   border-radius: var(--radius-sm, 8px);
   font-size: var(--text-xs, 0.75rem);
@@ -61,7 +61,7 @@
 }
 
 .bar-label {
-  color: var(--color-text-secondary, #737373);
+  color: var(--color-text-secondary, transparent);
   font-size: var(--text-xs, 0.75rem);
   margin-top: var(--space-1, 4px);
 }

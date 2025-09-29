@@ -12,7 +12,7 @@
     align-items: center;
     gap: var(--space-4, 16px);
     padding-bottom: var(--space-5, 20px);
-    border-bottom: 2px solid var(--color-border-primary, #e2e8f0);
+    border-bottom: 2px solid var(--color-border-primary, transparent);
   }
 
   &__header-content {
@@ -25,7 +25,7 @@
     margin: 0;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--color-text-primary, #1e293b);
+    color: var(--color-text-primary, transparent);
     display: flex;
     align-items: center;
     gap: var(--space-2, 8px);
@@ -34,7 +34,7 @@
   &__subtitle {
     margin: 0;
     font-size: 1.05rem;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__header-actions {
@@ -65,7 +65,7 @@
   &__filter-label {
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__input,
@@ -73,15 +73,15 @@
     width: 100%;
     padding: 12px 16px;
     border-radius: 10px;
-    border: 1px solid var(--color-border-primary, #e2e8f0);
-    background: var(--color-bg-primary, #ffffff);
+    border: 1px solid var(--color-border-primary, transparent);
+    background: var(--color-bg-primary, transparent);
     font: inherit;
     color: inherit;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
     &:focus {
       outline: none;
-      border-color: var(--accent-blue-500, #2563eb);
+      border-color: var(--accent-blue-500, transparent);
       box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
     }
   }
@@ -104,7 +104,7 @@
     align-items: flex-start;
     gap: var(--space-3, 12px);
     padding-bottom: var(--space-3, 12px);
-    border-bottom: 1px solid var(--color-border-primary, #e2e8f0);
+    border-bottom: 1px solid var(--color-border-primary, transparent);
   }
 
   &__card-info {
@@ -117,13 +117,13 @@
     margin: 0;
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--color-text-primary, #1e293b);
+    color: var(--color-text-primary, transparent);
   }
 
   &__card-id {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--color-text-secondary, #64748b);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__status {
@@ -141,17 +141,17 @@
 
   &__status--completo {
     background: var(--accent-green-100, transparent);
-    color: var(--accent-green-700, #047857);
+    color: var(--accent-green-700, transparent);
   }
 
   &__status--pendiente {
     background: var(--accent-red-100, transparent);
-    color: var(--accent-red-700, #b91c1c);
+    color: var(--accent-red-700, transparent);
   }
 
   &__status--revision {
     background: var(--accent-amber-100, transparent);
-    color: var(--accent-amber-700, #b45309);
+    color: var(--accent-amber-700, transparent);
   }
 
   &__card-body {
@@ -176,21 +176,21 @@
   &__document-count {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--color-text-primary, #1e293b);
+    color: var(--color-text-primary, transparent);
 
     &--complete {
-      color: var(--accent-green-600, #16a34a);
+      color: var(--accent-green-600, transparent);
     }
 
     &--pending {
-      color: var(--accent-amber-600, #d97706);
+      color: var(--accent-amber-600, transparent);
     }
   }
 
   &__document-label {
     font-size: 0.8rem;
     font-weight: 500;
-    color: var(--color-text-secondary, #64748b);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__progress {
@@ -210,21 +210,21 @@
   &__progress-fill {
     height: 100%;
     border-radius: inherit;
-    background: var(--accent-blue-500, #2563eb);
+    background: var(--accent-blue-500, transparent);
     transition: width 0.3s ease;
   }
 
   &__progress-text {
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__card-actions {
     display: flex;
     gap: var(--space-3, 12px);
     padding-top: var(--space-3, 12px);
-    border-top: 1px solid var(--color-border-primary, #e2e8f0);
+    border-top: 1px solid var(--color-border-primary, transparent);
   }
 
   &__button {
@@ -240,18 +240,18 @@
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 
     &--primary {
-      background: var(--accent-blue-500, #2563eb);
-      color: var(--flat-surface-bg, #ffffff);
+      background: var(--accent-blue-500, transparent);
+      color: var(--flat-surface-bg, transparent);
 
       &:hover {
-        background: var(--accent-blue-600, #1d4ed8);
+        background: var(--accent-blue-600, transparent);
       }
     }
 
     &--secondary {
       background: var(--color-bg-secondary, transparent);
-      color: var(--color-text-secondary, #1f2937);
-      border-color: var(--color-border-primary, #e2e8f0);
+      color: var(--color-text-secondary, transparent);
+      border-color: var(--color-border-primary, transparent);
 
       &:hover {
         background: var(--color-bg-tertiary, transparent);
@@ -260,8 +260,8 @@
 
     &--ghost {
       background: transparent;
-      color: var(--accent-blue-600, #2563eb);
-      border-color: var(--accent-blue-200, #bfdbfe);
+      color: var(--accent-blue-600, transparent);
+      border-color: var(--accent-blue-200, transparent);
 
       &:hover {
         background: var(--accent-blue-100, transparent);
@@ -276,7 +276,7 @@
     gap: var(--space-3, 12px);
     text-align: center;
     padding: var(--space-6, 24px);
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary, transparent);
   }
 
   &__empty-icon {
@@ -287,20 +287,20 @@
     align-items: center;
     justify-content: center;
     background: var(--accent-blue-100, transparent);
-    color: var(--accent-blue-600, #2563eb);
+    color: var(--accent-blue-600, transparent);
   }
 
   &__empty-title {
     margin: 0;
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--color-text-primary, #1e293b);
+    color: var(--color-text-primary, transparent);
   }
 
   &__empty-description {
     margin: 0;
     font-size: 1rem;
-    color: var(--color-text-secondary, #64748b);
+    color: var(--color-text-secondary, transparent);
   }
 
   @media (max-width: 768px) {

@@ -4,7 +4,7 @@
         <!-- Header -->
         <div class="avi-verification__header">
           <div class="avi-verification__title">
-            <span class="avi-verification__title-icon">🎤</span>
+            <app-icon name="microphone" [size]="24" class="avi-verification__title-icon" />
             <h2 [attr.id]="titleId">Verificación Inteligente AVI</h2>
           </div>
           <button class="avi-verification__close" (click)="closeModal()">✕</button>
@@ -37,7 +37,7 @@
               [ngClass]="getMicButtonClasses()"
               [disabled]="sessionData.status === 'completed'"
               (click)="toggleRecording()">
-              <span class="avi-verification__mic-icon">🎤</span>
+              <app-icon name="microphone" [size]="32" class="avi-verification__mic-icon" />
             </button>
             
             <div class="avi-verification__instructions">
@@ -71,7 +71,7 @@
 
           <!--  NUEVO: Voice Evaluation Results (Semáforo Display) -->
           <div class="avi-verification__evaluation" *ngIf="questionResults.length > 0">
-            <h3>🚦 Resultados de Análisis de Voz:</h3>
+            <h3><app-icon name="alert-triangle" [size]="18" class="avi-verification__results-icon" /> Resultados de Análisis de Voz:</h3>
             <div class="avi-verification__results">
               <div class="avi-verification__result-card" 
                    *ngFor="let result of questionResults; trackBy: trackByQuestionId"

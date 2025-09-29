@@ -218,7 +218,7 @@
 
 .admin-status--active {
   background: var(--color-surface-success-subtle, rgba(16, 185, 129, 0.16));
-  color: var(--color-text-success-dark, #047857);
+  color: var(--color-text-success-dark, transparent);
 }
 
 .admin-status--blocked {

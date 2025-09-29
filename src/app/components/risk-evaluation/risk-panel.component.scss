@@ -4,7 +4,7 @@
   gap: var(--space-24, 24px);
   padding: var(--space-24, 24px);
   border-radius: var(--radius-lg, 16px);
-  background: var(--flat-surface-bg, #ffffff);
+  background: var(--flat-surface-bg, transparent);
   border: 1px solid var(--neutral-300, transparent);
   box-shadow: var(--shadow-md, 0 16px 32px rgba(8, 8, 8, 0.08));
   transition: box-shadow var(--transition-quick, 0.2s ease);
@@ -32,7 +32,7 @@
   padding: var(--space-32, 32px);
   text-align: center;
   border-radius: var(--radius-lg, 16px);
-  background: var(--surface-neutral-weak, transparent);
+  background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
   border: 1px dashed var(--neutral-300, transparent);
 
   &--loading {
@@ -52,17 +52,17 @@
 
 .risk-panel__state-icon {
   --icon-size: 48px;
-  color: var(--accent-blue-500, #3b82f6);
+  color: var(--accent-blue-500, transparent);
 
   .risk-panel__state--error & {
-    color: var(--accent-red-500, #ef4444);
+    color: var(--accent-red-500, transparent);
   }
 }
 
 .risk-panel__state-message {
   max-width: 360px;
   font-size: 1rem;
-  color: var(--neutral-700, #404040);
+  color: var(--neutral-700, transparent);
 }
 
 .risk-panel__body {
@@ -87,14 +87,14 @@
 
 .risk-panel__title-icon {
   --icon-size: 28px;
-  color: var(--accent-blue-500, #3b82f6);
+  color: var(--accent-blue-500, transparent);
 }
 
 .risk-panel__title {
   margin: 0;
   font-size: var(--font-h2-size, 1.5rem);
   font-weight: var(--font-weight-bold, 700);
-  color: var(--neutral-900, #262626);
+  color: var(--neutral-900, transparent);
 }
 
 .risk-panel__meta {
@@ -107,7 +107,7 @@
 
 .risk-panel__meta-item--time {
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--accent-green-600, #15803d);
+  color: var(--accent-green-600, transparent);
 }
 
 .risk-panel__meta-item--version {
@@ -116,7 +116,7 @@
 
 .risk-panel__section {
   border-radius: var(--radius-lg, 16px);
-  background: var(--surface-neutral-weak, transparent);
+  background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
   border: 1px solid var(--neutral-300, transparent);
   padding: var(--space-20, 20px);
   display: flex;
@@ -132,14 +132,14 @@
 
 .risk-panel__section-icon {
   --icon-size: 22px;
-  color: var(--accent-blue-500, #3b82f6);
+  color: var(--accent-blue-500, transparent);
 }
 
 .risk-panel__section-title {
   margin: 0;
   font-size: var(--font-h4-size, 1.125rem);
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--neutral-800, #2f2f2f);
+  color: var(--neutral-800, transparent);
 }
 
 .risk-panel__score {
@@ -159,23 +159,23 @@
   font-size: 3rem;
   font-weight: 800;
   line-height: 1;
-  color: var(--neutral-800, #2f2f2f);
+  color: var(--neutral-800, transparent);
 
   &--excellent {
-    color: var(--accent-green-600, #15803d);
+    color: var(--accent-green-600, transparent);
     text-shadow: 0 0 20px rgba(21, 128, 61, 0.25);
   }
 
   &--good {
-    color: var(--accent-blue-600, #2563eb);
+    color: var(--accent-blue-600, transparent);
   }
 
   &--fair {
-    color: var(--accent-amber-600, #d97706);
+    color: var(--accent-amber-600, transparent);
   }
 
   &--poor {
-    color: var(--accent-red-500, #ef4444);
+    color: var(--accent-red-500, transparent);
   }
 }
 
@@ -183,7 +183,7 @@
   padding: 4px 12px;
   border-radius: var(--radius-full, 999px);
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--flat-surface-bg, #ffffff);
+  color: var(--flat-surface-bg, transparent);
 
   &--a {
     background: linear-gradient(135deg, #10b981, #059669);
@@ -213,7 +213,7 @@
 
 .risk-panel__score-icon {
   --icon-size: 20px;
-  color: var(--accent-blue-500, #3b82f6);
+  color: var(--accent-blue-500, transparent);
 }
 
 .risk-panel__score-details {
@@ -280,7 +280,7 @@
   padding: var(--space-12, 12px) var(--space-16, 16px);
   border-radius: var(--radius-lg, 16px);
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--flat-surface-bg, #ffffff);
+  color: var(--flat-surface-bg, transparent);
 
   &--critico {
     background: linear-gradient(135deg, #ef4444, #b91c1c);
@@ -313,21 +313,21 @@
   background: var(--flat-surface-bg, transparent);
 
   &--impact-pos {
-    border-left: 4px solid var(--accent-green-500, #16a34a);
+    border-left: 4px solid var(--accent-green-500, transparent);
   }
 
   &--impact-neu {
-    border-left: 4px solid var(--accent-blue-500, #3b82f6);
+    border-left: 4px solid var(--accent-blue-500, transparent);
   }
 
   &--impact-neg {
-    border-left: 4px solid var(--accent-red-500, #ef4444);
+    border-left: 4px solid var(--accent-red-500, transparent);
   }
 }
 
 .risk-panel__explain-icon {
   --icon-size: 20px;
-  color: var(--accent-blue-500, #3b82f6);
+  color: var(--accent-blue-500, transparent);
 }
 
 .risk-panel__explain-details {
@@ -338,7 +338,7 @@
 
 .risk-panel__explain-name {
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--neutral-800, #2f2f2f);
+  color: var(--neutral-800, transparent);
 }
 
 .risk-panel__explain-weight {
@@ -359,17 +359,17 @@
 
   &--pos {
     background: var(--accent-green-500, transparent);
-    color: var(--accent-green-700, #047857);
+    color: var(--accent-green-700, transparent);
   }
 
   &--neu {
     background: var(--neutral-300, transparent);
-    color: var(--neutral-700, #404040);
+    color: var(--neutral-700, transparent);
   }
 
   &--neg {
     background: var(--accent-red-500, transparent);
-    color: var(--accent-red-700, #b91c1c);
+    color: var(--accent-red-700, transparent);
   }
 }
 
@@ -406,7 +406,7 @@
 
 .risk-panel__risk-factor-icon {
   --icon-size: 24px;
-  color: var(--accent-blue-500, #3b82f6);
+  color: var(--accent-blue-500, transparent);
 }
 
 .risk-panel__risk-factor-body {
@@ -419,7 +419,7 @@
   margin: 0;
   font-size: 1rem;
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--neutral-800, #2f2f2f);
+  color: var(--neutral-800, transparent);
 }
 
 .risk-panel__risk-factor-description {
@@ -443,11 +443,11 @@
   font-weight: var(--font-weight-semibold, 600);
 
   &--positive {
-    color: var(--accent-green-600, #15803d);
+    color: var(--accent-green-600, transparent);
   }
 
   &--negative {
-    color: var(--accent-red-500, #ef4444);
+    color: var(--accent-red-500, transparent);
   }
 }
 
@@ -455,7 +455,7 @@
   margin: 0 0 4px 0;
   font-size: 0.85rem;
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--neutral-700, #404040);
+  color: var(--neutral-700, transparent);
 }
 
 .risk-panel__mitigations-list {
@@ -480,21 +480,21 @@
   border-radius: var(--radius-full, 999px);
   font-weight: var(--font-weight-semibold, 600);
   background: var(--neutral-300, transparent);
-  color: var(--neutral-900, #262626);
+  color: var(--neutral-900, transparent);
 
   &--go {
     background: var(--accent-green-500, transparent);
-    color: var(--accent-green-700, #047857);
+    color: var(--accent-green-700, transparent);
   }
 
   &--review {
     background: var(--accent-amber-500, transparent);
-    color: var(--accent-amber-700, #b45309);
+    color: var(--accent-amber-700, transparent);
   }
 
   &--no-go {
     background: var(--accent-red-500, transparent);
-    color: var(--accent-red-700, #b91c1c);
+    color: var(--accent-red-700, transparent);
   }
 }
 
@@ -533,22 +533,22 @@
 .risk-panel__financial-value {
   font-size: 1.05rem;
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--neutral-800, #2f2f2f);
+  color: var(--neutral-800, transparent);
 
   &--currency {
     font-family: var(--font-family-mono, 'IBM Plex Mono', monospace);
   }
 
   &--ratio-good {
-    color: var(--accent-green-600, #15803d);
+    color: var(--accent-green-600, transparent);
   }
 
   &--ratio-acceptable {
-    color: var(--accent-amber-600, #d97706);
+    color: var(--accent-amber-600, transparent);
   }
 
   &--ratio-high {
-    color: var(--accent-red-500, #ef4444);
+    color: var(--accent-red-500, transparent);
   }
 }
 
@@ -573,7 +573,7 @@
   height: 32px;
   border-radius: var(--radius-full, 999px);
   background: var(--accent-blue-500, transparent);
-  color: var(--accent-blue-700, #1d4ed8);
+  color: var(--accent-blue-700, transparent);
   font-weight: var(--font-weight-semibold, 600);
   display: grid;
   place-items: center;
@@ -604,17 +604,17 @@
     color var(--transition-quick, 0.2s ease);
 
   &--primary {
-    background: var(--accent-green-600, #15803d);
-    color: var(--flat-surface-bg, #ffffff);
+    background: var(--accent-green-600, transparent);
+    color: var(--flat-surface-bg, transparent);
 
     &:hover {
-      background: var(--accent-green-700, #047857);
+      background: var(--accent-green-700, transparent);
     }
   }
 
   &--secondary {
     background: var(--accent-blue-500, transparent);
-    color: var(--accent-blue-700, #1d4ed8);
+    color: var(--accent-blue-700, transparent);
     border-color: var(--accent-blue-500, transparent);
 
     &:hover {

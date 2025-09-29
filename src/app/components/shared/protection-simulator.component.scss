@@ -199,23 +199,23 @@
     transition: background-color 0.2s ease, transform 0.2s ease;
 
     &:hover:not(:disabled) {
-      background: var(--color-bg-info-hover, #2563eb);
+      background: var(--color-bg-info-hover, transparent);
     }
 
     &:disabled {
-      background: var(--color-bg-disabled, #9ca3af);
+      background: var(--color-bg-disabled, transparent);
       cursor: not-allowed;
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-info-dark, #1e40af);
+      background: var(--color-bg-info-dark, transparent);
 
       &:hover:not(:disabled) {
-        background: var(--color-bg-info-hover-dark, #1d4ed8);
+        background: var(--color-bg-info-hover-dark, transparent);
       }
 
       &:disabled {
-        background: var(--color-bg-disabled-dark, #4b5563);
+        background: var(--color-bg-disabled-dark, transparent);
       }
     }
   }
@@ -248,10 +248,10 @@
   &__options-icon {
     width: 24px;
     height: 24px;
-    color: var(--color-info, #3b82f6);
+    color: var(--color-info, transparent);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-info-light, #60a5fa);
+      color: var(--color-info-light, transparent);
     }
   }
 
@@ -263,7 +263,7 @@
 
   &__scenario-card {
     cursor: pointer;
-    border: 2px solid var(--color-border-secondary, #e2e8f0);
+    border: 2px solid var(--color-border-secondary, transparent);
     border-radius: 12px;
     padding: 24px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
@@ -271,29 +271,29 @@
 
     @media (prefers-color-scheme: dark) {
       background: color-mix(in srgb, var(--color-neutral-900) 90%, transparent);
-      border-color: var(--color-border-secondary-dark, #475569);
+      border-color: var(--color-border-secondary-dark, transparent);
     }
 
     &:hover {
-      border-color: var(--color-border-info, #3b82f6);
+      border-color: var(--color-border-info, transparent);
       box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
     }
 
     &--selected {
-      border-color: var(--color-border-info, #3b82f6);
-      background: var(--color-bg-info-light, #eff6ff);
+      border-color: var(--color-border-info, transparent);
+      background: var(--color-bg-info-light, transparent);
 
       @media (prefers-color-scheme: dark) {
-        border-color: var(--color-border-info-dark, #2563eb);
+        border-color: var(--color-border-info-dark, transparent);
         background: rgba(59, 130, 246, 0.12);
       }
     }
 
     &--recommended {
-      box-shadow: 0 0 0 2px var(--color-border-success, #10b981);
+      box-shadow: 0 0 0 2px var(--color-border-success, transparent);
 
       @media (prefers-color-scheme: dark) {
-        box-shadow: 0 0 0 2px var(--color-border-success-dark, #059669);
+        box-shadow: 0 0 0 2px var(--color-border-success-dark, transparent);
       }
     }
   }
@@ -328,10 +328,10 @@
   &__scenario-description {
     margin: 0;
     font-size: 0.875rem;
-    color: var(--color-text-secondary, #6b7280);
+    color: var(--color-text-secondary, transparent);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--openai-gray-300, #d4d4d4);
+      color: var(--openai-gray-300, transparent);
     }
   }
 
@@ -342,13 +342,13 @@
     padding: 4px 8px;
     font-size: 0.75rem;
     font-weight: 700;
-    background: var(--color-bg-success-light, #ecfdf5);
-    color: var(--color-text-success, #059669);
+    background: var(--color-bg-success-light, transparent);
+    color: var(--color-text-success, transparent);
     border-radius: 9999px;
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-success-dark, #064e3b);
-      color: var(--color-text-success-light, #10b981);
+      background: var(--color-bg-success-dark, transparent);
+      color: var(--color-text-success-light, transparent);
     }
   }
 
@@ -368,19 +368,19 @@
   &__savings-amount {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--color-text-success, #059669);
+    color: var(--color-text-success, transparent);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-success-light, #22c55e);
+      color: var(--color-text-success-light, transparent);
     }
   }
 
   &__support-text {
     font-size: 0.75rem;
-    color: var(--color-text-secondary, #6b7280);
+    color: var(--color-text-secondary, transparent);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--openai-gray-400, #a3a3a3);
+      color: var(--openai-gray-400, transparent);
     }
   }
 
@@ -406,18 +406,18 @@
   }
 
   &__benefits-title {
-    color: var(--color-text-success, #059669);
+    color: var(--color-text-success, transparent);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-success-light, #22c55e);
+      color: var(--color-text-success-light, transparent);
     }
   }
 
   &__considerations-title {
-    color: var(--color-info, #3b82f6);
+    color: var(--color-info, transparent);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-info-light, #60a5fa);
+      color: var(--color-info-light, transparent);
     }
   }
 
@@ -429,10 +429,10 @@
     flex-direction: column;
     gap: 4px;
     font-size: 0.875rem;
-    color: var(--color-text-secondary, #6b7280);
+    color: var(--color-text-secondary, transparent);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--openai-gray-300, #d4d4d4);
+      color: var(--openai-gray-300, transparent);
     }
   }
 
@@ -447,36 +447,36 @@
   }
 
   &__benefit-bullet {
-    color: var(--color-text-success, #10b981);
+    color: var(--color-text-success, transparent);
     font-size: 0.75rem;
     margin-top: 4px;
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-success-light, #22c55e);
+      color: var(--color-text-success-light, transparent);
     }
   }
 
   &__consideration-bullet {
-    color: var(--color-text-warning, #f97316);
+    color: var(--color-text-warning, transparent);
     font-size: 0.75rem;
     margin-top: 4px;
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-warning-light, #fb923c);
+      color: var(--color-text-warning-light, transparent);
     }
   }
 
   &__actions {
     margin-top: 24px;
     padding-top: 24px;
-    border-top: 1px solid var(--color-border-primary, #e5e7eb);
+    border-top: 1px solid var(--color-border-primary, transparent);
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
     justify-content: flex-end;
 
     @media (prefers-color-scheme: dark) {
-      border-top-color: var(--color-border-primary-dark, #374151);
+      border-top-color: var(--color-border-primary-dark, transparent);
     }
   }
 
@@ -495,7 +495,7 @@
     }
 
     @media (prefers-color-scheme: dark) {
-      border-color: var(--color-border-primary-dark, #475569);
+      border-color: var(--color-border-primary-dark, transparent);
 
       &:hover {
         background: rgba(255, 255, 255, 0.05);
@@ -505,7 +505,7 @@
 
   &__share-button {
     padding: 12px 24px;
-    background: var(--color-bg-success, #10b981);
+    background: var(--color-bg-success, transparent);
     color: var(--flat-surface-bg);
     border-radius: 8px;
     border: none;
@@ -513,14 +513,14 @@
     transition: background-color 0.2s ease;
 
     &:hover {
-      background: var(--color-bg-success-hover, #059669);
+      background: var(--color-bg-success-hover, transparent);
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-success-dark, #059669);
+      background: var(--color-bg-success-dark, transparent);
 
       &:hover {
-        background: var(--color-bg-success-hover-dark, #047857);
+        background: var(--color-bg-success-hover-dark, transparent);
       }
     }
   }
@@ -537,23 +537,23 @@
     transition: background-color 0.2s ease;
 
     &:hover:not(:disabled) {
-      background: var(--color-bg-info-hover, #2563eb);
+      background: var(--color-bg-info-hover, transparent);
     }
 
     &:disabled {
-      background: var(--color-bg-disabled, #9ca3af);
+      background: var(--color-bg-disabled, transparent);
       cursor: not-allowed;
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-info-dark, #1e40af);
+      background: var(--color-bg-info-dark, transparent);
 
       &:hover:not(:disabled) {
-        background: var(--color-bg-info-hover-dark, #1d4ed8);
+        background: var(--color-bg-info-hover-dark, transparent);
       }
 
       &:disabled {
-        background: var(--color-bg-disabled-dark, #4b5563);
+        background: var(--color-bg-disabled-dark, transparent);
       }
     }
   }

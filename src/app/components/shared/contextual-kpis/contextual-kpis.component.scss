@@ -1,6 +1,6 @@
 .contextual-kpis {
   margin-bottom: var(--space-32, 32px);
-  color: var(--neutral-100, #f5f5f5);
+  color: var(--neutral-100, transparent);
 
   &__header {
     display: flex;
@@ -14,14 +14,14 @@
     margin: 0;
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--neutral-100, #f5f5f5);
+    color: var(--neutral-100, transparent);
   }
 
   &__subtitle {
     margin: 0;
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--neutral-400, #a3a3a3);
+    color: var(--neutral-400, transparent);
   }
 
   &__grid {
@@ -34,7 +34,7 @@
     position: relative;
     padding: var(--space-24, 24px);
     border-radius: 16px;
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
     border: 1px solid var(--neutral-800, transparent);
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.08));
     transition: box-shadow var(--transition-fast, 0.3s ease);
@@ -47,7 +47,7 @@
       left: 0;
       right: 0;
       height: 3px;
-      background: var(--accent-blue-500, #3b82f6);
+      background: var(--accent-blue-500, transparent);
     }
 
     &:hover {
@@ -56,23 +56,23 @@
   }
 
   &__card--color-primary::before {
-    background: var(--primary-cyan-400, #3fb5f3);
+    background: var(--primary-cyan-400, transparent);
   }
 
   &__card--color-accent::before {
-    background: var(--accent-amber-500, #f59e0b);
+    background: var(--accent-amber-500, transparent);
   }
 
   &__card--color-success::before {
-    background: var(--success-500, #16a34a);
+    background: var(--success-500, transparent);
   }
 
   &__card--color-warning::before {
-    background: var(--accent-amber-400, #fb923c);
+    background: var(--accent-amber-400, transparent);
   }
 
   &__card--color-error::before {
-    background: var(--error-500, #dc2626);
+    background: var(--error-500, transparent);
   }
 
   &__card-header {
@@ -100,20 +100,20 @@
 
   &__trend--up {
     background: var(--accent-green-500, transparent);
-    border: 1px solid var(--accent-green-500, #16a34a);
-    color: var(--accent-green-600, #15803d);
+    border: 1px solid var(--accent-green-500, transparent);
+    color: var(--accent-green-600, transparent);
   }
 
   &__trend--down {
     background: var(--accent-red-500, transparent);
-    border: 1px solid var(--accent-red-500, #dc2626);
-    color: var(--accent-red-600, #b91c1c);
+    border: 1px solid var(--accent-red-500, transparent);
+    color: var(--accent-red-600, transparent);
   }
 
   &__trend--stable {
     background: var(--neutral-500, transparent);
-    border: 1px solid var(--neutral-500, #737373);
-    color: var(--neutral-500, #737373);
+    border: 1px solid var(--neutral-500, transparent);
+    color: var(--neutral-500, transparent);
   }
 
   &__trend-icon {
@@ -132,42 +132,42 @@
     font-weight: 800;
     line-height: 1;
     margin: 0;
-    background: linear-gradient(135deg, var(--neutral-100, #f5f5f5), var(--neutral-300, #d4d4d4));
+    background: linear-gradient(135deg, var(--neutral-100, transparent), var(--neutral-300, transparent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   &__value--color-primary {
-    background: linear-gradient(135deg, var(--primary-cyan-300, #64c9f5), var(--primary-cyan-500, #2f9cd9));
+    background: linear-gradient(135deg, var(--primary-cyan-300, transparent), var(--primary-cyan-500, transparent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   &__value--color-accent {
-    background: linear-gradient(135deg, var(--accent-amber-400, #fb923c), var(--accent-amber-600, #d97706));
+    background: linear-gradient(135deg, var(--accent-amber-400, transparent), var(--accent-amber-600, transparent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   &__value--color-success {
-    background: linear-gradient(135deg, var(--accent-green-400, #34d399), var(--accent-green-600, #15803d));
+    background: linear-gradient(135deg, var(--accent-green-400, transparent), var(--accent-green-600, transparent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   &__value--color-warning {
-    background: linear-gradient(135deg, var(--accent-amber-300, #fbbf24), var(--accent-amber-500, #f59e0b));
+    background: linear-gradient(135deg, var(--accent-amber-300, transparent), var(--accent-amber-500, transparent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   &__value--color-error {
-    background: linear-gradient(135deg, var(--accent-red-400, #f87171), var(--accent-red-600, #b91c1c));
+    background: linear-gradient(135deg, var(--accent-red-400, transparent), var(--accent-red-600, transparent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -176,12 +176,12 @@
   &__label {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--neutral-200, #e5e5e5);
+    color: var(--neutral-200, transparent);
   }
 
   &__subtitle-text {
     font-size: 0.85rem;
-    color: var(--neutral-400, #a3a3a3);
+    color: var(--neutral-400, transparent);
   }
 
   &__trend-bar {
@@ -200,15 +200,15 @@
   }
 
   &__trend-fill--up {
-    background: linear-gradient(90deg, var(--accent-green-500, #16a34a), var(--accent-green-300, #4ade80));
+    background: linear-gradient(90deg, var(--accent-green-500, transparent), var(--accent-green-300, transparent));
   }
 
   &__trend-fill--down {
-    background: linear-gradient(90deg, var(--accent-red-500, #dc2626), var(--accent-red-400, #f87171));
+    background: linear-gradient(90deg, var(--accent-red-500, transparent), var(--accent-red-400, transparent));
   }
 
   &__trend-fill--stable {
-    background: linear-gradient(90deg, var(--neutral-500, #737373), var(--neutral-400, #a3a3a3));
+    background: linear-gradient(90deg, var(--neutral-500, transparent), var(--neutral-400, transparent));
   }
 
   @media (max-width: 48rem) {

@@ -35,24 +35,24 @@
 
     <section class="next-best-hero__insight" aria-label="Razón recomendada">
       <div class="next-best-hero__insight-header">
-        <span class="next-best-hero__insight-icon" aria-hidden="true">🧠</span>
+        <app-icon name="lightbulb" [size]="20" class="next-best-hero__insight-icon" aria-hidden="true" />
         <span class="next-best-hero__insight-title">Inteligencia de Negocio</span>
       </div>
       <p class="next-best-hero__insight-text">{{ actionData.action.reasoning }}</p>
 
       <div class="next-best-hero__metrics" *ngIf="hasContextMetrics()">
         <div class="next-best-hero__metric" *ngIf="actionData.context.daysWaiting">
-          <span class="next-best-hero__metric-icon" aria-hidden="true">📅</span>
+          <app-icon name="calendar" [size]="16" class="next-best-hero__metric-icon" aria-hidden="true" />
           <span class="next-best-hero__metric-value">{{ actionData.context.daysWaiting }} días</span>
           <span class="next-best-hero__metric-label">esperando</span>
         </div>
         <div class="next-best-hero__metric" *ngIf="actionData.context.amountInvolved">
-          <span class="next-best-hero__metric-icon" aria-hidden="true">💰</span>
+          <app-icon name="currency-dollar" [size]="16" class="next-best-hero__metric-icon" aria-hidden="true" />
           <span class="next-best-hero__metric-value">{{ formatCurrency(actionData.context.amountInvolved) }}</span>
           <span class="next-best-hero__metric-label">en juego</span>
         </div>
         <div class="next-best-hero__metric" *ngIf="actionData.context.expirationDate">
-          <span class="next-best-hero__metric-icon" aria-hidden="true">📆</span>
+          <app-icon name="calendar" [size]="16" class="next-best-hero__metric-icon" aria-hidden="true" />
           <span class="next-best-hero__metric-value">{{ formatDate(actionData.context.expirationDate) }}</span>
           <span class="next-best-hero__metric-label">vencimiento</span>
         </div>

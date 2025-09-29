@@ -10,7 +10,7 @@
   border-radius: var(--radius-lg, 12px);
   border: 1px dashed var(--color-primary-400, transparent);
   background: var(--color-primary-900, transparent);
-  color: var(--color-primary-200, #e2e8f0);
+  color: var(--color-primary-200, transparent);
 }
 
 .dev-kpi-card__item {
@@ -27,21 +27,21 @@
 .dev-kpi-card__value {
   font-size: var(--text-lg, 1.125rem);
   font-weight: var(--font-bold, 700);
-  color: var(--color-bg-primary, #ffffff);
+  color: var(--color-bg-primary, transparent);
 }
 
 @media (prefers-color-scheme: light) {
   .dev-kpi-card {
-    background: var(--surface-neutral-weak, transparent);
+    background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
     border-color: var(--color-border-secondary, transparent);
-    color: var(--color-text-primary, #080808);
+    color: var(--color-text-primary, transparent);
   }
 
   .dev-kpi-card__label {
-    color: var(--color-text-secondary, #737373);
+    color: var(--color-text-secondary, transparent);
   }
 
   .dev-kpi-card__value {
-    color: var(--color-text-primary, #080808);
+    color: var(--color-text-primary, transparent);
   }
 }

@@ -8,7 +8,7 @@
   &__card {
     padding: var(--space-24, 24px);
     border-radius: 16px;
-    background: var(--flat-surface-bg, #ffffff);
+    background: var(--flat-surface-bg, transparent);
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.08));
     border: 1px solid var(--neutral-300, transparent);
   }
@@ -17,7 +17,7 @@
     margin: 0 0 var(--space-12, 12px);
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--neutral-700, #525252);
+    color: var(--neutral-700, transparent);
   }
 
   &__dropzone-wrapper {
@@ -67,13 +67,13 @@
   &__dropzone-icon {
     width: 32px;
     height: 32px;
-    color: var(--neutral-500, #737373);
+    color: var(--neutral-500, transparent);
   }
 
   &__dropzone-text {
     margin: 0;
     font-size: 0.875rem;
-    color: var(--neutral-600, #737373);
+    color: var(--neutral-600, transparent);
   }
 
   &__status {
@@ -92,15 +92,15 @@
   }
 
   &__status-line--processing {
-    color: var(--accent-amber-600, #d97706);
+    color: var(--accent-amber-600, transparent);
   }
 
   &__status-line--validated {
-    color: var(--accent-green-600, #15803d);
+    color: var(--accent-green-600, transparent);
   }
 
   &__status-line--error {
-    color: var(--accent-red-500, #dc2626);
+    color: var(--accent-red-500, transparent);
   }
 
   &__status-dot {
@@ -112,15 +112,15 @@
   }
 
   &__status-dot--processing {
-    background: var(--accent-amber-500, #f59e0b);
+    background: var(--accent-amber-500, transparent);
   }
 
   &__status-dot--validated {
-    background: var(--accent-green-400, #34d399);
+    background: var(--accent-green-400, transparent);
   }
 
   &__status-dot--error {
-    background: var(--accent-red-400, #f87171);
+    background: var(--accent-red-400, transparent);
   }
 
   &__loading {
@@ -183,13 +183,13 @@
     margin: 0;
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--neutral-700, #525252);
+    color: var(--neutral-700, transparent);
   }
 
   &__item-type {
     margin: 0;
     font-size: 0.75rem;
-    color: var(--neutral-500, #737373);
+    color: var(--neutral-500, transparent);
   }
 
   &__item-status {
@@ -206,17 +206,17 @@
 
   &__item-status--validated {
     background: var(--accent-green-500, transparent);
-    color: var(--accent-green-700, #166534);
+    color: var(--accent-green-700, transparent);
   }
 
   &__item-status--pending {
     background: var(--accent-amber-500, transparent);
-    color: var(--accent-amber-700, #9a3412);
+    color: var(--accent-amber-700, transparent);
   }
 
   &__item-status--error {
     background: var(--accent-red-500, transparent);
-    color: var(--accent-red-700, #b91c1c);
+    color: var(--accent-red-700, transparent);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -226,7 +226,7 @@
     }
 
     &__title {
-      color: var(--neutral-100, #f5f5f5);
+      color: var(--neutral-100, transparent);
     }
 
     &__dropzone {
@@ -241,7 +241,7 @@
 
     &__dropzone-icon,
     &__dropzone-text {
-      color: var(--accent-blue-200, #bfdbfe);
+      color: var(--accent-blue-200, transparent);
     }
 
     &__loading-line {
@@ -254,11 +254,11 @@
     }
 
     &__item-name {
-      color: var(--neutral-100, #f5f5f5);
+      color: var(--neutral-100, transparent);
     }
 
     &__item-type {
-      color: var(--neutral-300, #d4d4d4);
+      color: var(--neutral-300, transparent);
     }
   }
 }

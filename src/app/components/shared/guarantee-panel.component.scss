@@ -9,7 +9,7 @@
   border: 1px solid rgba(82, 82, 82, 0.55);
   border-radius: 16px;
   background: rgba(12, 14, 18, 0.92);
-  color: var(--openai-white, #ffffff);
+  color: var(--openai-white, transparent);
 
   &::before {
     content: '';
@@ -39,7 +39,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-info, #3b82f6);
+    color: var(--color-info, transparent);
   }
 
   &__lead-icon-symbol {
@@ -206,7 +206,7 @@
     cursor: pointer;
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--openai-white, #ffffff);
+    color: var(--openai-white, transparent);
     transition: background-color 0.2s ease, color 0.2s ease;
 
     &--upload {
@@ -443,11 +443,11 @@
   }
 
   &__primary-action {
-    background: var(--color-bg-info, #3b82f6);
-    color: var(--color-text-primary-inverted, #ffffff);
+    background: var(--color-bg-info, transparent);
+    color: var(--color-text-primary-inverted, transparent);
 
     &:hover:not(:disabled) {
-      background: var(--color-bg-info-hover, #2563eb);
+      background: var(--color-bg-info-hover, transparent);
     }
 
     &:disabled {
@@ -461,7 +461,7 @@
     align-items: center;
     gap: 8px;
     background: rgba(148, 163, 184, 0.16);
-    color: var(--openai-white, #ffffff);
+    color: var(--openai-white, transparent);
 
     &:hover {
       background: rgba(148, 163, 184, 0.24);

@@ -709,8 +709,8 @@
   width: var(--icon-size);
   height: var(--icon-size);
   display: inline-block;
-  color: var(--color-warning, #f59e0b);
-  --icon-color: var(--color-warning, #f59e0b);
+  color: var(--color-warning, transparent);
+  --icon-color: var(--color-warning, transparent);
 }
 
 /* WhatsApp Icon */
@@ -719,8 +719,8 @@
   width: var(--icon-size);
   height: var(--icon-size);
   display: inline-block;
-  color: var(--color-success, #10b981);
-  --icon-color: var(--color-success, #10b981);
+  color: var(--color-success, transparent);
+  --icon-color: var(--color-success, transparent);
 }
 
 /* Section Title Icons */
@@ -730,8 +730,8 @@
   height: var(--icon-size);
   display: inline-block;
   margin-right: var(--space-2, 8px);
-  color: var(--color-text-secondary, #6b7280);
-  --icon-color: var(--color-text-secondary, #6b7280);
+  color: var(--color-text-secondary, transparent);
+  --icon-color: var(--color-text-secondary, transparent);
   vertical-align: middle;
 }
 
@@ -754,8 +754,8 @@
   height: var(--icon-size);
   display: inline-block;
   margin-right: var(--space-2, 8px);
-  color: var(--color-accent, #3b82f6);
-  --icon-color: var(--color-accent, #3b82f6);
+  color: var(--color-accent, transparent);
+  --icon-color: var(--color-accent, transparent);
   vertical-align: middle;
 }
 
@@ -764,8 +764,8 @@
   width: var(--icon-size);
   height: var(--icon-size);
   display: inline-block;
-  color: var(--color-text-secondary, #6b7280);
-  --icon-color: var(--color-text-secondary, #6b7280);
+  color: var(--color-text-secondary, transparent);
+  --icon-color: var(--color-text-secondary, transparent);
 }
 
 .helper-section__icon--inline {
@@ -774,8 +774,8 @@
   height: var(--icon-size);
   display: inline-block;
   margin-right: var(--space-2, 8px);
-  color: var(--color-text-secondary, #6b7280);
-  --icon-color: var(--color-text-secondary, #6b7280);
+  color: var(--color-text-secondary, transparent);
+  --icon-color: var(--color-text-secondary, transparent);
   vertical-align: middle;
 }
 
@@ -790,57 +790,57 @@
 }
 
 .market-title__icon--yellow {
-  color: var(--color-warning, #f59e0b);
-  --icon-color: var(--color-warning, #f59e0b);
+  color: var(--color-warning, transparent);
+  --icon-color: var(--color-warning, transparent);
 
   @media (prefers-color-scheme: dark) {
-    color: var(--color-warning-dark, #fbbf24);
-    --icon-color: var(--color-warning-dark, #fbbf24);
+    color: var(--color-warning-dark, transparent);
+    --icon-color: var(--color-warning-dark, transparent);
   }
 }
 
 .market-title__icon--blue {
-  color: var(--color-info, #3b82f6);
-  --icon-color: var(--color-info, #3b82f6);
+  color: var(--color-info, transparent);
+  --icon-color: var(--color-info, transparent);
 
   @media (prefers-color-scheme: dark) {
-    color: var(--color-info-dark, #60a5fa);
-    --icon-color: var(--color-info-dark, #60a5fa);
+    color: var(--color-info-dark, transparent);
+    --icon-color: var(--color-info-dark, transparent);
   }
 }
 
 .market-title__icon--red {
-  color: var(--color-error, #ef4444);
-  --icon-color: var(--color-error, #ef4444);
+  color: var(--color-error, transparent);
+  --icon-color: var(--color-error, transparent);
 
   @media (prefers-color-scheme: dark) {
-    color: var(--color-error-dark, #f87171);
-    --icon-color: var(--color-error-dark, #f87171);
+    color: var(--color-error-dark, transparent);
+    --icon-color: var(--color-error-dark, transparent);
   }
 }
 
 /* Dark Mode Support for All Icons */
 @media (prefers-color-scheme: dark) {
   .banner-icon__svg {
-    color: var(--color-warning-dark, #fbbf24);
-    --icon-color: var(--color-warning-dark, #fbbf24);
+    color: var(--color-warning-dark, transparent);
+    --icon-color: var(--color-warning-dark, transparent);
   }
 
   .whatsapp-icon__svg {
-    color: var(--color-success-dark, #34d399);
-    --icon-color: var(--color-success-dark, #34d399);
+    color: var(--color-success-dark, transparent);
+    --icon-color: var(--color-success-dark, transparent);
   }
 
   .section-title__icon,
   .helper-section__icon,
   .helper-section__icon--inline {
-    color: var(--color-text-secondary-dark, #9ca3af);
-    --icon-color: var(--color-text-secondary-dark, #9ca3af);
+    color: var(--color-text-secondary-dark, transparent);
+    --icon-color: var(--color-text-secondary-dark, transparent);
   }
 
   .helper-title__icon {
-    color: var(--color-accent-dark, #60a5fa);
-    --icon-color: var(--color-accent-dark, #60a5fa);
+    color: var(--color-accent-dark, transparent);
+    --icon-color: var(--color-accent-dark, transparent);
   }
 }
 

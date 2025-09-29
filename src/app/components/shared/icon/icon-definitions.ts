@@ -62,6 +62,7 @@ export type IconName =
   | 'stop'
   | 'phone'
   | 'chevron-down'
+  | 'chevron-up'
   | 'arrow-right'
   | 'wifi'
   | 'chevrons-vertical'
@@ -418,6 +419,10 @@ const ICON_LIBRARY: Record<IconName, IconDefinition> = {
   'chevron-down': {
     viewBox: '0 0 24 24',
     shapes: [{ type: 'polyline', points: '6 9 12 15 18 9', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+  'chevron-up': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'polyline', points: '18 15 12 9 6 15', strokeLinecap: 'round', strokeLinejoin: 'round' }]
   },
   'arrow-right': {
     viewBox: '0 0 24 24',
