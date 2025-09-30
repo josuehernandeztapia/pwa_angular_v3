@@ -20,7 +20,7 @@ This checklist consolidates the flows that still lack automated coverage. Use it
 ## 4. Offline Queue & Context Panel
 - Offline queue buttons in `context-panel` currently clear only local memory and analytics events (`src/app/components/shared/context-panel/context-panel.component.ts`).
   - **Status:** unit specs now cover flush/clear actions and market policy reload (`context-panel.component.spec.ts`).
-  - **Pending tests:** E2E banner visibility + replay flow across Cotizador, Protección y Claims once server-side persistence is defined (plan en `docs/offline-e2e-plan.md`).
+  - **Pending tests:** E2E banner + indicador visibility + replay flow across Cotizador, Protección y Claims once server-side persistence is defined (plan en `docs/offline-e2e-plan.md`).
   - **Blocker:** server-side persistence contract still under definition.
 
 ## 5. Analytics Service & Protection Workflow
@@ -39,7 +39,7 @@ This checklist consolidates the flows that still lack automated coverage. Use it
   - **Pending tests:** `ContractGenerationService` integration, guard coverage, and E2E signatures once backend contracts ready.
 
 ## 8. Offline/E2E Coverage
-- No automated E2E validating the offline banner + queue flush across key flows (`src/app/components/shared/offline-queue-banner/`).
+- No automated E2E validating banner + indicador offline con flush de cola (`src/app/components/shared/offline-queue-banner/`, `src/app/components/shared/offline-indicator/`).
   - **Pending tests:** Cypress/Playwright smoke covering: trigger offline, enqueue items, reconnect, verify replay and analytics events.
 
 ## 9. Telemetry & Audit

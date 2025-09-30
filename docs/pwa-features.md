@@ -7,8 +7,8 @@
 
 ## 🔍 Estado actual (as-is)
 - `PwaInstallService` captura `beforeinstallprompt`, expone señales `canInstall/isInstalled` y usa localStorage. No hay temporizador ni eventos a `AnalyticsService`.
-- El único indicador visible es `<app-offline-queue-banner>`; no existen los “floating pill” ni dashboard de red.
-- `OfflineService` almacena peticiones en IndexedDB y hace flush al reconectar, pero solo registra `analytics.track('offline_queue_flush')` desde el banner de Documentos/Postventa.
+- Los indicadores de red combinan `<app-offline-queue-banner>` (contextual) y el nuevo `<app-offline-indicator>` flotante con pill de estado y métricas de cola.
+- `OfflineService` almacena peticiones en IndexedDB y hace flush al reconectar; el banner y el indicador levantan `analytics.track('offline_queue_flush')`, falta instrumentar detalles de métricas.
 
 ## ✅ Lo que sí está disponible
 - Banner reutilizable `app-offline-queue-banner` para Documentos, Cotizador, Postventa y Claims.
@@ -17,6 +17,6 @@
 
 ## 📌 Próximos pasos
 1. Añadir temporizador/analytics al prompt de instalación.
-2. Crear componente indicador (pill) reusable con estado de red y cola.
+2. Completar panel QA/métricas para el indicador offline y extenderlo a módulos críticos.
 3. Mostrar métricas de flush/error en un panel QA o sección de configuración.
 4. Incluir estos cambios en los docs y pruebas E2E correspondientes.

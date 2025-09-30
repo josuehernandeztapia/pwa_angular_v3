@@ -13,4 +13,4 @@
 - BFF endpoints (PostSale/Claims/Admin, PUT `/config/market-policies`) required for contract/E2E validation (coordinar según `docs/backend-coordination.md`).
 - Market policy diff/confirmación UI lista; falta persistencia/auditoría backend.
 - Contract generation component/service integration tests waiting for real backend.
-- Offline/E2E smokes for banner/queue and telemetry/audit trails once persistence is defined.
+- Offline/E2E smokes for banner + indicador y telemetry/audit trails once persistence is defined (unit coverage vive en `src/app/components/shared/offline-indicator/offline-indicator.component.spec.ts`).
