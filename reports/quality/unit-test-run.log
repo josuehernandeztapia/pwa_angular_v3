@@ -1,0 +1,1081 @@
+
+> conductores-pwa@0.0.0 test:unit
+> CHROME_BIN=$(node scripts/chrome-bin.js || echo '') ng test --watch=false --browsers=ChromeHeadless
+
+30 09 2025 23:07:06.068:INFO [karma-server]: Karma v6.4.4 server started at http://localhost:9876/
+30 09 2025 23:07:06.079:INFO [launcher]: Launching browsers ChromeHeadless with concurrency unlimited
+30 09 2025 23:07:06.098:INFO [launcher]: Starting browser ChromeHeadless
+30 09 2025 23:07:08.353:INFO [Chrome Headless 139.0.0.0 (Linux 0.0.0)]: Connected on socket nLuA1ZzMnefDD8X9AAAB with id 8017192
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 0 of 1080[32m SUCCESS[39m (0 secs / 0 secs)
+[1A[2KWARN: [36m'Spec 'ProtectionEngineService Comprehensive Scenario Generation Testing Edge Cases and Boundary Conditions should handle zero monthly payment' has no expectations.'[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 0 of 1080[32m SUCCESS[39m (0 secs / 0 secs)
+WARN: 'Spec 'ProtectionEngineService Comprehensive Scenario Generation Testing Edge Cases and Boundary Conditions should handle zero monthly payment' has no expectations.'
+[1A[2KWARN: [36m'Spec 'ProtectionEngineService Comprehensive Scenario Generation Testing Edge Cases and Boundary Conditions should handle zero remainderAmount gracefully' has no expectations.'[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 0 of 1080[32m SUCCESS[39m (0 secs / 0 secs)
+WARN: 'Spec 'ProtectionEngineService Comprehensive Scenario Generation Testing Edge Cases and Boundary Conditions should handle zero remainderAmount gracefully' has no expectations.'
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 1 of 1080[32m SUCCESS[39m (0 secs / 0.072 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 2 of 1080[32m SUCCESS[39m (0 secs / 0.095 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 3 of 1080[32m SUCCESS[39m (0 secs / 0.1 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 4 of 1080[32m SUCCESS[39m (0 secs / 0.128 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 5 of 1080[32m SUCCESS[39m (0 secs / 0.184 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 6 of 1080[32m SUCCESS[39m (0 secs / 0.196 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 7 of 1080[32m SUCCESS[39m (0 secs / 0.204 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 8 of 1080[32m SUCCESS[39m (0 secs / 0.217 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 9 of 1080[32m SUCCESS[39m (0 secs / 0.326 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 10 of 1080[32m SUCCESS[39m (0 secs / 1.836 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 11 of 1080[32m SUCCESS[39m (0 secs / 3.345 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 12 of 1080[32m SUCCESS[39m (0 secs / 3.361 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 13 of 1080[32m SUCCESS[39m (0 secs / 3.369 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 14 of 1080[32m SUCCESS[39m (0 secs / 3.377 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 15 of 1080[32m SUCCESS[39m (0 secs / 3.384 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 16 of 1080[32m SUCCESS[39m (0 secs / 3.392 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 17 of 1080[32m SUCCESS[39m (0 secs / 3.399 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 18 of 1080[32m SUCCESS[39m (0 secs / 3.405 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 19 of 1080[32m SUCCESS[39m (0 secs / 3.508 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 20 of 1080[32m SUCCESS[39m (0 secs / 5.017 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 21 of 1080[32m SUCCESS[39m (0 secs / 5.124 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 22 of 1080[32m SUCCESS[39m (0 secs / 5.132 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 23 of 1080[32m SUCCESS[39m (0 secs / 5.141 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 24 of 1080[32m SUCCESS[39m (0 secs / 5.148 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 25 of 1080[32m SUCCESS[39m (0 secs / 5.151 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 26 of 1080[32m SUCCESS[39m (0 secs / 5.153 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 27 of 1080[32m SUCCESS[39m (0 secs / 5.155 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 28 of 1080[32m SUCCESS[39m (0 secs / 5.164 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 29 of 1080[32m SUCCESS[39m (0 secs / 5.171 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 30 of 1080[32m SUCCESS[39m (0 secs / 5.174 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 31 of 1080[32m SUCCESS[39m (0 secs / 5.176 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 32 of 1080[32m SUCCESS[39m (0 secs / 5.178 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 33 of 1080[32m SUCCESS[39m (0 secs / 5.181 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 34 of 1080[32m SUCCESS[39m (0 secs / 5.183 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 35 of 1080[32m SUCCESS[39m (0 secs / 5.186 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 36 of 1080[32m SUCCESS[39m (0 secs / 5.189 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 37 of 1080[32m SUCCESS[39m (0 secs / 5.192 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 38 of 1080[32m SUCCESS[39m (0 secs / 5.193 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 39 of 1080[32m SUCCESS[39m (0 secs / 5.198 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 40 of 1080[32m SUCCESS[39m (0 secs / 5.201 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 41 of 1080[32m SUCCESS[39m (0 secs / 5.205 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 42 of 1080[32m SUCCESS[39m (0 secs / 5.207 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 43 of 1080[32m SUCCESS[39m (0 secs / 5.209 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 44 of 1080[32m SUCCESS[39m (0 secs / 5.213 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 45 of 1080[32m SUCCESS[39m (0 secs / 5.215 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 46 of 1080[32m SUCCESS[39m (0 secs / 5.218 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 47 of 1080[32m SUCCESS[39m (0 secs / 5.321 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 48 of 1080[32m SUCCESS[39m (0 secs / 5.327 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 49 of 1080[32m SUCCESS[39m (0 secs / 5.338 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 50 of 1080[32m SUCCESS[39m (0 secs / 5.345 secs)
+[1A[2KINFO: [36m'[monitoring:info]', Object{service: 'audit', operation: 'offline_queue_flush', message: 'Audit event offline_queue_flush', metadata: Object{event: 'offline_queue_flush', performedBy: 'user-123'}}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 50 of 1080[32m SUCCESS[39m (0 secs / 5.345 secs)
+INFO: '[monitoring:info]', Object{service: 'audit', operation: 'offline_queue_flush', message: 'Audit event offline_queue_flush', metadata: Object{event: 'offline_queue_flush', performedBy: 'user-123'}}
+[1A[2KWARN: [36m'[monitoring:warn]', Object{service: 'audit', operation: 'offline_queue_flush', message: 'Failed to persist audit event', metadata: Object{error: Error: network error
+Error: network error
+    at errorFactory (http://localhost:9876/_karma_webpack_/webpack:/src/app/services/monitoring.service.spec.ts:41:54)
+    at Observable._subscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at Observable._trySubscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at cb (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:31:30)
+    at errorContext (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at Observable.subscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:22:21)
+    at MonitoringService.auditEvent (http://localhost:9876/_karma_webpack_/webpack:/src/app/services/monitoring.service.ts:209:10)
+    at UserContext.apply (http://localhost:9876/_karma_webpack_/webpack:/src/app/services/monitoring.service.spec.ts:44:13)
+    at _ZoneDelegate.invoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:369:28)
+    at ProxyZoneSpec.onInvoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:2081:39), metadata: Object{performedBy: ...}}}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 50 of 1080[32m SUCCESS[39m (0 secs / 5.345 secs)
+WARN: '[monitoring:warn]', Object{service: 'audit', operation: 'offline_queue_flush', message: 'Failed to persist audit event', metadata: Object{error: Error: network error
+Error: network error
+    at errorFactory (http://localhost:9876/_karma_webpack_/webpack:/src/app/services/monitoring.service.spec.ts:41:54)
+    at Observable._subscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at Observable._trySubscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at cb (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:31:30)
+    at errorContext (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at Observable.subscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:22:21)
+    at MonitoringService.auditEvent (http://localhost:9876/_karma_webpack_/webpack:/src/app/services/monitoring.service.ts:209:10)
+    at UserContext.apply (http://localhost:9876/_karma_webpack_/webpack:/src/app/services/monitoring.service.spec.ts:44:13)
+    at _ZoneDelegate.invoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:369:28)
+    at ProxyZoneSpec.onInvoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:2081:39), metadata: Object{performedBy: ...}}}
+[1A[2KINFO: [36m'[monitoring:info]', Object{service: 'audit', operation: 'qa_policy_saved', message: 'Audit event qa_policy_saved', metadata: Object{event: 'qa_policy_saved', performedBy: 'user-123'}}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 50 of 1080[32m SUCCESS[39m (0 secs / 5.345 secs)
+INFO: '[monitoring:info]', Object{service: 'audit', operation: 'qa_policy_saved', message: 'Audit event qa_policy_saved', metadata: Object{event: 'qa_policy_saved', performedBy: 'user-123'}}
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 51 of 1080[32m SUCCESS[39m (0 secs / 5.359 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 52 of 1080[32m SUCCESS[39m (0 secs / 5.366 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 53 of 1080[32m SUCCESS[39m (0 secs / 5.369 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 54 of 1080[32m SUCCESS[39m (0 secs / 5.372 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 55 of 1080[32m SUCCESS[39m (0 secs / 5.378 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 56 of 1080[32m SUCCESS[39m (0 secs / 5.384 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 57 of 1080[32m SUCCESS[39m (0 secs / 5.387 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 58 of 1080[32m SUCCESS[39m (0 secs / 5.393 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 59 of 1080[32m SUCCESS[39m (0 secs / 5.399 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 60 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.404 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 61 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.413 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 62 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.421 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 63 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.433 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 64 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.436 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 65 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.445 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 66 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.448 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 67 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.458 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 68 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.463 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 69 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.494 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 70 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.505 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 71 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.51 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 72 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.515 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 73 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.518 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 74 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.521 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 75 of 1080 (skipped 1)[32m SUCCESS[39m (0 secs / 5.527 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) UsuariosService should create usuario FAILED[39m
+	Error: Expected one matching request for criteria "Match URL: http://localhost:3000/api/admin/usuarios", found none. Requests received are: POST /bff/users.
+	    at HttpClientTestingBackend.expectOne (node_modules/@angular/common/fesm2022/http/testing.mjs:270:19)
+	    at UserContext.apply (src/app/services/usuarios.service.spec.ts:59:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+	    at ZoneImpl.run (node_modules/zone.js/fesm2015/zone.js:111:43)
+	    at runInTestZone (node_modules/zone.js/fesm2015/zone-testing.js:216:38)
+	    at UserContext.<anonymous> (node_modules/zone.js/fesm2015/zone-testing.js:234:32)
+	    at <Jasmine>
+	Error: Expected no open requests, found 1: POST /bff/users
+	    at HttpClientTestingBackend.verify (node_modules/@angular/common/fesm2022/http/testing.mjs:298:19)
+	    at UserContext.apply (src/app/services/usuarios.service.spec.ts:30:14)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+	    at ZoneImpl.run (node_modules/zone.js/fesm2015/zone.js:111:43)
+	    at runInTestZone (node_modules/zone.js/fesm2015/zone-testing.js:216:38)
+	    at UserContext.<anonymous> (node_modules/zone.js/fesm2015/zone-testing.js:234:32)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 76 of 1080[31m (1 FAILED)[39m (skipped 1) (0 secs / 5.535 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) UsuariosService should toggle status FAILED[39m
+	Error: Expected one matching request for criteria "Match URL: http://localhost:3000/api/admin/usuarios/1/status", found none. Requests received are: PATCH /bff/users/1/status.
+	    at HttpClientTestingBackend.expectOne (node_modules/@angular/common/fesm2022/http/testing.mjs:270:19)
+	    at UserContext.apply (src/app/services/usuarios.service.spec.ts:85:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+	    at ZoneImpl.run (node_modules/zone.js/fesm2015/zone.js:111:43)
+	    at runInTestZone (node_modules/zone.js/fesm2015/zone-testing.js:216:38)
+	    at UserContext.<anonymous> (node_modules/zone.js/fesm2015/zone-testing.js:234:32)
+	    at <Jasmine>
+	Error: Expected no open requests, found 1: PATCH /bff/users/1/status
+	    at HttpClientTestingBackend.verify (node_modules/@angular/common/fesm2022/http/testing.mjs:298:19)
+	    at UserContext.apply (src/app/services/usuarios.service.spec.ts:30:14)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+	    at ZoneImpl.run (node_modules/zone.js/fesm2015/zone.js:111:43)
+	    at runInTestZone (node_modules/zone.js/fesm2015/zone-testing.js:216:38)
+	    at UserContext.<anonymous> (node_modules/zone.js/fesm2015/zone-testing.js:234:32)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 77 of 1080[31m (2 FAILED)[39m (skipped 1) (0 secs / 5.539 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) UsuariosService should update usuario FAILED[39m
+	Error: Expected one matching request for criteria "Match URL: http://localhost:3000/api/admin/usuarios/1", found none. Requests received are: PUT /bff/users/1.
+	    at HttpClientTestingBackend.expectOne (node_modules/@angular/common/fesm2022/http/testing.mjs:270:19)
+	    at UserContext.apply (src/app/services/usuarios.service.spec.ts:73:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+	    at ZoneImpl.run (node_modules/zone.js/fesm2015/zone.js:111:43)
+	    at runInTestZone (node_modules/zone.js/fesm2015/zone-testing.js:216:38)
+	    at UserContext.<anonymous> (node_modules/zone.js/fesm2015/zone-testing.js:234:32)
+	    at <Jasmine>
+	Error: Expected no open requests, found 1: PUT /bff/users/1
+	    at HttpClientTestingBackend.verify (node_modules/@angular/common/fesm2022/http/testing.mjs:298:19)
+	    at UserContext.apply (src/app/services/usuarios.service.spec.ts:30:14)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+	    at ZoneImpl.run (node_modules/zone.js/fesm2015/zone.js:111:43)
+	    at runInTestZone (node_modules/zone.js/fesm2015/zone-testing.js:216:38)
+	    at UserContext.<anonymous> (node_modules/zone.js/fesm2015/zone-testing.js:234:32)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 78 of 1080[31m (3 FAILED)[39m (skipped 1) (0 secs / 5.542 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) UsuariosService should list usuarios FAILED[39m
+	Error: Expected one matching request for criteria "Match URL: http://localhost:3000/api/admin/usuarios", found none. Requests received are: GET /bff/users.
+	    at HttpClientTestingBackend.expectOne (node_modules/@angular/common/fesm2022/http/testing.mjs:270:19)
+	    at UserContext.apply (src/app/services/usuarios.service.spec.ts:45:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+	    at ZoneImpl.run (node_modules/zone.js/fesm2015/zone.js:111:43)
+	    at runInTestZone (node_modules/zone.js/fesm2015/zone-testing.js:216:38)
+	    at UserContext.<anonymous> (node_modules/zone.js/fesm2015/zone-testing.js:234:32)
+	    at <Jasmine>
+	Error: Expected no open requests, found 1: GET /bff/users
+	    at HttpClientTestingBackend.verify (node_modules/@angular/common/fesm2022/http/testing.mjs:298:19)
+	    at UserContext.apply (src/app/services/usuarios.service.spec.ts:30:14)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+	    at ZoneImpl.run (node_modules/zone.js/fesm2015/zone.js:111:43)
+	    at runInTestZone (node_modules/zone.js/fesm2015/zone-testing.js:216:38)
+	    at UserContext.<anonymous> (node_modules/zone.js/fesm2015/zone-testing.js:234:32)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 79 of 1080[31m (4 FAILED)[39m (skipped 1) (0 secs / 5.553 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 80 of 1080[31m (4 FAILED)[39m (skipped 1) (0 secs / 5.558 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) ContractValidGuard allows navigation when contract context is valid FAILED[39m
+	TypeError: this.flowContext.saveContext is not a function
+	    at ContractValidGuard.persistClientContext (src/app/guards/contract-valid.guard.ts:95:22)
+	    at ContractValidGuard.canActivate (src/app/guards/contract-valid.guard.ts:78:10)
+	    at UserContext.apply (src/app/guards/contract-valid.guard.spec.ts:83:27)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+	    at ZoneImpl.run (node_modules/zone.js/fesm2015/zone.js:111:43)
+	    at runInTestZone (node_modules/zone.js/fesm2015/zone-testing.js:216:38)
+	    at UserContext.<anonymous> (node_modules/zone.js/fesm2015/zone-testing.js:234:32)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 81 of 1080[31m (5 FAILED)[39m (skipped 1) (0 secs / 5.562 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 82 of 1080[31m (5 FAILED)[39m (skipped 1) (0 secs / 5.566 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 83 of 1080[31m (5 FAILED)[39m (skipped 1) (0 secs / 5.568 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 84 of 1080[31m (5 FAILED)[39m (skipped 1) (0 secs / 6.172 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 85 of 1080[31m (5 FAILED)[39m (skipped 1) (0 secs / 6.682 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 86 of 1080[31m (5 FAILED)[39m (skipped 1) (0 secs / 6.684 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 87 of 1080[31m (5 FAILED)[39m (skipped 1) (0 secs / 6.692 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 88 of 1080[31m (5 FAILED)[39m (skipped 1) (0 secs / 6.699 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocsCompletedGuard enforceDocumentClearance navigates when documents are incomplete FAILED[39m
+	TypeError: this.marketPolicy.getIncomeThreshold is not a function
+	    at DocsCompletedGuard.extractIncomeThreshold (src/app/guards/docs-completed.guard.ts:208:37)
+	    at DocsCompletedGuard.requiresIncomeDocument (src/app/guards/docs-completed.guard.ts:149:28)
+	    at DocsCompletedGuard.hasDocumentClearance (src/app/guards/docs-completed.guard.ts:115:49)
+	    at DocsCompletedGuard.hasClearance (src/app/guards/docs-completed.guard.ts:77:14)
+	    at DocsCompletedGuard.evaluateAndHandle (src/app/guards/docs-completed.guard.ts:61:14)
+	    at DocsCompletedGuard.enforceDocumentClearance (src/app/guards/docs-completed.guard.ts:56:25)
+	    at UserContext.apply (src/app/guards/docs-completed.guard.spec.ts:119:27)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 89 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 6.711 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 90 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 6.965 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 91 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 6.978 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 92 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 8.726 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 93 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 8.757 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 94 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 8.768 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 95 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 8.778 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 96 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 8.787 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 97 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 8.958 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 98 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 9.108 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 99 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 9.136 secs)
+[1A[2KWARN: [36m'Spec 'LoginComponent Accessibility Tests Form Accessibility should provide accessible error messages' has no expectations.'[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 99 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 9.136 secs)
+WARN: 'Spec 'LoginComponent Accessibility Tests Form Accessibility should provide accessible error messages' has no expectations.'
+[1A[2KWARN: [36m'Spec 'LoginComponent Accessibility Tests Visual and Interaction Accessibility should not rely solely on color for form validation' has no expectations.'[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 99 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 9.136 secs)
+WARN: 'Spec 'LoginComponent Accessibility Tests Visual and Interaction Accessibility should not rely solely on color for form validation' has no expectations.'
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 100 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 9.169 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 101 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 9.189 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 102 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 9.21 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 103 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 9.337 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 104 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 9.459 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 105 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.072 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 106 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.101 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 107 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.142 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 108 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.153 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 109 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.265 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 110 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.279 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 111 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.293 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 112 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.306 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 113 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.388 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 114 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.411 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 115 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.425 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 116 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.434 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 117 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.457 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 118 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.484 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 119 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.503 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 120 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.517 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 121 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.537 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 122 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.555 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 123 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.578 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 124 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.599 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 125 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.624 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 126 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.844 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 127 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.893 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 128 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.934 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 129 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 10.981 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 130 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.028 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 131 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.086 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 132 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.141 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 133 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.204 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 134 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.264 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 135 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.335 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 136 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.39 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 137 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.438 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 138 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.492 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 139 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.532 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 140 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.573 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 141 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.611 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 142 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.615 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 143 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.618 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 144 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.62 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 145 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.622 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 146 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.624 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 147 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.632 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 148 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.634 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 149 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.637 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 150 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.639 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 151 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.641 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 152 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.643 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 153 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.644 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 154 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.646 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 155 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.648 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 156 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.65 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 157 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.658 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 158 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.664 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 159 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.666 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 160 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.668 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 161 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.673 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 162 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.679 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 163 of 1080[31m (6 FAILED)[39m (skipped 1) (0 secs / 11.682 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) NavigationService Quick Actions should execute quick action with route FAILED[39m
+	Expected spy navigateTo to have been called with:
+	  [ '/nueva-oportunidad' ]
+	but actual calls were:
+	  [ '/nueva-oportunidad', undefined ].
+	
+	Call 0:
+	  Expected $.length = 2 to equal 1.
+	  Unexpected $[1] = undefined in array.
+	Error: Expected spy navigateTo to have been called with:
+	  [ '/nueva-oportunidad' ]
+	but actual calls were:
+	  [ '/nueva-oportunidad', undefined ].
+	Call 0:
+	  Expected $.length = 2 to equal 1.
+	  Unexpected $[1] = undefined in array.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/services/navigation.service.spec.ts:307:34)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 164 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.694 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 165 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.696 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 166 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.698 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 167 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.7 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 168 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.701 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 169 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.702 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 170 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.704 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 171 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.705 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 172 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.706 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 173 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.708 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 174 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.71 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 175 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.712 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 176 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.714 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 177 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.716 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 178 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.723 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 179 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.73 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 180 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.736 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 181 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.741 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 182 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.749 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 183 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.752 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 184 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.754 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 185 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.756 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 186 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.762 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 187 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.767 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 188 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.774 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 189 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.78 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 190 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.787 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 191 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.795 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 192 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.797 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 193 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.81 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 194 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.813 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 195 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.827 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 196 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.833 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 197 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.84 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 198 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.848 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 199 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.855 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 200 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.869 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 201 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.876 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 202 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.881 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 203 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.884 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 204 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.934 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 205 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.942 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 206 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.949 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 207 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.955 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 208 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 11.972 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 209 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 12.219 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 210 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 12.288 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 211 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 12.349 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 212 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 12.386 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 213 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 12.476 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 214 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 12.54 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 215 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 12.567 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 216 of 1080[31m (7 FAILED)[39m (skipped 1) (0 secs / 12.595 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentsPhaseComponent should prevent submission when form is invalid FAILED[39m
+	Expected spy log to have been called with:
+	  [ ' Cannot complete documents - validation failed' ]
+	but actual calls were:
+	  [ 'Cannot complete documents - validation failed' ].
+	
+	Call 0:
+	  Expected $[0] = 'Cannot complete documents - validation failed' to equal ' Cannot complete documents - validation failed'.
+	Error: Expected spy log to have been called with:
+	  [ ' Cannot complete documents - validation failed' ]
+	but actual calls were:
+	  [ 'Cannot complete documents - validation failed' ].
+	Call 0:
+	  Expected $[0] = 'Cannot complete documents - validation failed' to equal ' Cannot complete documents - validation failed'.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/components/post-sales/documents-phase.component.spec.ts:172:25)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 217 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 12.624 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 218 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 12.709 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 219 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 12.798 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 220 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 13.427 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 221 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 13.472 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 222 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 13.973 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 223 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 13.981 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 224 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 13.987 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 225 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 13.99 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 226 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.008 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 227 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.015 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 228 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.028 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 229 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.042 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 230 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.049 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 231 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.064 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 232 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.075 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 233 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.082 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 234 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.085 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 235 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.095 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 236 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.102 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 237 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.105 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 238 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.107 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 239 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.109 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 240 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.117 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 241 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.123 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 242 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.131 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 243 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.134 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 244 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.141 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 245 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.157 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 246 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.16 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 247 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.167 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 248 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.17 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 249 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.173 secs)
+[1A[2KWARN: [36m'Spec 'OCRService Progress Messaging should handle unknown status messages' has no expectations.'[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 249 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.173 secs)
+WARN: 'Spec 'OCRService Progress Messaging should handle unknown status messages' has no expectations.'
+[1A[2KERROR: [36mError: OCR failed
+Error: OCR failed
+    at UserContext.<anonymous> (http://localhost:9876/_karma_webpack_/webpack:/src/app/services/ocr.service.spec.ts:165:68)
+    at Generator.next (<anonymous>)
+    at asyncGeneratorStep (http://localhost:9876/_karma_webpack_/webpack:/node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js:3:1)
+    at _next (http://localhost:9876/_karma_webpack_/webpack:/node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js:17:1)
+    at executor (http://localhost:9876/_karma_webpack_/webpack:/node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js:22:1)
+    at new ZoneAwarePromise (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:2702:25)
+    at UserContext.apply (http://localhost:9876/_karma_webpack_/webpack:/node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js:14:1)
+    at _ZoneDelegate.invoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:369:28)
+    at ProxyZoneSpec.onInvoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+    at _ZoneDelegate.invoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:368:34)[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 249 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.173 secs)
+ERROR: Error: OCR failed
+Error: OCR failed
+    at UserContext.<anonymous> (http://localhost:9876/_karma_webpack_/webpack:/src/app/services/ocr.service.spec.ts:165:68)
+    at Generator.next (<anonymous>)
+    at asyncGeneratorStep (http://localhost:9876/_karma_webpack_/webpack:/node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js:3:1)
+    at _next (http://localhost:9876/_karma_webpack_/webpack:/node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js:17:1)
+    at executor (http://localhost:9876/_karma_webpack_/webpack:/node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js:22:1)
+    at new ZoneAwarePromise (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:2702:25)
+    at UserContext.apply (http://localhost:9876/_karma_webpack_/webpack:/node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js:14:1)
+    at _ZoneDelegate.invoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:369:28)
+    at ProxyZoneSpec.onInvoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+    at _ZoneDelegate.invoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:368:34)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 250 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.18 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 251 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.187 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 252 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.201 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 253 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.209 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 254 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.213 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 255 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.226 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 256 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.267 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 257 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.374 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 258 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.384 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 259 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.386 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 260 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.393 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 261 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.41 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 262 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.424 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 263 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.446 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 264 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.458 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 265 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.47 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 266 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.478 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 267 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.48 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 268 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.483 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 269 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.485 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 270 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.491 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 271 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.498 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 272 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.5 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 273 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.506 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 274 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.508 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 275 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.514 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 276 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.528 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 277 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.537 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 278 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.555 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 279 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.573 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 280 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.595 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 281 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.607 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 282 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.621 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 283 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.63 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 284 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.646 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 285 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.666 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 286 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.68 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 287 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.705 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 288 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.726 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 289 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.735 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 290 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.749 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 291 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.751 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 292 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.753 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 293 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.759 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 294 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.76 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 295 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.765 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 296 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.772 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 297 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.778 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 298 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.784 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 299 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.786 secs)
+[1A[2KDEBUG: [36m'[analytics:event]', 'global_search_query', Object{query: 'Contrato', length: 8}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 299 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.786 secs)
+DEBUG: '[analytics:event]', 'global_search_query', Object{query: 'Contrato', length: 8}
+[1A[2KDEBUG: [36m'[analytics:event]', 'global_search_fallback', Object{query: 'Contrato', total: 2}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 299 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.786 secs)
+DEBUG: '[analytics:event]', 'global_search_fallback', Object{query: 'Contrato', total: 2}
+[1A[2KDEBUG: [36m'[analytics:event]', 'global_search_results', Object{query: 'Contrato', total: 2}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 299 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.786 secs)
+DEBUG: '[analytics:event]', 'global_search_results', Object{query: 'Contrato', total: 2}
+[1A[2KDEBUG: [36m'[analytics:event]', 'global_search_recent', Object{id: 'client-1', type: 'client'}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 299 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.786 secs)
+DEBUG: '[analytics:event]', 'global_search_recent', Object{id: 'client-1', type: 'client'}
+[1A[2KDEBUG: [36m'[analytics:event]', 'global_search_recent', Object{id: 'client-1', type: 'client'}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 299 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.786 secs)
+DEBUG: '[analytics:event]', 'global_search_recent', Object{id: 'client-1', type: 'client'}
+[1A[2KDEBUG: [36m'[analytics:event]', 'global_search_query', Object{query: 'AGS #1234', length: 9}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 299 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.786 secs)
+DEBUG: '[analytics:event]', 'global_search_query', Object{query: 'AGS #1234', length: 9}
+[1A[2KDEBUG: [36m'[analytics:event]', 'global_search_fallback', Object{query: 'AGS #1234', total: 1}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 299 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.786 secs)
+DEBUG: '[analytics:event]', 'global_search_fallback', Object{query: 'AGS #1234', total: 1}
+[1A[2KDEBUG: [36m'[analytics:event]', 'global_search_results', Object{query: 'AGS #1234', total: 1}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 299 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.786 secs)
+DEBUG: '[analytics:event]', 'global_search_results', Object{query: 'AGS #1234', total: 1}
+[1A[2KDEBUG: [36m'[analytics:event]', 'global_search_query', Object{query: 'Juan', length: 4}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 299 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.786 secs)
+DEBUG: '[analytics:event]', 'global_search_query', Object{query: 'Juan', length: 4}
+[1A[2KDEBUG: [36m'[analytics:event]', 'global_search_results', Object{query: 'Juan', total: 3}[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 299 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.786 secs)
+DEBUG: '[analytics:event]', 'global_search_results', Object{query: 'Juan', total: 3}
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 300 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.792 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 301 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.799 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 302 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.806 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 303 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 14.812 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 304 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 15.015 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 305 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 15.521 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 306 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 16.028 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 307 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 16.236 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 308 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 17.444 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 309 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 18.65 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 310 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 18.854 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 311 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 18.862 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 312 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 18.868 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 313 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 18.875 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 314 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 18.978 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 315 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 19.481 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 316 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 20.689 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 317 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 23.106 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 318 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 23.109 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 319 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 23.116 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 320 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 23.118 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 321 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 23.321 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 322 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 23.343 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 323 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 24.563 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 324 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 25.78 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 325 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 26.986 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 326 of 1080[31m (8 FAILED)[39m (skipped 1) (0 secs / 27.193 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) MockApiService Search and Analytics should perform global search with results structure FAILED[39m
+	TypeError: this.clientDataService.searchClients is not a function
+	    at MockApiService.globalSearch (src/app/services/mock-api.service.ts:365:39)
+	    at UserContext.apply (src/app/services/mock-api.service.spec.ts:389:15)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:369:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2081:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:368:34)
+	    at ZoneImpl.run (node_modules/zone.js/fesm2015/zone.js:111:43)
+	    at runInTestZone (node_modules/zone.js/fesm2015/zone-testing.js:213:38)
+	    at UserContext.<anonymous> (node_modules/zone.js/fesm2015/zone-testing.js:231:32)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 327 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 27.198 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 328 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 27.711 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 329 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 27.914 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 330 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 29.122 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 331 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 29.332 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 332 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 29.836 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 333 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 30.347 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 334 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 30.855 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 335 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 31.362 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 336 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 31.869 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 337 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 39.886 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 338 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 40.391 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 339 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 40.597 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 340 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 41.804 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 341 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 42.31 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 342 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 43.527 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 343 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 44.738 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 344 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 45.945 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 345 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 45.987 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 346 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 45.996 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 347 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.006 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 348 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.016 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 349 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.025 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 350 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.037 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 351 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.04 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 352 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.045 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 353 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.053 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 354 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.068 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 355 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.076 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 356 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.082 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 357 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.085 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 358 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.087 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 359 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.09 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 360 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.093 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 361 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.096 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 362 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.103 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 363 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.111 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 364 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.118 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 365 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.129 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 366 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.132 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 367 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.139 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 368 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.147 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 369 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.15 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 370 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.155 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 371 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.162 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 372 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.165 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 373 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.168 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 374 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.171 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 375 of 1080[31m (9 FAILED)[39m (skipped 1) (0 secs / 46.174 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DashboardComponent Integration Tests should render dashboard header with title FAILED[39m
+	NullInjectorError: R3InjectorError(Standalone[DashboardComponent])[DeliveriesService -> DeliveriesService -> HttpClient -> HttpClient]: 
+	  NullInjectorError: No provider for HttpClient!
+	error properties: Object({ ngTempTokenPath: null, ngTokenPath: [ 'DeliveriesService', 'DeliveriesService', 'HttpClient', 'HttpClient' ] })
+	    at NullInjector.get (node_modules/@angular/core/fesm2022/core.mjs:1654:27)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at injectInjectorOnly (node_modules/@angular/core/fesm2022/core.mjs:1100:40)
+	    at ɵɵinject (node_modules/@angular/core/fesm2022/core.mjs:1106:60)
+	    at inject (node_modules/@angular/core/fesm2022/core.mjs:1192:12)
+	    at new DeliveriesService (src/app/services/deliveries.service.ts:32:24)
+	    at Object.factory (ng:///DeliveriesService/ɵfac.js:4:10)
+	    at callback (node_modules/@angular/core/fesm2022/core.mjs:3219:47)
+	    at runInInjectorProfilerContext (node_modules/@angular/core/fesm2022/core.mjs:866:9)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 376 of 1080[31m (10 FAILED)[39m (skipped 1) (0 secs / 46.192 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DashboardComponent Integration Tests should handle view mode toggle clicks FAILED[39m
+	NullInjectorError: R3InjectorError(Standalone[DashboardComponent])[DeliveriesService -> DeliveriesService -> HttpClient -> HttpClient]: 
+	  NullInjectorError: No provider for HttpClient!
+	error properties: Object({ ngTempTokenPath: null, ngTokenPath: [ 'DeliveriesService', 'DeliveriesService', 'HttpClient', 'HttpClient' ] })
+	    at NullInjector.get (node_modules/@angular/core/fesm2022/core.mjs:1654:27)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at injectInjectorOnly (node_modules/@angular/core/fesm2022/core.mjs:1100:40)
+	    at ɵɵinject (node_modules/@angular/core/fesm2022/core.mjs:1106:60)
+	    at inject (node_modules/@angular/core/fesm2022/core.mjs:1192:12)
+	    at new DeliveriesService (src/app/services/deliveries.service.ts:32:24)
+	    at Object.factory (ng:///DeliveriesService/ɵfac.js:4:10)
+	    at callback (node_modules/@angular/core/fesm2022/core.mjs:3219:47)
+	    at runInInjectorProfilerContext (node_modules/@angular/core/fesm2022/core.mjs:866:9)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 377 of 1080[31m (11 FAILED)[39m (skipped 1) (0 secs / 46.197 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DashboardComponent Integration Tests should display KPI cards with data FAILED[39m
+	NullInjectorError: R3InjectorError(Standalone[DashboardComponent])[DeliveriesService -> DeliveriesService -> HttpClient -> HttpClient]: 
+	  NullInjectorError: No provider for HttpClient!
+	error properties: Object({ ngTempTokenPath: null, ngTokenPath: [ 'DeliveriesService', 'DeliveriesService', 'HttpClient', 'HttpClient' ] })
+	    at NullInjector.get (node_modules/@angular/core/fesm2022/core.mjs:1654:27)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at injectInjectorOnly (node_modules/@angular/core/fesm2022/core.mjs:1100:40)
+	    at ɵɵinject (node_modules/@angular/core/fesm2022/core.mjs:1106:60)
+	    at inject (node_modules/@angular/core/fesm2022/core.mjs:1192:12)
+	    at new DeliveriesService (src/app/services/deliveries.service.ts:32:24)
+	    at Object.factory (ng:///DeliveriesService/ɵfac.js:4:10)
+	    at callback (node_modules/@angular/core/fesm2022/core.mjs:3219:47)
+	    at runInInjectorProfilerContext (node_modules/@angular/core/fesm2022/core.mjs:866:9)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 378 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 46.207 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 379 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 46.212 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 380 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 46.213 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 381 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 46.594 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 382 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 46.614 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 383 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 46.622 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 384 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 46.645 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 385 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 48.84 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 386 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 48.894 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 387 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.09 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 388 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.586 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 389 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.6 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 390 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.615 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 391 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.638 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 392 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.645 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 393 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.652 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 394 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.652 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 395 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.653 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 396 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.654 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 397 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.655 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 398 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.655 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 399 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.655 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 400 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.656 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 401 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.656 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 402 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.657 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 403 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.661 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 404 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.662 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 405 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.663 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 406 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.667 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 407 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.672 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 408 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.673 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 409 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.673 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 410 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.674 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 411 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.674 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 412 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.675 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 413 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.683 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 414 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.69 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 415 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.692 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 416 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.694 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 417 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.701 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 418 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.708 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 419 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.715 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 420 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.718 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 421 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.725 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 422 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.732 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 423 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.734 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 424 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 49.941 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 425 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 50.044 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 426 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 50.4 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 427 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 50.854 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 428 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 51.122 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 429 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 51.125 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 430 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 51.127 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 431 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 51.133 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 432 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 51.135 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 433 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 51.141 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 434 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 51.143 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 435 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 51.145 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 436 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 51.146 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 437 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 51.802 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 438 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 52.019 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 439 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 52.477 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 440 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 53.237 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 441 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 53.44 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 442 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 53.959 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 443 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 53.975 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 444 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 53.981 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 445 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 53.987 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 446 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 53.989 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 447 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 53.995 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 448 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.002 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 449 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.004 secs)
+[1A[2KWARN: [36m'Spec 'CreditScoringService Scoring Simulation should include conditions for conditional approval' has no expectations.'[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 449 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.004 secs)
+WARN: 'Spec 'CreditScoringService Scoring Simulation should include conditions for conditional approval' has no expectations.'
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 450 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.011 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 451 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.013 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 452 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.018 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 453 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.02 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 454 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.022 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 455 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.054 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 456 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.058 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 457 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.062 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 458 of 1080[31m (12 FAILED)[39m (skipped 1) (0 secs / 54.065 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) ConfiguracionComponent should update select-based configuration fields correctly FAILED[39m
+	NullInjectorError: R3InjectorError(Standalone[ConfiguracionComponent])[ActivatedRoute -> ActivatedRoute -> ActivatedRoute]: 
+	  NullInjectorError: No provider for ActivatedRoute!
+	error properties: Object({ ngTempTokenPath: null, ngTokenPath: [ 'ActivatedRoute', 'ActivatedRoute', 'ActivatedRoute' ] })
+	    at NullInjector.get (node_modules/@angular/core/fesm2022/core.mjs:1654:27)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at ChainedInjector.get (node_modules/@angular/core/fesm2022/core.mjs:15723:36)
+	    at lookupTokenUsingModuleInjector (node_modules/@angular/core/fesm2022/core.mjs:5730:39)
+	    at getOrCreateInjectable (node_modules/@angular/core/fesm2022/core.mjs:5778:12)
+	    at Module.ɵɵdirectiveInject (node_modules/@angular/core/fesm2022/core.mjs:11050:19)
+	    at NodeInjectorFactory.factory (node_modules/@angular/router/fesm2022/router.mjs:424:104)
+	    at getNodeInjectable (node_modules/@angular/core/fesm2022/core.mjs:5984:44)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 459 of 1080[31m (13 FAILED)[39m (skipped 1) (0 secs / 54.106 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) ConfiguracionComponent should select package and update financial results FAILED[39m
+	NullInjectorError: R3InjectorError(Standalone[ConfiguracionComponent])[ActivatedRoute -> ActivatedRoute -> ActivatedRoute]: 
+	  NullInjectorError: No provider for ActivatedRoute!
+	error properties: Object({ ngTempTokenPath: null, ngTokenPath: [ 'ActivatedRoute', 'ActivatedRoute', 'ActivatedRoute' ] })
+	    at NullInjector.get (node_modules/@angular/core/fesm2022/core.mjs:1654:27)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at ChainedInjector.get (node_modules/@angular/core/fesm2022/core.mjs:15723:36)
+	    at lookupTokenUsingModuleInjector (node_modules/@angular/core/fesm2022/core.mjs:5730:39)
+	    at getOrCreateInjectable (node_modules/@angular/core/fesm2022/core.mjs:5778:12)
+	    at Module.ɵɵdirectiveInject (node_modules/@angular/core/fesm2022/core.mjs:11050:19)
+	    at NodeInjectorFactory.factory (node_modules/@angular/router/fesm2022/router.mjs:424:104)
+	    at getNodeInjectable (node_modules/@angular/core/fesm2022/core.mjs:5984:44)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 460 of 1080[31m (14 FAILED)[39m (skipped 1) (0 secs / 54.111 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) ConfiguracionComponent should compute consistent financial results for valid configuration FAILED[39m
+	NullInjectorError: R3InjectorError(Standalone[ConfiguracionComponent])[ActivatedRoute -> ActivatedRoute -> ActivatedRoute]: 
+	  NullInjectorError: No provider for ActivatedRoute!
+	error properties: Object({ ngTempTokenPath: null, ngTokenPath: [ 'ActivatedRoute', 'ActivatedRoute', 'ActivatedRoute' ] })
+	    at NullInjector.get (node_modules/@angular/core/fesm2022/core.mjs:1654:27)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at ChainedInjector.get (node_modules/@angular/core/fesm2022/core.mjs:15723:36)
+	    at lookupTokenUsingModuleInjector (node_modules/@angular/core/fesm2022/core.mjs:5730:39)
+	    at getOrCreateInjectable (node_modules/@angular/core/fesm2022/core.mjs:5778:12)
+	    at Module.ɵɵdirectiveInject (node_modules/@angular/core/fesm2022/core.mjs:11050:19)
+	    at NodeInjectorFactory.factory (node_modules/@angular/router/fesm2022/router.mjs:424:104)
+	    at getNodeInjectable (node_modules/@angular/core/fesm2022/core.mjs:5984:44)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 461 of 1080[31m (15 FAILED)[39m (skipped 1) (0 secs / 54.116 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) ConfiguracionComponent should validate precio field and register errors when invalid FAILED[39m
+	NullInjectorError: R3InjectorError(Standalone[ConfiguracionComponent])[ActivatedRoute -> ActivatedRoute -> ActivatedRoute]: 
+	  NullInjectorError: No provider for ActivatedRoute!
+	error properties: Object({ ngTempTokenPath: null, ngTokenPath: [ 'ActivatedRoute', 'ActivatedRoute', 'ActivatedRoute' ] })
+	    at NullInjector.get (node_modules/@angular/core/fesm2022/core.mjs:1654:27)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at ChainedInjector.get (node_modules/@angular/core/fesm2022/core.mjs:15723:36)
+	    at lookupTokenUsingModuleInjector (node_modules/@angular/core/fesm2022/core.mjs:5730:39)
+	    at getOrCreateInjectable (node_modules/@angular/core/fesm2022/core.mjs:5778:12)
+	    at Module.ɵɵdirectiveInject (node_modules/@angular/core/fesm2022/core.mjs:11050:19)
+	    at NodeInjectorFactory.factory (node_modules/@angular/router/fesm2022/router.mjs:424:104)
+	    at getNodeInjectable (node_modules/@angular/core/fesm2022/core.mjs:5984:44)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 462 of 1080[31m (16 FAILED)[39m (skipped 1) (0 secs / 54.129 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) ConfiguracionComponent should update mode and trigger recalculation FAILED[39m
+	NullInjectorError: R3InjectorError(Standalone[ConfiguracionComponent])[ActivatedRoute -> ActivatedRoute -> ActivatedRoute]: 
+	  NullInjectorError: No provider for ActivatedRoute!
+	error properties: Object({ ngTempTokenPath: null, ngTokenPath: [ 'ActivatedRoute', 'ActivatedRoute', 'ActivatedRoute' ] })
+	    at NullInjector.get (node_modules/@angular/core/fesm2022/core.mjs:1654:27)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at ChainedInjector.get (node_modules/@angular/core/fesm2022/core.mjs:15723:36)
+	    at lookupTokenUsingModuleInjector (node_modules/@angular/core/fesm2022/core.mjs:5730:39)
+	    at getOrCreateInjectable (node_modules/@angular/core/fesm2022/core.mjs:5778:12)
+	    at Module.ɵɵdirectiveInject (node_modules/@angular/core/fesm2022/core.mjs:11050:19)
+	    at NodeInjectorFactory.factory (node_modules/@angular/router/fesm2022/router.mjs:424:104)
+	    at getNodeInjectable (node_modules/@angular/core/fesm2022/core.mjs:5984:44)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 463 of 1080[31m (17 FAILED)[39m (skipped 1) (0 secs / 54.142 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) ConfiguracionComponent should create component with initial configuration FAILED[39m
+	NullInjectorError: R3InjectorError(Standalone[ConfiguracionComponent])[ActivatedRoute -> ActivatedRoute -> ActivatedRoute]: 
+	  NullInjectorError: No provider for ActivatedRoute!
+	error properties: Object({ ngTempTokenPath: null, ngTokenPath: [ 'ActivatedRoute', 'ActivatedRoute', 'ActivatedRoute' ] })
+	    at NullInjector.get (node_modules/@angular/core/fesm2022/core.mjs:1654:27)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at R3Injector.get (node_modules/@angular/core/fesm2022/core.mjs:3093:33)
+	    at ChainedInjector.get (node_modules/@angular/core/fesm2022/core.mjs:15723:36)
+	    at lookupTokenUsingModuleInjector (node_modules/@angular/core/fesm2022/core.mjs:5730:39)
+	    at getOrCreateInjectable (node_modules/@angular/core/fesm2022/core.mjs:5778:12)
+	    at Module.ɵɵdirectiveInject (node_modules/@angular/core/fesm2022/core.mjs:11050:19)
+	    at NodeInjectorFactory.factory (node_modules/@angular/router/fesm2022/router.mjs:424:104)
+	    at getNodeInjectable (node_modules/@angular/core/fesm2022/core.mjs:5984:44)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 464 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.172 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 465 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.182 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 466 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.206 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 467 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.209 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 468 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.211 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 469 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.224 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 470 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.227 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 471 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.23 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 472 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.232 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 473 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.234 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 474 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.236 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 475 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.248 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 476 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.252 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 477 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.255 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 478 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.257 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 479 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.259 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 480 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.261 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 481 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.262 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 482 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.262 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 483 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.263 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 484 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.263 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 485 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.264 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 486 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.264 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 487 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.264 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 488 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.278 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 489 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 54.28 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 490 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 55.585 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 491 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 56.389 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 492 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 56.696 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 493 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 57.199 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 494 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 59.007 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 495 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 0.01 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 496 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 1.819 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 497 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 1.826 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 498 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 1.833 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 499 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 1.836 secs)
+[1A[2KWARN: [36m'[DocumentValidationService] Falling back to local compliance report:', Error: network error
+Error: network error
+    at errorFactory (http://localhost:9876/_karma_webpack_/webpack:/src/app/services/document-validation.service.spec.ts:301:38)
+    at Observable._subscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at Observable._trySubscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at cb (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:31:30)
+    at errorContext (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at Observable.subscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:22:21)
+    at init (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/operators/map.js:6:16)
+    at OperatorSubscriber.call (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28)
+    at cb (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:26:30)
+    at errorContext (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)[39m
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 499 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 1.836 secs)
+WARN: '[DocumentValidationService] Falling back to local compliance report:', Error: network error
+Error: network error
+    at errorFactory (http://localhost:9876/_karma_webpack_/webpack:/src/app/services/document-validation.service.spec.ts:301:38)
+    at Observable._subscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at Observable._trySubscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at cb (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:31:30)
+    at errorContext (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at Observable.subscribe (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:22:21)
+    at init (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/operators/map.js:6:16)
+    at OperatorSubscriber.call (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28)
+    at cb (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/Observable.js:26:30)
+    at errorContext (http://localhost:9876/_karma_webpack_/webpack:/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 500 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 1.842 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 501 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 1.848 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 502 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 2.873 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 503 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 3.897 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 504 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 4.906 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 505 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 5.91 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 506 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 5.921 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 507 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 5.936 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 508 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 6.943 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 509 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 7.147 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 510 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 8.151 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 511 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 10.158 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 512 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 11.464 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 513 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 11.871 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 514 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 12.275 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 515 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 12.778 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 516 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 13.293 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 517 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 13.796 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 518 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 14.303 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 519 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 14.334 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 520 of 1080[31m (18 FAILED)[39m (skipped 1) (0 secs / 1 min 14.356 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Compliance Report Generation should merge remote compliance report overrides when API succeeds FAILED[39m
+	Expected spy post to have been called with:
+	  [ 'documents/compliance-report', <jasmine.any(Object)> ]
+	but actual calls were:
+	  [ 'documents/compliance-report', Object({ clientId: 'client-123', market: 'aguascalientes', flow: 'Individual', status: 'Activo', documents: [ Object({ id: 'doc-ine-123', name: 'INE Vigente', status: 'Aprobado', uploadedAt: Date(Mon Jan 15 2024 00:00:00 GMT+0000 (GMT)), expirationDate: Date(Sun Jan 15 2034 00:00:00 GMT+0000 (GMT)), fileName: undefined, fileSize: undefined, tooltip: undefined, group: undefined }), Object({ id: 'doc-rfc-123', name: 'RFC Persona Física', status: 'Aprobado', uploadedAt: Date(Mon Jan 15 2024 00:00:00 GMT+0000 (GMT)), expirationDate: undefined, fileName: undefined, fileSize: undefined, tooltip: undefined, group: undefined }), Object({ id: 'doc-comprobante-123', name: 'Comprobante de Domicilio', status: 'Pendiente', uploadedAt: Date(Wed Jan 10 2024 00:00:00 GMT+0000 (GMT)), expirationDate: Date(Wed Apr 10 2024 00:00:00 GMT+0000 (GMT)), fileName: undefined, fileSize: undefined, tooltip: undefined, group: undefined }) ] }), Object({ showLoading: false, show ....
+	
+	Call 0:
+	  Expected $.length = 3 to equal 2.
+	  Unexpected $[2] = Object({ showLoading: false, showError: true }) in array.
+	Error: Expected spy post to have been called with:
+	  [ 'documents/compliance-report', <jasmine.any(Object)> ]
+	but actual calls were:
+	  [ 'documents/compliance-report', Object({ clientId: 'client-123', market: 'aguascalientes', flow: 'Individual', status: 'Activo', documents: [ Object({ id: 'doc-ine-123', name: 'INE Vigente', status: 'Aprobado', uploadedAt: Date(Mon Jan 15 2024 00:00:00 GMT+0000 (GMT)), expirationDate: Date(Sun Jan 15 2034 00:00:00 GMT+0000 (GMT)), fileName: undefined, fileSize: undefined, tooltip: undefined, group: undefined }), Object({ id: 'doc-rfc-123', name: 'RFC Persona Física', status: 'Aprobado', uploadedAt: Date(Mon Jan 15 2024 00:00:00 GMT+0000 (GMT)), expirationDate: undefined, fileName: undefined, fileSize: undefined, tooltip: undefined, group: undefined }), Object({ id: 'doc-comprobante-123', name: 'Comprobante de Domicilio', status: 'Pendiente', uploadedAt: Date(Wed Jan 10 2024 00:00:00 GMT+0000 (GMT)), expirationDate: Date(Wed Apr 10 2024 00:00:00 GMT+0000 (GMT)), fileName: undefined, fileSize: undefined, tooltip: undefined, group: undefined }) ] }), Object({ showLoading: false, show ....
+	Call 0:
+	  Expected $.length = 3 to equal 2.
+	  Unexpected $[2] = Object({ showLoading: false, showError: true }) in array.
+	    at <Jasmine>
+	    at Object.next (src/app/services/document-validation.service.spec.ts:342:39)
+	    at ConsumerObserver.next (node_modules/rxjs/dist/esm/internal/Subscriber.js:91:33)
+	    at SafeSubscriber._next (node_modules/rxjs/dist/esm/internal/Subscriber.js:60:26)
+	    at SafeSubscriber.next (node_modules/rxjs/dist/esm/internal/Subscriber.js:31:18)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 521 of 1080[31m (19 FAILED)[39m (skipped 1) (0 secs / 1 min 14.37 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 522 of 1080[31m (19 FAILED)[39m (skipped 1) (0 secs / 1 min 14.378 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Compliance Report Generation should generate appropriate next steps FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 523 of 1080[31m (20 FAILED)[39m (skipped 1) (0 secs / 1 min 19.386 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 524 of 1080[31m (20 FAILED)[39m (skipped 1) (0 secs / 1 min 19.393 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Compliance Report Generation should provide blocking issues for incomplete documents FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 525 of 1080[31m (21 FAILED)[39m (skipped 1) (0 secs / 1 min 24.401 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Compliance Report Generation should identify missing documents FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 526 of 1080[31m (22 FAILED)[39m (skipped 1) (0 secs / 1 min 29.408 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Compliance Report Generation should generate compliance report for Aguascalientes client FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 527 of 1080[31m (23 FAILED)[39m (skipped 1) (0 secs / 1 min 34.416 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Compliance Report Generation should categorize documents correctly FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 528 of 1080[31m (24 FAILED)[39m (skipped 1) (0 secs / 1 min 39.425 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Document Validation should validate document with valid format FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 529 of 1080[31m (25 FAILED)[39m (skipped 1) (0 secs / 1 min 44.433 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Document Validation should detect invalid file format FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 530 of 1080[31m (26 FAILED)[39m (skipped 1) (0 secs / 1 min 49.436 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Document Validation should detect expired documents FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 531 of 1080[31m (27 FAILED)[39m (skipped 1) (0 secs / 1 min 54.445 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Document Validation should generate auto-corrections for fixable issues FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 532 of 1080[31m (28 FAILED)[39m (skipped 1) (0 secs / 1 min 59.454 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Document Validation should provide suggestions for improvement FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 533 of 1080[31m (29 FAILED)[39m (skipped 1) (0 secs / 2 mins 4.462 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Document Validation should merge remote validation response when mocks are disabled FAILED[39m
+	Expected spy post to have been called with:
+	  [ 'documents/validate', <jasmine.any(Object)> ]
+	but actual calls were:
+	  [ 'documents/validate', Object({ document: Object({ id: 'doc-test-123', name: 'INE_Juan_Perez.pdf', status: 'Pendiente', uploadedAt: Date(Mon Jan 15 2024 00:00:00 GMT+0000 (GMT)), expirationDate: Date(Sun Jan 15 2034 00:00:00 GMT+0000 (GMT)), fileName: undefined, fileSize: undefined, tooltip: undefined, group: undefined }), client: undefined }), Object({ showLoading: false, showError: true }) ].
+	
+	Call 0:
+	  Expected $.length = 3 to equal 2.
+	  Unexpected $[2] = Object({ showLoading: false, showError: true }) in array.
+	Error: Expected spy post to have been called with:
+	  [ 'documents/validate', <jasmine.any(Object)> ]
+	but actual calls were:
+	  [ 'documents/validate', Object({ document: Object({ id: 'doc-test-123', name: 'INE_Juan_Perez.pdf', status: 'Pendiente', uploadedAt: Date(Mon Jan 15 2024 00:00:00 GMT+0000 (GMT)), expirationDate: Date(Sun Jan 15 2034 00:00:00 GMT+0000 (GMT)), fileName: undefined, fileSize: undefined, tooltip: undefined, group: undefined }), client: undefined }), Object({ showLoading: false, showError: true }) ].
+	Call 0:
+	  Expected $.length = 3 to equal 2.
+	  Unexpected $[2] = Object({ showLoading: false, showError: true }) in array.
+	    at <Jasmine>
+	    at Object.next (src/app/services/document-validation.service.spec.ts:178:39)
+	    at ConsumerObserver.next (node_modules/rxjs/dist/esm/internal/Subscriber.js:91:33)
+	    at SafeSubscriber._next (node_modules/rxjs/dist/esm/internal/Subscriber.js:60:26)
+	    at SafeSubscriber.next (node_modules/rxjs/dist/esm/internal/Subscriber.js:31:18)
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 534 of 1080[31m (30 FAILED)[39m (skipped 1) (0 secs / 2 mins 4.489 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 535 of 1080[31m (30 FAILED)[39m (skipped 1) (0 secs / 2 mins 4.492 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 536 of 1080[31m (30 FAILED)[39m (skipped 1) (0 secs / 2 mins 4.499 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Edge Cases and Error Handling should generate compliance recommendations for various scenarios FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 537 of 1080[31m (31 FAILED)[39m (skipped 1) (0 secs / 2 mins 9.503 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Edge Cases and Error Handling should handle ecosystem validation with empty document list FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 538 of 1080[31m (32 FAILED)[39m (skipped 1) (0 secs / 2 mins 14.507 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 539 of 1080[31m (32 FAILED)[39m (skipped 1) (0 secs / 2 mins 14.511 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Edge Cases and Error Handling should handle empty document list FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 540 of 1080[31m (33 FAILED)[39m (skipped 1) (0 secs / 2 mins 19.516 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Edge Cases and Error Handling should handle documents without names FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 541 of 1080[31m (34 FAILED)[39m (skipped 1) (0 secs / 2 mins 24.523 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 542 of 1080[31m (34 FAILED)[39m (skipped 1) (0 secs / 2 mins 24.529 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 543 of 1080[31m (34 FAILED)[39m (skipped 1) (0 secs / 2 mins 24.532 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 544 of 1080[31m (34 FAILED)[39m (skipped 1) (0 secs / 2 mins 24.534 secs)
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 545 of 1080[31m (34 FAILED)[39m (skipped 1) (0 secs / 2 mins 24.536 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Validation Rules should validate file formats correctly FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 546 of 1080[31m (35 FAILED)[39m (skipped 1) (0 secs / 2 mins 29.539 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Validation Rules should assess legibility scores FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 547 of 1080[31m (36 FAILED)[39m (skipped 1) (0 secs / 2 mins 34.548 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Validation Rules should handle documents without expiration date FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 548 of 1080[31m (37 FAILED)[39m (skipped 1) (0 secs / 2 mins 39.556 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) DocumentValidationService Validation Rules should check document expiration FAILED[39m
+	Error: Timeout - Async function did not complete within 5000ms (set by jasmine.DEFAULT_TIMEOUT_INTERVAL)
+	    at <Jasmine>
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 549 of 1080[31m (38 FAILED)[39m (skipped 1) (0 secs / 2 mins 44.561 secs)
+30 09 2025 23:11:06.835:WARN [Chrome Headless 139.0.0.0 (Linux 0.0.0)]: Disconnected (0 times) , because no message in 30000 ms.
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) ERROR[39m
+  Disconnected , because no message in 30000 ms.
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 549 of 1080[31m (38 FAILED)[39m (skipped 1)[31m DISCONNECTED[39m (3 mins 37.908 secs / 2 mins 44.561 secs)
+Chrome Headless 139.0.0.0 (Linux 0.0.0) ERROR
+  Disconnected , because no message in 30000 ms.
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 549 of 1080[31m (38 FAILED)[39m (skipped 1)[31m DISCONNECTED[39m (3 mins 37.908 secs / 2 mins 44.561 secs)
+[1A[2K[31mChrome Headless 139.0.0.0 (Linux 0.0.0) ERROR[39m
+  Disconnected , because no message in 30000 ms.
+Chrome Headless 139.0.0.0 (Linux 0.0.0): Executed 549 of 1080[31m (38 FAILED)[39m (skipped 1)[31m DISCONNECTED[39m (4 mins 8.138 secs / 2 mins 44.561 secs)
+Chrome Headless 139.0.0.0 (Linux 0.0.0) ERROR
+  Disconnected , because no message in 30000 ms.
+[1A[2KChrome Headless 139.0.0.0 (Linux 0.0.0): Executed 549 of 1080[31m (38 FAILED)[39m (skipped 1)[31m DISCONNECTED[39m (4 mins 8.138 secs / 2 mins 44.561 secs)
