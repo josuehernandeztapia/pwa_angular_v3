@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import type { PartSuggestion } from './post-sales-quote-draft.service';
 
@@ -28,7 +28,11 @@ export class PostSalesQuoteApiService {
     }
     const body: any = { clientId, meta };
     return this.http.post<any>(this.base, body).pipe(
-      map(res => ({ quoteId: res.quoteId || res.id || 'unknown', number: res.number }))
+      map(res => ({ quoteId: res.quoteId || res.id || 'unknown', number: res.number })),
+      catchError(error => {
+        console.warn('[post-sales] BFF draft quote fallback', error);
+        return of({ quoteId: `fallback-${Date.now()}` });
+      })
     );
   }
 
@@ -47,8 +51,11 @@ export class PostSalesQuoteApiService {
       meta
     };
     return this.http.post<any>(`${this.base}/${quoteId}/lines`, body).pipe(
-      map(res => ({ quoteId: res.quoteId || quoteId, lineId: res.lineId || res.id, total: res.total, currency: res.currency }))
+      map(res => ({ quoteId: res.quoteId || quoteId, lineId: res.lineId || res.id, total: res.total, currency: res.currency })),
+      catchError(error => {
+        console.warn('[post-sales] BFF add line fallback', error);
+        return of({ quoteId, lineId: `fallback-${Date.now()}` });
+      })
     );
   }
 }
-

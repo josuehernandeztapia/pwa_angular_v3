@@ -1,7 +1,7 @@
 <!-- Skip Link for Accessibility -->
 <a class="skip-link" href="#cotizador-content">Saltar al contenido del cotizador</a>
 
-<div class="ui-container ui-section">
+<div class="container section">
   <!-- Header Section -->
   <div class="cotizador-main__section cotizador-main__section--large">
     <h1 class="cotizador-main__title">
@@ -12,34 +12,40 @@
     </p>
   </div>
 
+  <app-offline-queue-banner
+    contextLabel="cotizaciones"
+    endpointPrefix="/quotes"
+    featureTag="cotizador"
+  ></app-offline-queue-banner>
+
   <!-- Financial Summary Cards -->
-  <div *ngIf="pkg" class="ui-grid-metrics cotizador-main__section cotizador-main__section--large" role="region" aria-label="Resumen financiero" data-cy="cotizador-summary">
-    <div class="ui-metric-card">
-      <div class="ui-metric-label">Precio Total</div>
-      <div class="ui-metric-value" data-cy="sum-precio">{{ formatCurrency(totalPrice) }}</div>
+  <div *ngIf="pkg" class="grid-metrics cotizador-main__section cotizador-main__section--large" role="region" aria-label="Resumen financiero" data-cy="cotizador-summary">
+    <div class="metric-card">
+      <div class="metric-label">Precio Total</div>
+      <div class="metric-value" data-cy="sum-precio">{{ formatCurrency(totalPrice) }}</div>
     </div>
-    <div class="ui-metric-card">
-      <div class="ui-metric-label">Enganche</div>
-      <div class="ui-metric-value" data-cy="sum-enganche">{{ formatCurrency(downPayment) }}</div>
-      <div class="ui-metric-detail">
+    <div class="metric-card">
+      <div class="metric-label">Enganche</div>
+      <div class="metric-value" data-cy="sum-enganche">{{ formatCurrency(downPayment) }}</div>
+      <div class="metric-detail">
         {{ (downPayment/Math.max(totalPrice,1) * 100) | number:'1.0-0' }}%
       </div>
     </div>
-    <div class="ui-metric-card">
-      <div class="ui-metric-label">A Financiar</div>
-      <div class="ui-metric-value ui-metric-value--primary" data-cy="sum-financiar">{{ formatCurrency(amountToFinance) }}</div>
+    <div class="metric-card">
+      <div class="metric-label">A Financiar</div>
+      <div class="metric-value metric-value--primary" data-cy="sum-financiar">{{ formatCurrency(amountToFinance) }}</div>
     </div>
-    <div class="ui-metric-card">
-      <div class="ui-metric-label">PMT Mensual</div>
-      <div class="ui-metric-value ui-metric-value--primary" data-cy="sum-pmt">{{ formatCurrency(monthlyPayment) }}</div>
-      <div class="ui-metric-detail">
+    <div class="metric-card">
+      <div class="metric-label">PMT Mensual</div>
+      <div class="metric-value metric-value--primary" data-cy="sum-pmt">{{ formatCurrency(monthlyPayment) }}</div>
+      <div class="metric-detail">
         {{ term }} meses
       </div>
     </div>
   </div>
 
   <!-- Insurance Configuration -->
-  <div *ngIf="!isVentaDirecta && pkg" class="ui-card cotizador-main__section cotizador-main__section--medium">
+  <div *ngIf="!isVentaDirecta && pkg" class="card cotizador-main__section cotizador-main__section--medium">
     <h3 class="cotizador-main__section-title">Configuración de Seguros</h3>
     <div class="cotizador-main__stack cotizador-main__stack--loose">
       <label class="cotizador-main__checkbox-label">
@@ -48,8 +54,8 @@
       </label>
       <div *ngIf="includeInsurance" class="cotizador-main__stack cotizador-main__stack--medium cotizador-main__stack--indented">
         <div>
-          <label class="ui-label">Monto de Seguros</label>
-          <input type="number" min="0" [(ngModel)]="insuranceAmount" class="ui-input" placeholder="Ej: 15000" data-cy="insurance-amount" />
+          <label class="label">Monto de Seguros</label>
+          <input type="number" min="0" [(ngModel)]="insuranceAmount" class="input" placeholder="Ej: 15000" data-cy="insurance-amount" />
         </div>
         <div class="cotizador-main__stack cotizador-main__stack--tight">
           <label class="cotizador-main__radio-label">
@@ -66,7 +72,7 @@
   </div>
 
   <!-- First Payment Breakdown -->
-  <div *ngIf="!isVentaDirecta && amountToFinance>0 && term>0" class="ui-card cotizador-main__section cotizador-main__section--medium">
+  <div *ngIf="!isVentaDirecta && amountToFinance>0 && term>0" class="card cotizador-main__section cotizador-main__section--medium">
     <h3 class="cotizador-main__section-title cotizador-main__section-title--compact">Desglose Primer Pago</h3>
     <div class="cotizador-main__payment-breakdown">
       <div>
@@ -84,26 +90,63 @@
     </div>
   </div>
 
+  <!-- Progressive Disclosure Stepper -->
+  <div class="card cotizador-main__section cotizador-main__section--medium">
+    <div class="cotizador-stepper">
+      <div class="cotizador-stepper__header">
+        <div class="cotizador-stepper__progress-track">
+          <div class="cotizador-stepper__progress-bar" [style.width.%]="progressPercentage"></div>
+        </div>
+        <div class="cotizador-stepper__steps">
+          <div class="cotizador-stepper__step"
+               [class.cotizador-stepper__step--active]="currentStep === 1"
+               [class.cotizador-stepper__step--completed]="currentStep > 1">
+            <span class="cotizador-stepper__step-number">1</span>
+            <span class="cotizador-stepper__step-label">Contexto</span>
+          </div>
+          <div class="cotizador-stepper__step"
+               [class.cotizador-stepper__step--active]="currentStep === 2"
+               [class.cotizador-stepper__step--completed]="currentStep > 2">
+            <span class="cotizador-stepper__step-number">2</span>
+            <span class="cotizador-stepper__step-label">Producto</span>
+          </div>
+          <div class="cotizador-stepper__step"
+               [class.cotizador-stepper__step--active]="currentStep === 3"
+               [class.cotizador-stepper__step--completed]="currentStep > 3">
+            <span class="cotizador-stepper__step-number">3</span>
+            <span class="cotizador-stepper__step-label">Financiamiento</span>
+          </div>
+          <div class="cotizador-stepper__step"
+               [class.cotizador-stepper__step--active]="currentStep === 4"
+               [class.cotizador-stepper__step--completed]="currentStep > 4">
+            <span class="cotizador-stepper__step-number">4</span>
+            <span class="cotizador-stepper__step-label">Revisión</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Main Content -->
   <div id="cotizador-content" class="cotizador-main__layout">
 
     <!-- Left Panel: Configuration -->
     <div class="cotizador-main__panel cotizador-main__panel--config">
-      <!-- Context Configuration -->
-      <div *ngIf="!client" class="ui-card cotizador-main__section cotizador-main__section--medium">
-        <h3 class="cotizador-main__section-title cotizador-main__section-title--large">1. Contexto del Cliente</h3>
+      <!-- Step 1: Context Configuration -->
+      <div *ngIf="!client && currentStep === 1" class="card cotizador-main__section cotizador-main__section--medium">
+        <h3 class="cotizador-main__section-title cotizador-main__section-title--large">Paso 1: Contexto del Cliente</h3>
         <div class="cotizador-main__stack cotizador-main__stack--loose">
           <div>
-            <label for="market" class="ui-label">Mercado</label>
-            <select id="market" [(ngModel)]="market" (change)="onMarketChange()" class="ui-select">
+            <label for="market" class="label">Mercado</label>
+            <select id="market" [(ngModel)]="market" (change)="onMarketChange()" class="select">
               <option value="">-- Seleccionar mercado --</option>
               <option value="aguascalientes">Aguascalientes</option>
               <option value="edomex">Estado de México</option>
             </select>
           </div>
           <div>
-            <label for="clientType" class="ui-label">Tipo de Cliente</label>
-            <select id="clientType" [(ngModel)]="clientType" (change)="onClientTypeChange()" [disabled]="!market" class="ui-select">
+            <label for="clientType" class="label">Tipo de Cliente</label>
+            <select id="clientType" [(ngModel)]="clientType" (change)="onClientTypeChange()" [disabled]="!market" class="select">
               <option value="">-- Seleccionar tipo --</option>
               <option value="individual">Individual</option>
               <option value="colectivo" *ngIf="market === 'edomex'">Crédito Colectivo</option>
@@ -113,14 +156,14 @@
       </div>
 
       <!-- Loading State -->
-      <div *ngIf="isLoading" class="ui-card cotizador-main__section cotizador-main__section--medium cotizador-main__loading-card">
-        <div class="ui-spinner ui-spinner-lg cotizador-main__spinner"></div>
+      <div *ngIf="isLoading" class="card cotizador-main__section cotizador-main__section--medium cotizador-main__loading-card">
+        <div class="spinner spinner--lg cotizador-main__spinner"></div>
         <p class="cotizador-main__loading-text">Cargando paquete...</p>
       </div>
 
-      <!-- Package Components -->
-      <div *ngIf="pkg" class="ui-card cotizador-main__section cotizador-main__section--medium">
-        <h3 class="cotizador-main__section-title cotizador-main__section-title--large">2. Paquete de Producto</h3>
+      <!-- Step 2: Package Components -->
+      <div *ngIf="pkg && currentStep === 2" class="card cotizador-main__section cotizador-main__section--medium">
+        <h3 class="cotizador-main__section-title cotizador-main__section-title--large">Paso 2: Paquete de Producto</h3>
         <div class="cotizador-main__stack cotizador-main__stack--medium">
           <div *ngFor="let comp of pkg.components" class="cotizador-main__component-item">
             <div class="cotizador-main__component-control">
@@ -145,30 +188,30 @@
         </div>
       </div>
 
-      <!-- Financial Configuration -->
-      <div *ngIf="pkg" class="ui-card cotizador-main__section cotizador-main__section--medium">
+      <!-- Step 3: Financial Configuration -->
+      <div *ngIf="pkg && currentStep === 3" class="card cotizador-main__section cotizador-main__section--medium">
         <!-- Acquisition Mode Controls -->
         <div *ngIf="initialMode === 'acquisition'">
           <div *ngIf="isVentaDirecta">
-            <h3 class="cotizador-main__section-title cotizador-main__section-title--large">3. Estructura de Pago</h3>
+            <h3 class="cotizador-main__section-title cotizador-main__section-title--large">Paso 3: Estructura de Pago</h3>
             <div>
-              <label for="downPaymentAmount" class="ui-label ui-label-required">Pago Inicial</label>
+              <label for="downPaymentAmount" class="label label--required">Pago Inicial</label>
               <input
                 type="number"
                 id="downPaymentAmount"
                 [(ngModel)]="downPaymentAmountDirect"
                 (input)="onDownPaymentDirectChange()"
-                class="ui-input"
+                class="input"
                 placeholder="Ej: 400,000"
               />
             </div>
           </div>
 
           <div *ngIf="!isVentaDirecta">
-            <h3 class="cotizador-main__section-title cotizador-main__section-title--large">3. Estructura Financiera</h3>
+            <h3 class="cotizador-main__section-title cotizador-main__section-title--large">Paso 3: Estructura Financiera</h3>
             <div class="cotizador-main__stack cotizador-main__stack--loose">
               <div>
-                <label for="downPayment" class="ui-label">Enganche: {{ downPaymentPercentage }}%</label>
+                <label for="downPayment" class="label">Enganche: {{ downPaymentPercentage }}%</label>
                 <input
                   type="range"
                   id="downPayment"
@@ -180,14 +223,14 @@
                   [attr.aria-describedby]="'dp-note'"
                   [attr.title]="'Ajusta el % de enganche. Mínimo según política y paquete'"
                 />
-                <div class="ui-help-text" id="dp-note">
+                <div class="help-text" id="dp-note">
                   Mínimo: {{ pkg.minDownPaymentPercentage * 100 }}% ({{ formatCurrency(minDownPaymentRequired) }})
                 </div>
               </div>
 
               <div>
-                <label for="term" class="ui-label ui-label-required">Plazo</label>
-                <select id="term" [(ngModel)]="term" (change)="onTermChange()" class="ui-select" title="Selecciona el plazo del financiamiento en meses">
+                <label for="term" class="label label--required">Plazo</label>
+                <select id="term" [(ngModel)]="term" (change)="onTermChange()" class="select" title="Selecciona el plazo del financiamiento en meses">
                   <option *ngFor="let t of pkg.terms" [value]="t">{{ t }} meses</option>
                 </select>
               </div>
@@ -197,23 +240,23 @@
 
         <!-- Savings Mode Controls -->
         <div *ngIf="initialMode === 'savings'">
-          <h3 class="cotizador-main__section-title cotizador-main__section-title--large cotizador-main__section-title--savings">2. Simulación de Ahorro</h3>
+          <h3 class="cotizador-main__section-title cotizador-main__section-title--large cotizador-main__section-title--savings">Paso 3: Simulación de Ahorro</h3>
 
           <!-- Aguascalientes Individual -->
           <div *ngIf="market === 'aguascalientes' && clientType === 'individual'" class="cotizador-main__stack cotizador-main__stack--loose">
             <div>
-              <label for="initialDown" class="ui-label">Enganche Inicial (Aportación Fuerte)</label>
+              <label for="initialDown" class="label">Enganche Inicial (Aportación Fuerte)</label>
               <input
                 type="number"
                 id="initialDown"
                 [(ngModel)]="initialDownPayment"
                 (input)="onSavingsConfigChange()"
-                class="ui-input" title="Monto de enganche disponible al inicio"
+                class="input" title="Monto de enganche disponible al inicio"
                 placeholder="Ej: 400,000"
               />
             </div>
             <div>
-              <label for="deliveryTerm" class="ui-label">Fecha de Entrega Estimada: {{ deliveryTerm }} meses</label>
+              <label for="deliveryTerm" class="label">Fecha de Entrega Estimada: {{ deliveryTerm }} meses</label>
               <input
                 type="range"
                 id="deliveryTerm"
@@ -229,7 +272,7 @@
           <!-- EdoMex Colectivo -->
           <div *ngIf="market === 'edomex' && clientType === 'colectivo'" class="cotizador-main__stack cotizador-main__stack--loose">
             <div>
-              <label for="tandaMembers" class="ui-label">Número de Integrantes: {{ tandaMembers }}</label>
+              <label for="tandaMembers" class="label">Número de Integrantes: {{ tandaMembers }}</label>
               <input
                 type="range"
                 id="tandaMembers"
@@ -245,7 +288,7 @@
           <!-- Default Savings -->
           <div *ngIf="!(market === 'aguascalientes' && clientType === 'individual') && !(market === 'edomex' && clientType === 'colectivo')" class="cotizador-main__stack cotizador-main__stack--loose">
             <div>
-              <label for="voluntary" class="ui-label">Aportación Voluntaria Mensual</label>
+              <label for="voluntary" class="label">Aportación Voluntaria Mensual</label>
               <input
                 type="range"
                 min="0"
@@ -260,10 +303,10 @@
                 id="voluntary"
                 [(ngModel)]="voluntaryContribution"
                 (input)="onSavingsConfigChange()"
-                class="ui-input"
+                class="input"
                 placeholder="Monto mensual voluntario"
               />
-              <div class="ui-help-text">Actual: {{ formatCurrency(toNumber(voluntaryContribution) || 0) }}</div>
+              <div class="help-text">Actual: {{ formatCurrency(toNumber(voluntaryContribution) || 0) }}</div>
             </div>
           </div>
 
@@ -277,18 +320,18 @@
                   [placeholder]="'Consumo (L) - Unidad ' + unit.id"
                   [(ngModel)]="unit.consumption"
                   (input)="onSavingsConfigChange()"
-                  class="ui-input"
+                  class="input"
                 />
                 <input
                   type="number"
                   [placeholder]="'Sobreprecio ($) - Unidad ' + unit.id"
                   [(ngModel)]="unit.overprice"
                   (input)="onSavingsConfigChange()"
-                  class="ui-input"
+                  class="input"
                 />
               </div>
             </div>
-            <button class="ui-btn ui-btn-secondary cotizador-main__collection-add" (click)="addCollectionUnit()">
+            <button class="btn btn-secondary cotizador-main__collection-add" (click)="addCollectionUnit()">
               <span class="cotizador-main__button-icon cotizador-main__button-icon--large">+</span>
               Agregar Unidad a Recaudar
             </button>
@@ -299,10 +342,11 @@
 
     <!-- Right Panel: Results -->
     <div class="cotizador-main__panel cotizador-main__panel--results">
-      <div *ngIf="pkg">
+      <!-- Step 4: Review and Results -->
+      <div *ngIf="pkg && currentStep === 4">
         <!-- Acquisition Mode Results -->
         <div *ngIf="initialMode === 'acquisition'">
-          <div class="ui-card cotizador-main__section cotizador-main__section--medium">
+          <div class="card cotizador-main__section cotizador-main__section--medium">
             <h2 class="cotizador-main__results-title">Resumen Financiero</h2>
 
             <!-- Skeleton loader -->
@@ -360,17 +404,17 @@
           </div>
 
           <!-- Amortization Button -->
-          <div *ngIf="!isVentaDirecta" class="ui-card cotizador-main__section cotizador-main__section--medium">
+          <div *ngIf="!isVentaDirecta" class="card cotizador-main__section cotizador-main__section--medium">
             <button
               (click)="calculateAmortization()"
-              class="ui-btn ui-btn-primary cotizador-main__button--full" data-cy="calc-amort" title="Calcula la tabla de amortización para el monto a financiar"
+              class="btn btn-primary cotizador-main__button--full" data-cy="calc-amort" title="Calcula la tabla de amortización para el monto a financiar"
             >
               Calcular Tabla de Amortización
             </button>
           </div>
 
           <!-- Amortization Table -->
-          <div *ngIf="amortizationTable.length > 0 && !isVentaDirecta" class="ui-card cotizador-main__section cotizador-main__section--medium">
+          <div *ngIf="amortizationTable.length > 0 && !isVentaDirecta" class="card cotizador-main__section cotizador-main__section--medium">
             <h3 class="cotizador-main__results-title">Tabla de Amortización</h3>
             <div class="cotizador-main__table-wrapper">
               <div class="cotizador-main__table-scroll">
@@ -398,13 +442,13 @@
             </div>
           </div>
 
-          <div *ngIf="monthlyPayment > 0 && !isVentaDirecta" class="ui-alert ui-alert-info">
+          <div *ngIf="monthlyPayment > 0 && !isVentaDirecta" class="alert alert--info">
             <div class="cotizador-main__inline cotizador-main__inline--start">
               <div class="cotizador-main__inline-icon"></div>
               <div class="cotizador-main__inline-content">
                 <h4 class="cotizador-main__inline-title">Protección Conductores</h4>
                 <p class="cotizador-main__inline-description">Muestra al cliente cómo puede proteger sus pagos en caso de imprevistos. Un diferenciador clave de nuestra oferta.</p>
-                <button class="ui-btn ui-btn-secondary ui-btn-sm" (click)="openProtectionDemo()">
+                <button class="btn btn-secondary btn-sm" (click)="openProtectionDemo()">
                   Ver simulador de protección
                 </button>
               </div>
@@ -414,7 +458,7 @@
 
         <!-- Savings Mode Results -->
         <div *ngIf="initialMode === 'savings'">
-          <div class="ui-card cotizador-main__section cotizador-main__section--medium">
+          <div class="card cotizador-main__section cotizador-main__section--medium">
             <h2 class="cotizador-main__results-title">Proyección de Ahorro</h2>
 
             <!-- Aguascalientes Individual: Remainder Progress -->
@@ -492,17 +536,35 @@
       </div>
 
       <!-- Empty State -->
-      <div *ngIf="!pkg && !isLoading" class="ui-card cotizador-main__section cotizador-main__section--medium cotizador-main__empty-card">
+      <div *ngIf="!pkg && !isLoading" class="card cotizador-main__section cotizador-main__section--medium cotizador-main__empty-card">
         <div class="cotizador-main__empty-icon"></div>
         <p class="cotizador-main__empty-text">Selecciona el contexto para continuar con la cotización.</p>
       </div>
 
-      <!-- Action Buttons -->
-      <div *ngIf="pkg" class="cotizador-main__actions">
-        <button class="ui-btn ui-btn-secondary" (click)="generateOnePagePDF()" data-cy="cotizador-pdf">
+      <!-- Step Navigation -->
+      <div class="cotizador-stepper__navigation">
+        <button
+          *ngIf="canGoPrevious"
+          class="btn btn-secondary"
+          (click)="previousStep()"
+          data-cy="stepper-previous">
+          ← Anterior
+        </button>
+        <button
+          *ngIf="canGoNext && currentStep < totalSteps"
+          class="btn btn-primary"
+          (click)="nextStep()"
+          data-cy="stepper-next">
+          Siguiente →
+        </button>
+      </div>
+
+      <!-- Action Buttons (Step 4 only) -->
+      <div *ngIf="pkg && currentStep === 4" class="cotizador-main__actions">
+        <button class="btn btn-secondary" (click)="generateOnePagePDF()" data-cy="cotizador-pdf">
           Generar Propuesta PDF
         </button>
-        <button class="ui-btn ui-btn-primary" (click)="handleFormalizeClick()">
+        <button class="btn btn-primary" (click)="handleFormalizeClick()">
           <span class="cotizador-main__button-icon">[OK]</span>
           Formalizar y Continuar
         </button>

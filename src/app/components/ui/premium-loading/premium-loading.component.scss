@@ -1,7 +1,7 @@
 .premium-loading {
   --premium-loading-size: 24px;
   --premium-loading-font-size: var(--text-base, 1rem);
-  --premium-loading-color: var(--accent-blue-600, transparent);
+  --premium-loading-color: var(--accent-blue-600);
   --premium-loading-surface: color-mix(in srgb, var(--premium-loading-color) 16%, transparent);
   display: flex;
   flex-direction: column;
@@ -38,23 +38,23 @@
   }
 
   &--variant-primary {
-    --premium-loading-color: var(--accent-blue-600, transparent);
-    --premium-loading-surface: var(--accent-blue-500, transparent);
+    --premium-loading-color: var(--accent-blue-600);
+    --premium-loading-surface: var(--accent-blue-500);
   }
 
   &--variant-secondary {
-    --premium-loading-color: var(--color-neutral-600, transparent);
-    --premium-loading-surface: var(--color-neutral-400, transparent);
+    --premium-loading-color: var(--color-neutral-600);
+    --premium-loading-surface: var(--color-neutral-400);
   }
 
   &--variant-accent {
-    --premium-loading-color: var(--accent-amber-600, transparent);
-    --premium-loading-surface: var(--accent-amber-500, transparent);
+    --premium-loading-color: var(--accent-amber-600);
+    --premium-loading-surface: var(--accent-amber-500);
   }
 
   &--variant-neutral {
-    --premium-loading-color: var(--color-text-secondary, transparent);
-    --premium-loading-surface: var(--color-neutral-300, transparent);
+    --premium-loading-color: var(--color-text-secondary);
+    --premium-loading-surface: var(--color-neutral-300);
   }
 
   &__label {
@@ -332,11 +332,11 @@
     --premium-loading-surface: color-mix(in srgb, var(--premium-loading-color) 28%, transparent);
 
     &--variant-secondary {
-      --premium-loading-color: var(--color-neutral-400, transparent);
+      --premium-loading-color: var(--color-neutral-400);
     }
 
     &--variant-neutral {
-      --premium-loading-color: var(--color-neutral-300, transparent);
+      --premium-loading-color: var(--color-neutral-300);
     }
   }
 }

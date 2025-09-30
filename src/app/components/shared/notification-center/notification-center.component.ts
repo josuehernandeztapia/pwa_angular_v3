@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { IconName } from '../icon/icon-definitions';
@@ -6,6 +6,7 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PushNotificationService } from '../../../services/push-notification.service';
 import { NotificationHistory } from '../../../models/notification';
+import { Router } from '@angular/router';
 
 //  Using SSOT NotificationHistory from models/notification.ts
 
@@ -17,6 +18,7 @@ import { NotificationHistory } from '../../../models/notification';
   styleUrls: ['./notification-center.component.scss'],
 })
 export class NotificationCenterComponent implements OnInit, OnDestroy {
+  @ViewChild('panel') panelElement?: ElementRef<HTMLDivElement>;
   isOpen = false;
   permissionGranted = false;
   showPermissionBanner = true;
@@ -25,6 +27,7 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
   unreadCount$: Observable<number>;
 
   private destroy$ = new Subject<void>();
+  private previouslyFocusedElement: HTMLElement | null = null;
 
   getPanelClasses(): Record<string, boolean> {
     return {
@@ -39,7 +42,8 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private notificationService: PushNotificationService
+    private notificationService: PushNotificationService,
+    private router: Router
   ) {
     this.notifications$ = this.notificationService.notificationHistory;
     this.unreadCount$ = this.notificationService.getUnreadCount();
@@ -68,15 +72,37 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
   }
 
   open(): void {
+    this.previouslyFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     this.isOpen = true;
+    setTimeout(() => {
+      this.panelElement?.nativeElement.focus();
+    }, 0);
   }
 
   close(): void {
     this.isOpen = false;
+    this.panelElement?.nativeElement.blur();
+    if (this.previouslyFocusedElement) {
+      setTimeout(() => this.previouslyFocusedElement?.focus(), 0);
+    }
+    this.previouslyFocusedElement = null;
   }
 
   toggle(): void {
-    this.isOpen = !this.isOpen;
+    if (this.isOpen) {
+      this.close();
+    } else {
+      this.open();
+    }
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscape(event: KeyboardEvent): void {
+    if (!this.isOpen) {
+      return;
+    }
+    event.preventDefault();
+    this.close();
   }
 
   async requestPermission(): Promise<void> {
@@ -128,25 +154,30 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
       case 'payment_due':
       case 'gnv_overage':
         if (data?.payment_link) {
-          window.open(data.payment_link, '_blank');
+          window.open(data.payment_link, '_blank', 'noopener');
         }
         break;
         
       case 'document_pending':
         if (data?.client_id) {
-          window.location.href = `/clientes/${data.client_id}#documentos`;
+          this.router.navigate(['/clientes', data.client_id], { fragment: 'documentos' });
         }
         break;
         
       case 'contract_approved':
         if (data?.client_id) {
-          window.location.href = `/clientes/${data.client_id}`;
+          this.router.navigate(['/clientes', data.client_id]);
         }
         break;
         
       default:
         if (data?.action_url) {
-          window.location.href = data.action_url;
+          const actionUrl = data.action_url;
+          if (/^https?:\/\//i.test(actionUrl)) {
+            window.open(actionUrl, '_blank', 'noopener');
+          } else {
+            this.router.navigateByUrl(actionUrl);
+          }
         }
     }
   }

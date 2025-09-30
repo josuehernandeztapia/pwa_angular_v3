@@ -1,7 +1,9 @@
 // Real Delivery System Types - Universal 77-day tracking
 // Follows architectural specification for PWA & BFF integration
 
-export type Market = 'AGS' | 'EdoMex';
+import { IconName } from '../components/shared/icon/icon-definitions';
+
+export type Market = 'aguascalientes' | 'edomex';
 
 export type DeliveryStatus = 
   | 'PO_ISSUED'           // Purchase order issued to China
@@ -180,83 +182,83 @@ export const DELIVERY_STATUS_DESCRIPTIONS: Record<DeliveryStatus, {
   title: string;
   description: string;
   color: string;
-  iconType: string;
+  iconType: IconName;
   clientFriendly: string; // Simplified version for clients
 }> = {
   PO_ISSUED: {
     title: 'Orden Emitida',
     description: 'Orden de compra enviada a fábrica',
-    color: 'var(--color-text-muted, #737373)',
+    color: 'var(--accent-amber-500)',
     iconType: 'clipboard-list',
     clientFriendly: 'Procesando pedido'
   },
   IN_PRODUCTION: {
     title: 'En Producción',
     description: 'Vagoneta siendo fabricada en China',
-    color: 'var(--color-text-muted, #737373)',
+    color: 'var(--accent-amber-500)',
     iconType: 'factory',
     clientFriendly: 'En producción'
   },
   READY_AT_FACTORY: {
     title: 'Lista en Fábrica',
     description: 'Producción completa, lista para envío',
-    color: 'var(--color-text-muted, #737373)',
+    color: 'var(--accent-amber-500)',
     iconType: 'check-circle',
     clientFriendly: 'En producción'
   },
   AT_ORIGIN_PORT: {
     title: 'En Puerto Origen',
     description: 'En puerto de China para embarque',
-    color: 'var(--color-text-muted, #737373)',
+    color: 'var(--accent-amber-500)',
     iconType: 'ship',
     clientFriendly: 'En camino'
   },
   ON_VESSEL: {
     title: 'En Tránsito Marítimo',
     description: 'Navegando hacia México',
-    color: 'var(--color-text-muted, #737373)',
+    color: 'var(--accent-amber-500)',
     iconType: 'waves',
     clientFriendly: 'En camino'
   },
   AT_DEST_PORT: {
     title: 'En Puerto Destino',
     description: 'Arribó a puerto mexicano',
-    color: 'var(--color-text-muted, #737373)',
+    color: 'var(--accent-amber-500)',
     iconType: 'building-construction',
     clientFriendly: 'En camino'
   },
   IN_CUSTOMS: {
     title: 'En Aduanas',
     description: 'Proceso de liberación aduanal',
-    color: 'var(--color-text-muted, #737373)',
+    color: 'var(--accent-amber-500)',
     iconType: 'document-text',
     clientFriendly: 'En camino'
   },
   RELEASED: {
     title: 'Liberado',
     description: 'Liberado de aduanas, en transporte local',
-    color: 'var(--color-text-muted, #737373)',
+    color: 'var(--accent-amber-500)',
     iconType: 'truck',
     clientFriendly: 'En camino'
   },
   AT_WH: {
     title: 'En Bodega',
     description: 'En bodega local, preparando entrega',
-    color: 'var(--color-text-muted, #737373)',
+    color: 'var(--accent-amber-500)',
     iconType: 'store',
     clientFriendly: 'Lista para entrega'
   },
   READY_FOR_HANDOVER: {
     title: 'Lista para Entrega',
     description: 'Lista para coordinar entrega con cliente',
-    color: 'var(--color-text-muted, #737373)',
+    color: 'var(--accent-green-400)',
     iconType: 'target',
     clientFriendly: 'Lista para entrega'
   },
   DELIVERED: {
     title: 'Entregada',
     description: 'Entregada exitosamente al cliente',
-    color: 'var(--color-text-muted, #737373)',
+    color: 'var(--accent-green-500)',
     iconType: 'celebration',
     clientFriendly: 'Entregada'
   }

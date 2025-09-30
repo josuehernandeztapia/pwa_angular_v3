@@ -1,4 +1,8 @@
 import { Injectable } from '@angular/core';
+
+// Global declarations for Node.js-like APIs in browser context
+declare var require: any;
+declare var process: any;
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, map, shareReplay, switchMap, tap, delay } from 'rxjs/operators';
@@ -269,7 +273,7 @@ export class ConfigurationService {
     const getEnv = (key: string, fallback: string): string => {
       try {
         // Safe access to process.env in browser
-        const env = (typeof process !== 'undefined' && (process as any).env)
+        const env = (typeof process !== 'undefined' && process.env)
           || ((typeof window !== 'undefined' && (window as any).process && (window as any).process.env) ? (window as any).process.env : undefined);
         const value = env?.[key];
         return (typeof value === 'string' && value.length > 0) ? value : fallback;
@@ -889,8 +893,8 @@ export class ConfigurationService {
 
     const simpleUI: SimpleUIConfiguration = {
       theme: {
-        primaryColor: '#080808',        // OpenAI black /* OpenAI black */
-        secondaryColor: '#737373',       // OpenAI neutral gray /* OpenAI neutral */
+        primaryColor: 'var(--openai-black)',
+        secondaryColor: 'var(--color-text-secondary)',
         fontSize: 'large',
         buttonSize: 'large',
         spacing: 'comfortable',

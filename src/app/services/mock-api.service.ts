@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError, forkJoin } from 'rxjs';
 import { delay, map, catchError } from 'rxjs/operators';
 import { ClientDataService } from './data/client-data.service';
 import { EcosystemDataService } from './data/ecosystem-data.service';
@@ -7,7 +7,8 @@ import { CollectiveGroupDataService } from './data/collective-group-data.service
 import {
   Client,
   Ecosystem,
-  CompleteBusinessScenario
+  CompleteBusinessScenario,
+  BusinessFlow
 } from '../models/types';
 import { CollectiveCreditGroup } from '../models/tanda';
 
@@ -261,13 +262,13 @@ export class MockApiService {
           'Envía por WhatsApp al cliente'
         ],
         keyMetrics: [
-          { label: 'Precio Total', value: '$850,000', emoji: '' },
-          { label: 'Enganche', value: '$170,000', emoji: '' },
-          { label: 'Mensualidad', value: '$18,500', emoji: '' }
+          { label: 'Precio Total', value: '$850,000', icon: 'currency-dollar' },
+          { label: 'Enganche', value: '$170,000', icon: 'bank' },
+          { label: 'Mensualidad', value: '$18,500', icon: 'calendar' }
         ],
         timeline: [
-          { month: 0, event: 'Firma de Contrato', emoji: '' },
-          { month: 1, event: 'Primer Pago', emoji: '' }
+          { month: 0, event: 'Firma de Contrato', icon: 'document-text' },
+          { month: 1, event: 'Primer Pago', icon: 'currency-dollar' }
         ],
         whatsAppMessage: 'Tu cotización está lista'
       }
@@ -295,13 +296,13 @@ export class MockApiService {
           'Meta alcanzable identificada'
         ],
         keyMetrics: [
-          { label: 'Meta Ahorro', value: '$200,000', emoji: '' },
-          { label: 'Tiempo', value: '18 meses', emoji: '⏰' },
-          { label: 'Aportación', value: '$12,000/mes', emoji: '' }
+          { label: 'Meta Ahorro', value: '$200,000', icon: 'target' },
+          { label: 'Tiempo', value: '18 meses', icon: 'clock' },
+          { label: 'Aportación', value: '$12,000/mes', icon: 'currency-dollar' }
         ],
         timeline: [
-          { month: 6, event: '30% de Meta', emoji: '' },
-          { month: 18, event: 'Meta Completa', emoji: '' }
+          { month: 6, event: '30% de Meta', icon: 'chart' },
+          { month: 18, event: 'Meta Completa', icon: 'check-circle' }
         ],
         whatsAppMessage: 'Tu plan de ahorro está listo '
       }
@@ -319,22 +320,196 @@ export class MockApiService {
    */
   globalSearch(query: string): Observable<{
     clients: Client[];
-    ecosystems: Ecosystem[];
-    groups: CollectiveCreditGroup[];
+    quotes: Array<{
+      id: string;
+      label: string;
+      clientId: string;
+      clientName: string;
+      market?: string;
+      amount?: number;
+      status?: string;
+    }>;
+    documents: Array<{
+      id: string;
+      name: string;
+      status?: string;
+      clientId: string;
+      clientName: string;
+    }>;
+    contracts: Array<{
+      id: string;
+      label: string;
+      contractId: string;
+      clientId: string;
+      clientName: string;
+      market?: string;
+      status?: string;
+      documentsComplete: boolean;
+      protectionRequired: boolean;
+      protectionApplied: boolean;
+      pendingOfflineRequests: number;
+      updatedAt: number;
+      businessFlow?: BusinessFlow;
+      aviDecision?: string;
+      aviStatus?: string;
+      requiresVoiceVerification?: boolean;
+    }>;
     total: number;
   }> {
-    return of(null).pipe(
-      delay(this.NETWORK_SIMULATION.normal),
-      map(() => {
-        // This would typically call search methods on each service
+    const sanitized = (query || '').trim();
+    if (!sanitized) {
+      return of({ clients: [], quotes: [], documents: [], contracts: [], total: 0 });
+    }
+
+    return forkJoin({
+      clients: this.clientDataService.searchClients(sanitized),
+      groups: this.collectiveGroupDataService.searchGroups(sanitized)
+    }).pipe(
+      map(({ clients, groups }) => {
+        const topClients = clients.slice(0, 10);
+        const documents = this.buildDocumentMatches(topClients, sanitized);
+        const quotes = this.buildQuoteMatches(topClients, sanitized, groups);
+        const contracts = this.buildContractMatches(topClients);
+
         return {
-          clients: [], // Would call clientDataService.searchClients(query)
-          ecosystems: [], // Would call ecosystemDataService.searchEcosystems(query)  
-          groups: [], // Would call collectiveGroupDataService.searchGroups(query)
-          total: 0
+          clients: topClients,
+          quotes,
+          documents,
+          contracts,
+          total: topClients.length + quotes.length + documents.length + contracts.length
         };
       })
     );
+  }
+
+  private buildDocumentMatches(clients: Client[], query: string): Array<{
+    id: string;
+    name: string;
+    status?: string;
+    clientId: string;
+    clientName: string;
+  }> {
+    const lower = query.toLowerCase();
+    const matches: Array<{ id: string; name: string; status?: string; clientId: string; clientName: string }> = [];
+
+    clients.forEach(client => {
+      (client.documents || []).forEach((doc, index) => {
+        const docName = (doc.name || '').toString();
+        if (docName.toLowerCase().includes(lower)) {
+          matches.push({
+            id: `${client.id}-doc-${doc.id || index}`,
+            name: docName,
+            status: (doc.status as any) ?? undefined,
+            clientId: client.id,
+            clientName: client.name
+          });
+        }
+      });
+    });
+
+    return matches.slice(0, 10);
+  }
+
+  private buildQuoteMatches(
+    clients: Client[],
+    query: string,
+    groups: CollectiveCreditGroup[]
+  ): Array<{
+    id: string;
+    label: string;
+    clientId: string;
+    clientName: string;
+    market?: string;
+    amount?: number;
+    status?: string;
+  }> {
+    const lower = query.toLowerCase();
+    const matches: Array<{ id: string; label: string; clientId: string; clientName: string; market?: string; amount?: number; status?: string }> = [];
+
+    clients.forEach((client, idx) => {
+      const quoteId = `Q-${client.id}-${idx + 1}`;
+      const label = `Cotización ${client.name}`;
+      if (label.toLowerCase().includes(lower) || quoteId.toLowerCase().includes(lower)) {
+        matches.push({
+          id: quoteId,
+          label,
+          clientId: client.id,
+          clientName: client.name,
+          market: client.market as any,
+          amount: (client as any).remainderAmount ?? undefined,
+          status: client.status
+        });
+      }
+    });
+
+    groups.forEach(group => {
+      if (group.name.toLowerCase().includes(lower)) {
+        const syntheticId = `GROUP-${group.id}`;
+        matches.push({
+          id: syntheticId,
+          label: `Cotización colectiva ${group.name}`,
+          clientId: group.id,
+          clientName: group.name,
+          amount: group.savingsGoalPerUnit,
+          status: group.status as any
+        });
+      }
+    });
+
+    return matches.slice(0, 10);
+  }
+
+  private buildContractMatches(clients: Client[]): Array<{
+    id: string;
+    label: string;
+    contractId: string;
+    clientId: string;
+    clientName: string;
+    market?: string;
+    status?: string;
+    documentsComplete: boolean;
+    protectionRequired: boolean;
+    protectionApplied: boolean;
+    pendingOfflineRequests: number;
+    updatedAt: number;
+    businessFlow?: BusinessFlow;
+    aviDecision?: string;
+    aviStatus?: string;
+    requiresVoiceVerification?: boolean;
+  }> {
+    const now = Date.now();
+    return clients
+      .filter(client => ['Aprobado', 'Activo', 'En seguimiento'].includes(client.status))
+      .map((client, index) => {
+        const contractId = `CON-${client.id}-${index + 1}`;
+        const label = `Contrato ${client.name}`;
+        const protectionRequired = client.flow !== BusinessFlow.VentaDirecta;
+        const protectionApplied = !!client.protectionPlan;
+        const documentsComplete = Boolean(
+          client.documents?.length &&
+          client.documents.every(doc => doc.status === 'Aprobado')
+        );
+
+        return {
+          id: `${client.id}-contract-${index + 1}`,
+          label,
+          contractId,
+          clientId: client.id,
+          clientName: client.name,
+          market: client.market as any,
+          status: client.status,
+          documentsComplete,
+          protectionRequired,
+          protectionApplied,
+          pendingOfflineRequests: 0,
+          updatedAt: now - index * 45_000,
+          businessFlow: client.flow,
+          aviDecision: 'go',
+          aviStatus: 'completed',
+          requiresVoiceVerification: protectionRequired
+        };
+      })
+      .slice(0, 10);
   }
 
   /**

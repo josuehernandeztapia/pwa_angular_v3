@@ -101,7 +101,12 @@
             class="collective-credit__button collective-credit__button--secondary"
             (click)="handleAddEvent()"
           >
-            <span class="collective-credit__button-icon">+</span>
+            <app-icon
+              name="plus"
+              [size]="16"
+              class="collective-credit__button-icon"
+              aria-hidden="true"
+            ></app-icon>
             Añadir Evento
           </button>
         </div>
@@ -119,7 +124,7 @@
               aria-label="Eliminar evento"
               (click)="handleRemoveEvent(event.id)"
             >
-              ×
+              <app-icon name="close" [size]="16" aria-hidden="true"></app-icon>
             </button>
           </div>
         </div>
@@ -157,7 +162,9 @@
         <div *ngIf="result && kpis" class="collective-credit__results">
           <div class="collective-credit__kpi-group">
             <article class="collective-credit__kpi-card" *ngFor="let kpi of kpis">
-              <div class="collective-credit__kpi-icon">{{ kpi.icon }}</div>
+              <div class="collective-credit__kpi-icon">
+                <app-icon [name]="kpi.icon" [size]="18"></app-icon>
+              </div>
               <div class="collective-credit__kpi-copy">
                 <span class="collective-credit__kpi-label">{{ kpi.title }}</span>
                 <span class="collective-credit__kpi-value">{{ kpi.value }}</span>

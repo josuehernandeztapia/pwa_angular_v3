@@ -3,13 +3,13 @@ import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, ElementRef, 
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chart } from 'chart.js/auto';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { IconName } from '../../shared/icon/icon-definitions';
 
 interface SimulatorScenario {
   id: string;
   title: string;
   subtitle: string;
-  icon?: string;
-  iconType?: string;
+  icon: IconName;
   description: string;
   market: 'aguascalientes' | 'edomex';
   clientType: 'Individual' | 'Colectivo';
@@ -83,7 +83,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
       id: 'ags-ahorro',
       title: 'Proyector de Ahorro y Liquidación',
       subtitle: 'AGS Individual',
-      iconType: 'bank',
+      icon: 'bank',
       description: 'Modela un plan de ahorro con aportación fuerte y recaudación para clientes de Aguascalientes.',
       market: 'aguascalientes',
       clientType: 'Individual',
@@ -94,7 +94,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
       id: 'edomex-individual',
       title: 'Planificador de Enganche',
       subtitle: 'EdoMex Individual',
-      iconType: 'chart',
+      icon: 'chart',
       description: 'Proyecta el tiempo para alcanzar la meta de enganche para un cliente individual en EdoMex.',
       market: 'edomex',
       clientType: 'Individual',
@@ -105,7 +105,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
       id: 'tanda-colectiva',
       title: 'Simulador de Tanda Colectiva',
       subtitle: 'EdoMex Colectivo',
-      icon: '',
+      icon: 'users',
       description: 'Modela el "efecto bola de nieve" para un grupo de crédito colectivo.',
       market: 'edomex',
       clientType: 'Colectivo',
@@ -629,7 +629,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
         datasets: [{
           label: 'Ahorro Acumulado',
           data: [3250, 19500, 39000, 58500, 78000],
-          borderColor: 'var(--color-accent-primary, #0EA5E9)',
+          borderColor: 'var(--color-accent-primary)',
           backgroundColor: 'var(--color-accent-primary-muted, rgba(14, 165, 233, 0.1))',
           borderWidth: 2,
           fill: true,
@@ -676,7 +676,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
         datasets: [{
           label: 'PMT Mensual',
           data: [3250, 3250, 3250],
-          backgroundColor: ['var(--color-accent-primary, #0EA5E9)', 'var(--color-accent-primary, #0EA5E9)', 'var(--color-success, #10B981)'],
+          backgroundColor: ['var(--color-accent-primary)', 'var(--color-accent-primary)', 'var(--color-success)'],
           borderRadius: 4
         }]
       },

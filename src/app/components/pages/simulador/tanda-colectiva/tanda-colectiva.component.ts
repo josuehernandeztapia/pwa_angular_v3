@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, AfterViewInit, ViewChild, ElementRef, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -12,6 +12,10 @@ import { ToastService } from '../../../../services/toast.service';
 import { SkeletonCardComponent } from '../../../shared/skeleton-card.component';
 import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-panel.component';
 import { IconComponent } from '../../../shared/icon/icon.component';
+import { DESIGN_TOKENS, getDataColor } from '../../../../styles/design-tokens';
+import { FlowContextService } from '../../../../services/flow-context.service';
+import { MarketPolicyContext, MarketPolicyService, PolicyClientType, PolicyMarket } from '../../../../services/market-policy.service';
+import { BusinessFlow } from '../../../../models/types';
 
 declare var Chart: any;
 
@@ -43,7 +47,9 @@ export class TandaColectivaComponent implements OnInit, OnDestroy, AfterViewInit
     private pdfExportService: PdfExportService,
     private speech: SpeechService,
     private toast: ToastService,
-    private router: Router
+    private router: Router,
+    private marketPolicy: MarketPolicyService,
+    @Optional() private flowContext?: FlowContextService
   ) {
     this.configForm = this.fb.group({
       memberCount: [15, [Validators.required, Validators.min(5), Validators.max(50)]],
@@ -99,6 +105,8 @@ export class TandaColectivaComponent implements OnInit, OnDestroy, AfterViewInit
       this.simulationResult.scenario.monthsToFirstAward = Math.ceil(values.unitPrice / this.simulationResult.scenario.monthlyContribution);
       this.simulationResult.scenario.monthsToFullDelivery = this.simulationResult.scenario.monthsToFirstAward * values.memberCount;
 
+      this.persistFlowContextSnapshot(config, 'tanda-simulation');
+
       this.isSimulating = false;
       this.loadingService.hide();
 
@@ -120,6 +128,99 @@ export class TandaColectivaComponent implements OnInit, OnDestroy, AfterViewInit
 
   formatCurrency(value: number): string {
     return this.financialCalc.formatCurrency(value);
+  }
+
+  private persistFlowContextSnapshot(config: CollectiveScenarioConfig, origin: string): void {
+    if (!this.flowContext) {
+      return;
+    }
+
+    const market: PolicyMarket = 'edomex';
+    const clientType: PolicyClientType = 'colectivo';
+    const saleType: 'contado' | 'financiero' = 'financiero';
+    const businessFlow = BusinessFlow.CreditoColectivo;
+    const rawMembers = Number(config.memberCount);
+    const collectiveMembers = Number.isFinite(rawMembers) && rawMembers > 0 ? rawMembers : undefined;
+
+    const groupContribution = this.simulationResult?.scenario?.monthlyContribution;
+    const monthlyPayment = typeof groupContribution === 'number' && collectiveMembers
+      ? groupContribution / collectiveMembers
+      : undefined;
+
+    const policyContext: MarketPolicyContext = {
+      market,
+      clientType,
+      saleType,
+      businessFlow,
+      collectiveSize: collectiveMembers,
+    };
+
+    let incomeThreshold: number | undefined;
+    let incomeThresholdRatio: number | undefined;
+
+    if (monthlyPayment && monthlyPayment > 0) {
+      const ratio = this.marketPolicy.getIncomeThreshold(policyContext);
+      if (typeof ratio === 'number' && Number.isFinite(ratio) && ratio > 0) {
+        incomeThresholdRatio = ratio;
+        incomeThreshold = monthlyPayment * ratio;
+      }
+    }
+
+    const requiresIncomeProof = incomeThreshold !== undefined && monthlyPayment !== undefined
+      ? monthlyPayment > incomeThreshold
+      : undefined;
+
+    if (typeof requiresIncomeProof === 'boolean') {
+      policyContext.requiresIncomeProof = requiresIncomeProof;
+    }
+
+    const simulatorData = {
+      market,
+      clientType,
+      saleType,
+      collectiveMembers,
+      monthlyContribution: groupContribution,
+      monthlyPayment,
+      incomeThreshold,
+      incomeThresholdRatio,
+      requiresIncomeProof,
+      config,
+      scenario: this.simulationResult?.scenario,
+      origin,
+      updatedAt: Date.now(),
+    };
+
+    const existing = this.flowContext.getContextData<any>('simulador') ?? {};
+
+    this.flowContext.saveContext('simulador', {
+      ...existing,
+      market,
+      clientType,
+      saleType,
+      businessFlow,
+      collectiveMembers,
+      monthlyPayment,
+      incomeThreshold,
+      incomeThresholdRatio,
+      requiresIncomeProof,
+      simulatorData,
+      quotationData: {
+        ...(existing.quotationData ?? {}),
+        monthlyPayment,
+        incomeThreshold,
+        incomeThresholdRatio,
+        collectiveMembers,
+      },
+      policyContext,
+      clientId: existing.clientId,
+      clientName: existing.clientName,
+    }, {
+      breadcrumbs: this.buildSimulatorBreadcrumbs(),
+    });
+  }
+
+  private buildSimulatorBreadcrumbs(): string[] {
+    return ['Dashboard', 'Simulador', 'Tanda Colectiva'];
   }
 
   private initializeCharts(): void {
@@ -147,7 +248,7 @@ export class TandaColectivaComponent implements OnInit, OnDestroy, AfterViewInit
         datasets: [{
           label: 'Ahorro Grupal Acumulado',
           data: groupSavings,
-          borderColor: '#0EA5E9',
+          borderColor: getDataColor('accent'),
           backgroundColor: 'transparent',
           tension: 0.3,
           pointRadius: 3
@@ -158,10 +259,10 @@ export class TandaColectivaComponent implements OnInit, OnDestroy, AfterViewInit
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          x: { ticks: { color: '#6B7280' } },
+          x: { ticks: { color: DESIGN_TOKENS.color.text.secondary } },
           y: {
             ticks: {
-              color: '#6B7280',
+              color: DESIGN_TOKENS.color.text.secondary,
               callback: (value: any) => this.formatCurrency(Number(value))
             }
           }
@@ -187,7 +288,10 @@ export class TandaColectivaComponent implements OnInit, OnDestroy, AfterViewInit
         labels: ['PMT Individual', 'Resto del Grupo'],
         datasets: [{
           data: [avgPmt, this.simulationResult.scenario.monthlyContribution - avgPmt],
-          backgroundColor: ['#0EA5E9', '#E2E8F0']
+          backgroundColor: [
+            getDataColor('accent'),
+            DESIGN_TOKENS.color.border
+          ]
         }]
       },
       options: {

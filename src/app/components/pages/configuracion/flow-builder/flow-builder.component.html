@@ -44,7 +44,12 @@
 
         <div *ngFor="let category of getFilteredCategories()" class="node-category">
           <div class="category-header" (click)="toggleCategory(category.name)">
-            <span class="category-icon">{{ category.expanded ? '▼' : '▶' }}</span>
+            <app-icon
+              class="category-icon"
+              [name]="category.expanded ? 'chevron-down' : 'chevron-right'"
+              [size]="16"
+              aria-hidden="true"
+            ></app-icon>
             <span class="category-name">{{ category.name }}</span>
             <span class="category-count">({{ category.templates.length }})</span>
           </div>
@@ -76,9 +81,23 @@
     <div class="flow-canvas-container premium-card">
       <div class="canvas-toolbar">
         <div class="zoom-controls">
-          <button class="zoom-btn" (click)="zoomOut()">➖</button>
+          <button
+            class="zoom-btn"
+            type="button"
+            (click)="zoomOut()"
+            aria-label="Alejar lienzo"
+          >
+            <app-icon name="minus" [size]="14" aria-hidden="true"></app-icon>
+          </button>
           <span class="zoom-level">{{ (zoomLevel * 100).toFixed(0) }}%</span>
-          <button class="zoom-btn" (click)="zoomIn()">➕</button>
+          <button
+            class="zoom-btn"
+            type="button"
+            (click)="zoomIn()"
+            aria-label="Acercar lienzo"
+          >
+            <app-icon name="plus" [size]="14" aria-hidden="true"></app-icon>
+          </button>
         </div>
         <div class="canvas-controls">
           <button class="canvas-btn" (click)="fitToView()">Ajustar</button>
@@ -107,7 +126,7 @@
           <defs>
             <marker id="arrowhead" markerWidth="10" markerHeight="7"
                     refX="10" refY="3.5" orient="auto">
-              <polygon points="0 0 10 3.5 0 7" fill="var(--color-text-muted, #737373)"></polygon>
+              <polygon points="0,0 10,3.5 0,7" fill="var(--color-text-muted, transparent)"></polygon>
             </marker>
           </defs>
 
@@ -199,7 +218,11 @@
       <div class="panel-header">
         <h3>Propiedades</h3>
         <button class="panel-toggle" (click)="togglePropertiesPanel()">
-          {{ propertiesPanelExpanded ? '→' : '←' }}
+          <app-icon
+            [name]="propertiesPanelExpanded ? 'arrow-right' : 'arrow-left'"
+            [size]="16"
+            aria-hidden="true"
+          ></app-icon>
         </button>
       </div>
 
@@ -248,7 +271,14 @@
                   class="regulation-input"
                   placeholder="SEMOV, Verificación..."
                 />
-                <button class="remove-btn" (click)="removeRegulation(i)">✕</button>
+                <button
+                  class="remove-btn"
+                  type="button"
+                  (click)="removeRegulation(i)"
+                  aria-label="Eliminar restricción"
+                >
+                  <app-icon name="close" [size]="12" aria-hidden="true"></app-icon>
+                </button>
               </div>
               <button class="add-regulation-btn" (click)="addRegulation()">+ Agregar</button>
             </div>
@@ -294,7 +324,14 @@
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Generar Flujo</h3>
-        <button class="modal-close" (click)="closeGenerationModal()">✕</button>
+        <button
+          class="modal-close"
+          type="button"
+          (click)="closeGenerationModal()"
+          aria-label="Cerrar exportación"
+        >
+          <app-icon name="close" [size]="14" aria-hidden="true"></app-icon>
+        </button>
       </div>
 
       <div class="modal-body">

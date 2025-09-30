@@ -5,7 +5,7 @@
 
 /* ===== KEYFRAME DEFINITIONS ===== */
 
-/* 🌊 Fluid Entry Animations */
+/* Fluid Entry Animations */
 @keyframes fluidSlideIn {
   0% {
     opacity: 0;
@@ -213,7 +213,7 @@
 
 /* ===== ANIMATION UTILITY CLASSES ===== */
 
-/* 🎬 Entry Animations */
+/* Entry Animations */
 .animate-fluid-enter {
   animation: fluidSlideIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }

@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import { Location } from '@angular/common';
+import { IconName } from '../components/shared/icon/icon-definitions';
 
 export interface BreadcrumbItem {
   label: string;
   route?: string;
-  icon?: string;
-  iconType?: 'home' | 'money' | 'target' | 'users' | 'documents' | 'protection' | 'reports' | 'add' | 'truck' | 'handshake' | 'lightbulb' | 'bank' | 'snowflake';
+  icon?: IconName;
+  iconType?: IconName;
   params?: any;
 }
 
@@ -23,12 +24,16 @@ export interface NavigationState {
 export interface QuickAction {
   id: string;
   label: string;
-  icon: string;
-  iconType?: 'home' | 'money' | 'target' | 'users' | 'documents' | 'protection' | 'reports' | 'add' | 'truck' | 'handshake' | 'lightbulb' | 'bank' | 'snowflake' | 'user' | 'import';
+  icon: IconName;
+  iconType?: IconName;
   route?: string;
+  queryParams?: Record<string, any>;
   action?: () => void;
   badge?: number;
   color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+  disabled?: boolean;
+  tooltip?: string;
+  active?: boolean;
 }
 
 @Injectable({
@@ -64,7 +69,7 @@ export class NavigationService {
       title: 'Nueva Oportunidad',
       breadcrumbs: [
         { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
-        { label: 'Nueva Oportunidad', iconType: 'add' }
+        { label: 'Nueva Oportunidad', iconType: 'plus' }
       ],
       showBackButton: true
     },
@@ -72,14 +77,14 @@ export class NavigationService {
       title: 'Cotizador',
       breadcrumbs: [
         { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
-        { label: 'Cotizador', iconType: 'money' }
+        { label: 'Cotizador', iconType: 'currency-dollar' }
       ]
     },
     '/cotizador/ags-individual': {
       title: 'Cotizador AGS Individual',
       breadcrumbs: [
         { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
-        { label: 'Cotizador', route: '/cotizador', iconType: 'money' },
+        { label: 'Cotizador', route: '/cotizador', iconType: 'currency-dollar' },
         { label: 'AGS Individual', iconType: 'truck' }
       ],
       showBackButton: true
@@ -88,7 +93,7 @@ export class NavigationService {
       title: 'Cotizador EdoMex Colectivo',
       breadcrumbs: [
         { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
-        { label: 'Cotizador', route: '/cotizador', iconType: 'money' },
+        { label: 'Cotizador', route: '/cotizador', iconType: 'currency-dollar' },
         { label: 'EdoMex Colectivo', iconType: 'handshake' }
       ],
       showBackButton: true
@@ -123,7 +128,7 @@ export class NavigationService {
       breadcrumbs: [
         { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
         { label: 'Simulador', route: '/simulador', iconType: 'target' },
-        { label: 'Tanda Colectiva', iconType: 'snowflake' }
+        { label: 'Tanda Colectiva', iconType: 'snow' }
       ],
       showBackButton: true
     },
@@ -138,21 +143,21 @@ export class NavigationService {
       title: 'Expedientes Digitales',
       breadcrumbs: [
         { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
-        { label: 'Expedientes', iconType: 'documents' }
+        { label: 'Expedientes', iconType: 'document-text' }
       ]
     },
     '/proteccion': {
       title: 'Protección Financiera',
       breadcrumbs: [
         { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
-        { label: 'Protección', iconType: 'protection' }
+        { label: 'Protección', iconType: 'shield' }
       ]
     },
     '/reportes': {
       title: 'Reportes y Análisis',
       breadcrumbs: [
         { label: 'Dashboard', route: '/dashboard', iconType: 'home' },
-        { label: 'Reportes', iconType: 'reports' }
+        { label: 'Reportes', iconType: 'chart' }
       ]
     }
   };
@@ -278,103 +283,124 @@ export class NavigationService {
   getQuickActions(): Observable<QuickAction[]> {
     return this.navigationState$.pipe(
       map(state => {
-        const route = state.currentRoute;
+        const route = state.currentRoute === '/' ? '/dashboard' : state.currentRoute;
         
         // Define quick actions based on current route
         switch (route) {
           case '/dashboard':
-            return [
+            return this.markCurrentRoute(route, [
               {
                 id: 'new-opportunity',
                 label: 'Nueva Oportunidad',
-                icon: 'plus-icon',
-                iconType: 'add',
+                icon: 'plus',
+                iconType: 'plus',
                 route: '/nueva-oportunidad',
-                color: 'primary' as const
+                color: 'primary' as const,
+                tooltip: 'Crear una nueva oportunidad'
               },
               {
                 id: 'quick-quote',
                 label: 'Cotización Rápida',
-                icon: '',
-                iconType: 'money',
+                icon: 'currency-dollar',
+                iconType: 'currency-dollar',
                 route: '/cotizador',
-                color: 'success' as const
+                queryParams: { source: 'quick-action', view: 'new-quote' },
+                color: 'success' as const,
+                tooltip: 'Abrir el cotizador con el flujo rápido'
               },
               {
                 id: 'simulator',
                 label: 'Simulador',
-                icon: '',
+                icon: 'target',
                 iconType: 'target',
                 route: '/simulador',
-                color: 'secondary' as const
+                queryParams: { source: 'quick-action' },
+                color: 'secondary' as const,
+                tooltip: 'Ir al simulador de escenarios'
               }
-            ];
+            ]);
 
           case '/clientes':
-            return [
+            return this.markCurrentRoute(route, [
               {
                 id: 'new-client',
                 label: 'Nuevo Cliente',
-                icon: '',
+                icon: 'user',
                 iconType: 'user',
-                color: 'primary' as const
+                route: '/clientes/nuevo',
+                queryParams: { source: 'quick-action' },
+                color: 'primary' as const,
+                tooltip: 'Registrar un nuevo cliente'
               },
               {
                 id: 'import-clients',
                 label: 'Importar',
-                icon: 'import-icon',
-                iconType: 'import',
-                color: 'secondary' as const
+                icon: 'download-tray',
+                iconType: 'download-tray',
+                route: '/clientes',
+                queryParams: { view: 'import', source: 'quick-action' },
+                color: 'secondary' as const,
+                tooltip: 'Importar clientes desde archivo'
               }
-            ];
+            ]);
 
           case '/cotizador':
-            return [
+            return this.markCurrentRoute(route, [
               {
                 id: 'ags-quote',
                 label: 'AGS Individual',
-                icon: 'truck-icon',
+                icon: 'truck',
                 iconType: 'truck',
                 route: '/cotizador/ags-individual',
-                color: 'primary' as const
+                queryParams: { source: 'quick-action' },
+                color: 'primary' as const,
+                tooltip: 'Cotizar plan individual de Aguascalientes'
               },
               {
                 id: 'edomex-quote',
                 label: 'EdoMex Colectivo',
-                icon: 'handshake-icon',
+                icon: 'handshake',
                 iconType: 'handshake',
                 route: '/cotizador/edomex-colectivo',
-                color: 'success' as const
+                queryParams: { source: 'quick-action' },
+                color: 'success' as const,
+                tooltip: 'Cotizar plan colectivo Estado de México'
               }
-            ];
+            ]);
 
           case '/simulador':
-            return [
+            return this.markCurrentRoute(route, [
               {
                 id: 'ags-saving',
                 label: 'AGS Ahorro',
                 icon: 'lightbulb',
                 iconType: 'lightbulb',
                 route: '/simulador/ags-ahorro',
-                color: 'warning' as const
+                queryParams: { source: 'quick-action' },
+                color: 'warning' as const,
+                tooltip: 'Comparar escenarios de ahorro AGS'
               },
               {
                 id: 'edomex-individual',
                 label: 'EdoMex Individual',
-                icon: 'bank-icon',
+                icon: 'bank',
                 iconType: 'bank',
                 route: '/simulador/edomex-individual',
-                color: 'primary' as const
+                queryParams: { source: 'quick-action' },
+                color: 'primary' as const,
+                tooltip: 'Escenario individual Estado de México'
               },
               {
                 id: 'collective-tanda',
                 label: 'Tanda Colectiva',
-                icon: 'snowflake-icon',
-                iconType: 'snowflake',
+                icon: 'snow',
+                iconType: 'snow',
                 route: '/simulador/tanda-colectiva',
-                color: 'secondary' as const
+                queryParams: { source: 'quick-action' },
+                color: 'secondary' as const,
+                tooltip: 'Simular una tanda colectiva'
               }
-            ];
+            ]);
 
           default:
             return [];
@@ -388,15 +414,36 @@ export class NavigationService {
    */
   executeQuickAction(actionId: string): void {
     // Find the action and execute it
-    this.getQuickActions().subscribe(actions => {
+    this.getQuickActions().pipe(take(1)).subscribe(actions => {
       const action = actions.find(a => a.id === actionId);
       if (action) {
+        if (action.disabled) {
+          return;
+        }
         if (action.route) {
-          this.navigateTo(action.route);
+          this.navigateTo(action.route, action.queryParams);
         } else if (action.action) {
           action.action();
         }
       }
+    });
+  }
+
+  private markCurrentRoute(currentRoute: string, actions: QuickAction[]): QuickAction[] {
+    const normalized = currentRoute.split('?')[0];
+
+    return actions.map(action => {
+      if (!action.route) {
+        return action;
+      }
+
+      const isCurrent = normalized === action.route || normalized.startsWith(`${action.route}/`);
+
+      return {
+        ...action,
+        disabled: isCurrent,
+        active: isCurrent
+      };
     });
   }
 

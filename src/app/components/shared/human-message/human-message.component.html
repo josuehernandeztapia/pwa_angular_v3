@@ -7,11 +7,11 @@
   [attr.data-tone]="microcopy?.tone"
 >
   <div *ngIf="showIcon" [ngClass]="getIconClasses()" aria-hidden="true">
-    <app-ui-icon
+    <app-icon
       class="human-message__icon-symbol"
       [name]="getContextIcon()"
       [size]="iconSize"
-    ></app-ui-icon>
+    ></app-icon>
   </div>
 
   <div class="human-message__content">
@@ -42,6 +42,6 @@
     (click)="onDismiss()"
     aria-label="Cerrar mensaje"
   >
-    <app-ui-icon name="alert-circle" size="sm"></app-ui-icon>
+    <app-icon name="alert-circle" size="sm"></app-icon>
   </button>
 </div>

@@ -203,8 +203,8 @@
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-full);
   border: none;
-  background: var(--color-success, transparent);
-  color: var(--color-bg-primary, transparent);
+  background: var(--color-success);
+  color: var(--color-bg-primary);
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 16px 36px rgba(16, 185, 129, 0.28);
@@ -212,17 +212,17 @@
 }
 
 .premium-dashboard__journey-action:hover {
-  background: var(--color-success, var(--color-success-strong, transparent) 15%);
+  background: var(--color-success, var(--color-success-strong) 15%);
   box-shadow: 0 18px 40px rgba(16, 185, 129, 0.32);
 }
 
 .premium-dashboard__journey-action:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 4px var(--color-success, transparent);
+  box-shadow: 0 0 0 4px var(--color-success);
 }
 
 .premium-dashboard__journey-action--active {
-  box-shadow: 0 0 0 4px var(--color-success, transparent);
+  box-shadow: 0 0 0 4px var(--color-success);
 }
 
 .premium-dashboard__loaders {

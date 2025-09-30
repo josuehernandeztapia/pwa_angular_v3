@@ -4,8 +4,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-24, 24px);
-  background: var(--command-center-bg, transparent);
-  color: var(--neutral-950, transparent);
+  background: var(--command-center-bg, var(--openai-gray-50));
+  color: var(--neutral-950, var(--openai-gray-900));
 
   &__header {
     margin: 0;
@@ -17,8 +17,8 @@
     gap: var(--space-16, 16px);
     padding: var(--space-24, 24px);
     border-radius: var(--radius-lg, 16px);
-    background: var(--flat-surface-bg, transparent);
-    border: 1px solid var(--neutral-300, transparent);
+    background: var(--flat-surface-bg, var(--openai-white));
+    border: 1px solid var(--neutral-300, var(--openai-gray-200));
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.08));
   }
 
@@ -32,13 +32,13 @@
     margin: 0;
     font-size: var(--font-h1-size, 1.75rem);
     font-weight: var(--font-weight-bold, 700);
-    color: var(--neutral-900, transparent);
+    color: var(--neutral-900, var(--openai-gray-800));
   }
 
   &__subtitle {
     margin: 0;
     font-size: var(--font-body-size, 1rem);
-    color: var(--neutral-500, transparent);
+    color: var(--neutral-500, var(--openai-gray-400));
   }
 
   &__header-meta {
@@ -54,20 +54,20 @@
     gap: var(--space-8, 8px);
     padding: 6px 14px;
     border-radius: 999px;
-    border: 1px solid var(--accent-green-500, transparent);
-    background: var(--accent-green-500, transparent);
-    color: var(--accent-green-700, transparent);
+    border: 1px solid var(--accent-green-500);
+    background: var(--accent-green-500);
+    color: var(--accent-green-700);
     font-size: 0.85rem;
     font-weight: var(--font-weight-semibold, 600);
 
     &--active {
-      box-shadow: 0 0 0 1px var(--accent-green-500, transparent);
+      box-shadow: 0 0 0 1px var(--accent-green-500);
     }
 
     &--inactive {
-      border-color: var(--accent-red-500, transparent);
-      background: var(--accent-red-500, transparent);
-      color: var(--accent-red-600, transparent);
+      border-color: var(--accent-red-500);
+      background: var(--accent-red-500);
+      color: var(--accent-red-600);
 
       .triggers-monitor__monitoring-dot {
         animation: none;
@@ -92,7 +92,7 @@
 
   &__monitoring-timestamp {
     font-size: 0.85rem;
-    color: var(--neutral-500, transparent);
+    color: var(--neutral-500, var(--openai-gray-400));
   }
 
   &__refresh {
@@ -101,18 +101,18 @@
     gap: var(--space-8, 8px);
     padding: 10px 16px;
     border-radius: var(--radius-md, 8px);
-    border: 1px solid var(--neutral-300, transparent);
-    background: var(--flat-surface-bg, transparent);
-    color: var(--neutral-600, transparent);
+    border: 1px solid var(--neutral-300, var(--openai-gray-200));
+    background: var(--flat-surface-bg, var(--openai-white));
+    color: var(--neutral-600, var(--openai-gray-500));
     font-size: 0.9rem;
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
     transition: var(--transition-quick, all 0.2s ease);
 
     &:hover:not(:disabled) {
-      border-color: var(--accent-blue-500, transparent);
-      color: var(--neutral-900, transparent);
-      background: var(--neutral-100, transparent);
+      border-color: var(--accent-blue-500);
+      color: var(--neutral-900, var(--openai-gray-800));
+      background: var(--neutral-100, var(--openai-gray-50));
     }
 
     &:disabled {
@@ -143,24 +143,24 @@
     gap: var(--space-16, 16px);
     padding: var(--space-20, 20px);
     border-radius: var(--radius-lg, 16px);
-    background: var(--flat-surface-bg, transparent);
-    border: 1px solid var(--neutral-300, transparent);
+    background: var(--flat-surface-bg, var(--openai-white));
+    border: 1px solid var(--neutral-300, var(--openai-gray-200));
     box-shadow: var(--shadow-xs, 0 1px 2px rgba(8, 8, 8, 0.05));
 
     &--total {
-      border-color: var(--accent-blue-500, transparent);
+      border-color: var(--accent-blue-500);
     }
 
     &--success {
-      border-color: var(--accent-green-500, transparent);
+      border-color: var(--accent-green-500);
     }
 
     &--error {
-      border-color: var(--accent-red-500, transparent);
+      border-color: var(--accent-red-500);
     }
 
     &--warning {
-      border-color: var(--accent-amber-500, transparent);
+      border-color: var(--accent-amber-500);
     }
   }
 
@@ -173,25 +173,25 @@
   &__summary-label {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--neutral-500, transparent);
+    color: var(--neutral-500, var(--openai-gray-400));
   }
 
   &__summary-value {
     margin: 0;
     font-size: 2rem;
     font-weight: var(--font-weight-bold, 700);
-    color: var(--neutral-900, transparent);
+    color: var(--neutral-900, var(--openai-gray-800));
 
     &--success {
-      color: var(--accent-green-600, transparent);
+      color: var(--accent-green-600);
     }
 
     &--error {
-      color: var(--accent-red-600, transparent);
+      color: var(--accent-red-600);
     }
 
     &--warning {
-      color: var(--accent-amber-600, transparent);
+      color: var(--accent-amber-600);
     }
   }
 
@@ -201,26 +201,26 @@
     border-radius: 12px;
     display: grid;
     place-items: center;
-    background: var(--neutral-100, transparent);
+    background: var(--neutral-100, var(--openai-gray-50));
 
     &--primary {
-      background: var(--accent-blue-500, transparent);
-      color: var(--accent-blue-600, transparent);
+      background: var(--accent-blue-500);
+      color: var(--accent-blue-600);
     }
 
     &--success {
-      background: var(--accent-green-500, transparent);
-      color: var(--accent-green-600, transparent);
+      background: var(--accent-green-500);
+      color: var(--accent-green-600);
     }
 
     &--error {
-      background: var(--accent-red-500, transparent);
-      color: var(--accent-red-600, transparent);
+      background: var(--accent-red-500);
+      color: var(--accent-red-600);
     }
 
     &--warning {
-      background: var(--accent-amber-500, transparent);
-      color: var(--accent-amber-600, transparent);
+      background: var(--accent-amber-500);
+      color: var(--accent-amber-600);
     }
 
     app-icon {
@@ -234,8 +234,8 @@
     gap: var(--space-16, 16px);
     padding: var(--space-20, 20px);
     border-radius: var(--radius-lg, 16px);
-    background: var(--flat-surface-bg, transparent);
-    border: 1px solid var(--neutral-300, transparent);
+    background: var(--flat-surface-bg, var(--openai-white));
+    border: 1px solid var(--neutral-300, var(--openai-gray-200));
     box-shadow: var(--shadow-xs, 0 1px 2px rgba(8, 8, 8, 0.05));
   }
 
@@ -250,7 +250,7 @@
     gap: var(--space-8, 8px);
     font-size: 0.9rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--neutral-600, transparent);
+    color: var(--neutral-600, var(--openai-gray-500));
   }
 
   &__filter-icon {
@@ -258,11 +258,11 @@
     height: 18px;
 
     &--market {
-      color: var(--accent-blue-500, transparent);
+      color: var(--accent-blue-500);
     }
 
     &--status {
-      color: var(--accent-purple-500, transparent);
+      color: var(--accent-purple-500);
     }
   }
 
@@ -270,15 +270,15 @@
     width: 100%;
     padding: 12px;
     border-radius: var(--radius-md, 8px);
-    border: 1px solid var(--neutral-300, transparent);
-    background: var(--flat-surface-bg, transparent);
-    color: var(--neutral-900, transparent);
+    border: 1px solid var(--neutral-300, var(--openai-gray-200));
+    background: var(--flat-surface-bg, var(--openai-white));
+    color: var(--neutral-900, var(--openai-gray-800));
     transition: border-color var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
 
     &:focus {
       outline: none;
-      border-color: var(--accent-blue-500, transparent);
-      box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
+      border-color: var(--accent-blue-500);
+      box-shadow: 0 0 0 3px var(--accent-blue-500);
     }
   }
 
@@ -291,23 +291,23 @@
 
   &__filters-count {
     font-size: 0.9rem;
-    color: var(--neutral-600, transparent);
+    color: var(--neutral-600, var(--openai-gray-500));
   }
 
   &__filters-clear {
     padding: 8px 14px;
     border-radius: var(--radius-md, 8px);
     border: 1px solid transparent;
-    background: var(--accent-red-500, transparent);
-    color: var(--accent-red-500, transparent);
+    background: var(--accent-red-500);
+    color: var(--accent-red-500);
     font-size: 0.85rem;
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
     transition: var(--transition-quick, all 0.2s ease);
 
     &:hover {
-      background: var(--accent-red-500, transparent);
-      color: var(--flat-surface-bg, transparent);
+      background: var(--accent-red-500);
+      color: var(--flat-surface-bg, var(--openai-white));
     }
   }
 
@@ -315,7 +315,7 @@
     display: inline-flex;
     flex-wrap: wrap;
     gap: var(--space-12, 12px);
-    border-bottom: 1px solid var(--neutral-300, transparent);
+    border-bottom: 1px solid var(--neutral-300, var(--openai-gray-200));
     padding-bottom: var(--space-4, 16px);
   }
 
@@ -328,28 +328,28 @@
     border-radius: var(--radius-md, 8px);
     border: none;
     background: transparent;
-    color: var(--neutral-600, transparent);
+    color: var(--neutral-600, var(--openai-gray-500));
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
     transition: var(--transition-quick, all 0.2s ease);
 
     &:hover {
-      color: var(--neutral-900, transparent);
-      background: var(--neutral-100, transparent);
+      color: var(--neutral-900, var(--openai-gray-800));
+      background: var(--neutral-100, var(--openai-gray-50));
     }
 
     &--active {
-      color: var(--neutral-900, transparent);
-      background: var(--accent-blue-500, transparent);
-      box-shadow: inset 0 -2px 0 var(--accent-blue-500, transparent);
+      color: var(--neutral-900, var(--openai-gray-800));
+      background: var(--accent-blue-500);
+      box-shadow: inset 0 -2px 0 var(--accent-blue-500);
     }
   }
 
   &__tab-badge {
     padding: 2px 8px;
     border-radius: 999px;
-    background: var(--accent-blue-500, transparent);
-    color: var(--accent-blue-600, transparent);
+    background: var(--accent-blue-500);
+    color: var(--accent-blue-600);
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
   }
@@ -370,8 +370,8 @@
   &__pending-card,
   &__rule-card {
     border-radius: var(--radius-lg, 16px);
-    background: var(--flat-surface-bg, transparent);
-    border: 1px solid var(--neutral-300, transparent);
+    background: var(--flat-surface-bg, var(--openai-white));
+    border: 1px solid var(--neutral-300, var(--openai-gray-200));
     box-shadow: var(--shadow-xs, 0 1px 2px rgba(8, 8, 8, 0.05));
     padding: var(--space-20, 20px);
     display: flex;
@@ -401,18 +401,18 @@
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: var(--neutral-400, transparent);
+    background: var(--neutral-400, var(--openai-gray-300));
 
     &--success {
-      background: var(--accent-green-500, transparent);
+      background: var(--accent-green-500);
     }
 
     &--error {
-      background: var(--accent-red-500, transparent);
+      background: var(--accent-red-500);
     }
 
     &--pending {
-      background: var(--accent-amber-500, transparent);
+      background: var(--accent-amber-500);
     }
   }
 
@@ -431,32 +431,32 @@
     border-radius: 999px;
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
-    background: var(--neutral-200, transparent);
-    color: var(--neutral-700, transparent);
+    background: var(--neutral-200, var(--openai-gray-100));
+    color: var(--neutral-700, var(--openai-gray-600));
 
     &--directa {
-      background: var(--accent-blue-500, transparent);
-      color: var(--accent-blue-600, transparent);
+      background: var(--accent-blue-500);
+      color: var(--accent-blue-600);
     }
 
     &--plazo {
-      background: var(--accent-purple-500, transparent);
-      color: var(--accent-purple-600, transparent);
+      background: var(--accent-purple-500);
+      color: var(--accent-purple-600);
     }
 
     &--ahorro {
-      background: var(--accent-green-500, transparent);
-      color: var(--accent-green-600, transparent);
+      background: var(--accent-green-500);
+      color: var(--accent-green-600);
     }
 
     &--colectivo {
-      background: var(--accent-amber-500, transparent);
-      color: var(--accent-amber-600, transparent);
+      background: var(--accent-amber-500);
+      color: var(--accent-amber-600);
     }
 
     &--default {
-      background: var(--neutral-400, transparent);
-      color: var(--neutral-700, transparent);
+      background: var(--neutral-400, var(--openai-gray-300));
+      color: var(--neutral-700, var(--openai-gray-600));
     }
   }
 
@@ -467,21 +467,21 @@
     border-radius: 999px;
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
-    background: var(--neutral-200, transparent);
-    color: var(--neutral-700, transparent);
+    background: var(--neutral-200, var(--openai-gray-100));
+    color: var(--neutral-700, var(--openai-gray-600));
 
     &--neutral {
-      background: var(--neutral-200, transparent);
+      background: var(--neutral-200, var(--openai-gray-100));
     }
 
     &--purple {
-      background: var(--accent-purple-500, transparent);
-      color: var(--accent-purple-600, transparent);
+      background: var(--accent-purple-500);
+      color: var(--accent-purple-600);
     }
 
     &--success {
-      background: var(--accent-green-500, transparent);
-      color: var(--accent-green-600, transparent);
+      background: var(--accent-green-500);
+      color: var(--accent-green-600);
     }
   }
 
@@ -499,14 +499,14 @@
     gap: 6px;
     padding: 12px;
     border-radius: var(--radius-md, 8px);
-    background: var(--neutral-100, transparent);
+    background: var(--neutral-100, var(--openai-gray-50));
   }
 
   &__event-metric-label,
   &__pending-metric-label {
     margin: 0;
     font-size: 0.85rem;
-    color: var(--neutral-500, transparent);
+    color: var(--neutral-500, var(--openai-gray-400));
   }
 
   &__event-metric-value,
@@ -514,10 +514,10 @@
     margin: 0;
     font-size: 1.1rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--neutral-900, transparent);
+    color: var(--neutral-900, var(--openai-gray-800));
 
     &--warning {
-      color: var(--accent-amber-600, transparent);
+      color: var(--accent-amber-600);
     }
   }
 
@@ -535,7 +535,7 @@
     flex-wrap: wrap;
     gap: var(--space-12, 12px);
     font-size: 0.85rem;
-    color: var(--neutral-500, transparent);
+    color: var(--neutral-500, var(--openai-gray-400));
   }
 
   &__event-actions {
@@ -547,40 +547,40 @@
   &__event-button {
     padding: 8px 16px;
     border-radius: var(--radius-md, 8px);
-    border: 1px solid var(--neutral-300, transparent);
-    background: var(--neutral-100, transparent);
-    color: var(--neutral-900, transparent);
+    border: 1px solid var(--neutral-300, var(--openai-gray-200));
+    background: var(--neutral-100, var(--openai-gray-50));
+    color: var(--neutral-900, var(--openai-gray-800));
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
     transition: var(--transition-quick, all 0.2s ease);
 
     &:hover {
-      border-color: var(--accent-blue-500, transparent);
+      border-color: var(--accent-blue-500);
     }
 
     &--primary {
       border-color: transparent;
-      background: var(--accent-blue-500, transparent);
-      color: var(--flat-surface-bg, transparent);
+      background: var(--accent-blue-500);
+      color: var(--flat-surface-bg, var(--openai-white));
 
       &:hover {
-        background: var(--accent-blue-600, transparent);
+        background: var(--accent-blue-600);
       }
     }
 
     &--danger {
       border-color: transparent;
-      background: var(--accent-red-500, transparent);
-      color: var(--flat-surface-bg, transparent);
+      background: var(--accent-red-500);
+      color: var(--flat-surface-bg, var(--openai-white));
 
       &:hover {
-        background: var(--accent-red-600, transparent);
+        background: var(--accent-red-600);
       }
     }
   }
 
   &__pending-card--tanda {
-    border-color: var(--accent-purple-500, transparent);
+    border-color: var(--accent-purple-500);
   }
 
   &__pending-progress {
@@ -594,7 +594,7 @@
     flex: 1;
     height: 8px;
     border-radius: 999px;
-    background: var(--neutral-300, transparent);
+    background: var(--neutral-300, var(--openai-gray-200));
     overflow: hidden;
   }
 
@@ -604,7 +604,7 @@
     left: 0;
     bottom: 0;
     border-radius: inherit;
-    background: var(--accent-green-500, transparent);
+    background: var(--accent-green-500);
     transition: width 0.3s ease;
   }
 
@@ -621,16 +621,16 @@
     border-radius: var(--radius-md, 8px);
     font-size: 0.85rem;
     font-weight: var(--font-weight-medium, 500);
-    background: var(--neutral-100, transparent);
+    background: var(--neutral-100, var(--openai-gray-50));
 
     &--ok {
-      background: var(--accent-green-500, transparent);
-      color: var(--accent-green-600, transparent);
+      background: var(--accent-green-500);
+      color: var(--accent-green-600);
     }
 
     &--alert {
-      background: var(--accent-red-500, transparent);
-      color: var(--accent-red-600, transparent);
+      background: var(--accent-red-500);
+      color: var(--accent-red-600);
     }
   }
 
@@ -641,6 +641,17 @@
     background: currentColor;
   }
 
+  &__pending-check-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__status-icon {
+    display: inline-flex;
+    --icon-color: currentColor;
+  }
+
   &__pulse-dot {
     width: 10px;
     height: 10px;
@@ -648,11 +659,11 @@
     animation: triggers-monitor-pulse 1.8s ease-in-out infinite;
 
     &--orange {
-      background: var(--accent-amber-500, transparent);
+      background: var(--accent-amber-500);
     }
 
     &--purple {
-      background: var(--accent-purple-500, transparent);
+      background: var(--accent-purple-500);
     }
   }
 
@@ -665,7 +676,7 @@
   &__rule-description {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--neutral-500, transparent);
+    color: var(--neutral-500, var(--openai-gray-400));
   }
 
   &__rule-status {
@@ -690,19 +701,19 @@
     display: grid;
     gap: 4px;
     font-size: 0.9rem;
-    color: var(--neutral-500, transparent);
+    color: var(--neutral-500, var(--openai-gray-400));
   }
 
   &__empty {
     padding: var(--space-20, 20px);
     border-radius: var(--radius-lg, 16px);
-    background: var(--neutral-100, transparent);
+    background: var(--neutral-100, var(--openai-gray-50));
     text-align: center;
   }
 
   &__empty-message {
     margin: 0;
-    color: var(--neutral-600, transparent);
+    color: var(--neutral-600, var(--openai-gray-500));
     font-weight: var(--font-weight-medium, 500);
   }
 
@@ -718,10 +729,10 @@
   &__modal {
     width: min(520px, 92vw);
     border-radius: var(--radius-lg, 16px);
-    background: var(--flat-surface-bg, transparent);
+    background: var(--flat-surface-bg, var(--openai-white));
     padding: var(--space-24, 24px);
     box-shadow: var(--shadow-lg, 0 12px 32px rgba(8, 8, 8, 0.25));
-    border: 1px solid var(--neutral-300, transparent);
+    border: 1px solid var(--neutral-300, var(--openai-gray-200));
   }
 
   &__modal-title {
@@ -732,7 +743,7 @@
 
   &__modal-message {
     margin: 0 0 var(--space-16, 16px) 0;
-    color: var(--neutral-600, transparent);
+    color: var(--neutral-600, var(--openai-gray-500));
   }
 
   &__modal-actions {
@@ -743,15 +754,15 @@
   &__modal-button {
     padding: 10px 18px;
     border-radius: var(--radius-md, 8px);
-    border: 1px solid var(--neutral-300, transparent);
-    background: var(--neutral-100, transparent);
-    color: var(--neutral-900, transparent);
+    border: 1px solid var(--neutral-300, var(--openai-gray-200));
+    background: var(--neutral-100, var(--openai-gray-50));
+    color: var(--neutral-900, var(--openai-gray-800));
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
     transition: var(--transition-quick, all 0.2s ease);
 
     &:hover {
-      border-color: var(--accent-blue-500, transparent);
+      border-color: var(--accent-blue-500);
     }
   }
 

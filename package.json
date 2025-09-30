@@ -29,8 +29,10 @@
     "build": "ng build",
     "build:test": "ng build --configuration=development",
     "build:prod": "ng build --configuration production",
+    "build:prod:stats": "ng build --configuration production --stats-json",
     "build:prod:performance": "ng build --configuration production --aot --build-optimizer",
     "build:check": "ng build --configuration production --dry-run",
+    "size:guard": "node scripts/check-bundle-size.mjs",
     "build:analyze": "ng build --configuration production --stats-json && npx webpack-bundle-analyzer dist/conductores-pwa/stats.json",
     "build:staging": "ng build --configuration=staging",
     "serve:staging": "ng serve --configuration=staging",
@@ -39,6 +41,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:unit": "CHROME_BIN=$(node scripts/chrome-bin.js || echo '') ng test --watch=false --browsers=ChromeHeadless",
+    "test:single": "KARMA_PORT=9878 CHROME_BIN=$(node scripts/chrome-bin.js || echo '') ng test --watch=false --browsers=ChromeHeadless",
+    "test:single:services": "KARMA_PORT=9879 CHROME_BIN=$(node scripts/chrome-bin.js || echo '') ng test --ts-config=tsconfig.spec.services.json --include='**/services/**/*.spec.ts' --watch=false --browsers=ChromeHeadless",
     "test:services": "CHROME_BIN=$(node scripts/chrome-bin.js || echo '') ng test --ts-config=tsconfig.spec.services.json --include='**/services/**/*.spec.ts' --watch=false --browsers=ChromeHeadless",
     "test:unit:new-feature": "CHROME_BIN=$(node scripts/chrome-bin.js || echo '') ng test --watch=false --browsers=ChromeHeadless --include='src/app/services/user-profile.service.spec.ts,src/app/services/flows.service.spec.ts,src/app/services/tanda-lab.service.spec.ts,src/app/services/postventa.service.spec.ts'",
     "test:components": "ng test --ts-config=tsconfig.spec.components.json --include='**/components/**/*.spec.ts' --watch=false --browsers=ChromeHeadless",
@@ -47,7 +51,6 @@
     "test:visual": "playwright test --config=playwright.config.ts",
     "test:visual:all": "playwright test --config=playwright.config.ts",
     "test:visual:report": "playwright show-report",
-    
     "test:visual:modules": "playwright test --config=playwright.config.ts --grep @",
     "test:visual:modules:cross:browser": "npm run test:visual",
     "test:visual:modules:responsive": "npm run test:visual",
@@ -130,17 +133,13 @@
     "test:visual:color:palette:consistency": "node scripts/ux-coherence-runner.js visual:palette",
     "test:visual:typography:hierarchy": "node scripts/ux-coherence-runner.js visual:typography",
     "test:visual:spacing:consistency": "node scripts/ux-coherence-runner.js visual:spacing",
-    
     "test:ux:component:transitions": "node scripts/ux-coherence-runner.js ux:transitions",
     "test:ux:modal:overlay:consistency": "node scripts/ux-coherence-runner.js ux:modals",
     "test:ux:form:interaction:flow": "node scripts/ux-coherence-runner.js ux:forms",
     "test:ux:navigation:flow:coherence": "node scripts/ux-coherence-runner.js ux:navigation",
-    
     "test:responsive:breakpoint:coherence": "node scripts/ux-coherence-runner.js responsive:breakpoints",
     "test:ux:coherence:master:validation": "node scripts/ux-coherence-runner.js master:validation",
-    
     "monitor:ux:coherence:real:time": "node scripts/ux-coherence-runner.js coherence:all",
-    
     "upgrade:component:nueva-oportunidad": "node scripts/upgrade-component.js nueva-oportunidad",
     "upgrade:component:clientes-list": "node scripts/upgrade-component.js clientes",
     "upgrade:component:onboarding-main": "node scripts/upgrade-component.js onboarding",
@@ -195,6 +194,7 @@
     "chart.js": "^4.5.0",
     "firebase": "^12.2.1",
     "jspdf": "^3.0.2",
+    "lucide-angular": "^0.544.0",
     "rxjs": "~7.8.0",
     "tesseract.js": "^6.0.1",
     "tslib": "^2.3.0",
@@ -227,7 +227,7 @@
     "@types/jasmine": "~5.1.0",
     "@types/jasminewd2": "^2.0.13",
     "@types/jest-axe": "^3.5.9",
-    "@types/node": "^24.3.1",
+    "@types/node": "^24.6.0",
     "@types/tesseract.js": "^0.0.2",
     "@typescript-eslint/eslint-plugin": "7.11.0",
     "@typescript-eslint/parser": "7.11.0",
@@ -260,6 +260,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "~5.4.2",
     "wait-on": "^8.0.1",
+    "webpack": "^5.102.0",
     "webpack-bundle-analyzer": "^4.10.2"
   }
 }

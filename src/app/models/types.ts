@@ -55,6 +55,7 @@ export interface Document {
   status: DocumentStatus;
   isOptional?: boolean;
   tooltip?: string;
+  group?: string;
   // Additional properties for API operations (optional for compatibility)
   uploadedAt?: Date;
   // Optional expiration for documents that expire

@@ -314,7 +314,7 @@ describe('NavigationService', () => {
         {
           id: 'custom-action',
           label: 'Custom',
-          icon: 'FAST',
+          icon: 'target',
           action: customAction
         }
       ]));

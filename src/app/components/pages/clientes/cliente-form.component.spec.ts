@@ -8,8 +8,9 @@ import userEvent from '@testing-library/user-event';
 import { ClienteFormComponent } from './cliente-form.component';
 import { ToastService } from '../../../services/toast.service';
 import { ApiService } from '../../../services/api.service';
-import { CustomValidators } from '../../../validators/custom-validators';
 import { Client, BusinessFlow } from '../../../models/types';
+import { FlowContextService } from '../../../services/flow-context.service';
+import { ErrorBoundaryService } from '../../../services/error-boundary.service';
 
 const mockClient: Client = {
   id: '1',
@@ -34,16 +35,26 @@ describe('ClienteFormComponent', () => {
   let mockActivatedRoute: any;
   let mockToastService: jasmine.SpyObj<ToastService>;
   let mockApiService: jasmine.SpyObj<ApiService>;
+  let mockErrorBoundary: jasmine.SpyObj<ErrorBoundaryService>;
 
   beforeEach(async () => {
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate', 'navigateByUrl']);
     const toastServiceSpy = jasmine.createSpyObj('ToastService', ['success', 'error']);
     const apiServiceSpy = jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']);
+    const flowContextSpy = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'clearContext', 'getContextData', 'updateContext']);
+    flowContextSpy.getContextData.and.returnValue(null);
+    const errorBoundarySpy = jasmine.createSpyObj('ErrorBoundaryService', ['reportNetworkTimeout', 'resolveIssueByContext']);
+    errorBoundarySpy.reportNetworkTimeout.and.callFake(() => ({ id: 'issue-1' } as any));
+
+    const queryParamMap = {
+      get: (_: string) => null
+    };
 
     mockActivatedRoute = {
       params: of({ id: null }),
-      snapshot: { 
-        params: { id: null }
+      snapshot: {
+        params: { id: null },
+        queryParamMap
       },
       data: of({})
     };
@@ -54,7 +65,9 @@ describe('ClienteFormComponent', () => {
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: ToastService, useValue: toastServiceSpy },
-        { provide: ApiService, useValue: apiServiceSpy }
+        { provide: ApiService, useValue: apiServiceSpy },
+        { provide: FlowContextService, useValue: flowContextSpy },
+        { provide: ErrorBoundaryService, useValue: errorBoundarySpy }
       ]
     }).compileComponents();
 
@@ -65,6 +78,8 @@ describe('ClienteFormComponent', () => {
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     mockToastService = TestBed.inject(ToastService) as jasmine.SpyObj<ToastService>;
     mockApiService = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
+    TestBed.inject(FlowContextService);
+    mockErrorBoundary = TestBed.inject(ErrorBoundaryService) as jasmine.SpyObj<ErrorBoundaryService>;
 
   });
 
@@ -196,7 +211,29 @@ describe('ClienteFormComponent', () => {
 
     component.onSubmit();
 
-    expect(mockToastService.error).toHaveBeenCalledWith('Error al crear el cliente');
+    expect(mockToastService.error).toHaveBeenCalledWith('No se pudo crear el cliente');
+    expect(mockErrorBoundary.reportNetworkTimeout).toHaveBeenCalled();
+    expect(component.isLoading).toBe(false);
+  });
+
+  it('should handle API error during client update', () => {
+    component.isEditMode = true;
+    component.clientId = '1';
+
+    mockApiService.updateClient.and.returnValue(throwError(() => new Error('fail')));
+
+    component.clienteForm.patchValue({
+      name: 'Updated Name',
+      email: 'updated@example.com',
+      phone: '5559876543',
+      market: 'edomex',
+      flow: BusinessFlow.AhorroProgramado
+    });
+
+    component.onSubmit();
+
+    expect(mockToastService.error).toHaveBeenCalledWith('No se pudo actualizar el cliente');
+    expect(mockErrorBoundary.reportNetworkTimeout).toHaveBeenCalled();
     expect(component.isLoading).toBe(false);
   });
 
@@ -269,7 +306,7 @@ describe('ClienteFormComponent Integration Tests', () => {
   it('should render form with all required fields', async () => {
     const mockActivatedRoute = {
       params: of({ id: null }),
-      snapshot: { params: { id: null } },
+      snapshot: { params: { id: null }, queryParamMap: { get: (_: string) => null } },
       data: of({})
     };
 
@@ -278,12 +315,19 @@ describe('ClienteFormComponent Integration Tests', () => {
     mockApiService.updateClient.and.returnValue(of(mockClient));
     mockApiService.getClientById.and.returnValue(of(mockClient));
 
+    const flowContext = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'clearContext', 'getContextData', 'updateContext']);
+    flowContext.getContextData.and.returnValue(null);
+    const errorBoundary = jasmine.createSpyObj('ErrorBoundaryService', ['reportNetworkTimeout', 'resolveIssueByContext']);
+    errorBoundary.reportNetworkTimeout.and.returnValue({ id: 'issue' });
+
     await render(ClienteFormComponent, {
       providers: [
         { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
-        { provide: ApiService, useValue: mockApiService }
+        { provide: ApiService, useValue: mockApiService },
+        { provide: FlowContextService, useValue: flowContext },
+        { provide: ErrorBoundaryService, useValue: errorBoundary }
       ]
     });
 
@@ -297,7 +341,7 @@ describe('ClienteFormComponent Integration Tests', () => {
   it('should show validation errors when submitting empty form', async () => {
     const mockActivatedRoute = {
       params: of({ id: null }),
-      snapshot: { params: { id: null } },
+      snapshot: { params: { id: null }, queryParamMap: { get: (_: string) => null } },
       data: of({})
     };
 
@@ -306,12 +350,19 @@ describe('ClienteFormComponent Integration Tests', () => {
     mockApiService.updateClient.and.returnValue(of(mockClient));
     mockApiService.getClientById.and.returnValue(of(mockClient));
 
+    const flowContext = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'clearContext', 'getContextData', 'updateContext']);
+    flowContext.getContextData.and.returnValue(null);
+    const errorBoundary = jasmine.createSpyObj('ErrorBoundaryService', ['reportNetworkTimeout', 'resolveIssueByContext']);
+    errorBoundary.reportNetworkTimeout.and.returnValue({ id: 'issue' });
+
     await render(ClienteFormComponent, {
       providers: [
         { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
-        { provide: ApiService, useValue: mockApiService }
+        { provide: ApiService, useValue: mockApiService },
+        { provide: FlowContextService, useValue: flowContext },
+        { provide: ErrorBoundaryService, useValue: errorBoundary }
       ]
     });
 
@@ -327,18 +378,25 @@ describe('ClienteFormComponent Integration Tests', () => {
   it('should handle form input correctly', async () => {
     const mockActivatedRoute = {
       params: of({ id: null }),
-      snapshot: { params: { id: null } },
+      snapshot: { params: { id: null }, queryParamMap: { get: (_: string) => null } },
       data: of({})
     };
 
     const user = userEvent.setup();
+
+    const flowContext = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'clearContext', 'getContextData', 'updateContext']);
+    flowContext.getContextData.and.returnValue(null);
+    const errorBoundary = jasmine.createSpyObj('ErrorBoundaryService', ['reportNetworkTimeout', 'resolveIssueByContext']);
+    errorBoundary.reportNetworkTimeout.and.returnValue({ id: 'issue' });
 
     await render(ClienteFormComponent, {
       providers: [
         { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
-        { provide: ApiService, useValue: jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']) }
+        { provide: ApiService, useValue: jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']) },
+        { provide: FlowContextService, useValue: flowContext },
+        { provide: ErrorBoundaryService, useValue: errorBoundary }
       ]
     });
 
@@ -358,7 +416,7 @@ describe('ClienteFormComponent Integration Tests', () => {
   it('should submit form with valid data', async () => {
     const mockActivatedRoute = {
       params: of({ id: null }),
-      snapshot: { params: { id: null } },
+      snapshot: { params: { id: null }, queryParamMap: { get: (_: string) => null } },
       data: of({})
     };
 
@@ -373,12 +431,19 @@ describe('ClienteFormComponent Integration Tests', () => {
     const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     const user = userEvent.setup();
 
+    const flowContext = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'clearContext', 'getContextData', 'updateContext']);
+    flowContext.getContextData.and.returnValue(null);
+    const errorBoundary = jasmine.createSpyObj('ErrorBoundaryService', ['reportNetworkTimeout', 'resolveIssueByContext']);
+    errorBoundary.reportNetworkTimeout.and.returnValue({ id: 'issue' });
+
     await render(ClienteFormComponent, {
       providers: [
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
-        { provide: ApiService, useValue: mockApiService }
+        { provide: ApiService, useValue: mockApiService },
+        { provide: FlowContextService, useValue: flowContext },
+        { provide: ErrorBoundaryService, useValue: errorBoundary }
       ]
     });
 
@@ -401,26 +466,32 @@ describe('ClienteFormComponent Integration Tests', () => {
   it('should handle back button click', async () => {
     const mockActivatedRoute = {
       params: of({ id: null }),
-      snapshot: { params: { id: null } },
+      snapshot: { params: { id: null }, queryParamMap: { get: (_: string) => null } },
       data: of({})
     };
 
     const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     const user = userEvent.setup();
 
+    const flowContext = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'clearContext', 'getContextData', 'updateContext']);
+    flowContext.getContextData.and.returnValue(null);
+    const errorBoundary = jasmine.createSpyObj('ErrorBoundaryService', ['reportNetworkTimeout', 'resolveIssueByContext']);
+    errorBoundary.reportNetworkTimeout.and.returnValue({ id: 'issue' });
+
     await render(ClienteFormComponent, {
       providers: [
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
-        { provide: ApiService, useValue: jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']) }
+        { provide: ApiService, useValue: jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']) },
+        { provide: FlowContextService, useValue: flowContext },
+        { provide: ErrorBoundaryService, useValue: errorBoundary }
       ]
     });
 
-    const backButton = screen.getByText('← Volver');
+    const backButton = screen.getByRole('button', { name: 'Volver' });
     await user.click(backButton);
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/clientes']);
   });
 });
-

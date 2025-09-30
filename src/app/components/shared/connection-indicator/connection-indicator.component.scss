@@ -22,9 +22,9 @@
     gap: var(--space-12, 12px);
     padding: var(--space-8, 8px) var(--space-16, 16px);
     border-radius: 999px;
-    border: 1px solid var(--neutral-300, transparent);
-    background: var(--neutral-100, var(--flat-surface-bg, transparent));
-    color: var(--neutral-600, transparent);
+    border: 1px solid var(--neutral-300, var(--openai-gray-200));
+    background: var(--neutral-100, var(--flat-surface-bg, var(--openai-white)));
+    color: var(--neutral-600, var(--openai-gray-500));
     font-size: 0.875rem;
     font-weight: var(--font-weight-semibold, 600);
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.08));
@@ -32,38 +32,38 @@
   }
 
   &__card--offline {
-    background: var(--accent-red-500, var(--flat-surface-bg, transparent));
-    border-color: var(--accent-red-500, transparent);
-    color: var(--accent-red-700, transparent);
+    background: var(--accent-red-500, var(--flat-surface-bg, var(--openai-white)));
+    border-color: var(--accent-red-500);
+    color: var(--accent-red-700);
   }
 
   &__card--excellent {
-    background: var(--accent-green-500, var(--flat-surface-bg, transparent));
-    border-color: var(--accent-green-500, transparent);
-    color: var(--accent-green-700, transparent);
+    background: var(--accent-green-500, var(--flat-surface-bg, var(--openai-white)));
+    border-color: var(--accent-green-500);
+    color: var(--accent-green-700);
   }
 
   &__card--good {
-    background: var(--accent-blue-500, var(--flat-surface-bg, transparent));
-    border-color: var(--accent-blue-500, transparent);
-    color: var(--accent-blue-700, transparent);
+    background: var(--accent-blue-500, var(--flat-surface-bg, var(--openai-white)));
+    border-color: var(--accent-blue-500);
+    color: var(--accent-blue-700);
   }
 
   &__card--fair {
-    background: var(--accent-amber-400, var(--flat-surface-bg, transparent));
-    border-color: var(--accent-amber-400, transparent);
-    color: var(--accent-amber-700, transparent);
+    background: var(--accent-amber-400, var(--flat-surface-bg, var(--openai-white)));
+    border-color: var(--accent-amber-400);
+    color: var(--accent-amber-700);
   }
 
   &__card--poor {
-    background: var(--accent-amber-500, var(--flat-surface-bg, transparent));
-    border-color: var(--accent-amber-500, transparent);
-    color: var(--accent-amber-700, transparent);
+    background: var(--accent-amber-500, var(--flat-surface-bg, var(--openai-white)));
+    border-color: var(--accent-amber-500);
+    color: var(--accent-amber-700);
   }
 
   &__card--neutral {
-    background: var(--neutral-200, var(--flat-surface-bg, transparent));
-    color: var(--neutral-600, transparent);
+    background: var(--neutral-200, var(--flat-surface-bg, var(--openai-white)));
+    color: var(--neutral-600, var(--openai-gray-500));
   }
 
   &__icon {
@@ -81,7 +81,7 @@
     position: absolute;
     inset: -4px;
     border-radius: 999px;
-    background: var(--accent-amber-400, transparent);
+    background: var(--accent-amber-400);
     animation: connection-indicator-pulse 1.6s ease-out infinite;
     pointer-events: none;
   }
@@ -109,8 +109,8 @@
     right: 0;
     bottom: 0;
     padding: var(--space-12, 12px) var(--space-16, 16px);
-    background: var(--accent-red-500, transparent);
-    color: var(--flat-surface-bg, transparent);
+    background: var(--accent-red-500);
+    color: var(--flat-surface-bg, var(--openai-white));
     transition: opacity var(--transition-fast, 0.3s ease), max-height var(--transition-fast, 0.3s ease), padding var(--transition-fast, 0.3s ease);
     max-height: 160px;
     opacity: 1;
@@ -168,7 +168,7 @@
     align-items: center;
     justify-content: center;
     border: none;
-    background: var(--flat-surface-bg, transparent);
+    background: var(--flat-surface-bg, var(--openai-white));
     color: currentColor;
     padding: 6px;
     border-radius: 999px;
@@ -178,7 +178,7 @@
 
   &__mobile-dismiss:hover,
   &__mobile-dismiss:focus-visible {
-    background: var(--flat-surface-bg, transparent);
+    background: var(--flat-surface-bg, var(--openai-white));
     opacity: 0.9;
     outline: none;
   }
@@ -229,17 +229,17 @@
     gap: var(--space-12, 12px);
     padding: var(--space-12, 12px) var(--space-16, 16px);
     border-radius: var(--radius-md, 8px);
-    background: var(--flat-surface-bg, transparent);
-    border: 1px solid var(--neutral-300, transparent);
+    background: var(--flat-surface-bg, var(--openai-white));
+    border: 1px solid var(--neutral-300, var(--openai-gray-200));
     box-shadow: var(--shadow-md, 0 2px 4px rgba(8, 8, 8, 0.12));
   }
 
   &__toast-card--online {
-    border-color: var(--accent-green-500, transparent);
+    border-color: var(--accent-green-500);
   }
 
   &__toast-card--offline {
-    border-color: var(--accent-red-500, transparent);
+    border-color: var(--accent-red-500);
   }
 
   &__toast-icon {
@@ -256,11 +256,11 @@
   }
 
   &__toast-symbol--online {
-    color: var(--accent-green-600, transparent);
+    color: var(--accent-green-600);
   }
 
   &__toast-symbol--offline {
-    color: var(--accent-red-500, transparent);
+    color: var(--accent-red-500);
   }
 
   &__toast-body {
@@ -274,13 +274,13 @@
     margin: 0;
     font-size: 0.875rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--neutral-700, transparent);
+    color: var(--neutral-700, var(--openai-gray-600));
   }
 
   &__toast-message {
     margin: 0;
     font-size: 0.75rem;
-    color: var(--neutral-500, transparent);
+    color: var(--neutral-500, var(--openai-gray-400));
   }
 
   &__toast-dismiss {
@@ -289,7 +289,7 @@
     justify-content: center;
     border: none;
     background: transparent;
-    color: var(--neutral-500, transparent);
+    color: var(--neutral-500, var(--openai-gray-400));
     cursor: pointer;
     padding: 4px;
     border-radius: 999px;
@@ -298,8 +298,8 @@
 
   &__toast-dismiss:hover,
   &__toast-dismiss:focus-visible {
-    color: var(--neutral-700, transparent);
-    background: var(--neutral-200, transparent);
+    color: var(--neutral-700, var(--openai-gray-600));
+    background: var(--neutral-200, var(--openai-gray-100));
     outline: none;
   }
 

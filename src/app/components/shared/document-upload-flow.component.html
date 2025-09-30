@@ -1,6 +1,66 @@
 <div class="document-upload" *ngIf="flowContext">
-  <section class="document-upload__card ui-card">
-    <h2 class="document-upload__title">Documentos</h2>
+  <section class="document-upload__card card">
+    <header class="document-upload__header">
+      <h2 class="document-upload__title">Documentos requeridos</h2>
+      <div class="document-upload__meta">
+        <span class="document-upload__progress" data-cy="documents-progress">
+          {{ completionStatus.completedDocs }}/{{ completionStatus.totalDocs }} validados
+          <ng-container *ngIf="completionStatus.totalDocs">
+            ({{ completionStatus.completionPercentage }}%)
+          </ng-container>
+        </span>
+        <span *ngIf="completionStatus.pendingDocs > 0" class="document-upload__pending" data-cy="doc-qa-warning">
+          {{ completionStatus.pendingDocs }} pendientes
+        </span>
+        <span *ngIf="pendingOfflineDocs > 0" class="document-upload__queued" data-cy="doc-queued-count">
+          {{ pendingOfflineDocs }} en cola offline
+        </span>
+      </div>
+    </header>
+
+    <p *ngIf="syncMessage" class="document-upload__sync" data-cy="doc-sync-message">
+      {{ syncMessage }}
+    </p>
+
+    <ng-container *ngIf="statusBannerType as banner">
+      <div
+        class="document-upload__alert"
+        data-cy="doc-error-banner"
+        [attr.data-banner-type]="banner"
+      >
+        <ng-container [ngSwitch]="banner">
+          <span *ngSwitchCase="'offline'">Sin conexión. Guardaremos tus cargas y las enviaremos al reconectar.</span>
+          <span *ngSwitchCase="'queued'">{{ pendingOfflineDocs }} documento(s) pendientes de sincronizar. Se enviarán automáticamente.</span>
+          <span *ngSwitchCase="'error'">Algunos documentos requieren atención. Reintenta la subida o utiliza captura manual.</span>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <div *ngIf="protectionRequired" class="document-upload__banner document-upload__banner--warning" data-cy="protection-required-banner">
+      <div>
+        <strong>Protección obligatoria.</strong> Aplica una cobertura ({{ protectionCoverageOptions }}) antes de generar el contrato.
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm" (click)="dismissProtectionBanner()">Entendido</button>
+    </div>
+
+    <div *ngIf="showTandaBanner" class="document-upload__banner document-upload__banner--info" data-cy="tanda-rules-banner">
+      <div>
+        <strong>Validación colectiva.</strong> Configura la tanda con {{ tandaRules?.minMembers }}-{{ tandaRules?.maxMembers }} integrantes, aportes entre {{ (tandaRules?.minContribution || 0) | currency:'MXN':'symbol-narrow':'1.0-0' }} y {{ (tandaRules?.maxContribution || 0) | currency:'MXN':'symbol-narrow':'1.0-0' }}, duración {{ tandaRules?.minRounds || 0 }}-{{ tandaRules?.maxRounds || 0 }} rondas.
+        <span
+          *ngIf="tandaValidationStatus as status"
+          class="document-upload__badge document-upload__badge--status"
+          [attr.data-status]="status"
+          data-cy="tanda-validation-status">
+          Validación: {{ getTandaStatusLabel(status) }}
+        </span>
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm" (click)="dismissTandaBanner()">Entendido</button>
+    </div>
+
+    <div *ngIf="showIncomeBanner" class="document-upload__banner document-upload__banner--alert" data-cy="income-threshold-banner">
+      <div>{{ incomeBannerMessage }}</div>
+      <button type="button" class="btn btn-ghost btn-sm" (click)="dismissIncomeBanner()">Entendido</button>
+    </div>
 
     <div class="document-upload__dropzone-wrapper">
       <input
@@ -63,29 +123,193 @@
       <span class="document-upload__loading-line document-upload__loading-line--narrow"></span>
     </div>
 
-    <div *ngIf="!isProcessingDocument && processedDocuments.length > 0" data-cy="documents-table">
-      <div class="document-upload__list">
-        <div
-          *ngFor="let doc of processedDocuments"
-          class="document-upload__item"
-        >
-          <div class="document-upload__item-meta">
-            <span class="document-upload__item-icon" aria-hidden="true"></span>
-            <div class="document-upload__item-copy">
-              <p class="document-upload__item-name">{{ doc.name }}</p>
-              <p class="document-upload__item-type">{{ doc.type }}</p>
-            </div>
+    <ng-template #documentCard let-doc>
+      <article
+        class="document-card"
+        [attr.data-doc-id]="doc.id"
+        [attr.data-group]="doc.group || null"
+        [attr.data-cy]="'doc-card-' + doc.id">
+        <header class="document-card__header">
+          <div>
+            <h3 class="document-card__title">
+              {{ getDocumentTitle(doc) }}
+              <span *ngIf="doc.isOptional" class="document-card__badge" data-cy="doc-optional-badge">Opcional</span>
+              <span *ngIf="doc.group === 'member'" class="document-card__badge document-card__badge--member" data-cy="doc-member-badge">Integrante</span>
+            </h3>
+            <p *ngIf="doc.tooltip" class="document-card__tooltip">{{ doc.tooltip }}</p>
           </div>
-
           <span
-            class="document-upload__item-status"
-            [ngClass]="getDocumentStatusClasses(doc.status)"
-            data-cy="doc-status"
-          >
-            {{ getDocumentStatusLabel(doc.status) }}
+            class="document-card__status"
+            [ngClass]="getDocumentBadgeClasses(doc)"
+            [attr.data-cy]="'doc-status-' + doc.id">
+            {{ getDocumentBadgeLabel(doc) }}
           </span>
+        </header>
+
+        <ng-container *ngIf="getDocumentQaHints(doc) as qaHints">
+          <ul *ngIf="qaHints.length" class="document-card__qa" [attr.data-cy]="'doc-qa-list-' + doc.id">
+            <li
+              *ngFor="let hint of qaHints; let idx = index"
+              class="document-card__qa-item"
+              [attr.data-cy]="'doc-qa-hint-' + doc.id + '-' + idx">
+              {{ hint }}
+            </li>
+          </ul>
+        </ng-container>
+
+        <div class="document-card__actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            [disabled]="isUploading(doc)"
+            (click)="uploadDocument(doc)"
+            [attr.data-cy]="'doc-upload-' + doc.id">
+            {{ isUploading(doc) ? 'Cargando…' : 'Subir documento' }}
+          </button>
+
+          <button
+            *ngIf="doc.status === DocumentStatus.Rechazado"
+            type="button"
+            class="btn btn-secondary"
+            (click)="retryDocument(doc)"
+            [attr.data-cy]="'doc-retake-' + doc.id">
+            Reintentar
+          </button>
+
+          <button
+            *ngIf="doc.status === DocumentStatus.EnRevision"
+            type="button"
+            class="btn btn-secondary"
+            (click)="markManualComplete(doc)"
+            [attr.data-cy]="'doc-manual-confirm-' + doc.id">
+            Marcar como validado manualmente
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-ghost"
+            (click)="markManualReview(doc)"
+            [attr.data-cy]="'doc-manual-' + doc.id">
+            Captura manual
+          </button>
         </div>
+      </article>
+    </ng-template>
+
+    <div class="document-upload__grid" *ngIf="primaryDocuments.length">
+      <ng-container *ngFor="let doc of primaryDocuments">
+        <ng-container *ngTemplateOutlet="documentCard; context: { $implicit: doc }"></ng-container>
+      </ng-container>
+    </div>
+
+    <section
+      *ngFor="let member of memberDocumentSections"
+      class="document-upload__member"
+      [attr.data-member-index]="member.index"
+      [attr.data-cy]="'doc-member-section-' + member.index">
+      <header class="document-upload__member-header">
+        <h3 class="document-upload__member-title">{{ member.label }}</h3>
+        <span class="document-upload__member-count">{{ member.documents.length }} documentos</span>
+      </header>
+      <div class="document-upload__grid document-upload__grid--member">
+        <ng-container *ngFor="let doc of member.documents">
+          <ng-container *ngTemplateOutlet="documentCard; context: { $implicit: doc }"></ng-container>
+        </ng-container>
       </div>
+    </section>
+
+
+    <div *ngIf="completionStatus.allComplete" class="document-upload__success" data-cy="doc-status-badge-overall">
+      ¡Todos los documentos obligatorios están validados!
     </div>
   </section>
+
+  <section
+    *ngIf="showTelemetryPanel"
+    class="document-upload__telemetry card"
+    data-cy="doc-telemetry-panel">
+    <header class="document-upload__telemetry-header">
+      <h3>Telemetría del flujo</h3>
+      <span class="document-upload__telemetry-count">{{ telemetryStats.total }} issues</span>
+    </header>
+    <div class="document-upload__telemetry-summary">
+      <span data-cy="telemetry-offline">Offline: {{ telemetryStats.offlineQueued }}</span>
+      <span data-cy="telemetry-queued">En cola: {{ telemetryStats.queued }}</span>
+      <span data-cy="telemetry-ocr">OCR: {{ telemetryStats.ocrFailures }}</span>
+      <span data-cy="telemetry-timeouts">Timeouts: {{ telemetryStats.networkTimeouts }}</span>
+    </div>
+    <ul class="document-upload__telemetry-list" *ngIf="telemetryIssues.length">
+      <li
+        *ngFor="let issue of telemetryIssues"
+        class="document-upload__telemetry-item"
+        [attr.data-issue-id]="issue.id">
+        <div class="document-upload__telemetry-row">
+          <strong class="document-upload__telemetry-type">{{ formatTelemetryType(issue.type) }}</strong>
+          <span class="document-upload__telemetry-status">{{ formatTelemetryStatus(issue.status) }}</span>
+        </div>
+        <p class="document-upload__telemetry-message">{{ issue.message }}</p>
+        <div class="document-upload__telemetry-actions" *ngIf="issue.actions?.length">
+          <button
+            type="button"
+            class="btn btn-link btn-sm"
+            [disabled]="issue.status === 'processing'"
+            (click)="retryTelemetryIssue(issue.id)"
+            data-cy="telemetry-retry">
+            Reintentar
+          </button>
+          <button
+            type="button"
+            class="btn btn-link btn-sm"
+            (click)="dismissTelemetryIssue(issue.id)"
+            data-cy="telemetry-dismiss">
+            Descartar
+          </button>
+        </div>
+      </li>
+    </ul>
+    <p *ngIf="!telemetryIssues.length" class="document-upload__telemetry-empty">
+      No hay incidencias activas. Seguimiento en tiempo real listo.
+    </p>
+
+    <div class="document-upload__telemetry-queue" *ngIf="queuedRequests.length">
+      <h4>Documentos en cola ({{ queuedRequests.length }})</h4>
+      <ul class="document-upload__telemetry-list">
+        <li
+          *ngFor="let request of queuedRequests; trackBy: trackQueuedRequest"
+          class="document-upload__telemetry-item"
+          [attr.data-queue-id]="request.id">
+          <div class="document-upload__telemetry-row">
+            <strong class="document-upload__telemetry-type">{{ queueDocumentLabel(request) }}</strong>
+            <span class="document-upload__telemetry-status">Intentos: {{ request.attempts ?? 0 }}</span>
+          </div>
+          <p class="document-upload__telemetry-message">
+            {{ request.data?.metadata?.queueReason ? ('Motivo: ' + request.data.metadata.queueReason) : 'En cola para sincronización.' }}
+          </p>
+          <div class="document-upload__telemetry-actions">
+            <button
+              type="button"
+              class="btn btn-link btn-sm"
+              [disabled]="isQueueActionBusy(request.id)"
+              (click)="retryQueuedRequest(request.id)"
+              data-cy="telemetry-queue-retry">
+              Sincronizar ahora
+            </button>
+            <button
+              type="button"
+              class="btn btn-link btn-sm"
+              [disabled]="isQueueActionBusy(request.id)"
+              (click)="discardQueuedRequest(request.id)"
+              data-cy="telemetry-queue-discard">
+              Descartar
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <app-context-panel
+    class="document-upload__context"
+    [keys]="['documentos', 'cotizador', 'onboarding-wizard']">
+  </app-context-panel>
 </div>

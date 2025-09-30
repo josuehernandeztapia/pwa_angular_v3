@@ -105,6 +105,10 @@
   font-weight: 600;
 }
 
+.documents-phase__step-number app-icon {
+  --icon-color: currentColor;
+}
+
 .documents-phase__step-label {
   font-size: 0.85rem;
   color: var(--color-text-secondary);
@@ -388,11 +392,20 @@
 
 .documents-phase__validation-title {
   margin: 0 0 var(--space-2) 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .documents-phase__validation-list {
   margin: 0;
   padding-left: var(--space-4);
+}
+
+.documents-phase__validation-title app-icon,
+.documents-phase__section-title app-icon,
+.documents-phase__modal-title app-icon {
+  --icon-color: currentColor;
 }
 
 .documents-phase__file-input {
@@ -426,10 +439,13 @@
   box-shadow: var(--shadow-xl);
 }
 
-.documents-phase__modal-header h3 {
+.documents-phase__modal-title {
   margin: 0;
   font-size: 1.4rem;
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .documents-phase__modal-body {
@@ -437,9 +453,21 @@
   gap: var(--space-4);
 }
 
-.documents-phase__summary ul {
+.documents-phase__summary-list {
   margin: 0;
-  padding-left: var(--space-4);
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.documents-phase__list-icon {
+  margin-right: var(--space-2);
+  --icon-color: currentColor;
+}
+
+.documents-phase__cta-icon {
+  margin-left: var(--space-2);
 }
 
 .documents-phase__next-step {
@@ -471,7 +499,7 @@
     justify-content: stretch;
   }
 
-  .documents-phase__actions-bar .ui-btn {
+  .documents-phase__actions-bar .btn {
     flex: 1 1 100%;
   }
 }

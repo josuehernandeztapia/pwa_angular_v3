@@ -199,23 +199,23 @@
     transition: background-color 0.2s ease, transform 0.2s ease;
 
     &:hover:not(:disabled) {
-      background: var(--color-bg-info-hover, transparent);
+      background: var(--color-bg-info-hover);
     }
 
     &:disabled {
-      background: var(--color-bg-disabled, transparent);
+      background: var(--color-bg-disabled);
       cursor: not-allowed;
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-info-dark, transparent);
+      background: var(--color-bg-info-dark);
 
       &:hover:not(:disabled) {
-        background: var(--color-bg-info-hover-dark, transparent);
+        background: var(--color-bg-info-hover-dark);
       }
 
       &:disabled {
-        background: var(--color-bg-disabled-dark, transparent);
+        background: var(--color-bg-disabled-dark);
       }
     }
   }
@@ -248,10 +248,10 @@
   &__options-icon {
     width: 24px;
     height: 24px;
-    color: var(--color-info, transparent);
+    color: var(--color-info);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-info-light, transparent);
+      color: var(--color-info-light);
     }
   }
 
@@ -263,7 +263,7 @@
 
   &__scenario-card {
     cursor: pointer;
-    border: 2px solid var(--color-border-secondary, transparent);
+    border: 2px solid var(--color-border-secondary);
     border-radius: 12px;
     padding: 24px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
@@ -271,29 +271,29 @@
 
     @media (prefers-color-scheme: dark) {
       background: color-mix(in srgb, var(--color-neutral-900) 90%, transparent);
-      border-color: var(--color-border-secondary-dark, transparent);
+      border-color: var(--color-border-secondary-dark);
     }
 
     &:hover {
-      border-color: var(--color-border-info, transparent);
+      border-color: var(--color-border-info);
       box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
     }
 
     &--selected {
-      border-color: var(--color-border-info, transparent);
-      background: var(--color-bg-info-light, transparent);
+      border-color: var(--color-border-info);
+      background: var(--color-bg-info-light);
 
       @media (prefers-color-scheme: dark) {
-        border-color: var(--color-border-info-dark, transparent);
+        border-color: var(--color-border-info-dark);
         background: rgba(59, 130, 246, 0.12);
       }
     }
 
     &--recommended {
-      box-shadow: 0 0 0 2px var(--color-border-success, transparent);
+      box-shadow: 0 0 0 2px var(--color-border-success);
 
       @media (prefers-color-scheme: dark) {
-        box-shadow: 0 0 0 2px var(--color-border-success-dark, transparent);
+        box-shadow: 0 0 0 2px var(--color-border-success-dark);
       }
     }
   }
@@ -328,10 +328,10 @@
   &__scenario-description {
     margin: 0;
     font-size: 0.875rem;
-    color: var(--color-text-secondary, transparent);
+    color: var(--color-text-secondary);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--openai-gray-300, transparent);
+      color: var(--openai-gray-300);
     }
   }
 
@@ -342,13 +342,13 @@
     padding: 4px 8px;
     font-size: 0.75rem;
     font-weight: 700;
-    background: var(--color-bg-success-light, transparent);
-    color: var(--color-text-success, transparent);
+    background: var(--color-bg-success-light);
+    color: var(--color-text-success);
     border-radius: 9999px;
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-success-dark, transparent);
-      color: var(--color-text-success-light, transparent);
+      background: var(--color-bg-success-dark);
+      color: var(--color-text-success-light);
     }
   }
 
@@ -368,19 +368,19 @@
   &__savings-amount {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--color-text-success, transparent);
+    color: var(--color-text-success);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-success-light, transparent);
+      color: var(--color-text-success-light);
     }
   }
 
   &__support-text {
     font-size: 0.75rem;
-    color: var(--color-text-secondary, transparent);
+    color: var(--color-text-secondary);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--openai-gray-400, transparent);
+      color: var(--openai-gray-400);
     }
   }
 
@@ -406,18 +406,18 @@
   }
 
   &__benefits-title {
-    color: var(--color-text-success, transparent);
+    color: var(--color-text-success);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-success-light, transparent);
+      color: var(--color-text-success-light);
     }
   }
 
   &__considerations-title {
-    color: var(--color-info, transparent);
+    color: var(--color-info);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-info-light, transparent);
+      color: var(--color-info-light);
     }
   }
 
@@ -429,10 +429,10 @@
     flex-direction: column;
     gap: 4px;
     font-size: 0.875rem;
-    color: var(--color-text-secondary, transparent);
+    color: var(--color-text-secondary);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--openai-gray-300, transparent);
+      color: var(--openai-gray-300);
     }
   }
 
@@ -447,36 +447,36 @@
   }
 
   &__benefit-bullet {
-    color: var(--color-text-success, transparent);
+    color: var(--color-text-success);
     font-size: 0.75rem;
     margin-top: 4px;
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-success-light, transparent);
+      color: var(--color-text-success-light);
     }
   }
 
   &__consideration-bullet {
-    color: var(--color-text-warning, transparent);
+    color: var(--color-text-warning);
     font-size: 0.75rem;
     margin-top: 4px;
 
     @media (prefers-color-scheme: dark) {
-      color: var(--color-text-warning-light, transparent);
+      color: var(--color-text-warning-light);
     }
   }
 
   &__actions {
     margin-top: 24px;
     padding-top: 24px;
-    border-top: 1px solid var(--color-border-primary, transparent);
+    border-top: 1px solid var(--color-border-primary);
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
     justify-content: flex-end;
 
     @media (prefers-color-scheme: dark) {
-      border-top-color: var(--color-border-primary-dark, transparent);
+      border-top-color: var(--color-border-primary-dark);
     }
   }
 
@@ -495,7 +495,7 @@
     }
 
     @media (prefers-color-scheme: dark) {
-      border-color: var(--color-border-primary-dark, transparent);
+      border-color: var(--color-border-primary-dark);
 
       &:hover {
         background: rgba(255, 255, 255, 0.05);
@@ -505,7 +505,7 @@
 
   &__share-button {
     padding: 12px 24px;
-    background: var(--color-bg-success, transparent);
+    background: var(--color-bg-success, var(--accent-green-500));
     color: var(--flat-surface-bg);
     border-radius: 8px;
     border: none;
@@ -513,14 +513,14 @@
     transition: background-color 0.2s ease;
 
     &:hover {
-      background: var(--color-bg-success-hover, transparent);
+      background: var(--color-bg-success-hover);
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-success-dark, transparent);
+      background: var(--color-bg-success-dark);
 
       &:hover {
-        background: var(--color-bg-success-hover-dark, transparent);
+        background: var(--color-bg-success-hover-dark);
       }
     }
   }
@@ -537,23 +537,23 @@
     transition: background-color 0.2s ease;
 
     &:hover:not(:disabled) {
-      background: var(--color-bg-info-hover, transparent);
+      background: var(--color-bg-info-hover);
     }
 
     &:disabled {
-      background: var(--color-bg-disabled, transparent);
+      background: var(--color-bg-disabled);
       cursor: not-allowed;
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--color-bg-info-dark, transparent);
+      background: var(--color-bg-info-dark);
 
       &:hover:not(:disabled) {
-        background: var(--color-bg-info-hover-dark, transparent);
+        background: var(--color-bg-info-hover-dark);
       }
 
       &:disabled {
-        background: var(--color-bg-disabled-dark, transparent);
+        background: var(--color-bg-disabled-dark);
       }
     }
   }

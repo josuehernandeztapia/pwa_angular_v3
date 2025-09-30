@@ -207,7 +207,7 @@ export class WebhookRetryService {
   }
 
   /**
-   * 🌐 Execute actual webhook HTTP call
+   * Execute actual webhook HTTP call
    */
   private executeWebhookCall(payload: WebhookPayload): Observable<any> {
     const headers = {
@@ -355,7 +355,7 @@ export class WebhookRetryService {
   }
 
   /**
-   * 🔗 Public observables for reactive UI
+   * Public observables for reactive UI
    */
   get metrics$() {
     return this.metrics$.asObservable();

@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Optional } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Client, EventLog } from '../../../models/types';
 import { ImportStatus } from '../../../models/postventa';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { FlowContextService } from '../../../services/flow-context.service';
 
 @Component({
   selector: 'app-cliente-detail',
   standalone: true,
-  imports: [CommonModule, IconComponent],
+  imports: [CommonModule, IconComponent, RouterModule],
   templateUrl: './cliente-detail.component.html',
   styleUrls: ['./cliente-detail.component.scss']
 })
@@ -22,9 +23,14 @@ export class ClienteDetailComponent implements OnInit {
     this.generatePaymentLink('spei');
   };
   
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    @Optional() private flowContext?: FlowContextService
+  ) {}
 
   async ngOnInit(): Promise<void> {
+    this.flowContext?.setBreadcrumbs(['Dashboard', 'Clientes', 'Detalle']);
     this.client = {
       id: 'client-001',
       name: 'Juan Pérez García',
@@ -66,10 +72,29 @@ export class ClienteDetailComponent implements OnInit {
         placasEntregadas: { completed: false }
       }
     };
+    this.flowContext?.setBreadcrumbs(['Dashboard', 'Clientes', this.client.name]);
     
     this.loadClientEvents();
   }
-  
+
+  createQuote(): void {
+    if (!this.client) {
+      return;
+    }
+
+    this.flowContext?.saveContext('cotizador', {
+      clientId: this.client.id,
+      clientName: this.client.name
+    });
+
+    this.router.navigate(['/cotizador'], {
+      queryParams: {
+        clientId: this.client.id,
+        source: 'cliente-detail'
+      }
+    });
+  }
+
   private loadClientEvents(): void {
     this.clientEvents = [
       {
@@ -196,7 +221,7 @@ export class ClienteDetailComponent implements OnInit {
         <div class="cliente-modal cliente-modal--visible">
           <div class="cliente-modal__backdrop"></div>
           <div class="cliente-modal__panel">
-            <h3 class="cliente-modal__title">🎤 Verificación AVI</h3>
+            <h3 class="cliente-modal__title">Verificación AVI</h3>
             <p class="cliente-modal__message">Cargando componente de verificación...</p>
             <button type="button" class="btn btn-secondary btn-sm cliente-modal__close" onclick="this.closest('.cliente-modal').style.display='none'">
               Cerrar

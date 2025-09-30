@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { catchError, delay, map } from 'rxjs/operators';
 import { BusinessFlow, Client, Document, Market } from '../models/types';
+import { HttpClientService, ApiResponse } from './http-client.service';
+import { environment } from '../../environments/environment';
 
 export interface DocumentRequirement {
   id: string;
@@ -89,7 +91,7 @@ export class DocumentValidationService {
   private documentRequirements: DocumentRequirement[] = [];
   private validationRules: DocumentValidationRule[] = [];
 
-  constructor() {
+  constructor(@Optional() private readonly httpClient?: HttpClientService) {
     this.initializeDocumentRequirements();
     this.initializeValidationRules();
   }
@@ -98,39 +100,102 @@ export class DocumentValidationService {
    * Validate individual document against business rules
    */
   validateDocument(document: Document, client?: Client): Observable<DocumentValidationResult> {
-    const applicableRules = this.getApplicableRules(document, client);
-    const results = applicableRules.map(rule => rule.validator(document, client));
-    
-    const consolidatedResult = this.consolidateValidationResults(results);
-    
-    // Add auto-corrections based on common issues
-    consolidatedResult.autoCorrections = this.generateAutoCorrections(document, consolidatedResult.issues);
+    const localResult = this.buildLocalValidationResult(document, client);
 
-    return of(consolidatedResult).pipe(delay(300));
+    if (this.shouldUseMock()) {
+      return of(localResult).pipe(delay(300));
+    }
+
+    const payload = this.buildValidationPayload(document, client);
+
+    return this.httpClient!.post<DocumentValidationResult>('documents/validate', payload, {
+      showLoading: false,
+      showError: true
+    }).pipe(
+      map(response => this.mergeValidationResult(response, document, localResult)),
+      catchError(error => {
+        console.warn('[DocumentValidationService] Falling back to local validation:', error);
+        return of(localResult);
+      })
+    );
   }
 
   /**
    * Generate complete compliance report for client
    */
   generateComplianceReport(client: Client): Observable<DocumentComplianceReport> {
-    const requiredDocs = this.getRequiredDocuments((client.market || 'all') as any, client.flow, client);
-    const submittedDocs = client.documents || [];
-    
-    // Find missing documents
-    const missingDocs = requiredDocs.filter(reqDoc => 
-      !submittedDocs.some(subDoc => 
+    if (this.shouldUseMock()) {
+      return of(this.buildComplianceReportLocal(client)).pipe(delay(600));
+    }
+
+    const payload = {
+      clientId: client.id,
+      market: client.market,
+      flow: client.flow,
+      status: client.status,
+      documents: (client.documents ?? []).map(doc => this.sanitizeDocument(doc))
+    };
+
+    return this.httpClient!.post<DocumentComplianceReport>('documents/compliance-report', payload, {
+      showLoading: false,
+      showError: true
+    }).pipe(
+      map(response => this.mergeComplianceReport(response, client)),
+      catchError(error => {
+        console.warn('[DocumentValidationService] Falling back to local compliance report:', error);
+        return of(this.buildComplianceReportLocal(client));
+      })
+    );
+  }
+
+  /**
+   * Legacy local compliance report builder (used for mocks/fallback).
+   */
+  private buildComplianceReportLocal(client: Client): DocumentComplianceReport {
+    return this.composeComplianceReport(client);
+  }
+
+  /**
+   * Compose the compliance snapshot blending local heuristics with remote overrides.
+   */
+  composeComplianceReport(
+    client: Client,
+    overrides: Partial<DocumentComplianceReport> = {}
+  ): DocumentComplianceReport {
+    const targetMarket: Market = overrides.market ?? client.market ?? 'all';
+    const targetFlow: BusinessFlow = overrides.flow ?? client.flow;
+
+    const requiredDocsOverride = overrides.requiredDocuments;
+    const submittedDocsOverride = overrides.submittedDocuments;
+
+    const submittedDocs = Array.isArray(submittedDocsOverride)
+      ? [...submittedDocsOverride]
+      : [...(client.documents ?? [])];
+
+    const requiredDocs = Array.isArray(requiredDocsOverride)
+      ? [...requiredDocsOverride]
+      : [...this.getRequiredDocuments(targetMarket, targetFlow, client)];
+
+    const effectiveClient: Client = {
+      ...client,
+      market: targetMarket,
+      flow: targetFlow,
+      documents: submittedDocs,
+    };
+
+    const missingDocs = requiredDocs.filter(reqDoc =>
+      !submittedDocs.some(subDoc =>
         subDoc.name.toLowerCase().includes(reqDoc.name.toLowerCase()) ||
         reqDoc.name.toLowerCase().includes(subDoc.name.toLowerCase())
       )
     );
 
-    // Validate submitted documents
     const validDocs: Document[] = [];
     const invalidDocs: Document[] = [];
     const warningDocs: Document[] = [];
 
     submittedDocs.forEach(doc => {
-      const validation = this.validateDocumentSync(doc, client);
+      const validation = this.validateDocumentSync(doc, effectiveClient);
       if (validation.valid) {
         validDocs.push(doc);
       } else {
@@ -143,24 +208,23 @@ export class DocumentValidationService {
       }
     });
 
-    // Calculate overall compliance
     const totalRequired = requiredDocs.length;
     const totalValid = validDocs.length;
     const overallScore = totalRequired > 0 ? (totalValid / totalRequired) * 100 : 100;
 
-    let complianceLevel: 'complete' | 'partial' | 'insufficient' | 'non-compliant' = 'non-compliant';
+    let complianceLevel: DocumentComplianceReport['complianceLevel'] = 'non-compliant';
     if (overallScore >= 100) complianceLevel = 'complete';
     else if (overallScore >= 80) complianceLevel = 'partial';
     else if (overallScore >= 50) complianceLevel = 'insufficient';
 
-    const blockingIssues = this.identifyBlockingIssues(client, missingDocs, invalidDocs);
-    const recommendations = this.generateComplianceRecommendations(client, missingDocs, invalidDocs);
-    const nextSteps = this.generateNextSteps(client, missingDocs, invalidDocs, complianceLevel);
+    const blockingIssues = this.identifyBlockingIssues(effectiveClient, missingDocs, invalidDocs);
+    const recommendations = this.generateComplianceRecommendations(effectiveClient, missingDocs, invalidDocs);
+    const nextSteps = this.generateNextSteps(effectiveClient, missingDocs, invalidDocs, complianceLevel);
 
-    const report: DocumentComplianceReport = {
+    const base: DocumentComplianceReport = {
       clientId: client.id,
-      market: (client.market || 'all') as any,
-      flow: client.flow,
+      market: targetMarket,
+      flow: targetFlow,
       overallScore,
       requiredDocuments: requiredDocs,
       submittedDocuments: submittedDocs,
@@ -171,10 +235,25 @@ export class DocumentValidationService {
       complianceLevel,
       blockingIssues,
       recommendations,
-      nextSteps
+      nextSteps,
     };
 
-    return of(report).pipe(delay(600));
+    return {
+      clientId: overrides.clientId ?? base.clientId,
+      market: overrides.market ?? base.market,
+      flow: overrides.flow ?? base.flow,
+      overallScore: overrides.overallScore ?? base.overallScore,
+      requiredDocuments: overrides.requiredDocuments ?? base.requiredDocuments,
+      submittedDocuments: overrides.submittedDocuments ?? base.submittedDocuments,
+      missingDocuments: overrides.missingDocuments ?? base.missingDocuments,
+      validDocuments: overrides.validDocuments ?? base.validDocuments,
+      invalidDocuments: overrides.invalidDocuments ?? base.invalidDocuments,
+      warningDocuments: overrides.warningDocuments ?? base.warningDocuments,
+      complianceLevel: overrides.complianceLevel ?? base.complianceLevel,
+      blockingIssues: overrides.blockingIssues ?? base.blockingIssues,
+      recommendations: overrides.recommendations ?? base.recommendations,
+      nextSteps: overrides.nextSteps ?? base.nextSteps,
+    };
   }
 
   /**
@@ -184,6 +263,33 @@ export class DocumentValidationService {
     ecosystemId: string,
     documents: Document[]
   ): Observable<EcosystemDocumentValidation> {
+    const localValidation = this.buildEcosystemValidationLocal(ecosystemId, documents);
+
+    if (this.shouldUseMock()) {
+      return of(localValidation).pipe(delay(800));
+    }
+
+    const payload = {
+      ecosystemId,
+      documents: documents.map(doc => this.sanitizeDocument(doc))
+    };
+
+    return this.httpClient!.post<EcosystemDocumentValidation>('documents/ecosystem/validate', payload, {
+      showLoading: false,
+      showError: true
+    }).pipe(
+      map(response => this.mergeEcosystemValidation(response, localValidation)),
+      catchError(error => {
+        console.warn('[DocumentValidationService] Falling back to local ecosystem validation:', error);
+        return of(localValidation);
+      })
+    );
+  }
+
+  private buildEcosystemValidationLocal(
+    ecosystemId: string,
+    documents: Document[]
+  ): EcosystemDocumentValidation {
     
     // Documentos de la ruta/ecosistema
     const constitutiveAct = documents.find(d => d.name.includes('Acta Constitutiva'));
@@ -273,7 +379,7 @@ export class DocumentValidationService {
       validationNotes
     };
 
-    return of(validation).pipe(delay(800));
+    return validation;
   }
 
   /**
@@ -306,6 +412,41 @@ export class DocumentValidationService {
     confidence: number;
     suggestions: string[];
   }> {
+    const localDetection = this.detectDocumentTypeLocal(filename, content);
+
+    if (this.shouldUseMock()) {
+      return of(localDetection).pipe(delay(150));
+    }
+
+    const payload = { filename, content };
+
+    return this.httpClient!.post<{ detectedType: string; confidence: number; suggestions: string[] }>('documents/detect-type', payload, {
+      showLoading: false,
+      showError: false
+    }).pipe(
+      map(response => {
+        const data = response?.data;
+        if (!data) {
+          return localDetection;
+        }
+        return {
+          detectedType: data.detectedType ?? localDetection.detectedType,
+          confidence: typeof data.confidence === 'number' ? data.confidence : localDetection.confidence,
+          suggestions: Array.isArray(data.suggestions) ? data.suggestions : localDetection.suggestions
+        };
+      }),
+      catchError(error => {
+        console.warn('[DocumentValidationService] Falling back to local document type detection:', error);
+        return of(localDetection);
+      })
+    );
+  }
+
+  private detectDocumentTypeLocal(filename: string, content?: string): {
+    detectedType: string;
+    confidence: number;
+    suggestions: string[];
+  } {
     const filename_lower = filename.toLowerCase();
     let detectedType = 'unknown';
     let confidence = 0;
@@ -350,11 +491,114 @@ export class DocumentValidationService {
       suggestions.push('Incluya el tipo de documento en el nombre del archivo');
     }
 
-    return of({
+    return {
       detectedType,
       confidence,
       suggestions
-    }).pipe(delay(150));
+    };
+  }
+
+  private shouldUseMock(): boolean {
+    if (!this.httpClient) {
+      return true;
+    }
+
+    const features: Record<string, any> = environment.features as any;
+    if (typeof features['enableDocumentValidationMock'] === 'boolean') {
+      return features['enableDocumentValidationMock'];
+    }
+
+    return features['enableMockData'] === true;
+  }
+
+  private buildValidationPayload(document: Document, client?: Client): any {
+    return {
+      document: this.sanitizeDocument(document),
+      client: client
+        ? {
+            id: client.id,
+            market: client.market,
+            flow: client.flow,
+            status: client.status
+          }
+        : undefined
+    };
+  }
+
+  private sanitizeDocument(document: Document): any {
+    return {
+      id: document.id,
+      name: document.name,
+      status: document.status,
+      uploadedAt: document.uploadedAt,
+      expirationDate: document.expirationDate,
+      fileName: document.fileName,
+      fileSize: document.fileSize,
+      tooltip: document.tooltip,
+      group: document.group
+    };
+  }
+
+  private buildLocalValidationResult(document: Document, client?: Client): DocumentValidationResult {
+    const base = this.validateDocumentSync(document, client);
+    return {
+      ...base,
+      autoCorrections: this.generateAutoCorrections(document, base.issues),
+      suggestions: base.suggestions || []
+    };
+  }
+
+  private mergeValidationResult(
+    response: ApiResponse<DocumentValidationResult> | null | undefined,
+    document: Document,
+    fallback: DocumentValidationResult
+  ): DocumentValidationResult {
+    const data = response?.data;
+    if (!data) {
+      return fallback;
+    }
+
+    const merged: DocumentValidationResult = {
+      valid: data.valid ?? fallback.valid,
+      score: typeof data.score === 'number' ? data.score : fallback.score,
+      issues: Array.isArray(data.issues) ? data.issues : fallback.issues,
+      suggestions: Array.isArray(data.suggestions) ? data.suggestions : fallback.suggestions,
+      autoCorrections: []
+    };
+
+    merged.autoCorrections = this.generateAutoCorrections(document, merged.issues);
+    return merged;
+  }
+
+  private mergeComplianceReport(
+    response: ApiResponse<DocumentComplianceReport> | null | undefined,
+    client: Client
+  ): DocumentComplianceReport {
+    const overrides = (response?.data ?? {}) as Partial<DocumentComplianceReport>;
+    return this.composeComplianceReport(client, overrides);
+  }
+
+  private mergeEcosystemValidation(
+    response: ApiResponse<EcosystemDocumentValidation> | null | undefined,
+    fallback: EcosystemDocumentValidation
+  ): EcosystemDocumentValidation {
+    const data = response?.data;
+    if (!data) {
+      return fallback;
+    }
+
+    return {
+      ecosystemId: data.ecosystemId ?? fallback.ecosystemId,
+      constitutiveActValid: data.constitutiveActValid ?? fallback.constitutiveActValid,
+      rfcValid: data.rfcValid ?? fallback.rfcValid,
+      bankStatementsValid: data.bankStatementsValid ?? fallback.bankStatementsValid,
+      memberRegistryValid: data.memberRegistryValid ?? fallback.memberRegistryValid,
+      boardResolutionValid: data.boardResolutionValid ?? fallback.boardResolutionValid,
+      overallValid: data.overallValid ?? fallback.overallValid,
+      validationDetails: data.validationDetails ?? fallback.validationDetails,
+      ecosystemRiskLevel: data.ecosystemRiskLevel ?? fallback.ecosystemRiskLevel,
+      validationNotes: data.validationNotes ?? fallback.validationNotes
+    };
   }
 
   // === PRIVATE METHODS ===

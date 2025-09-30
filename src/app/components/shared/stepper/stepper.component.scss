@@ -1,0 +1,327 @@
+@use '../../../styles/design-tokens' as tokens;
+
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$spacing-lg;
+  width: 100%;
+
+  &--mobile {
+    gap: tokens.$spacing-md;
+  }
+}
+
+.stepper__progress {
+  width: 100%;
+  margin-bottom: tokens.$spacing-sm;
+
+  @media (max-width: tokens.$breakpoint-mobile) {
+    margin-bottom: tokens.$spacing-xs;
+  }
+}
+
+.stepper__progress-track {
+  width: 100%;
+  height: 4px;
+  background-color: tokens.$surface-2;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stepper__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, tokens.$primary-500, tokens.$primary-600);
+  border-radius: 2px;
+  transition: width 0.3s ease-in-out;
+}
+
+.stepper__steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+
+  @media (max-width: tokens.$breakpoint-mobile) {
+    .stepper--mobile & {
+      display: none;
+    }
+  }
+
+  @media (max-width: tokens.$breakpoint-tablet) {
+    flex-wrap: wrap;
+    gap: tokens.$spacing-sm;
+    justify-content: flex-start;
+  }
+}
+
+.stepper__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: tokens.$spacing-xs;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  padding: tokens.$spacing-sm;
+  border-radius: tokens.$radius-md;
+  min-width: 120px;
+
+  &:hover {
+    background-color: tokens.$surface-1;
+  }
+
+  &:focus {
+    outline: 2px solid tokens.$primary-500;
+    outline-offset: 2px;
+    background-color: tokens.$surface-1;
+  }
+
+  &--active {
+    background-color: tokens.$primary-50;
+
+    .stepper__step-label {
+      color: tokens.$primary-700;
+      font-weight: tokens.$font-weight-semibold;
+    }
+
+    .stepper__step-number {
+      background-color: tokens.$primary-500;
+      color: white;
+    }
+  }
+
+  &--completed {
+    .stepper__step-label {
+      color: tokens.$success-700;
+    }
+
+    .stepper__step-connector {
+      background-color: tokens.$success-500;
+    }
+  }
+
+  &--invalid {
+    .stepper__step-label {
+      color: tokens.$danger-700;
+    }
+
+    .stepper__step-number {
+      background-color: tokens.$danger-500;
+      color: white;
+    }
+  }
+
+  @media (max-width: tokens.$breakpoint-tablet) {
+    min-width: 80px;
+    flex: 0 1 calc(33.333% - tokens.$spacing-sm);
+  }
+}
+
+.stepper__step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  position: relative;
+  z-index: 2;
+}
+
+.stepper__step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: tokens.$surface-2;
+  color: tokens.$text-secondary;
+  transition: all 0.2s ease-in-out;
+
+  &--completed {
+    background-color: tokens.$success-500;
+    color: white;
+  }
+
+  .stepper__step--active & {
+    background-color: tokens.$primary-100;
+    color: tokens.$primary-600;
+  }
+}
+
+.stepper__step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: tokens.$surface-2;
+  color: tokens.$text-secondary;
+  font-size: tokens.$font-size-sm;
+  font-weight: tokens.$font-weight-medium;
+  transition: all 0.2s ease-in-out;
+}
+
+.stepper__step-label {
+  font-size: tokens.$font-size-sm;
+  color: tokens.$text-secondary;
+  text-align: center;
+  line-height: 1.3;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: tokens.$spacing-xs;
+}
+
+.stepper__step-error {
+  color: tokens.$danger-500;
+  display: flex;
+  align-items: center;
+}
+
+.stepper__step-connector {
+  position: absolute;
+  top: 16px; // Half of indicator height
+  left: calc(50% + 16px); // Half of indicator width
+  right: calc(-50% + 16px);
+  height: 2px;
+  background-color: tokens.$surface-2;
+  z-index: 1;
+  transition: background-color 0.2s ease-in-out;
+
+  .stepper__step:last-child & {
+    display: none;
+  }
+
+  @media (max-width: tokens.$breakpoint-tablet) {
+    display: none;
+  }
+}
+
+// Mobile Navigation
+.stepper__mobile-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: tokens.$spacing-md;
+  padding: tokens.$spacing-sm 0;
+  border-top: 1px solid tokens.$border;
+  margin-top: tokens.$spacing-md;
+
+  @media (min-width: calc(#{tokens.$breakpoint-mobile} + 1px)) {
+    .stepper:not(.stepper--mobile) & {
+      display: none;
+    }
+  }
+}
+
+.stepper__nav-btn {
+  display: flex;
+  align-items: center;
+  gap: tokens.$spacing-xs;
+  padding: tokens.$spacing-sm tokens.$spacing-md;
+  border: 1px solid tokens.$border;
+  border-radius: tokens.$radius-md;
+  background-color: white;
+  color: tokens.$text-primary;
+  font-size: tokens.$font-size-sm;
+  font-weight: tokens.$font-weight-medium;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  min-width: 90px;
+
+  &:hover:not(:disabled) {
+    background-color: tokens.$surface-1;
+    border-color: tokens.$primary-300;
+  }
+
+  &:focus {
+    outline: 2px solid tokens.$primary-500;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--next {
+    background-color: tokens.$primary-500;
+    color: white;
+    border-color: tokens.$primary-500;
+
+    &:hover:not(:disabled) {
+      background-color: tokens.$primary-600;
+      border-color: tokens.$primary-600;
+    }
+  }
+}
+
+.stepper__nav-text {
+  font-size: tokens.$font-size-sm;
+}
+
+.stepper__mobile-indicator {
+  font-size: tokens.$font-size-sm;
+  color: tokens.$text-secondary;
+  font-weight: tokens.$font-weight-medium;
+  text-align: center;
+  padding: 0 tokens.$spacing-sm;
+}
+
+// Responsive adjustments
+@media (max-width: tokens.$breakpoint-mobile) {
+  .stepper__steps {
+    gap: tokens.$spacing-xs;
+  }
+
+  .stepper__step {
+    min-width: 60px;
+    padding: tokens.$spacing-xs;
+  }
+
+  .stepper__step-indicator {
+    width: 24px;
+    height: 24px;
+  }
+
+  .stepper__step-label {
+    font-size: tokens.$font-size-xs;
+  }
+
+  .stepper__step-connector {
+    top: 12px;
+    left: calc(50% + 12px);
+    right: calc(-50% + 12px);
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .stepper__step-number,
+  .stepper__step-icon {
+    border: 2px solid currentColor;
+  }
+
+  .stepper__progress-fill {
+    background: tokens.$primary-700;
+  }
+
+  .stepper__step-connector {
+    height: 3px;
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .stepper__step,
+  .stepper__progress-fill,
+  .stepper__step-icon,
+  .stepper__step-number,
+  .stepper__step-label,
+  .stepper__step-connector {
+    transition: none;
+  }
+}

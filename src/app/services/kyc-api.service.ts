@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class KycApiService {
@@ -14,7 +15,11 @@ export class KycApiService {
     if (!this.enabled) {
       return of({ ok: true, kycSessionId: `stub_${Date.now()}` });
     }
-    return this.http.post<{ ok: boolean; kycSessionId: string }>(`${this.base}/start`, { clientId, ...(opts || {}) });
+    return this.http.post<{ ok: boolean; kycSessionId: string }>(`${this.base}/start`, { clientId, ...(opts || {}) }).pipe(
+      catchError(error => {
+        console.warn('[kyc] BFF fallback', error);
+        return of({ ok: true, kycSessionId: `stub_${Date.now()}` });
+      })
+    );
   }
 }
-

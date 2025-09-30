@@ -51,6 +51,26 @@
   box-shadow: var(--shadow-sm);
 }
 
+.onboarding-main__mobile-progress {
+  display: none;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.onboarding-main__mobile-step {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-tertiary);
+}
+
+.onboarding-main__mobile-step-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
 .onboarding-main__steps {
   display: flex;
   justify-content: space-between;
@@ -726,22 +746,86 @@
 
 @media (max-width: 960px) {
   .onboarding-main {
-    padding: var(--space-5) var(--space-4);
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .onboarding-main__progress {
+    position: sticky;
+    top: var(--space-3);
+    z-index: 6;
+    padding: var(--space-3);
+    gap: var(--space-3);
+    background: color-mix(in srgb, var(--flat-surface-bg) 85%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(6px);
+  }
+
+  .onboarding-main__mobile-progress {
+    display: flex;
+    margin-bottom: var(--space-2);
   }
 
   .onboarding-main__steps {
-    flex-direction: column;
+    flex-direction: row;
     gap: var(--space-2);
+    overflow-x: auto;
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-1);
+    scroll-snap-type: x proximity;
+  }
+
+  .onboarding-main__steps::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .onboarding-main__steps::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--color-border-secondary) 45%, transparent);
+    border-radius: 999px;
+  }
+
+  .onboarding-main__step {
+    min-width: 128px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--color-border-secondary) 16%, transparent);
+  }
+
+  .onboarding-main__step.onboarding-main__step--active {
+    background: color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
+  }
+
+  .onboarding-main__step.onboarding-main__step--completed {
+    background: color-mix(in srgb, var(--accent-blue-500) 10%, transparent);
   }
 
   .onboarding-main__step::after {
     display: none;
   }
 
+  .onboarding-main__step-circle {
+    margin-inline: auto;
+  }
+
+  .onboarding-main__step-label {
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
   .onboarding-main__actions,
   .onboarding-main__draft-banner {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .onboarding-main__section {
+    padding: var(--space-4);
+  }
+
+  .onboarding-main__form-layout {
+    grid-template-columns: 1fr;
   }
 
   .onboarding-main__actions {
@@ -757,7 +841,7 @@
     width: 100%;
   }
 
-  .onboarding-main__completion-actions .ui-btn {
+  .onboarding-main__completion-actions .btn {
     flex: 1 1 100%;
   }
 }
@@ -770,4 +854,8 @@
   .onboarding-main__contract-button {
     transition: none;
   }
+}
+
+.onboarding-main__context {
+  margin-top: var(--space-6);
 }

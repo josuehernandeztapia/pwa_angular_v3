@@ -2,7 +2,11 @@
   <div *ngFor="let milestone of milestones; let index = index" class="tanda-timeline__item">
     <div class="tanda-timeline__marker">
       <div [ngClass]="getMarkerCircleClasses(milestone)">
-        <span class="tanda-timeline__marker-emoji">{{ milestone.emoji }}</span>
+        <app-icon
+          class="tanda-timeline__marker-icon"
+          [name]="getMilestoneIcon(milestone)"
+          [size]="milestone.current ? 20 : 16"
+        ></app-icon>
       </div>
       <div
         *ngIf="index < milestones.length - 1"

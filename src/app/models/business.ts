@@ -2,6 +2,7 @@
 // Consolidates all business scenarios, quoting, and product configuration types
 
 import { BusinessFlow, Market } from './types';
+import { IconName } from '../components/shared/icon/icon-definitions';
 
 // Client classification types
 export type ClientType = 'individual' | 'colectivo';
@@ -86,13 +87,13 @@ export interface BusinessSeniorSummary {
     keyMetrics: Array<{
         label: string;
         value: string;
-        emoji: string;
+        icon: IconName;
         category?: 'financial' | 'timeline' | 'risk' | 'opportunity';
     }>;
     timeline: Array<{
         month: number;
         event: string;
-        emoji: string;
+        icon: IconName;
         category?: 'milestone' | 'payment' | 'delivery' | 'completion';
     }>;
     whatsAppMessage: string;

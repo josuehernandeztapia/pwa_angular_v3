@@ -9,7 +9,8 @@
         Actualizar
       </button>
       <button type="button" class="opportunities-pipeline__button opportunities-pipeline__button--primary" (click)="createNewOpportunity()">
-        <span aria-hidden="true">➕</span> Nueva Oportunidad
+        <app-icon name="plus" [size]="18" class="opportunities-pipeline__button-icon"></app-icon>
+        Nueva Oportunidad
       </button>
     </div>
   </header>
@@ -89,7 +90,10 @@
   <section class="opportunities-pipeline__kanban" aria-live="polite">
     <div *ngFor="let stage of pipelineStages" class="opportunities-pipeline__stage">
       <header class="opportunities-pipeline__stage-header">
-        <h2 class="opportunities-pipeline__stage-title">{{ stage.icon }} {{ stage.name }}</h2>
+        <h2 class="opportunities-pipeline__stage-title">
+          <app-icon [name]="stage.icon" [size]="18" class="opportunities-pipeline__stage-icon"></app-icon>
+          {{ stage.name }}
+        </h2>
         <span class="opportunities-pipeline__stage-count">{{ getStageOpportunities(stage.key).length }}</span>
         <span class="opportunities-pipeline__stage-value">{{ formatCurrency(getStageValue(stage.key)) }}</span>
       </header>
@@ -106,8 +110,14 @@
             <span
               class="opportunities-pipeline__card-priority"
               [ngClass]="getPriorityBadgeClasses(opportunity.priority)"
-              [innerHTML]="getPriorityIcon(opportunity.priority)"
-            ></span>
+            >
+              <app-icon
+                [name]="getPriorityIcon(opportunity.priority)"
+                [size]="12"
+                class="opportunities-pipeline__card-priority-icon"
+              ></app-icon>
+              {{ getPriorityLabel(opportunity.priority) }}
+            </span>
           </header>
 
           <dl class="opportunities-pipeline__card-details">

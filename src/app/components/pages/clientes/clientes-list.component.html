@@ -4,7 +4,7 @@
       <h1 class="clientes-list__title command-title">Portafolio de Clientes Inteligente</h1>
       <p class="clientes-list__subtitle intelligence-subtitle">Administra todos tus clientes y sus expedientes</p>
     </div>
-    <button type="button" routerLink="/clientes/nuevo" class="premium-button clientes-list__cta">
+    <button type="button" routerLink="/clientes/nuevo" class="premium-button clientes-list__cta" data-cy="create-client">
       <app-icon class="icon-16" name="plus" [size]="16"></app-icon>
       Nuevo Cliente
     </button>
@@ -21,6 +21,7 @@
           placeholder="¿Dónde está el cliente...?"
           class="premium-input"
           aria-label="Buscar clientes"
+          data-cy="clientes-search"
         >
       </div>
     </div>

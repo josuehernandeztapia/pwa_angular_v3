@@ -121,7 +121,7 @@
                       <span class="detail-item suggestion-type">{{ suggestion.type }}</span>
                     </div>
                   </div>
-                  <span class="select-arrow">→</span>
+                  <app-icon class="select-arrow" name="arrow-right" [size]="14" aria-hidden="true"></app-icon>
                 </div>
               </div>
               <div class="suggestion-footer" *ngIf="!isCheckingDuplicates">
@@ -269,6 +269,13 @@
             [class.suggested]="smartContext.suggestedFlow === 'COTIZACION'"
             (click)="selectOpportunityType('COTIZACION')"
           >
+            <span
+              *ngIf="opportunityType === 'COTIZACION'"
+              class="opportunity-card__selected-indicator"
+              aria-hidden="true"
+            >
+              <app-icon name="check" [size]="16"></app-icon>
+            </span>
             <div class="card-icon"></div>
             <div class="card-content">
               <h3>Adquisición de Unidad</h3>
@@ -283,6 +290,13 @@
             [class.suggested]="smartContext.suggestedFlow === 'SIMULACION'"
             (click)="selectOpportunityType('SIMULACION')"
           >
+            <span
+              *ngIf="opportunityType === 'SIMULACION'"
+              class="opportunity-card__selected-indicator"
+              aria-hidden="true"
+            >
+              <app-icon name="check" [size]="16"></app-icon>
+            </span>
             <div class="card-icon"></div>
             <div class="card-content">
               <h3>Plan de Ahorro</h3>

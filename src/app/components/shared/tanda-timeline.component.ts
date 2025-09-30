@@ -2,6 +2,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TandaMilestone } from '../../models/tanda';
 import { IconComponent } from './icon/icon.component';
+import { IconName } from './icon/icon-definitions';
 
 @Component({
   selector: 'app-tanda-timeline',
@@ -35,5 +36,13 @@ export class TandaTimelineComponent {
       'tanda-timeline__marker-line': true,
       'tanda-timeline__marker-line--completed': !!milestone.completed,
     };
+  }
+
+  getMilestoneIcon(milestone: TandaMilestone): IconName {
+    if (milestone.icon) {
+      return milestone.icon;
+    }
+
+    return milestone.type === 'entrega' ? 'truck' : 'currency-dollar';
   }
 }

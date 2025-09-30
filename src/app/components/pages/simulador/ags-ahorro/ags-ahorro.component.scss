@@ -197,7 +197,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-error, transparent);
+  color: var(--color-text-error);
   border-radius: 50%;
   border: none;
   background: transparent;
@@ -594,7 +594,7 @@ select:focus-visible {
 
 @media print {
   .skip-link,
-  .ui-btn,
+  .btn,
   .btn,
   button {
     display: none !important;

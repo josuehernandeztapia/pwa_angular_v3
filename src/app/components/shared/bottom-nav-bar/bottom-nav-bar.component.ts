@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Subject, fromEvent } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { IconComponent } from '../icon/icon.component';
 import { IconName } from '../icon/icon-definitions';
@@ -21,7 +22,7 @@ interface BottomNavItem {
   templateUrl: './bottom-nav-bar.component.html',
   styleUrls: ['./bottom-nav-bar.component.scss'],
 })
-export class BottomNavBarComponent implements OnInit {
+export class BottomNavBarComponent implements OnInit, OnDestroy {
   showBottomNav = false;
 
   navItems: BottomNavItem[] = [
@@ -64,19 +65,24 @@ export class BottomNavBarComponent implements OnInit {
 
   constructor(private router: Router) {}
 
+  private destroy$ = new Subject<void>();
+
   ngOnInit(): void {
     this.checkMobileView();
     this.updateActiveStates();
     
     // Listen to route changes
     this.router.events.pipe(
-      filter((event: any) => event instanceof NavigationEnd)
+      filter((event: any) => event instanceof NavigationEnd),
+      takeUntil(this.destroy$)
     ).subscribe(() => {
       this.updateActiveStates();
     });
 
     // Listen to window resize
-    window.addEventListener('resize', () => this.checkMobileView());
+    fromEvent(window, 'resize')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.checkMobileView());
 
     // Conditionally add Postventa Wizard to bottom nav (before "Más")
     if (environment.features?.enablePostSalesWizard) {
@@ -95,6 +101,11 @@ export class BottomNavBarComponent implements OnInit {
         }
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private checkMobileView(): void {

@@ -1,12 +1,12 @@
 <section class="ocr-scanner" [attr.data-testid]="'ocr-scanner-' + mode">
   <header class="ocr-scanner__header">
     <div class="ocr-scanner__heading">
-      <app-ui-icon
+      <app-icon
         class="ocr-scanner__heading-icon"
         [name]="getScannerIcon()"
         [size]="24"
         color="currentColor"
-      ></app-ui-icon>
+      ></app-icon>
       <h3 class="ocr-scanner__title">{{ getScannerTitle() }}</h3>
     </div>
     <span class="ocr-scanner__status" [attr.data-status]="currentStatus">{{ getStatusText() }}</span>
@@ -27,8 +27,8 @@
     @if (selectedImage) {
       <figure class="ocr-scanner__preview">
         <img [src]="selectedImage" alt="Imagen seleccionada" class="ocr-scanner__preview-image" />
-        <button type="button" class="ui-btn ui-btn-ghost ocr-scanner__retake" (click)="retakePhoto()">
-          <app-ui-icon name="camera" [size]="18" color="currentColor"></app-ui-icon>
+        <button type="button" class="btn btn-ghost ocr-scanner__retake" (click)="retakePhoto()">
+          <app-icon name="camera" [size]="18" color="currentColor"></app-icon>
           Tomar otra foto
         </button>
       </figure>
@@ -36,17 +36,17 @@
 
     <button
       type="button"
-      class="ui-btn ui-btn-primary ocr-scanner__camera-trigger"
+      class="btn btn-primary ocr-scanner__camera-trigger"
       (click)="triggerCamera()"
       [disabled]="isProcessing"
       [attr.data-testid]="mode + '-camera-trigger'"
     >
-      <app-ui-icon
+      <app-icon
         [name]="selectedImage ? 'refresh' : 'camera'"
         [size]="28"
         color="currentColor"
         [class.ocr-scanner__icon--spinning]="isProcessing"
-      ></app-ui-icon>
+      ></app-icon>
       <span>{{ selectedImage ? 'Procesar imagen' : 'Tomar foto del ' + getScannerLabel() }}</span>
     </button>
   </section>
@@ -72,13 +72,13 @@
   @if (ocrResult && !showManualEntry) {
     <section class="ocr-scanner__results">
       <header class="ocr-scanner__results-header">
-        <app-ui-icon
+        <app-icon
           class="ocr-scanner__results-icon"
           [name]="ocrResult.needsManualEntry ? 'alert-triangle' : 'check-circle'"
           [size]="20"
           color="currentColor"
           [attr.data-state]="ocrResult.needsManualEntry ? 'warning' : 'success'"
-        ></app-ui-icon>
+        ></app-icon>
         <span class="ocr-scanner__results-title">{{ ocrResult.needsManualEntry ? 'Verificación necesaria' : 'Detectado automáticamente' }}</span>
       </header>
 
@@ -109,7 +109,7 @@
   @if (showManualEntry) {
     <section class="ocr-scanner__manual">
       <header class="ocr-scanner__manual-header">
-        <app-ui-icon name="edit" [size]="18" color="currentColor"></app-ui-icon>
+        <app-icon name="edit" [size]="18" color="currentColor"></app-icon>
         <span>Entrada manual</span>
       </header>
 
@@ -124,7 +124,7 @@
         />
         @if (validationMessage) {
           <div class="ocr-scanner__validation">
-            <app-ui-icon name="info" [size]="16" color="currentColor"></app-ui-icon>
+            <app-icon name="info" [size]="16" color="currentColor"></app-icon>
             <span>{{ validationMessage }}</span>
           </div>
         }
@@ -141,23 +141,23 @@
   <footer class="ocr-scanner__actions">
     <button
       type="button"
-      class="ui-btn ui-btn-secondary"
+      class="btn btn-secondary"
       (click)="toggleManualEntry()"
       [disabled]="isProcessing"
       [attr.data-testid]="mode + '-toggle-manual'"
     >
-      <app-ui-icon [name]="showManualEntry ? 'camera' : 'edit'" [size]="18" color="currentColor"></app-ui-icon>
+      <app-icon [name]="showManualEntry ? 'camera' : 'edit'" [size]="18" color="currentColor"></app-icon>
       {{ showManualEntry ? 'Usar cámara' : 'Entrada manual' }}
     </button>
 
     <button
       type="button"
-      class="ui-btn ui-btn-primary"
+      class="btn btn-primary"
       (click)="confirmValue()"
       [disabled]="!canConfirm()"
       [attr.data-testid]="mode + '-confirm'"
     >
-      <app-ui-icon name="check" [size]="18" color="currentColor"></app-ui-icon>
+      <app-icon name="check" [size]="18" color="currentColor"></app-icon>
       Confirmar {{ getScannerLabel() }}
     </button>
   </footer>
@@ -169,8 +169,8 @@
         context="ocr-error"
         [data]="{ error: errorMessage, canRetry: true }"
       ></app-human-message>
-      <button type="button" class="ui-btn ui-btn-ghost" (click)="retry()">
-        <app-ui-icon name="refresh" [size]="18" color="currentColor"></app-ui-icon>
+      <button type="button" class="btn btn-ghost" (click)="retry()">
+        <app-icon name="refresh" [size]="18" color="currentColor"></app-icon>
         Reintentar
       </button>
     </section>

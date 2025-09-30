@@ -1,0 +1,33 @@
+<ng-container *ngIf="isOpen$ | async">
+  <div class="shortcuts__backdrop" role="presentation" (click)="close()"></div>
+  <div class="shortcuts__dialog" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title">
+    <header class="shortcuts__header">
+      <h2 id="shortcuts-title" class="shortcuts__title">
+        <app-icon name="keyboard" class="shortcuts__title-icon" aria-hidden="true"></app-icon>
+        Atajos de teclado
+      </h2>
+      <button type="button" class="shortcuts__close" (click)="close()" aria-label="Cerrar atajos">
+        <app-icon name="x" aria-hidden="true"></app-icon>
+      </button>
+    </header>
+
+    <div class="shortcuts__body">
+      <p class="shortcuts__description">Usa estos atajos para moverte más rápido por la aplicación.</p>
+      <ng-container *ngIf="shortcuts$ | async as shortcutList">
+        <dl class="shortcuts__list">
+          <div *ngFor="let shortcut of shortcutList; trackBy: trackByCombo" class="shortcuts__item">
+            <dt class="shortcuts__combo">{{ shortcut.combo }}</dt>
+            <dd class="shortcuts__detail">
+              <span class="shortcuts__description-text">{{ shortcut.description }}</span>
+              <span *ngIf="shortcut.context" class="shortcuts__context">{{ shortcut.context }}</span>
+            </dd>
+          </div>
+        </dl>
+      </ng-container>
+    </div>
+
+    <footer class="shortcuts__footer">
+      <span>Presiona <kbd>Esc</kbd> para cerrar</span>
+    </footer>
+  </div>
+</ng-container>

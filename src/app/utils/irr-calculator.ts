@@ -1,5 +1,5 @@
 /**
- * 🧮 IRR Calculator - Newton-Raphson Method
+ * IRR calculator - Newton-Raphson method
  * Quirúrgico calculation for post-protection TIR
  */
 

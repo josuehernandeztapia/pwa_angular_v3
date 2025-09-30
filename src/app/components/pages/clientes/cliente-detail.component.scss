@@ -49,6 +49,12 @@
   box-shadow: var(--shadow-sm);
 }
 
+.cliente-header__actions {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
 .cliente-header__primary {
   min-width: 0;
   flex: 1;
@@ -310,7 +316,7 @@
 }
 
 .action-card__chevron {
-  font-size: var(--text-lg);
+  display: inline-flex;
   color: var(--color-text-tertiary);
 }
 

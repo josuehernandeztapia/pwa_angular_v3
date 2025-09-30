@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { BusinessFlow, DOC_NAME_COMPROBANTE, DOC_NAME_INE, DOC_NAME_KYC_CONTAINS, Document, DocumentStatus } from '../models/types';
+import { MarketPolicyContext, MarketPolicyService } from './market-policy.service';
 
 // Port exacto de document requirement checklists desde React simulationService.ts líneas 10-33
 const VENTA_DIRECTA_CONTADO_DOCS: Document[] = [
@@ -71,7 +72,7 @@ const PAQUETE_DACION_PAGO_DOCS: Document[] = [
 })
 export class DocumentRequirementsService {
 
-  constructor() { }
+  constructor(private readonly marketPolicy: MarketPolicyService) { }
 
   /**
    * Port exacto de document requirements logic desde React simulationService.ts
@@ -83,40 +84,46 @@ export class DocumentRequirementsService {
     businessFlow?: BusinessFlow;
     clientType?: 'individual' | 'colectivo';
     ecosystemId?: string;
+    requiresIncomeProof?: boolean;
+    collectiveSize?: number;
   }): Observable<Document[]> {
-    let documents: Document[] = [];
-
-    // Exact port from React logic
-    if (config.saleType === 'contado' || config.businessFlow === BusinessFlow.VentaDirecta) {
-      documents = VENTA_DIRECTA_CONTADO_DOCS.map(d => ({ ...d }));
-    } else if (config.saleType === 'financiero') {
-      if (config.market === 'aguascalientes') {
-        documents = AGUASCALIENTES_FINANCIERO_DOCS.map(d => ({ ...d }));
-      } else { // EdoMex
-        documents = EDOMEX_MIEMBRO_DOCS.map(d => ({ ...d }));
-      }
-    }
-
-    // Special case for savings 
+    // Legacy special case for savings
     if (config.businessFlow === BusinessFlow.AhorroProgramado) {
       if (config.market === 'aguascalientes') {
-        // AGS: Solo documentos básicos de ahorro
-        documents = AHORRO_PROGRAMADO_DOCS.map(d => ({ ...d }));
-      } else {
-        // EdoMex: Documentos base + documentos de ahorro (tarjeta circulación)
-        documents = [
-          ...EDOMEX_MIEMBRO_DOCS.map(d => ({ ...d })),
-          { 
-            id: '9', 
-            name: 'Copia de la factura (Opcional)', 
-            status: DocumentStatus.Pendiente,
-            tooltip: "Documento adicional para validar la propiedad del vehículo"
-          }
-        ];
+        const documents = AHORRO_PROGRAMADO_DOCS.map(d => ({ ...d }));
+        return of(documents).pipe(delay(100));
       }
+
+      const documents = [
+        ...EDOMEX_MIEMBRO_DOCS.map(d => ({ ...d })),
+        {
+          id: '9',
+          name: 'Copia de la factura (Opcional)',
+          status: DocumentStatus.Pendiente,
+          tooltip: 'Documento adicional para validar la propiedad del vehículo',
+          isOptional: true
+        }
+      ];
+      return of(documents).pipe(delay(100));
     }
 
-    return of(documents).pipe(delay(100));
+    if (config.saleType === 'contado' || config.businessFlow === BusinessFlow.VentaDirecta) {
+      const documents = VENTA_DIRECTA_CONTADO_DOCS.map(d => ({ ...d }));
+      return of(documents).pipe(delay(50));
+    }
+
+    const policyContext: MarketPolicyContext = {
+      market: config.market,
+      clientType: config.clientType ?? 'individual',
+      saleType: config.saleType,
+      businessFlow: config.businessFlow,
+      requiresIncomeProof: config.requiresIncomeProof,
+      collectiveSize: config.collectiveSize
+    };
+
+    const policy = this.marketPolicy.getPolicyDocuments(policyContext);
+    const documents = this.marketPolicy.toDocuments(policy);
+    return of(documents).pipe(delay(50));
   }
 
   /**
@@ -208,16 +215,26 @@ export class DocumentRequirementsService {
     completionPercentage: number;
     allComplete: boolean;
   } {
+    const requiredDocs = documents.filter(doc => !doc.isOptional);
+    const optionalDocs = documents.filter(doc => doc.isOptional);
+
+    const completedRequired = requiredDocs.filter(doc => doc.status === DocumentStatus.Aprobado).length;
+    const completedOptional = optionalDocs.filter(doc => doc.status === DocumentStatus.Aprobado).length;
+
+    const totalRequired = requiredDocs.length;
     const totalDocs = documents.length;
-    const completedDocs = documents.filter(d => d.status === DocumentStatus.Aprobado).length;
-    const pendingDocs = totalDocs - completedDocs;
-    const completionPercentage = totalDocs > 0 ? (completedDocs / totalDocs) * 100 : 0;
-    const allComplete = completedDocs === totalDocs;
+
+    const pendingRequired = totalRequired - completedRequired;
+    const completionPercentage = totalRequired > 0
+      ? (completedRequired / totalRequired) * 100
+      : (totalDocs > 0 ? 100 : 0);
+
+    const allComplete = pendingRequired <= 0;
 
     return {
       totalDocs,
-      completedDocs,
-      pendingDocs,
+      completedDocs: completedRequired + completedOptional,
+      pendingDocs: Math.max(pendingRequired, 0),
       completionPercentage: Math.round(completionPercentage),
       allComplete
     };

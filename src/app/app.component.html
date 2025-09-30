@@ -8,63 +8,61 @@
 
     <nav class="app-shell__nav" role="navigation" aria-label="Navegación principal">
       <div class="app-shell__nav-section">
-        <div class="app-shell__nav-label">Crear</div>
+        <div class="app-shell__nav-label">Principal</div>
         <div class="app-shell__nav-links">
-          <a routerLink="/chat" class="app-shell__nav-link" data-cy="nav-chat">
-            <app-icon name="chat"></app-icon>
-            <span>Chat</span>
+          <a routerLink="/dashboard" class="app-shell__nav-link" data-cy="nav-dashboard">
+            <app-icon name="home"></app-icon>
+            <span>Dashboard</span>
           </a>
-          <a routerLink="/audio" class="app-shell__nav-link" data-cy="nav-audio">
-            <app-icon name="microphone"></app-icon>
-            <span>Audio</span>
-          </a>
-          <a routerLink="/images" class="app-shell__nav-link" data-cy="nav-images">
-            <app-icon name="image"></app-icon>
-            <span>Images</span>
-          </a>
-          <a routerLink="/assistants" class="app-shell__nav-link" data-cy="nav-assistants">
-            <app-icon name="assistants"></app-icon>
-            <span>Assistants</span>
+          <a routerLink="/clientes" class="app-shell__nav-link" data-cy="nav-clientes">
+            <!-- <app-icon name="users"></app-icon> -->
+            <span>Clientes</span>
           </a>
         </div>
       </div>
 
       <div class="app-shell__nav-section">
-        <div class="app-shell__nav-label">Gestionar</div>
+        <div class="app-shell__nav-label">Herramientas</div>
         <div class="app-shell__nav-links">
-          <a routerLink="/usage" class="app-shell__nav-link" data-cy="nav-usage">
-            <app-icon name="usage"></app-icon>
-            <span>Usage</span>
-          </a>
           <a routerLink="/cotizador" class="app-shell__nav-link" data-cy="nav-cotizador">
-            <app-icon name="calculator"></app-icon>
+            <!-- <app-icon name="calculator"></app-icon> -->
             <span>Cotizador</span>
           </a>
           <a routerLink="/simulador" class="app-shell__nav-link" data-cy="nav-simulador">
-            <app-icon name="simulator"></app-icon>
+            <!-- <app-icon name="chart"></app-icon> -->
             <span>Simulador</span>
-          </a>
-          <a routerLink="/documentos" class="app-shell__nav-link" data-cy="nav-documentos">
-            <app-icon name="document"></app-icon>
-            <span>Documentos</span>
-          </a>
-          <a routerLink="/entregas" class="app-shell__nav-link" data-cy="nav-entregas">
-            <app-icon name="truck"></app-icon>
-            <span>Entregas</span>
           </a>
         </div>
       </div>
 
       <div class="app-shell__nav-section">
-        <div class="app-shell__nav-label">Optimizar</div>
+        <div class="app-shell__nav-label">Operaciones</div>
         <div class="app-shell__nav-links">
-          <a routerLink="/avi" class="app-shell__nav-link" data-cy="nav-avi">
-            <app-icon name="microphone"></app-icon>
-            <span>AVI</span>
+          <a routerLink="/documentos" class="app-shell__nav-link" data-cy="nav-documentos">
+            <!-- <app-icon name="document"></app-icon> -->
+            <span>Documentos</span>
           </a>
+          <a routerLink="/entregas" class="app-shell__nav-link" data-cy="nav-entregas">
+            <!-- <app-icon name="truck"></app-icon> -->
+            <span>Entregas</span>
+          </a>
+          <a routerLink="/gnv" class="app-shell__nav-link" data-cy="nav-gnv">
+            <!-- <app-icon name="fuel"></app-icon> -->
+            <span>GNV</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="app-shell__nav-section">
+        <div class="app-shell__nav-label">Servicios</div>
+        <div class="app-shell__nav-links">
           <a routerLink="/proteccion" class="app-shell__nav-link" data-cy="nav-proteccion">
-            <app-icon name="shield"></app-icon>
+            <!-- <app-icon name="shield"></app-icon> -->
             <span>Protección</span>
+          </a>
+          <a routerLink="/configuracion" class="app-shell__nav-link" data-cy="nav-configuracion">
+            <!-- <app-icon name="settings"></app-icon> -->
+            <span>Configuración</span>
           </a>
         </div>
       </div>
@@ -74,20 +72,72 @@
   <!-- Main Content Area -->
   <div class="app-shell__main">
     <header class="app-shell__topbar">
-      <div class="app-shell__topbar-info">
-        Organización: <span data-cy="org-name">mvpcoductores</span>
+      <div class="app-shell__topbar-left">
+        <div class="app-shell__topbar-info">
+          Organización: <span data-cy="org-name">mvpcoductores</span>
+        </div>
+        <nav
+          class="app-shell__breadcrumbs"
+          *ngIf="(breadcrumbs$ | async) as breadcrumbs"
+          aria-label="Breadcrumb"
+          aria-live="polite"
+        >
+          <ng-container *ngIf="breadcrumbs.length">
+            <span class="app-shell__breadcrumb" *ngFor="let crumb of breadcrumbs; let last = last; trackBy: trackBreadcrumb">
+              {{ crumb }}
+              <span *ngIf="!last" class="app-shell__breadcrumb-separator">/</span>
+            </span>
+          </ng-container>
+        </nav>
       </div>
 
+      <app-global-search
+        *ngIf="isGlobalSearchEnabled"
+        class="app-shell__global-search"></app-global-search>
+
       <div class="app-shell__topbar-actions">
-        <button class="btn btn-primary btn-sm" data-cy="export">Exportar</button>
+        <ng-container *ngIf="quickActions$ | async as quickActions">
+          <div
+            class="app-shell__quick-actions"
+            role="group"
+            aria-label="Acciones rápidas"
+            *ngIf="quickActions.length"
+          >
+            <button
+              type="button"
+              class="app-shell__quick-action"
+              *ngFor="let action of quickActions; trackBy: trackQuickAction"
+              [attr.data-color]="action.color || 'secondary'"
+              (click)="onQuickAction(action)"
+              [disabled]="action.disabled"
+              [attr.aria-disabled]="action.disabled"
+              [attr.aria-label]="action.tooltip || action.label"
+              [attr.title]="action.tooltip || action.label"
+              [attr.aria-current]="action.active ? 'page' : null"
+              [attr.aria-pressed]="action.active ? 'true' : null"
+              [class.app-shell__quick-action--active]="action.active"
+              [attr.data-cy]="'quick-action-' + action.id"
+            >
+              <ng-container *ngIf="action.iconType">
+                <app-icon [name]="action.iconType" [size]="16" aria-hidden="true"></app-icon>
+              </ng-container>
+              {{ action.label }}
+              <span *ngIf="action.badge !== null" class="app-shell__quick-action-badge">{{ action.badge }}</span>
+            </button>
+          </div>
+        </ng-container>
         <button class="btn btn-secondary btn-sm" data-cy="date-range">Rango de fechas</button>
+        <button class="btn btn-primary btn-sm" data-cy="export">
+          <!-- <app-icon name="download" aria-hidden="true"></app-icon> -->
+          Exportar
+        </button>
         <button
           class="btn btn-ghost btn-sm"
           (click)="toggleDarkMode()"
-          data-cy="toggle-dark"
+          data-cy="dark-toggle"
           [attr.aria-label]="isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'">
-          <app-icon name="moon" *ngIf="!isDarkMode"></app-icon>
-          <app-icon name="sun" *ngIf="isDarkMode"></app-icon>
+          <!-- <app-icon name="moon" *ngIf="!isDarkMode"></app-icon> -->
+          <!-- <app-icon name="sun" *ngIf="isDarkMode"></app-icon> -->
         </button>
       </div>
     </header>
@@ -99,17 +149,27 @@
 </div>
 
 <!-- Mobile Bottom Navigation -->
-<app-bottom-nav-bar
-  class="app-shell__mobile-nav"
-  role="navigation"
-  aria-label="Navegación móvil">
-</app-bottom-nav-bar>
+@defer (on idle) {
+  <app-bottom-nav-bar
+    class="app-shell__mobile-nav"
+    role="navigation"
+    aria-label="Navegación móvil">
+  </app-bottom-nav-bar>
+}
 
 <!-- Update Banner for PWA updates -->
-<app-update-banner></app-update-banner>
+@defer (on idle) {
+  <app-update-banner></app-update-banner>
+}
 
 <!-- Offline Status Indicator -->
-<app-offline-indicator></app-offline-indicator>
+@defer (on idle) {
+  <app-offline-indicator></app-offline-indicator>
+}
 
 <!-- PWA Install Prompt -->
-<app-pwa-install-prompt></app-pwa-install-prompt>
+@defer (on idle) {
+  <app-pwa-install-prompt></app-pwa-install-prompt>
+}
+
+<app-keyboard-shortcuts-modal></app-keyboard-shortcuts-modal>

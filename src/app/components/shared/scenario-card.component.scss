@@ -2,9 +2,9 @@
   width: 100%;
   text-align: left;
   padding: var(--space-4, 16px);
-  border: 2px solid var(--neutral-700, transparent);
+  border: 2px solid var(--neutral-700, var(--openai-gray-600));
   border-radius: 12px;
-  background: var(--neutral-900, transparent);
+  background: var(--neutral-900, var(--openai-gray-800));
   position: relative;
   display: flex;
   flex-direction: column;
@@ -19,12 +19,12 @@
   }
 
   &:not(:disabled):hover {
-    border-color: var(--neutral-700, var(--neutral-500, transparent));
+    border-color: var(--neutral-700, var(--neutral-500, var(--openai-gray-400)));
   }
 
   &--selected {
-    background: var(--accent-green-500, var(--neutral-900, transparent));
-    border-color: var(--accent-green-500, transparent);
+    background: var(--accent-green-500, var(--neutral-900, var(--openai-gray-800)));
+    border-color: var(--accent-green-500);
   }
 
   &__selected {
@@ -34,11 +34,11 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: var(--accent-green-500, transparent);
+    background: var(--accent-green-500);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--flat-surface-bg, transparent);
+    color: var(--flat-surface-bg, var(--openai-white));
     font-weight: var(--font-weight-bold, 700);
   }
 
@@ -46,18 +46,18 @@
     margin: 0;
     font-size: 1.125rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--flat-surface-bg, transparent);
+    color: var(--flat-surface-bg, var(--openai-white));
   }
 
   &__description {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--flat-surface-bg, transparent);
+    color: var(--flat-surface-bg, var(--openai-white));
   }
 
   &__details {
     padding-top: var(--space-3, 12px);
-    border-top: 1px solid var(--neutral-700, transparent);
+    border-top: 1px solid var(--neutral-700, var(--openai-gray-600));
     display: flex;
     flex-direction: column;
     gap: var(--space-3, 12px);
@@ -66,7 +66,7 @@
   &__detail {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--neutral-200, transparent);
+    color: var(--neutral-200, var(--openai-gray-100));
   }
 
   &__summary {
@@ -79,18 +79,18 @@
   &__summary-label {
     font-size: 0.9rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--flat-surface-bg, transparent);
+    color: var(--flat-surface-bg, var(--openai-white));
   }
 
   &__summary-value {
     font-size: 0.9rem;
     font-family: 'Roboto Mono', monospace;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--flat-surface-bg, transparent);
+    color: var(--flat-surface-bg, var(--openai-white));
   }
 
   &__term-change {
-    color: var(--flat-surface-bg, transparent);
+    color: var(--flat-surface-bg, var(--openai-white));
     font-weight: var(--font-weight-medium, 500);
   }
 
@@ -106,20 +106,20 @@
     gap: 2px;
     padding: var(--space-2, 8px);
     border-radius: 8px;
-    background: var(--neutral-950, transparent);
-    border: 1px solid var(--neutral-700, transparent);
+    background: var(--neutral-950, var(--openai-gray-900));
+    border: 1px solid var(--neutral-700, var(--openai-gray-600));
   }
 
   &__kpi-label {
     font-size: 0.75rem;
-    color: var(--flat-surface-bg, transparent);
+    color: var(--flat-surface-bg, var(--openai-white));
   }
 
   &__kpi-value {
     font-size: 0.85rem;
     font-family: 'Roboto Mono', monospace;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--flat-surface-bg, transparent);
+    color: var(--flat-surface-bg, var(--openai-white));
   }
 
   @media (max-width: 48rem) {

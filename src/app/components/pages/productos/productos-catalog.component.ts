@@ -7,6 +7,7 @@ import { ToastService } from '../../../services/toast.service';
 import { EmptyStateCardComponent } from '../../shared/empty-state-card.component';
 import { SkeletonCardComponent } from '../../shared/skeleton-card.component';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { IconName } from '../../shared/icon/icon-definitions';
 
 interface ProductCatalogItem {
   id: string;
@@ -21,6 +22,12 @@ interface ProductCatalogItem {
   terms?: number[];
   minDownPayment: number;
   isPopular?: boolean;
+}
+
+interface MarketFilterOption {
+  value: 'all' | 'aguascalientes' | 'edomex';
+  label: string;
+  icon: IconName;
 }
 
 @Component({
@@ -39,13 +46,13 @@ export class ProductosCatalogComponent implements OnInit {
   selectedMarket: 'all' | 'aguascalientes' | 'edomex' = 'all';
   selectedType: 'all' | 'plazo' | 'directa' | 'colectivo' = 'all';
 
-  markets = [
-    { value: 'all', label: 'Todos', emoji: '🌎' },
-    { value: 'aguascalientes', label: 'Aguascalientes', emoji: '🌵' },
-    { value: 'edomex', label: 'Estado de México', emoji: '🏙️' }
+  markets: MarketFilterOption[] = [
+    { value: 'all', label: 'Todos', icon: 'globe' },
+    { value: 'aguascalientes', label: 'Aguascalientes', icon: 'sun' },
+    { value: 'edomex', label: 'Estado de México', icon: 'building-office' }
   ];
 
-  productTypes = [
+  productTypes: { value: 'all' | 'plazo' | 'directa' | 'colectivo', label: string }[] = [
     { value: 'all', label: 'Todos los tipos' },
     { value: 'plazo', label: 'Venta a Plazo' },
     { value: 'directa', label: 'Venta Directa' },
@@ -65,9 +72,17 @@ export class ProductosCatalogComponent implements OnInit {
   private loadCatalog(): void {
     this.isLoading = true;
 
+    // Get packages for different markets and types
+    const packageKeys = [
+      'aguascalientes-plazo', 'aguascalientes-directa',
+      'edomex-plazo', 'edomex-directa', 'edomex-colectivo'
+    ];
+
+    const packageRequests = packageKeys.map(key => this.cotizador.getProductPackage(key));
+
+    // For demo purposes, create mock packages
     setTimeout(() => {
-      const packages: ProductPackage[] = this.cotizador.getProductPackages();
-      this.products = packages.map(pkg => this.mapPackageToCatalogItem(pkg));
+      this.products = this.createMockCatalogItems();
 
       if (!this.products.some(product => product.isPopular)) {
         this.products = this.products.map((product, index) => ({
@@ -81,21 +96,60 @@ export class ProductosCatalogComponent implements OnInit {
     }, 300);
   }
 
-  private mapPackageToCatalogItem(pkg: ProductPackage): ProductCatalogItem {
-    return {
-      id: pkg.id,
-      name: pkg.name,
-      market: pkg.market,
-      type: pkg.type,
-      businessFlow: pkg.businessFlow,
-      basePrice: pkg.basePrice,
-      components: pkg.components,
-      features: pkg.features || [],
-      rate: pkg.rate,
-      terms: pkg.terms,
-      minDownPayment: pkg.minDownPayment,
-      isPopular: pkg.isPopular
-    };
+  private createMockCatalogItems(): ProductCatalogItem[] {
+    return [
+      {
+        id: 'ags-plazo-1',
+        name: 'Paquete Venta a Plazo - Aguascalientes',
+        market: 'aguascalientes',
+        type: 'plazo',
+        businessFlow: 'VentaPlazo',
+        basePrice: 350000,
+        components: [
+          { id: 'vehicle-base', name: 'Vehículo Base', price: 280000, isOptional: false, isMultipliedByTerm: false },
+          { id: 'insurance', name: 'Seguro Anual', price: 15000, isOptional: false, isMultipliedByTerm: true },
+          { id: 'gps', name: 'GPS', price: 5000, isOptional: true, isMultipliedByTerm: false }
+        ],
+        features: ['Financiamiento directo', 'Tasa competitiva', 'Pagos mensuales fijos'],
+        rate: 0.12,
+        terms: [12, 24, 36, 48],
+        minDownPayment: 0.20,
+        isPopular: true
+      },
+      {
+        id: 'ags-directa-1',
+        name: 'Venta Directa - Aguascalientes',
+        market: 'aguascalientes',
+        type: 'directa',
+        businessFlow: 'VentaDirecta',
+        basePrice: 280000,
+        components: [
+          { id: 'vehicle', name: 'Vehículo', price: 280000, isOptional: false, isMultipliedByTerm: false }
+        ],
+        features: ['Sin financiamiento', 'Entrega inmediata'],
+        rate: 0,
+        terms: [],
+        minDownPayment: 1.0,
+        isPopular: false
+      },
+      {
+        id: 'edomex-colectivo-1',
+        name: 'Crédito Colectivo - Estado de México',
+        market: 'edomex',
+        type: 'colectivo',
+        businessFlow: 'CreditoColectivo',
+        basePrice: 320000,
+        components: [
+          { id: 'vehicle-collective', name: 'Vehículo Base', price: 280000, isOptional: false, isMultipliedByTerm: false },
+          { id: 'group-admin', name: 'Administración Grupal', price: 2000, isOptional: false, isMultipliedByTerm: true }
+        ],
+        features: ['Financiamiento grupal', 'Menores tasas de interés'],
+        rate: 0.08,
+        terms: [24, 36, 48],
+        minDownPayment: 0.15,
+        isPopular: false
+      }
+    ];
   }
 
   getMarketLabel(market: string): string {

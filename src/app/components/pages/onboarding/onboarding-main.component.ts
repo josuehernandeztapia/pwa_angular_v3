@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, Optional } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -14,8 +14,29 @@ import { MifielService } from '../../../services/mifiel.service';
 import { OnboardingEngineService } from '../../../services/onboarding-engine.service';
 import { InterviewCheckpointModalComponent } from '../../shared/interview-checkpoint-modal/interview-checkpoint-modal.component';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { ContextPanelComponent } from '../../shared/context-panel/context-panel.component';
+import { FlowContextService } from '../../../services/flow-context.service';
+import { MarketPolicyContext, PolicyClientType, PolicyMarket } from '../../../services/market-policy.service';
+import { DocsCompletedGuard } from '../../../guards/docs-completed.guard';
+import { ProtectionRequiredGuard } from '../../../guards/protection-required.guard';
+import { AnalyticsService } from '../../../services/analytics.service';
+import { TandaValidGuard } from '../../../guards/tanda-valid.guard';
+import { PlazoGuard } from '../../../guards/plazo.guard';
+import { environment } from '../../../../environments/environment';
 
 type OnboardingStep = 'selection' | 'client_info' | 'documents' | 'kyc' | 'contracts' | 'completed';
+
+interface DocumentGuardFlowContext {
+  market: PolicyMarket;
+  clientType: PolicyClientType;
+  saleType: 'contado' | 'financiero';
+  businessFlow: BusinessFlow;
+  collectiveMembers?: number;
+  requiresIncomeProof?: boolean;
+  monthlyPayment?: number;
+  incomeThreshold?: number;
+  quotationData?: any;
+}
 
 interface OnboardingForm {
   // Client selection
@@ -36,10 +57,27 @@ interface OnboardingForm {
   memberNames: string[];
 }
 
+interface OnboardingContextSnapshot {
+  form: OnboardingForm;
+  currentStep: OnboardingStep;
+  currentStepIndex: number;
+  currentClient: Client | null;
+  documentProgress: typeof OnboardingMainComponent.prototype.documentProgress;
+  kycValidation: typeof OnboardingMainComponent.prototype.kycValidation;
+  kycStatus: typeof OnboardingMainComponent.prototype.kycStatus;
+  contractValidation: typeof OnboardingMainComponent.prototype.contractValidation;
+  contractMessage: string;
+  showRoutesPreview: boolean;
+  draftFound: boolean;
+  aviDecision: 'GO' | 'REVIEW' | 'NO_GO' | null;
+  aviScore: number | null;
+  aviUpdatedAt: number | null;
+}
+
 @Component({
   selector: 'app-onboarding-main',
   standalone: true,
-  imports: [CommonModule, FormsModule, InterviewCheckpointModalComponent, IconComponent],
+  imports: [CommonModule, FormsModule, InterviewCheckpointModalComponent, IconComponent, ContextPanelComponent],
   templateUrl: './onboarding-main.component.html',
   styleUrls: ['./onboarding-main.component.scss'],
 })
@@ -88,10 +126,17 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   contractValidation: { canGenerate: boolean; missingRequirements: string[]; warningMessages: string[] } = { canGenerate: false, missingRequirements: [], warningMessages: [] };
   contractMessage = '';
   isGeneratingContract = false;
+  isMobileView = false;
   // Draft recovery
   private draftSave$ = new Subject<void>();
   draftFound = false;
   private readonly draftKey = 'onboardingDraft';
+  private readonly contextKey = 'onboarding-wizard';
+
+  aviDecision: 'GO' | 'REVIEW' | 'NO_GO' | null = null;
+  aviScore: number | null = null;
+  aviUpdatedAt: number | null = null;
+
 
   constructor(
     private onboardingEngine: OnboardingEngineService,
@@ -100,26 +145,33 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     private contractGen: ContractGenerationService,
     private mifiel: MifielService,
     private ecosystemData: EcosystemDataService,
-    private interviewCheckpoint: InterviewCheckpointService
+    private interviewCheckpoint: InterviewCheckpointService,
+    private analytics: AnalyticsService,
+    @Optional() private flowContext?: FlowContextService,
+    @Optional() private docsCompletedGuard?: DocsCompletedGuard,
+    @Optional() private protectionRequiredGuard?: ProtectionRequiredGuard,
+    @Optional() private tandaValidGuard?: TandaValidGuard,
+    @Optional() private plazoGuard?: PlazoGuard,
   ) { }
 
   ngOnInit(): void {
-    // Restore draft if present
-    const saved = localStorage.getItem(this.draftKey);
-    if (saved) {
-      this.draftFound = true;
+    this.updateViewportState();
+    const restored = this.restoreFromFlowContext();
+
+    if (!restored) {
+      const saved = localStorage.getItem(this.draftKey);
+      if (saved) {
+        this.draftFound = true;
+      }
     }
 
-    // Debounced draft save
     this.draftSave$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       // Debounce manually via setTimeout pattern replaced by Subject usage in handlers
     });
 
-    // Use a debounced save with setTimeout logic encapsulated in scheduleDraftSave
-    // Load available ecosystems
     this.loadAvailableEcosystems();
+    this.updateBreadcrumbs();
 
-    // Subscribe to MetaMap events
     this.metamap.kycSuccess$.pipe(takeUntil(this.destroy$)).subscribe(
       ({ clientId, verificationData }: { clientId: string; verificationData: any }) => {
         if (clientId === this.currentClient?.id) {
@@ -137,9 +189,15 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     );
   }
 
+  @HostListener('window:resize')
+  onViewportResize(): void {
+    this.updateViewportState();
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.persistContext();
   }
 
   get progressPercentage(): number {
@@ -149,9 +207,39 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   // Navigation
   nextStep(): void {
     if (this.currentStepIndex < this.steps.length - 1) {
-      this.currentStepIndex++;
-      this.currentStep = this.steps[this.currentStepIndex].id as OnboardingStep;
+      const nextIndex = this.currentStepIndex + 1;
+      const nextStep = this.steps[nextIndex].id as OnboardingStep;
+
+      if (nextStep === 'contracts') {
+        if (this.tandaValidGuard && !this.tandaValidGuard.enforceTandaClearance('/cotizador/edomex-colectivo')) {
+          this.analytics.track('tanda_guard_blocked', { step: this.currentStep, nextStep });
+          return;
+        }
+
+        if (this.plazoGuard && !this.plazoGuard.enforcePlazoClearance('/cotizador')) {
+          this.analytics.track('plazo_guard_blocked', { step: this.currentStep, nextStep });
+          return;
+        }
+
+        if (this.protectionRequiredGuard && !this.protectionRequiredGuard.enforceProtectionClearance('/proteccion')) {
+          this.analytics.track('protection_guard_blocked', { step: this.currentStep, nextStep });
+          return;
+        }
+
+        if (this.docsCompletedGuard && !this.docsCompletedGuard.enforceDocumentClearance('/onboarding/contracts')) {
+          this.analytics.track('documents_guard_blocked', { step: this.currentStep, nextStep });
+          return;
+        }
+      }
+
+      this.currentStepIndex = nextIndex;
+      this.currentStep = nextStep;
+      this.analytics.track('onboarding_step_advanced', {
+        fromStep: this.steps[nextIndex - 1]?.id ?? this.currentStep,
+        toStep: nextStep,
+      });
       this.onStepChange();
+      this.persistContext();
     }
   }
 
@@ -160,6 +248,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       this.currentStepIndex--;
       this.currentStep = this.steps[this.currentStepIndex].id as OnboardingStep;
       this.onStepChange();
+      this.persistContext();
     }
   }
 
@@ -186,6 +275,8 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     }, 0);
     // Schedule draft save on step change
     this.scheduleDraftSave();
+    this.updateBreadcrumbs();
+    this.persistContext();
   }
 
   // Step validation
@@ -306,6 +397,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       next: (client: Client) => {
         this.currentClient = client;
         this.nextStep();
+        this.persistContext();
       },
       error: (error: unknown) => {
       }
@@ -332,6 +424,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         // Use first member as representative for UI
         this.currentClient = members[0];
         this.nextStep();
+        this.persistContext();
       },
       error: (error: unknown) => {
       }
@@ -356,6 +449,13 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     this.loadAvailableEcosystems();
   }
 
+  private updateViewportState(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    this.isMobileView = window.innerWidth < 960;
+  }
+
   // Document handling
   updateDocumentProgress(): void {
     if (!this.currentClient) return;
@@ -367,6 +467,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       missingDocs: kyc.missingDocs, 
       tooltipMessage: kyc.tooltipMessage 
     };
+    this.persistContext();
   }
 
   attemptDocumentUpload(fileInput: HTMLInputElement, documentId: string): void {
@@ -511,6 +612,10 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       next: (updatedClient: Client) => {
         this.currentClient = updatedClient;
         this.updateKycStatus();
+
+        const score = this.extractAviScore(verificationData?.score);
+        const decision = this.resolveAviDecisionFromScore(score);
+        this.setAviDecision(decision, score);
       },
       error: (error: unknown) => {
       }
@@ -518,6 +623,87 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   }
 
   onKycExit(reason: string): void {
+    const decision = this.resolveAviDecisionFromExit(reason);
+    this.setAviDecision(decision, null);
+  }
+
+  private setAviDecision(decision: 'GO' | 'REVIEW' | 'NO_GO', score: number | null): void {
+    const normalizedScore = score != null ? this.clampScore(score) : null;
+    const changed = this.aviDecision !== decision || this.aviScore !== normalizedScore;
+    this.aviDecision = decision;
+    this.aviScore = normalizedScore;
+    this.aviUpdatedAt = Date.now();
+
+    this.flowContext?.updateContext('avi', current => ({
+      ...(current as any),
+      decision,
+      score: normalizedScore != null ? Math.round(normalizedScore * 1000) : (current as any)?.score,
+      completedAt: Date.now(),
+      requiresSupervisor: decision === 'REVIEW'
+    }), { breadcrumbs: this.getBreadcrumbTrail('documents') });
+
+    if (changed) {
+      this.analytics.track('avi_decision_recorded', {
+        decision,
+        score: normalizedScore,
+      });
+      this.persistContext();
+    }
+  }
+
+  private extractAviScore(rawScore: any): number | null {
+    if (rawScore === undefined || rawScore === null) {
+      return null;
+    }
+
+    const numeric = Number(rawScore);
+    if (!Number.isFinite(numeric)) {
+      return null;
+    }
+
+    const normalized = numeric > 1 ? numeric / 100 : numeric;
+    return this.clampScore(normalized);
+  }
+
+  private resolveAviDecisionFromScore(score: number | null): 'GO' | 'REVIEW' | 'NO_GO' {
+    if (score === null) {
+      return 'REVIEW';
+    }
+
+    const profile = environment.avi?.decisionProfile ?? 'conservative';
+    const thresholds = environment.avi?.thresholds?.[profile as 'conservative' | 'permissive'] ?? environment.avi?.thresholds?.conservative ?? { GO_MIN: 0.78, NOGO_MAX: 0.55 };
+    const goMin = typeof thresholds.GO_MIN === 'number' ? thresholds.GO_MIN : 0.78;
+    const noGoMax = typeof thresholds.NOGO_MAX === 'number' ? thresholds.NOGO_MAX : 0.55;
+
+    if (score >= goMin) {
+      return 'GO';
+    }
+    if (score <= noGoMax) {
+      return 'NO_GO';
+    }
+    return 'REVIEW';
+  }
+
+  private resolveAviDecisionFromExit(reason: string): 'REVIEW' | 'NO_GO' {
+    const normalized = (reason || '').toLowerCase();
+    const negativeTriggers = ['fraud', 'rechaz', 'denied', 'deny', 'bloque', 'no go', 'fail', 'error'];
+    if (negativeTriggers.some(trigger => normalized.includes(trigger))) {
+      return 'NO_GO';
+    }
+    return 'REVIEW';
+  }
+
+  private clampScore(score: number): number {
+    if (!Number.isFinite(score)) {
+      return 0;
+    }
+    if (score < 0) {
+      return 0;
+    }
+    if (score > 1) {
+      return 1;
+    }
+    return score;
   }
 
   // Contract handling
@@ -644,7 +830,6 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   }
 
   private scheduleDraftSave(): void {
-    // Debounce via timeout per requirement (500ms)
     clearTimeout((this as any)._draftTimer);
     (this as any)._draftTimer = setTimeout(() => this.performDraftSave(), 500);
   }
@@ -658,6 +843,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     try {
       localStorage.setItem(this.draftKey, JSON.stringify(draft));
     } catch { /* ignore quota errors */ }
+    this.persistContext();
   }
 
   continueDraft(): void {
@@ -672,15 +858,209 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       }
       this.draftFound = false;
       this.onStepChange();
+      this.persistContext();
     } catch { /* ignore parse errors */ }
   }
 
   private clearDraft(): void {
     try { localStorage.removeItem(this.draftKey); } catch { /* ignore */ }
     this.draftFound = false;
+    this.aviDecision = null;
+    this.aviScore = null;
+    this.aviUpdatedAt = null;
+    this.flowContext?.clearContext(this.contextKey);
   }
 
   discardDraft(): void {
     this.clearDraft();
   }
+
+  private getBreadcrumbTrail(step: OnboardingStep = this.currentStep): string[] {
+    const base = ['Dashboard', 'Onboarding'];
+    const labels: Record<OnboardingStep, string> = {
+      selection: 'Configuración',
+      client_info: 'Información del Cliente',
+      documents: 'Documentos',
+      kyc: 'KYC',
+      contracts: 'Contratos',
+      completed: 'Completado'
+    };
+
+    const label = labels[step] ?? 'Configuración';
+    const trail = [...base, label];
+    if (this.currentClient?.name) {
+      trail.splice(2, 0, this.currentClient.name);
+    }
+    return trail;
+  }
+
+  private updateBreadcrumbs(): void {
+    this.flowContext?.setBreadcrumbs(this.getBreadcrumbTrail());
+  }
+
+  private persistContext(): void {
+    if (!this.flowContext) {
+      return;
+    }
+
+    this.persistDocumentContextForGuard();
+
+    const snapshot: OnboardingContextSnapshot = {
+      form: { ...this.form, memberNames: [...this.form.memberNames] },
+      currentStep: this.currentStep,
+      currentStepIndex: this.currentStepIndex,
+      currentClient: this.currentClient ? { ...this.currentClient } : null,
+      documentProgress: { ...this.documentProgress },
+      kycValidation: { ...this.kycValidation },
+      kycStatus: { ...this.kycStatus },
+      contractValidation: { ...this.contractValidation },
+      contractMessage: this.contractMessage,
+      showRoutesPreview: this.showRoutesPreview,
+      draftFound: this.draftFound,
+      aviDecision: this.aviDecision,
+      aviScore: this.aviScore,
+      aviUpdatedAt: this.aviUpdatedAt
+    };
+
+    this.flowContext.saveContext(this.contextKey, snapshot, { breadcrumbs: this.getBreadcrumbTrail() });
+  }
+
+  private persistDocumentContextForGuard(): void {
+    if (!this.flowContext || !this.currentClient) {
+      return;
+    }
+
+    const existing = this.flowContext.getContextData<any>('documentos');
+    const previousFlow: DocumentGuardFlowContext = existing?.flowContext ?? {};
+
+    const built = this.buildDocumentGuardFlowContext();
+    if (!built) {
+      return;
+    }
+
+    const flowContext: DocumentGuardFlowContext = {
+      ...previousFlow,
+      ...built,
+    };
+
+    if (typeof flowContext.monthlyPayment !== 'number') {
+      const monthlyPayment = this.currentClient.paymentPlan?.monthlyPayment;
+      if (typeof monthlyPayment === 'number' && Number.isFinite(monthlyPayment)) {
+        flowContext.monthlyPayment = monthlyPayment;
+      }
+    }
+
+    if (typeof flowContext.incomeThreshold !== 'number') {
+      const quotationIncomeThreshold = existing?.flowContext?.quotationData?.incomeThreshold
+        ?? existing?.flowContext?.quotationData?.requiredIncomeThreshold;
+      if (typeof quotationIncomeThreshold === 'number' && Number.isFinite(quotationIncomeThreshold)) {
+        flowContext.incomeThreshold = quotationIncomeThreshold;
+      }
+    }
+
+    if (!flowContext.quotationData && existing?.flowContext?.quotationData) {
+      flowContext.quotationData = existing.flowContext.quotationData;
+    }
+
+    const payload = {
+      flowContext,
+      policyContext: this.buildPolicyContextForDocuments(flowContext),
+      documents: this.currentClient.documents.map(doc => ({ ...doc })),
+      completionStatus: { ...this.documentProgress },
+      voiceVerified: this.kycStatus.status === 'completed',
+      showAVI: this.aviDecision !== null,
+      aviAnalysis: this.aviDecision
+        ? {
+            decision: this.aviDecision,
+            score: this.aviScore,
+            updatedAt: this.aviUpdatedAt
+          }
+        : undefined
+    };
+
+    this.flowContext.saveContext(
+      'documentos',
+      payload,
+      { breadcrumbs: this.getBreadcrumbTrail('documents') }
+    );
+  }
+
+  private buildDocumentGuardFlowContext(): DocumentGuardFlowContext | null {
+    if (!this.form.market || !this.form.saleType) {
+      return null;
+    }
+
+    const collectiveMembers = this.form.clientType === 'colectivo'
+      ? this.form.memberNames.filter(name => name.trim()).length
+      : undefined;
+
+    const businessFlow = this.currentClient?.flow
+      ?? (this.form.clientType === 'colectivo'
+        ? BusinessFlow.CreditoColectivo
+        : BusinessFlow.VentaPlazo);
+
+    const monthlyPayment = this.currentClient?.paymentPlan?.monthlyPayment;
+    const incomeThreshold = this.currentClient?.paymentPlan?.monthlyGoal;
+
+    return {
+      market: this.form.market as PolicyMarket,
+      clientType: (this.form.clientType || 'individual') as PolicyClientType,
+      saleType: this.form.saleType as 'contado' | 'financiero',
+      businessFlow,
+      collectiveMembers,
+      requiresIncomeProof: this.determineIncomeProofRequirementFlag(),
+      monthlyPayment: typeof monthlyPayment === 'number' ? monthlyPayment : undefined,
+      incomeThreshold: typeof incomeThreshold === 'number' ? incomeThreshold : undefined,
+    };
+  }
+
+  private buildPolicyContextForDocuments(flow: DocumentGuardFlowContext): MarketPolicyContext {
+    return {
+      market: flow.market,
+      clientType: flow.clientType,
+      saleType: flow.saleType,
+      businessFlow: flow.businessFlow,
+      requiresIncomeProof: flow.requiresIncomeProof,
+      collectiveSize: flow.collectiveMembers
+    };
+  }
+
+  private determineIncomeProofRequirementFlag(): boolean | undefined {
+    const incomeDoc = this.currentClient?.documents.find(doc => doc.id === 'doc-income');
+    if (!incomeDoc) {
+      return undefined;
+    }
+
+    return incomeDoc.isOptional === true ? false : true;
+  }
+
+  private restoreFromFlowContext(): boolean {
+    if (!this.flowContext) {
+      return false;
+    }
+
+    const stored = this.flowContext.getContextData<OnboardingContextSnapshot>(this.contextKey);
+    if (!stored) {
+      return false;
+    }
+
+    this.form = { ...this.form, ...stored.form, memberNames: [...stored.form.memberNames] };
+    this.currentStep = stored.currentStep ?? this.currentStep;
+    this.currentStepIndex = stored.currentStepIndex ?? this.currentStepIndex;
+    this.currentClient = stored.currentClient ? { ...stored.currentClient } : null;
+    this.documentProgress = stored.documentProgress ?? this.documentProgress;
+    this.kycValidation = stored.kycValidation ?? this.kycValidation;
+    this.kycStatus = stored.kycStatus ?? this.kycStatus;
+    this.contractValidation = stored.contractValidation ?? this.contractValidation;
+    this.contractMessage = stored.contractMessage ?? this.contractMessage;
+    this.showRoutesPreview = stored.showRoutesPreview ?? this.showRoutesPreview;
+    this.draftFound = stored.draftFound ?? this.draftFound;
+    this.aviDecision = stored.aviDecision ?? this.aviDecision;
+    this.aviScore = stored.aviScore ?? this.aviScore;
+    this.aviUpdatedAt = stored.aviUpdatedAt ?? this.aviUpdatedAt;
+
+    this.onStepChange();
+    return true;
+  }
+
 }

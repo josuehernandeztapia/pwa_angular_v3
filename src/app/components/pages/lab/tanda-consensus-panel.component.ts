@@ -5,11 +5,12 @@ import { TandaDeliveryService } from '../../../services/tanda-delivery.service';
 import { EnhancedTandaSimulationService, TandaScenarioResult } from '../../../services/enhanced-tanda-simulation.service';
 import { FinancialCalculatorService } from '../../../services/financial-calculator.service';
 import { RiskService } from '../../../services/risk.service';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-tanda-consensus-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IconComponent],
   templateUrl: './tanda-consensus-panel.component.html',
   styleUrls: ['./tanda-consensus-panel.component.scss']
 })

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IconComponent } from '../icon/icon.component';
+import { IconName } from '../icon/icon-definitions';
 import { Subject, takeUntil } from 'rxjs';
 import { NextBestActionService, NextBestAction, ActionInsights } from '../../../services/next-best-action.service';
 
@@ -24,6 +25,11 @@ export class NextBestActionWidgetComponent implements OnInit, OnDestroy {
   showingAll = false;
 
   private destroy$ = new Subject<void>();
+  private readonly metaIconMap: Record<'time' | 'value' | 'due', IconName> = {
+    time: 'clock',
+    value: 'currency-dollar',
+    due: 'calendar'
+  };
 
   constructor(private nextBestActionService: NextBestActionService) {}
 
@@ -83,15 +89,20 @@ export class NextBestActionWidgetComponent implements OnInit, OnDestroy {
     this.updateDisplayActions();
   }
 
-  getActionIcon(type: string): string {
-    const icons = {
-      'contact': '',
-      'document': '',
-      'payment': 'payment',
-      'opportunity': '',
-      'system': '⚙️'
+  getActionIcon(type: string): IconName {
+    const normalizedType = (type || '').toLowerCase();
+    const icons: Record<string, IconName> = {
+      contact: 'phone',
+      document: 'document-text',
+      payment: 'currency-dollar',
+      opportunity: 'target',
+      system: 'settings'
     };
-    return icons[type as keyof typeof icons] || 'pin';
+    return icons[normalizedType] ?? 'information-circle';
+  }
+
+  getMetaIcon(key: 'time' | 'value' | 'due'): IconName {
+    return this.metaIconMap[key];
   }
 
   formatCurrency(value: number): string {

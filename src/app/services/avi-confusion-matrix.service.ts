@@ -109,7 +109,7 @@ export class AVIConfusionMatrixService {
   }
 
   /**
-   * 🧮 Calculate confusion matrix from samples
+   * Calculate confusion matrix from samples
    */
   calculateConfusionMatrix(): Observable<ConfusionMatrixData> {
     const samples = this.calibrationSamples$.value;
@@ -248,7 +248,7 @@ export class AVIConfusionMatrixService {
   }
 
   /**
-   * 🧹 Clear calibration data (for reset)
+   * Clear calibration data (for reset)
    */
   clearCalibrationData(): Observable<boolean> {
     this.calibrationSamples$.next([]);
@@ -265,7 +265,7 @@ export class AVIConfusionMatrixService {
   }
 
   /**
-   * 📥 Import calibration samples (for bulk loading)
+   * Import calibration samples (for bulk loading)
    */
   importCalibrationSamples(samples: CalibrationSample[]): Observable<boolean> {
     const validSamples = samples.filter(this.validateSample);
@@ -282,7 +282,7 @@ export class AVIConfusionMatrixService {
   }
 
   /**
-   * 📤 Export calibration data
+   * Export calibration data
    */
   exportCalibrationData(): Observable<{
     samples: CalibrationSample[];

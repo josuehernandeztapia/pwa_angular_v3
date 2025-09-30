@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { IconName } from '../../shared/icon/icon-definitions';
 import { ApiService } from '../../../services/api.service';
 import { CotizadorEngineService } from '../../../services/cotizador-engine.service';
 import { ToastService } from '../../../services/toast.service';
@@ -67,12 +68,12 @@ export class OpportunitiesPipelineComponent implements OnInit {
     stageDistribution: {}
   };
 
-  pipelineStages = [
-    { key: 'prospecto', name: 'Prospecto', icon: '' },
-    { key: 'cotizando', name: 'Cotizando', icon: '' },
-    { key: 'negociando', name: 'Negociando', icon: '🤝' },
-    { key: 'documentando', name: 'Documentando', icon: '' },
-    { key: 'cerrando', name: 'Cerrando', icon: '' }
+  pipelineStages: Array<{ key: Opportunity['stage']; name: string; icon: IconName }> = [
+    { key: 'prospecto', name: 'Prospecto', icon: 'target' },
+    { key: 'cotizando', name: 'Cotizando', icon: 'calculator' },
+    { key: 'negociando', name: 'Negociando', icon: 'handshake' },
+    { key: 'documentando', name: 'Documentando', icon: 'document-text' },
+    { key: 'cerrando', name: 'Cerrando', icon: 'check-circle' }
   ];
 
   constructor(
@@ -391,9 +392,28 @@ export class OpportunitiesPipelineComponent implements OnInit {
     };
   }
 
-  getPriorityIcon(priority: string): string {
-    const icons = { alta: '<svg class="priority-icon priority-icon--high" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg>', media: '<svg class="priority-icon priority-icon--medium" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg>', baja: '<svg class="priority-icon priority-icon--low" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg>' };
-    return icons[priority as keyof typeof icons] || '⚪';
+  getPriorityIcon(priority: Opportunity['priority']): IconName {
+    switch (priority) {
+      case 'alta':
+        return 'alert-triangle';
+      case 'media':
+        return 'information-circle';
+      default:
+        return 'dot';
+    }
+  }
+
+  getPriorityLabel(priority: Opportunity['priority']): string {
+    switch (priority) {
+      case 'alta':
+        return 'Alta';
+      case 'media':
+        return 'Media';
+      case 'baja':
+        return 'Baja';
+      default:
+        return 'Sin Prioridad';
+    }
   }
 
   formatCurrency(amount: number): string {

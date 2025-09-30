@@ -1,0 +1,57 @@
+<div class="usage-reports">
+  <header class="usage-reports__header">
+    <div>
+      <h1 class="usage-reports__title">Usage &amp; Reports</h1>
+      <p class="usage-reports__subtitle">Panel read-only para monitorear consumo y costos relacionados con APIs e IA.</p>
+    </div>
+    <button type="button" class="usage-reports__refresh">Actualizar</button>
+  </header>
+
+  <section class="usage-reports__stats">
+    <article *ngFor="let stat of stats" class="usage-reports__stat">
+      <header class="usage-reports__stat-header">{{ stat.label }}</header>
+      <div class="usage-reports__stat-value">{{ stat.value }}</div>
+      <footer class="usage-reports__stat-meta" *ngIf="stat.delta">
+        <span class="usage-reports__stat-trend" [attr.data-trend]="stat.trend">{{ stat.trend === 'down' ? '↓' : stat.trend === 'up' ? '↑' : '→' }}</span>
+        <span>{{ stat.delta }}</span>
+      </footer>
+    </article>
+  </section>
+
+  <section class="usage-reports__table">
+    <header class="usage-reports__table-header">
+      <h2>Consumo por categoría</h2>
+      <p>Datos mock para pruebas mientras se integra el backend real.</p>
+    </header>
+
+    <div class="usage-reports__table-wrapper" role="region" aria-label="Consumo detallado">
+      <table>
+        <thead>
+          <tr>
+            <th>Categoría</th>
+            <th>Requests</th>
+            <th>Éxito</th>
+            <th>Costo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of rows">
+            <td>{{ row.category }}</td>
+            <td>{{ row.requests | number }}</td>
+            <td>{{ row.successRate }}</td>
+            <td>{{ row.cost }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="usage-reports__footnote">
+    <h2>Pendiente de integración</h2>
+    <ul>
+      <li>Conectar con endpoints reales de métricas (DataDog / internal BFF).</li>
+      <li>Exponer descargas CSV y filtros por rango de fechas.</li>
+      <li>Agregar alertas configurables por umbral de consumo.</li>
+    </ul>
+  </section>
+</div>

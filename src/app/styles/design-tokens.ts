@@ -4,79 +4,88 @@
  * Una sola fuente de verdad para colores, tipografía, espaciados y efectos
  */
 
+const resolveCssColor = (variableName: string): string => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return `var(${variableName})`;
+  }
+
+  const value = getComputedStyle(document.documentElement).getPropertyValue(variableName).trim();
+  return value || `var(${variableName})`;
+};
+
 export const DESIGN_TOKENS = {
   //  Colores
   color: {
     // Backgrounds base
     bg: {
-      light: '#f8fafc',    // OpenAI light gray background /* OpenAI light-gray */
-      dark: '#080808'      // OpenAI black /* OpenAI black */
+      get light() { return resolveCssColor('--color-bg-secondary'); },
+      get dark() { return resolveCssColor('--openai-black'); }
     },
 
     // Paneles y tarjetas
     panel: {
-      light: '#ffffff',    // OpenAI white /* OpenAI white */
-      dark: '#1e293b'      // OpenAI dark text /* OpenAI dark-text */
+      get light() { return resolveCssColor('--openai-white'); },
+      get dark() { return resolveCssColor('--color-primary-800'); }
     },
 
     // Texto
     text: {
-      primary: '#080808',   // OpenAI black /* OpenAI black */
-      secondary: '#737373', // OpenAI neutral gray /* OpenAI neutral */
-      inverse: '#f1f5f9'    // OpenAI subtle background /* OpenAI subtle-bg */
+      get primary() { return resolveCssColor('--color-text-primary'); },
+      get secondary() { return resolveCssColor('--color-text-secondary'); },
+      get inverse() { return resolveCssColor('--color-bg-tertiary'); }
     },
 
     // Colores de marca
     brand: {
-      primary: '#080808',   // OpenAI black /* OpenAI black */
-      success: '#737373',   // OpenAI neutral gray /* OpenAI neutral */
-      warn: '#737373',      // OpenAI neutral gray /* OpenAI neutral */
-      danger: '#737373'     // OpenAI neutral gray /* OpenAI neutral */
+      get primary() { return resolveCssColor('--openai-black'); },
+      get success() { return resolveCssColor('--accent-primary'); },
+      get warn() { return resolveCssColor('--accent-amber-500'); },
+      get danger() { return resolveCssColor('--accent-red-500'); }
     },
 
     // Data Visualization Colors - OpenAI Compliant
     data: {
-      primary: '#2563eb',    // Blue for primary data series
-      secondary: '#16a34a',  // Green for success/positive metrics
-      tertiary: '#9333ea',   // Purple for secondary data
-      warning: '#ea580c',    // Orange for warnings
-      danger: '#dc2626',     // Red for alerts/negative metrics
-      neutral: '#6b7280',    // Gray for neutral data
-      accent: '#0891b2',     // Cyan for accent data
-      highlight: '#7c3aed'   // Violet for highlights
+      get primary() { return resolveCssColor('--accent-blue-600'); },
+      get secondary() { return resolveCssColor('--accent-green-500'); },
+      get tertiary() { return resolveCssColor('--accent-purple-600'); },
+      get warning() { return resolveCssColor('--accent-amber-500'); },
+      get danger() { return resolveCssColor('--accent-red-500'); },
+      get neutral() { return resolveCssColor('--color-text-secondary'); },
+      get accent() { return resolveCssColor('--accent-cyan-500'); },
+      get highlight() { return resolveCssColor('--accent-purple-600'); }
     },
 
     // Chart specific colors
     chart: {
       // Line charts
       line: {
-        primary: '#2563eb',    // Primary line color
-        secondary: '#16a34a',  // Secondary line color
-        grid: '#e5e7eb',      // Grid lines
-        axis: '#6b7280'       // Axis labels
+        get primary() { return resolveCssColor('--accent-blue-600'); },
+        get secondary() { return resolveCssColor('--accent-green-500'); },
+        get grid() { return resolveCssColor('--color-border-primary'); },
+        get axis() { return resolveCssColor('--color-text-secondary'); }
       },
       // Bar charts
       bar: {
-        primary: '#2563eb',    // Primary bar color
-        secondary: '#16a34a',  // Secondary bar color
-        tertiary: '#9333ea',   // Tertiary bar color
+        get primary() { return resolveCssColor('--accent-blue-600'); },
+        get secondary() { return resolveCssColor('--accent-green-500'); },
+        get tertiary() { return resolveCssColor('--accent-purple-600'); },
         background: 'transparent'
       },
       // Progress indicators
       progress: {
-        complete: '#16a34a',   // Green for completed
-        inProgress: '#2563eb', // Blue for in progress
-        pending: '#6b7280'     // Gray for pending
+        get complete() { return resolveCssColor('--accent-green-500'); },
+        get inProgress() { return resolveCssColor('--accent-blue-600'); },
+        get pending() { return resolveCssColor('--color-text-secondary'); }
       }
     },
 
     // Bordes y divisores
-    border: '#e5e7eb',      // OpenAI light borders /* OpenAI light-border */
+    get border() { return resolveCssColor('--color-border-primary'); },
 
     // Estados de interacción
     hover: {
-      light: '#f1f5f9',     // OpenAI subtle background /* OpenAI subtle-bg */
-      dark: '#525252'       // OpenAI dark gray hover /* OpenAI dark-gray */
+      get light() { return resolveCssColor('--color-bg-tertiary'); },
+      get dark() { return resolveCssColor('--color-border-focus'); }
     }
   },
 

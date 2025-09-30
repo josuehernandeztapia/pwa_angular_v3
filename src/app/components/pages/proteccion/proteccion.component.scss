@@ -78,6 +78,10 @@
   gap: 32px;
 }
 
+.proteccion-context-panel {
+  display: block;
+}
+
 @media (min-width: 768px) {
   .proteccion-main {
     padding: 40px 32px 64px;

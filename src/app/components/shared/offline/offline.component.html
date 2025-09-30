@@ -1,5 +1,5 @@
 <section class="offline" aria-live="polite">
-  <div class="offline__card ui-card">
+  <div class="offline__card card">
     <header class="offline__header">
       <div class="offline__signal" aria-hidden="true">
         <app-icon class="offline__signal-icon" name="offline" [size]="40"></app-icon>
@@ -46,7 +46,7 @@
     <div class="offline__actions">
       <button
         type="button"
-        class="ui-btn ui-btn-primary offline__action offline__action--primary"
+        class="btn btn-primary offline__action offline__action--primary"
         (click)="checkConnection()"
         [disabled]="isChecking()"
       >
@@ -66,11 +66,11 @@
       </button>
 
       <div class="offline__secondary-actions">
-        <button type="button" class="ui-btn ui-btn-secondary offline__action" (click)="goToDashboard()">
+        <button type="button" class="btn btn-secondary offline__action" (click)="goToDashboard()">
           <app-icon class="offline__action-icon" name="home" [size]="20"></app-icon>
           Dashboard
         </button>
-        <button type="button" class="ui-btn ui-btn-secondary offline__action" (click)="clearOfflineData()">
+        <button type="button" class="btn btn-secondary offline__action" (click)="clearOfflineData()">
           <app-icon class="offline__action-icon" name="trash" [size]="20"></app-icon>
           Limpiar caché
         </button>

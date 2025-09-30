@@ -243,10 +243,13 @@ export PLAYWRIGHT_TIMEOUT=30000
 
 ## 🚨 Troubleshooting Commands
 
-### Problemas Comunes
+### Problemas Críticos de Build TypeScript
 ```bash
-# Limpiar cache de npm
-npm cache clean --force
+# Verificar errores específicos de TypeScript
+ng build --configuration=development 2>&1 | grep -E "(ERROR|WARNING)"
+
+# Limpiar cache Angular completo
+rm -rf .angular/cache dist/ node_modules/.cache
 
 # Reinstalar dependencias
 rm -rf node_modules package-lock.json
@@ -255,11 +258,44 @@ npm install --legacy-peer-deps
 # Limpiar builds
 rm -rf dist/
 npm run build
+```
 
-# Reset de playwright browsers
+### Errores Críticos y Soluciones Detalladas
+Ver [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) para soluciones completas a:
+- **ERROR TS2339**: `IconName` type issues - conversión de strings a IconName types
+- **Missing IconComponent imports**: Componentes que usan `<app-icon>` sin importar IconComponent
+- **Duplicate object properties**: Objetos con propiedades duplicadas como `legend`
+- **Missing template methods**: Métodos usados en templates pero no definidos en .ts (`restoreFromFlowContext`, `updateBreadcrumbs`)
+- **SVG syntax errors**: Errores en polígonos y elementos SVG
+
+### Comandos de Diagnóstico Rápida
+```bash
+# Health check completo de iconos
+grep -r "app-icon" src/ --include="*.html" | wc -l    # Contar usos de app-icon
+grep -r "IconComponent" src/ --include="*.ts" | wc -l # Contar imports de IconComponent
+
+# Verificar type mismatches de iconos
+grep -r ": string" src/ | grep -i icon | head -5
+
+# Buscar métodos faltantes en templates
+grep -r "{{ get.*}}" src/ --include="*.html"
+grep -r "\.restore\|\.updateBreadcrumbs" src/ --include="*.html"
+
+# Debug de testing frameworks
+npx playwright install --force
+npx cypress cache clear
+npx cypress install --force
+```
+
+### Problemas Comunes Pre-2024
+```bash
+# Limpiar cache de npm
+npm cache clean --force
+
+# Reset de playwright browsers (si persisten errores)
 npx playwright install --force
 
-# Reset de cypress
+# Reset de cypress (si persisten errores)
 npx cypress cache clear
 npx cypress install --force
 ```

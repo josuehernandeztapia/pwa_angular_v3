@@ -7,7 +7,7 @@ describe('Authentication Flow (Minimal Dark)', () => {
     it('should display login form correctly (Minimal Dark)', () => {
       cy.navigateAndWait('/login');
       // Container exists (Minimal Dark)
-      cy.get('main, [role="main"], .ui-card').should('exist');
+      cy.get('main, [role="main"], .card').should('exist');
       
       // Verify login form elements are present using enhanced commands
       cy.waitForElement('[data-cy="login-form"]');

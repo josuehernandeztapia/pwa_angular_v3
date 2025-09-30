@@ -19,6 +19,8 @@ export const environment = {
     enableAnalytics: true,
     enablePushNotifications: true,
     enableOfflineMode: true,
+    enableDocumentValidationMock: false,
+    forceOfflineQueueMock: false,
     enablePostSalesWizard: false,
     enableDevKpi: false,
     // Post-venta: Chips "Agregar a cotización" (disabled by default in prod)
@@ -44,11 +46,19 @@ export const environment = {
     enablePaymentsBff: true,
     enableContractsBff: true,
     enableAutomationBff: true,
+    enableAviMicroLocalBff: true,
     // New parity flags (default conservative in prod)
     enableLabs: false,
     enablePostventa: false,
+    enableClaimsModule: false,
     enableFlowBuilder: true,
-    enablePerfil: true
+    enablePostSaleBff: false,
+    enableClaimsBff: false,
+    enableAdminBff: false,
+    enablePerfil: true,
+    enableQaTools: false,
+    enableUsageModule: false,
+    enableGlobalSearch: false
   },
 
   // Dynamic configuration base paths
@@ -75,6 +85,18 @@ export const environment = {
     documents: '/documents',
     payments: '/payments',
     reports: '/reports'
+  },
+
+  analytics: {
+    eventsEndpoint: 'analytics/events',
+    metricsEndpoint: 'analytics/metrics',
+    flushIntervalMs: 10000
+  },
+
+  monitoring: {
+    eventsEndpoint: 'monitoring/events',
+    datadogEndpoint: 'monitoring/datadog',
+    slackWebhook: process.env['SLACK_MONITORING_WEBHOOK'] || ''
   },
 
   // External services - production keys

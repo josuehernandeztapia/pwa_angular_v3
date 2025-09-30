@@ -1,17 +1,17 @@
 /**
- * Icono contextual representado mediante `<app-ui-icon>` para Human Message Component - Contextual Microcopy Display
+ * Icono contextual representado mediante `<app-icon>` para Human Message Component - Contextual Microcopy Display
  * Displays human-first messages with appropriate styling and animations
  */
 
 import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HumanMicrocopyService, MicrocopyConfig } from '../../../services/human-microcopy.service';
-import { UiIconComponent } from '../../ui/ui-icon/ui-icon.component';
+import { IconComponent } from "../shared/icon/icon.component"
 
 @Component({
   selector: 'app-human-message',
   standalone: true,
-  imports: [CommonModule, UiIconComponent],
+  imports: [CommonModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './human-message.component.html',
   styleUrls: ['./human-message.component.scss']

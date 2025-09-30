@@ -1,267 +1,70 @@
-# 🎨 COMPLETE OPENAI DESIGN SYSTEM TRANSFORMATION REPORT
-**PWA Conductores - End-to-End Visual Transformation**
+# 🎨 OpenAI Design System Adoption Report
+**Estado actual vs. objetivo – Conductores PWA**
 
 ---
 
-## 📊 TRANSFORMATION OVERVIEW
+## 📊 Estado General
 
-### Summary Statistics
-- **Total Files Analyzed**: 343+ files (HTML, TS, SCSS)
-- **Lucide Icons Replaced**: 12 instances → Pure SVG implementations
-- **Tailwind Classes Converted**: 255+ instances → OpenAI CSS variables
-- **Hardcoded Colors Updated**: 662+ hex colors → OpenAI variables
-- **SCSS Files Transformed**: 25+ files → Consistent design tokens
-- **Components Modernized**: 117+ components → OpenAI styling system
-
----
-
-## ✅ COMPLETED TRANSFORMATIONS
-
-### 1. Icon System Transformation
-**Status: ✅ COMPLETE**
-- **Location**: `/src/app/app.component.html`
-- **Changes**: 12 Lucide icons → SVG implementations
-- **Icons Transformed**:
-  - `HelpCircle` → Chat icon SVG
-  - `Mic` → Microphone icon SVG (2 instances)
-  - `Activity` → Activity/pulse icon SVG
-  - `Settings` → Settings gear icon SVG
-  - `BarChart` → Bar chart icon SVG
-  - `Calculator` → Calculator icon SVG
-  - `LineChart` → Line chart icon SVG
-  - `FileText` → Document icon SVG
-  - `Truck` → Truck/delivery icon SVG
-  - `Shield` → Shield/protection icon SVG
-
-**Technical Implementation**:
-```html
-<!-- Before -->
-<lucide-icon name="HelpCircle" class="w-5 h-5 text-slate-400"></lucide-icon>
-
-<!-- After -->
-<svg class="w-5 h-5" style="color: var(--color-text-tertiary)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-  <circle cx="12" cy="12" r="10"/>
-  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-  <point cx="12" cy="17" r=".02"/>
-</svg>
-```
-
-### 2. Tailwind to OpenAI Variable Conversion
-**Status: ✅ COMPLETE**
-- **Files Transformed**: 7 HTML files
-- **Classes Converted**: 255+ instances
-
-#### Background Colors
-```html
-<!-- Before -->
-<div class="bg-slate-50 dark:bg-slate-950">
-<aside class="bg-slate-900">
-<div class="bg-slate-200 dark:bg-slate-700">
-
-<!-- After -->
-<div style="background-color: var(--color-bg-secondary)">
-<aside style="background-color: var(--color-neutral-900)">
-<div class="skeleton skeleton-text">
-```
-
-#### Text Colors
-```html
-<!-- Before -->
-<h1 class="text-slate-900 dark:text-slate-100">
-<p class="text-slate-600 dark:text-slate-400">
-<span class="text-slate-500">
-
-<!-- After -->
-<h1 style="color: var(--color-text-primary)">
-<p style="color: var(--color-text-secondary)">
-<span style="color: var(--color-text-tertiary)">
-```
-
-#### Border Colors
-```html
-<!-- Before -->
-<div class="border-slate-800">
-<div class="border-slate-200 dark:border-slate-700">
-
-<!-- After -->
-<div style="border: 1px solid var(--color-neutral-800)">
-<div style="border: 1px solid var(--color-border-primary)">
-```
-
-### 3. Component Class Modernization
-**Status: ✅ COMPLETE**
-
-#### Card Components
-```html
-<!-- Before -->
-<div class="ui-card">
-<section class="ui-card">
-
-<!-- After -->
-<div class="card">
-<section class="card">
-```
-
-#### Button Components
-```html
-<!-- Before -->
-<button class="ui-btn ui-btn-primary ui-btn-sm">
-<button class="ui-btn ui-btn-secondary ui-btn-sm">
-<button class="ui-btn ui-btn-ghost ui-btn-sm">
-
-<!-- After -->
-<button class="btn btn-primary btn-sm">
-<button class="btn btn-secondary btn-sm">
-<button class="btn btn-ghost btn-sm">
-```
-
-#### Skeleton Loaders
-```html
-<!-- Before -->
-<div class="h-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
-
-<!-- After -->
-<div class="skeleton skeleton-text"></div>
-```
-
-### 4. SCSS Color System Transformation
-**Status: ✅ COMPLETE**
-- **File**: `/src/app/app.component.scss`
-- **Transformations**:
-
-```scss
-/* Before */
-background: var(--neutral-950);
-background: #f1f1f1;
-background: #c1c1c1;
-outline: 2px solid #4299e1;
-
-/* After */
-background: var(--color-bg-primary);
-background: var(--color-neutral-200);
-background: var(--color-neutral-400);
-outline: 2px solid var(--color-primary-500);
-```
-
-### 5. Design System Integration
-**Status: ✅ COMPLETE**
-- **File**: `/src/styles.scss`
-- **Added Imports**:
-```scss
-/* ===== OPENAI DESIGN SYSTEM ===== */
-@import 'styles/design-system-openai.scss';
-@import 'styles/components-openai.scss';
-```
+- **Avance actual (As-Is)**: migración parcial. Persisten `ui-card`, `ui-btn`, `ui-input`, etc. en componentes clave.
+- **Objetivo (To-Be)**: adopción completa del design system OpenAI (`card`, `btn`, `input`, tokens `--color-*`, skeletons uniformes).
+- **Prioridades inmediatas**:
+  1. Sustituir clases `ui-*` por los componentes estandarizados OpenAI.
+  2. Migrar SCSS de vistas principales (Cotizador, Documentos, Dashboard) a los tokens `--color-*` y helpers nuevos.
+  3. Homologar loaders y estados vacíos a los skeletons del sistema.
 
 ---
 
-## 🎯 DESIGN SYSTEM ARCHITECTURE
+## ✅ Avances confirmados
+- Reemplazo de algunos íconos Lucide por SVG propios en `app.component.html`.
+- Inclusión de los paquetes `design-system-openai.scss` y `components-openai.scss` en el build.
+- Eliminación de `transform: ...` en producción (ver OpenAI Transform Compliance Report).
 
-### Color Palette Implementation
-**Primary Colors**:
-- `--color-primary-500: #00bfbf` (Teal brand color)
-- `--color-primary-600: #009999` (Darker teal)
-- `--color-primary-700: #007373` (Darkest teal)
+## 🔄 Gap vs. Objetivo
 
-**Semantic Colors**:
-- `--color-bg-primary: #ffffff` (Main background)
-- `--color-bg-secondary: #f8f9fa` (Secondary background)
-- `--color-text-primary: #0d1117` (Primary text)
-- `--color-text-secondary: #656d76` (Secondary text)
-- `--color-text-tertiary: #8b949e` (Tertiary text)
+| Área | Estado actual (As-Is) | Próximos pasos (To-Be) |
+| --- | --- | --- |
+| Plantillas (`ui-card`, `ui-btn`, `ui-input`) | Continúan en Cotizador, Documentos, Dashboard, formularios de clientes, etc. | Migrar a las clases OpenAI (`card`, `btn`, `input`, `select`) y actualizar estilos asociados. |
+| Skeletons / loaders | Convivencia de `ui-spinner`, `ui-card` con nuevos skeletons. | Normalizar loaders a los componentes `skeleton-*` del design system. |
+| Tokens de color | Uso mixto de clases Tailwind (`bg-slate-*`, `text-slate-*`) y variables antiguas. | Sustituir por `var(--color-*)` y helpers globales. |
+| SCSS heredado | Módulos clave mantienen SCSS legacy sin tokens. | Planificar migración módulo por módulo (Cotizador, Documentos, Dashboard, Protección). |
 
-**Component Tokens**:
-- `--button-height-sm: 2rem` (32px)
-- `--button-height-md: 2.5rem` (40px)
-- `--input-height-md: 2.5rem` (40px)
-- `--radius-lg: 0.5rem` (8px)
+## 📌 Roadmap sugerido
+1. **Refactor UI base**: exponer wrappers `card`, `stack`, `grid` reutilizables y deprecate `ui-*`.
+2. **Migración por módulo**: priorizar Cotizador → Documentos → Dashboard. Documentar antes/después (capturas, listados de PRs).
+3. **QA visual**: ligar cada migración con tests Playwright/Cypress que verifiquen estados clave y regresiones.
+4. **Documentación**: actualizar Storybook/guías internas conforme se completen los módulos.
 
-### Typography System
-- **Font Family**: Inter, system fonts
-- **Scale**: 12px - 60px (xs to 6xl)
-- **Weights**: 300, 400, 500, 600, 700, 900
-- **Line Heights**: 1.0 - 2.0 (none to loose)
+### Referencia rápida (`ui-*` todavía presentes) - MAPEO COMPLETO
 
-### Spacing System
-- **Scale**: Fibonacci-inspired (2px - 128px)
-- **Tokens**: `--space-1` to `--space-32`
-- **Usage**: Consistent padding, margins, gaps
+| Archivo | Clases ui-* encontradas | Crítico |
+| --- | --- | --- |
+| ✅ `cotizador-main.component.html` | MIGRADO | ✅ |
+| ✅ `dashboard.component.html` | MIGRADO | ✅ |
+| ✅ `document-upload-flow.component.html` | MIGRADO | ✅ |
+| ✅ `onboarding-main.component.html` | MIGRADO | ✅ |
+| ✅ `simulador-main.component.html` | MIGRADO | ✅ |
+| ✅ `login.component.html` | MIGRADO | ✅ |
+| `plates-phase.component.html` | `ui-btn` (16 instancias) | 🟡 |
+| `delivery-tracker.component.html` | `ui-btn` (1 instancia) | 🟡 |
+| `avi-interview.component.html` | `ui-btn` (9 instancias) | 🟡 |
+| `delivery-phase.component.html` | `ui-btn` (11 instancias) | 🟡 |
+| `avi-validation-runner.component.html` | `ui-btn` (5 instancias) | 🟡 |
+| `offline.component.html` | `ui-card`, `ui-btn` (4 instancias) | 🟡 |
+| `ocr-scanner-enhanced.component.html` | `ui-btn`, `app-ui-icon` (múltiples) | 🟡 |
+| `documents-phase.component.html` | `ui-btn` (17 instancias) | 🟡 |
+| `claims-page.component.html` | `ui-btn` (5 instancias) | 🔴 |
+| `photo-wizard.component.html` | `ui-btn` (10 instancias) | 🔴 |
+| `market-policy-admin.component.html` | `ui-btn` (3 instancias) | 🔴 |
+| **EXTRAS en cotizador** | `ui-container`, `ui-grid-metrics`, `ui-metric-card`, `ui-metric-*`, `ui-label`, `ui-help-text`, `ui-spinner`, `ui-alert` | ❌ |
 
----
+**Estado real:** 16 archivos + clases auxiliares pendientes
+**Prioridad:** 🔴 Critical business components, 🟡 Secondary, ✅ Migrated
 
-## 🛠️ TECHNICAL IMPLEMENTATION
+*Mapeo completo ejecutado via `rg "ui-" src/app -n` - inventario exhaustivo de 200+ instancias ui-* restantes.* 
 
-### CSS Architecture
-```scss
-/* Base Variables - 273 design tokens */
-:root {
-  /* Typography System */
-  --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto"...
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-
-  /* Color System */
-  --color-bg-primary: #ffffff;
-  --color-text-primary: #0d1117;
-  --color-primary-500: #00bfbf;
-
-  /* Spacing System */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-4: 1rem;
-
-  /* Animation System */
-  --duration-150: 150ms;
-  --ease-out: cubic-bezier(0, 0, 0.2, 1);
-}
-```
-
-### Component System
-```scss
-/* Button System */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  border: none;
-  cursor: pointer;
-  transition: all var(--duration-150) var(--ease-out);
-  border-radius: var(--radius-lg);
-}
-
-.btn-primary {
-  background: var(--color-primary-500);
-  color: white;
-  &:hover {
-    background: var(--color-primary-600);
-    transform: translateY(-1px);
-  }
-}
-
-/* Card System */
-.card {
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
-}
-```
-
----
-
-## 📱 RESPONSIVE DESIGN FEATURES
-
-### Dark Mode Support
-```scss
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg-primary: #0d1117;
-    --color-bg-secondary: #161b22;
-    --color-text-primary: #f0f6fc;
-    --color-text-secondary: #b1bac4;
-  }
-}
-```
+## 📝 Seguimiento
+- Mantén este reporte como matriz viva: anota fecha, módulo y PR cuando un bloque queda 100% migrado.
+- Actualiza `docs/pending-tests.md` si se añaden pruebas específicas para validar la nueva capa visual.
 
 ### Mobile Optimization
 - Responsive breakpoints: 640px, 768px, 1024px

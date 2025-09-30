@@ -5,7 +5,7 @@
 <div class="login-shell">
 
   <!-- Login Card - Enterprise Style -->
-  <div class="ui-card ui-card-spacious login-card">
+  <div class="card card-spacious login-card">
 
     <!-- Header -->
     <div class="login-header">
@@ -25,22 +25,22 @@
 
       <!-- Email Field -->
       <div class="field-block">
-        <label for="email" class="ui-label" [class.ui-label-required]="true">
+        <label for="email" class="label" [class.label--required]="true">
           Correo electrónico
         </label>
-        <input
-          id="email"
-          type="email"
-          formControlName="email"
-          class="ui-input"
-          [class.ui-input-error]="isFieldInvalid('email')"
-          placeholder="usuario@empresa.com"
-          autocomplete="email"
-          required
-          aria-required="true"
-          data-cy="email-input"
-        >
-        <div *ngIf="isFieldInvalid('email')" class="ui-error-text" role="alert">
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="input"
+            [class.input-error]="isFieldInvalid('email')"
+            placeholder="usuario@empresa.com"
+            autocomplete="email"
+            required
+            aria-required="true"
+            data-cy="login-email"
+          >
+        <div *ngIf="isFieldInvalid('email')" class="error-text" role="alert">
           <span *ngIf="loginForm.get('email')?.errors?.['required']">
             El correo electrónico es requerido
           </span>
@@ -52,7 +52,7 @@
 
       <!-- Password Field -->
       <div class="field-block field-block--spaced">
-        <label for="password" class="ui-label" [class.ui-label-required]="true">
+        <label for="password" class="label" [class.label--required]="true">
           Contraseña
         </label>
         <div class="password-field">
@@ -60,13 +60,13 @@
             id="password"
             [type]="showPassword ? 'text' : 'password'"
             formControlName="password"
-            class="ui-input"
-            [class.ui-input-error]="isFieldInvalid('password')"
+            class="input"
+            [class.input-error]="isFieldInvalid('password')"
             placeholder="••••••••"
             autocomplete="current-password"
             required
             aria-required="true"
-            data-cy="password-input"
+            data-cy="login-password"
           >
           <button
             type="button"
@@ -83,7 +83,7 @@
             ></app-icon>
           </button>
         </div>
-        <div *ngIf="isFieldInvalid('password')" class="ui-error-text" role="alert">
+        <div *ngIf="isFieldInvalid('password')" class="error-text" role="alert">
           <span *ngIf="loginForm.get('password')?.errors?.['required']">
             La contraseña es requerida
           </span>
@@ -116,19 +116,19 @@
       <!-- Submit Button -->
       <button
         type="submit"
-        class="ui-btn ui-btn-primary submit-button"
+        class="btn btn-primary submit-button"
         [disabled]="loginForm.invalid || isLoading"
         data-cy="login-submit"
       >
         <span *ngIf="!isLoading">Iniciar Sesión</span>
         <span *ngIf="isLoading" class="loading-indicator">
-          <div class="ui-spinner ui-spinner-sm"></div>
+          <div class="spinner spinner--sm"></div>
           Iniciando sesión...
         </span>
       </button>
 
       <!-- Error Message -->
-      <div *ngIf="errorMessage" class="ui-alert ui-alert-error form-error" role="alert">
+      <div *ngIf="errorMessage" class="alert alert--error form-error" role="alert">
         {{ errorMessage }}
       </div>
     </form>
@@ -144,7 +144,7 @@
         </a>
       </div>
 
-      <div class="ui-alert ui-alert-info login-tip">
+      <div class="alert alert--info login-tip">
         <div class="tip-title">Credenciales de prueba:</div>
         <div class="tip-body">
           <div><span class="tip-label">Contraseña:</span> demo123</div>

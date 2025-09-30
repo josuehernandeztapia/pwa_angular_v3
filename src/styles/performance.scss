@@ -6,17 +6,17 @@
 // CSS Variables for consistent theming and reduced bundle size
 :root {
   // Color Palette - Optimized for performance
-  --primary: #080808; /* OpenAI black */
-  --primary-dark: #525252; /* OpenAI dark gray */
-  --secondary: #64748b; /* OpenAI muted text */
-  --surface: #ffffff; /* OpenAI white */
-  --background: #f8fafc; /* OpenAI very light gray */
-  --border: #e2e8f0; /* OpenAI light border */
-  --text-primary: #1e293b; /* OpenAI very dark text */
-  --text-secondary: #64748b; /* OpenAI muted text */
-  --success: #737373; /* OpenAI neutral */
-  --warning: #737373; /* OpenAI neutral */
-  --error: #737373; /* OpenAI neutral */
+  --primary: var(--openai-black);
+  --primary-dark: var(--color-border-focus);
+  --secondary: var(--color-text-tertiary);
+  --surface: var(--openai-white);
+  --background: var(--color-bg-secondary);
+  --border: var(--color-border-secondary);
+  --text-primary: var(--color-primary-800);
+  --text-secondary: var(--color-text-secondary);
+  --success: var(--accent-primary);
+  --warning: var(--accent-primary);
+  --error: var(--accent-primary);
 
   // Spacing System - Reduced CSS output
   --space-1: 0.25rem;
@@ -295,11 +295,11 @@
 // Dark Mode Support - Performance optimized
 @media (prefers-color-scheme: dark) {
   :root {
-    --surface: #1e293b; /* OpenAI very dark text */
-    --background: #080808; /* OpenAI black */
-    --border: #525252; /* OpenAI dark gray */
-    --text-primary: #f8fafc; /* OpenAI very light gray */
-    --text-secondary: #94a3b8; /* OpenAI muted text */
+    --surface: var(--color-primary-800);
+    --background: var(--openai-black);
+    --border: var(--color-border-focus);
+    --text-primary: var(--openai-white);
+    --text-secondary: var(--color-text-tertiary);
   }
 }
 

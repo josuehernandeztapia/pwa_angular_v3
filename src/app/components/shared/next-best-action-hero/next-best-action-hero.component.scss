@@ -69,7 +69,9 @@
 
   &__indicator-icon {
     position: relative;
-    font-size: 1.75rem;
+    display: inline-flex;
+    color: inherit;
+    --icon-color: currentColor;
     z-index: 1;
   }
 
@@ -108,7 +110,9 @@
   }
 
   &__time-icon {
-    font-size: 1rem;
+    display: inline-flex;
+    color: inherit;
+    --icon-color: currentColor;
   }
 
   &__time-text {
@@ -337,7 +341,8 @@
   }
 
   &__action-icon {
-    font-size: 1.1rem;
+    display: inline-flex;
+    --icon-color: currentColor;
   }
 
   &__action-text {

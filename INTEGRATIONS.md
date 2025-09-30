@@ -1,6 +1,6 @@
 # Integrations Guide (BFF + PWA)
 
-This guide consolidates the FE↔BFF contracts already pre‑wired in the app, and adds the PMO‑level checklists for pending integrations. All endpoints are stubbed in dev; flip feature flags per environment to activate real calls.
+This guide consolidates the FE↔BFF contracts already pre‑wired in the app, and adds the PMO‑level checklists for pending integrations. All endpoints siguen en modo stub en dev; cuando el BFF real esté listo, ajusta los flags y endpoints para enrutar tráfico real.
 
 ## Status overview
 
@@ -14,14 +14,17 @@ This guide consolidates the FE↔BFF contracts already pre‑wired in the app, a
 ## Environment flags
 
 - Dev (src/environments/environment.ts)
-  - `features.enableOdooQuoteBff = false`
-  - `features.enableGnvBff = false`
-  - `features.enableKycBff = false`
-  - `features.enablePaymentsBff = false`
-  - `features.enableContractsBff = false`
-  - `features.enableAutomationBff = false`
+  - `features.enableOdooQuoteBff = true`
+  - `features.enableGnvBff = true`
+  - `features.enableKycBff = true`
+  - `features.enablePaymentsBff = true`
+  - `features.enableContractsBff = true`
+  - `features.enableAutomationBff = true`
+  - `features.enablePostSaleBff = false`
+  - `features.enableClaimsBff = false`
+  - `features.enableAdminBff = false`
 - Staging/Prod (src/environments/*)
-  - Flags on según entorno; baseUrl opcional en `environment.integrations.*`
+  - Activar o desactivar por entorno; definir `environment.integrations.*.baseUrl` según la ruta real del BFF.
 
 ## HTTP & Auth
 

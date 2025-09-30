@@ -1,9 +1,25 @@
-/* 🚚 Delivery Tracker Component Styles */
+/* Delivery Tracker Component Styles */
 
 .delivery-tracker {
   padding: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
+
+  /* Local palette aliases */
+  --dt-surface-primary: var(--color-bg-primary, #ffffff);
+  --dt-surface-muted: var(--color-bg-secondary, #f8fafc);
+  --dt-border: var(--color-border-primary, #e5e7eb);
+  --dt-border-strong: var(--color-border-secondary, #e2e8f0);
+  --dt-text-strong: var(--color-text-primary, #080808);
+  --dt-text-muted: var(--color-text-secondary, #737373);
+  --dt-text-subtle: var(--color-text-tertiary, #94a3b8);
+  --dt-neutral: var(--openai-gray-400, #a3a3a3);
+  --dt-accent-blue: var(--accent-blue-500, #3b82f6);
+  --dt-accent-blue-strong: var(--accent-blue-600, #2563eb);
+  --dt-accent-green: var(--accent-green-500, #16a34a);
+  --dt-accent-red: var(--accent-red-500, #dc2626);
+  --dt-accent-amber: var(--accent-amber-500, #f59e0b);
+  --dt-accent-purple: var(--accent-purple-500, #8b5cf6);
 }
 
 /*  Metrics Overview */
@@ -19,8 +35,8 @@
 }
 
 .metric-card {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--dt-surface-primary);
+  border: 1px solid var(--dt-border);
   border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
   text-align: center;
@@ -30,19 +46,19 @@
 
 .metric-card:hover {
   /* transform removed - OpenAI compliance */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.1);
 }
 
 .metric-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--dt-text-strong);
   margin-bottom: 0.5rem;
 }
 
 .metric-label {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--dt-text-muted);
   font-weight: 500;
 }
 
@@ -53,17 +69,16 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #737373 /* OpenAI neutral */;
+  background: var(--dt-neutral);
 }
-
-.metric-status.good { background: #737373 /* OpenAI neutral */; }
-.metric-status.warning { background: #737373 /* OpenAI neutral */; }
-.metric-status.critical { background: #737373 /* OpenAI neutral */; }
+.metric-status.good { background: var(--dt-neutral); }
+.metric-status.warning { background: var(--dt-neutral); }
+.metric-status.critical { background: var(--dt-neutral); }
 
 /*  Tracking Input */
 .tracking-input {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--dt-surface-primary);
+  border: 1px solid var(--dt-border);
   border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -78,7 +93,7 @@
 .tracking-code-input {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--dt-border);
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -86,14 +101,14 @@
 
 .tracking-code-input:focus {
   outline: none;
-  border-color: #080808 /* OpenAI black */;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--dt-accent-blue-strong);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .track-button {
   padding: 0.75rem 1.5rem;
-  background: #080808 /* OpenAI black */;
-  color: white;
+  background: var(--openai-black, #080808);
+  color: var(--color-text-inverted, #ffffff);
   border: none;
   border-radius: 8px;
   font-weight: 600;
@@ -102,19 +117,19 @@
 }
 
 .track-button:hover:not(:disabled) {
-  background: #2563eb;
+  background: var(--dt-accent-blue-strong);
   transform: none; /* OpenAI no transforms */
 }
 
 .track-button:disabled {
-  background: #9ca3af;
+  background: var(--dt-text-subtle);
   cursor: not-allowed;
 }
 
-/* 📦 Tracking Results */
+/* Tracking Results */
 .tracking-results {
   margin-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--dt-border);
   padding-top: 1.5rem;
 }
 
@@ -124,7 +139,7 @@
   gap: 0.5rem;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--dt-text-strong);
   margin-bottom: 1rem;
 }
 
@@ -139,15 +154,15 @@
   margin-bottom: 1rem;
 }
 
-.status-scheduled { background: #dbeafe; color: #1d4ed8; }
-.status-en-route { background: #fef3c7; color: #d97706; }
-.status-arriving { background: #ecfdf5; color: #059669; }
-.status-delivered { background: #dcfce7; color: #16a34a; }
-.status-failed { background: #fee2e2; color: #dc2626; }
-.status-rescheduled { background: #f3e8ff; color: #7c3aed; }
+.status-scheduled { background: var(--accent-blue-100, #dbeafe); color: var(--accent-blue-700, #1d4ed8); }
+.status-en-route { background: var(--accent-amber-100, #fef3c7); color: var(--accent-amber-600, #d97706); }
+.status-arriving { background: var(--accent-green-100, #bbf7d0); color: var(--accent-green-600, #15803d); }
+.status-delivered { background: var(--accent-green-100, #bbf7d0); color: var(--accent-green-500, #16a34a); }
+.status-failed { background: var(--accent-red-100, #fecaca); color: var(--accent-red-500, #dc2626); }
+.status-rescheduled { background: var(--accent-purple-200, #ddd6fe); color: var(--accent-purple-500, #8b5cf6); }
 
 .delivery-details {
-  background: #f9fafb;
+  background: var(--dt-surface-muted);
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1.5rem;
@@ -158,7 +173,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--dt-border);
 }
 
 .detail-row:last-child {
@@ -167,15 +182,15 @@
 
 .detail-row .label {
   font-weight: 500;
-  color: #6b7280;
+  color: var(--dt-text-muted);
 }
 
 .detail-row .value {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--dt-text-strong);
 }
 
-/* 🕐 ETA Display */
+/* ETA Display */
 .current-eta {
   background: var(--flat-surface-bg);
   color: white;
@@ -219,46 +234,55 @@
 }
 
 .factor {
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--dt-surface-primary) 10%, transparent);
   padding: 0.5rem 0.75rem;
   border-radius: 8px; /* OpenAI standard */
   font-size: 0.875rem;
 }
 
-.factor.light, .factor.clear, .factor.optimal {
-  background: rgba(16, 185, 129, 0.2);
+.factor.light,
+.factor.clear,
+.factor.optimal {
+  background: color-mix(in srgb, var(--dt-accent-green) 20%, transparent);
 }
 
-.factor.moderate, .factor.rain, .factor.detour {
-  background: rgba(245, 158, 11, 0.2);
+.factor.moderate,
+.factor.rain,
+.factor.detour {
+  background: color-mix(in srgb, var(--dt-accent-amber) 20%, transparent);
 }
 
-.factor.heavy, .factor.adverse, .factor.blocked {
-  background: rgba(239, 68, 68, 0.2);
+.factor.heavy,
+.factor.adverse,
+.factor.blocked {
+  background: color-mix(in srgb, var(--dt-accent-red) 20%, transparent);
 }
 
-/* 📍 Location & Instructions */
-.delivery-location, .special-instructions {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+/* Location & Instructions */
+.delivery-location,
+.special-instructions {
+  background: var(--dt-surface-muted);
+  border: 1px solid var(--dt-border);
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
 }
 
-.location-header, .instructions-header {
+.location-header,
+.instructions-header {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--dt-text-strong);
   margin-bottom: 0.5rem;
 }
 
-.location-address, .instructions-text {
-  color: #6b7280;
+.location-address,
+.instructions-text {
+  color: var(--dt-text-muted);
   line-height: 1.6;
 }
 
 .location-landmark {
-  color: #6b7280;
+  color: var(--dt-text-muted);
   font-size: 0.875rem;
   margin-top: 0.25rem;
 }
@@ -267,7 +291,7 @@
 .no-results {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--dt-text-muted);
 }
 
 .no-results-icon {
@@ -287,7 +311,7 @@
 .active-deliveries h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--dt-text-strong);
   margin-bottom: 1rem;
 }
 
@@ -298,8 +322,8 @@
 }
 
 .delivery-card {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--dt-surface-primary);
+  border: 1px solid var(--dt-border);
   border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
   transition: all 0.2s ease;
@@ -307,15 +331,15 @@
 
 .delivery-card:hover {
   /* transform removed - OpenAI compliance */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.1);
 }
 
 .delivery-card.status-en-route {
-  border-left: 4px solid #737373 /* OpenAI neutral */;
+  border-left: 4px solid var(--dt-accent-blue);
 }
 
 .delivery-card.status-arriving {
-  border-left: 4px solid #737373 /* OpenAI neutral */;
+  border-left: 4px solid var(--dt-accent-green);
 }
 
 .delivery-header {
@@ -327,7 +351,7 @@
 
 .tracking-code {
   font-weight: 700;
-  color: #1f2937;
+  color: var(--dt-text-strong);
   font-size: 1.1rem;
 }
 
@@ -340,7 +364,7 @@
 
 .client-id {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--dt-text-muted);
 }
 
 .priority {
@@ -350,12 +374,12 @@
   font-weight: 600;
 }
 
-.priority-normal { background: #e5e7eb; color: #6b7280; }
-.priority-high { background: #fef3c7; color: #d97706; }
-.priority-urgent { background: #fee2e2; color: #dc2626; }
+.priority-normal { background: var(--dt-border); color: var(--dt-text-muted); }
+.priority-high { background: var(--accent-amber-100, #fef3c7); color: var(--dt-accent-amber); }
+.priority-urgent { background: var(--accent-red-100, #fecaca); color: var(--dt-accent-red); }
 
 .delivery-window {
-  background: #f9fafb;
+  background: var(--dt-surface-muted);
   border-radius: 8px; /* OpenAI standard */
   padding: 0.75rem;
   margin-bottom: 1rem;
@@ -364,22 +388,22 @@
 
 .window-date {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--dt-text-strong);
   margin-bottom: 0.25rem;
 }
 
 .window-time {
-  color: #6b7280;
+  color: var(--dt-text-muted);
   margin-bottom: 0.25rem;
 }
 
 .eta {
-  color: #080808 /* OpenAI black */;
+  color: var(--openai-black, #080808);
   font-weight: 600;
 }
 
 .delivery-address {
-  color: #6b7280;
+  color: var(--dt-text-muted);
   font-size: 0.875rem;
   margin-bottom: 1rem;
   line-height: 1.5;
@@ -409,25 +433,25 @@
 }
 
 .btn-primary {
-  background: #080808 /* OpenAI black */;
-  color: white;
-  border: 1px solid #080808 /* OpenAI black */;
+  background: var(--openai-black, #080808);
+  color: var(--color-text-inverted, #ffffff);
+  border: 1px solid var(--openai-black, #080808);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: var(--dt-accent-blue-strong);
+  border-color: var(--dt-accent-blue-strong);
 }
 
 .btn-outline {
-  background: white;
-  color: #6b7280;
-  border: 1px solid #d1d5db;
+  background: var(--dt-surface-primary);
+  color: var(--dt-text-muted);
+  border: 1px solid var(--dt-border-strong);
 }
 
 .btn-outline:hover {
-  background: #f9fafb;
-  color: #374151;
+  background: var(--dt-surface-muted);
+  color: var(--dt-text-strong);
 }
 
 .btn:disabled {
@@ -435,11 +459,11 @@
   cursor: not-allowed;
 }
 
-/* 📦 Empty State */
+/* Empty State */
 .empty-deliveries {
   text-align: center;
   padding: 3rem;
-  color: #6b7280;
+  color: var(--dt-text-muted);
 }
 
 .empty-icon {
@@ -453,8 +477,8 @@
 
 /*  System Status */
 .system-status {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--dt-surface-primary);
+  border: 1px solid var(--dt-border);
   border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
 }
@@ -467,21 +491,21 @@
 }
 
 .status-icon.online {
-  color: #737373 /* OpenAI neutral */;
+  color: var(--dt-accent-green);
 }
 
 .status-icon.offline {
-  color: #737373 /* OpenAI neutral */;
+  color: var(--dt-accent-red);
 }
 
 .status-text {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--dt-text-strong);
 }
 
 .last-sync {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--dt-text-muted);
   margin-bottom: 1rem;
 }
 
@@ -491,14 +515,14 @@
 
 .reliability-label {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--dt-text-muted);
   margin-bottom: 0.5rem;
 }
 
 .reliability-bar {
   width: 100%;
   height: 8px;
-  background: #e5e7eb;
+  background: var(--dt-border);
   border-radius: 8px; /* OpenAI standard */
   overflow: hidden;
   margin-bottom: 0.5rem;
@@ -510,16 +534,16 @@
   border-radius: 8px; /* OpenAI standard */
 }
 
-.reliability-fill.excellent { background: #737373 /* OpenAI neutral */; }
-.reliability-fill.good { background: #080808 /* OpenAI black */; }
-.reliability-fill.warning { background: #737373 /* OpenAI neutral */; }
-.reliability-fill.critical { background: #737373 /* OpenAI neutral */; }
+.reliability-fill.excellent { background: var(--dt-accent-blue); }
+.reliability-fill.good { background: var(--openai-black, #080808); }
+.reliability-fill.warning { background: var(--dt-accent-amber); }
+.reliability-fill.critical { background: var(--dt-accent-red); }
 
 .reliability-value {
   text-align: center;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--dt-text-strong);
 }
 
 /*  Responsive Design */
@@ -598,7 +622,7 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: #737373 /* OpenAI neutral */;
+  background: var(--dt-accent-blue);
   animation: deliveryPulse 2s infinite;
 }
 
@@ -609,6 +633,6 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: #737373 /* OpenAI neutral */;
+  background: var(--dt-accent-green);
   animation: deliveryPulse 1s infinite;
 }

@@ -68,25 +68,25 @@
   }
 
   &__action-button--primary {
-    background: var(--accent-blue-600, transparent);
-    color: var(--flat-surface-bg, transparent);
+    background: var(--accent-blue-600);
+    color: var(--flat-surface-bg, var(--openai-white));
   }
 
   &__action-button--primary:hover,
   &__action-button--primary:focus-visible {
-    background: var(--accent-blue-700, transparent);
+    background: var(--accent-blue-700);
     outline: none;
   }
 
   &__action-button--secondary {
-    background: var(--flat-surface-bg, transparent);
+    background: var(--flat-surface-bg, var(--openai-white));
     color: inherit;
     border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
   }
 
   &__action-button--secondary:hover,
   &__action-button--secondary:focus-visible {
-    background: var(--flat-surface-bg, transparent);
+    background: var(--flat-surface-bg, var(--openai-white));
     outline: none;
   }
 
@@ -129,21 +129,21 @@
   }
 
   &--context-onboarding {
-    background: var(--flat-surface-bg, transparent);
-    border-color: #0284c7;
-    color: #0c4a6e;
+    background: var(--flat-surface-bg, var(--openai-white));
+    border-color: var(--accent-blue-600);
+    color: var(--accent-blue-800);
   }
 
   &--context-success {
-    background: var(--flat-surface-bg, transparent);
-    border-color: #16a34a;
-    color: #14532d;
+    background: var(--flat-surface-bg, var(--openai-white));
+    border-color: var(--accent-green-500);
+    color: var(--accent-green-700);
   }
 
   &--context-celebration {
-    background: var(--flat-surface-bg, transparent);
-    border-color: #eab308;
-    color: #713f12;
+    background: var(--flat-surface-bg, var(--openai-white));
+    border-color: var(--color-warning-400);
+    color: var(--color-warning-600);
 
     &::after {
       content: '';
@@ -156,27 +156,27 @@
   }
 
   &--context-error {
-    background: var(--flat-surface-bg, transparent);
-    border-color: #dc2626;
-    color: #7f1d1d;
+    background: var(--flat-surface-bg, var(--openai-white));
+    border-color: var(--accent-red-500);
+    color: var(--accent-red-700);
   }
 
   &--context-guidance {
-    background: var(--flat-surface-bg, transparent);
-    border-color: #9333ea;
-    color: #581c87;
+    background: var(--flat-surface-bg, var(--openai-white));
+    border-color: var(--accent-purple-500);
+    color: var(--accent-purple-700);
   }
 
   &--context-encouragement {
-    background: var(--flat-surface-bg, transparent);
-    border-color: #2563eb;
-    color: #1e3a8a;
+    background: var(--flat-surface-bg, var(--openai-white));
+    border-color: var(--accent-blue-600);
+    color: var(--accent-blue-800);
   }
 
   &--context-reassurance {
-    background: var(--flat-surface-bg, transparent);
-    border-color: #6b7280;
-    color: #374151;
+    background: var(--flat-surface-bg, var(--openai-white));
+    border-color: var(--color-border-secondary);
+    color: var(--color-text-primary);
   }
 
   &--tone-professional .human-message__primary {

@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClientService } from './http-client.service';
+import { environment } from '../../environments/environment';
 
 export interface MonitoringEvent {
   id: string;
@@ -24,6 +26,11 @@ export interface MonitoringMetrics {
   uptime: number;
 }
 
+interface MonitoringDispatchOptions {
+  notifyExternally?: boolean;
+  channels?: Array<'datadog' | 'slack'>;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -38,7 +45,7 @@ export class MonitoringService {
   public events$ = this.eventsSubject.asObservable();
   public metrics$ = this.metricsSubject.asObservable();
 
-  constructor() {
+  constructor(@Optional() private readonly httpClient?: HttpClientService) {
     // Auto-cleanup old events every 5 minutes
     setInterval(() => this.cleanupOldEvents(), 5 * 60 * 1000);
   }
@@ -53,7 +60,14 @@ export class MonitoringService {
   /**
    * Capture critical errors that impact business operations
    */
-  captureError(service: string, operation: string, error: Error | any, metadata?: any, businessImpact: 'critical' | 'high' | 'medium' | 'low' = 'high'): string {
+  captureError(
+    service: string,
+    operation: string,
+    error: Error | any,
+    metadata?: any,
+    businessImpact: 'critical' | 'high' | 'medium' | 'low' = 'high',
+    options: MonitoringDispatchOptions = {}
+  ): string {
     const event: MonitoringEvent = {
       id: this.generateEventId(),
       timestamp: new Date(),
@@ -70,10 +84,21 @@ export class MonitoringService {
     this.addEvent(event);
 
     // Send to external monitoring if configured
-    this.sendToExternalMonitoring(event);
+    if (options.notifyExternally) {
+      this.sendToExternalMonitoring(event, options.channels);
+    }
 
     // Log to console in development only
     if (!this.isProduction()) {
+      // eslint-disable-next-line no-console
+      console.error('[monitoring:error]', {
+        service,
+        operation,
+        message: event.message,
+        metadata,
+        stack: event.stackTrace,
+        businessImpact
+      });
     }
 
     return event.id;
@@ -82,7 +107,13 @@ export class MonitoringService {
   /**
    * Capture warnings for non-critical issues
    */
-  captureWarning(service: string, operation: string, message: string, metadata?: any): string {
+  captureWarning(
+    service: string,
+    operation: string,
+    message: string,
+    metadata?: any,
+    options: MonitoringDispatchOptions = {}
+  ): string {
     const event: MonitoringEvent = {
       id: this.generateEventId(),
       timestamp: new Date(),
@@ -99,6 +130,17 @@ export class MonitoringService {
 
     // Log to console in development only
     if (!this.isProduction()) {
+      // eslint-disable-next-line no-console
+      console.warn('[monitoring:warn]', {
+        service,
+        operation,
+        message,
+        metadata
+      });
+    }
+
+    if (options.notifyExternally) {
+      this.sendToExternalMonitoring(event, options.channels);
     }
 
     return event.id;
@@ -107,7 +149,13 @@ export class MonitoringService {
   /**
    * Capture informational events for debugging
    */
-  captureInfo(service: string, operation: string, message: string, metadata?: any): string {
+  captureInfo(
+    service: string,
+    operation: string,
+    message: string,
+    metadata?: any,
+    options: MonitoringDispatchOptions = {}
+  ): string {
     const event: MonitoringEvent = {
       id: this.generateEventId(),
       timestamp: new Date(),
@@ -120,7 +168,55 @@ export class MonitoringService {
     };
 
     this.addEvent(event);
+    if (options.notifyExternally) {
+      this.sendToExternalMonitoring(event, options.channels);
+    }
+    if (!this.isProduction()) {
+      // eslint-disable-next-line no-console
+      console.info('[monitoring:info]', {
+        service,
+        operation,
+        message,
+        metadata
+      });
+    }
     return event.id;
+  }
+
+  /**
+   * Record audit trail event and persist remotely when configured
+   */
+  auditEvent(
+    event: string,
+    metadata: Record<string, any> = {},
+    options: MonitoringDispatchOptions = {}
+  ): string {
+    const enrichedMetadata = { event, ...metadata };
+    const message = `Audit event ${event}`;
+    const eventId = this.captureInfo('audit', event, message, enrichedMetadata, options);
+
+    const endpoint = environment.monitoring?.eventsEndpoint;
+    if (this.httpClient && endpoint) {
+      this.httpClient
+        .post(endpoint, {
+          event,
+          timestamp: new Date().toISOString(),
+          metadata
+        }, {
+          showLoading: false,
+          showError: false
+        })
+        .subscribe({
+          error: error => {
+            this.captureWarning('audit', event, 'Failed to persist audit event', {
+              error,
+              metadata
+            });
+          }
+        });
+    }
+
+    return eventId;
   }
 
   /**
@@ -291,12 +387,25 @@ export class MonitoringService {
     return [headers, ...rows].map(row => row.join(',')).join('\n');
   }
 
-  private sendToExternalMonitoring(event: MonitoringEvent): void {
-    // Implementation for external monitoring services (Datadog, New Relic, etc.)
-    // This would typically send to an API endpoint
-    if (this.isProduction() && event.businessImpact === 'critical') {
-      // Send critical events to external monitoring
-      // Example: this.http.post('/api/monitoring/events', event).subscribe();
+  private sendToExternalMonitoring(event: MonitoringEvent, channels: Array<'datadog' | 'slack'> = ['datadog']): void {
+    if (!this.httpClient) {
+      return;
+    }
+
+    const config = environment.monitoring ?? {};
+    const payload = {
+      ...event,
+      channels,
+      sentAt: new Date().toISOString()
+    };
+
+    if (config.eventsEndpoint) {
+      this.httpClient.post(config.eventsEndpoint, payload, {
+        showLoading: false,
+        showError: false
+      }).subscribe({
+        error: () => undefined
+      });
     }
   }
 

@@ -1,0 +1,30 @@
+<section class="monitoring-panel">
+  <header class="monitoring-panel__header">
+    <h2 class="monitoring-panel__title">Eventos recientes</h2>
+    <p class="monitoring-panel__subtitle">Muestra los últimos eventos capturados por MonitoringService</p>
+  </header>
+
+  <div class="monitoring-panel__list" role="list">
+    <article
+      *ngFor="let event of events(); trackBy: trackByEvent"
+      role="listitem"
+      class="monitoring-panel__item"
+      [attr.data-level]="event.level"
+    >
+      <div class="monitoring-panel__meta">
+        <span class="monitoring-panel__badge monitoring-panel__badge--level">{{ event.level | uppercase }}</span>
+        <span class="monitoring-panel__service">{{ event.service }}</span>
+        <span class="monitoring-panel__divider">•</span>
+        <time class="monitoring-panel__timestamp">{{ event.timestamp | date:'short' }}</time>
+      </div>
+      <h3 class="monitoring-panel__message">{{ event.message }}</h3>
+      <p class="monitoring-panel__details">
+        Operación: <strong>{{ event.operation }}</strong>
+        <ng-container *ngIf="event.businessImpact">• Impacto: {{ event.businessImpact }}</ng-container>
+      </p>
+      <pre *ngIf="event.metadata" class="monitoring-panel__metadata">{{ event.metadata | json }}</pre>
+    </article>
+
+    <p *ngIf="events().length === 0" class="monitoring-panel__empty">Sin eventos recientes.</p>
+  </div>
+</section>

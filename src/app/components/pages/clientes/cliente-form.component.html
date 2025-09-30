@@ -1,7 +1,10 @@
 <div class="cliente-form">
   <header class="cliente-form__header">
     <nav class="cliente-form__breadcrumb" aria-label="Regresar">
-      <button type="button" class="cliente-form__breadcrumb-back" (click)="goBack()">← Volver</button>
+      <button type="button" class="cliente-form__breadcrumb-back" (click)="goBack()">
+        <app-icon name="arrow-left" [size]="16" aria-hidden="true"></app-icon>
+        Volver
+      </button>
       <span class="cliente-form__breadcrumb-separator" aria-hidden="true">/</span>
       <span class="cliente-form__breadcrumb-current">{{ isEditMode ? 'Editar Cliente' : 'Nuevo Cliente' }}</span>
     </nav>
@@ -135,7 +138,7 @@
       <button type="button" class="cliente-form__button cliente-form__button--secondary" (click)="goBack()">
         Cancelar
       </button>
-      <button type="submit" class="cliente-form__button cliente-form__button--primary" [disabled]="isLoading">
+      <button type="submit" class="cliente-form__button cliente-form__button--primary" [disabled]="isLoading" data-cy="save-client">
         {{ isLoading ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Crear Cliente') }}
       </button>
     </div>

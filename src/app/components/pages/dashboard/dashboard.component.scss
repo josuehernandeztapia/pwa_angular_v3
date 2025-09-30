@@ -128,7 +128,7 @@
   }
 }
 
-.dashboard-mobile-actions .ui-btn {
+.dashboard-mobile-actions .btn {
   width: 100%;
   justify-content: center;
 }
@@ -275,7 +275,7 @@
 }
 
 .kpi-trend-indicator {
-  font-size: 14px;
+  display: inline-flex;
 }
 
 .kpi-trend--up {
@@ -292,6 +292,24 @@
 
 .kpi-trend-caption {
   color: var(--color-text-tertiary);
+}
+
+.kpi-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.kpi-actions .btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.kpi-actions .btn-primary,
+.kpi-actions .btn-secondary {
+  min-height: 32px;
 }
 
 .dashboard-chart-grid {

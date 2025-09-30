@@ -1,10 +1,13 @@
 <!-- Skip Link for Accessibility -->
 <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
 
-<div class="simulador-shell ui-container ui-section" *ngIf="!isRedirecting">
+<div class="simulador-shell container section" *ngIf="!isRedirecting">
   <!-- Header -->
   <div class="simulador-header">
-    <button (click)="goBack()" class="ui-btn ui-btn-ghost simulador-header__back-btn">← Dashboard</button>
+    <button (click)="goBack()" class="btn btn-ghost simulador-header__back-btn">
+      <app-icon name="arrow-left" [size]="16" aria-hidden="true"></app-icon>
+      Dashboard
+    </button>
     <h1 class="simulador-header__title">Hub de Simuladores</h1>
     <p class="simulador-header__subtitle">Herramientas de simulación financiera para diferentes escenarios</p>
   </div>
@@ -13,11 +16,13 @@
   <div id="main-content" class="scenarios-grid">
     <div
       *ngFor="let scenario of availableScenarios"
-      class="scenario-card ui-card"
+      class="scenario-card card"
       [attr.data-cy]="'sim-' + scenario.id.replace('_', '-').toLowerCase()"
       (click)="selectScenario(scenario)"
     >
-      <div class="scenario-card__icon">{{ scenario.icon }}</div>
+      <div class="scenario-card__icon" aria-hidden="true">
+        <app-icon [name]="scenario.icon" [size]="28"></app-icon>
+      </div>
       <h3 class="scenario-card__title">{{ scenario.title }}</h3>
       <p class="scenario-card__subtitle">{{ scenario.subtitle }}</p>
       <p class="scenario-card__description">{{ scenario.description }}</p>
@@ -25,7 +30,7 @@
   </div>
 
   <!-- Context Info -->
-  <div *ngIf="smartContext.hasContext" class="context-alert ui-alert ui-alert-info">
+  <div *ngIf="smartContext.hasContext" class="context-alert alert alert--info">
     <div class="context-alert__content">
       <span class="context-alert__icon">
         <app-icon
@@ -43,7 +48,7 @@
     </div>
   </div>
 
-  <section class="results-section ui-card" *ngIf="simulationResults.selectedScenario">
+  <section class="results-section card" *ngIf="simulationResults.selectedScenario">
     <h2 class="results-section__title">Resultado de Simulación</h2>
 
     <!-- Skeleton loader -->
@@ -78,11 +83,11 @@
 
   <!-- Charts -->
   <div class="charts-grid" *ngIf="simulationResults.selectedScenario && !simulationResults.loading">
-    <div class="chart-card ui-card">
+    <div class="chart-card card">
       <h2 class="chart-card__title">Ahorro acumulado</h2>
       <canvas id="chartAhorro" data-cy="chart-ahorro"></canvas>
     </div>
-    <div class="chart-card ui-card">
+    <div class="chart-card card">
       <h2 class="chart-card__title">PMT mensual</h2>
       <canvas id="chartPMT" data-cy="chart-pmt"></canvas>
     </div>
@@ -106,7 +111,7 @@
     <div class="saved-grid">
       <div
         *ngFor="let simulation of savedSimulations.slice(0, 5)"
-        class="simulation-card ui-card"
+        class="simulation-card card"
         [class.simulation-card--selected]="selectedForComparison.has(simulation.id)"
       >
         <!-- Comparison Checkbox -->
@@ -128,7 +133,7 @@
           <div class="simulation-card__actions" *ngIf="!comparisonMode">
             <button
               (click)="continueSimulation(simulation)"
-              class="ui-btn ui-btn-ghost ui-btn-xs"
+              class="btn btn-ghost btn-xs"
             >
               Continuar
             </button>
@@ -178,8 +183,8 @@
       <div class="comparison-controls__header">
         <button
           (click)="toggleComparisonMode()"
-          class="ui-btn ui-btn-secondary"
-          [class.ui-btn-primary]="comparisonMode"
+          class="btn btn-secondary"
+          [class.btn-primary]="comparisonMode"
           data-cy="toggle-compare"
         >
           <app-icon
@@ -197,7 +202,7 @@
           <button
             (click)="clearSelection()"
             *ngIf="selectedForComparison.size > 0"
-            class="ui-btn ui-btn-ghost ui-btn-sm"
+            class="btn btn-ghost btn-sm"
           >
             Limpiar
           </button>
@@ -208,7 +213,7 @@
         <button
           (click)="compareSelectedSimulations()"
           [disabled]="selectedForComparison.size < 2"
-          class="ui-btn ui-btn-primary"
+          class="btn btn-primary"
           data-cy="open-comparison"
         >
            Comparar {{ selectedForComparison.size }} Escenarios
@@ -218,7 +223,7 @@
   </section>
 
   <div class="show-all-container" *ngIf="savedSimulations.length > 5">
-    <button (click)="showAllSimulations()" class="ui-btn ui-btn-ghost">
+    <button (click)="showAllSimulations()" class="btn btn-ghost">
       Ver todas las simulaciones ({{ savedSimulations.length }})
     </button>
   </div>
@@ -265,7 +270,7 @@
             ></app-icon>
             Comparación de Escenarios
           </h2>
-          <button (click)="closeComparisonModal()" class="ui-btn ui-btn-ghost ui-btn-sm" #cmpClose aria-label="Cerrar">×</button>
+          <button (click)="closeComparisonModal()" class="btn btn-ghost btn-sm" #cmpClose aria-label="Cerrar">×</button>
         </div>
       </div>
 
@@ -389,7 +394,7 @@
           Insights Automáticos
         </h3>
         <div class="comparison-modal__insights-grid">
-          <div class="ui-card">
+          <div class="card">
             <div class="comparison-modal__insight-icon">
               <app-icon
                 class="comparison-modal__insight-icon-svg"
@@ -401,7 +406,7 @@
             <div class="comparison-modal__insight-label">Mejor Opción</div>
             <div class="comparison-modal__insight-value">{{ getBestOption() }}</div>
           </div>
-          <div class="ui-card">
+          <div class="card">
             <div class="comparison-modal__insight-icon">
               <app-icon
                 class="comparison-modal__insight-icon-svg comparison-modal__insight-icon-svg--warning"
@@ -413,7 +418,7 @@
             <div class="comparison-modal__insight-label">Más Rápido</div>
             <div class="comparison-modal__insight-value">{{ getFastestOption() }}</div>
           </div>
-          <div class="ui-card">
+          <div class="card">
             <div class="comparison-modal__insight-icon">
               <app-icon
                 class="comparison-modal__insight-icon-svg comparison-modal__insight-icon-svg--success"
@@ -430,10 +435,10 @@
 
       <!-- Actions -->
       <div class="comparison-modal__actions">
-        <button (click)="closeComparisonModal()" class="ui-btn ui-btn-primary comparison-modal__primary-action">
+        <button (click)="closeComparisonModal()" class="btn btn-primary comparison-modal__primary-action">
           Cerrar
         </button>
-        <button (click)="shareComparison()" class="ui-btn ui-btn-secondary comparison-modal__secondary-action">
+        <button (click)="shareComparison()" class="btn btn-secondary comparison-modal__secondary-action">
           <app-icon
             class="comparison-modal__share-icon"
             name="chat-bubble"
@@ -442,7 +447,7 @@
           ></app-icon>
           Compartir WhatsApp
         </button>
-        <button (click)="exportComparison()" class="ui-btn ui-btn-ghost comparison-modal__ghost-action">
+        <button (click)="exportComparison()" class="btn btn-ghost comparison-modal__ghost-action">
            Exportar
         </button>
       </div>

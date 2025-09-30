@@ -10,12 +10,16 @@
       <span>Borrador encontrado de un onboarding anterior.</span>
     </div>
     <div class="onboarding-main__draft-actions">
-      <button type="button" class="ui-btn ui-btn-secondary" (click)="continueDraft()">Continuar</button>
-      <button type="button" class="ui-btn ui-btn-secondary" (click)="discardDraft()">Descartar</button>
+      <button type="button" class="btn btn-secondary" (click)="continueDraft()">Continuar</button>
+      <button type="button" class="btn btn-secondary" (click)="discardDraft()">Descartar</button>
     </div>
   </div>
 
   <header class="onboarding-main__progress" aria-label="Progreso del Onboarding">
+    <div class="onboarding-main__mobile-progress" *ngIf="isMobileView">
+      <span class="onboarding-main__mobile-step">Paso {{ currentStepIndex + 1 }} de {{ steps.length }}</span>
+      <span class="onboarding-main__mobile-step-label">{{ steps[currentStepIndex].label }}</span>
+    </div>
     <div class="onboarding-main__steps">
       <div
         *ngFor="let step of steps; let i = index"
@@ -54,6 +58,7 @@
           [(ngModel)]="form.market"
           (change)="onMarketChange()"
           (ngModelChange)="onFormChange()"
+          data-cy="onboarding-market-select"
         >
           <option value="">Selecciona un mercado</option>
           <option value="aguascalientes">Aguascalientes</option>
@@ -69,6 +74,7 @@
           [(ngModel)]="form.saleType"
           (change)="onSaleTypeChange()"
           (ngModelChange)="onFormChange()"
+          data-cy="onboarding-sale-type"
         >
           <option value="">Selecciona tipo de venta</option>
           <option value="contado">Venta de Contado</option>
@@ -83,6 +89,7 @@
           class="onboarding-main__select"
           [(ngModel)]="form.clientType"
           (ngModelChange)="onFormChange()"
+          data-cy="onboarding-client-type"
         >
           <option value="">Selecciona modalidad</option>
           <option value="individual">Individual</option>
@@ -98,6 +105,7 @@
           [(ngModel)]="form.ecosystemId"
           (change)="onEcosystemChange()"
           (ngModelChange)="onFormChange()"
+          data-cy="onboarding-ecosystem-select"
         >
           <option value="">Selecciona una ruta</option>
           <option *ngFor="let ecosystem of availableEcosystems" [value]="ecosystem.id">
@@ -113,6 +121,7 @@
             [(ngModel)]="newRouteName"
             (ngModelChange)="onFormChange()"
             placeholder="Nombre de la nueva ruta (ej: Ruta Valle Dorado)"
+            data-cy="onboarding-new-route-input"
           />
           <small class="onboarding-main__help-text">
             Esta ruta se registrará como "en prospección" y podrás cotizar inmediatamente
@@ -127,7 +136,7 @@
         <div class="onboarding-main__routes">
           <div class="onboarding-main__routes-header">
             <h4 class="onboarding-main__routes-title">Rutas Disponibles en Estado de México</h4>
-            <button type="button" class="ui-btn ui-btn-ghost" (click)="toggleRoutesPreview()">
+            <button type="button" class="btn btn-ghost" (click)="toggleRoutesPreview()">
               {{ showRoutesPreview ? 'Ocultar' : 'Ver Todas' }}
             </button>
           </div>
@@ -156,9 +165,10 @@
     <div class="onboarding-main__actions">
       <button
         type="button"
-        class="ui-btn ui-btn-primary"
+        class="btn btn-primary"
         [disabled]="!canProceedFromSelection()"
         (click)="nextStep()"
+        data-cy="onboarding-selection-continue"
       >
         Continuar
       </button>
@@ -299,7 +309,7 @@
           </div>
           <button
             type="button"
-            class="ui-btn ui-btn-ghost onboarding-main__member-add"
+            class="btn btn-ghost onboarding-main__member-add"
             *ngIf="form.memberNames.length < 10"
             (click)="addMember()"
           >
@@ -310,7 +320,7 @@
     </div>
 
     <div class="onboarding-main__actions onboarding-main__actions--stack">
-      <button type="button" class="ui-btn ui-btn-secondary" aria-label="Volver" (click)="previousStep()">
+      <button type="button" class="btn btn-secondary" aria-label="Volver" (click)="previousStep()">
         Atrás
       </button>
       <div class="onboarding-main__actions-group">
@@ -318,7 +328,7 @@
         <div class="onboarding-main__actions-stack">
           <button
             type="button"
-            class="ui-btn ui-btn-primary"
+            class="btn btn-primary"
             [disabled]="!canProceedFromClientInfo()"
             (click)="createClient()"
           >
@@ -371,7 +381,7 @@
           />
           <button
             type="button"
-            class="ui-btn ui-btn-secondary"
+            class="btn btn-secondary"
             (click)="attemptDocumentUpload(fileInput, doc.id)"
           >
             Subir Documento
@@ -399,13 +409,13 @@
     </div>
 
     <div class="onboarding-main__actions onboarding-main__actions--stack">
-      <button type="button" class="ui-btn ui-btn-secondary" aria-label="Volver" (click)="previousStep()">
+      <button type="button" class="btn btn-secondary" aria-label="Volver" (click)="previousStep()">
         Atrás
       </button>
       <div class="onboarding-main__actions-stack">
         <button
           type="button"
-          class="ui-btn ui-btn-primary"
+          class="btn btn-primary"
           [disabled]="!documentProgress.allComplete"
           (click)="nextStep()"
         >
@@ -467,7 +477,7 @@
     </div>
 
     <div class="onboarding-main__actions onboarding-main__actions--stack">
-      <button type="button" class="ui-btn ui-btn-secondary" aria-label="Volver" (click)="previousStep()">
+      <button type="button" class="btn btn-secondary" aria-label="Volver" (click)="previousStep()">
         Atrás
       </button>
       <div class="onboarding-main__actions-group">
@@ -475,7 +485,7 @@
         <div class="onboarding-main__actions-stack">
           <button
             type="button"
-            class="ui-btn ui-btn-primary"
+            class="btn btn-primary"
             [disabled]="!canProceedToContracts()"
             (click)="nextStep()"
           >
@@ -524,7 +534,7 @@
       <div class="onboarding-main__contract-actions" *ngIf="contractValidation.canGenerate">
         <button
           type="button"
-          class="ui-btn ui-btn-primary onboarding-main__contract-button"
+          class="btn btn-primary onboarding-main__contract-button"
           [disabled]="isGeneratingContract"
           (click)="generateContract()"
         >
@@ -541,12 +551,12 @@
     </div>
 
     <div class="onboarding-main__actions onboarding-main__actions--stack">
-      <button type="button" class="ui-btn ui-btn-secondary" aria-label="Volver" (click)="previousStep()">
+      <button type="button" class="btn btn-secondary" aria-label="Volver" (click)="previousStep()">
         Atrás
       </button>
       <button
         type="button"
-        class="ui-btn ui-btn-primary"
+        class="btn btn-primary"
         [disabled]="!contractMessage"
         (click)="nextStep()"
       >
@@ -584,8 +594,8 @@
       </div>
 
       <div class="onboarding-main__completion-actions">
-        <button type="button" class="ui-btn ui-btn-primary" (click)="goToClient()">Ver Cliente</button>
-        <button type="button" class="ui-btn ui-btn-secondary" (click)="startNewOnboarding()">Nuevo Onboarding</button>
+        <button type="button" class="btn btn-primary" (click)="goToClient()">Ver Cliente</button>
+        <button type="button" class="btn btn-secondary" (click)="startNewOnboarding()">Nuevo Onboarding</button>
       </div>
     </div>
   </section>
@@ -609,3 +619,8 @@
     (continueUpload)="onInterviewCompleted()"
   ></app-interview-checkpoint-modal>
 </section>
+
+<app-context-panel
+  class="onboarding-main__context"
+  [keys]="['onboarding-wizard', 'cotizador', 'documentos']">
+</app-context-panel>

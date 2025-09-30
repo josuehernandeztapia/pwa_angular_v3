@@ -46,11 +46,11 @@
         </div>
       </div>
       
-      <button class="ui-btn ui-btn-primary start-button" (click)="startInterview()">
+      <button class="btn btn-primary start-button" (click)="startInterview()">
         Comenzar Entrevista
       </button>
       <div class="guided-start">
-        <button class="ui-btn ui-btn-secondary start-button" (click)="guidedBasicActive = true; startInterview()" title="Flujo guiado: 6 preguntas de Información Básica">
+        <button class="btn btn-secondary start-button" (click)="guidedBasicActive = true; startInterview()" title="Flujo guiado: 6 preguntas de Información Básica">
           Guided Básicas (6)
         </button>
       </div>
@@ -116,7 +116,7 @@
           <!-- Controles de voz -->
           <div class="voice-controls layout-row-center">
             <button 
-              class="ui-btn ui-btn-secondary voice-button"
+              class="btn btn-secondary voice-button"
               [class.recording]="isRecording"
               (click)="toggleRecording()"
               [disabled]="isRecording || isProcessingResponse"
@@ -130,7 +130,7 @@
               Grabar
             </button>
             <button 
-              class="ui-btn ui-btn-warning voice-button"
+              class="btn btn-warning voice-button"
               *ngIf="isRecording"
               (click)="toggleRecording()"
               aria-label="Detener"
@@ -156,7 +156,7 @@
         <!-- Botones de acción -->
         <div class="action-buttons layout-row-end">
           <button 
-            class="ui-btn ui-btn-ghost" 
+            class="btn btn-ghost" 
             (click)="skipQuestion()"
             *ngIf="currentQuestion.weight <= 4"
             [disabled]="isProcessingResponse">
@@ -164,7 +164,7 @@
           </button>
           
           <button 
-            class="ui-btn ui-btn-primary"
+            class="btn btn-primary"
             *ngIf="hasResultReady"
             (click)="submitResponse()"
             [disabled]="isProcessingResponse"
@@ -384,10 +384,10 @@
 
       <!-- Botones de acción final -->
       <div class="final-actions">
-        <button class="ui-btn ui-btn-secondary" (click)="restartInterview()">
+        <button class="btn btn-secondary" (click)="restartInterview()">
           Nueva Entrevista
         </button>
-        <button class="ui-btn ui-btn-ghost" disabled>
+        <button class="btn btn-ghost" disabled>
           Exportar Reporte
         </button>
       </div>

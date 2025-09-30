@@ -12,6 +12,15 @@
   </header>
 
   <main id="main-content" class="proteccion-main">
+    <app-offline-queue-banner
+      contextLabel="protecciones"
+      endpointPrefix="/protection"
+      featureTag="proteccion"
+    ></app-offline-queue-banner>
+    <app-context-panel
+      class="proteccion-context-panel"
+      [keys]="['proteccion', 'cotizador', 'documentos', 'onboarding-wizard']">
+    </app-context-panel>
     <!-- Protección KPIs -->
     <section class="card proteccion-section">
       <h2 class="section-heading">Protección</h2>

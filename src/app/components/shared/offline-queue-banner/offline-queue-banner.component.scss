@@ -1,0 +1,30 @@
+.offline-banner {
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--accent-blue-500) 28%, transparent);
+  background: color-mix(in srgb, var(--accent-blue-500) 10%, transparent);
+  padding: var(--space-3) var(--space-4);
+  color: var(--accent-blue-900);
+
+  &__row {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+  }
+
+  &__icon {
+    font-size: 1.2rem;
+    margin-top: var(--space-1);
+    color: var(--accent-blue-700);
+  }
+
+  &__message {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.45;
+
+    &--success {
+      color: var(--accent-green-700);
+    }
+  }
+}

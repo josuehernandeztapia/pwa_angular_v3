@@ -2,14 +2,19 @@
   <header class="next-best-hero__header">
     <div class="next-best-hero__indicator">
       <span class="next-best-hero__indicator-ring" [ngClass]="getPriorityClasses()" aria-hidden="true"></span>
-      <span class="next-best-hero__indicator-icon">{{ getActionIcon() }}</span>
+      <app-icon
+        class="next-best-hero__indicator-icon"
+        [name]="getActionIconName()"
+        [size]="28"
+        aria-hidden="true"
+      ></app-icon>
     </div>
     <div class="next-best-hero__heading">
       <h2 class="next-best-hero__title">{{ actionData.action.title }}</h2>
       <p class="next-best-hero__subtitle">Tu próxima mejor acción para maximizar el impacto</p>
     </div>
     <div class="next-best-hero__time">
-      <span class="next-best-hero__time-icon" aria-hidden="true">timer</span>
+      <app-icon name="clock" [size]="16" class="next-best-hero__time-icon" aria-hidden="true"></app-icon>
       <span class="next-best-hero__time-text">{{ actionData.action.timeEstimate }}</span>
     </div>
   </header>
@@ -66,7 +71,12 @@
       class="next-best-hero__action next-best-hero__action--primary"
       (click)="executeAction(actionData.suggestedActions.primary)"
     >
-      <span class="next-best-hero__action-icon">{{ actionData.suggestedActions.primary.icon }}</span>
+      <app-icon
+        class="next-best-hero__action-icon"
+        [name]="resolveActionIcon(actionData.suggestedActions.primary.icon)"
+        [size]="16"
+        aria-hidden="true"
+      ></app-icon>
       <span class="next-best-hero__action-text">{{ actionData.suggestedActions.primary.label }}</span>
     </button>
 
@@ -77,7 +87,12 @@
         *ngFor="let action of actionData.suggestedActions.secondary"
         (click)="executeAction(action)"
       >
-        <span class="next-best-hero__action-icon">{{ action.icon }}</span>
+        <app-icon
+          class="next-best-hero__action-icon"
+          [name]="resolveActionIcon(action.icon)"
+          [size]="16"
+          aria-hidden="true"
+        ></app-icon>
         <span class="next-best-hero__action-text">{{ action.label }}</span>
       </button>
     </div>

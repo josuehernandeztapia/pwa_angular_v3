@@ -9,7 +9,7 @@
       </div>
 
       <div class="dashboard-actions">
-        <button class="ui-btn ui-btn-secondary dashboard-action-btn">
+        <button class="btn btn-secondary dashboard-action-btn">
           <app-icon
             class="dashboard-action-icon"
             name="download"
@@ -18,7 +18,7 @@
           ></app-icon>
           Exportar
         </button>
-        <button class="ui-btn ui-btn-primary dashboard-action-btn" (click)="createNewOpportunity()">
+        <button class="btn btn-primary dashboard-action-btn" (click)="createNewOpportunity()">
           <app-icon
             class="dashboard-action-icon"
             name="plus"
@@ -30,7 +30,7 @@
       </div>
 
       <div class="dashboard-mobile-toggle">
-        <button class="ui-btn ui-btn-secondary dashboard-mobile-button" (click)="toggleMobileActions()">
+        <button class="btn btn-secondary dashboard-mobile-button" (click)="toggleMobileActions()">
           <app-icon
             class="dashboard-action-icon"
             name="menu"
@@ -42,8 +42,8 @@
     </div>
 
     <div *ngIf="showMobileActions" class="dashboard-mobile-actions">
-      <button class="ui-btn ui-btn-secondary">Exportar</button>
-      <button class="ui-btn ui-btn-primary" (click)="createNewOpportunity()">Nueva Oportunidad</button>
+      <button class="btn btn-secondary">Exportar</button>
+      <button class="btn btn-primary" (click)="createNewOpportunity()">Nueva Oportunidad</button>
     </div>
   </header>
 
@@ -51,7 +51,7 @@
     <section class="dashboard-section">
       <h2 class="section-title">Métricas Principales</h2>
       <div class="dashboard-kpi-grid">
-        <div *ngFor="let kpi of kpiCards" class="dashboard-kpi-card ui-card">
+        <div *ngFor="let kpi of kpiCards" class="dashboard-kpi-card card">
           <div class="kpi-card-header">
             <div class="kpi-info">
               <span class="kpi-label">{{ kpi.title }}</span>
@@ -67,14 +67,45 @@
               ></app-icon>
             </div>
           </div>
-          <div *ngIf="kpi.trend" class="kpi-trend" [ngClass]="{
-                'kpi-trend--up': kpi.trend === 'up',
-                'kpi-trend--down': kpi.trend === 'down',
-                'kpi-trend--stable': kpi.trend === 'stable'
-              }">
-            <span class="kpi-trend-indicator">{{ getTrendSymbol(kpi.trend) }}</span>
+          <div
+            *ngIf="kpi.trend"
+            class="kpi-trend"
+            [ngClass]="{
+              'kpi-trend--up': kpi.trend === 'up',
+              'kpi-trend--down': kpi.trend === 'down',
+              'kpi-trend--stable': kpi.trend === 'stable'
+            }"
+          >
+            <app-icon
+              class="kpi-trend-indicator"
+              [name]="getTrendIcon(kpi.trend)"
+              [size]="16"
+              aria-hidden="true"
+            ></app-icon>
             <span class="kpi-trend-value">{{ kpi.trendValue }}</span>
             <span class="kpi-trend-caption">vs semana anterior</span>
+          </div>
+          <div *ngIf="kpi.primaryAction || kpi.secondaryAction" class="kpi-actions">
+            <button
+              *ngIf="kpi.primaryAction"
+              type="button"
+              class="btn"
+              [ngClass]="kpi.primaryAction.variant === 'primary' ? 'btn-primary' : 'btn-secondary'"
+              (click)="handleKpiAction(kpi.primaryAction)"
+              [attr.data-cy]="kpi.primaryAction.dataCy"
+            >
+              {{ kpi.primaryAction.label }}
+            </button>
+            <button
+              *ngIf="kpi.secondaryAction"
+              type="button"
+              class="btn"
+              [ngClass]="kpi.secondaryAction.variant === 'primary' ? 'btn-primary' : 'btn-secondary'"
+              (click)="handleKpiAction(kpi.secondaryAction)"
+              [attr.data-cy]="kpi.secondaryAction.dataCy"
+            >
+              {{ kpi.secondaryAction.label }}
+            </button>
           </div>
         </div>
       </div>
@@ -82,14 +113,14 @@
 
     <section class="dashboard-section">
       <div class="dashboard-chart-grid">
-        <div class="dashboard-chart-card ui-card">
+        <div class="dashboard-chart-card card">
           <h3 class="section-subtitle">Evolución PMT (Últimos 6 meses)</h3>
           <div class="chart-container">
             <canvas #pmtChart data-cy="chart-pmt"></canvas>
           </div>
         </div>
 
-        <div class="dashboard-chart-card ui-card">
+        <div class="dashboard-chart-card card">
           <h3 class="section-subtitle">Proyección de Ingresos</h3>
           <div class="chart-container">
             <canvas #revenueChart data-cy="chart-revenue"></canvas>
@@ -101,7 +132,7 @@
     <section *ngIf="actionableGroups.length > 0" class="dashboard-section">
       <h2 class="section-title">Acciones Requeridas</h2>
       <div class="dashboard-action-grid">
-        <div *ngFor="let group of actionableGroups" class="action-card ui-card">
+        <div *ngFor="let group of actionableGroups" class="action-card card">
           <div class="action-card-header">
             <div>
               <h3 class="action-title">{{ group.title }}</h3>
@@ -124,7 +155,7 @@
 
     <section *ngIf="activityFeed.length > 0" class="dashboard-section">
       <h2 class="section-title">Actividad Reciente</h2>
-      <div class="dashboard-activity-card ui-card">
+      <div class="dashboard-activity-card card">
         <div *ngFor="let activity of activityFeed.slice(0, 5); let last = last" class="activity-item" [class.activity-item--last]="last">
           <div class="activity-icon">
             <app-icon class="activity-icon-symbol" name="grid" [size]="24" aria-hidden="true"></app-icon>

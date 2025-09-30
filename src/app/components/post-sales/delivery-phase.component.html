@@ -173,7 +173,7 @@
               <div class="delivery-phase__status-actions">
                 <button
                   type="button"
-                  class="ui-btn ui-btn-ghost delivery-phase__status-btn delivery-phase__status-btn--approved"
+                  class="btn btn-ghost delivery-phase__status-btn delivery-phase__status-btn--approved"
                   [class.is-active]="item.status === 'approved'"
                   (click)="updateChecklistItem(item.item, 'approved')"
                 >
@@ -187,7 +187,7 @@
                 </button>
                 <button
                   type="button"
-                  class="ui-btn ui-btn-ghost delivery-phase__status-btn delivery-phase__status-btn--issues"
+                  class="btn btn-ghost delivery-phase__status-btn delivery-phase__status-btn--issues"
                   [class.is-active]="item.status === 'with_issues'"
                   (click)="updateChecklistItem(item.item, 'with_issues')"
                 >
@@ -201,7 +201,7 @@
                 </button>
                 <button
                   type="button"
-                  class="ui-btn ui-btn-ghost delivery-phase__status-btn delivery-phase__status-btn--rejected"
+                  class="btn btn-ghost delivery-phase__status-btn delivery-phase__status-btn--rejected"
                   [class.is-active]="item.status === 'rejected'"
                   (click)="updateChecklistItem(item.item, 'rejected')"
                 >
@@ -245,7 +245,7 @@
       <div class="delivery-phase__upload">
         <button
           type="button"
-          class="ui-btn ui-btn-ghost delivery-phase__upload-area"
+          class="btn btn-ghost delivery-phase__upload-area"
           (click)="triggerPhotoUpload()"
         >
           <app-icon
@@ -274,7 +274,7 @@
               <img [src]="photo" alt="Fotografía del vehículo" class="delivery-phase__photo-image" />
               <button
                 type="button"
-                class="ui-btn ui-btn-ghost delivery-phase__photo-remove"
+                class="btn btn-ghost delivery-phase__photo-remove"
                 (click)="removePhoto(photo)"
               >
                 <app-icon
@@ -305,7 +305,7 @@
         @if (!digitalSignature()) {
           <button
             type="button"
-            class="ui-btn ui-btn-ghost delivery-phase__signature-placeholder"
+            class="btn btn-ghost delivery-phase__signature-placeholder"
             (click)="openSignatureModal()"
           >
             <app-icon
@@ -325,7 +325,7 @@
             />
             <button
               type="button"
-              class="ui-btn ui-btn-secondary delivery-phase__signature-action"
+              class="btn btn-secondary delivery-phase__signature-action"
               (click)="openSignatureModal()"
             >
               <app-icon
@@ -362,7 +362,7 @@
     <footer class="delivery-phase__actions">
       <button
         type="button"
-        class="ui-btn ui-btn-secondary delivery-phase__action"
+        class="btn btn-secondary delivery-phase__action"
         (click)="saveDraft()"
         [disabled]="isSaving()"
       >
@@ -370,7 +370,7 @@
       </button>
       <button
         type="submit"
-        class="ui-btn ui-btn-primary delivery-phase__action"
+        class="btn btn-primary delivery-phase__action"
         [disabled]="!canCompleteDelivery() || isSubmitting()"
       >
         @if (isSubmitting()) {
@@ -431,7 +431,7 @@
         <footer class="delivery-phase__modal-actions">
           <button
             type="button"
-            class="ui-btn ui-btn-primary"
+            class="btn btn-primary"
             (click)="goToDocumentsPhase()"
             autofocus
           >

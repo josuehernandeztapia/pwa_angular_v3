@@ -222,6 +222,21 @@
   color: var(--color-text-secondary);
 }
 
+.photo-wizard__preview {
+  margin: var(--space-3) 0;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 65%, transparent);
+  overflow: hidden;
+  max-width: 320px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
 .photo-wizard__input {
   position: absolute;
   width: 1px;
@@ -484,6 +499,18 @@
   color: var(--accent-amber-700);
 }
 
+.photo-wizard__banner--offline {
+  border-color: color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+  color: var(--accent-blue-700);
+}
+
+.photo-wizard__banner--queued {
+  border-color: color-mix(in srgb, var(--accent-purple-500) 30%, transparent);
+  background: color-mix(in srgb, var(--accent-purple-500) 14%, transparent);
+  color: var(--accent-purple-700);
+}
+
 .photo-wizard__banner-content {
   display: inline-flex;
   align-items: center;
@@ -493,6 +520,11 @@
 .photo-wizard__banner-content p {
   margin: var(--space-1) 0 0;
   color: var(--color-text-secondary);
+}
+
+.photo-wizard__badge--queued {
+  background: color-mix(in srgb, var(--accent-purple-500) 12%, transparent);
+  color: var(--accent-purple-700);
 }
 
 .photo-wizard__quote {
@@ -635,7 +667,7 @@
     justify-content: stretch;
   }
 
-  .photo-wizard__footer .ui-btn {
+  .photo-wizard__footer .btn {
     width: 100%;
     justify-content: center;
   }

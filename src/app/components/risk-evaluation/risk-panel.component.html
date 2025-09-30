@@ -9,7 +9,7 @@
     class="risk-panel__state risk-panel__state--loading"
     data-testid="evaluation-loading"
   >
-    <app-ui-icon class="risk-panel__state-icon" name="refresh" size="md"></app-ui-icon>
+    <app-icon class="risk-panel__state-icon" name="refresh" size="md"></app-icon>
     <app-human-message
       class="risk-panel__state-message"
       message-context="loading-evaluation"
@@ -22,7 +22,7 @@
     class="risk-panel__state risk-panel__state--error"
     data-testid="api-error-message"
   >
-    <app-ui-icon class="risk-panel__state-icon" name="alert-triangle"></app-ui-icon>
+    <app-icon class="risk-panel__state-icon" name="alert-triangle"></app-icon>
     <app-human-message
       class="risk-panel__state-message"
       message-context="evaluation-error"
@@ -40,7 +40,7 @@
   >
     <header class="risk-panel__header">
       <div class="risk-panel__title-group">
-        <app-ui-icon class="risk-panel__title-icon" name="proteccion"></app-ui-icon>
+        <app-icon class="risk-panel__title-icon" name="proteccion"></app-icon>
         <div>
           <h2 class="risk-panel__title">Evaluación de Riesgo KIBAN/HASE</h2>
           <div class="risk-panel__meta">
@@ -75,7 +75,7 @@
         </div>
 
         <div class="risk-panel__score-summary">
-          <app-ui-icon class="risk-panel__score-icon" name="cotizador"></app-ui-icon>
+          <app-icon class="risk-panel__score-icon" name="cotizador"></app-icon>
           <div class="risk-panel__score-details">
             <div class="risk-panel__score-detail">
               <span class="risk-panel__score-detail-label">Score final</span>
@@ -113,7 +113,7 @@
 
     <section class="risk-panel__section risk-panel__section--hase">
       <header class="risk-panel__section-header">
-        <app-ui-icon class="risk-panel__section-icon" name="simulador"></app-ui-icon>
+        <app-icon class="risk-panel__section-icon" name="simulador"></app-icon>
         <h3 class="risk-panel__section-title">HASE · Análisis integral</h3>
       </header>
 
@@ -134,7 +134,7 @@
           class="risk-panel__explain-item"
           [ngClass]="getFactorImpactClass(factor.impact)"
         >
-          <app-ui-icon class="risk-panel__explain-icon" [name]="getFactorIcon(factor.factor)"></app-ui-icon>
+          <app-icon class="risk-panel__explain-icon" [name]="getFactorIcon(factor.factor)"></app-icon>
           <div class="risk-panel__explain-details">
             <span class="risk-panel__explain-name">{{ getFactorDisplayName(factor.factor) }}</span>
             <div class="risk-panel__explain-weight">
@@ -155,7 +155,7 @@
       *ngIf="riskEvaluation()?.riskFactors?.length"
     >
       <header class="risk-panel__section-header">
-        <app-ui-icon class="risk-panel__section-icon" name="alert-triangle"></app-ui-icon>
+        <app-icon class="risk-panel__section-icon" name="alert-triangle"></app-icon>
         <h3 class="risk-panel__section-title">Factores de riesgo identificados</h3>
       </header>
 
@@ -167,7 +167,7 @@
           data-testid="risk-reason"
         >
           <div class="risk-panel__risk-factor-icon">
-            <app-ui-icon [name]="getSeverityIcon(factor.severity)"></app-ui-icon>
+            <app-icon [name]="getSeverityIcon(factor.severity)"></app-icon>
           </div>
           <div class="risk-panel__risk-factor-body">
             <h4 class="risk-panel__risk-factor-name">{{ factor.factorName }}</h4>
@@ -205,7 +205,7 @@
 
     <section class="risk-panel__section risk-panel__section--decision">
       <header class="risk-panel__section-header">
-        <app-ui-icon class="risk-panel__section-icon" [name]="getDecisionIcon()"></app-ui-icon>
+        <app-icon class="risk-panel__section-icon" [name]="getDecisionIcon()"></app-icon>
         <h3 class="risk-panel__section-title">Decisión final</h3>
       </header>
 
@@ -247,7 +247,7 @@
       *ngIf="riskEvaluation()?.financialRecommendations"
     >
       <header class="risk-panel__section-header">
-        <app-ui-icon class="risk-panel__section-icon" name="cotizador"></app-ui-icon>
+        <app-icon class="risk-panel__section-icon" name="cotizador"></app-icon>
         <h3 class="risk-panel__section-title">Recomendaciones financieras</h3>
       </header>
 
@@ -296,7 +296,7 @@
       *ngIf="riskEvaluation()?.nextSteps?.length || getSuggestions().length"
     >
       <header class="risk-panel__section-header">
-        <app-ui-icon class="risk-panel__section-icon" name="check-circle"></app-ui-icon>
+        <app-icon class="risk-panel__section-icon" name="check-circle"></app-icon>
         <h3 class="risk-panel__section-title">Siguientes pasos</h3>
       </header>
 
@@ -324,7 +324,7 @@
             data-testid="add-guarantor-btn"
             (click)="onAddGuarantor()"
           >
-            <app-ui-icon class="risk-panel__button-icon" name="check-circle"></app-ui-icon>
+            <app-icon class="risk-panel__button-icon" name="check-circle"></app-icon>
             Agregar aval
           </button>
 
@@ -335,7 +335,7 @@
             data-testid="reduce-term-btn"
             (click)="onReduceTerm()"
           >
-            <app-ui-icon class="risk-panel__button-icon" name="clock"></app-ui-icon>
+            <app-icon class="risk-panel__button-icon" name="clock"></app-icon>
             Ajustar plazo
           </button>
 
@@ -346,7 +346,7 @@
             data-testid="upload-documents-btn"
             (click)="onUploadDocuments()"
           >
-            <app-ui-icon class="risk-panel__button-icon" name="scan"></app-ui-icon>
+            <app-icon class="risk-panel__button-icon" name="scan"></app-icon>
             Cargar documentos
           </button>
         </div>
@@ -358,7 +358,7 @@
       *ngIf="riskEvaluation()?.kiban.status === 'NOT_FOUND'"
       data-testid="fallback-message"
     >
-      <app-ui-icon class="risk-panel__section-icon" name="info"></app-ui-icon>
+      <app-icon class="risk-panel__section-icon" name="info"></app-icon>
       <app-human-message
         message-context="not-found-fallback"
         [personalization-data]="getPersonalizationData()"
@@ -370,7 +370,7 @@
       *ngIf="riskEvaluation()?.decision === 'NO-GO'"
       data-testid="rejection-message"
     >
-      <app-ui-icon class="risk-panel__section-icon" name="alert-circle"></app-ui-icon>
+      <app-icon class="risk-panel__section-icon" name="alert-circle"></app-icon>
       <app-human-message
         message-context="rejection-explanation"
         [personalization-data]="getPersonalizationData()"
@@ -382,7 +382,7 @@
     *ngIf="!isLoading() && !hasError() && !riskEvaluation()"
     class="risk-panel__state risk-panel__state--empty"
   >
-    <app-ui-icon class="risk-panel__state-icon" name="info"></app-ui-icon>
+    <app-icon class="risk-panel__state-icon" name="info"></app-icon>
     <p class="risk-panel__state-message">No se encontró información de riesgo para este contrato.</p>
   </section>
 </section>

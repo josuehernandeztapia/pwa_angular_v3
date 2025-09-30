@@ -110,6 +110,7 @@
   font-size: 1rem;
   background: color-mix(in srgb, var(--color-border-secondary) 45%, transparent);
   color: var(--color-text-secondary);
+  --icon-color: currentColor;
 }
 
 .plates-phase__step-label {

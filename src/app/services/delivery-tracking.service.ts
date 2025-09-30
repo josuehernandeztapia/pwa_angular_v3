@@ -4,6 +4,8 @@ import { Observable, BehaviorSubject, timer, of, throwError } from 'rxjs';
 import { map, catchError, tap, switchMap, retry, shareReplay } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { MonitoringService } from './monitoring.service';
+import { FlowContextService } from './flow-context.service';
+import type { PolicyMarket } from './market-policy.service';
 
 export interface DeliveryLocation {
   lat: number;
@@ -66,17 +68,173 @@ export interface DeliveryMetrics {
   rescheduleRate: number; // percentage
 }
 
+export type DeliveryTimelineStatus = 'completed' | 'in_progress' | 'upcoming';
+
+export interface DeliveryTimelineEvent {
+  id: string;
+  order: number;
+  offsetDays: number;
+  label: string;
+  description: string;
+  status: DeliveryTimelineStatus;
+  estimatedDate: string;
+  completedAt?: string;
+  market: PolicyMarket;
+  requiresAction?: boolean;
+}
+
+interface DeliveryTimelineBlueprintEntry {
+  id: string;
+  offsetDays: number;
+  label: string;
+  description: string;
+  milestone?: 'preparation' | 'dispatch' | 'handover' | 'followup';
+}
+
+interface DeliveryFlowContextState {
+  market: PolicyMarket;
+  etaDays: number;
+  lastUpdated: string;
+  events: DeliveryTimelineEvent[];
+}
+
+export interface DeliveryTimelineSnapshot {
+  market: PolicyMarket;
+  etaDays: number;
+  lastUpdated: string;
+  events: DeliveryTimelineEvent[];
+  source: 'cache' | 'remote';
+}
+
+const MARKET_TIMELINE_BLUEPRINTS: Record<PolicyMarket, DeliveryTimelineBlueprintEntry[]> = {
+  aguascalientes: [
+    {
+      id: 'contract-signed',
+      offsetDays: 0,
+      label: 'Contrato firmado',
+      description: 'Firma de contrato y verificación de documentos post-venta',
+      milestone: 'preparation'
+    },
+    {
+      id: 'unit-assigned',
+      offsetDays: 7,
+      label: 'Unidad asignada',
+      description: 'Asignación de VIN y revisión de inventario',
+      milestone: 'preparation'
+    },
+    {
+      id: 'customs-review',
+      offsetDays: 21,
+      label: 'Revisión aduanal',
+      description: 'Liberación de unidad con importador y verificación mecánica',
+      milestone: 'dispatch'
+    },
+    {
+      id: 'logistics',
+      offsetDays: 45,
+      label: 'Logística de transporte',
+      description: 'Programación de transporte hacia agencia y contacto con cliente',
+      milestone: 'dispatch'
+    },
+    {
+      id: 'final-delivery',
+      offsetDays: 75,
+      label: 'Entrega final',
+      description: 'Entrega de vehículo y firma de acta de conformidad',
+      milestone: 'handover'
+    }
+  ],
+  edomex: [
+    {
+      id: 'post-sale-case',
+      offsetDays: 0,
+      label: 'Expediente post-venta',
+      description: 'Creación de expediente y carga de checklist local',
+      milestone: 'preparation'
+    },
+    {
+      id: 'plates-process',
+      offsetDays: 12,
+      label: 'Gestoría de placas',
+      description: 'Solicitud de láminas, tenencia y hologramas EdoMex',
+      milestone: 'preparation'
+    },
+    {
+      id: 'financing-release',
+      offsetDays: 24,
+      label: 'Liberación de financiamiento',
+      description: 'Validación con financiera y confirmación de pago a proveedor',
+      milestone: 'dispatch'
+    },
+    {
+      id: 'schedule-delivery',
+      offsetDays: 38,
+      label: 'Programar entrega',
+      description: 'Coordinación con cliente para entrega en agencia o domicilio',
+      milestone: 'handover'
+    },
+    {
+      id: 'home-delivery',
+      offsetDays: 52,
+      label: 'Entrega en domicilio',
+      description: 'Entrega final, fotografías y firma de conformidad',
+      milestone: 'handover'
+    }
+  ],
+  otros: [
+    {
+      id: 'kickoff',
+      offsetDays: 0,
+      label: 'Inicio de post-venta',
+      description: 'Confirmación de contrato y checklist inicial',
+      milestone: 'preparation'
+    },
+    {
+      id: 'documents-verified',
+      offsetDays: 15,
+      label: 'Documentación verificada',
+      description: 'Validación de documentos de propiedad y garantías locales',
+      milestone: 'preparation'
+    },
+    {
+      id: 'transport-logistics',
+      offsetDays: 35,
+      label: 'Logística de transporte',
+      description: 'Coordinación logística con operadores y aseguradora',
+      milestone: 'dispatch'
+    },
+    {
+      id: 'handover',
+      offsetDays: 60,
+      label: 'Entrega y firma',
+      description: 'Entrega de vehículo, firma de acta y fotografías de evidencia',
+      milestone: 'handover'
+    },
+    {
+      id: 'first-followup',
+      offsetDays: 75,
+      label: 'Seguimiento 15 días',
+      description: 'Encuesta de satisfacción y recordatorio de mantenimiento',
+      milestone: 'followup'
+    }
+  ]
+};
+
 @Injectable({ providedIn: 'root' })
 export class DeliveryTrackingService {
   private monitoringService = inject(MonitoringService);
   private http = inject(HttpClient);
+  private flowContext = inject(FlowContextService, { optional: true });
   private readonly BFF_BASE_URL = `${environment.apiUrl}/bff/delivery`;
   private readonly STORAGE_PREFIX = 'delivery_tracking_';
+  private readonly deliveryContextKey = 'delivery';
+  private readonly timelineStaleMs = 30 * 60 * 1000; // 30 minutos de cache
 
-  // 🚚 P0.2 SURGICAL - Enhanced state management with persistence
+  // P0.2 SURGICAL - Enhanced state management with persistence
   private deliveryCommitments$ = new BehaviorSubject<DeliveryCommitment[]>([]);
   private activeDeliveries$ = new BehaviorSubject<DeliveryCommitment[]>([]);
   private etaUpdates$ = new BehaviorSubject<ETAUpdate[]>([]);
+  private deliveryTimelineSubject = new BehaviorSubject<DeliveryTimelineSnapshot | null>(null);
 
   // Reactive signals for UI
   readonly isTracking = signal(false);
@@ -120,7 +278,7 @@ export class DeliveryTrackingService {
   }
 
   /**
-   * 🕐 Update ETA with persistence and confidence tracking
+   * Update ETA with persistence and confidence tracking
    */
   updateETA(commitmentId: string, eta: Omit<ETAUpdate, 'commitmentId' | 'calculatedAt'>): Observable<ETAUpdate> {
     const etaUpdate: ETAUpdate = {
@@ -209,6 +367,37 @@ export class DeliveryTrackingService {
       latestETA,
       history: etaHistory
     });
+  }
+
+  getDeliveryTimeline(params: {
+    market: PolicyMarket;
+    anchorDate?: string;
+    forceRefresh?: boolean;
+  }): Observable<DeliveryTimelineSnapshot> {
+    const { market, anchorDate, forceRefresh } = params;
+    const cached = this.getStoredTimeline();
+
+    if (!forceRefresh && cached && cached.market === market && !this.isTimelineStale(cached.lastUpdated)) {
+      const snapshot: DeliveryTimelineSnapshot = {
+        ...cached,
+        events: cached.events.map(event => ({ ...event })),
+        source: 'cache'
+      };
+      this.deliveryTimelineSubject.next(snapshot);
+      return of(snapshot);
+    }
+
+    return this.simulateTimelineRequest(market, anchorDate).pipe(
+      map(snapshot => ({ ...snapshot, source: 'remote' as const })),
+      tap(snapshot => {
+        this.persistTimeline(snapshot);
+        this.deliveryTimelineSubject.next(snapshot);
+      })
+    );
+  }
+
+  deliveryTimeline$(): Observable<DeliveryTimelineSnapshot | null> {
+    return this.deliveryTimelineSubject.asObservable().pipe(shareReplay(1));
   }
 
   /**
@@ -492,6 +681,106 @@ export class DeliveryTrackingService {
       { success: true, timestamp: new Date(oneHourAgo.getTime() + 30 * 60 * 1000).toISOString() },
       { success: true, timestamp: new Date(oneHourAgo.getTime() + 45 * 60 * 1000).toISOString() }
     ];
+  }
+
+  private getStoredTimeline(): DeliveryTimelineSnapshot | null {
+    if (!this.flowContext) {
+      return null;
+    }
+
+    const stored = this.flowContext.getContextData<DeliveryFlowContextState>(this.deliveryContextKey);
+    if (!stored || !stored.events) {
+      return null;
+    }
+
+    return {
+      market: stored.market,
+      etaDays: stored.etaDays,
+      lastUpdated: stored.lastUpdated,
+      events: stored.events.map(event => ({ ...event })),
+      source: 'cache'
+    };
+  }
+
+  private persistTimeline(snapshot: DeliveryTimelineSnapshot): void {
+    if (!this.flowContext) {
+      return;
+    }
+
+    const payload: DeliveryFlowContextState = {
+      market: snapshot.market,
+      etaDays: snapshot.etaDays,
+      lastUpdated: snapshot.lastUpdated,
+      events: snapshot.events.map(event => ({ ...event }))
+    };
+
+    this.flowContext.saveContext(this.deliveryContextKey, payload, {
+      breadcrumbs: ['Dashboard', 'Entregas']
+    });
+  }
+
+  private isTimelineStale(lastUpdated: string): boolean {
+    const updatedAt = new Date(lastUpdated);
+    if (Number.isNaN(updatedAt.getTime())) {
+      return true;
+    }
+    return Date.now() - updatedAt.getTime() > this.timelineStaleMs;
+  }
+
+  private simulateTimelineRequest(
+    market: PolicyMarket,
+    anchorDate?: string
+  ): Observable<Omit<DeliveryTimelineSnapshot, 'source'>> {
+    const anchor = anchorDate ? new Date(anchorDate) : new Date();
+    const blueprint = MARKET_TIMELINE_BLUEPRINTS[market] ?? MARKET_TIMELINE_BLUEPRINTS.otros;
+    const snapshot = this.buildTimelineSnapshot(market, anchor, blueprint);
+    return timer(450).pipe(map(() => snapshot));
+  }
+
+  private buildTimelineSnapshot(
+    market: PolicyMarket,
+    anchor: Date,
+    blueprint: DeliveryTimelineBlueprintEntry[]
+  ): Omit<DeliveryTimelineSnapshot, 'source'> {
+    const dayMs = 24 * 60 * 60 * 1000;
+    const progressIndex = Math.floor(Math.random() * (blueprint.length + 1));
+    const currentOffset = progressIndex >= blueprint.length
+      ? blueprint[blueprint.length - 1]?.offsetDays ?? 0
+      : blueprint[progressIndex].offsetDays;
+
+    const events: DeliveryTimelineEvent[] = blueprint.map((entry, index) => {
+      const eventDate = new Date(anchor.getTime() + entry.offsetDays * dayMs);
+      let status: DeliveryTimelineStatus;
+      if (index < progressIndex) {
+        status = 'completed';
+      } else if (index === progressIndex) {
+        status = 'in_progress';
+      } else {
+        status = 'upcoming';
+      }
+      return {
+        id: `${market}-${entry.id}`,
+        order: index,
+        offsetDays: entry.offsetDays,
+        label: entry.label,
+        description: entry.description,
+        status,
+        estimatedDate: eventDate.toISOString(),
+        completedAt: status === 'completed' ? eventDate.toISOString() : undefined,
+        market,
+        requiresAction: status === 'in_progress' && entry.milestone !== 'followup'
+      };
+    });
+
+    const finalOffset = blueprint[blueprint.length - 1]?.offsetDays ?? currentOffset;
+    const etaDays = Math.max(0, finalOffset - currentOffset);
+
+    return {
+      market,
+      etaDays,
+      lastUpdated: new Date().toISOString(),
+      events
+    };
   }
 
   // Public getters for reactive data

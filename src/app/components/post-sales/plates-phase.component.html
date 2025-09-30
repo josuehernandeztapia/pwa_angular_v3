@@ -19,11 +19,15 @@
 
   <section class="plates-phase__steps" aria-label="Progreso post-venta">
     <article class="plates-phase__step plates-phase__step--completed">
-      <span class="plates-phase__step-icon" aria-hidden="true">✓</span>
+      <span class="plates-phase__step-icon" aria-hidden="true">
+        <app-icon name="check" [size]="16"></app-icon>
+      </span>
       <span class="plates-phase__step-label">Entrega</span>
     </article>
     <article class="plates-phase__step plates-phase__step--completed">
-      <span class="plates-phase__step-icon" aria-hidden="true">✓</span>
+      <span class="plates-phase__step-icon" aria-hidden="true">
+        <app-icon name="check" [size]="16"></app-icon>
+      </span>
       <span class="plates-phase__step-label">Documentos</span>
     </article>
     <article class="plates-phase__step plates-phase__step--active" aria-current="step">
@@ -176,7 +180,7 @@
       </h3>
       <div class="plates-phase__document">
         @if (!tarjetaCirculacion()) {
-          <button type="button" class="ui-btn ui-btn-ghost plates-phase__document-upload" (click)="triggerDocumentUpload()">
+          <button type="button" class="btn btn-ghost plates-phase__document-upload" (click)="triggerDocumentUpload()">
             <app-icon [name]="getIcon('upload')" [size]="24" color="currentColor"></app-icon>
             <span class="plates-phase__document-title">Subir tarjeta de circulación (PDF)</span>
             <small class="plates-phase__document-hint">Documento oficial con placas registradas</small>
@@ -192,9 +196,9 @@
               </div>
             </div>
             <div class="plates-phase__document-actions">
-              <button type="button" class="ui-btn ui-btn-ghost" (click)="viewDocument()">Ver</button>
-              <button type="button" class="ui-btn ui-btn-secondary" (click)="triggerDocumentUpload()">Reemplazar</button>
-              <button type="button" class="ui-btn ui-btn-ghost plates-phase__document-action--danger" (click)="removeDocument()">Eliminar</button>
+              <button type="button" class="btn btn-ghost" (click)="viewDocument()">Ver</button>
+              <button type="button" class="btn btn-secondary" (click)="triggerDocumentUpload()">Reemplazar</button>
+              <button type="button" class="btn btn-ghost plates-phase__document-action--danger" (click)="removeDocument()">Eliminar</button>
             </div>
           </article>
         }
@@ -211,7 +215,7 @@
           <p class="plates-phase__photos-title">Requerido: fotos claras de ambas placas</p>
           <small class="plates-phase__photos-hint">Asegura legibilidad, incluye hologramas si aplican</small>
         </div>
-        <button type="button" class="ui-btn ui-btn-ghost plates-phase__photo-upload" (click)="triggerPhotoUpload()">
+        <button type="button" class="btn btn-ghost plates-phase__photo-upload" (click)="triggerPhotoUpload()">
           <app-icon [name]="getIcon('photos')" [size]="28" color="currentColor"></app-icon>
           <span>Agregar fotos de placas</span>
         </button>
@@ -221,7 +225,7 @@
               <figure class="plates-phase__photo" [attr.data-label]="getPhotoLabel(i)">
                 <img [src]="photo" alt="{{ getPhotoLabel(i) }}" class="plates-phase__photo-image" />
                 <figcaption class="plates-phase__photo-caption">{{ getPhotoLabel(i) }}</figcaption>
-                <button type="button" class="ui-btn ui-btn-ghost plates-phase__photo-remove" (click)="removePhoto(photo)">
+                <button type="button" class="btn btn-ghost plates-phase__photo-remove" (click)="removePhoto(photo)">
                   <app-icon [name]="getIcon('remove')" [size]="16" color="currentColor"></app-icon>
                   <span class="plates-phase__sr-only">Eliminar fotografía {{ getPhotoLabel(i) }}</span>
                 </button>
@@ -263,11 +267,11 @@
     }
 
     <footer class="plates-phase__actions">
-      <button type="button" class="ui-btn ui-btn-secondary" (click)="goBack()">Volver a Documentos</button>
-      <button type="button" class="ui-btn ui-btn-secondary" (click)="saveDraft()" [disabled]="isSaving()">
+      <button type="button" class="btn btn-secondary" (click)="goBack()">Volver a Documentos</button>
+      <button type="button" class="btn btn-secondary" (click)="saveDraft()" [disabled]="isSaving()">
         {{ isSaving() ? 'Guardando…' : 'Guardar borrador' }}
       </button>
-      <button type="submit" class="ui-btn ui-btn-primary plates-phase__action-critical" [disabled]="!canCompleteHandover() || isSubmitting()">
+      <button type="submit" class="btn btn-primary plates-phase__action-critical" [disabled]="!canCompleteHandover() || isSubmitting()">
         @if (isSubmitting()) {
           <span class="plates-phase__loader" aria-hidden="true"></span>
           Activando sistema…
@@ -285,7 +289,7 @@
             <li class="plates-phase__validation-item">{{ error }}</li>
           }
         </ul>
-        <button type="button" class="ui-btn ui-btn-secondary plates-phase__validation-action" (click)="goToNextError()">Ir al siguiente error</button>
+        <button type="button" class="btn btn-secondary plates-phase__validation-action" (click)="goToNextError()">Ir al siguiente error</button>
       </section>
     }
   </form>
@@ -346,8 +350,8 @@
           </section>
         </div>
         <footer class="plates-phase__modal-actions">
-          <button type="button" class="ui-btn ui-btn-secondary" (click)="viewPostSalesDashboard()">Ver dashboard post-venta</button>
-          <button type="button" class="ui-btn ui-btn-primary" (click)="completeProcess()">Proceso completado</button>
+          <button type="button" class="btn btn-secondary" (click)="viewPostSalesDashboard()">Ver dashboard post-venta</button>
+          <button type="button" class="btn btn-primary" (click)="completeProcess()">Proceso completado</button>
         </footer>
       </article>
     </div>

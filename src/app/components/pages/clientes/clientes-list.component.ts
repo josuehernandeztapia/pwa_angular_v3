@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +6,7 @@ import { ApiService } from '../../../services/api.service';
 import { ToastService } from '../../../services/toast.service';
 import { Client, BusinessFlow } from '../../../models/types';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { FlowContextService } from '../../../services/flow-context.service';
 
 @Component({
   selector: 'app-clientes-list',
@@ -42,10 +43,12 @@ export class ClientesListComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private toast: ToastService
+    private toast: ToastService,
+    @Optional() private flowContext?: FlowContextService
   ) {}
 
   ngOnInit(): void {
+    this.flowContext?.setBreadcrumbs(['Dashboard', 'Clientes']);
     this.loadClientes();
   }
 

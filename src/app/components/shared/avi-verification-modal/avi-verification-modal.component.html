@@ -7,7 +7,9 @@
             <app-icon name="microphone" [size]="24" class="avi-verification__title-icon" />
             <h2 [attr.id]="titleId">Verificación Inteligente AVI</h2>
           </div>
-          <button class="avi-verification__close" (click)="closeModal()">✕</button>
+          <button class="avi-verification__close" type="button" (click)="closeModal()" aria-label="Cerrar modal">
+            <app-icon name="close" [size]="16" aria-hidden="true"></app-icon>
+          </button>
         </div>
 
         <!-- Main Content -->
@@ -79,7 +81,12 @@
                 
                 <!-- Semáforo Icon -->
                 <div class="avi-verification__result-indicator" [attr.aria-label]="result.decision">
-                  <span class="avi-verification__result-icon">{{ result.icon }}</span>
+                  <app-icon
+                    class="avi-verification__result-icon"
+                    [name]="result.icon"
+                    [size]="20"
+                    aria-hidden="true"
+                  ></app-icon>
                 </div>
                 
                 <!-- Question Info -->

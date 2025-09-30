@@ -202,15 +202,23 @@ export class DeliveryDetailComponent implements OnInit {
   }
 
   getMarketName(market: string): string {
-    return market === 'AGS' ? 'Aguascalientes' : 'Estado de México';
+    return market === 'aguascalientes' ? 'Aguascalientes' : 'Estado de México';
   }
 
   getStatusTitle(status: string): string {
     return DELIVERY_STATUS_DESCRIPTIONS[status as keyof typeof DELIVERY_STATUS_DESCRIPTIONS]?.title || status;
   }
 
-  getStatusColor(status: string): string {
-    return this.deliveriesService.getStatusColor(status as any);
+  getStatusColor(order: DeliveryOrder | null): string {
+    if (!order) {
+      return this.deliveriesService.getStatusColor('PO_ISSUED');
+    }
+
+    if (order.status !== 'DELIVERED' && this.isOverdue(order.eta)) {
+      return 'var(--accent-red-500)';
+    }
+
+    return this.deliveriesService.getStatusColor(order.status);
   }
 
   getStatusIcon(status: string): IconName {
@@ -307,7 +315,7 @@ export class DeliveryDetailComponent implements OnInit {
   private calculateBufferedETA(createdAt: string, currentStatus: DeliveryStatus): string {
     // p80 buffers by tramo (multiplicative factors)
     const p80: Record<string, number> = {
-      IN_PRODUCTION: 1.2,          // 30d → p80
+      IN_PRODUCTION: 1.2,          // 30d -> p80
       READY_AT_FACTORY: 1.1,       // 5d ground to port
       ON_VESSEL: 1.2,              // 30d vessel
       IN_CUSTOMS: 1.2,             // 10d customs

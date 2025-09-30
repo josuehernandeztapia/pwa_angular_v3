@@ -5,11 +5,12 @@ import { IconComponent } from './icon/icon.component';
 import { TandaSimDraft, TandaSimulationResult, TandaMonthState, TandaSimEvent } from '../../models/types';
 import { TandaEngineService } from '../../services/tanda-engine.service';
 import { ToastService } from '../../services/toast.service';
+import { IconName } from './icon/icon-definitions';
 
 interface KpiCardData {
   title: string;
   value: string;
-  icon: string;
+  icon: IconName;
 }
 
 interface NewEventForm {
@@ -90,22 +91,22 @@ export class CollectiveCreditComponent implements OnInit {
       {
         title: 'Unidades Entregadas',
         value: `${this.result.kpis.deliveredCount} / ${this.draft.group.members.length}`,
-        icon: '✅'
+        icon: 'check-circle'
       },
       {
         title: 'Primera Entrega',
         value: `Mes ${this.result.firstAwardT || 'N/A'}`,
-        icon: '✨'
+        icon: 'calendar'
       },
       {
         title: 'Última Entrega',
         value: `Mes ${this.result.lastAwardT || 'N/A'}`,
-        icon: '👥'
+        icon: 'users'
       },
       {
         title: 'Tiempo Promedio',
         value: `${this.result.kpis.avgTimeToAward.toFixed(1)} meses`,
-        icon: '📈'
+        icon: 'clock'
       },
     ];
   }

@@ -1,13 +1,26 @@
-import { Injectable, signal, computed } from '@angular/core';
-import { fromEvent, merge, Observable, BehaviorSubject } from 'rxjs';
+import { Injectable, signal, computed, Optional } from '@angular/core';
+import { fromEvent, merge, BehaviorSubject, Subject, firstValueFrom } from 'rxjs';
 import { map, startWith, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { AnalyticsService } from './analytics.service';
+import { HttpClientService } from './http-client.service';
+import { DocumentUploadService } from './document-upload.service';
+import { MonitoringService } from './monitoring.service';
+import { FlowContextService } from './flow-context.service';
 
 export interface OfflineData {
+  id: string;
   timestamp: number;
   data: any;
   endpoint: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  attempts?: number;
+}
+
+export interface OfflineProcessResult {
+  request: OfflineData;
+  success: boolean;
+  error?: any;
 }
 
 export interface ConnectionStatus {
@@ -45,11 +58,59 @@ export class OfflineService {
   private pendingRequests: OfflineData[] = [];
   private readonly pendingRequestsSubject = new BehaviorSubject<OfflineData[]>([]);
   public readonly pendingRequests$ = this.pendingRequestsSubject.asObservable();
+  private readonly processedRequestsSubject = new Subject<OfflineProcessResult>();
+  public readonly processedRequests$ = this.processedRequestsSubject.asObservable();
 
-  constructor() {
+  constructor(
+    @Optional() private readonly analytics?: AnalyticsService,
+    @Optional() private readonly httpClient?: HttpClientService,
+    @Optional() private readonly documentUpload?: DocumentUploadService,
+    @Optional() private readonly monitoring?: MonitoringService,
+    @Optional() private readonly flowContext?: FlowContextService
+  ) {
     this.initializeConnectivityMonitoring();
     this.loadPendingRequests();
     this.setupConnectionHandlers();
+    this.syncFlowContextQueue();
+  }
+
+  private auditEvent(event: string, metadata: Record<string, any> = {}): void {
+    this.monitoring?.auditEvent(event, metadata);
+  }
+
+  private trackQueueMetric(event: string, payload: Record<string, any> = {}): void {
+    if (!this.analytics) {
+      return;
+    }
+
+    const sanitized: Record<string, any> = {
+      queueLength: this.pendingRequests.length,
+      ...payload,
+    };
+
+    if (sanitized['error'] instanceof Error) {
+      sanitized['error'] = sanitized['error'].message;
+    }
+
+    this.analytics.track(event, sanitized);
+  }
+
+  private syncFlowContextQueue(): void {
+    if (!this.flowContext) {
+      return;
+    }
+
+    const snapshot = {
+      pending: this.pendingRequests.length,
+      endpoints: this.pendingRequests
+        .slice(0, 5)
+        .map(request => this.normalizeEndpoint(request.endpoint ?? '')),
+      lastUpdated: Date.now()
+    };
+
+    this.flowContext.saveContext('offlineQueue', snapshot, {
+      breadcrumbs: ['Dashboard', 'Offline']
+    });
   }
 
   private initializeConnectivityMonitoring(): void {
@@ -98,7 +159,6 @@ export class OfflineService {
 
       if (isOnline) {
         this.processPendingRequests();
-      } else {
       }
     }
   }
@@ -142,24 +202,37 @@ export class OfflineService {
     }
 
     const offlineData: OfflineData = {
+      id: this.generateRequestId(),
       timestamp: Date.now(),
       endpoint,
       method,
-      data
+      data,
+      attempts: 0
     };
 
     // Agregar a la queue
     this.pendingRequests.push(offlineData);
 
     // Limitar tamaño de la queue
+    let trimmed = false;
     if (this.pendingRequests.length > this.MAX_OFFLINE_STORAGE) {
       this.pendingRequests.shift(); // Remove oldest
+      trimmed = true;
     }
 
     // Persistir en localStorage
     this.savePendingRequests();
     this.pendingRequestsSubject.next([...this.pendingRequests]);
+    this.syncFlowContextQueue();
 
+    const auditPayload = {
+      endpoint,
+      method,
+      trimmed,
+    };
+
+    this.trackQueueMetric('offline_queue_enqueued', auditPayload);
+    this.auditEvent('offline_queue_enqueued', auditPayload);
   }
 
   // Procesar requests pendientes cuando vuelve la conexión
@@ -171,20 +244,289 @@ export class OfflineService {
     const requests = [...this.pendingRequests];
     this.pendingRequests = [];
     this.pendingRequestsSubject.next([]);
+    this.syncFlowContextQueue();
+
+    const flushStartPayload = { pending: requests.length };
+    this.trackQueueMetric('offline_queue_flush_start', flushStartPayload);
+    this.auditEvent('offline_queue_flush_start', flushStartPayload);
 
     for (const request of requests) {
+      let success = false;
+      let error: any;
+      let attempts = request.attempts ?? 0;
       try {
-        // Aquí normalmente harías la llamada real al API
-        // Por ahora, simulamos el procesamiento
-        await this.simulateApiCall(request);
-      } catch (error) {
-        // Re-agregar a la queue si falla
-        this.pendingRequests.push(request);
+        await this.executeRequest(request);
+        success = true;
+        const requestFlushedPayload = {
+          endpoint: request.endpoint,
+          method: request.method,
+          attempts,
+        };
+        this.trackQueueMetric('offline_queue_request_flushed', requestFlushedPayload);
+        this.auditEvent('offline_queue_request_flushed', requestFlushedPayload);
+      } catch (err) {
+        error = err;
+        attempts = attempts + 1;
+        this.pendingRequests.push({ ...request, attempts });
+        const requestFailedPayload = {
+          endpoint: request.endpoint,
+          method: request.method,
+          attempts,
+          error,
+        };
+        this.trackQueueMetric('offline_queue_request_failed', requestFailedPayload);
+        this.auditEvent('offline_queue_request_failed', requestFailedPayload);
       }
+
+      this.processedRequestsSubject.next({ request: { ...request, attempts }, success, error });
     }
 
     this.savePendingRequests();
     this.pendingRequestsSubject.next([...this.pendingRequests]);
+    this.syncFlowContextQueue();
+
+    const flushCompletePayload = {
+      remaining: this.pendingRequests.length,
+      processed: requests.length,
+    };
+    this.trackQueueMetric('offline_queue_flush_complete', flushCompletePayload);
+    this.auditEvent('offline_queue_flush_complete', flushCompletePayload);
+
+    if (this.analytics) {
+      this.analytics.track('offline_queue_flush', {
+        remaining: this.pendingRequests.length,
+        processed: requests.length,
+      });
+    }
+  }
+
+  private canProcessOnline(): boolean {
+    if (!this.httpClient) {
+      return false;
+    }
+
+    const features: Record<string, any> = environment.features as any;
+    if (features['forceOfflineQueueMock'] === true) {
+      return false;
+    }
+
+    if (features['forceOfflineQueueMock'] === false) {
+      return true;
+    }
+
+    return features['enableMockData'] !== true;
+  }
+
+  public getPendingRequestsSnapshot(): OfflineData[] {
+    return [...this.pendingRequests];
+  }
+
+  public async flushQueueNow(): Promise<void> {
+    await this.processPendingRequests();
+  }
+
+  public clearPendingRequests(reason: string = 'manual'): void {
+    if (this.pendingRequests.length === 0) {
+      return;
+    }
+
+    this.pendingRequests = [];
+    this.savePendingRequests();
+    this.pendingRequestsSubject.next([]);
+    this.syncFlowContextQueue();
+
+    const clearedPayload = { reason };
+    this.trackQueueMetric('offline_queue_cleared', clearedPayload);
+    this.auditEvent('offline_queue_cleared', clearedPayload);
+
+    if (this.analytics) {
+      this.analytics.track('offline_queue_cleared', { reason });
+    }
+  }
+
+  private normalizeEndpoint(endpoint: string): string {
+    if (!endpoint) {
+      return endpoint;
+    }
+    return endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+  }
+
+  private isDocumentUploadRequest(request: OfflineData): boolean {
+    const endpoint = this.normalizeEndpoint(request.endpoint ?? '');
+    return endpoint === 'documents/upload';
+  }
+
+  private canProcessDocumentUpload(request: OfflineData): boolean {
+    if (!this.documentUpload || !this.canProcessOnline()) {
+      return false;
+    }
+
+    const payload = request.data;
+    return Boolean(
+      payload &&
+      typeof payload.clientId === 'string' &&
+      typeof payload.documentId === 'string' &&
+      typeof payload.fileBase64 === 'string' &&
+      payload.fileBase64.length > 0
+    );
+  }
+
+  private async processDocumentUploadRequest(request: OfflineData): Promise<void> {
+    const payload = request.data ?? {};
+
+    if (!this.documentUpload) {
+      await this.dispatchHttpRequest(request);
+      return;
+    }
+
+    const fileName = payload.fileName || `${payload.documentId || 'document'}.bin`;
+    const fileType = payload.fileType || payload.type || 'application/octet-stream';
+
+    await this.documentUpload.uploadQueuedDocument({
+      clientId: payload.clientId,
+      documentId: payload.documentId,
+      fileBase64: payload.fileBase64,
+      fileName,
+      fileType,
+      fileSize: payload.fileSize ?? payload.size,
+      hash: payload.hash,
+      metadata: payload.metadata,
+    });
+
+    const documentUploadedPayload = {
+      endpoint: request.endpoint,
+      documentId: payload.documentId,
+      size: payload.fileSize ?? payload.size,
+    };
+    this.trackQueueMetric('offline_queue_document_uploaded', documentUploadedPayload);
+    this.auditEvent('offline_queue_document_uploaded', documentUploadedPayload);
+  }
+
+  private async dispatchHttpRequest(request: OfflineData): Promise<void> {
+    if (!this.httpClient) {
+      await this.simulateApiCall(request);
+      return;
+    }
+
+    const method = (request.method ?? 'POST').toUpperCase() as OfflineData['method'];
+    const endpoint = this.normalizeEndpoint(request.endpoint);
+    const payload = request.data ?? {};
+
+    switch (method) {
+      case 'GET':
+        await firstValueFrom(
+          this.httpClient.get<any>(endpoint, {
+            showLoading: false,
+            showError: false,
+            params: typeof payload === 'object' ? payload : undefined
+          })
+        );
+        break;
+      case 'DELETE':
+        await firstValueFrom(
+          this.httpClient.delete<any>(endpoint, {
+            showLoading: false,
+            showError: true
+          })
+        );
+        break;
+      case 'PUT':
+      case 'PATCH':
+        await firstValueFrom(
+          this.httpClient.put<any>(endpoint, payload, {
+            showLoading: false,
+            showError: true
+          })
+        );
+        break;
+      case 'POST':
+      default:
+        await firstValueFrom(
+          this.httpClient.post<any>(endpoint, payload, {
+            showLoading: false,
+            showError: true
+          })
+        );
+        break;
+    }
+  }
+
+  private async executeRequest(request: OfflineData): Promise<void> {
+    if (this.isDocumentUploadRequest(request) && this.canProcessDocumentUpload(request)) {
+      await this.processDocumentUploadRequest(request);
+      return;
+    }
+
+    if (!this.canProcessOnline()) {
+      await this.simulateApiCall(request);
+      return;
+    }
+
+    await this.dispatchHttpRequest(request);
+  }
+
+  public async replayRequest(id: string): Promise<boolean> {
+    const index = this.pendingRequests.findIndex(item => item.id === id);
+    if (index === -1) {
+      return false;
+    }
+
+    const [request] = this.pendingRequests.splice(index, 1);
+    this.pendingRequestsSubject.next([...this.pendingRequests]);
+    this.savePendingRequests();
+    this.syncFlowContextQueue();
+
+    try {
+      await this.executeRequest(request);
+      const manualReplaySuccessPayload = {
+        endpoint: request.endpoint,
+        method: request.method,
+        attempts: request.attempts ?? 0,
+      };
+      this.trackQueueMetric('offline_queue_manual_replay_success', manualReplaySuccessPayload);
+      this.auditEvent('offline_queue_manual_replay_success', manualReplaySuccessPayload);
+      this.processedRequestsSubject.next({ request, success: true });
+      return true;
+    } catch (error) {
+      const attempts = (request.attempts ?? 0) + 1;
+      const retried: OfflineData = { ...request, attempts };
+      this.pendingRequests.unshift(retried);
+      this.savePendingRequests();
+      this.pendingRequestsSubject.next([...this.pendingRequests]);
+      this.syncFlowContextQueue();
+      const manualReplayFailedPayload = {
+        endpoint: request.endpoint,
+        method: request.method,
+        attempts,
+        error,
+      };
+      this.trackQueueMetric('offline_queue_manual_replay_failed', manualReplayFailedPayload);
+      this.auditEvent('offline_queue_manual_replay_failed', manualReplayFailedPayload);
+      this.processedRequestsSubject.next({ request: retried, success: false, error });
+      throw error;
+    }
+  }
+
+  public discardRequest(id: string): boolean {
+    const index = this.pendingRequests.findIndex(item => item.id === id);
+    if (index === -1) {
+      return false;
+    }
+
+    const [removed] = this.pendingRequests.splice(index, 1);
+    this.savePendingRequests();
+    this.pendingRequestsSubject.next([...this.pendingRequests]);
+
+    const discardPayload = {
+      endpoint: removed.endpoint,
+      method: removed.method,
+      attempts: removed.attempts ?? 0,
+    };
+    this.trackQueueMetric('offline_queue_discarded', discardPayload);
+    this.auditEvent('offline_queue_discarded', discardPayload);
+
+    this.processedRequestsSubject.next({ request: removed, success: false, error: 'discarded' });
+    return true;
   }
 
   private async simulateApiCall(request: OfflineData): Promise<void> {
@@ -214,6 +556,7 @@ export class OfflineService {
     try {
       localStorage.setItem(`${this.STORAGE_PREFIX}cache_${key}`, JSON.stringify(cacheEntry));
     } catch (error) {
+      // No-op: storage quota might be exceeded
     }
   }
 
@@ -253,7 +596,6 @@ export class OfflineService {
 
   private cleanupExpiredCache(): void {
     const keys = Object.keys(localStorage);
-    let cleanedCount = 0;
 
     keys.forEach(key => {
       if (key.startsWith(`${this.STORAGE_PREFIX}cache_`)) {
@@ -265,19 +607,14 @@ export class OfflineService {
 
             if (isExpired) {
               localStorage.removeItem(key);
-              cleanedCount++;
             }
           }
         } catch (error) {
           // Remove corrupted entries
           localStorage.removeItem(key);
-          cleanedCount++;
         }
       }
     });
-
-    if (cleanedCount > 0) {
-    }
   }
 
   private savePendingRequests(): void {
@@ -287,6 +624,7 @@ export class OfflineService {
         JSON.stringify(this.pendingRequests)
       );
     } catch (error) {
+      // No-op: storage quota might be exceeded
     }
   }
 
@@ -294,8 +632,17 @@ export class OfflineService {
     try {
       const stored = localStorage.getItem(`${this.STORAGE_PREFIX}pending`);
       if (stored) {
-        this.pendingRequests = JSON.parse(stored);
+        const parsed: OfflineData[] = JSON.parse(stored).map((entry: any) => ({
+          id: entry.id ?? this.generateRequestId(),
+          timestamp: entry.timestamp ?? Date.now(),
+          endpoint: entry.endpoint,
+          method: entry.method ?? 'POST',
+          data: entry.data,
+          attempts: entry.attempts ?? 0
+        }));
+        this.pendingRequests = parsed;
         this.pendingRequestsSubject.next([...this.pendingRequests]);
+        this.syncFlowContextQueue();
       }
     } catch (error) {
       this.pendingRequests = [];
@@ -366,5 +713,9 @@ export class OfflineService {
     } catch {
       return false;
     }
+  }
+
+  private generateRequestId(): string {
+    return `offline-${Date.now()}-${Math.random().toString(16).slice(2)}`;
   }
 }

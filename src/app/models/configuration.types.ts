@@ -909,6 +909,7 @@ export interface ApplicationConfiguration {
   smartUX: SmartUXConfiguration;
   analytics: AnalyticsConfiguration;
   uxOptimization: UXOptimizationConfiguration;
+  locale?: string; // Optional locale property for internationalization
   version: string;
   lastUpdated: Date;
 }

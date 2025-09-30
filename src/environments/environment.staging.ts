@@ -18,6 +18,8 @@ export const environment = {
     enableAnalytics: true,
     enablePushNotifications: true,
     enableOfflineMode: true,
+    enableDocumentValidationMock: false,
+    forceOfflineQueueMock: false,
     enableAVISystem: true,
     enableVoiceRecording: true,
     enableStressDetection: true,
@@ -37,17 +39,25 @@ export const environment = {
     enableLocalizationConfig: true,
     enableIntegrationsConfig: true,
     enableAdminConfig: true,
+    enableUsageModule: false,
+    enableGlobalSearch: true,
     enableSecurityConfig: true,
     // Integrations (BFF) flags
     enableKycBff: true,
     enablePaymentsBff: true,
     enableContractsBff: true,
     enableAutomationBff: true,
+    enableAviMicroLocalBff: true,
     // New parity flags (staging enabled)
     enableLabs: true,
     enablePostventa: true,
+    enableClaimsModule: true,
+    enablePostSaleBff: false,
+    enableClaimsBff: false,
+    enableAdminBff: false,
     enableFlowBuilder: true,
-    enablePerfil: true
+    enablePerfil: true,
+    enableQaTools: true
   },
   // Optional overrides for BFF base URLs per integration
   integrations: {
@@ -73,6 +83,25 @@ export const environment = {
       appId: '',
       baseUrl: 'https://sandbox.mifiel.com/api/v1'
     }
+  },
+  endpoints: {
+    auth: '/auth',
+    clients: '/clients',
+    quotes: '/quotes',
+    scenarios: '/scenarios',
+    documents: '/documents',
+    payments: '/payments',
+    reports: '/reports'
+  },
+  analytics: {
+    eventsEndpoint: 'analytics/events',
+    metricsEndpoint: 'analytics/metrics',
+    flushIntervalMs: 12000
+  },
+  monitoring: {
+    eventsEndpoint: 'monitoring/events',
+    datadogEndpoint: 'monitoring/datadog',
+    slackWebhook: ''
   },
   // Finance config required by several components/services
   finance: {

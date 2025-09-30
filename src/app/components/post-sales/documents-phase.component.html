@@ -14,7 +14,7 @@
     <div class="documents-phase__actions">
       <button
         type="button"
-        class="ui-btn ui-btn-secondary documents-phase__action"
+        class="btn btn-secondary documents-phase__action"
         (click)="printOnePager()"
         data-cy="postventa-pdf"
       >
@@ -25,7 +25,9 @@
 
   <section class="documents-phase__steps" aria-label="Progreso de postventa">
     <div class="documents-phase__step documents-phase__step--completed">
-      <span class="documents-phase__step-number">✓</span>
+      <span class="documents-phase__step-number">
+        <app-icon name="check" [size]="16" aria-hidden="true"></app-icon>
+      </span>
       <span class="documents-phase__step-label">Entrega</span>
     </div>
     <div class="documents-phase__step documents-phase__step--active">
@@ -130,9 +132,9 @@
                   </div>
                 </div>
                 <div class="documents-phase__file-actions">
-                  <button type="button" class="ui-btn ui-btn-ghost" (click)="viewDocument('factura')">Ver</button>
-                  <button type="button" class="ui-btn ui-btn-secondary" (click)="triggerFileUpload('factura')">Reemplazar</button>
-                  <button type="button" class="ui-btn ui-btn-ghost documents-phase__file-action--danger" (click)="removeDocument('factura')">Eliminar</button>
+                  <button type="button" class="btn btn-ghost" (click)="viewDocument('factura')">Ver</button>
+                  <button type="button" class="btn btn-secondary" (click)="triggerFileUpload('factura')">Reemplazar</button>
+                  <button type="button" class="btn btn-ghost documents-phase__file-action--danger" (click)="removeDocument('factura')">Eliminar</button>
                 </div>
               </div>
             }
@@ -168,9 +170,9 @@
                   </div>
                 </div>
                 <div class="documents-phase__file-actions">
-                  <button type="button" class="ui-btn ui-btn-ghost" (click)="viewDocument('polizaSeguro')">Ver</button>
-                  <button type="button" class="ui-btn ui-btn-secondary" (click)="triggerFileUpload('polizaSeguro')">Reemplazar</button>
-                  <button type="button" class="ui-btn ui-btn-ghost documents-phase__file-action--danger" (click)="removeDocument('polizaSeguro')">Eliminar</button>
+                  <button type="button" class="btn btn-ghost" (click)="viewDocument('polizaSeguro')">Ver</button>
+                  <button type="button" class="btn btn-secondary" (click)="triggerFileUpload('polizaSeguro')">Reemplazar</button>
+                  <button type="button" class="btn btn-ghost documents-phase__file-action--danger" (click)="removeDocument('polizaSeguro')">Eliminar</button>
                 </div>
               </div>
             }
@@ -207,12 +209,12 @@
                       </div>
                     </div>
                     <div class="documents-phase__file-actions">
-                      <button type="button" class="ui-btn ui-btn-ghost" (click)="viewContractDocument(contract)">Ver</button>
-                      <button type="button" class="ui-btn ui-btn-ghost documents-phase__file-action--danger" (click)="removeContractDocument(contract)">Eliminar</button>
+                      <button type="button" class="btn btn-ghost" (click)="viewContractDocument(contract)">Ver</button>
+                      <button type="button" class="btn btn-ghost documents-phase__file-action--danger" (click)="removeContractDocument(contract)">Eliminar</button>
                     </div>
                   </div>
                 }
-                <button type="button" class="ui-btn ui-btn-secondary" (click)="triggerFileUpload('contratos')">
+                <button type="button" class="btn btn-secondary" (click)="triggerFileUpload('contratos')">
                   Agregar más contratos
                 </button>
               </div>
@@ -250,12 +252,12 @@
                       </div>
                     </div>
                     <div class="documents-phase__file-actions">
-                      <button type="button" class="ui-btn ui-btn-ghost" (click)="viewEndorsementDocument(endoso)">Ver</button>
-                      <button type="button" class="ui-btn ui-btn-ghost documents-phase__file-action--danger" (click)="removeEndorsementDocument(endoso)">Eliminar</button>
+                      <button type="button" class="btn btn-ghost" (click)="viewEndorsementDocument(endoso)">Ver</button>
+                      <button type="button" class="btn btn-ghost documents-phase__file-action--danger" (click)="removeEndorsementDocument(endoso)">Eliminar</button>
                     </div>
                   </div>
                 }
-                <button type="button" class="ui-btn ui-btn-secondary" (click)="triggerFileUpload('endosos')">
+                <button type="button" class="btn btn-secondary" (click)="triggerFileUpload('endosos')">
                   Agregar más endosos
                 </button>
               </div>
@@ -266,7 +268,10 @@
     </section>
 
     <section class="documents-phase__section" *ngIf="hasRequiredDocuments()">
-      <h3 class="documents-phase__section-title">✅ Verificación de Documentos</h3>
+      <h3 class="documents-phase__section-title">
+        <app-icon name="check-circle" [size]="16" aria-hidden="true"></app-icon>
+        Verificación de Documentos
+      </h3>
       <div class="documents-phase__checklist">
         <label class="documents-phase__check-item">
           <input type="checkbox" formControlName="facturaValida" />
@@ -298,10 +303,11 @@
     </section>
 
     <div class="documents-phase__actions-bar">
-      <button type="button" class="ui-btn ui-btn-secondary" (click)="goBack()">
-        ← Volver a Entrega
+      <button type="button" class="btn btn-secondary" (click)="goBack()">
+        <app-icon name="arrow-left" [size]="16" aria-hidden="true"></app-icon>
+        Volver a Entrega
       </button>
-      <button type="button" class="ui-btn ui-btn-secondary" (click)="saveDraft()" [disabled]="isSaving()">
+      <button type="button" class="btn btn-secondary" (click)="saveDraft()" [disabled]="isSaving()">
         @if (isSaving()) {
           <span class="documents-phase__spinner" aria-hidden="true"></span>
           Guardando...
@@ -309,7 +315,7 @@
           <app-icon name="cloud-upload" [size]="16"></app-icon> Guardar Borrador
         }
       </button>
-      <button type="submit" class="ui-btn ui-btn-primary" [disabled]="!canCompleteDocuments() || isSubmitting()">
+      <button type="submit" class="btn btn-primary" [disabled]="!canCompleteDocuments() || isSubmitting()">
         @if (isSubmitting()) {
           <span class="documents-phase__spinner" aria-hidden="true"></span>
           Completando...
@@ -320,8 +326,12 @@
     </div>
 
     <div class="documents-phase__quote" *ngIf="features.enablePostSalesAddToQuote">
-      <button type="button" class="ui-btn ui-btn-ghost" (click)="addToQuote()" [disabled]="addingToQuote()">
-        {{ addingToQuote() ? 'Agregando...' : '➕ Agregar a cotización' }}
+      <button type="button" class="btn btn-ghost" (click)="addToQuote()" [disabled]="addingToQuote()">
+        <ng-container *ngIf="addingToQuote(); else addToQuoteLabel">Agregando...</ng-container>
+        <ng-template #addToQuoteLabel>
+          <app-icon name="plus" [size]="16" aria-hidden="true"></app-icon>
+          Agregar a cotización
+        </ng-template>
       </button>
       <span class="documents-phase__quote-status" *ngIf="quoteStatus()">{{ quoteStatus() }}</span>
       <small class="documents-phase__quote-hint" *ngIf="!features.enableOdooQuoteBff">(Modo local: sin BFF)</small>
@@ -329,7 +339,10 @@
 
     @if (validationErrors().length > 0) {
       <div class="documents-phase__validation">
-        <h4 class="documents-phase__validation-title">⚠️ Campos requeridos:</h4>
+        <h4 class="documents-phase__validation-title">
+          <app-icon name="alert-triangle" [size]="14" aria-hidden="true"></app-icon>
+          Campos requeridos:
+        </h4>
         <ul class="documents-phase__validation-list">
           @for (error of validationErrors(); track error) {
             <li>{{ error }}</li>
@@ -353,18 +366,33 @@
     <div class="documents-phase__modal-backdrop" role="dialog" aria-modal="true" (click)="closeSuccessModal()" (keydown)="onModalKeydown($event)">
       <div class="documents-phase__modal" (click)="$event.stopPropagation()" (keydown)="onModalKeydown($event)">
         <header class="documents-phase__modal-header">
-          <h3>✅ Documentos Transferidos</h3>
+          <h3 class="documents-phase__modal-title">
+            <app-icon name="check-circle" [size]="18" aria-hidden="true"></app-icon>
+            Documentos Transferidos
+          </h3>
         </header>
         <div class="documents-phase__modal-body">
           <p>La transferencia legal ha sido completada exitosamente.</p>
           <div class="documents-phase__summary">
             <h4><app-icon name="document" [size]="16"></app-icon> Documentos procesados:</h4>
-            <ul>
-              <li>✅ Factura original</li>
-              <li>✅ Póliza de seguro ({{ documentsForm.get('duracionPoliza')?.value }} meses)</li>
-              <li>✅ {{ uploadedDocuments().contratos.length }} contrato(s) firmado(s)</li>
+            <ul class="documents-phase__summary-list">
+              <li>
+                <app-icon name="check" [size]="14" class="documents-phase__list-icon" aria-hidden="true"></app-icon>
+                Factura original
+              </li>
+              <li>
+                <app-icon name="check" [size]="14" class="documents-phase__list-icon" aria-hidden="true"></app-icon>
+                Póliza de seguro ({{ documentsForm.get('duracionPoliza')?.value }} meses)
+              </li>
+              <li>
+                <app-icon name="check" [size]="14" class="documents-phase__list-icon" aria-hidden="true"></app-icon>
+                {{ uploadedDocuments().contratos.length }} contrato(s) firmado(s)
+              </li>
               @if (uploadedDocuments().endosos.length > 0) {
-                <li>✅ {{ uploadedDocuments().endosos.length }} endoso(s) adicional(es)</li>
+                <li>
+                  <app-icon name="check" [size]="14" class="documents-phase__list-icon" aria-hidden="true"></app-icon>
+                  {{ uploadedDocuments().endosos.length }} endoso(s) adicional(es)
+                </li>
               }
             </ul>
           </div>
@@ -374,8 +402,9 @@
           </div>
         </div>
         <footer class="documents-phase__modal-actions">
-          <button type="button" class="ui-btn ui-btn-primary" (click)="goToPlatesPhase()" autofocus>
-            Continuar a Placas →
+          <button type="button" class="btn btn-primary" (click)="goToPlatesPhase()" autofocus>
+            Continuar a Placas
+            <app-icon name="arrow-right" [size]="16" class="documents-phase__cta-icon" aria-hidden="true"></app-icon>
           </button>
         </footer>
       </div>

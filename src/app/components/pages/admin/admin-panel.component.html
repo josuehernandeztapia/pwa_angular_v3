@@ -1,30 +1,43 @@
 <!-- Skip Link for Accessibility -->
-<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+<a class="skip-link" href="#admin-content">Saltar al contenido principal</a>
 
 <div class="admin-shell">
   <header class="admin-header">
     <div class="admin-header__content">
       <div class="admin-header__info">
         <h1 class="admin-title">Panel de Administración</h1>
-        <p class="admin-subtitle">Gestión de usuarios y configuración del sistema</p>
+        <p class="admin-subtitle">Gestiona usuarios, roles y estado operativo de la plataforma</p>
       </div>
-      <button class="btn btn-primary admin-header__action" type="button" (click)="openCreate()" data-cy="admin-create-user">
-        + Nuevo Usuario
-      </button>
+      <div class="admin-header__actions">
+        <label class="admin-search">
+          <span class="visually-hidden">Buscar usuario</span>
+          <input
+            type="search"
+            class="input admin-search__input"
+            placeholder="Buscar por nombre, correo o rol"
+            [(ngModel)]="search"
+          />
+        </label>
+        <button *ngIf="qaEnabled" class="btn btn-ghost" type="button" routerLink="/qa/monitoring">
+          QA: Monitoring
+        </button>
+        <button class="btn btn-primary" type="button" (click)="openCreate()" data-cy="admin-create-user">
+          + Nuevo usuario
+        </button>
+      </div>
     </div>
   </header>
 
-  <main id="main-content" class="admin-main">
-    <!-- Users Management -->
-    <section class="card admin-section">
+  <main id="admin-content" class="admin-main">
+    <section class="card admin-section" aria-live="polite">
       <div class="admin-section__header">
         <div>
-          <h2 class="section-title">Usuarios del Sistema</h2>
-          <p class="section-subtitle">Controla los roles y el estado operativo de cada usuario</p>
+          <h2 class="section-title">Usuarios del sistema</h2>
+          <p class="section-subtitle">{{ filteredUsuarios.length }} usuarios encontrados</p>
         </div>
       </div>
 
-      <div class="admin-table" role="region" aria-live="polite">
+      <div class="admin-table" role="region">
         <table class="admin-table__grid">
           <thead>
             <tr>
@@ -32,11 +45,12 @@
               <th scope="col">Correo</th>
               <th scope="col">Rol</th>
               <th scope="col">Estado</th>
+              <th scope="col">Actualizado</th>
               <th scope="col" class="admin-table__actions-header">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let usuario of usuarios; trackBy: trackByUsuario">
+            <tr *ngFor="let usuario of filteredUsuarios; trackBy: trackByUsuario">
               <td>
                 <div class="admin-user">
                   <div class="admin-user__avatar" aria-hidden="true">{{ getInitials(usuario.nombre) }}</div>
@@ -47,63 +61,51 @@
                 </div>
               </td>
               <td class="admin-table__email">{{ usuario.email }}</td>
-              <td>
-                <label class="visually-hidden" [attr.for]="'rol-' + usuario.id">Cambiar rol</label>
-                <select
-                  class="input input-sm admin-select"
-                  [id]="'rol-' + usuario.id"
-                  [(ngModel)]="usuario.rol"
-                  (ngModelChange)="onEdit(usuario)"
-                >
-                  <option value="admin">Admin</option>
-                  <option value="asesor">Asesor</option>
-                  <option value="operaciones">Operaciones</option>
-                  <option value="soporte">Soporte</option>
-                </select>
-              </td>
+              <td class="admin-table__role">{{ usuario.rol | titlecase }}</td>
               <td>
                 <span class="admin-status" [ngClass]="usuario.activo ? 'admin-status--active' : 'admin-status--blocked'">
                   {{ usuario.activo ? 'Activo' : 'Bloqueado' }}
                 </span>
               </td>
+              <td>{{ formatDate(usuario.updatedAt) }}</td>
               <td class="admin-table__actions">
-                <button
-                  class="btn btn-secondary btn-sm"
-                  type="button"
-                  (click)="toggle(usuario)"
-                  [attr.aria-label]="usuario.activo ? 'Bloquear ' + usuario.nombre : 'Desbloquear ' + usuario.nombre"
-                >
+                <button class="btn btn-ghost btn-sm" type="button" (click)="edit(usuario)">Editar</button>
+                <button class="btn btn-secondary btn-sm" type="button" (click)="toggle(usuario)">
                   {{ usuario.activo ? 'Bloquear' : 'Desbloquear' }}
                 </button>
+                <button class="btn btn-danger btn-sm" type="button" (click)="delete(usuario)">
+                  Eliminar
+                </button>
               </td>
+            </tr>
+            <tr *ngIf="filteredUsuarios.length === 0">
+              <td colspan="6" class="admin-table__empty">No se encontraron usuarios para los filtros aplicados.</td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- System Configuration -->
-    <section class="card admin-section">
+    <section class="card admin-section admin-section--secondary">
       <div class="admin-section__header">
         <div>
-          <h2 class="section-title">Configuración del Sistema</h2>
-          <p class="section-subtitle">Preferencias globales para el entorno operativo</p>
+          <h2 class="section-title">Configuración del sistema</h2>
+          <p class="section-subtitle">Preferencias globales para el entorno administrativo</p>
         </div>
       </div>
-
       <div class="admin-config">
         <div class="admin-config__column">
-          <h3 class="config-heading">Configuración General</h3>
+          <h3 class="config-heading">Estado del sistema</h3>
           <ul class="config-list">
             <li class="config-item">
-              <span>Mantenimiento</span>
+              <span>Mantenimiento programado</span>
               <label class="toggle">
                 <input type="checkbox" class="toggle__control">
                 <span class="toggle__visual" aria-hidden="true"></span>
               </label>
             </li>
             <li class="config-item">
-              <span>Logs de debug</span>
+              <span>Logs de depuración</span>
               <label class="toggle">
                 <input type="checkbox" class="toggle__control">
                 <span class="toggle__visual" aria-hidden="true"></span>
@@ -111,17 +113,16 @@
             </li>
           </ul>
         </div>
-
         <div class="admin-config__column">
-          <h3 class="config-heading">Límites del Sistema</h3>
+          <h3 class="config-heading">Límites</h3>
           <ul class="config-list">
             <li class="config-item config-item--input">
-              <label for="max-users">Max usuarios</label>
-              <input id="max-users" type="number" value="50" class="input input-sm admin-number">
+              <label for="max-users">Máx. usuarios</label>
+              <input id="max-users" type="number" value="50" class="input input-sm admin-number" min="1" />
             </li>
             <li class="config-item config-item--input">
               <label for="timeout">Timeout (seg)</label>
-              <input id="timeout" type="number" value="30" class="input input-sm admin-number">
+              <input id="timeout" type="number" value="30" class="input input-sm admin-number" min="5" />
             </li>
           </ul>
         </div>
@@ -130,26 +131,22 @@
   </main>
 </div>
 
-<!-- Modal -->
 <div class="admin-modal" *ngIf="showModal" (click)="closeModal()" role="presentation">
   <div class="admin-modal__panel" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title" (click)="$event.stopPropagation()">
-    <h3 class="admin-modal__title" id="admin-modal-title">{{ editing ? 'Editar Usuario' : 'Crear Usuario' }}</h3>
+    <h3 class="admin-modal__title" id="admin-modal-title">{{ editing ? 'Editar usuario' : 'Crear usuario' }}</h3>
     <form class="admin-form" (ngSubmit)="save()">
       <label class="admin-form__field">
-        <span class="admin-form__label">Nombre</span>
-        <input [(ngModel)]="form.nombre" name="nombre" required class="input" />
+        <span class="admin-form__label">Nombre completo</span>
+        <input [(ngModel)]="form.nombre" name="nombre" required class="input" autocomplete="off" />
       </label>
       <label class="admin-form__field">
-        <span class="admin-form__label">Email</span>
-        <input [(ngModel)]="form.email" name="email" type="email" required class="input" />
+        <span class="admin-form__label">Correo electrónico</span>
+        <input [(ngModel)]="form.email" name="email" type="email" required class="input" autocomplete="off" />
       </label>
       <label class="admin-form__field">
         <span class="admin-form__label">Rol</span>
         <select [(ngModel)]="form.rol" name="rol" required class="input">
-          <option value="admin">Admin</option>
-          <option value="asesor">Asesor</option>
-          <option value="operaciones">Operaciones</option>
-          <option value="soporte">Soporte</option>
+          <option *ngFor="let role of roles" [value]="role.value">{{ role.label }}</option>
         </select>
       </label>
       <div class="admin-form__actions">

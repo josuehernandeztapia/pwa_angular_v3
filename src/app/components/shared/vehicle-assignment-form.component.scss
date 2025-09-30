@@ -6,9 +6,9 @@
   max-width: 800px;
   margin: 0 auto;
   padding: var(--space-6, 24px);
-  background: var(--color-bg-primary, transparent);
+  background: var(--color-bg-primary);
   border-radius: var(--radius-lg, 12px);
-  border: 1px solid var(--color-border-secondary, transparent);
+  border: 1px solid var(--color-border-secondary);
   box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
   display: flex;
   flex-direction: column;
@@ -20,25 +20,25 @@
   flex-direction: column;
   gap: var(--space-2, 8px);
   padding-bottom: var(--space-4, 16px);
-  border-bottom: 1px solid var(--color-border-secondary, transparent);
+  border-bottom: 1px solid var(--color-border-secondary);
 }
 
 .vehicle-assignment__title {
   margin: 0;
   font-size: var(--text-2xl, 1.5rem);
   font-weight: var(--font-semibold, 600);
-  color: var(--color-text-primary, transparent);
+  color: var(--color-text-primary);
 }
 
 .vehicle-assignment__client,
 .vehicle-assignment__status {
   margin: 0;
-  color: var(--color-text-secondary, transparent);
+  color: var(--color-text-secondary);
 }
 
 .vehicle-assignment__status {
   font-weight: var(--font-semibold, 600);
-  color: var(--accent-green-500, transparent);
+  color: var(--accent-green-500);
 }
 
 .vehicle-assignment__form {
@@ -50,24 +50,24 @@
 .vehicle-assignment__section {
   padding: var(--space-5, 20px);
   border-radius: var(--radius-md, 10px);
-  border: 1px solid var(--color-border-secondary, transparent);
-  background: var(--color-bg-primary, transparent);
+  border: 1px solid var(--color-border-secondary);
+  background: var(--color-bg-primary);
   display: flex;
   flex-direction: column;
   gap: var(--space-5, 20px);
 }
 
 .vehicle-assignment__section--muted {
-  background: var(--surface-neutral-weak, var(--color-neutral-400, transparent));
+  background: var(--surface-neutral-weak, var(--color-neutral-400));
 }
 
 .vehicle-assignment__section-title {
   margin: 0;
   padding-bottom: var(--space-3, 12px);
-  border-bottom: 1px solid var(--color-border-secondary, transparent);
+  border-bottom: 1px solid var(--color-border-secondary);
   font-size: var(--text-lg, 1.125rem);
   font-weight: var(--font-semibold, 600);
-  color: var(--color-text-primary, transparent);
+  color: var(--color-text-primary);
 }
 
 .vehicle-assignment__row {
@@ -89,11 +89,11 @@
 .vehicle-assignment__label {
   font-size: var(--text-sm, 0.875rem);
   font-weight: var(--font-semibold, 600);
-  color: var(--color-text-primary, transparent);
+  color: var(--color-text-primary);
 }
 
 .vehicle-assignment__required {
-  color: var(--accent-red-500, transparent);
+  color: var(--accent-red-500);
 }
 
 .vehicle-assignment__input,
@@ -101,8 +101,8 @@
 .vehicle-assignment__textarea {
   padding: var(--space-3, 12px);
   border-radius: var(--radius-sm, 8px);
-  border: 1px solid var(--color-border-secondary, transparent);
-  background: var(--color-bg-primary, transparent);
+  border: 1px solid var(--color-border-secondary);
+  background: var(--color-bg-primary);
   font-size: var(--text-sm, 0.875rem);
   transition: border-color var(--transition-fast, 0.2s ease),
               box-shadow var(--transition-fast, 0.2s ease);
@@ -112,23 +112,23 @@
 .vehicle-assignment__select:focus,
 .vehicle-assignment__textarea:focus {
   outline: none;
-  border-color: var(--accent-blue-500, transparent);
-  box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
+  border-color: var(--accent-blue-500);
+  box-shadow: 0 0 0 3px var(--accent-blue-500);
 }
 
 .vehicle-assignment__input--error {
-  border-color: var(--accent-red-500, transparent);
-  box-shadow: 0 0 0 3px var(--accent-red-500, transparent);
+  border-color: var(--accent-red-500);
+  box-shadow: 0 0 0 3px var(--accent-red-500);
 }
 
 .vehicle-assignment__hint {
   font-size: var(--text-xs, 0.75rem);
-  color: var(--color-text-tertiary, transparent);
+  color: var(--color-text-tertiary);
 }
 
 .vehicle-assignment__error {
   font-size: var(--text-sm, 0.875rem);
-  color: var(--accent-red-500, transparent);
+  color: var(--accent-red-500);
 }
 
 .vehicle-assignment__specs {
@@ -143,34 +143,34 @@
 
 .vehicle-assignment__spec-label {
   font-weight: var(--font-semibold, 600);
-  color: var(--color-text-secondary, transparent);
+  color: var(--color-text-secondary);
 }
 
 .vehicle-assignment__spec-value {
   padding: var(--space-1, 4px) var(--space-3, 12px);
   border-radius: var(--radius-sm, 8px);
-  background: var(--color-border-secondary, transparent);
-  color: var(--color-text-primary, transparent);
+  background: var(--color-border-secondary);
+  color: var(--color-text-primary);
   font-size: var(--text-sm, 0.875rem);
 }
 
 .vehicle-assignment__validation {
   padding: var(--space-4, 16px);
   border-radius: var(--radius-md, 10px);
-  background: var(--surface-red-weak, var(--accent-red-500, transparent));
-  border: 1px solid var(--accent-red-500, transparent);
+  background: var(--surface-red-weak, var(--accent-red-500));
+  border: 1px solid var(--accent-red-500);
 }
 
 .vehicle-assignment__validation-title {
   margin: 0 0 var(--space-2, 8px) 0;
   font-weight: var(--font-semibold, 600);
-  color: var(--accent-red-500, transparent);
+  color: var(--accent-red-500);
 }
 
 .vehicle-assignment__validation-list {
   margin: 0;
   padding-left: var(--space-4, 16px);
-  color: var(--accent-red-600, transparent);
+  color: var(--accent-red-600);
   font-size: var(--text-sm, 0.875rem);
 }
 
@@ -179,7 +179,7 @@
   justify-content: flex-end;
   gap: var(--space-4, 16px);
   padding-top: var(--space-5, 20px);
-  border-top: 1px solid var(--color-border-secondary, transparent);
+  border-top: 1px solid var(--color-border-secondary);
 }
 
 .vehicle-assignment__button {
@@ -198,27 +198,27 @@
 }
 
 .vehicle-assignment__button--primary {
-  background: var(--accent-blue-600, transparent);
-  color: var(--color-bg-primary, transparent);
+  background: var(--accent-blue-600);
+  color: var(--color-bg-primary);
 
   &:hover:not(:disabled) {
-    background: var(--accent-blue-700, transparent);
+    background: var(--accent-blue-700);
   }
 
   &:disabled {
-    background: var(--accent-blue-200, transparent);
+    background: var(--accent-blue-200);
     cursor: not-allowed;
   }
 }
 
 .vehicle-assignment__button--secondary {
-  background: var(--color-bg-secondary, transparent);
-  color: var(--color-text-secondary, transparent);
-  border-color: var(--color-border-secondary, transparent);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-secondary);
 
   &:hover:not(:disabled) {
-    background: var(--color-bg-secondary, transparent);
-    border-color: var(--color-border-secondary, transparent);
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border-secondary);
   }
 }
 
@@ -240,29 +240,29 @@
 .vehicle-assignment__result {
   padding: var(--space-4, 16px);
   border-radius: var(--radius-md, 10px);
-  border: 1px solid var(--color-border-secondary, transparent);
+  border: 1px solid var(--color-border-secondary);
   margin-top: var(--space-4, 16px);
 }
 
 .vehicle-assignment__result--success {
-  background: var(--surface-green-weak, var(--accent-green-500, transparent));
-  border-color: var(--accent-green-500, transparent);
+  background: var(--surface-green-weak, var(--accent-green-500));
+  border-color: var(--accent-green-500);
 }
 
 .vehicle-assignment__result--error {
-  background: var(--surface-red-weak, var(--accent-red-500, transparent));
-  border-color: var(--accent-red-500, transparent);
+  background: var(--surface-red-weak, var(--accent-red-500));
+  border-color: var(--accent-red-500);
 }
 
 .vehicle-assignment__result-title {
   margin: 0 0 var(--space-2, 8px) 0;
   font-weight: var(--font-semibold, 600);
-  color: var(--color-text-primary, transparent);
+  color: var(--color-text-primary);
 }
 
 .vehicle-assignment__result-text {
   margin: 0;
-  color: var(--color-text-secondary, transparent);
+  color: var(--color-text-secondary);
   font-size: var(--text-sm, 0.875rem);
 }
 
@@ -270,8 +270,8 @@
   margin-top: var(--space-3, 12px);
   padding: var(--space-3, 12px);
   border-radius: var(--radius-sm, 8px);
-  border: 1px solid var(--accent-green-400, transparent);
-  background: var(--color-bg-primary, transparent);
+  border: 1px solid var(--accent-green-400);
+  background: var(--color-bg-primary);
   display: flex;
   flex-direction: column;
   gap: var(--space-2, 8px);

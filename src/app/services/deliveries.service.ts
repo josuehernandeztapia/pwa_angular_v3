@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, throwError, map, of, forkJoin, switchMap } from 'rxjs';
-import { 
+import {
   DeliveryOrder,
   DeliveryEventLog,
   DeliveryListRequest,
@@ -17,6 +17,7 @@ import {
   DELIVERY_STATUS_DESCRIPTIONS,
   calculateETA
 } from '../models/deliveries';
+import { IconName } from '../components/shared/icon/icon-definitions';
 
 declare global {
   interface Window {
@@ -377,14 +378,14 @@ export class DeliveriesService {
    * Get status color for UI components
    */
   getStatusColor(status: DeliveryStatus): string {
-    return DELIVERY_STATUS_DESCRIPTIONS[status]?.color || 'var(--color-text-muted, #737373)';
+    return DELIVERY_STATUS_DESCRIPTIONS[status]?.color || 'var(--accent-amber-500)';
   }
 
   /**
    * Get status icon for UI components
    */
-  getStatusIcon(status: DeliveryStatus): string {
-    return DELIVERY_STATUS_DESCRIPTIONS[status]?.iconType || 'package';
+  getStatusIcon(status: DeliveryStatus): IconName {
+    return (DELIVERY_STATUS_DESCRIPTIONS[status]?.iconType || 'package') as IconName;
   }
 
   /**

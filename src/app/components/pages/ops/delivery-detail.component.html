@@ -1,8 +1,14 @@
 <div class="delivery-detail">
   <div class="delivery-header">
     <div class="delivery-header__primary">
-      <button class="delivery-back" routerLink="/ops/deliveries">
-        ← Volver al Dashboard
+      <button class="delivery-back" routerLink="/entregas">
+        <app-icon
+          class="delivery-back__icon"
+          name="arrow-left"
+          [size]="16"
+          aria-hidden="true"
+        ></app-icon>
+        Volver al Dashboard
       </button>
       <h1 class="delivery-title" *ngIf="delivery()">
         <app-icon
@@ -14,7 +20,7 @@
         Entrega {{ delivery()!.id }}
       </h1>
       <div class="delivery-status" *ngIf="delivery()">
-        <span class="delivery-status__badge" [style.background]="getStatusColor(delivery()!.status)">
+        <span class="delivery-status__badge" [style.background]="getStatusColor(delivery())">
           <app-icon
             class="delivery-status__icon"
             [name]="getStatusIcon(delivery()!.status)"
@@ -98,7 +104,15 @@
 
         <div class="delivery-card">
           <div class="delivery-card__header">
-            <h3>⏰ Tiempos</h3>
+            <h3>
+              <app-icon
+                class="delivery-section-icon"
+                name="clock"
+                [size]="20"
+                aria-hidden="true"
+              ></app-icon>
+              Tiempos
+            </h3>
           </div>
           <div class="delivery-card__body">
             <div class="delivery-info">
@@ -295,7 +309,10 @@
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Avanzar Estado de Entrega</h3>
-        <button class="modal-close" (click)="hideAdvanceModal()">×</button>
+        <button class="modal-close" type="button" aria-label="Cerrar"
+          (click)="hideAdvanceModal()">
+          <app-icon name="close" [size]="16" aria-hidden="true"></app-icon>
+        </button>
       </div>
 
       <div class="modal-body">

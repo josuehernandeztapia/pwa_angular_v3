@@ -149,6 +149,10 @@
     padding: 0.25rem;
     border-radius: var(--radius-sm, 8px);
     transition: opacity var(--transition-quick, 0.2s ease), background var(--transition-quick, 0.2s ease);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    --icon-color: currentColor;
 
     &:hover,
     &:focus-visible {

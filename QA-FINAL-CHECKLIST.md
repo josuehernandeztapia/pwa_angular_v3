@@ -113,21 +113,7 @@ npm run build:analyze
 
 ## 🎨 Phase 4: Visual & UX Validation (10 min)
 
-### 4.1 Premium Icons & Microinteractions
-```bash
-# Abrir demo route en navegador
-open http://localhost:4200/premium-icons-demo
-```
-
-**Manual Validation Checklist:**
-- [ ] ✅ Premium SVG icons render correctly (no emoji fallbacks)
-- [ ] ✅ Hover states and microinteractions smooth
-- [ ] ✅ Loading states use premium spinners
-- [ ] ✅ Icons scale properly on different screen sizes
-- [ ] ✅ Dark mode toggle works (if implemented)
-- [ ] ✅ Animations respect `prefers-reduced-motion`
-
-### 4.2 Core User Flows (Browser Testing)
+### 4.1 Core User Flows (Browser Testing)
 **Desktop (Chrome/Safari/Firefox):**
 - [ ] ✅ Login → Dashboard navigation <2s
 - [ ] ✅ Cotizador form interactions smooth
@@ -135,7 +121,7 @@ open http://localhost:4200/premium-icons-demo
 - [ ] ✅ Modal accessibility (focus trap works)
 - [ ] ✅ Service worker caching active (DevTools → Application)
 
-**Mobile (Responsive Testing):**
+### 4.2 Mobile (Responsive Testing)
 - [ ] ✅ Touch interactions responsive
 - [ ] ✅ Viewport scaling correct
 - [ ] ✅ Navigation menu mobile-friendly

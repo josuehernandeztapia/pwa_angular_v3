@@ -1,36 +1,60 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+
+import { IconComponent } from '../../shared/icon/icon.component';
 import { ToastService } from '../../../services/toast.service';
 import { ApiService } from '../../../services/api.service';
 import { CustomValidators } from '../../../validators/custom-validators';
 import { Client, BusinessFlow } from '../../../models/types';
+import { FlowContextService } from '../../../services/flow-context.service';
+import { ErrorBoundaryService } from '../../../services/error-boundary.service';
 
 @Component({
   selector: 'app-cliente-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IconComponent],
   templateUrl: './cliente-form.component.html',
   styleUrls: ['./cliente-form.component.scss']
 })
-export class ClienteFormComponent implements OnInit {
+export class ClienteFormComponent implements OnInit, OnDestroy {
   clienteForm!: FormGroup;
   isEditMode = false;
   isLoading = false;
   clientId?: string;
+  private returnTo: string | null = null;
+  private returnUrl: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private apiService: ApiService,
-    private toast: ToastService
+    private toast: ToastService,
+    private errorBoundary: ErrorBoundaryService,
+    @Optional() private flowContext?: FlowContextService
   ) {}
 
   ngOnInit(): void {
     this.createForm();
     this.checkEditMode();
+    this.returnTo = this.route.snapshot.queryParamMap.get('returnTo');
+    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+    this.restoreDraftFromContext();
+    this.updateBreadcrumbs();
+  }
+
+  ngOnDestroy(): void {
+    if (!this.isEditMode) {
+      this.flowContext?.saveContext('cliente-form', { formValues: this.clienteForm.value }, {
+        ttlMs: 10 * 60 * 1000,
+        breadcrumbs: ['Dashboard', 'Clientes', 'Nuevo']
+      });
+    } else {
+      this.flowContext?.clearContext('cliente-form', false);
+    }
   }
 
   private createForm(): void {
@@ -53,6 +77,16 @@ export class ClienteFormComponent implements OnInit {
     }
   }
 
+  private updateBreadcrumbs(clientName?: string): void {
+    const trail = ['Dashboard', 'Clientes'];
+    if (this.isEditMode) {
+      trail.push(clientName || 'Editar');
+    } else {
+      trail.push('Nuevo');
+    }
+    this.flowContext?.setBreadcrumbs(trail);
+  }
+
   private loadClient(id: string): void {
     this.isLoading = true;
     this.apiService.getClientById(id).subscribe({
@@ -67,6 +101,7 @@ export class ClienteFormComponent implements OnInit {
             flow: client.flow,
             notes: ''
           });
+          this.updateBreadcrumbs(client.name);
         }
         this.isLoading = false;
       },
@@ -76,6 +111,17 @@ export class ClienteFormComponent implements OnInit {
         this.router.navigate(['/clientes']);
       }
     });
+  }
+
+  private restoreDraftFromContext(): void {
+    if (this.isEditMode) {
+      return;
+    }
+
+    const stored = this.flowContext?.getContextData<{ formValues: any }>('cliente-form');
+    if (stored?.formValues) {
+      this.clienteForm.patchValue(stored.formValues);
+    }
   }
 
   onSubmit(): void {
@@ -90,14 +136,16 @@ export class ClienteFormComponent implements OnInit {
 
     if (this.isEditMode && this.clientId) {
       this.apiService.updateClient(this.clientId, formData).subscribe({
-        next: (client) => {
+        next: client => {
           this.toast.success('Cliente actualizado exitosamente');
           this.isLoading = false;
-          this.router.navigate(['/clientes', this.clientId]);
+          this.errorBoundary.resolveIssueByContext(issue => issue.context?.module === 'clientes' && issue.context?.clientId === this.clientId);
+          this.handlePostSaveNavigation(client);
         },
-        error: (error) => {
-          this.toast.error('Error al actualizar el cliente');
+        error: () => {
           this.isLoading = false;
+          this.toast.error('No se pudo actualizar el cliente');
+          this.handleClientPersistenceError('update', formData);
         }
       });
     } else {
@@ -105,11 +153,13 @@ export class ClienteFormComponent implements OnInit {
         next: (client) => {
           this.toast.success('Cliente creado exitosamente');
           this.isLoading = false;
-          this.router.navigate(['/clientes']);
+          this.errorBoundary.resolveIssueByContext(issue => issue.context?.module === 'clientes' && issue.context?.clientId === client.id);
+          this.handlePostSaveNavigation(client);
         },
-        error: (error) => {
-          this.toast.error('Error al crear el cliente');
+        error: () => {
           this.isLoading = false;
+          this.toast.error('No se pudo crear el cliente');
+          this.handleClientPersistenceError('create', formData);
         }
       });
     }
@@ -152,5 +202,74 @@ export class ClienteFormComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/clientes']);
+  }
+
+  private handlePostSaveNavigation(client?: Client): void {
+    this.flowContext?.clearContext('cliente-form');
+
+    if (this.returnTo === 'cotizador') {
+      this.flowContext?.updateContext('cotizador', (ctx) => {
+        const next = { ...(ctx || {}) } as any;
+        if (client) {
+          next.clientId = client.id;
+          next.clientName = client.name;
+        }
+        next.lastClientSync = Date.now();
+        return next;
+      });
+
+      const target = this.returnUrl || '/cotizador';
+      this.router.navigateByUrl(target);
+      return;
+    }
+
+    if (this.isEditMode && this.clientId) {
+      this.router.navigate(['/clientes', this.clientId]);
+    } else {
+      this.router.navigate(['/clientes']);
+    }
+  }
+
+  private handleClientPersistenceError(action: 'create' | 'update', payload: any): void {
+    const endpoint = action === 'create' ? 'clients' : `clients/${this.clientId}`;
+    const method = action === 'create' ? 'POST' : 'PUT';
+
+    this.persistDraft(payload);
+
+    this.errorBoundary.reportNetworkTimeout({
+      message: action === 'create'
+        ? 'Intentaremos crear el cliente cuando vuelva la conexión.'
+        : 'Intentaremos actualizar el cliente cuando vuelva la conexión.',
+      context: {
+        module: 'clientes',
+        clientId: this.clientId ?? undefined
+      },
+      retry: () => this.retryClientRequest(action, payload),
+      queueRequest: {
+        endpoint,
+        method,
+        payload
+      },
+      onSaveDraft: () => this.persistDraft(payload)
+    });
+  }
+
+  private persistDraft(payload: any): void {
+    this.flowContext?.saveContext('cliente-form', { formValues: payload }, {
+      ttlMs: 10 * 60 * 1000,
+      breadcrumbs: ['Dashboard', 'Clientes', this.isEditMode ? 'Editar' : 'Nuevo']
+    });
+  }
+
+  private async retryClientRequest(action: 'create' | 'update', payload: any): Promise<Client> {
+    if (action === 'create') {
+      return firstValueFrom(this.apiService.createClient(payload));
+    }
+
+    if (!this.clientId) {
+      throw new Error('No hay cliente seleccionado para reintentar.');
+    }
+
+    return firstValueFrom(this.apiService.updateClient(this.clientId, payload));
   }
 }

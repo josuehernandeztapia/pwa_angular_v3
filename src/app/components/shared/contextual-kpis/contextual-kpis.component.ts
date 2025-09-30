@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IconComponent } from '../icon/icon.component';
+import { IconName } from '../icon/icon-definitions';
 
 export interface KPIData {
   id: string;
@@ -9,7 +11,7 @@ export interface KPIData {
   trend: 'up' | 'down' | 'stable';
   trendPercentage: number;
   format: 'number' | 'currency' | 'percentage';
-  icon: string;
+  icon?: IconName;
   color: 'primary' | 'accent' | 'success' | 'warning' | 'error';
   subtitle?: string;
 }
@@ -17,7 +19,7 @@ export interface KPIData {
 @Component({
   selector: 'app-contextual-kpis',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   templateUrl: './contextual-kpis.component.html',
   styleUrls: ['./contextual-kpis.component.scss']
 })
@@ -60,13 +62,17 @@ export class ContextualKPIsComponent implements OnInit {
     };
   }
 
-  getTrendIcon(trend: 'up' | 'down' | 'stable'): string {
-    const icons = {
-      up: '▲',
-      down: '▼',
-      stable: '→'
+  getTrendIcon(trend: 'up' | 'down' | 'stable'): IconName {
+    const map: Record<'up' | 'down' | 'stable', IconName> = {
+      up: 'trending-up',
+      down: 'trending-down',
+      stable: 'minus'
     };
-    return icons[trend];
+    return map[trend];
+  }
+
+  getValueIcon(kpi: KPIData): IconName {
+    return kpi.icon ?? 'information-circle';
   }
 
   formatValue(value: number | string, format: 'number' | 'currency' | 'percentage'): string {

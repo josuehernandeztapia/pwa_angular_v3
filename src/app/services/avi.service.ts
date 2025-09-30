@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, delay, map } from 'rxjs/operators';
+import { catchError, delay, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import {
   AVI_VOICE_WEIGHTS,
@@ -17,7 +17,32 @@ import {
   VoiceAnalysis
 } from '../models/avi';
 import { ApiConfigService } from './api-config.service';
+import { AnalyticsService } from './analytics.service';
 import { ConfigurationService } from './configuration.service';
+import { FlowContextService } from './flow-context.service';
+
+interface AviFlowContextSnapshot {
+  sessionId: string | null;
+  startedAt: number;
+  status: 'IN_PROGRESS' | 'COMPLETED';
+  responses: Array<{
+    questionId: string;
+    transcription: string;
+    responseTime: number;
+    recordedAt: number;
+  }>;
+  transcript?: string;
+  lastResponseAt?: number;
+  score?: number;
+  riskLevel?: string;
+  confidence?: number;
+  redFlags?: RedFlag[];
+  decision?: 'GO' | 'REVIEW' | 'NO_GO';
+  flags?: string[];
+  completedAt?: number;
+  processedAt?: number;
+  requiresSupervisor?: boolean;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -31,19 +56,88 @@ export class AVIService {
   constructor(
     private configService: ConfigurationService,
     private http: HttpClient,
-    apiConfigService: ApiConfigService
+    apiConfigService: ApiConfigService,
+    @Optional() private readonly analytics?: AnalyticsService,
+    @Optional() private readonly flowContext?: FlowContextService
   ) {
     this.apiConfig = apiConfigService;
+  }
+
+  private persistAviContext(partial: Partial<AviFlowContextSnapshot>, appendResponse?: AviFlowContextSnapshot['responses'][number]): void {
+    if (!this.flowContext) {
+      return;
+    }
+
+    if (appendResponse) {
+      this.flowContext.updateContext<AviFlowContextSnapshot>('avi', current => {
+        const base: AviFlowContextSnapshot = current ?? {
+          sessionId: partial.sessionId ?? this.currentSession$.value ?? null,
+          startedAt: partial.startedAt ?? Date.now(),
+          status: partial.status ?? 'IN_PROGRESS',
+          responses: []
+        };
+
+        base.responses = [...(base.responses ?? []), appendResponse];
+        base.lastResponseAt = appendResponse.recordedAt;
+        const combined = [base.transcript, appendResponse.transcription].filter(Boolean).join(' ').trim();
+        base.transcript = combined;
+
+        return { ...base, ...partial };
+      }, { breadcrumbs: ['Dashboard', 'AVI'] });
+      return;
+    }
+
+    this.flowContext.updateContext<AviFlowContextSnapshot>('avi', current => {
+      if (!current) {
+        return {
+          sessionId: partial.sessionId ?? this.currentSession$.value ?? null,
+          startedAt: partial.startedAt ?? Date.now(),
+          status: partial.status ?? 'IN_PROGRESS',
+          responses: [],
+          ...partial
+        } as AviFlowContextSnapshot;
+      }
+      return { ...current, ...partial };
+    }, { breadcrumbs: ['Dashboard', 'AVI'] });
   }
 
   /**
    * Start new AVI session
    */
   startSession(): Observable<string> {
-    const sessionId = `avi_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    this.currentSession$.next(sessionId);
-    this.responses$.next([]);
-    return of(sessionId);
+    const localSessionId = this.generateLocalSessionId();
+
+    const session$ = this.isMockMode()
+      ? of({ sessionId: localSessionId, remote: false })
+      : this.http.post<{ sessionId: string }>(`${environment.apiUrl}/v1/avi/session`, {
+          locale: this.getBrowserLocale(),
+          startedAt: new Date().toISOString(),
+          deviceInfo: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
+        }).pipe(
+          map(res => ({ sessionId: res.sessionId ?? localSessionId, remote: true })),
+          catchError(error => {
+            console.warn('[AVI] No se pudo iniciar sesión remota, usando fallback local', error);
+            return of({ sessionId: localSessionId, remote: false });
+          })
+        );
+
+    return session$.pipe(
+      tap(({ sessionId, remote }) => {
+        this.currentSession$.next(sessionId);
+        this.responses$.next([]);
+        this.persistAviContext({
+          sessionId,
+          startedAt: Date.now(),
+          status: 'IN_PROGRESS',
+          responses: []
+        });
+        this.analytics?.track('avi_session_started', {
+          sessionId,
+          remote
+        });
+      }),
+      map(({ sessionId }) => sessionId)
+    );
   }
 
   /**
@@ -94,13 +188,54 @@ export class AVIService {
   submitResponse(response: AVIResponse): Observable<boolean> {
     const currentResponses = this.responses$.value;
     const updatedResponses = [...currentResponses, response];
-    
+
     this.responses$.next(updatedResponses);
-    
+
     // Perform real-time validation
     this.validateResponse(response);
-    
-    return of(true).pipe(delay(100));
+
+    const sessionId = this.currentSession$.value;
+
+    let submission$: Observable<boolean>;
+
+    if (!this.isMockMode() && sessionId) {
+      submission$ = this.http
+        .post(`${environment.apiUrl}/v1/avi/session/${sessionId}/responses`, {
+          questionId: response.questionId,
+          transcription: response.transcription ?? response.value,
+          responseTime: response.responseTime,
+          stressIndicators: response.stressIndicators,
+          sessionId,
+          recordedAt: new Date().toISOString()
+        })
+        .pipe(
+          map(() => true),
+          catchError(error => {
+            console.warn('[AVI] Error al enviar respuesta a BFF, usando fallback local', error);
+            return of(true);
+          })
+        );
+    } else {
+      submission$ = of(true).pipe(delay(100));
+    }
+
+    return submission$.pipe(
+      tap(() => {
+        const recordedAt = Date.now();
+        this.persistAviContext({}, {
+          questionId: response.questionId,
+          transcription: response.transcription ?? response.value,
+          responseTime: response.responseTime,
+          recordedAt
+        });
+
+        this.analytics?.track('avi_response_recorded', {
+          sessionId: this.currentSession$.value,
+          questionId: response.questionId,
+          responseTime: response.responseTime
+        });
+      })
+    );
   }
 
   /**
@@ -115,9 +250,11 @@ export class AVIService {
    */
   calculateScore(): Observable<AVIScore> {
     const responses = this.responses$.value;
-    
+
+    let score$: Observable<AVIScore>;
+
     if (responses.length === 0) {
-      return of({
+      score$ = of({
         totalScore: 0,
         riskLevel: 'HIGH',
         categoryScores: {} as any,
@@ -126,17 +263,31 @@ export class AVIService {
         processingTime: 0,
         confidence: 0.1
       });
+    } else if (this.apiConfig.isMockMode()) {
+      score$ = this.calculateScoreVoiceOnly(responses);
+    } else {
+      score$ = this.calculateScoreWithBFF(responses).pipe(
+        catchError(() => this.calculateScoreLocal(responses))
+      );
     }
 
-    // In mock/test mode, use voice-only calculation to align with LAB
-    if (this.apiConfig.isMockMode()) {
-      return this.calculateScoreVoiceOnly(responses);
-    }
+    return score$.pipe(
+      tap(score => {
+        this.persistAviContext({
+          score: score.totalScore,
+          riskLevel: score.riskLevel,
+          confidence: score.confidence,
+          redFlags: score.redFlags,
+          processedAt: Date.now()
+        });
 
-    // Use BFF for AVI calculation
-    return this.calculateScoreWithBFF(responses).pipe(
-      catchError(error => {
-        return this.calculateScoreLocal(responses);
+        this.analytics?.track('avi_score_calculated', {
+          sessionId: this.currentSession$.value,
+          score: score.totalScore,
+          riskLevel: score.riskLevel,
+          redFlags: score.redFlags?.length ?? 0,
+          confidence: score.confidence
+        });
       })
     );
   }
@@ -402,6 +553,62 @@ export class AVIService {
     if (score >= 551) return 'MEDIUM';
     if (score >= 550) return 'HIGH';
     return 'CRITICAL';
+  }
+
+  completeSession(decision: 'GO' | 'REVIEW' | 'NO-GO', options: { flags?: string[]; score?: AVIScore | null } = {}): void {
+    const { flags, score } = options;
+    const normalizedDecision = decision === 'NO-GO' ? 'NO_GO' : decision;
+    this.persistAviContext({
+      decision: normalizedDecision,
+      flags,
+      status: 'COMPLETED',
+      completedAt: Date.now(),
+      requiresSupervisor: normalizedDecision === 'REVIEW',
+      score: score?.totalScore,
+      riskLevel: score?.riskLevel,
+      confidence: score?.confidence,
+      redFlags: score?.redFlags
+    });
+
+    const sessionId = this.currentSession$.value;
+    if (sessionId && !this.isMockMode()) {
+      this.http
+        .post(`${environment.apiUrl}/v1/avi/session/${sessionId}/complete`, {
+          decision: normalizedDecision,
+          score: score?.totalScore,
+          confidence: score?.confidence,
+          flags
+        })
+        .pipe(catchError(error => {
+          console.warn('[AVI] Error al finalizar sesión remota', error);
+          return of(null);
+        }))
+        .subscribe();
+    }
+
+    this.analytics?.track('avi_session_completed', {
+      sessionId,
+      decision: normalizedDecision,
+      score: score?.totalScore,
+      confidence: score?.confidence
+    });
+
+    this.currentSession$.next(null);
+  }
+
+  private generateLocalSessionId(): string {
+    return `avi_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+  }
+
+  private getBrowserLocale(): string {
+    if (typeof navigator !== 'undefined' && navigator.language) {
+      return navigator.language;
+    }
+    return this.configService.getCurrentConfiguration()?.locale ?? 'es-MX';
+  }
+
+  private isMockMode(): boolean {
+    return this.apiConfig.isMockMode();
   }
 
   private generateRecommendations(score: number, redFlags: RedFlag[]): string[] {

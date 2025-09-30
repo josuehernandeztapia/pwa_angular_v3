@@ -12,7 +12,7 @@
     align-items: center;
     gap: var(--space-4, 16px);
     padding-bottom: var(--space-5, 20px);
-    border-bottom: 2px solid var(--color-border-primary, transparent);
+    border-bottom: 2px solid var(--color-border-primary);
   }
 
   &__header-content {
@@ -25,7 +25,7 @@
     margin: 0;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--color-text-primary, transparent);
+    color: var(--color-text-primary);
     display: flex;
     align-items: center;
     gap: var(--space-2, 8px);
@@ -34,7 +34,7 @@
   &__subtitle {
     margin: 0;
     font-size: 1.05rem;
-    color: var(--color-text-secondary, transparent);
+    color: var(--color-text-secondary);
   }
 
   &__header-actions {
@@ -65,7 +65,7 @@
   &__filter-label {
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--color-text-secondary, transparent);
+    color: var(--color-text-secondary);
   }
 
   &__input,
@@ -73,16 +73,16 @@
     width: 100%;
     padding: 12px 16px;
     border-radius: 10px;
-    border: 1px solid var(--color-border-primary, transparent);
-    background: var(--color-bg-primary, transparent);
+    border: 1px solid var(--color-border-primary);
+    background: var(--color-bg-primary);
     font: inherit;
     color: inherit;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
     &:focus {
       outline: none;
-      border-color: var(--accent-blue-500, transparent);
-      box-shadow: 0 0 0 3px var(--accent-blue-500, transparent);
+      border-color: var(--accent-blue-500);
+      box-shadow: 0 0 0 3px var(--accent-blue-500);
     }
   }
 
@@ -104,7 +104,7 @@
     align-items: flex-start;
     gap: var(--space-3, 12px);
     padding-bottom: var(--space-3, 12px);
-    border-bottom: 1px solid var(--color-border-primary, transparent);
+    border-bottom: 1px solid var(--color-border-primary);
   }
 
   &__card-info {
@@ -117,13 +117,13 @@
     margin: 0;
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--color-text-primary, transparent);
+    color: var(--color-text-primary);
   }
 
   &__card-id {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--color-text-secondary, transparent);
+    color: var(--color-text-secondary);
   }
 
   &__status {
@@ -140,18 +140,18 @@
   }
 
   &__status--completo {
-    background: var(--accent-green-100, transparent);
-    color: var(--accent-green-700, transparent);
+    background: var(--accent-green-100);
+    color: var(--accent-green-700);
   }
 
   &__status--pendiente {
-    background: var(--accent-red-100, transparent);
-    color: var(--accent-red-700, transparent);
+    background: var(--accent-red-100);
+    color: var(--accent-red-700);
   }
 
   &__status--revision {
-    background: var(--accent-amber-100, transparent);
-    color: var(--accent-amber-700, transparent);
+    background: var(--accent-amber-100);
+    color: var(--accent-amber-700);
   }
 
   &__card-body {
@@ -176,21 +176,21 @@
   &__document-count {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--color-text-primary, transparent);
+    color: var(--color-text-primary);
 
     &--complete {
-      color: var(--accent-green-600, transparent);
+      color: var(--accent-green-600);
     }
 
     &--pending {
-      color: var(--accent-amber-600, transparent);
+      color: var(--accent-amber-600);
     }
   }
 
   &__document-label {
     font-size: 0.8rem;
     font-weight: 500;
-    color: var(--color-text-secondary, transparent);
+    color: var(--color-text-secondary);
   }
 
   &__progress {
@@ -203,28 +203,28 @@
     width: 100%;
     height: 10px;
     border-radius: 999px;
-    background: var(--color-border-primary, transparent);
+    background: var(--color-border-primary);
     overflow: hidden;
   }
 
   &__progress-fill {
     height: 100%;
     border-radius: inherit;
-    background: var(--accent-blue-500, transparent);
+    background: var(--accent-blue-500);
     transition: width 0.3s ease;
   }
 
   &__progress-text {
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--color-text-secondary, transparent);
+    color: var(--color-text-secondary);
   }
 
   &__card-actions {
     display: flex;
     gap: var(--space-3, 12px);
     padding-top: var(--space-3, 12px);
-    border-top: 1px solid var(--color-border-primary, transparent);
+    border-top: 1px solid var(--color-border-primary);
   }
 
   &__button {
@@ -240,31 +240,31 @@
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 
     &--primary {
-      background: var(--accent-blue-500, transparent);
-      color: var(--flat-surface-bg, transparent);
+      background: var(--accent-blue-500);
+      color: var(--flat-surface-bg, var(--openai-white));
 
       &:hover {
-        background: var(--accent-blue-600, transparent);
+        background: var(--accent-blue-600);
       }
     }
 
     &--secondary {
-      background: var(--color-bg-secondary, transparent);
-      color: var(--color-text-secondary, transparent);
-      border-color: var(--color-border-primary, transparent);
+      background: var(--color-bg-secondary);
+      color: var(--color-text-secondary);
+      border-color: var(--color-border-primary);
 
       &:hover {
-        background: var(--color-bg-tertiary, transparent);
+        background: var(--color-bg-tertiary);
       }
     }
 
     &--ghost {
       background: transparent;
-      color: var(--accent-blue-600, transparent);
-      border-color: var(--accent-blue-200, transparent);
+      color: var(--accent-blue-600);
+      border-color: var(--accent-blue-200);
 
       &:hover {
-        background: var(--accent-blue-100, transparent);
+        background: var(--accent-blue-100);
       }
     }
   }
@@ -276,7 +276,7 @@
     gap: var(--space-3, 12px);
     text-align: center;
     padding: var(--space-6, 24px);
-    color: var(--color-text-secondary, transparent);
+    color: var(--color-text-secondary);
   }
 
   &__empty-icon {
@@ -286,21 +286,21 @@
     border-radius: 20px;
     align-items: center;
     justify-content: center;
-    background: var(--accent-blue-100, transparent);
-    color: var(--accent-blue-600, transparent);
+    background: var(--accent-blue-100);
+    color: var(--accent-blue-600);
   }
 
   &__empty-title {
     margin: 0;
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--color-text-primary, transparent);
+    color: var(--color-text-primary);
   }
 
   &__empty-description {
     margin: 0;
     font-size: 1rem;
-    color: var(--color-text-secondary, transparent);
+    color: var(--color-text-secondary);
   }
 
   @media (max-width: 768px) {

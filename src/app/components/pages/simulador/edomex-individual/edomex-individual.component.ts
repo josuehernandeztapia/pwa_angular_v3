@@ -11,6 +11,7 @@ import { ToastService } from '../../../../services/toast.service';
 import { SkeletonCardComponent } from '../../../shared/skeleton-card.component';
 import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-panel.component';
 import { IconComponent } from '../../../shared/icon/icon.component';
+import { DESIGN_TOKENS, getDataColor } from '../../../../styles/design-tokens';
 
 declare var Chart: any;
 
@@ -145,6 +146,15 @@ export class EdomexIndividualComponent implements OnInit, OnDestroy, AfterViewIn
     this.initializeDistributionChart();
   }
 
+  private withAlpha(color: string, alpha: number): string {
+    const hex = color.replace('#', '');
+    const bigint = parseInt(hex, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
   private initializeProgressChart(): void {
     if (!this.progressChartRef?.nativeElement || !this.scenario) return;
 
@@ -163,8 +173,8 @@ export class EdomexIndividualComponent implements OnInit, OnDestroy, AfterViewIn
         datasets: [{
           label: 'Progreso de Ahorro',
           data: projectedData,
-          borderColor: 'rgb(59, 130, 246)',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: getDataColor('primary'),
+          backgroundColor: this.withAlpha(getDataColor('primary'), 0.1),
           borderWidth: 2,
           fill: true,
           tension: 0.4
@@ -179,17 +189,17 @@ export class EdomexIndividualComponent implements OnInit, OnDestroy, AfterViewIn
             display: true,
             text: 'Progreso Mensual hacia el Enganche',
             font: { size: 14, weight: '600' },
-            color: '#374151'
+            color: DESIGN_TOKENS.color.text.primary
           }
         },
         scales: {
           x: {
-            title: { display: true, text: 'Mes', color: '#6B7280' },
-            grid: { color: '#E5E7EB' }
+            title: { display: true, text: 'Mes', color: DESIGN_TOKENS.color.text.secondary },
+            grid: { color: DESIGN_TOKENS.color.border }
           },
           y: {
-            title: { display: true, text: 'Monto ($)', color: '#6B7280' },
-            grid: { color: '#E5E7EB' },
+            title: { display: true, text: 'Monto ($)', color: DESIGN_TOKENS.color.text.secondary },
+            grid: { color: DESIGN_TOKENS.color.border },
             ticks: {
               callback: (value: any) => this.formatCurrency(Number(value))
             }
@@ -216,7 +226,10 @@ export class EdomexIndividualComponent implements OnInit, OnDestroy, AfterViewIn
         labels: ['Recaudación Combustible', 'Aportación Voluntaria'],
         datasets: [{
           data: [collectionAmount, voluntaryAmount],
-          backgroundColor: ['#080808', '#525252'],  /* OpenAI black/gray */
+          backgroundColor: [
+            DESIGN_TOKENS.color.text.primary,
+            DESIGN_TOKENS.color.text.secondary
+          ],
           borderWidth: 0
         }]
       },
@@ -227,13 +240,16 @@ export class EdomexIndividualComponent implements OnInit, OnDestroy, AfterViewIn
           legend: {
             display: true,
             position: 'bottom',
-            labels: { usePointStyle: true }
+            labels: {
+              usePointStyle: true,
+              color: DESIGN_TOKENS.color.text.secondary
+            }
           },
           title: {
             display: true,
             text: 'Distribución de Aportaciones',
             font: { size: 14, weight: '600' },
-            color: '#374151'
+            color: DESIGN_TOKENS.color.text.primary
           }
         }
       }

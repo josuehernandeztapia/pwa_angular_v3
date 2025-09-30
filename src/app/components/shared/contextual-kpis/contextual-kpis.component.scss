@@ -1,6 +1,6 @@
 .contextual-kpis {
   margin-bottom: var(--space-32, 32px);
-  color: var(--neutral-100, transparent);
+  color: var(--neutral-100, var(--openai-gray-50));
 
   &__header {
     display: flex;
@@ -14,14 +14,14 @@
     margin: 0;
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--neutral-100, transparent);
+    color: var(--neutral-100, var(--openai-gray-50));
   }
 
   &__subtitle {
     margin: 0;
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--neutral-400, transparent);
+    color: var(--neutral-400, var(--openai-gray-300));
   }
 
   &__grid {
@@ -34,8 +34,8 @@
     position: relative;
     padding: var(--space-24, 24px);
     border-radius: 16px;
-    background: var(--flat-surface-bg, transparent);
-    border: 1px solid var(--neutral-800, transparent);
+    background: var(--flat-surface-bg, var(--openai-white));
+    border: 1px solid var(--neutral-800, var(--openai-gray-700));
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.08));
     transition: box-shadow var(--transition-fast, 0.3s ease);
     overflow: hidden;
@@ -47,7 +47,7 @@
       left: 0;
       right: 0;
       height: 3px;
-      background: var(--accent-blue-500, transparent);
+      background: var(--accent-blue-500);
     }
 
     &:hover {
@@ -56,23 +56,23 @@
   }
 
   &__card--color-primary::before {
-    background: var(--primary-cyan-400, transparent);
+    background: var(--primary-cyan-400, var(--openai-blue));
   }
 
   &__card--color-accent::before {
-    background: var(--accent-amber-500, transparent);
+    background: var(--accent-amber-500);
   }
 
   &__card--color-success::before {
-    background: var(--success-500, transparent);
+    background: var(--success-500, var(--openai-gray-600));
   }
 
   &__card--color-warning::before {
-    background: var(--accent-amber-400, transparent);
+    background: var(--accent-amber-400);
   }
 
   &__card--color-error::before {
-    background: var(--error-500, transparent);
+    background: var(--error-500, var(--openai-black));
   }
 
   &__card-header {
@@ -84,7 +84,7 @@
   }
 
   &__icon {
-    font-size: 2rem;
+    display: inline-flex;
     opacity: 0.85;
   }
 
@@ -99,25 +99,25 @@
   }
 
   &__trend--up {
-    background: var(--accent-green-500, transparent);
-    border: 1px solid var(--accent-green-500, transparent);
-    color: var(--accent-green-600, transparent);
+    background: var(--accent-green-500);
+    border: 1px solid var(--accent-green-500);
+    color: var(--accent-green-600);
   }
 
   &__trend--down {
-    background: var(--accent-red-500, transparent);
-    border: 1px solid var(--accent-red-500, transparent);
-    color: var(--accent-red-600, transparent);
+    background: var(--accent-red-500);
+    border: 1px solid var(--accent-red-500);
+    color: var(--accent-red-600);
   }
 
   &__trend--stable {
-    background: var(--neutral-500, transparent);
-    border: 1px solid var(--neutral-500, transparent);
-    color: var(--neutral-500, transparent);
+    background: var(--neutral-500, var(--openai-gray-400));
+    border: 1px solid var(--neutral-500, var(--openai-gray-400));
+    color: var(--neutral-500, var(--openai-gray-400));
   }
 
   &__trend-icon {
-    font-size: 0.9rem;
+    display: inline-flex;
   }
 
   &__card-body {
@@ -132,42 +132,42 @@
     font-weight: 800;
     line-height: 1;
     margin: 0;
-    background: linear-gradient(135deg, var(--neutral-100, transparent), var(--neutral-300, transparent));
+    background: linear-gradient(135deg, var(--neutral-100, var(--openai-gray-50)), var(--neutral-300, var(--openai-gray-200)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   &__value--color-primary {
-    background: linear-gradient(135deg, var(--primary-cyan-300, transparent), var(--primary-cyan-500, transparent));
+    background: linear-gradient(135deg, var(--primary-cyan-300, var(--openai-blue)), var(--primary-cyan-500, var(--openai-blue-hover)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   &__value--color-accent {
-    background: linear-gradient(135deg, var(--accent-amber-400, transparent), var(--accent-amber-600, transparent));
+    background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   &__value--color-success {
-    background: linear-gradient(135deg, var(--accent-green-400, transparent), var(--accent-green-600, transparent));
+    background: linear-gradient(135deg, var(--accent-green-400), var(--accent-green-600));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   &__value--color-warning {
-    background: linear-gradient(135deg, var(--accent-amber-300, transparent), var(--accent-amber-500, transparent));
+    background: linear-gradient(135deg, var(--accent-amber-300), var(--accent-amber-500));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   &__value--color-error {
-    background: linear-gradient(135deg, var(--accent-red-400, transparent), var(--accent-red-600, transparent));
+    background: linear-gradient(135deg, var(--accent-red-400), var(--accent-red-600));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -176,12 +176,12 @@
   &__label {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--neutral-200, transparent);
+    color: var(--neutral-200, var(--openai-gray-100));
   }
 
   &__subtitle-text {
     font-size: 0.85rem;
-    color: var(--neutral-400, transparent);
+    color: var(--neutral-400, var(--openai-gray-300));
   }
 
   &__trend-bar {
@@ -190,7 +190,7 @@
     right: 0;
     bottom: 0;
     height: 4px;
-    background: var(--neutral-200, transparent);
+    background: var(--neutral-200, var(--openai-gray-100));
   }
 
   &__trend-fill {
@@ -200,15 +200,15 @@
   }
 
   &__trend-fill--up {
-    background: linear-gradient(90deg, var(--accent-green-500, transparent), var(--accent-green-300, transparent));
+    background: linear-gradient(90deg, var(--accent-green-500), var(--accent-green-300));
   }
 
   &__trend-fill--down {
-    background: linear-gradient(90deg, var(--accent-red-500, transparent), var(--accent-red-400, transparent));
+    background: linear-gradient(90deg, var(--accent-red-500), var(--accent-red-400));
   }
 
   &__trend-fill--stable {
-    background: linear-gradient(90deg, var(--neutral-500, transparent), var(--neutral-400, transparent));
+    background: linear-gradient(90deg, var(--neutral-500, var(--openai-gray-400)), var(--neutral-400, var(--openai-gray-300)));
   }
 
   @media (max-width: 48rem) {

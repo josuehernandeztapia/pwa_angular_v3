@@ -26,7 +26,9 @@
         <button type="button" class="app-nav__a11y-btn" [ngClass]="{ 'is-active': fontScale === 'base' }" (click)="setFontScale('base')" aria-label="Tamaño de fuente base">A</button>
         <button type="button" class="app-nav__a11y-btn" [ngClass]="{ 'is-active': fontScale === 'sm' }" (click)="setFontScale('sm')" aria-label="Tamaño de fuente pequeño">A</button>
         <button type="button" class="app-nav__a11y-btn" [ngClass]="{ 'is-active': fontScale === 'lg' }" (click)="setFontScale('lg')" aria-label="Tamaño de fuente grande">A</button>
-        <button type="button" class="app-nav__contrast" [ngClass]="{ 'is-active': highContrast }" (click)="toggleHighContrast()" title="Alto contraste" aria-label="Alternar alto contraste">⬛⬜</button>
+        <button type="button" class="app-nav__contrast" [ngClass]="{ 'is-active': highContrast }" (click)="toggleHighContrast()" title="Alto contraste" aria-label="Alternar alto contraste">
+          <app-icon class="app-nav__contrast-icon" name="sparkles" [size]="16" aria-hidden="true"></app-icon>
+        </button>
       </div>
 
       <button type="button" class="app-nav__collapse" (click)="toggleCollapse()" aria-label="Alternar navegación" title="Alternar navegación">
@@ -62,6 +64,7 @@
       (click)="navigate(item)"
       [routerLink]="item.route"
       [attr.aria-label]="isCollapsed ? item.label : null"
+      [attr.data-cy]="item.dataCy || null"
       routerLinkActive="is-active"
     >
       <span class="app-nav__item-icon" aria-hidden="true">
@@ -77,6 +80,7 @@
           [ngClass]="{ 'is-active': isActive(child.route) }"
           (click)="navigate(child); $event.stopPropagation()"
           [routerLink]="child.route"
+          [attr.data-cy]="child.dataCy || null"
         >
           <span class="app-nav__subitem-icon" aria-hidden="true">
             <app-icon class="icon-16" [name]="child.iconType" [size]="16"></app-icon>

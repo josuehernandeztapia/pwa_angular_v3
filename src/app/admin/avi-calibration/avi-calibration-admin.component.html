@@ -2,12 +2,12 @@
   <header class="calibration-admin__header">
     <div class="calibration-admin__header-content">
       <div class="calibration-admin__title-group">
-        <app-ui-icon
+        <app-icon
           name="voice-analysis"
           [size]="32"
           class="calibration-admin__title-icon"
           aria-hidden="true"
-        ></app-ui-icon>
+        ></app-icon>
         <div>
           <h1 class="calibration-admin__title">AVI Calibration Center</h1>
           <p class="calibration-admin__subtitle">Real-time voice analysis calibration metrics</p>
@@ -20,13 +20,13 @@
         (click)="runNewCalibration()"
         [disabled]="runningCalibration"
       >
-        <app-ui-icon
+        <app-icon
           name="refresh"
           [size]="20"
           class="calibration-admin__button-icon"
           [ngClass]="{ 'calibration-admin__button-icon--spin': runningCalibration }"
           aria-hidden="true"
-        ></app-ui-icon>
+        ></app-icon>
         {{ runningCalibration ? 'Running...' : 'Run New Calibration' }}
       </button>
     </div>
@@ -36,13 +36,13 @@
     <article class="calibration-admin__status-card" [attr.data-status]="latestResult.gateStatus">
       <div class="calibration-admin__status-header">
         <div class="calibration-admin__status-indicator">
-          <app-ui-icon
+          <app-icon
             [name]="getStatusIcon(latestResult.gateStatus)"
             [size]="24"
             class="calibration-admin__status-icon"
             [ngClass]="getStatusIconClasses(latestResult.gateStatus)"
             aria-hidden="true"
-          ></app-ui-icon>
+          ></app-icon>
           <span class="calibration-admin__status-text">{{ latestResult.gateStatus }}</span>
         </div>
         <span class="calibration-admin__status-updated">Last updated: {{ formatTimestamp(latestResult.timestamp) }}</span>
@@ -154,12 +154,12 @@
 
   <div *ngIf="runningCalibration" class="calibration-admin__overlay" aria-live="assertive">
     <div class="calibration-admin__overlay-content">
-      <app-ui-icon
+      <app-icon
         name="voice-analysis"
         [size]="48"
         class="calibration-admin__overlay-icon"
         aria-hidden="true"
-      ></app-ui-icon>
+      ></app-icon>
       <h3 class="calibration-admin__overlay-title">Running AVI Calibration...</h3>
       <p class="calibration-admin__overlay-text">Analyzing voice samples and calculating metrics</p>
       <div class="calibration-admin__progress">

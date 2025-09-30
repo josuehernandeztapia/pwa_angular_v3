@@ -64,7 +64,15 @@
           <tr *ngFor="let result of results">
             <td>{{ result.name }}</td>
             <td class="tanda-enhanced__cell--numeric">{{ (result.irrAnnual * 100) | number:'1.2-2' }}</td>
-            <td class="tanda-enhanced__cell--center">{{ result.tirOK ? '✓' : '✗' }}</td>
+            <td class="tanda-enhanced__cell--center">
+              <app-icon
+                class="tanda-enhanced__status-icon"
+                [name]="result.tirOK ? 'check' : 'x-circle'"
+                [size]="16"
+                [ariaLabel]="result.tirOK ? 'IRR objetivo cumplido' : 'IRR objetivo no cumplido'"
+                [ngClass]="result.tirOK ? 'tanda-enhanced__status-icon--go' : 'tanda-enhanced__status-icon--no-go'"
+              ></app-icon>
+            </td>
             <td class="tanda-enhanced__cell--numeric">{{ result.metrics.awardsMade }}</td>
             <td class="tanda-enhanced__cell--numeric">{{ result.metrics.firstAwardT || '-' }}</td>
             <td class="tanda-enhanced__cell--numeric">{{ result.metrics.lastAwardT || '-' }}</td>

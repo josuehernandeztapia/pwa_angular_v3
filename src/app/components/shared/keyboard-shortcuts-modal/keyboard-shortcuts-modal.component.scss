@@ -1,0 +1,133 @@
+.shortcuts__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 1200;
+}
+
+.shortcuts__dialog {
+  position: fixed;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: min(480px, calc(100% - 32px));
+  max-height: calc(100vh - 64px);
+  background: var(--surface-dark, #111827);
+  color: var(--text-light, #f9fafb);
+  border-radius: 16px;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.45);
+  display: flex;
+  flex-direction: column;
+  z-index: 1210;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.shortcuts__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 12px 24px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.shortcuts__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.shortcuts__title-icon {
+  color: var(--brand, #38bdf8);
+}
+
+.shortcuts__close {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(148, 163, 184, 0.15);
+    outline: none;
+  }
+}
+
+.shortcuts__body {
+  padding: 16px 24px;
+  overflow-y: auto;
+}
+
+.shortcuts__description {
+  margin: 0 0 16px 0;
+  color: var(--text-2, #cbd5f5);
+}
+
+.shortcuts__list {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shortcuts__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.shortcuts__combo {
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  background: rgba(96, 165, 250, 0.16);
+  color: var(--brand, #38bdf8);
+  padding: 6px 12px;
+  border-radius: 10px;
+  min-width: 120px;
+  text-align: center;
+  margin: 0;
+}
+
+.shortcuts__detail {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+}
+
+.shortcuts__description-text {
+  font-size: 0.95rem;
+}
+
+.shortcuts__context {
+  font-size: 0.8rem;
+  color: rgba(248, 250, 252, 0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.shortcuts__footer {
+  padding: 12px 24px 18px 24px;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  font-size: 0.85rem;
+  color: rgba(203, 213, 225, 0.9);
+}
+
+@media (max-width: 480px) {
+  .shortcuts__dialog {
+    width: calc(100% - 24px);
+  }
+
+  .shortcuts__combo {
+    min-width: 96px;
+    padding: 6px 10px;
+  }
+}

@@ -40,7 +40,12 @@
 
       <div class="next-best-action__card-body">
         <div class="next-best-action__card-header">
-          <span class="next-best-action__type-icon" aria-hidden="true">{{ getActionIcon(action.type) }}</span>
+          <app-icon
+            class="next-best-action__type-icon"
+            [name]="getActionIcon(action.type)"
+            [size]="18"
+            aria-hidden="true"
+          ></app-icon>
           <h4 class="next-best-action__card-title">{{ action.title }}</h4>
           <div class="next-best-action__confidence" *ngIf="action.confidence >= 70">
             <span class="next-best-action__confidence-icon" aria-hidden="true">
@@ -63,18 +68,33 @@
 
         <dl class="next-best-action__meta">
           <div class="next-best-action__meta-item next-best-action__meta-item--time">
-            <span class="next-best-action__meta-icon" aria-hidden="true">timer</span>
-            <span class="next-best-action__meta-text">{{ action.timeToComplete }} min</span>
-          </div>
-          <div class="next-best-action__meta-item next-best-action__meta-item--value" *ngIf="action.businessValue > 0">
-            <span class="next-best-action__meta-icon" aria-hidden="true"></span>
-            <span class="next-best-action__meta-text">{{ formatCurrency(action.businessValue) }}</span>
-          </div>
-          <div class="next-best-action__meta-item next-best-action__meta-item--due" *ngIf="action.dueDate">
-            <span class="next-best-action__meta-icon" aria-hidden="true">date</span>
-            <span class="next-best-action__meta-text">{{ formatDueDate(action.dueDate) }}</span>
-          </div>
-        </dl>
+          <app-icon
+            class="next-best-action__meta-icon"
+            [name]="getMetaIcon('time')"
+            [size]="14"
+            aria-hidden="true"
+          ></app-icon>
+          <span class="next-best-action__meta-text">{{ action.timeToComplete }} min</span>
+        </div>
+        <div class="next-best-action__meta-item next-best-action__meta-item--value" *ngIf="action.businessValue > 0">
+          <app-icon
+            class="next-best-action__meta-icon"
+            [name]="getMetaIcon('value')"
+            [size]="14"
+            aria-hidden="true"
+          ></app-icon>
+          <span class="next-best-action__meta-text">{{ formatCurrency(action.businessValue) }}</span>
+        </div>
+        <div class="next-best-action__meta-item next-best-action__meta-item--due" *ngIf="action.dueDate">
+          <app-icon
+            class="next-best-action__meta-icon"
+            [name]="getMetaIcon('due')"
+            [size]="14"
+            aria-hidden="true"
+          ></app-icon>
+          <span class="next-best-action__meta-text">{{ formatDueDate(action.dueDate) }}</span>
+        </div>
+      </dl>
 
         <div class="next-best-action__tags" *ngIf="action.tags.length > 0">
           <span
@@ -91,7 +111,12 @@
     <div class="next-best-action__toggle" *ngIf="allActions.length > maxDisplayActions">
       <button type="button" class="next-best-action__toggle-btn" (click)="toggleShowAll()">
         {{ showingAll ? 'Mostrar menos' : ('Ver todas (' + allActions.length + ')') }}
-        <span class="next-best-action__toggle-icon" aria-hidden="true">{{ showingAll ? '▲' : '▼' }}</span>
+        <app-icon
+          class="next-best-action__toggle-icon"
+          [name]="showingAll ? 'chevron-up' : 'chevron-down'"
+          [size]="14"
+          aria-hidden="true"
+        ></app-icon>
       </button>
     </div>
   </div>

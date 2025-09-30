@@ -1,6 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, from } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface MicroLocalQuestion {
   id: string;
@@ -23,11 +26,16 @@ export interface QuestionPool {
   providedIn: 'root'
 })
 export class AviQuestionGeneratorService {
+  private readonly http = inject(HttpClient);
   private questionPools: Map<string, QuestionPool> = new Map();
   private readonly REFRESH_INTERVAL_DAYS = 30;
+  private readonly storageKeyPrefix = 'avi_questions_';
+  private readonly microLocalEndpoint = `${environment.apiUrl}/bff/avi/micro-local-questions`;
+  private readonly bffEnabled = !!(environment as any)?.features?.enableAviMicroLocalBff;
 
   constructor() {
     this.initializeLocalQuestionPools();
+    this.initializeFromStorage();
   }
 
   private initializeLocalQuestionPools(): void {
@@ -204,24 +212,30 @@ export class AviQuestionGeneratorService {
     const prompt = this.buildLLMPrompt(municipality);
     
     try {
-      const response = await fetch('/api/generate-micro-local-questions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt,
-          municipality,
-          count: 20,
-          exclude_previous: this.getPreviousQuestions(municipality)
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('LLM API call failed');
+      if (!this.bffEnabled) {
+        return [];
       }
 
-      const data = await response.json();
+      const payload = {
+        prompt,
+        municipality,
+        count: 20,
+        exclude_previous: this.getPreviousQuestions(municipality)
+      };
+
+      const data = await firstValueFrom(
+        this.http.post<{ questions: any[] }>(this.microLocalEndpoint, payload).pipe(
+          catchError(error => {
+            console.warn('[avi] micro-local BFF fallback', error);
+            return of({ questions: [] as any[] });
+          })
+        )
+      );
+
+      if (!data?.questions?.length) {
+        return [];
+      }
+
       return this.parseLLMResponse(data.questions, municipality);
     } catch (error) {
       return [];
@@ -297,15 +311,26 @@ EJEMPLOS del estilo deseado:
 
   private saveQuestionPoolToStorage(municipality: string, pool: QuestionPool): void {
     try {
-      localStorage.setItem(`avi_questions_${municipality}`, JSON.stringify(pool));
+      const payload = {
+        ...pool,
+        lastUpdated: pool.lastUpdated.toISOString()
+      };
+      localStorage.setItem(`${this.storageKeyPrefix}${municipality}`, JSON.stringify(payload));
     } catch (error) {
     }
   }
 
   private loadQuestionPoolFromStorage(municipality: string): QuestionPool | null {
     try {
-      const stored = localStorage.getItem(`avi_questions_${municipality}`);
-      return stored ? JSON.parse(stored) : null;
+      const stored = localStorage.getItem(`${this.storageKeyPrefix}${municipality}`);
+      if (!stored) {
+        return null;
+      }
+      const parsed = JSON.parse(stored);
+      return {
+        ...parsed,
+        lastUpdated: new Date(parsed.lastUpdated)
+      } as QuestionPool;
     } catch (error) {
       return null;
     }

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { SwPush } from '@angular/service-worker';
 import { of, throwError, firstValueFrom } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 import { PushNotificationService } from './push-notification.service';
 import { NotificationHistory, NotificationPayload } from '../models/notification';
 
@@ -185,7 +186,7 @@ describe('PushNotificationService', () => {
       localStorage.setItem('auth_token', 'mock_token');
     });
 
-    it('should subscribe to push notifications', (done) => {
+    it('should subscribe to push notifications', async () => {
       const mockSubscription = {
         endpoint: 'https://fcm.googleapis.com/fcm/send/test',
         getKey: jasmine.createSpy('getKey').and.returnValue(new Uint8Array([1, 2, 3]).buffer)
@@ -193,24 +194,20 @@ describe('PushNotificationService', () => {
 
       mockSwPush.requestSubscription.and.returnValue(Promise.resolve(mockSubscription as any));
 
-      // Start the subscription process
-      service.subscribeToNotifications().then(result => {
-        expect(mockSwPush.requestSubscription).toHaveBeenCalled();
-        expect(result).toBeTruthy();
-        expect(result?.endpoint).toBe(mockSubscription.endpoint);
-        done();
-      }).catch(() => done.fail());
+      const subscriptionPromise = service.subscribeToNotifications();
 
-      // Handle the HTTP request immediately
-      setTimeout(() => {
-        const req = httpMock.expectOne(req => req.url.includes('/notifications/subscriptions'));
-        expect(req.request.method).toBe('POST');
-        
-        req.flush({
-          subscription_id: 'sub123',
-          ...req.request.body
-        });
-      }, 10);
+      const req = httpMock.expectOne(request => request.url.includes('/notifications/subscriptions'));
+      expect(req.request.method).toBe('POST');
+      
+      req.flush({
+        subscription_id: 'sub123',
+        ...req.request.body
+      });
+
+      const result = await subscriptionPromise;
+      expect(mockSwPush.requestSubscription).toHaveBeenCalled();
+      expect(result).toBeTruthy();
+      expect(result?.endpoint).toBe(mockSubscription.endpoint);
     });
 
     it('should return null when permission not granted', async () => {
@@ -233,7 +230,7 @@ describe('PushNotificationService', () => {
       }
     });
 
-    it('should unsubscribe from push notifications', (done) => {
+    it('should unsubscribe from push notifications', async () => {
       // Set up existing subscription
       const existingSubscription = {
         subscription_id: 'sub123',
@@ -249,19 +246,16 @@ describe('PushNotificationService', () => {
 
       mockSwPush.unsubscribe.and.returnValue(Promise.resolve());
 
-      service.unsubscribeFromNotifications().then(result => {
-        expect(result).toBeTrue();
-        expect(mockSwPush.unsubscribe).toHaveBeenCalled();
-        expect(localStorage.getItem('push_subscription')).toBeNull();
-        done();
-      }).catch(() => done.fail());
+      const unsubscribePromise = service.unsubscribeFromNotifications();
 
-      // Handle the HTTP request immediately
-      setTimeout(() => {
-        const req = httpMock.expectOne(req => req.url.includes('/notifications/subscriptions/sub123'));
-        expect(req.request.method).toBe('DELETE');
-        req.flush({});
-      }, 10);
+      const req = httpMock.expectOne(request => request.url.includes('/notifications/subscriptions/sub123'));
+      expect(req.request.method).toBe('DELETE');
+      req.flush({});
+
+      const result = await unsubscribePromise;
+      expect(result).toBeTrue();
+      expect(mockSwPush.unsubscribe).toHaveBeenCalled();
+      expect(localStorage.getItem('push_subscription')).toBeNull();
     });
 
     it('should handle unsubscribe failures gracefully', async () => {
@@ -483,7 +477,7 @@ describe('PushNotificationService', () => {
   });
 
   describe('Notification History', () => {
-    it('should get unread notification count', (done) => {
+    it('should get unread notification count', async () => {
       const notifications = [
         {
           id: '1',
@@ -509,10 +503,8 @@ describe('PushNotificationService', () => {
 
       service['notifications$'].next(notifications);
 
-      service.getUnreadCount().subscribe(count => {
-        expect(count).toBe(1);
-        done();
-      });
+      const count = await firstValueFrom(service.getUnreadCount().pipe(take(1)));
+      expect(count).toBe(1);
     });
 
     it('should mark all notifications as read', () => {
@@ -543,9 +535,8 @@ describe('PushNotificationService', () => {
 
       service.markAllAsRead();
 
-      service.notificationHistory.subscribe(history => {
-        expect(history.every(n => n.clicked)).toBeTrue();
-      });
+      const history = service['notifications$'].value;
+      expect(history.every(n => n.clicked)).toBeTrue();
     });
 
     it('should clear notification history', () => {
@@ -566,9 +557,7 @@ describe('PushNotificationService', () => {
 
       service.clearNotificationHistory();
 
-      service.notificationHistory.subscribe(history => {
-        expect(history).toEqual([]);
-      });
+      expect(service['notifications$'].value).toEqual([]);
 
       expect(localStorage.getItem('notification_history')).toBeNull();
     });
@@ -603,17 +592,14 @@ describe('PushNotificationService', () => {
 
       const newService = TestBed.inject(PushNotificationService);
       
-      return new Promise<void>((resolve) => {
-        newService.notificationHistory.subscribe(history => {
-          if (history.length > 0) {
-            expect(history).toEqual(notifications);
-            resolve();
-          }
-        });
-        
-        // If no notifications are loaded after 100ms, resolve anyway
-        setTimeout(() => resolve(), 100);
-      });
+      const history = await firstValueFrom(
+        newService.notificationHistory.pipe(
+          filter(list => list.length > 0),
+          take(1)
+        )
+      );
+
+      expect(history).toEqual(notifications);
     });
 
     it('should handle corrupted notification history data', async () => {
@@ -869,4 +855,3 @@ describe('PushNotificationService', () => {
     });
   });
 });
-

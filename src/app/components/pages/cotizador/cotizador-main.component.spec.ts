@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CotizadorMainComponent } from './cotizador-main.component';
 import { ToastService } from '../../../services/toast.service';
 
@@ -8,7 +9,7 @@ describe('CotizadorMainComponent – PMT and Amortization', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CotizadorMainComponent],
+      imports: [CotizadorMainComponent, HttpClientTestingModule],
       providers: [
         { provide: ToastService, useValue: { success: () => {}, error: () => {}, info: () => {} } }
       ]

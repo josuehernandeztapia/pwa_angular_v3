@@ -80,8 +80,11 @@ jobs:
           max_attempts: 2
           command: npm run test:unit
 
-      - name: Build PWA
-        run: npm run build:prod
+      - name: Build PWA (stats)
+        run: npm run build:prod:stats
+
+      - name: Bundle Size Guard
+        run: npm run size:guard
 
       - name: Upload PWA Artifacts
         uses: actions/upload-artifact@v4

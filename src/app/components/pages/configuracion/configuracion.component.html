@@ -22,6 +22,22 @@
     </button>
   </div>
 
+  <section class="configuracion__links" aria-label="Enlaces rápidos de administración">
+    <a
+      routerLink="/configuracion/politicas"
+      class="configuracion__link-card"
+      data-cy="config-market-policies-link"
+    >
+      <span class="configuracion__link-icon">
+        <app-icon name="settings" [size]="24"></app-icon>
+      </span>
+      <div>
+        <h3>Políticas de mercado</h3>
+        <p>Editar matrices de documentos y refrescar configuración remota.</p>
+      </div>
+    </a>
+  </section>
+
   <div class="configuracion__form" id="configuracion-main">
     <div class="configuracion__form-grid">
       <label class="configuracion__field">
@@ -114,7 +130,13 @@
         data-cy="product-package"
       >
         <header class="configuracion__package-header">
-          <span class="configuracion__package-icon" [innerHTML]="pkg.icon"></span>
+          <span
+            class="configuracion__package-icon"
+            [ngClass]="'configuracion__package-icon--' + pkg.id"
+            aria-hidden="true"
+          >
+            <app-icon [name]="pkg.icon" [size]="24"></app-icon>
+          </span>
           <div class="configuracion__package-meta">
             <span class="configuracion__package-name">{{ pkg.name }}</span>
             <span class="configuracion__package-price">{{ '$' + pkg.price }}</span>

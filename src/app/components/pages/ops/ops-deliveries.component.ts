@@ -1,13 +1,16 @@
-import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { IconName } from '../../shared/icon/icon-definitions';
+import { ContextPanelComponent } from '../../shared/context-panel/context-panel.component';
 import { finalize } from 'rxjs';
 
 import { DeliveriesService } from '../../../services/deliveries.service';
 import { StockService } from '../../../services/stock.service';
 import { ToastService } from '../../../services/toast.service';
+import { FlowContextService } from '../../../services/flow-context.service';
 import { 
   DeliveryOrder,
   DeliveryStatus,
@@ -17,14 +20,24 @@ import {
   StockAlert
 } from '../../../models/deliveries';
 
+interface DeliveriesContextSnapshot {
+  selectedMarket: Market | '';
+  selectedRoute: string;
+  clientSearch: string;
+  selectedStatus: DeliveryStatus | '';
+  currentPage: number;
+  pageSize: number;
+  timestamp: number;
+}
+
 @Component({
   selector: 'app-ops-deliveries',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, IconComponent],
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent, ContextPanelComponent],
   templateUrl: './ops-deliveries.component.html',
   styleUrls: ['./ops-deliveries.component.scss']
 })
-export class OpsDeliveriesComponent implements OnInit {
+export class OpsDeliveriesComponent implements OnInit, OnDestroy {
   // Injected services
   private deliveriesService = inject(DeliveriesService);
   private stockService = inject(StockService);
@@ -41,6 +54,26 @@ export class OpsDeliveriesComponent implements OnInit {
   stockPositions = signal<StockPosition[]>([]);
   stockAlerts = signal<StockAlert[]>([]);
   availableRoutes = signal<Array<{ id: string; name: string; market: Market }>>([]);
+
+  performanceMetrics = signal<{ totalDeliveries: number; onTimePercentage: number; avgTransitDays: number; delayedDeliveries: number } | null>(null);
+  metricsLoading = signal<boolean>(false);
+
+  showEtaHistoryModal = signal<boolean>(false);
+  etaHistory = signal<any[]>([]);
+  etaHistoryLoading = signal<boolean>(false);
+  etaHistoryError = signal<string | null>(null);
+  etaHistoryDelivery = signal<DeliveryOrder | null>(null);
+
+  showAdjustEtaModal = signal<boolean>(false);
+  adjustEtaDate = signal<string>('');
+  adjustEtaReason = signal<string>('');
+  adjustEtaSaving = signal<boolean>(false);
+  adjustEtaError = signal<string | null>(null);
+  adjustEtaDelivery = signal<DeliveryOrder | null>(null);
+
+  private readonly flowContext = inject(FlowContextService, { optional: true });
+  private readonly FLOW_CONTEXT_KEY = 'entregas';
+  private restoringContext = false;
 
   // UI state
   loading = signal<boolean>(false);
@@ -107,7 +140,7 @@ export class OpsDeliveriesComponent implements OnInit {
   });
 
   marketSummary = computed(() => {
-    const markets: Market[] = ['AGS', 'EdoMex'];
+    const markets: Market[] = ['aguascalientes', 'edomex'];
     return markets.map(market => {
       const marketDeliveries = this.deliveries().filter(d => d.market === market);
       return {
@@ -158,17 +191,87 @@ export class OpsDeliveriesComponent implements OnInit {
   constructor() {
     // React to market changes to load routes
     effect(() => {
-      if (this.selectedMarket() === 'EdoMex') {
+      if (this.selectedMarket() === 'edomex') {
         this.loadRoutes();
       } else {
         this.selectedRoute.set('');
         this.availableRoutes.set([]);
       }
     });
+
+    effect(() => {
+      if (!this.flowContext || this.restoringContext) {
+        return;
+      }
+      this.persistContext({
+        selectedMarket: this.selectedMarket(),
+        selectedRoute: this.selectedRoute(),
+        clientSearch: this.clientSearch(),
+        selectedStatus: this.selectedStatus(),
+        currentPage: this.currentPage(),
+        pageSize: this.pageSize()
+      });
+    });
   }
 
   ngOnInit(): void {
+    this.flowContext?.setBreadcrumbs(['Dashboard', 'Entregas']);
+    this.restoreFromContext();
     this.loadData();
+  }
+
+  ngOnDestroy(): void {
+    this.persistContext();
+  }
+
+  private persistContext(partial?: Partial<DeliveriesContextSnapshot>): void {
+    if (!this.flowContext) {
+      return;
+    }
+
+    const snapshot: DeliveriesContextSnapshot = {
+      selectedMarket: partial?.selectedMarket ?? this.selectedMarket(),
+      selectedRoute: partial?.selectedRoute ?? this.selectedRoute(),
+      clientSearch: partial?.clientSearch ?? this.clientSearch(),
+      selectedStatus: partial?.selectedStatus ?? this.selectedStatus(),
+      currentPage: partial?.currentPage ?? this.currentPage(),
+      pageSize: partial?.pageSize ?? this.pageSize(),
+      timestamp: Date.now()
+    };
+
+    this.flowContext.saveContext(this.FLOW_CONTEXT_KEY, snapshot, { breadcrumbs: ['Dashboard', 'Entregas'] });
+  }
+
+  private restoreFromContext(): void {
+    if (!this.flowContext) {
+      return;
+    }
+
+    const stored = this.flowContext.getContextData<DeliveriesContextSnapshot>(this.FLOW_CONTEXT_KEY);
+    if (!stored) {
+      return;
+    }
+
+    this.restoringContext = true;
+    if (stored.selectedMarket !== undefined) {
+      this.selectedMarket.set(stored.selectedMarket ?? '');
+    }
+    if (stored.selectedRoute !== undefined) {
+      this.selectedRoute.set(stored.selectedRoute ?? '');
+    }
+    if (stored.clientSearch !== undefined) {
+      this.clientSearch.set(stored.clientSearch ?? '');
+    }
+    if (stored.selectedStatus !== undefined) {
+      this.selectedStatus.set(stored.selectedStatus ?? '');
+    }
+    if (stored.currentPage !== undefined) {
+      this.currentPage.set(stored.currentPage || 1);
+    }
+    if (stored.pageSize !== undefined) {
+      this.pageSize.set(stored.pageSize || 20);
+    }
+    this.restoringContext = false;
   }
 
   // Data loading methods
@@ -188,6 +291,7 @@ export class OpsDeliveriesComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.deliveries.set(response.items);
+          this.loadPerformanceMetrics();
         },
         error: (error) => {
           this.toastService.error(error.userMessage || 'Error cargando entregas');
@@ -202,7 +306,7 @@ export class OpsDeliveriesComponent implements OnInit {
     this.stockLoading.set(true);
     
     // Load stock positions for both markets
-    const markets: Market[] = ['AGS', 'EdoMex'];
+    const markets: Market[] = ['aguascalientes', 'edomex'];
     const stockPromises = markets.map(market => 
       this.stockService.getAllPositions(market).toPromise()
     );
@@ -223,6 +327,22 @@ export class OpsDeliveriesComponent implements OnInit {
           this.stockAlerts.set(alerts);
         },
         error: (error) => {
+        }
+      });
+  }
+
+  private loadPerformanceMetrics(): void {
+    this.metricsLoading.set(true);
+    const market = this.selectedMarket() || undefined;
+    this.deliveriesService.getPerformanceMetrics(market as Market | undefined)
+      .pipe(finalize(() => this.metricsLoading.set(false)))
+      .subscribe({
+        next: metrics => {
+          this.performanceMetrics.set(metrics);
+        },
+        error: (error) => {
+          this.performanceMetrics.set(null);
+          this.toastService.warning(error.userMessage || 'No fue posible obtener los indicadores de entrega.');
         }
       });
   }
@@ -305,6 +425,87 @@ export class OpsDeliveriesComponent implements OnInit {
     this.selectedDelivery.set(null);
   }
 
+  openEtaHistory(delivery: DeliveryOrder): void {
+    this.etaHistoryDelivery.set(delivery);
+    this.showEtaHistoryModal.set(true);
+    this.etaHistoryLoading.set(true);
+    this.etaHistoryError.set(null);
+    this.deliveriesService.getEtaHistory(delivery.id)
+      .pipe(finalize(() => this.etaHistoryLoading.set(false)))
+      .subscribe({
+        next: history => {
+          this.etaHistory.set(history);
+        },
+        error: (error) => {
+          this.etaHistory.set([]);
+          this.etaHistoryError.set(error.userMessage || 'No fue posible recuperar el historial de ETA.');
+        }
+      });
+  }
+
+  closeEtaHistory(): void {
+    this.showEtaHistoryModal.set(false);
+    this.etaHistory.set([]);
+    this.etaHistoryDelivery.set(null);
+    this.etaHistoryError.set(null);
+  }
+
+  openAdjustEta(delivery: DeliveryOrder): void {
+    this.adjustEtaDelivery.set(delivery);
+    this.adjustEtaDate.set(this.formatDateForInput(delivery.eta));
+    this.adjustEtaReason.set('');
+    this.adjustEtaError.set(null);
+    this.showAdjustEtaModal.set(true);
+  }
+
+  closeAdjustEtaModal(): void {
+    this.showAdjustEtaModal.set(false);
+    this.adjustEtaDelivery.set(null);
+    this.adjustEtaDate.set('');
+    this.adjustEtaReason.set('');
+    this.adjustEtaError.set(null);
+    this.adjustEtaSaving.set(false);
+  }
+
+  submitEtaAdjustment(): void {
+    const delivery = this.adjustEtaDelivery();
+    if (!delivery) {
+      return;
+    }
+
+    const dateValue = this.adjustEtaDate().trim();
+    if (!dateValue) {
+      this.adjustEtaError.set('Selecciona una fecha estimada.');
+      return;
+    }
+
+    const reasonValue = this.adjustEtaReason().trim();
+    if (!reasonValue) {
+      this.adjustEtaError.set('Describe el motivo del ajuste.');
+      return;
+    }
+
+    const isoDate = this.formatIsoForSubmission(dateValue);
+
+    this.adjustEtaSaving.set(true);
+    this.deliveriesService.adjustEta(delivery.id, isoDate, reasonValue, 'ops_dev')
+      .pipe(finalize(() => this.adjustEtaSaving.set(false)))
+      .subscribe({
+        next: response => {
+          if (response.success) {
+            this.toastService.success(response.message || 'ETA actualizada correctamente.');
+            this.closeAdjustEtaModal();
+            this.loadData();
+          } else {
+            this.adjustEtaError.set(response.message || 'No se pudo actualizar la ETA.');
+          }
+        },
+        error: (error) => {
+          this.adjustEtaError.set(error.userMessage || 'Error ajustando la ETA.');
+        }
+      });
+  }
+
   executeTransition(event: any): void {
     const delivery = this.selectedDelivery();
     if (!delivery) return;
@@ -341,7 +542,7 @@ export class OpsDeliveriesComponent implements OnInit {
 
   // Utility methods
   getMarketName(market: Market): string {
-    return market === 'AGS' ? 'Aguascalientes' : 'Estado de México';
+    return market === 'aguascalientes' ? 'Aguascalientes' : 'Estado de México';
   }
 
   getSelectedRouteName(): string {
@@ -353,11 +554,14 @@ export class OpsDeliveriesComponent implements OnInit {
     return DELIVERY_STATUS_DESCRIPTIONS[status]?.title || status;
   }
 
-  getStatusColor(status: DeliveryStatus): string {
-    return this.deliveriesService.getStatusColor(status);
+  getStatusColor(delivery: DeliveryOrder): string {
+    if (delivery.status !== 'DELIVERED' && this.isOverdue(delivery.eta)) {
+      return 'var(--accent-red-500)';
+    }
+    return this.deliveriesService.getStatusColor(delivery.status);
   }
 
-  getStatusIcon(status: DeliveryStatus): string {
+  getStatusIcon(status: DeliveryStatus): IconName {
     return this.deliveriesService.getStatusIcon(status);
   }
 
@@ -382,11 +586,37 @@ export class OpsDeliveriesComponent implements OnInit {
     }).format(new Date(date));
   }
 
+  formatEtaHistoryDate(date: string): string {
+    const parsed = new Date(date);
+    if (isNaN(parsed.getTime())) {
+      return date;
+    }
+    return new Intl.DateTimeFormat('es-MX', {
+      day: 'numeric',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(parsed);
+  }
+
   formatCurrency(amount: number): string {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN'
     }).format(amount);
+  }
+
+  private formatDateForInput(eta?: string): string {
+    if (!eta) {
+      return '';
+    }
+    const date = new Date(eta);
+    return isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10);
+  }
+
+  private formatIsoForSubmission(date: string): string {
+    const parsed = new Date(`${date}T00:00:00Z`);
+    return parsed.toISOString();
   }
 
   isOverdue(eta?: string): boolean {

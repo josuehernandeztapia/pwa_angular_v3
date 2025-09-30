@@ -153,7 +153,7 @@ export class TriggersMonitorComponent implements OnInit, OnDestroy {
   }
 
   viewDeliveryOrder(orderId: string) {
-    this.router.navigate(['/ops/deliveries', orderId]);
+    this.router.navigate(['/entregas', orderId]);
   }
 
   viewError(event: TriggerEvent) {

@@ -1,6 +1,8 @@
 // SSOT - Single Source of Truth for TANDA System
 // Consolidates 4+ different TandaMember/Group definitions across the codebase
 
+import { IconName } from '../components/shared/icon/icon-definitions';
+
 export type TandaMemberStatus = 'active' | 'frozen' | 'left' | 'delivered' | 'pending' | 'cancelled';
 
 export type TandaGroupStatus = 'forming' | 'active' | 'completed' | 'cancelled' | 'inactive';
@@ -252,7 +254,7 @@ export type TandaMilestone = {
   month?: number;
   completed?: boolean;
   current?: boolean;
-  emoji?: string;
+  icon?: IconName;
   title?: string;
   description?: string;
   amount?: number;

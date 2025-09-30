@@ -25,7 +25,7 @@
         (click)="markAllAsRead()"
         title="Marcar todas como leídas"
       >
-        <span aria-hidden="true">✓</span>
+        <app-icon name="check" [size]="16" aria-hidden="true"></app-icon>
         <span class="notifications-panel__sr-only">Marcar todas como leídas</span>
       </button>
 
@@ -35,7 +35,7 @@
         (click)="closePanel()"
         title="Cerrar panel"
       >
-        <span aria-hidden="true">×</span>
+        <app-icon name="close" [size]="16" aria-hidden="true"></app-icon>
         <span class="notifications-panel__sr-only">Cerrar panel</span>
       </button>
     </div>
@@ -54,7 +54,7 @@
       (click)="onNotificationClick(notification)"
     >
       <div class="notifications-panel__item-icon" aria-hidden="true">
-        {{ getNotificationIcon(notification.type) }}
+        <app-icon [name]="getNotificationIcon(notification.type)" [size]="24"></app-icon>
       </div>
 
       <div class="notifications-panel__item-body">
@@ -83,19 +83,19 @@
           (click)="markAsRead(notification.id); $event.stopPropagation()"
           title="Marcar como leída"
         >
-          <span aria-hidden="true">✓</span>
+          <app-icon name="check" [size]="14" aria-hidden="true"></app-icon>
           <span class="notifications-panel__sr-only">Marcar como leída</span>
         </button>
 
         <div class="notifications-panel__priority" [ngClass]="getPriorityClasses(notification)">
-          {{ getPriorityIcon(notification.priority) }}
+          <app-icon [name]="getPriorityIcon(notification.priority)" [size]="12"></app-icon>
         </div>
       </div>
     </article>
 
     <div *ngIf="filteredNotifications.length === 0" class="notifications-panel__empty">
       <div class="notifications-panel__empty-icon" aria-hidden="true">
-        {{ showUnreadOnly ? '•' : '∅' }}
+        <app-icon [name]="showUnreadOnly ? 'dot' : 'inbox'" [size]="36"></app-icon>
       </div>
       <p class="notifications-panel__empty-text">
         {{ showUnreadOnly ? 'No hay notificaciones sin leer' : 'No hay notificaciones pendientes' }}

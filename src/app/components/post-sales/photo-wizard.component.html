@@ -6,10 +6,41 @@
     }
   </header>
 
+  @if (isOffline) {
+    <aside class="photo-wizard__banner photo-wizard__banner--offline" role="status">
+      <div class="photo-wizard__banner-content">
+        <app-icon [name]="getIcon('camera')" [size]="20" color="currentColor"></app-icon>
+        <div>
+          <strong>Mantén las capturas</strong>
+          <p>Guardamos las fotos en cola offline y las enviaremos al recuperar conexión.</p>
+        </div>
+      </div>
+    </aside>
+  }
+
+  @if (queueMessage) {
+    <aside class="photo-wizard__banner photo-wizard__banner--queued" role="status">
+      <div class="photo-wizard__banner-content">
+        <app-icon [name]="getIcon('camera')" [size]="20" color="currentColor"></app-icon>
+        <p>{{ queueMessage }}</p>
+      </div>
+    </aside>
+  } @else if (pendingOfflineCount > 0) {
+    <aside class="photo-wizard__banner photo-wizard__banner--queued" role="status">
+      <div class="photo-wizard__banner-content">
+        <app-icon [name]="getIcon('camera')" [size]="20" color="currentColor"></app-icon>
+        <div>
+          <strong>{{ pendingOfflineCount }} foto{{ pendingOfflineCount > 1 ? 's' : '' }} en cola</strong>
+          <p>Sincronizaremos automáticamente al reconectar.</p>
+        </div>
+      </div>
+    </aside>
+  }
+
   <div class="photo-wizard__steps" data-cy="photo-steps">
     @for (step of steps; track step.id; let index = $index) {
       <article
-        class="photo-wizard__step"
+        class="photo-wizard__step card"
         [class.photo-wizard__step--completed]="step.done"
         [class.photo-wizard__step--warning]="step.done && (step.confidence || 0) < threshold"
         data-cy="step-card"
@@ -35,6 +66,8 @@
                 <span class="photo-wizard__spinner" aria-hidden="true"></span>
                 Procesando…
               </span>
+            } @else if (step.offlineQueued) {
+              <span class="photo-wizard__badge photo-wizard__badge--queued">En cola offline</span>
             } @else if (step.done && (step.confidence || 0) >= threshold && (!step.missing || step.missing.length === 0)) {
               <span class="photo-wizard__badge photo-wizard__badge--success">
                 Validado ({{ (step.confidence!*100) | number:'1.0-0' }}%)
@@ -47,7 +80,11 @@
 
         <div class="photo-wizard__step-body">
           <div class="photo-wizard__actions">
-            <label class="ui-btn ui-btn-ghost photo-wizard__action" [class.is-disabled]="step.uploading">
+            <label
+              class="btn btn-ghost ui-btn photo-wizard__action"
+              [class.is-disabled]="step.uploading"
+              [attr.data-cy]="'postventa-upload-photo-' + step.id"
+            >
               <input
                 type="file"
                 accept="image/*"
@@ -61,11 +98,20 @@
             </label>
 
             @if (step.done) {
-              <button type="button" class="ui-btn ui-btn-secondary photo-wizard__action" (click)="retake(step.id)">
+              <button type="button" class="btn btn-secondary ui-btn photo-wizard__action" (click)="retake(step.id)">
                 Repetir
               </button>
             }
           </div>
+
+          @if (photoSnapshots[step.id]) {
+            <div class="photo-wizard__preview" [attr.data-cy]="'postventa-upload-preview-' + step.id">
+              <img
+                [src]="photoSnapshots[step.id]"
+                alt="Previsualización {{ step.title }}"
+              />
+            </div>
+          }
 
           @if (step.example) {
             <figure class="photo-wizard__example">
@@ -94,7 +140,7 @@
           }
 
           @if (step.done) {
-            <section class="photo-wizard__review">
+            <section class="photo-wizard__review" data-cy="postventa-review">
               @if ((step.confidence || 0) >= threshold && (!step.missing || step.missing.length === 0)) {
                 <div class="photo-wizard__review-card photo-wizard__review-card--success">
                   <span class="photo-wizard__review-dot" aria-hidden="true"></span>
@@ -119,13 +165,14 @@
                   }
 
                   <div class="photo-wizard__review-actions">
-                    <button type="button" class="ui-btn ui-btn-secondary" (click)="retake(step.id)">
+                    <button type="button" class="btn btn-secondary" (click)="retake(step.id)">
                       Repetir captura
                     </button>
                     @if (step.id === 'vin' || step.id === 'odometer') {
                       <button
                         type="button"
-                        class="ui-btn ui-btn-primary"
+                        class="btn btn-primary ui-btn"
+                        [attr.data-cy]="'postventa-ocr-' + step.id"
                         (click)="openManualEntry(step.id)"
                         data-testid="manual-entry-btn"
                       >
@@ -156,7 +203,7 @@
           <p>Vuelve a capturar el VIN con mejor iluminación o enfoca el cuadro completo.</p>
         </div>
       </div>
-      <button type="button" class="ui-btn ui-btn-secondary" (click)="retakeVinWithRetry()">
+      <button type="button" class="btn btn-secondary" (click)="retakeVinWithRetry()">
         Reintentar captura VIN
       </button>
     </aside>
@@ -222,20 +269,25 @@
               <span class="photo-wizard__quote-meta">OEM {{ part.oem }} · Eq. {{ part.equivalent }}</span>
               <span class="photo-wizard__quote-meta">${{ part.priceMXN | number:'1.0-0' }} MXN · Stock {{ part.stock }}</span>
             </div>
-            <button type="button" class="ui-btn ui-btn-primary photo-wizard__quote-action" (click)="addToQuote(part)">
+            <button type="button" class="btn btn-primary photo-wizard__quote-action" (click)="addToQuote(part)">
               Agregar a borrador
             </button>
           </li>
         }
       </ul>
-      <button type="button" class="ui-btn ui-btn-ghost photo-wizard__quote-clear" (click)="clearDraft()" [disabled]="draftCount === 0">
+      <button type="button" class="btn btn-ghost photo-wizard__quote-clear" (click)="clearDraft()" [disabled]="draftCount === 0">
         Vaciar borrador
       </button>
     </section>
   }
 
   <footer class="photo-wizard__footer">
-    <button type="button" class="ui-btn ui-btn-primary" (click)="next()">
+    <button
+      type="button"
+      class="btn btn-primary ui-btn"
+      (click)="next()"
+      [attr.data-cy]="isAllGood ? 'postventa-confirm' : 'postventa-next'"
+    >
       {{ ctaText }}
     </button>
   </footer>

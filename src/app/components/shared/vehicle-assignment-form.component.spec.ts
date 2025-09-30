@@ -155,7 +155,7 @@ describe('VehicleAssignmentFormComponent', () => {
     // Form is invalid by default (empty required fields)
     component.onSubmit();
     
-    expect(console.log).toHaveBeenCalledWith(' Form is invalid, cannot submit');
+    expect(console.log).toHaveBeenCalledWith('Form is invalid, cannot submit');
     expect(mockVehicleService.assignVehicleToClient).not.toHaveBeenCalled();
   });
 

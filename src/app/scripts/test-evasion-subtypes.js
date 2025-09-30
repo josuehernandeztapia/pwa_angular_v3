@@ -400,7 +400,7 @@ class AdvancedEvasionAnalyzer {
     }
     
     if (avgConfidence > 0.90 && evasionPatterns.directDenialCount > 0) {
-      reasons.push(`🚨 Demasiado seguro en negaciones (${(avgConfidence*100).toFixed(1)}% confianza)`);
+      reasons.push(`Alerta: demasiado seguro en negaciones (${(avgConfidence*100).toFixed(1)}% confianza)`);
     }
     
     return reasons;

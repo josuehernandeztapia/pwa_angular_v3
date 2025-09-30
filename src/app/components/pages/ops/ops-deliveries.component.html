@@ -11,11 +11,141 @@
             Actualizar
           </button>
           <button class="ops-deliveries__action-button ops-deliveries__action-button--recompute" (click)="recomputeStock()" [disabled]="stockLoading()" aria-label="Recalcular stock">
-            <app-icon name="bar-chart" [size]="16" class="ops-deliveries__action-icon" />
+            <app-icon name="chart" [size]="16" class="ops-deliveries__action-icon" />
             Recalcular Stock
           </button>
         </div>
       </div>
+
+    <app-context-panel
+      class="ops-deliveries__context-panel"
+      [keys]="['entregas', 'documentos', 'cotizador']">
+    </app-context-panel>
+
+    <section class="ops-deliveries__metrics" aria-label="Indicadores de desempeño">
+      <div *ngIf="metricsLoading()" class="ops-deliveries__metrics-loading">Cargando indicadores de entrega…</div>
+      <div *ngIf="!metricsLoading() && performanceMetrics() as metrics" class="ops-deliveries__summary-grid">
+        <div class="ops-deliveries__summary-card">
+          <h4>Total de pedidos</h4>
+          <div class="ops-deliveries__summary-stats">
+            <div class="ops-deliveries__summary-stat">
+              <span class="ops-deliveries__summary-value">{{ metrics.totalDeliveries }}</span>
+              <span class="ops-deliveries__summary-label">Registrados en NEON</span>
+            </div>
+          </div>
+        </div>
+        <div class="ops-deliveries__summary-card">
+          <h4>Entregas a tiempo</h4>
+          <div class="ops-deliveries__summary-stats">
+            <div class="ops-deliveries__summary-stat">
+              <span class="ops-deliveries__summary-value">{{ metrics.onTimePercentage }}%</span>
+              <span class="ops-deliveries__summary-label">Cumplimiento ETA</span>
+            </div>
+          </div>
+        </div>
+        <div class="ops-deliveries__summary-card">
+          <h4>Promedio tránsito</h4>
+          <div class="ops-deliveries__summary-stats">
+            <div class="ops-deliveries__summary-stat">
+              <span class="ops-deliveries__summary-value">{{ metrics.avgTransitDays }} días</span>
+              <span class="ops-deliveries__summary-label">Del pedido a entrega</span>
+            </div>
+          </div>
+        </div>
+        <div class="ops-deliveries__summary-card">
+          <h4>Pedidos retrasados</h4>
+          <div class="ops-deliveries__summary-stats">
+            <div class="ops-deliveries__summary-stat">
+              <span class="ops-deliveries__summary-value">{{ metrics.delayedDeliveries }}</span>
+              <span class="ops-deliveries__summary-label">Requieren seguimiento</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Historial ETA -->
+  <div *ngIf="showEtaHistoryModal()" class="ops-deliveries__modal-overlay" (click)="closeEtaHistory()">
+    <div class="ops-deliveries__modal" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="eta-history-title">
+      <div class="ops-deliveries__modal-header">
+        <h3 id="eta-history-title">Historial ETA – {{ etaHistoryDelivery()?.client?.name }}</h3>
+        <button class="ops-deliveries__modal-close" type="button" (click)="closeEtaHistory()" aria-label="Cerrar">
+          <app-icon name="x" [size]="16"></app-icon>
+        </button>
+      </div>
+      <div class="ops-deliveries__modal-body">
+        <div *ngIf="etaHistoryLoading()" class="ops-deliveries__metrics-loading">Cargando historial…</div>
+        <div *ngIf="etaHistoryError()" class="ops-deliveries__alert ops-deliveries__alert--warning">{{ etaHistoryError() }}</div>
+        <table *ngIf="!etaHistoryLoading() && !etaHistoryError() && etaHistory().length" class="ops-deliveries__table eta-history-table">
+          <thead>
+            <tr>
+              <th>Registrado</th>
+              <th>ETA anterior</th>
+              <th>ETA nueva</th>
+              <th>Método</th>
+              <th>Motivo</th>
+              <th>Registrado por</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of etaHistory()">
+              <td>{{ formatEtaHistoryDate(entry.calculatedAt || entry.createdAt) }}</td>
+              <td>{{ formatETA(entry.previousEta) }}</td>
+              <td>{{ formatETA(entry.newEta) }}</td>
+              <td>{{ entry.method || 'Automático' }}</td>
+              <td>{{ entry.reason || '—' }}</td>
+              <td>{{ entry.adjustedBy || 'NEON' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <p *ngIf="!etaHistoryLoading() && !etaHistoryError() && !etaHistory().length" class="ops-deliveries__empty-state">Sin ajustes de ETA registrados.</p>
+      </div>
+      <div class="ops-deliveries__modal-footer">
+        <button type="button" class="ops-deliveries__button ops-deliveries__button--view" (click)="closeEtaHistory()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Ajustar ETA -->
+  <div *ngIf="showAdjustEtaModal()" class="ops-deliveries__modal-overlay" (click)="closeAdjustEtaModal()">
+    <div class="ops-deliveries__modal" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="adjust-eta-title">
+      <div class="ops-deliveries__modal-header">
+        <h3 id="adjust-eta-title">Ajustar ETA – {{ adjustEtaDelivery()?.client?.name }}</h3>
+        <button class="ops-deliveries__modal-close" type="button" (click)="closeAdjustEtaModal()" aria-label="Cerrar">
+          <app-icon name="x" [size]="16"></app-icon>
+        </button>
+      </div>
+      <div class="ops-deliveries__modal-body">
+        <label class="ops-deliveries__filters-label">
+          Nueva fecha estimada
+          <input
+            type="date"
+            [ngModel]="adjustEtaDate()"
+            (ngModelChange)="adjustEtaDate.set($event)"
+            class="ops-deliveries__filters-input"
+            name="adjustEtaDate">
+        </label>
+        <label class="ops-deliveries__filters-label">
+          Motivo del ajuste
+          <textarea
+            rows="3"
+            [ngModel]="adjustEtaReason()"
+            (ngModelChange)="adjustEtaReason.set($event)"
+            class="ops-deliveries__textarea"
+            name="adjustEtaReason"
+            placeholder="Ej. Retraso en aduana">
+          </textarea>
+        </label>
+        <div *ngIf="adjustEtaError()" class="ops-deliveries__alert ops-deliveries__alert--warning">{{ adjustEtaError() }}</div>
+      </div>
+      <div class="ops-deliveries__modal-footer">
+        <button type="button" class="ops-deliveries__button ops-deliveries__button--cancel" (click)="closeAdjustEtaModal()" [disabled]="adjustEtaSaving()">Cancelar</button>
+        <button type="button" class="ops-deliveries__button ops-deliveries__button--advance" (click)="submitEtaAdjustment()" [disabled]="adjustEtaSaving()">
+          {{ adjustEtaSaving() ? 'Guardando…' : 'Guardar ETA' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+    </section>
 
       <!-- Filtros Jerárquicos: Mercado > Ruta > Cliente > Pedido -->
       <div class="ops-deliveries__filters" role="region" aria-label="Filtros de entregas">
@@ -26,12 +156,12 @@
           </label>
           <select [(ngModel)]="selectedMarket" (change)="onMarketChange()" class="ops-deliveries__filters-select" aria-label="Seleccionar mercado">
             <option value="">Todos los mercados</option>
-            <option value="AGS">Aguascalientes (CON asientos)</option>
-            <option value="EdoMex">Estado de México (SIN asientos)</option>
+            <option value="aguascalientes">Aguascalientes (CON asientos)</option>
+            <option value="edomex">Estado de México (SIN asientos)</option>
           </select>
         </div>
 
-        <div class="ops-deliveries__filters-item" *ngIf="selectedMarket() === 'EdoMex'">
+        <div class="ops-deliveries__filters-item" *ngIf="selectedMarket() === 'edomex'">
           <label class="ops-deliveries__filters-label">
             <app-icon name="map" [size]="16" class="ops-deliveries__filter-icon" />
             Ruta
@@ -116,7 +246,7 @@
 
         <div class="ops-deliveries__market-summary">
           <h3>
-            <app-icon name="bar-chart" [size]="20" class="ops-deliveries__section-icon" />
+            <app-icon name="chart" [size]="20" class="ops-deliveries__section-icon" />
             Resumen de Entregas por Mercado
           </h3>
           <div class="ops-deliveries__summary-grid">
@@ -176,8 +306,14 @@
                     <span class="ops-deliveries__order-id">{{ delivery.id }}</span>
                   </td>
                   <td>
-                    <span class="ops-deliveries__status-badge" [style.background-color]="getStatusColor(delivery.status)">
-                      {{ getStatusIcon(delivery.status) }} {{ getStatusTitle(delivery.status) }}
+                    <span class="ops-deliveries__status-badge" [style.background-color]="getStatusColor(delivery)">
+                      <app-icon
+                        class="ops-deliveries__status-icon"
+                        [name]="getStatusIcon(delivery.status)"
+                        [size]="14"
+                        aria-hidden="true"
+                      ></app-icon>
+                      {{ getStatusTitle(delivery.status) }}
                     </span>
                   </td>
                   <td>
@@ -195,7 +331,7 @@
                     <div class="ops-deliveries__table-actions">
                       <button 
                         class="ops-deliveries__icon-button ops-deliveries__icon-button--view"
-                        [routerLink]="['/ops/deliveries', delivery.id]"
+                        [routerLink]="['/entregas', delivery.id]"
                         title="Ver detalles" aria-label="Ver detalles">
                         Ver
                       </button>
@@ -205,6 +341,18 @@
                         (click)="showAdvanceModal(delivery)"
                         title="Avanzar estado" aria-label="Avanzar estado">
                         Avanzar
+                      </button>
+                      <button
+                        class="ops-deliveries__icon-button ops-deliveries__icon-button--history"
+                        (click)="openEtaHistory(delivery)"
+                        title="Historial ETA" aria-label="Historial ETA">
+                        ETA
+                      </button>
+                      <button
+                        class="ops-deliveries__icon-button ops-deliveries__icon-button--adjust"
+                        (click)="openAdjustEta(delivery)"
+                        title="Ajustar ETA" aria-label="Ajustar ETA">
+                        Ajustar ETA
                       </button>
                     </div>
                   </td>
@@ -231,11 +379,17 @@
               <div *ngFor="let delivery of client.deliveries" class="ops-deliveries__client-delivery">
                 <div class="ops-deliveries__client-summary">
                   <span class="ops-deliveries__order-id">{{ delivery.id }}</span>
-                  <span class="ops-deliveries__status-badge" [style.background-color]="getStatusColor(delivery.status)">
-                    {{ getStatusIcon(delivery.status) }} {{ getStatusTitle(delivery.status) }}
+                  <span class="ops-deliveries__status-badge" [style.background-color]="getStatusColor(delivery)">
+                    <app-icon
+                      class="ops-deliveries__status-icon"
+                      [name]="getStatusIcon(delivery.status)"
+                      [size]="14"
+                      aria-hidden="true"
+                    ></app-icon>
+                    {{ getStatusTitle(delivery.status) }}
                   </span>
                   <span class="ops-deliveries__eta">{{ formatETA(delivery.eta) }}</span>
-                  <button class="ops-deliveries__button ops-deliveries__button--view" [routerLink]="['/ops/deliveries', delivery.id]" aria-label="Ver detalles">Ver</button>
+                  <button class="ops-deliveries__button ops-deliveries__button--view" [routerLink]="['/entregas', delivery.id]" aria-label="Ver detalles">Ver</button>
                 </div>
               </div>
             </div>
@@ -261,8 +415,14 @@
             
             <div class="ops-deliveries__card-body">
               <div class="ops-deliveries__status-section">
-                <span class="ops-deliveries__status-badge" [style.background-color]="getStatusColor(delivery.status)">
-                  {{ getStatusIcon(delivery.status) }} {{ getStatusTitle(delivery.status) }}
+                <span class="ops-deliveries__status-badge" [style.background-color]="getStatusColor(delivery)">
+                  <app-icon
+                    class="ops-deliveries__status-icon"
+                    [name]="getStatusIcon(delivery.status)"
+                    [size]="14"
+                    aria-hidden="true"
+                  ></app-icon>
+                  {{ getStatusTitle(delivery.status) }}
                 </span>
                 <div class="ops-deliveries__progress">
                   <div class="ops-deliveries__progress-fill" [style.width.%]="getProgress(delivery.status)"></div>
@@ -289,7 +449,7 @@
             <div class="ops-deliveries__card-actions">
               <button 
                 class="ops-deliveries__button ops-deliveries__button--view"
-                [routerLink]="['/ops/deliveries', delivery.id]">
+                [routerLink]="['/entregas', delivery.id]">
                 Ver Detalles
               </button>
               <button 
@@ -297,6 +457,16 @@
                 class="ops-deliveries__button ops-deliveries__button--advance"
                 (click)="showAdvanceModal(delivery)">
                 Avanzar Estado
+              </button>
+              <button
+                class="ops-deliveries__button ops-deliveries__button--view"
+                (click)="openEtaHistory(delivery)">
+                Historial ETA
+              </button>
+              <button
+                class="ops-deliveries__button ops-deliveries__button--advance"
+                (click)="openAdjustEta(delivery)">
+                Ajustar ETA
               </button>
             </div>
           </div>
@@ -308,7 +478,8 @@
             class="ops-deliveries__page-button"
             [disabled]="currentPage() === 1"
             (click)="previousPage()">
-            ← Anterior
+            <app-icon name="arrow-left" [size]="14" aria-hidden="true" class="ops-deliveries__page-icon"></app-icon>
+            Anterior
           </button>
           <span class="ops-deliveries__page-info">
             Página {{ currentPage() }} de {{ totalPages() }}
@@ -317,7 +488,8 @@
             class="ops-deliveries__page-button"
             [disabled]="currentPage() === totalPages()"
             (click)="nextPage()">
-            Siguiente →
+            Siguiente
+            <app-icon name="arrow-right" [size]="14" aria-hidden="true" class="ops-deliveries__page-icon"></app-icon>
           </button>
         </div>
       </div>

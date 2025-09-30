@@ -123,7 +123,7 @@ interface HASEScoring {
 }
 
 // ============================================================================
-// 🧬 AVI SYSTEM INTEGRATION (55 Questions + Dual Engine)
+// AVI SYSTEM INTEGRATION (55 Questions + Dual Engine)
 // ============================================================================
 
 // AVI Question with Scientific Coefficients
@@ -898,10 +898,10 @@ export class VoiceValidationService {
   }
 
   getComplianceColor(score: number): string {
-    if (score >= 90) return '#22c55e'; // Green
-    if (score >= 70) return '#eab308'; // Yellow  
-    if (score >= 50) return '#f97316'; // Orange
-    return '#ef4444'; // Red
+    if (score >= 90) return 'var(--accent-green-500)';
+    if (score >= 70) return 'var(--accent-amber-400)';
+    if (score >= 50) return 'var(--accent-amber-500)';
+    return 'var(--accent-red-500)';
   }
 
   //  COMPLEMENTO: Geographic Risk Scoring (EDOMEX)
@@ -956,7 +956,7 @@ export class VoiceValidationService {
   };
 
   // ============================================================================
-  // 🧬 AVI 55 QUESTIONS (Scientifically Calibrated) - API CONFIGURABLE
+  // AVI 55 QUESTIONS (Scientifically Calibrated) - API CONFIGURABLE
   // ============================================================================
   
   private readonly AVI_55_QUESTIONS: AVIQuestion[] = [
@@ -1470,7 +1470,7 @@ export class VoiceValidationService {
   }
 
   // ============================================================================
-  // 🧬 AVI INTEGRATION METHODS (API-driven)
+  // AVI INTEGRATION METHODS (API-driven)
   // ============================================================================
 
   /**
@@ -1775,7 +1775,7 @@ export class VoiceValidationService {
   }
 
   // ============================================================================
-  // 🧬 AVI HELPER METHODS
+  // AVI HELPER METHODS
   // ============================================================================
 
   private calculateAVISubscore(
@@ -2513,4 +2513,3 @@ export class VoiceValidationService {
 
 // getAuthToken is defined earlier in this service
 }
-

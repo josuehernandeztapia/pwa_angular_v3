@@ -151,7 +151,7 @@ export class DashboardService {
         message: 'Pago de enganche recibido',
         clientName: 'Carlos Mendoza',
         amount: 150000,
-        iconType: 'money'
+        iconType: 'currency-dollar'
       },
       {
         id: 'activity-2',
@@ -184,7 +184,7 @@ export class DashboardService {
         timestamp: new Date(now.getTime() - 60 * 60000), // 1 hour ago
         message: 'Contrato firmado digitalmente',
         clientName: 'Luis Herrera',
-        iconType: 'document'
+        iconType: 'document-text'
       }
     ];
   }
@@ -212,7 +212,7 @@ export class DashboardService {
           timestamp: new Date(),
           message: 'Nuevo pago recibido',
           amount: Math.floor(Math.random() * 100000) + 50000,
-          iconType: 'money'
+          iconType: 'currency-dollar'
         },
         {
           id: `activity-${Date.now()}`,

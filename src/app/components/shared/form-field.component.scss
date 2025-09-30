@@ -8,7 +8,7 @@
 
   &__label {
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--neutral-600, transparent);
+    color: var(--neutral-600, var(--openai-gray-500));
     font-size: 0.9rem;
   }
 
@@ -16,9 +16,9 @@
     width: 100%;
     padding: 12px 14px;
     border-radius: var(--radius-md, 8px);
-    border: 1px solid var(--neutral-400, transparent);
-    background: var(--flat-surface-bg, transparent);
-    color: var(--neutral-700, transparent);
+    border: 1px solid var(--neutral-400, var(--openai-gray-300));
+    background: var(--flat-surface-bg, var(--openai-white));
+    color: var(--neutral-700, var(--openai-gray-600));
     font: inherit;
   }
 
@@ -29,11 +29,11 @@
 
   &__helper {
     font-size: 0.8rem;
-    color: var(--neutral-500, transparent);
+    color: var(--neutral-500, var(--openai-gray-400));
   }
 
   &__error {
     font-size: 0.8rem;
-    color: var(--accent-red-500, transparent);
+    color: var(--accent-red-500);
   }
 }

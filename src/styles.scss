@@ -7,8 +7,8 @@
 @import 'styles/design-system-openai.scss';
 @import 'styles/components-openai.scss';
 
-/* UI Helpers - Enterprise Components */
-@import './app/styles/ui-helpers.scss';
+/* OpenAI Design System Helpers */
+@import './app/styles/openai-helpers.scss';
 
 /* Performance-Critical Styles */
 @import 'styles/performance.scss';
@@ -131,6 +131,8 @@
   --accent-green-600: #15803d;
   --accent-green-700: #166534;
   --accent-green-900: #064e3b;
+
+  --accent-cyan-500: color-mix(in srgb, var(--accent-blue-500) 55%, var(--accent-green-400) 45%);
 
   --accent-amber-50: #fff7ed;
   --accent-amber-100: #fed7aa;

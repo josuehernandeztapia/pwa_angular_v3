@@ -6,7 +6,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@
 import { CommonModule } from '@angular/common';
 import { Subject, interval, takeUntil } from 'rxjs';
 
-import { UiIconComponent } from '../ui/ui-icon/ui-icon.component';
+import { IconComponent } from "../shared/icon/icon.component"
 import { HumanMessageComponent } from './human-message/human-message.component'; // Path verified: exists
 // Removed dependency on PremiumIconsService
 import { HumanMicrocopyService } from '../../services/human-microcopy.service';
@@ -29,9 +29,9 @@ interface SystemStatus {
 }
 
 @Component({
-  selector: 'app-ui-dashboard-showcase',
+  selector: 'app-dashboard-showcase',
   standalone: true,
-  imports: [CommonModule, UiIconComponent, HumanMessageComponent],
+  imports: [CommonModule, IconComponent, HumanMessageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './premium-dashboard-showcase.component.html',
   styleUrls: ['./premium-dashboard-showcase.component.scss']

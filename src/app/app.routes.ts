@@ -1,7 +1,15 @@
 import { Routes } from '@angular/router';
 import { environment } from '../environments/environment';
 import { AuthGuard } from './guards/auth.guard';
+import { AviCompletedGuard } from './guards/avi-completed.guard';
+import { FeatureFlagGuard } from './guards/feature-flag.guard';
+import { PlazoGuard } from './guards/plazo.guard';
+import { ProtectionRequiredGuard } from './guards/protection-required.guard';
 import { RoleGuard } from './guards/role.guard';
+import { TandaValidGuard } from './guards/tanda-valid.guard';
+import { ContractReadyGuard } from './guards/contract-ready.guard';
+import { ContractValidGuard } from './guards/contract-valid.guard';
+import { DeliveryGuard } from './guards/delivery.guard';
 
 // Rutas comunes (antes del wildcard)
 const commonBeforeWildcard: Routes = [
@@ -33,7 +41,7 @@ const commonBeforeWildcard: Routes = [
   {
     path: 'dashboard',
     loadComponent: () => import('./components/pages/dashboard/dashboard.component').then(c => c.DashboardComponent),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, ContractValidGuard],
     title: 'Dashboard - Conductores PWA'
   },
 
@@ -62,10 +70,22 @@ const commonBeforeWildcard: Routes = [
   */
 
   {
-    path: 'document-upload',
+    path: 'documentos',
     loadComponent: () => import('./components/shared/document-upload-flow.component').then(c => c.DocumentUploadFlowComponent),
-    canActivate: [AuthGuard],
-    title: 'Carga de Documentos - Conductores PWA'
+    canActivate: [AuthGuard, AviCompletedGuard, PlazoGuard, TandaValidGuard, ProtectionRequiredGuard],
+    title: 'Documentos - Conductores PWA'
+  },
+  {
+    path: 'document-upload',
+    redirectTo: '/documentos',
+    pathMatch: 'full'
+  },
+
+  {
+    path: 'contratos/generacion',
+    loadComponent: () => import('./components/pages/contracts/contract-generation.component').then(c => c.ContractGenerationComponent),
+    canActivate: [AuthGuard, ContractReadyGuard],
+    title: 'Generación de Contratos - Conductores PWA'
   },
 
   /*
@@ -156,6 +176,27 @@ const commonBeforeWildcard: Routes = [
     ]
   },
 
+  {
+    path: 'entregas',
+    loadComponent: () => import('./components/pages/ops/ops-deliveries.component').then(c => c.OpsDeliveriesComponent),
+    canActivate: [AuthGuard, DeliveryGuard],
+    title: 'Entregas - Conductores PWA'
+  },
+
+  {
+    path: 'entregas/:id',
+    loadComponent: () => import('./components/pages/ops/delivery-detail.component').then(c => c.DeliveryDetailComponent),
+    canActivate: [AuthGuard, DeliveryGuard],
+    title: 'Detalle de Entrega - Conductores PWA'
+  },
+
+  {
+    path: 'gnv',
+    loadComponent: () => import('./components/pages/ops/gnv-health.component').then(c => c.GnvHealthComponent),
+    canActivate: [AuthGuard],
+    title: 'GNV - Salud de Estaciones'
+  },
+
   // Delivery Tracking System - Phase 1B Universal 77-day tracking
   {
     path: 'ops',
@@ -164,6 +205,7 @@ const commonBeforeWildcard: Routes = [
       {
         path: 'deliveries',
         loadComponent: () => import('./components/pages/ops/ops-deliveries.component').then(c => c.OpsDeliveriesComponent),
+        canActivate: [DeliveryGuard],
         title: 'Centro de Operaciones - Entregas'
       },
       {
@@ -179,6 +221,7 @@ const commonBeforeWildcard: Routes = [
       {
         path: 'deliveries/:id',
         loadComponent: () => import('./components/pages/ops/delivery-detail.component').then(c => c.DeliveryDetailComponent),
+        canActivate: [DeliveryGuard],
         title: 'Detalle de Entrega - Operaciones'
       },
       {
@@ -255,6 +298,12 @@ const commonBeforeWildcard: Routes = [
     canActivate: [AuthGuard],
     title: 'Configuración - Conductores PWA'
   },
+  {
+    path: 'configuracion/politicas',
+    loadComponent: () => import('./components/pages/configuracion/market-policy-admin.component').then(c => c.MarketPolicyAdminComponent),
+    canActivate: [AuthGuard],
+    title: 'Políticas de Mercado - Conductores PWA'
+  },
 
   // Flow Builder direct route (optional entry point; gated by flag)
   ...(environment.features.enableFlowBuilder ? [{
@@ -315,7 +364,7 @@ const postSalesWizardRoutes: Routes = [
   {
     path: 'postventa/wizard',
     loadComponent: () => import('./components/post-sales/photo-wizard.component').then(c => c.PhotoWizardComponent),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, ContractValidGuard],
     title: 'Postventa – Wizard de 4 Fotos'
   }
 ];
@@ -324,6 +373,7 @@ const postSalesWizardRoutes: Routes = [
 const integrationsRoutes: Routes = [
   {
     path: 'integraciones',
+    loadComponent: () => import('./components/pages/integraciones/integraciones.component').then(c => c.IntegracionesComponent),
     canActivate: [AuthGuard],
     title: 'Integraciones Externas'
   }
@@ -334,8 +384,49 @@ const adminRoutes: Routes = [
   {
     path: 'administracion',
     loadComponent: () => import('./components/pages/admin/admin-panel.component').then(c => c.AdminPanelComponent),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, RoleGuard],
+    data: {
+      roles: ['admin']
+    },
     title: 'Panel de Administración'
+  }
+];
+
+// Rutas Claims / Service Desk (condicional por rol + feature flag)
+const claimsRoutes: Routes = [
+  {
+    path: 'claims',
+    loadComponent: () => import('./components/pages/claims/claims-page.component').then(c => c.ClaimsPageComponent),
+    canActivate: [AuthGuard, RoleGuard, FeatureFlagGuard],
+    data: {
+      roles: ['admin', 'claims_manager'],
+      featureFlag: 'enableClaimsModule'
+    },
+    title: 'Claims & Service - Conductores PWA'
+  }
+];
+
+// Rutas QA (solo entorno dev/staging)
+const qaRoutes: Routes = [
+  {
+    path: 'qa/monitoring',
+    loadComponent: () => import('./components/qa/monitoring-panel/monitoring-panel.component').then(c => c.MonitoringPanelComponent),
+    canActivate: [AuthGuard, RoleGuard, FeatureFlagGuard],
+    data: {
+      roles: ['admin'],
+      featureFlag: 'enableQaTools'
+    },
+    title: 'QA – Monitoring Events'
+  }
+];
+
+// Rutas Usage/Reports (placeholder)
+const usageRoutes: Routes = [
+  {
+    path: 'usage',
+    loadComponent: () => import('./components/pages/usage/usage-reports.component').then(c => c.UsageReportsComponent),
+    canActivate: [AuthGuard],
+    title: 'Usage & Reports (Beta)'
   }
 ];
 
@@ -363,12 +454,26 @@ const withAdmin = environment.features.enableAdminConfig
   ? [...adminRoutes]
   : [];
 
+const withClaims = environment.features.enableClaimsModule
+  ? [...claimsRoutes]
+  : [];
+
+const withQa = environment.features.enableQaTools
+  ? [...qaRoutes]
+  : [];
+
+const withUsage = environment.features.enableUsageModule
+  ? [...usageRoutes]
+  : [];
+
 export const routes: Routes = [
   ...commonBeforeWildcard,
   ...withLab,
   ...withWizard,
   ...withIntegrations,
   ...withAdmin,
+  ...withClaims,
+  ...withQa,
+  ...withUsage,
   ...tailRoutes
 ];
-

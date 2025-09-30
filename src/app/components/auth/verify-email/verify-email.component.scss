@@ -35,23 +35,23 @@
 }
 
 .icon.success {
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
 }
 
 .icon.error {
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
 }
 
 h1 {
   margin: 0;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   font-size: 2rem;
   font-weight: 700;
 }
 
 p {
   margin: 0;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   font-size: 1.1rem;
   line-height: 1.6;
   max-width: 400px;
@@ -100,7 +100,7 @@ p {
 
 .btn-primary {
   background: var(--flat-surface-bg); /* FIXED (verify-ux) */
-  color: var(--color-text-primary-inverted, transparent);
+  color: var(--color-text-primary-inverted);
 }
 
 .btn-primary:hover {
@@ -110,14 +110,14 @@ p {
 }
 
 .btn-secondary {
-  background: var(--color-text-muted, transparent);
-  color: var(--color-text-muted, transparent);
-  border: 2px solid var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
+  color: var(--color-text-muted);
+  border: 2px solid var(--color-text-muted);
 }
 
 .btn-secondary:hover {
-  background: var(--color-text-muted, transparent);
-  border-color: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
+  border-color: var(--color-text-muted);
 }
 
 @keyframes verify-email-spin {

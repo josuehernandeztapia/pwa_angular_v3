@@ -210,7 +210,7 @@ test.describe('Documents Minimalista - Upload & OCR States', () => {
     await page.waitForSelector('[data-cy="documents-table"]');
 
     // Validate minimalista UI card styling
-    const uiCard = page.locator('.ui-card').first();
+    const uiCard = page.locator('.card').first();
     await expect(uiCard).toBeVisible();
 
     // Validate title styling (consistent with AVI)

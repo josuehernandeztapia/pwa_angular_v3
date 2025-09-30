@@ -109,7 +109,7 @@ export class RiskPersistenceService {
   }
 
   /**
-   * 📖 Get evaluation history for a client
+   * Get evaluation history for a client
    */
   getEvaluationHistory(clientId: string, limit: number = 10): Observable<StoredRiskEvaluation[]> {
     if (!this.enabled) {

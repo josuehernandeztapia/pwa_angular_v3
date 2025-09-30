@@ -36,7 +36,7 @@ export class EventLogComponent implements OnInit {
       EventType.Contribution,
       this.iconRegistry.toSvg('handshake', {
         className: 'icon-16',
-        color: 'var(--color-success, #10b981)'
+        color: 'var(--color-success)'
       })
     );
 
@@ -44,7 +44,7 @@ export class EventLogComponent implements OnInit {
       EventType.Collection,
       this.iconRegistry.toSvg('collection', {
         className: 'icon-16',
-        color: 'var(--color-accent-secondary, #06b6d4)'
+        color: 'var(--color-accent-secondary)'
       })
     );
 
@@ -52,7 +52,7 @@ export class EventLogComponent implements OnInit {
       EventType.AdvisorAction,
       this.iconRegistry.toSvg('document', {
         className: 'icon-16',
-        color: 'var(--color-warning, #f59e0b)'
+        color: 'var(--color-warning)'
       })
     );
 
@@ -60,7 +60,7 @@ export class EventLogComponent implements OnInit {
       EventType.ClientAction,
       this.iconRegistry.toSvg('user', {
         className: 'icon-16',
-        color: 'var(--color-success, #10b981)'
+        color: 'var(--color-success)'
       })
     );
 
@@ -68,7 +68,7 @@ export class EventLogComponent implements OnInit {
       EventType.System,
       this.iconRegistry.toSvg('settings', {
         className: 'icon-16',
-        color: 'var(--color-text-tertiary, #9ca3af)'
+        color: 'var(--color-text-tertiary)'
       })
     );
 
@@ -76,7 +76,7 @@ export class EventLogComponent implements OnInit {
       EventType.GoalAchieved,
       this.iconRegistry.toSvg('target', {
         className: 'icon-16',
-        color: 'var(--color-accent-primary, #0891b2)'
+        color: 'var(--color-accent-primary)'
       })
     );
 
@@ -84,7 +84,7 @@ export class EventLogComponent implements OnInit {
       EventType.StatusChange,
       this.iconRegistry.toSvg('chart', {
         className: 'icon-16',
-        color: 'var(--color-info, #3b82f6)'
+        color: 'var(--color-info)'
       })
     );
 
@@ -92,7 +92,7 @@ export class EventLogComponent implements OnInit {
       EventType.DocumentSubmission,
       this.iconRegistry.toSvg('cloud-upload', {
         className: 'icon-16',
-        color: 'var(--color-success, #10b981)'
+        color: 'var(--color-success)'
       })
     );
 
@@ -100,7 +100,7 @@ export class EventLogComponent implements OnInit {
       EventType.DocumentReview,
       this.iconRegistry.toSvg('document', {
         className: 'icon-16',
-        color: 'var(--color-warning, #f59e0b)'
+        color: 'var(--color-warning)'
       })
     );
 
@@ -108,13 +108,13 @@ export class EventLogComponent implements OnInit {
       EventType.KYCCompleted,
       this.iconRegistry.toSvg('badge-check', {
         className: 'icon-16',
-        color: 'var(--color-accent-primary, #0891b2)'
+        color: 'var(--color-accent-primary)'
       })
     );
 
     this.defaultDocumentIcon = this.iconRegistry.toSvg('document', {
       className: 'icon-16',
-      color: 'var(--color-text-secondary, #6b7280)'
+      color: 'var(--color-text-secondary)'
     });
   }
 

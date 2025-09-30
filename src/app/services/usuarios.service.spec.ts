@@ -6,22 +6,35 @@ import { Usuario, UsuarioDto, UsuariosService } from './usuarios.service';
 describe('UsuariosService', () => {
   let service: UsuariosService;
   let httpMock: HttpTestingController;
+  let originalEnableAdminBff: boolean;
 
   beforeEach(() => {
+    // Store original value
+    originalEnableAdminBff = environment.features.enableAdminBff;
+    // Enable BFF for testing HTTP calls
+    environment.features.enableAdminBff = true;
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule]
     });
     service = TestBed.inject(UsuariosService);
     httpMock = TestBed.inject(HttpTestingController);
+
+    // Clear localStorage to ensure clean test state
+    localStorage.removeItem('__admin_users__');
   });
 
   afterEach(() => {
+    // Restore original value
+    environment.features.enableAdminBff = originalEnableAdminBff;
     httpMock.verify();
+    // Clean up localStorage
+    localStorage.removeItem('__admin_users__');
   });
 
   it('should list usuarios', () => {
     const mock: Usuario[] = [
-      { id: '1', nombre: 'Ana', email: 'ana@test.com', rol: 'asesor', activo: true }
+      { id: '1', nombre: 'Ana', email: 'ana@test.com', rol: 'asesor', activo: true, createdAt: '2024-01-01T00:00:00Z', updatedAt: '2024-01-01T00:00:00Z' }
     ];
 
     service.list().subscribe(users => {
@@ -36,7 +49,7 @@ describe('UsuariosService', () => {
 
   it('should create usuario', () => {
     const dto: UsuarioDto = { nombre: 'Luis', email: 'luis@test.com', rol: 'operaciones' };
-    const response: Usuario = { id: '2', activo: true, ...dto } as Usuario;
+    const response: Usuario = { id: '2', activo: true, createdAt: '2024-01-01T00:00:00Z', updatedAt: '2024-01-01T00:00:00Z', ...dto };
 
     service.create(dto).subscribe(u => {
       expect(u.id).toBe('2');
@@ -51,7 +64,7 @@ describe('UsuariosService', () => {
 
   it('should update usuario', () => {
     const dto: UsuarioDto = { nombre: 'Ana B', email: 'ana@test.com', rol: 'admin' };
-    const response: Usuario = { id: '1', activo: true, ...dto } as Usuario;
+    const response: Usuario = { id: '1', activo: true, createdAt: '2024-01-01T00:00:00Z', updatedAt: '2024-01-01T00:00:00Z', ...dto };
 
     service.update('1', dto).subscribe(u => {
       expect(u.rol).toBe('admin');
@@ -63,7 +76,7 @@ describe('UsuariosService', () => {
   });
 
   it('should toggle status', () => {
-    const response: Usuario = { id: '1', nombre: 'Ana', email: 'ana@test.com', rol: 'asesor', activo: false };
+    const response: Usuario = { id: '1', nombre: 'Ana', email: 'ana@test.com', rol: 'asesor', activo: false, createdAt: '2024-01-01T00:00:00Z', updatedAt: '2024-01-01T00:00:00Z' };
 
     service.toggleStatus('1', false).subscribe(u => {
       expect(u.activo).toBeFalse();

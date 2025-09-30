@@ -114,12 +114,12 @@
     </form>
 
     <footer class="manual-entry__actions">
-      <button type="button" class="ui-btn ui-btn-ghost manual-entry__action" (click)="close()">
+      <button type="button" class="btn btn-ghost manual-entry__action" (click)="close()">
         Cancelar
       </button>
       <button
         type="button"
-        class="ui-btn ui-btn-primary manual-entry__action"
+        class="btn btn-primary manual-entry__action"
         (click)="saveManualData()"
         [disabled]="!manualForm.valid || isSaving"
       >

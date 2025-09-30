@@ -1,0 +1,78 @@
+<div class="global-search" [class.global-search--open]="isOpen">
+  <label class="global-search__field" [attr.data-open]="isOpen">
+    <app-icon name="search" class="global-search__icon" aria-hidden="true"></app-icon>
+    <input
+      #searchInput
+      type="search"
+      class="global-search__input"
+      placeholder="Buscar clientes, contratos, cotizaciones, documentos..."
+      autocomplete="off"
+      [value]="query"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (input)="onInput(searchInput.value)"
+      (keydown)="onKeyDown($event)"
+      data-cy="global-search"
+      aria-label="Buscar"
+      role="combobox"
+      [attr.aria-expanded]="isOpen"
+      aria-controls="global-search-list"
+    />
+    <span class="global-search__shortcut" aria-hidden="true">Ctrl + K</span>
+  </label>
+
+  <div class="global-search__filters" *ngIf="isOpen && results.length">
+    <span class="global-search__filters-label">Filtrar:</span>
+    <div class="global-search__chips" role="group" aria-label="Filtrar resultados">
+      <button
+        *ngFor="let filter of filters"
+        type="button"
+        class="global-search__chip"
+        [class.global-search__chip--active]="activeFilter === filter.value"
+        (mousedown)="$event.preventDefault()"
+        (click)="setFilter(filter.value)"
+        [attr.aria-pressed]="activeFilter === filter.value"
+        [attr.data-cy]="filter.dataCy"
+      >
+        {{ filter.label }}
+      </button>
+    </div>
+  </div>
+
+  <p *ngIf="isOpen && filteredResults.length" class="global-search__section-label">
+    {{ query ? 'Resultados' : recents.length ? 'Recientes' : 'Sugerencias' }}
+    <span class="global-search__section-count">{{ filteredResults.length }}</span>
+  </p>
+
+  <div
+    *ngIf="isOpen && filteredResults.length"
+    id="global-search-list"
+    class="global-search__panel"
+    role="listbox"
+  >
+    <div
+      *ngFor="let result of filteredResults; let idx = index"
+      class="global-search__item"
+      [class.global-search__item--highlighted]="isHighlighted(idx)"
+      (mousedown)="selectResult(result)"
+      [attr.data-cy]="'global-search-suggestion-' + result.type + '-' + idx"
+      role="option"
+    >
+      <div class="global-search__item-head">
+        <span class="global-search__item-label">{{ result.label }}</span>
+        <span class="global-search__item-type">{{ getTypeLabel(result.type) }}</span>
+      </div>
+      <div *ngIf="result.description" class="global-search__item-description">
+        {{ result.description }}
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isOpen && results.length && !filteredResults.length" class="global-search__empty">
+    <p>Sin coincidencias para este filtro.</p>
+  </div>
+
+  <div *ngIf="isOpen && !results.length" class="global-search__empty">
+    <p>Sin resultados. Intenta otra búsqueda.</p>
+  </div>
+</div>

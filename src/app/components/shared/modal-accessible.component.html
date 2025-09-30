@@ -15,7 +15,9 @@
   >
     <header class="section-header">
       <h2 class="section-title" [id]="ariaLabelledby || null">{{ title }}</h2>
-      <button type="button" class="btn-secondary btn-sm" aria-label="Cerrar" (click)="close()">✕</button>
+      <button type="button" class="btn-secondary btn-sm" aria-label="Cerrar" (click)="close()">
+        <app-icon name="close" [size]="14" aria-hidden="true"></app-icon>
+      </button>
     </header>
     <div class="content">
       <ng-content></ng-content>

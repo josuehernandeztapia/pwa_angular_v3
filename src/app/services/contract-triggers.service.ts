@@ -582,7 +582,7 @@ export class ContractTriggersService {
   }
 
   private mapDeliveryMarket(deliveryMarket: DeliveryMarket): Market {
-    return deliveryMarket === 'AGS' ? 'aguascalientes' : 'edomex';
+    return deliveryMarket === 'aguascalientes' ? 'aguascalientes' : 'edomex';
   }
 
   private updateTriggerStatus(contractId: string, triggerEvent: TriggerEvent): Observable<void> {

@@ -17,7 +17,7 @@
       </div>
       <button
         type="button"
-        class="ui-btn ui-btn-secondary client-tracking__refresh"
+        class="btn btn-secondary client-tracking__refresh"
         (click)="refreshTracking()"
         [disabled]="loading()"
       >
@@ -59,7 +59,7 @@
           </span>
           <button
             type="button"
-            class="ui-btn ui-btn-ghost client-tracking__action"
+            class="btn btn-ghost client-tracking__action"
             (click)="printOnePager(info)"
             data-cy="entregas-pdf"
           >
@@ -113,7 +113,7 @@
         </div>
         <button
           type="button"
-          class="ui-btn ui-btn-primary"
+          class="btn btn-primary"
           (click)="requestCallback(info.orderId)"
         >
           Solicitar contacto
@@ -241,7 +241,12 @@
           </div>
         </div>
         <div class="client-tracking__contact-item">
-          <span class="client-tracking__contact-icon" aria-hidden="true">✉️</span>
+          <app-icon
+            class="client-tracking__contact-icon"
+            name="mail"
+            [size]="16"
+            aria-hidden="true"
+          ></app-icon>
           <div>
             <span class="client-tracking__contact-label">Email</span>
             <span class="client-tracking__contact-value">soporte&#64;conductores.mx</span>

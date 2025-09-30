@@ -1,6 +1,9 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { IconComponent } from '../../shared/icon/icon.component';
+import { IconName } from '../../shared/icon/icon-definitions';
 
 interface ConfigurationState {
   mode: 'cotizador' | 'simulador';
@@ -18,7 +21,7 @@ interface ProductPackage {
   id: 'basico' | 'premium' | 'colectivo';
   name: string;
   description: string;
-  icon: string;
+  icon: IconName;
   features: string[];
   price: number;
   recommended?: boolean;
@@ -34,7 +37,7 @@ interface FinancialResult {
 @Component({
   selector: 'app-configuracion',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IconComponent, RouterModule],
   templateUrl: './configuracion.component.html',
   styleUrls: ['./configuracion.component.scss']
 })
@@ -56,7 +59,7 @@ export class ConfiguracionComponent implements OnInit {
       id: 'basico',
       name: 'Básico',
       description: 'Paquete esencial para comenzar',
-      icon: '<svg class="configuracion__package-icon configuracion__package-icon--basic" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>',
+      icon: 'cube',
       features: ['Cobertura básica', 'Soporte estándar', '1 año garantía'],
       price: 15000
     },
@@ -64,7 +67,7 @@ export class ConfiguracionComponent implements OnInit {
       id: 'premium',
       name: 'Premium',
       description: 'Funcionalidades avanzadas',
-      icon: '<svg class="configuracion__package-icon configuracion__package-icon--premium" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>',
+      icon: 'sparkles',
       features: ['Cobertura completa', 'Soporte prioritario', '3 años garantía', 'Beneficios extra'],
       price: 35000,
       recommended: true
@@ -73,7 +76,7 @@ export class ConfiguracionComponent implements OnInit {
       id: 'colectivo',
       name: 'Colectivo',
       description: 'Para grupos y empresas',
-      icon: '',
+      icon: 'users',
       features: ['Cobertura empresarial', 'Soporte dedicado', '5 años garantía', 'Descuentos grupales'],
       price: 75000
     }

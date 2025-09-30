@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { IconComponent } from '../icon/icon.component';
+import { IconName } from '../icon/icon-definitions';
 
 export interface NextBestActionData {
   id: string;
@@ -33,7 +35,7 @@ export interface NextBestActionData {
 
 export interface ActionButton {
   label: string;
-  icon: string;
+  icon?: string | IconName;
   action: string;
   params?: any;
 }
@@ -41,7 +43,7 @@ export interface ActionButton {
 @Component({
   selector: 'app-next-best-action-hero',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, IconComponent],
   templateUrl: './next-best-action-hero.component.html',
   styleUrls: ['./next-best-action-hero.component.scss']
 })
@@ -49,22 +51,47 @@ export class NextBestActionHeroComponent implements OnInit {
   @Input('data') actionData?: NextBestActionData;
   @Output() actionExecuted = new EventEmitter<{ action: ActionButton; context: NextBestActionData }>();
 
+  private readonly actionTypeIconMap: Record<NextBestActionData['type'], IconName> = {
+    contact: 'phone',
+    document: 'document-text',
+    renewal: 'refresh',
+    opportunity: 'lightbulb',
+    payment: 'currency-dollar'
+  };
+
+  private readonly actionIconFallbackMap: Record<string, IconName> = {
+    call: 'phone',
+    phone: 'phone',
+    chat: 'chat',
+    whatsapp: 'chat',
+    sms: 'chat',
+    message: 'chat',
+    email: 'mail',
+    mail: 'mail',
+    document: 'document-text',
+    description: 'document-text',
+    upload: 'cloud-upload',
+    reminder: 'bell',
+    payments: 'currency-dollar',
+    payment: 'currency-dollar',
+    invoice: 'document-text',
+    renew: 'refresh',
+    autorenew: 'refresh',
+    followup: 'target',
+    link: 'link',
+    calendar_today: 'calendar',
+    calendar: 'calendar',
+    download: 'download',
+    view: 'eye'
+  };
+
   constructor() {}
 
   ngOnInit(): void {}
 
-  getActionIcon(): string {
-    if (!this.actionData) return '';
-
-    const icons: Record<NextBestActionData['type'], string> = {
-      contact: 'call',
-      document: 'description',
-      renewal: 'autorenew',
-      opportunity: 'lightbulb',
-      payment: 'payments'
-    };
-
-    return icons[this.actionData.type];
+  getActionIconName(): IconName {
+    if (!this.actionData) return 'information-circle';
+    return this.actionTypeIconMap[this.actionData.type];
   }
 
   getPriorityClasses(): Record<string, boolean> {
@@ -113,6 +140,22 @@ export class NextBestActionHeroComponent implements OnInit {
     }
 
     return !!(context.daysWaiting || context.amountInvolved || context.expirationDate);
+  }
+
+  resolveActionIcon(icon?: string | IconName): IconName {
+    if (!icon) {
+      return 'information-circle';
+    }
+
+    if (typeof icon !== 'string') {
+      return icon;
+    }
+
+    const normalized = icon.toLowerCase();
+    if (this.actionIconFallbackMap[normalized]) {
+      return this.actionIconFallbackMap[normalized];
+    }
+    return normalized as IconName;
   }
 
   formatCurrency(amount: number | undefined): string {

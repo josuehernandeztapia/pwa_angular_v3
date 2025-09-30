@@ -219,8 +219,8 @@
   }
 
   &__type-icon {
-    font-size: 1rem;
-    line-height: 1;
+    display: inline-flex;
+    color: inherit;
   }
 
   &__card-title {
@@ -294,6 +294,11 @@
     }
   }
 
+  &__meta-icon {
+    display: inline-flex;
+    color: currentColor;
+  }
+
   &__tags {
     display: flex;
     flex-wrap: wrap;
@@ -353,6 +358,10 @@
     &:hover {
       background: color-mix(in srgb, var(--accent-green-500) 18%, transparent);
     }
+  }
+
+  &__toggle-icon {
+    display: inline-flex;
   }
 
   &__empty {

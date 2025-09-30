@@ -44,7 +44,7 @@ describe('UserProfileService', () => {
   it('updatePassword() should PATCH and return void', () => {
     const body: UpdatePasswordDto = { currentPassword: 'x', newPassword: 'y' };
     service.updatePassword(body).subscribe(resp => {
-      expect(resp).toBeUndefined();
+      expect(resp).toBeNull();
     });
     const req = httpMock.expectOne(`${environment.api.users}/me/password`);
     expect(req.request.method).toBe('PATCH');

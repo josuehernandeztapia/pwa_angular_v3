@@ -1,6 +1,8 @@
 // SSOT - Single Source of Truth for Notifications
 // Eliminates 7 different duplicate definitions across the codebase
 
+import { IconName } from '../components/shared/icon/icon-definitions';
+
 export interface NotificationBase {
   id: string;
   type:
@@ -91,44 +93,44 @@ export interface WhatsAppNotificationResult {
 // Notification type descriptions for UI
 export const NOTIFICATION_TYPE_DESCRIPTIONS: Record<string, {
   title: string;
-  iconType: string;
+  iconType: IconName;
   color: string;
   priority: 'high' | 'medium' | 'low';
 }> = {
   payment_due: {
     title: 'Pago Pendiente',
-    iconType: 'credit-card',
-    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
+    iconType: 'currency-dollar',
+    color: 'var(--color-text-secondary) /* OpenAI neutral */',
     priority: 'high'
   },
   gnv_overage: {
     title: 'Exceso de GNV',
     iconType: 'fuel',
-    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
+    color: 'var(--color-text-secondary) /* OpenAI neutral */',
     priority: 'high'
   },
   document_pending: {
     title: 'Documento Pendiente',
     iconType: 'document-text',
-    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
+    color: 'var(--color-text-secondary) /* OpenAI neutral */',
     priority: 'medium'
   },
   contract_approved: {
     title: 'Contrato Aprobado',
     iconType: 'check-circle',
-    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
+    color: 'var(--color-text-secondary) /* OpenAI neutral */',
     priority: 'low'
   },
   system_alert: {
     title: 'Alerta del Sistema',
     iconType: 'bell',
-    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
+    color: 'var(--color-text-secondary) /* OpenAI neutral */',
     priority: 'medium'
   },
   general: {
     title: 'Notificación General',
-    iconType: 'announcement',
-    color: 'var(--color-text-secondary, #737373) /* OpenAI neutral */',
+    iconType: 'information-circle',
+    color: 'var(--color-text-secondary) /* OpenAI neutral */',
     priority: 'low'
   }
 };

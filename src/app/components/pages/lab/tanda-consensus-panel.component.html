@@ -143,7 +143,15 @@
           <tr *ngFor="let result of irrResults">
             <td>{{ result.name }}</td>
             <td>{{ (result.irrAnnual * 100) | number:'1.2-2' }}</td>
-            <td>{{ result.tirOK ? '✓' : '✗' }}</td>
+            <td class="tanda-consensus__status-cell">
+              <app-icon
+                class="tanda-consensus__status-icon"
+                [name]="result.tirOK ? 'check' : 'x-circle'"
+                [size]="16"
+                [ariaLabel]="result.tirOK ? 'IRR objetivo cumplido' : 'IRR objetivo no cumplido'"
+                [ngClass]="result.tirOK ? 'tanda-consensus__status-icon--go' : 'tanda-consensus__status-icon--no-go'"
+              ></app-icon>
+            </td>
           </tr>
         </tbody>
       </table>

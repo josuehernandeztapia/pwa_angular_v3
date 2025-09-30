@@ -82,6 +82,21 @@
   white-space: nowrap;
 }
 
+.admin-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.admin-search {
+  position: relative;
+}
+
+.admin-search__input {
+  min-width: 220px;
+  padding-left: var(--space-4);
+}
+
 .admin-main {
   max-width: 1120px;
   margin: 0 auto;
@@ -155,6 +170,12 @@
   border-bottom: none;
 }
 
+.admin-table__empty {
+  text-align: center;
+  padding: var(--space-4);
+  color: var(--color-text-tertiary);
+}
+
 .admin-table__email {
   display: none;
 }
@@ -218,12 +239,17 @@
 
 .admin-status--active {
   background: var(--color-surface-success-subtle, rgba(16, 185, 129, 0.16));
-  color: var(--color-text-success-dark, transparent);
+  color: var(--color-text-success-dark);
 }
 
 .admin-status--blocked {
   background: var(--color-surface-error-subtle, rgba(239, 68, 68, 0.16));
-  color: #b91c1c;
+  color: var(--color-text-error-strong);
+}
+
+.btn-danger {
+  background: var(--color-surface-error-subtle, rgba(239, 68, 68, 0.18));
+  color: var(--color-text-error-strong);
 }
 
 .admin-config {

@@ -45,7 +45,7 @@ export class VisionOCRRetryService {
   constructor() {}
 
   /**
-   * 🩺 SURGICAL OCR with retry/backoff
+   * Surgical OCR with retry/backoff
    */
   ocrWithRetry(
     imageUrl: string,

@@ -62,7 +62,7 @@
             class="guarantee-panel__action-btn guarantee-panel__action-btn--upload"
             (click)="onUpload.emit(document.id)"
           >
-            <app-icon class="guarantee-panel__action-icon" name="cloud-upload" [size]="16" color="var(--color-success, #10b981)"></app-icon>
+            <app-icon class="guarantee-panel__action-icon" name="cloud-upload" [size]="16" color="var(--color-success)"></app-icon>
             Subir
           </button>
           <button
@@ -71,7 +71,7 @@
             class="guarantee-panel__action-btn guarantee-panel__action-btn--view"
             (click)="viewDocument(document)"
           >
-            <app-icon class="guarantee-panel__action-icon" name="eye" [size]="16" color="var(--color-info, #3b82f6)"></app-icon>
+            <app-icon class="guarantee-panel__action-icon" name="eye" [size]="16" color="var(--color-info)"></app-icon>
             Ver
           </button>
           <button
@@ -80,7 +80,7 @@
             class="guarantee-panel__action-btn guarantee-panel__action-btn--resubmit"
             (click)="onUpload.emit(document.id)"
           >
-            <app-icon class="guarantee-panel__action-icon" name="refresh" [size]="16" color="var(--color-warning, #f59e0b)"></app-icon>
+            <app-icon class="guarantee-panel__action-icon" name="refresh" [size]="16" color="var(--color-warning)"></app-icon>
             Re-subir
           </button>
         </div>

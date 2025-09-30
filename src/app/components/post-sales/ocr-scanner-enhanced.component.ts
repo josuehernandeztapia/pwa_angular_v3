@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { OCRService, OCRProgress } from '../../services/ocr.service';
-import { UiIconComponent } from '../ui/ui-icon/ui-icon.component';
+import { IconComponent } from "../shared/icon/icon.component"
 import { HumanMessageComponent } from '../human-message/human-message.component';
 import { HumanMicrocopyService } from '../../services/human-microcopy.service';
 
@@ -25,7 +25,7 @@ export type ScanMode = 'vin' | 'odometer' | 'general';
 @Component({
   selector: 'app-ocr-scanner-enhanced',
   standalone: true,
-  imports: [CommonModule, FormsModule, UiIconComponent, HumanMessageComponent],
+  imports: [CommonModule, FormsModule, IconComponent, HumanMessageComponent],
   templateUrl: './ocr-scanner-enhanced.component.html',
   styleUrls: ['./ocr-scanner-enhanced.component.scss']
 })

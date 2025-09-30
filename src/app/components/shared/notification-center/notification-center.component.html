@@ -1,9 +1,13 @@
 <div
+  #panel
   class="notification-center"
   [ngClass]="getPanelClasses()"
-  role="dialog"
-  aria-modal="true"
+  [attr.role]="isOpen ? 'dialog' : null"
+  [attr.aria-modal]="isOpen ? 'true' : null"
+  [attr.aria-hidden]="isOpen ? null : 'true'"
+  [attr.inert]="isOpen ? null : ''"
   aria-label="Centro de notificaciones"
+  tabindex="-1"
 >
   <header class="notification-center__header">
     <div class="notification-center__title-group">

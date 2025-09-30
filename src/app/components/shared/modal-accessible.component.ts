@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild, OnChanges } from '@angular/core';
 import { FocusTrapService } from '../../services/focus-trap.service';
+import { IconComponent } from './icon/icon.component';
 
 @Component({
   selector: 'app-modal-accessible',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   templateUrl: './modal-accessible.component.html',
   styleUrls: ['./modal-accessible.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

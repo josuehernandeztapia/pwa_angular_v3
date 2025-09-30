@@ -1,0 +1,10 @@
+<div class="offline-banner" *ngIf="isOffline || pendingCount > 0 || lastSyncMessage">
+  <div class="offline-banner__row">
+    <app-icon name="cloud-upload" class="offline-banner__icon" aria-hidden="true"></app-icon>
+    <div class="offline-banner__content">
+      <p *ngIf="isOffline" class="offline-banner__message">Sin conexión. Guardaremos tus {{ contextLabel }} y las enviaremos automáticamente cuando se restablezca la red.</p>
+      <p *ngIf="!isOffline && pendingCount > 0" class="offline-banner__message">Tenemos {{ pendingCount }} {{ contextLabel }} pendientes de sincronizar. Las enviaremos en cuanto haya conexión estable.</p>
+      <p *ngIf="lastSyncMessage" class="offline-banner__message offline-banner__message--success">{{ lastSyncMessage }}</p>
+    </div>
+  </div>
+</div>

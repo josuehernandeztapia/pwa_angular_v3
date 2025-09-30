@@ -10,6 +10,7 @@ import {
 } from '../../models/types';
 import { IntegratedImportTrackerService } from '../../services/integrated-import-tracker.service';
 import { PostSalesApiService } from '../../services/post-sales-api.service';
+import { IconComponent } from '../shared/icon/icon.component';
 
 /**
  * FASE 7: DOCUMENTOS TRANSFERIDOS
@@ -19,7 +20,7 @@ import { PostSalesApiService } from '../../services/post-sales-api.service';
 @Component({
   selector: 'app-documents-phase',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IconComponent],
   templateUrl: './documents-phase.component.html',
   styleUrls: ['./documents-phase.component.scss']
 })
@@ -264,7 +265,7 @@ export class DocumentsPhaseComponent {
 
   onSubmit(): void {
     if (!this.canCompleteDocuments()) {
-      console.log('❌ Cannot complete documents - validation failed');
+      console.log('Cannot complete documents - validation failed');
       return;
     }
 
@@ -353,4 +354,3 @@ export class DocumentsPhaseComponent {
     }
   }
 }
-

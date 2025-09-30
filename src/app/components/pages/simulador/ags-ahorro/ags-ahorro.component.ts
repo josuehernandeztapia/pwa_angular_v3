@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { IconComponent } from '../../../shared/icon/icon.component';
 import { CotizadorEngineService } from '../../../../services/cotizador-engine.service';
 import { PdfExportService } from '../../../../services/pdf-export.service';
 import { SavingsScenario, SimuladorEngineService } from '../../../../services/simulador-engine.service';
@@ -10,13 +11,14 @@ import { ToastService } from '../../../../services/toast.service';
 import { FormFieldComponent } from '../../../shared/form-field.component';
 import { SkeletonCardComponent } from '../../../shared/skeleton-card.component';
 import { SummaryPanelComponent } from '../../../shared/summary-panel/summary-panel.component';
+import { DESIGN_TOKENS, getDataColor } from '../../../../styles/design-tokens';
 
 declare var Chart: any;
 
 @Component({
   selector: 'app-ags-ahorro',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SummaryPanelComponent, SkeletonCardComponent, FormFieldComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SummaryPanelComponent, SkeletonCardComponent, FormFieldComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './ags-ahorro.component.html',
   styleUrl: './ags-ahorro.component.scss',
@@ -328,6 +330,15 @@ export class AgsAhorroComponent implements OnInit, AfterViewInit {
     this.initializePMTChart();
   }
 
+  private withAlpha(color: string, alpha: number): string {
+    const hex = color.replace('#', '');
+    const bigint = parseInt(hex, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
   private initializeAhorroChart(): void {
     if (!this.ahorroChartRef?.nativeElement || !this.currentScenario) return;
 
@@ -346,8 +357,8 @@ export class AgsAhorroComponent implements OnInit, AfterViewInit {
         datasets: [{
           label: 'Ahorro Acumulado',
           data: projectedData,
-          borderColor: 'rgb(59, 130, 246)',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: getDataColor('primary'),
+          backgroundColor: this.withAlpha(getDataColor('primary'), 0.1),
           borderWidth: 2,
           fill: true,
           tension: 0.4
@@ -362,17 +373,17 @@ export class AgsAhorroComponent implements OnInit, AfterViewInit {
             display: true,
             text: 'Proyección de Ahorro Mensual',
             font: { size: 14, weight: '600' },
-            color: '#374151'
+            color: DESIGN_TOKENS.color.text.primary
           }
         },
         scales: {
           x: {
-            title: { display: true, text: 'Mes', color: '#6B7280' },
-            grid: { color: '#E5E7EB' }
+            title: { display: true, text: 'Mes', color: DESIGN_TOKENS.color.text.secondary },
+            grid: { color: DESIGN_TOKENS.color.border }
           },
           y: {
-            title: { display: true, text: 'Monto ($)', color: '#6B7280' },
-            grid: { color: '#E5E7EB' },
+            title: { display: true, text: 'Monto ($)', color: DESIGN_TOKENS.color.text.secondary },
+            grid: { color: DESIGN_TOKENS.color.border },
             ticks: {
               callback: (value: any) => this.formatCurrency(Number(value))
             }
@@ -399,7 +410,10 @@ export class AgsAhorroComponent implements OnInit, AfterViewInit {
         labels: ['Ahorro Programado', 'Remanente a Financiar'],
         datasets: [{
           data: [monthlyContribution * this.currentScenario.monthsToTarget, remainderAmount],
-          backgroundColor: ['#080808', '#737373'],  /* OpenAI palette */
+          backgroundColor: [
+            DESIGN_TOKENS.color.text.primary,
+            DESIGN_TOKENS.color.text.secondary
+          ],
           borderWidth: 0
         }]
       },
@@ -410,13 +424,16 @@ export class AgsAhorroComponent implements OnInit, AfterViewInit {
           legend: {
             display: true,
             position: 'bottom',
-            labels: { usePointStyle: true }
+            labels: {
+              usePointStyle: true,
+              color: DESIGN_TOKENS.color.text.secondary
+            }
           },
           title: {
             display: true,
             text: 'Distribución de Financiamiento',
             font: { size: 14, weight: '600' },
-            color: '#374151'
+            color: DESIGN_TOKENS.color.text.primary
           }
         }
       }
@@ -427,4 +444,3 @@ export class AgsAhorroComponent implements OnInit, AfterViewInit {
     return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value);
   }
 }
-

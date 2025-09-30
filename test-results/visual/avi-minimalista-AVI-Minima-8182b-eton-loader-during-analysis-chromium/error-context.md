@@ -1,0 +1,89 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - complementary [ref=e5]:
+      - generic [ref=e6]: Conductores
+      - navigation "Navegación principal" [ref=e7]:
+        - generic [ref=e8]:
+          - generic [ref=e9]: Principal
+          - generic [ref=e10]:
+            - link "Dashboard" [ref=e11] [cursor=pointer]:
+              - /url: /dashboard
+              - img [ref=e13] [cursor=pointer]
+              - generic [ref=e16] [cursor=pointer]: Dashboard
+            - link "Clientes" [ref=e17] [cursor=pointer]:
+              - /url: /clientes
+              - generic [ref=e18] [cursor=pointer]: Clientes
+        - generic [ref=e19]:
+          - generic [ref=e20]: Herramientas
+          - generic [ref=e21]:
+            - link "Cotizador" [ref=e22] [cursor=pointer]:
+              - /url: /cotizador
+              - generic [ref=e23] [cursor=pointer]: Cotizador
+            - link "Simulador" [ref=e24] [cursor=pointer]:
+              - /url: /simulador
+              - generic [ref=e25] [cursor=pointer]: Simulador
+        - generic [ref=e26]:
+          - generic [ref=e27]: Operaciones
+          - generic [ref=e28]:
+            - link "Documentos" [ref=e29] [cursor=pointer]:
+              - /url: /documentos
+              - generic [ref=e30] [cursor=pointer]: Documentos
+            - link "Entregas" [ref=e31] [cursor=pointer]:
+              - /url: /entregas
+              - generic [ref=e32] [cursor=pointer]: Entregas
+            - link "GNV" [ref=e33] [cursor=pointer]:
+              - /url: /gnv
+              - generic [ref=e34] [cursor=pointer]: GNV
+        - generic [ref=e35]:
+          - generic [ref=e36]: Servicios
+          - generic [ref=e37]:
+            - link "Protección" [ref=e38] [cursor=pointer]:
+              - /url: /proteccion
+              - generic [ref=e39] [cursor=pointer]: Protección
+            - link "Configuración" [ref=e40] [cursor=pointer]:
+              - /url: /configuracion
+              - generic [ref=e41] [cursor=pointer]: Configuración
+    - generic [ref=e42]:
+      - banner [ref=e43]:
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - text: "Organización:"
+            - generic [ref=e46]: mvpcoductores
+          - navigation "Breadcrumb":
+            - generic [ref=e47]:
+              - text: Dashboard
+              - generic [ref=e48]: /
+            - generic [ref=e49]: Offline
+        - generic [ref=e50]:
+          - img [ref=e52]
+          - combobox "Buscar" [ref=e55]
+          - generic [ref=e56]: Ctrl + K
+        - generic [ref=e57]:
+          - group "Acciones rápidas" [ref=e58]:
+            - button "Crear una nueva oportunidad" [ref=e59] [cursor=pointer]:
+              - img [ref=e61] [cursor=pointer]
+              - text: Nueva Oportunidad
+            - button "Abrir el cotizador con el flujo rápido" [ref=e62] [cursor=pointer]:
+              - img [ref=e64] [cursor=pointer]
+              - text: Cotización Rápida
+            - button "Ir al simulador de escenarios" [ref=e66] [cursor=pointer]:
+              - img [ref=e68] [cursor=pointer]
+              - text: Simulador
+          - button "Rango de fechas" [ref=e72] [cursor=pointer]
+          - button "Exportar" [ref=e73] [cursor=pointer]
+          - button "Cambiar a modo oscuro" [ref=e74] [cursor=pointer]
+      - main [ref=e75]
+  - generic:
+    - status:
+      - generic:
+        - generic: Nueva versión disponible
+        - button: Actualizar ahora
+  - button "Opciones de instalación" [ref=e77] [cursor=pointer]:
+    - img [ref=e80] [cursor=pointer]
+    - generic [ref=e82] [cursor=pointer]: Instalar
+```

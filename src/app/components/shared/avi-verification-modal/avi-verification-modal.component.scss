@@ -63,6 +63,7 @@
       align-items: center;
       justify-content: center;
       transition: background 0.2s;
+      --icon-color: currentColor;
     }
 
     .avi-verification__close:hover {
@@ -553,16 +554,19 @@
     .avi-verification__result-card--go {
       border-color: var(--accent-green-500);
       background: var(--flat-surface-bg); /* FIXED (verify-ux) */
+      color: var(--accent-green-600);
     }
 
     .avi-verification__result-card--no-go {
       border-color: var(--accent-red-500);
       background: var(--flat-surface-bg); /* FIXED (verify-ux) */
+      color: var(--accent-red-600);
     }
 
     .avi-verification__result-card--review {
       border-color: var(--accent-amber-500);
       background: var(--flat-surface-bg); /* FIXED (verify-ux) */
+      color: var(--accent-amber-600);
     }
 
     .avi-verification__result-indicator {
@@ -578,8 +582,10 @@
     }
 
     .avi-verification__result-icon {
-      font-size: 24px;
-      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      --icon-color: currentColor;
     }
 
     .avi-verification__result-info {

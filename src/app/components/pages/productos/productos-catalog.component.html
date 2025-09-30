@@ -25,7 +25,13 @@
         [attr.aria-label]="'Filtrar por mercado: ' + market.label"
         (click)="selectMarket(market.value)"
       >
-        {{ market.emoji }} {{ market.label }}
+        <app-icon
+          [name]="market.icon"
+          [size]="16"
+          class="catalog-page__filter-icon"
+          aria-hidden="true"
+        ></app-icon>
+        {{ market.label }}
       </button>
     </div>
 
@@ -112,7 +118,7 @@
             </div>
             <div class="catalog-card__financial-item" *ngIf="producto.terms?.length">
               <span class="catalog-card__financial-label">Plazos</span>
-              <span class="catalog-card__financial-value">{{ producto.terms.join(', ') }} meses</span>
+              <span class="catalog-card__financial-value">{{ producto.terms?.join(', ') }} meses</span>
             </div>
           </div>
         </section>

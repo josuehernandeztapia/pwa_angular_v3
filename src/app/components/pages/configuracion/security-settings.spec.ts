@@ -1,9 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfiguracionComponent } from './configuracion.component';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 class RouterStub {
   navigate(commands: any[]): Promise<boolean> { return Promise.resolve(true); }
+}
+
+class ActivatedRouteStub {
+  params = of({});
+  queryParams = of({});
+  fragment = of(null);
+  data = of({});
 }
 
 describe('Security settings validation', () => {
@@ -14,7 +22,10 @@ describe('Security settings validation', () => {
     localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [ConfiguracionComponent],
-      providers: [{ provide: Router, useClass: RouterStub }]
+      providers: [
+        { provide: Router, useClass: RouterStub },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ConfiguracionComponent);

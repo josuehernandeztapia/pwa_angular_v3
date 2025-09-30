@@ -173,7 +173,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Market,
       name: 'Ciudad/Mercado',
       iconType: 'building-office',
-      color: 'var(--color-accent-primary, #0284c7)',
+      color: 'var(--color-accent-primary)',
       category: 'Mercados',
       description: 'Define una nueva ciudad o mercado',
       defaultConfig: {
@@ -192,7 +192,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Document,
       name: 'INE Vigente',
       iconType: 'document-text',
-      color: 'var(--color-border-muted, #94a3b8)',
+      color: 'var(--color-border-muted)',
       category: 'Documentos',
       description: 'Documento de identificación oficial',
       defaultConfig: {
@@ -209,7 +209,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Document,
       name: 'Tarjeta de Circulación',
       iconType: 'document-report',
-      color: 'var(--color-border-muted, #94a3b8)',
+      color: 'var(--color-border-muted)',
       category: 'Documentos',
       description: 'Documento del vehículo',
       defaultConfig: {
@@ -226,7 +226,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Document,
       name: 'Documento Personalizado',
       iconType: 'document',
-      color: 'var(--color-border-muted, #94a3b8)',
+      color: 'var(--color-border-muted)',
       category: 'Documentos',
       description: 'Documento específico de la ciudad',
       defaultConfig: {
@@ -244,7 +244,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Verification,
       name: 'Patrón de Voz',
       iconType: 'microphone',
-      color: 'var(--color-accent-secondary, #1d4ed8)',
+      color: 'var(--color-accent-secondary)',
       category: 'Verificaciones',
       description: 'Verificación por patrón de voz',
       defaultConfig: {
@@ -260,7 +260,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Verification,
       name: 'Análisis AVI',
       iconType: 'monitor',
-      color: 'var(--color-accent-secondary, #1d4ed8)',
+      color: 'var(--color-accent-secondary)',
       category: 'Verificaciones',
       description: 'Análisis automático de voz e inteligencia',
       defaultConfig: {
@@ -278,7 +278,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Product,
       name: 'Venta Directa',
       iconType: 'currency-dollar',
-      color: 'var(--color-success, #10b981)',
+      color: 'var(--color-success)',
       category: 'Productos',
       description: 'Producto de venta directa simplificado',
       defaultConfig: {
@@ -295,7 +295,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Product,
       name: 'Venta a Plazo',
       iconType: 'bank',
-      color: 'var(--color-accent-primary, #0284c7)',
+      color: 'var(--color-accent-primary)',
       category: 'Productos',
       description: 'Producto de financiamiento completo',
       defaultConfig: {
@@ -312,7 +312,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Product,
       name: 'Ahorro Programado',
       iconType: 'chart',
-      color: 'var(--color-accent-secondary, #1d4ed8)',
+      color: 'var(--color-accent-secondary)',
       category: 'Productos',
       description: 'Plan de ahorro para vehículo',
       defaultConfig: {
@@ -329,7 +329,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Product,
       name: 'Crédito Colectivo',
       iconType: 'collection',
-      color: 'var(--color-accent-primary, #0284c7)',
+      color: 'var(--color-accent-primary)',
       category: 'Productos',
       description: 'Crédito grupal para vehículos',
       defaultConfig: {
@@ -348,7 +348,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Product,
       name: 'Tanda Colectiva',
       iconType: 'sparkles',
-      color: 'var(--color-accent-secondary, #1d4ed8)',
+      color: 'var(--color-accent-secondary)',
       category: 'Productos',
       description: 'Sistema de tanda para ahorro grupal',
       defaultConfig: {
@@ -367,7 +367,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.BusinessRule,
       name: 'Regla de Negocio',
       iconType: 'lightbulb',
-      color: 'var(--color-warning, #fbbf24)',
+      color: 'var(--color-warning)',
       category: 'Reglas',
       description: 'Evalúa una condición para bifurcar el flujo',
       defaultConfig: {
@@ -386,7 +386,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Route,
       name: 'Ruta Condicional',
       iconType: 'target',
-      color: 'var(--color-border-muted, #94a3b8)',
+      color: 'var(--color-border-muted)',
       category: 'Rutas',
       description: 'Redirige según una condición del contexto',
       defaultConfig: {
@@ -506,7 +506,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       name: template.name,
       icon: template.icon ?? template.iconType ?? '',
       iconType: template.iconType ?? template.icon ?? '',
-      color: template.color ?? 'var(--color-border-muted, #94a3b8)',
+      color: template.color ?? 'var(--color-border-muted)',
       position,
       config: JSON.parse(JSON.stringify(template.defaultConfig)),
       inputs: template.inputs.map((input, index) => ({
@@ -1209,7 +1209,7 @@ export class ${className}Component {
         type: NodeType.Market,
         name: 'Guadalajara',
         iconType: 'building-office',
-        color: 'var(--color-accent-primary, #0284c7)',
+        color: 'var(--color-accent-primary)',
         position: { x: 50, y: 100 },
         config: {
           cityCode: 'guadalajara',
@@ -1226,7 +1226,7 @@ export class ${className}Component {
         type: NodeType.Document,
         name: 'INE Vigente',
         iconType: 'document-text',
-        color: 'var(--color-border-muted, #94a3b8)',
+        color: 'var(--color-border-muted)',
         position: { x: 350, y: 50 },
         config: {
           documentType: 'identification',
@@ -1245,7 +1245,7 @@ export class ${className}Component {
         type: NodeType.Product,
         name: 'Venta Directa',
         iconType: 'currency-dollar',
-        color: 'var(--color-success, #10b981)',
+        color: 'var(--color-success)',
         position: { x: 650, y: 100 },
         config: {
           productType: 'venta_directa',

@@ -8,13 +8,15 @@ import { ApiService } from '../../../services/api.service';
 import { Client, EventType, Actor, BusinessFlow } from '../../../models/types';
 import { NotificationUI } from '../../../models/notification';
 import { ToastService } from '../../../services/toast.service';
+import { IconComponent } from '../icon/icon.component';
+import { IconName } from '../icon/icon-definitions';
 
 //  Using SSOT NotificationUI from models/notification.ts
 
 @Component({
   selector: 'app-notifications-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent],
   templateUrl: './notifications-panel.component.html',
   styleUrls: ['./notifications-panel.component.scss'],
 })
@@ -270,24 +272,28 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
     this.onClose.emit();
   }
 
-  getNotificationIcon(type: string): string {
-    const icons = {
-      'payment_reminder': '',
-      'document_required': '',
-      'client_action': '',
-      'system_alert': '',
-      'opportunity': ''
+  getNotificationIcon(type: string): IconName {
+    const icons: Record<string, IconName> = {
+      payment_reminder: 'currency-dollar',
+      document_required: 'document-text',
+      client_action: 'user',
+      system_alert: 'alert-triangle',
+      opportunity: 'target'
     };
-    return icons[type as keyof typeof icons] || 'info';
+
+    return icons[type] ?? 'information-circle';
   }
 
-  getPriorityIcon(priority: string): string {
-    const icons = {
-      'high': '●',
-      'medium': '●',
-      'low': '●'
-    };
-    return icons[priority as keyof typeof icons] || '●';
+  getPriorityIcon(priority?: string | null): IconName {
+    if (priority === 'high') {
+      return 'alert-triangle';
+    }
+
+    if (priority === 'medium') {
+      return 'information-circle';
+    }
+
+    return 'dot';
   }
 
   getClientName(clientId: string): string {

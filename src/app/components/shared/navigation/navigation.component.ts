@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject, fromEvent } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { PushNotificationService } from '../../../services/push-notification.service';
 import { UserPreferencesService } from '../../../services/user-preferences.service';
 import { NotificationCenterComponent } from '../notification-center/notification-center.component';
-import { environment } from '../../../../environments/environment';
 import { IconComponent } from '../icon/icon.component';
 import { IconName } from '../icon/icon-definitions';
 
@@ -14,6 +14,7 @@ interface NavigationItem {
   route: string;
   iconType: IconName;
   badge?: number;
+  dataCy?: string;
   children?: NavigationItem[];
 }
 
@@ -24,7 +25,7 @@ interface NavigationItem {
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit, OnDestroy {
   @ViewChild('notificationCenter') notificationCenter!: NotificationCenterComponent;
   
   isCollapsed = false;
@@ -36,60 +37,18 @@ export class NavigationComponent implements OnInit {
   userInitials = 'AD';
 
   unreadCount$: Observable<number>;
+  private destroy$ = new Subject<void>();
 
   navigationItems: NavigationItem[] = [
-    {
-      label: 'Dashboard',
-      route: '/dashboard',
-      iconType: 'home'
-    },
-    {
-      label: 'Nueva Oportunidad',
-      route: '/nueva-oportunidad',
-      iconType: 'plus',
-      badge: 2
-    },
-    {
-      label: 'Cotizador',
-      route: '/cotizador',
-      iconType: 'calculator',
-      children: [
-        { label: 'AGS Individual', route: '/cotizador/ags-individual', iconType: 'truck' },
-        { label: 'EdoMex Colectivo', route: '/cotizador/edomex-colectivo', iconType: 'handshake' }
-      ]
-    },
-    {
-      label: 'Simulador',
-      route: '/simulador',
-      iconType: 'target',
-      children: [
-        { label: 'Ahorro AGS', route: '/simulador/ags-ahorro', iconType: 'lightbulb' },
-        { label: 'Enganche EdoMex', route: '/simulador/edomex-individual', iconType: 'bank' },
-        { label: 'Tanda Colectiva', route: '/simulador/tanda-colectiva', iconType: 'snow' }
-      ]
-    },
-    {
-      label: 'Clientes',
-      route: '/clientes',
-      iconType: 'users',
-      badge: 12
-    },
-    {
-      label: 'Expedientes',
-      route: '/expedientes',
-      iconType: 'clipboard'
-    },
-    {
-      label: 'Protección',
-      route: '/proteccion',
-      iconType: 'shield',
-      badge: 3
-    },
-    {
-      label: 'Reportes',
-      route: '/reportes',
-      iconType: 'chart'
-    }
+    { label: 'Dashboard', route: '/dashboard', iconType: 'home', dataCy: 'nav-dashboard' },
+    { label: 'Clientes', route: '/clientes', iconType: 'users', dataCy: 'nav-clientes' },
+    { label: 'Cotizador', route: '/cotizador', iconType: 'calculator', dataCy: 'nav-cotizador' },
+    { label: 'Simulador', route: '/simulador', iconType: 'target', dataCy: 'nav-simulador' },
+    { label: 'Documentos', route: '/documentos', iconType: 'document', dataCy: 'nav-documentos' },
+    { label: 'Entregas', route: '/entregas', iconType: 'truck', dataCy: 'nav-entregas' },
+    { label: 'GNV', route: '/gnv', iconType: 'fuel', dataCy: 'nav-gnv' },
+    { label: 'Protección', route: '/proteccion', iconType: 'shield', dataCy: 'nav-proteccion' },
+    { label: 'Configuración', route: '/configuracion', iconType: 'settings', dataCy: 'nav-configuracion' }
   ];
 
   constructor(
@@ -116,7 +75,9 @@ export class NavigationComponent implements OnInit {
 
   ngOnInit() {
     this.checkMobileView();
-    window.addEventListener('resize', () => this.checkMobileView());
+    fromEvent(window, 'resize')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.checkMobileView());
     
     // Initialize notifications
     this.initializeNotifications();
@@ -125,41 +86,11 @@ export class NavigationComponent implements OnInit {
     this.fontScale = this.userPrefs.getFontScale();
     this.highContrast = this.userPrefs.getHighContrast();
 
-    // Conditionally add Postventa Wizard entry
-    if (environment.features?.enablePostSalesWizard) {
-      const exists = this.navigationItems.some(i => i.route === '/postventa/wizard');
-      if (!exists) {
-        this.navigationItems.splice(3, 0, {
-          label: 'Postventa',
-          route: '/postventa/wizard',
-          iconType: 'settings'
-        });
-      }
-    }
+  }
 
-    // Conditionally add Integraciones Externas entry
-    if (environment.features?.enableIntegrationsConfig) {
-      const exists = this.navigationItems.some(i => i.route === '/integraciones');
-      if (!exists) {
-        this.navigationItems.push({
-          label: 'Integraciones',
-          route: '/integraciones',
-          iconType: 'link'
-        });
-      }
-    }
-
-    // Conditionally add Administración/Usuarios entry
-    if (environment.features?.enableAdminConfig) {
-      const exists = this.navigationItems.some(i => i.route === '/administracion');
-      if (!exists) {
-        this.navigationItems.push({
-          label: 'Administración',
-          route: '/administracion',
-          iconType: 'user'
-        });
-      }
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async initializeNotifications() {

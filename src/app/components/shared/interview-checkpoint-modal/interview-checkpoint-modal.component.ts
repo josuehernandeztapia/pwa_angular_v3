@@ -13,6 +13,8 @@ import {
 import { Subject, takeUntil } from 'rxjs';
 import { InterviewCheckpointService } from '../../../services/interview-checkpoint.service';
 import { VoiceRecorderComponent } from '../voice-recorder/voice-recorder.component';
+import { IconComponent } from '../icon/icon.component';
+import { IconName } from '../icon/icon-definitions';
 
 interface CheckpointModalData {
   clientId: string;
@@ -25,7 +27,7 @@ interface CheckpointModalData {
 @Component({
   selector: 'app-interview-checkpoint-modal',
   standalone: true,
-  imports: [CommonModule, VoiceRecorderComponent],
+  imports: [CommonModule, VoiceRecorderComponent, IconComponent],
   templateUrl: './interview-checkpoint-modal.component.html',
   styleUrls: ['./interview-checkpoint-modal.component.scss']
 })
@@ -178,22 +180,22 @@ export class InterviewCheckpointModalComponent implements OnInit, OnDestroy, OnC
     return map[status] || '';
   }
 
-  getStatusIcon(): string {
-    if (!this.modalData?.checkpoint) return '❓';
+  getStatusIcon(): IconName {
+    if (!this.modalData?.checkpoint) return 'information-circle';
 
     switch (this.modalData.checkpoint.status) {
       case 'required_pending':
-        return '⏳';
+        return 'clock';
       case 'in_progress':
-        return 'REC';
+        return 'microphone';
       case 'completed_valid':
-        return '✅';
+        return 'check-circle';
       case 'completed_invalid':
-        return '⚠️';
+        return 'alert-triangle';
       case 'expired':
-        return '⏰';
+        return 'stop';
       default:
-        return '❓';
+        return 'information-circle';
     }
   }
 

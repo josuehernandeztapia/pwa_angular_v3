@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectionStrategy, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -8,10 +8,13 @@ import { Market, BusinessFlow, Client } from '../../../models/types';
 import { Quote, ProductPackage, ClientType, SimulatorMode } from '../../../models/business';
 import { TandaMilestone } from '../../../models/tanda';
 import { CotizadorEngineService, ProductComponent } from '../../../services/cotizador-engine.service';
+import { FlowContextService } from '../../../services/flow-context.service';
+import { MarketPolicyContext, MarketPolicyService, PolicyClientType, PolicyMarket } from '../../../services/market-policy.service';
 import { PdfExportService } from '../../../services/pdf-export.service';
 import { SavingsProjectionChartComponent } from '../../shared/savings-projection-chart.component';
 import { TandaTimelineComponent } from '../../shared/tanda-timeline.component';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { OfflineQueueBannerComponent } from '../../shared/offline-queue-banner/offline-queue-banner.component';
 import { ToastService } from '../../../services/toast.service';
 
 interface CollectionUnit {
@@ -31,7 +34,7 @@ interface AmortizationRow {
 @Component({
   selector: 'app-cotizador-main',
   standalone: true,
-  imports: [CommonModule, FormsModule, IconComponent, SavingsProjectionChartComponent, TandaTimelineComponent],
+  imports: [CommonModule, FormsModule, IconComponent, SavingsProjectionChartComponent, TandaTimelineComponent, OfflineQueueBannerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cotizador-main.component.html',
   styleUrls: ['./cotizador-main.component.scss'],
@@ -43,6 +46,47 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
   @Output() onFormalize = new EventEmitter<Quote | Event>();
 
   private destroy$ = new Subject<void>();
+
+  // Progressive Disclosure State
+  currentStep: number = 1;
+  totalSteps: number = 4;
+
+  get progressPercentage(): number {
+    return (this.currentStep / this.totalSteps) * 100;
+  }
+
+  get canGoNext(): boolean {
+    switch (this.currentStep) {
+      case 1: return !!(this.market && this.clientType);
+      case 2: return !!this.pkg;
+      case 3: return this.totalPrice > 0;
+      case 4: return true;
+      default: return false;
+    }
+  }
+
+  get canGoPrevious(): boolean {
+    return this.currentStep > 1;
+  }
+
+  nextStep(): void {
+    if (this.canGoNext && this.currentStep < this.totalSteps) {
+      this.currentStep++;
+    }
+  }
+
+  previousStep(): void {
+    if (this.canGoPrevious) {
+      this.currentStep--;
+    }
+  }
+
+  goToStep(step: number): void {
+    if (step >= 1 && step <= this.totalSteps) {
+      this.currentStep = step;
+    }
+  }
+
   toNumber(value: any): number {
     const n = typeof value === 'number' ? value : parseFloat(value || '0');
     return isNaN(n) ? 0 : n;
@@ -70,14 +114,43 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
   isProtectionDemoOpen = false;
 
   // UX improvements: insurance financing and first payment breakdown
-  includeInsurance = false;
-  insuranceAmount: any = '';
-  insuranceMode: 'financiado' | 'contado' = 'financiado';
+  private _includeInsurance = false;
+  private _insuranceAmount: any = '';
+  private _insuranceMode: 'financiado' | 'contado' = 'financiado';
+
+  get includeInsurance(): boolean {
+    return this._includeInsurance;
+  }
+
+  set includeInsurance(value: boolean) {
+    this._includeInsurance = value;
+    this.persistFlowContextSnapshot('insurance-toggle');
+  }
+
+  get insuranceAmount(): any {
+    return this._insuranceAmount;
+  }
+
+  set insuranceAmount(value: any) {
+    this._insuranceAmount = value;
+    this.persistFlowContextSnapshot('insurance-amount');
+  }
+
+  get insuranceMode(): 'financiado' | 'contado' {
+    return this._insuranceMode;
+  }
+
+  set insuranceMode(value: 'financiado' | 'contado') {
+    this._insuranceMode = value;
+    this.persistFlowContextSnapshot('insurance-mode');
+  }
 
   constructor(
     private cotizadorEngine: CotizadorEngineService,
     private pdf: PdfExportService,
-    private toast: ToastService
+    private toast: ToastService,
+    private marketPolicy: MarketPolicyService,
+    @Optional() private flowContext?: FlowContextService
   ) {}
 
   ngOnInit(): void {
@@ -97,6 +170,8 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
     if (this.market && this.clientType) {
       this.fetchPackage();
     }
+
+    this.persistFlowContextSnapshot('init');
   }
 
   ngOnDestroy(): void {
@@ -218,7 +293,7 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
         month: i,
         completed: false,
         current: i === 1,
-        emoji: '💰',
+        icon: 'credit-card',
         title: `Enganche ${i}`,
         description: `Acumulando ${this.formatCurrency(downPaymentGoal)} para la entrega`,
         amount: downPaymentGoal
@@ -232,7 +307,7 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
         month: i,
         completed: false,
         current: false,
-        emoji: '🚐',
+        icon: 'truck',
         title: `Entrega ${i}`,
         description: `Unidad #${i} entregada al grupo`
       });
@@ -249,36 +324,39 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
   onMarketChange(): void {
     this.clientType = '';
     this.pkg = null;
+    this.persistFlowContextSnapshot('market-change');
   }
 
   onClientTypeChange(): void {
     if (this.market && this.clientType) {
       this.fetchPackage();
     }
+    this.persistFlowContextSnapshot('client-type-change');
   }
 
   onDownPaymentSliderChange(): void {
-    // Triggered by slider change
+    this.persistFlowContextSnapshot('downpayment-slider');
   }
 
   onDownPaymentDirectChange(): void {
-    // Triggered by direct payment input
+    this.persistFlowContextSnapshot('downpayment-direct');
   }
 
   onTermChange(): void {
-    // Triggered by term selection
+    this.persistFlowContextSnapshot('term-change');
   }
 
   onSavingsConfigChange(): void {
-    // Triggered by any savings config change
+    this.persistFlowContextSnapshot('savings-config');
   }
 
   onTandaMembersChange(): void {
-    // Triggered by tanda members slider
+    this.persistFlowContextSnapshot('tanda-members');
   }
 
   toggleComponent(componentId: string): void {
     this.selectedOptions[componentId] = !this.selectedOptions[componentId];
+    this.persistFlowContextSnapshot('component-toggle');
   }
 
   addCollectionUnit(): void {
@@ -288,6 +366,7 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
       consumption: '',
       overprice: ''
     });
+    this.persistFlowContextSnapshot('collection-add');
   }
 
   // Port exacto de fetchPackage desde React líneas 164-200
@@ -325,11 +404,13 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
         this.voluntaryContribution = '0';
         this.downPaymentAmountDirect = '';
         this.isLoading = false;
+        this.persistFlowContextSnapshot('package-loaded');
       },
       error: (error) => {
         this.toast.error(`Error al cargar el paquete para ${this.market}`);
         this.pkg = null;
         this.isLoading = false;
+        this.persistFlowContextSnapshot('package-error');
       }
     });
   }
@@ -360,6 +441,7 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
     
     this.amortizationTable = table;
     this.toast.success("Tabla de amortización calculada.");
+    this.persistFlowContextSnapshot('amortization');
   }
 
   // Port exacto de handleFormalizeClick desde React líneas 284-315
@@ -393,6 +475,8 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
       flow: finalFlow,
     };
     
+    this.persistFlowContextSnapshot('formalize');
+    
     this.onFormalize.emit(quote);
   }
 
@@ -415,6 +499,181 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
       style: 'currency', 
       currency: 'MXN' 
     }).format(amount);
+  }
+
+  private persistFlowContextSnapshot(origin: string = 'auto'): void {
+    if (!this.flowContext) {
+      return;
+    }
+
+    const market = this.resolveMarket();
+    const clientType = this.resolveClientType();
+    if (!market || !clientType) {
+      return;
+    }
+
+    const saleType: 'contado' | 'financiero' = this.isVentaDirecta ? 'contado' : 'financiero';
+    const businessFlow = this.resolveBusinessFlow(clientType, saleType);
+    const collectiveMembers = this.resolveCollectiveMembers(clientType);
+    const monthlyPayment = this.resolveMonthlyPayment();
+
+    const existing = this.flowContext.getContextData<any>('cotizador') ?? {};
+    const policyContext = this.buildPolicyContext(market, clientType, saleType, businessFlow, collectiveMembers);
+
+    let incomeThreshold: number | undefined;
+    let incomeThresholdRatio: number | undefined;
+
+    if (policyContext && monthlyPayment !== undefined && saleType === 'financiero') {
+      const ratio = this.marketPolicy.getIncomeThreshold(policyContext);
+      if (typeof ratio === 'number' && Number.isFinite(ratio) && ratio > 0) {
+        incomeThresholdRatio = ratio;
+        incomeThreshold = monthlyPayment * ratio;
+      }
+    }
+
+    if (incomeThreshold === undefined && typeof existing.incomeThreshold === 'number') {
+      incomeThreshold = existing.incomeThreshold;
+    }
+    if (incomeThresholdRatio === undefined && typeof existing.incomeThresholdRatio === 'number') {
+      incomeThresholdRatio = existing.incomeThresholdRatio;
+    }
+
+    const requiresIncomeProof = saleType === 'financiero'
+      ? (incomeThreshold !== undefined && monthlyPayment !== undefined
+          ? monthlyPayment > incomeThreshold
+          : existing.requiresIncomeProof)
+      : false;
+
+    if (policyContext && typeof requiresIncomeProof === 'boolean') {
+      policyContext.requiresIncomeProof = requiresIncomeProof;
+    }
+
+    const membersArray = this.buildMembersArray(collectiveMembers, existing.members);
+
+    const quotationData = {
+      ...existing.quotationData,
+      market,
+      clientType,
+      saleType,
+      totalPrice: this.totalPrice,
+      downPayment: this.downPayment,
+      amountToFinance: this.amountToFinance,
+      term: this.term,
+      monthlyPayment,
+      incomeThreshold,
+      incomeThresholdRatio,
+      requiresIncomeProof,
+      collectiveMembers,
+      members: membersArray,
+      includeInsurance: this.includeInsurance,
+      insuranceAmount: this.includeInsurance ? this.toNumber(this.insuranceAmount) : 0,
+      insuranceMode: this.includeInsurance ? this.insuranceMode : 'contado',
+      origin,
+      updatedAt: Date.now(),
+    };
+
+    const payload = {
+      ...existing,
+      market,
+      clientType,
+      saleType,
+      businessFlow,
+      clientId: this.client?.id ?? existing.clientId,
+      clientName: this.client?.name ?? existing.clientName,
+      monthlyPayment,
+      incomeThreshold,
+      incomeThresholdRatio,
+      requiresIncomeProof,
+      collectiveMembers,
+      members: membersArray,
+      quotationData,
+      policyContext,
+    };
+
+    this.flowContext.saveContext('cotizador', payload, {
+      breadcrumbs: this.buildFlowContextBreadcrumbs(payload.clientName, payload.clientId),
+    });
+  }
+
+  private resolveMarket(): PolicyMarket | null {
+    if (this.market === 'aguascalientes' || this.market === 'edomex') {
+      return this.market as PolicyMarket;
+    }
+    return null;
+  }
+
+  private resolveClientType(): PolicyClientType | null {
+    if (this.clientType === 'individual' || this.clientType === 'colectivo') {
+      return this.clientType as PolicyClientType;
+    }
+    if (this.client?.flow === BusinessFlow.CreditoColectivo) {
+      return 'colectivo';
+    }
+    return null;
+  }
+
+  private resolveBusinessFlow(clientType: PolicyClientType, saleType: 'contado' | 'financiero'): BusinessFlow {
+    if (saleType === 'contado') {
+      return BusinessFlow.VentaDirecta;
+    }
+    if (clientType === 'colectivo') {
+      return BusinessFlow.CreditoColectivo;
+    }
+    return BusinessFlow.VentaPlazo;
+  }
+
+  private resolveCollectiveMembers(clientType: PolicyClientType): number | undefined {
+    if (clientType !== 'colectivo') {
+      return undefined;
+    }
+    const members = Number(this.tandaMembers);
+    return Number.isFinite(members) && members > 0 ? members : undefined;
+  }
+
+  private resolveMonthlyPayment(): number | undefined {
+    const payment = this.monthlyPayment;
+    if (!Number.isFinite(payment) || payment <= 0) {
+      return undefined;
+    }
+    return payment;
+  }
+
+  private buildPolicyContext(
+    market: PolicyMarket,
+    clientType: PolicyClientType,
+    saleType: 'contado' | 'financiero',
+    businessFlow: BusinessFlow,
+    collectiveMembers?: number,
+  ): MarketPolicyContext | null {
+    return {
+      market,
+      clientType,
+      saleType,
+      businessFlow,
+      collectiveSize: collectiveMembers,
+    };
+  }
+
+  private buildMembersArray(collectiveMembers: number | undefined, existingMembers: any): any {
+    if (!collectiveMembers || collectiveMembers <= 0) {
+      return undefined;
+    }
+
+    if (Array.isArray(existingMembers) && existingMembers.length === collectiveMembers) {
+      return existingMembers;
+    }
+
+    return Array.from({ length: collectiveMembers }, (_, index) => index + 1);
+  }
+
+  private buildFlowContextBreadcrumbs(clientName?: string, clientId?: string): string[] {
+    const crumbs = ['Dashboard', 'Cotizador'];
+    if (clientName) {
+      crumbs.push(clientName);
+    } else if (clientId) {
+      crumbs.push(`Cliente ${clientId}`);
+    }
+    return crumbs;
   }
 
   async generateOnePagePDF(): Promise<void> {

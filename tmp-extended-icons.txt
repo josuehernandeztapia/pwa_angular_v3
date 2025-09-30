@@ -1,0 +1,409 @@
+'chat-bubble': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      {
+        type: 'path',
+        d: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        strokeWidth: '2'
+      }
+    ]
+  },
+simulator: {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M3 3v18h18' },
+      { type: 'path', d: 'M18.7 8l-5.1 5.2-2.8-2.7L7 14.3', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+minus: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'line', x1: '5', y1: '12', x2: '19', y2: '12', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+handshake: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M5 13l4 4L19 7', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+lightbulb: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+bank: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+snow: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M12 1v6l3-3m-3 3L9 4m3 3v6l3-3m-3 3L9 10m3 3h6l-3-3m3 3-3 3m-3-3h6l-3-3m3 3v6l3-3m-3 3L9 16', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+clipboard: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M8 7v8a2 2 0 0 0 2 2h6M8 7V5a2 2 0 0 1 2-2h4.586a1 1 0 0 1 .707.293l4.414 4.414a1 1 0 0 1 .293.707V15a2 2 0 0 1-2 2h-2M8 7H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+adjustments: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: '2' }]
+  },
+link: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M13.828 10.172a4 4 0 015.656 5.656l-3.536 3.536a4 4 0 01-5.656-5.656m2.828-2.828a4 4 0 00-5.656-5.656L4.172 9.344a4 4 0 005.656 5.656', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+user: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M5.121 17.804A4 4 0 019 15h6a4 4 0 013.879 2.804M15 7a3 3 0 11-6 0 3 3 0 016 0z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+support: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z', strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: '1.5' }]
+  },
+lock: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+stop: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'rect', x: '6', y: '6', width: '12', height: '12', rx: '2' }]
+  },
+phone: {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.86 19.86 0 01-3.07-8.63A2 2 0 014.11 2h3a2 2 0 012 1.72 12.54 12.54 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.54 12.54 0 002.81.7 2 2 0 011.72 2.03z', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+trash: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'device-mobile': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M12 18h.01', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+close: {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M6 18L18 6', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M6 6l12 12', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+cube: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+edit: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+factory: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+ship: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+customs: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+eye: {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.066 7-9.542 7s-8.268-2.943-9.542-7z', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+scale: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M3 6l3 1m0 0-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2 3-1m-3 1-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9-6-2m0-2v2m0 16V5m0 16H9m3 0h3', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+star: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z', fill: 'currentColor' }]
+  },
+search: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'shield-alert': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'academic-cap': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'currency-dollar': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'device-laptop': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+dot: {
+    viewBox: '0 0 20 20',
+    shapes: [{ type: 'circle', cx: '10', cy: '10', r: '8', fill: 'currentColor' }]
+  },
+heart: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+inbox: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'link-connected': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+monitor: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 8h12a2 2 0 002-2V6a2 2 0 00-2-2H8a2 2 0 00-2 2v10a2 2 0 002 2z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'user-network': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'eye-off': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 711.563-3.029m5.858.908a3 3 0 114.243 4.243', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M9.878 9.878l4.242 4.242', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M9.878 9.878L3 3m6.878 6.878L21 21', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'waves': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M2 12c0 0 3-3 5-3s5 6 7 6 5-3 5-3', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M2 8c0 0 3-3 5-3s5 6 7 6 5-3 5-3', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M2 16c0 0 3-3 5-3s5 6 7 6 5-3 5-3', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'building-construction': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M3 21V7l9-4 9 4v14', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M9 21V11h6v10', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M7 9h2m4 0h2', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'store': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M3 9a2 2 0 002 2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 8h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 11H19a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v2z', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M5 11v8a2 2 0 002 2h10a2 2 0 002-2v-8', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'celebration': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'circle', cx: '12', cy: '8', r: '3' },
+      { type: 'path', d: 'M8 14l-2 4h12l-2-4', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M12 11v3', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M6 2l1.5 1.5M18 2l-1.5 1.5M2 6l1.5 1.5M22 6l-1.5 1.5', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'fuel': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M4 6h16v10a2 2 0 01-2 2H6a2 2 0 01-2-2V6z', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M4 6V4a2 2 0 012-2h12a2 2 0 012 2v2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M8 10h8m-8 4h6', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'building-office': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+grid: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z', fill: 'currentColor' }]
+  },
+beaker: {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'check-circle-solid': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z', fill: 'currentColor' }]
+  },
+'volume-up': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'volume-off': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'exclamation-triangle': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'lightning-bolt': {
+    viewBox: '0 0 24 24',
+    shapes: [{ type: 'path', d: 'M13 10V3L4 14h7v7l9-11h-7z', strokeLinecap: 'round', strokeLinejoin: 'round' }]
+  },
+'target-arrow': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'circle', cx: '12', cy: '12', r: '9' },
+      { type: 'circle', cx: '12', cy: '12', r: '4' },
+      { type: 'line', x1: '12', y1: '3', x2: '12', y2: '7', strokeLinecap: 'round' },
+      { type: 'line', x1: '12', y1: '17', x2: '12', y2: '21', strokeLinecap: 'round' },
+      { type: 'line', x1: '3', y1: '12', x2: '7', y2: '12', strokeLinecap: 'round' },
+      { type: 'line', x1: '17', y1: '12', x2: '21', y2: '12', strokeLinecap: 'round' }
+    ]
+  },
+'exclamation-circle': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'circle', cx: '12', cy: '12', r: '9' },
+      { type: 'path', d: 'M12 8v4m0 4h.01', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'map': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'polygon', points: '3 5 9 3 15 5 21 3 21 19 15 21 9 19 3 21' },
+      { type: 'polyline', points: '9 3 9 19', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'polyline', points: '15 5 15 21', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'package': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'line', x1: '16.5', y1: '9.4', x2: '7.5', y2: '4.21', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'polyline', points: '3.27 6.96 12 12.01 20.73 6.96', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'line', x1: '12', y1: '22.08', x2: '12', y2: '12', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'location-marker': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'path', d: 'M15 11a3 3 0 11-6 0 3 3 0 016 0z', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'book': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'globe': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'external-link': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'polyline', points: '15 3 21 3 21 9', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'line', x1: '10', y1: '14', x2: '21', y2: '3', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'chevrons-left': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'polyline', points: '11 17 6 12 11 7', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'polyline', points: '18 17 13 12 18 7', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'chevrons-right': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'polyline', points: '13 17 18 12 13 7', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'polyline', points: '6 17 11 12 6 7', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'volume-2': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'polygon', points: '11 5 6 9 2 9 2 15 6 15 11 19 11 5' },
+      { type: 'path', d: 'M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'file-text': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'polyline', points: '14 2 14 8 20 8', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'line', x1: '16', y1: '13', x2: '8', y2: '13', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'line', x1: '16', y1: '17', x2: '8', y2: '17', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'polyline', points: '10 9 9 9 8 9', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'shield-check': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'polyline', points: '9 12 12 15 16 10', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'alert-circle': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'circle', cx: '12', cy: '12', r: '10' },
+      { type: 'line', x1: '12', y1: '8', x2: '12', y2: '12', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'line', x1: '12', y1: '16', x2: '12.01', y2: '16', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'umbrella': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M23 12a11.05 11.05 0 0 0-22 0zm-5 7a3 3 0 0 1-6 0v-7', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'info': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'circle', cx: '12', cy: '12', r: '10' },
+      { type: 'line', x1: '12', y1: '16', x2: '12', y2: '12', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'line', x1: '12', y1: '8', x2: '12.01', y2: '8', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'activity': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'polyline', points: '22 12 18 12 15 21 9 3 6 12 2 12', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'piggy-bank': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M12 2C8.686 2 6 4.686 6 8v1H4a2 2 0 00-2 2v6a2 2 0 002 2h1v1a2 2 0 002 2h10a2 2 0 002-2v-1h1a2 2 0 002-2v-6a2 2 0 00-2-2h-2V8c0-3.314-2.686-6-6-6z', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'circle', cx: '15', cy: '11', r: '1' },
+      { type: 'path', d: 'M12 15v2', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'trending-up': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'polyline', points: '23 6 13.5 15.5 8.5 10.5 1 18', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'polyline', points: '17 6 23 6 23 12', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'trending-down': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'polyline', points: '23 18 13.5 8.5 8.5 13.5 1 6', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'polyline', points: '17 18 23 18 23 12', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  },
+'clipboard-list': {
+    viewBox: '0 0 24 24',
+    shapes: [
+      { type: 'path', d: 'M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'rect', x: '8', y: '2', width: '8', height: '4', rx: '1', ry: '1' },
+      { type: 'line', x1: '9', y1: '12', x2: '15', y2: '12', strokeLinecap: 'round', strokeLinejoin: 'round' },
+      { type: 'line', x1: '9', y1: '16', x2: '15', y2: '16', strokeLinecap: 'round', strokeLinejoin: 'round' }
+    ]
+  }

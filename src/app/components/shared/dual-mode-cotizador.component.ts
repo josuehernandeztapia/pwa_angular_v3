@@ -267,9 +267,9 @@ export class DualModeCotizadorComponent implements OnInit {
 
   private generateWhatsAppMessage(): string {
     if (this.currentMode === 'acquisition') {
-      return `🛒 *Cotización ${this.selectedMarket.toUpperCase()}*
+      return `Cotización ${this.selectedMarket.toUpperCase()}
 
-💰 *Resumen:*
+Resumen:
 • Precio total: ${this.formatCurrency(this.totalPrice)}
 • Enganche: ${this.formatCurrency(this.downPayment)}
 • ${this.isVentaDirecta ? 'Remanente' : 'Financiamiento'}: ${this.formatCurrency(this.amountToFinance)}
@@ -278,9 +278,9 @@ ${!this.isVentaDirecta ? `• Plazo: ${this.selectedTerm} meses` : ''}
 
 ¿Te interesa formalizar esta cotización?`;
     } else {
-      return `💰 *Simulación de Ahorro ${this.selectedMarket.toUpperCase()}*
+      return `Simulación de ahorro ${this.selectedMarket.toUpperCase()}
 
-📊 *Tu Plan:*
+Tu plan:
 • Meta: ${this.formatCurrency(this.savingsScenario?.targetAmount || 0)}
 • Ahorro mensual: ${this.formatCurrency(this.savingsScenario?.monthlyContribution || 0)}
 • Tiempo estimado: ${this.savingsScenario?.monthsToTarget || 0} meses

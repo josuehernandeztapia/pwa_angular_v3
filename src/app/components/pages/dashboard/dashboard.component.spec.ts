@@ -1,16 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { render, screen } from '@testing-library/angular';
 import { of } from 'rxjs';
 import { ActionableGroup, ActivityFeedItem, DashboardStats, Market, OpportunityStage } from '../../../models/types';
 import { DashboardService } from '../../../services/dashboard.service';
+import { DeliveriesService } from '../../../services/deliveries.service';
+import { ToastService } from '../../../services/toast.service';
 import { DashboardComponent } from './dashboard.component';
+import { FlowContextService } from '../../../services/flow-context.service';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   let mockDashboardService: jasmine.SpyObj<DashboardService>;
   let mockRouter: jasmine.SpyObj<Router>;
+  let mockDeliveriesService: jasmine.SpyObj<DeliveriesService>;
+  let mockToast: jasmine.SpyObj<ToastService>;
 
   const mockDashboardStats: DashboardStats = {
     opportunitiesInPipeline: {
@@ -44,7 +50,7 @@ describe('DashboardComponent', () => {
       timestamp: new Date(),
       message: 'Pago recibido por $5,000',
       amount: 5000,
-      iconType: 'payment'
+      iconType: 'currency-dollar'
     }
   ];
 
@@ -92,18 +98,30 @@ describe('DashboardComponent', () => {
       'updateMarket'
     ]);
 
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate'], { url: '/dashboard' });
+    const deliveriesSpy = jasmine.createSpyObj('DeliveriesService', ['validateEtaCalculations']);
+    const toastSpy = jasmine.createSpyObj('ToastService', ['info', 'success', 'warning', 'error']);
+    const flowContextSpy = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'getContextData', 'updateContext', 'clearContext'], {
+      breadcrumbs$: of(['Dashboard'])
+    });
+    flowContextSpy.getContextData.and.returnValue(null);
 
     await TestBed.configureTestingModule({
-      imports: [DashboardComponent],
+      imports: [DashboardComponent, HttpClientTestingModule],
       providers: [
         { provide: DashboardService, useValue: dashboardServiceSpy },
-        { provide: Router, useValue: routerSpy }
+        { provide: Router, useValue: routerSpy },
+        { provide: DeliveriesService, useValue: deliveriesSpy },
+        { provide: ToastService, useValue: toastSpy },
+        { provide: FlowContextService, useValue: flowContextSpy }
       ]
     }).compileComponents();
 
     mockDashboardService = TestBed.inject(DashboardService) as jasmine.SpyObj<DashboardService>;
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    mockDeliveriesService = TestBed.inject(DeliveriesService) as jasmine.SpyObj<DeliveriesService>;
+    mockToast = TestBed.inject(ToastService) as jasmine.SpyObj<ToastService>;
+    TestBed.inject(FlowContextService);
 
     // Setup default spy returns
     mockDashboardService.getDashboardStats.and.returnValue(of(mockDashboardStats));
@@ -111,6 +129,12 @@ describe('DashboardComponent', () => {
     mockDashboardService.getOpportunityStages.and.returnValue(of(mockOpportunityStages));
     mockDashboardService.getActionableGroups.and.returnValue(of(mockActionableGroups));
     mockDashboardService.getAllClients.and.returnValue(of([]));
+    mockDeliveriesService.validateEtaCalculations.and.returnValue(of({
+      calculationsAccurate: true,
+      testedTransitions: 6,
+      accuracyPercentage: 100,
+      issues: []
+    }));
 
     // Create component fixture
     fixture = TestBed.createComponent(DashboardComponent);
@@ -168,6 +192,30 @@ describe('DashboardComponent', () => {
     component.navigateToOpportunities();
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/opportunities']);
+  });
+
+  it('should handle quick action navigation', () => {
+    component.handleKpiAction({
+      label: 'Ir a cotizador',
+      dataCy: 'test-action',
+      variant: 'primary',
+      route: ['/cotizador'],
+      queryParams: { source: 'test' }
+    });
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/cotizador'], { queryParams: { source: 'test' } });
+  });
+
+  it('should trigger ETA recalculation action once', () => {
+    component.handleKpiAction({
+      label: 'Recalcular ETA',
+      dataCy: 'recalculate-eta',
+      variant: 'secondary',
+      action: 'recalculateEta'
+    });
+
+    expect(mockDeliveriesService.validateEtaCalculations).toHaveBeenCalledTimes(1);
+    expect(mockToast.success).toHaveBeenCalledWith('ETA recalculado y validado correctamente.');
   });
 
   it('should toggle view mode', () => {

@@ -6,7 +6,7 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { UiIconComponent } from '../../components/ui/ui-icon/ui-icon.component';
+import { IconComponent } from "../shared/icon/icon.component"
 import { HumanMessageComponent } from '../../components/shared/human-message/human-message.component';
 
 interface CalibrationResult {
@@ -37,7 +37,7 @@ interface CalibrationResult {
 @Component({
   selector: 'app-avi-calibration-admin',
   standalone: true,
-  imports: [CommonModule, UiIconComponent, HumanMessageComponent],
+  imports: [CommonModule, IconComponent, HumanMessageComponent],
   templateUrl: './avi-calibration-admin.component.html',
   styleUrls: ['./avi-calibration-admin.component.scss']
 })

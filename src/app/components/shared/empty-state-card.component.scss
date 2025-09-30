@@ -4,7 +4,7 @@
   gap: var(--space-4);
   padding: var(--space-6);
   border-radius: 20px;
-  background: var(--flat-surface-bg, transparent);
+  background: var(--flat-surface-bg, var(--openai-white));
   text-align: center;
   box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.08));
 
@@ -14,20 +14,20 @@
   }
 
   &__icon {
-    color: var(--accent-blue-500, transparent);
+    color: var(--accent-blue-500);
   }
 
   &__title {
     margin: 0;
     font-size: 1.25rem;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--neutral-700, transparent);
+    color: var(--neutral-700, var(--openai-gray-600));
   }
 
   &__subtitle {
     margin: 0;
     font-size: 0.95rem;
-    color: var(--neutral-500, transparent);
+    color: var(--neutral-500, var(--openai-gray-400));
   }
 
   &__actions {
@@ -46,22 +46,22 @@
     transition: background var(--transition-quick, 0.2s ease), border-color var(--transition-quick, 0.2s ease);
 
     &--primary {
-      background: var(--accent-blue-500, transparent);
-      color: var(--flat-surface-bg, transparent);
+      background: var(--accent-blue-500);
+      color: var(--flat-surface-bg, var(--openai-white));
     }
 
     &--primary:hover {
-      background: var(--accent-blue-600, transparent);
+      background: var(--accent-blue-600);
     }
 
     &--secondary {
-      background: var(--neutral-100, transparent);
-      border-color: var(--neutral-300, transparent);
-      color: var(--neutral-600, transparent);
+      background: var(--neutral-100, var(--openai-gray-50));
+      border-color: var(--neutral-300, var(--openai-gray-200));
+      color: var(--neutral-600, var(--openai-gray-500));
     }
 
     &--secondary:hover {
-      background: var(--neutral-200, transparent);
+      background: var(--neutral-200, var(--openai-gray-100));
     }
   }
 }

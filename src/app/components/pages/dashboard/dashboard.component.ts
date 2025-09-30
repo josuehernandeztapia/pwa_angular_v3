@@ -2,17 +2,31 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Subject, forkJoin, of } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take, finalize } from 'rxjs/operators';
 import { Chart, ChartConfiguration, ChartType, registerables } from 'chart.js';
 import { ActionableClient, ActionableGroup, ActivityFeedItem, DashboardStats, Market, OpportunityStage } from '../../../models/types';
 import { DashboardService } from '../../../services/dashboard.service';
 import { ConnectionIndicatorComponent } from '../../shared/connection-indicator/connection-indicator.component';
-import { getDataColor, getChartColor } from '../../../styles/design-tokens';
+import { DESIGN_TOKENS, getDataColor, getChartColor } from '../../../styles/design-tokens';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { IconName } from '../../shared/icon/icon-definitions';
+import { DeliveriesService } from '../../../services/deliveries.service';
+import { ToastService } from '../../../services/toast.service';
+import { environment } from '../../../../environments/environment';
+import { FlowContextService } from '../../../services/flow-context.service';
 
 // Register Chart.js components
 Chart.register(...registerables);
+
+interface KPIAction {
+  label: string;
+  dataCy: string;
+  variant: 'primary' | 'secondary';
+  route?: string | any[];
+  queryParams?: Record<string, any>;
+  externalUrl?: string;
+  action?: 'recalculateEta' | 'downloadSavings';
+}
 
 interface KPICard {
   title: string;
@@ -23,6 +37,8 @@ interface KPICard {
   dataCy: string;
   trend?: 'up' | 'down' | 'stable';
   trendValue?: string;
+  primaryAction?: KPIAction;
+  secondaryAction?: KPIAction;
 }
 
 @Component({
@@ -50,6 +66,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedMarket: Market = 'all';
   isLoading = true;
   showMobileActions = false;
+  private isEtaRecalculating = false;
 
   // Dashboard data
   stats: DashboardStats | null = null;
@@ -69,7 +86,21 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       iconClass: 'kpi-icon--money',
       dataCy: 'kpi-pmt',
       trend: 'up',
-      trendValue: '+5.2%'
+      trendValue: '+5.2%',
+      primaryAction: {
+        label: 'Crear cotización',
+        dataCy: 'dashboard-pmt-create-quote',
+        variant: 'primary',
+        route: ['/cotizador'],
+        queryParams: { source: 'dashboard', view: 'new-quote' }
+      },
+      secondaryAction: {
+        label: 'Ver pipeline',
+        dataCy: 'dashboard-pmt-open-pipeline',
+        variant: 'secondary',
+        route: ['/cotizador'],
+        queryParams: { filter: 'pipeline', source: 'dashboard' }
+      }
     },
     {
       title: 'TIR',
@@ -79,7 +110,21 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       iconClass: 'kpi-icon--chart-up',
       dataCy: 'kpi-tir',
       trend: 'up',
-      trendValue: '+2.1%'
+      trendValue: '+2.1%',
+      primaryAction: {
+        label: 'Abrir simulador',
+        dataCy: 'dashboard-tir-open-simulator',
+        variant: 'primary',
+        route: ['/simulador'],
+        queryParams: { preset: 'tir', source: 'dashboard' }
+      },
+      secondaryAction: {
+        label: 'Ver protección',
+        dataCy: 'dashboard-tir-open-proteccion',
+        variant: 'secondary',
+        route: ['/proteccion'],
+        queryParams: { source: 'dashboard' }
+      }
     },
     {
       title: 'Ahorro Proyectado',
@@ -89,7 +134,20 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       iconClass: 'kpi-icon--target',
       dataCy: 'kpi-ahorro',
       trend: 'up',
-      trendValue: '+12.8%'
+      trendValue: '+12.8%',
+      primaryAction: {
+        label: 'Comparar escenarios',
+        dataCy: 'dashboard-ahorro-compare',
+        variant: 'primary',
+        route: ['/simulador'],
+        queryParams: { view: 'compare', source: 'dashboard' }
+      },
+      secondaryAction: {
+        label: 'Exportar ahorro',
+        dataCy: 'dashboard-ahorro-export',
+        variant: 'secondary',
+        action: 'downloadSavings'
+      }
     },
     {
       title: 'Unidades Entregadas',
@@ -99,16 +157,33 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       iconClass: 'kpi-icon--delivery',
       dataCy: 'kpi-entregas',
       trend: 'stable',
-      trendValue: '0%'
+      trendValue: '0%',
+      primaryAction: {
+        label: 'Revisar entregas',
+        dataCy: 'dashboard-entregas-open',
+        variant: 'primary',
+        route: ['/entregas'],
+        queryParams: { source: 'dashboard' }
+      },
+      secondaryAction: {
+        label: 'Recalcular ETA',
+        dataCy: 'dashboard-entregas-recalculate',
+        variant: 'secondary',
+        action: 'recalculateEta'
+      }
     }
   ];
 
   constructor(
     private router: Router,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private deliveriesService: DeliveriesService,
+    private toast: ToastService,
+    private flowContext: FlowContextService
   ) {}
 
   ngOnInit(): void {
+    this.flowContext.setBreadcrumbs(['Dashboard']);
     this.loadDashboardData();
     this.subscribeToActivityFeed();
   }
@@ -157,7 +232,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
           backgroundColor: 'transparent',
           borderWidth: 2,
           pointBackgroundColor: getDataColor('primary'),  // OpenAI data blue
-          pointBorderColor: '#ffffff',
+          pointBorderColor: DESIGN_TOKENS.color.panel.light,
           pointBorderWidth: 2,
           pointRadius: 4,
           tension: 0.1
@@ -229,7 +304,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
             position: 'top',
             labels: {
               usePointStyle: true,
-              color: '#6B7280',
+              color: DESIGN_TOKENS.color.text.secondary,
               font: { size: 12 }
             }
           }
@@ -313,14 +388,50 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.router.navigate(['/opportunities']);
   }
 
-  getTrendSymbol(trend: KPICard['trend']): string {
+  handleKpiAction(action: KPIAction): void {
+    if (!action) {
+      return;
+    }
+
+    if (action.route) {
+      const commands = Array.isArray(action.route) ? action.route : [action.route];
+      this.router.navigate(commands, { queryParams: action.queryParams ?? undefined });
+      return;
+    }
+
+    if (action.externalUrl && typeof window !== 'undefined') {
+      window.open(action.externalUrl, '_blank', 'noopener');
+      return;
+    }
+
+    if (action.action === 'downloadSavings') {
+      this.downloadSavingsReport();
+      return;
+    }
+
+    if (action.action === 'recalculateEta') {
+      this.triggerEtaRecalculation();
+      return;
+    }
+  }
+
+  getTrendIcon(trend: KPICard['trend']): IconName {
     if (trend === 'up') {
-      return '↗';
+      return 'trending-up';
     }
     if (trend === 'down') {
-      return '↘';
+      return 'trending-down';
     }
-    return '→';
+    return 'minus';
+  }
+
+  getTrendSymbol(trend: KPICard['trend']): string {
+    switch(trend) {
+      case 'up': return '↗';
+      case 'down': return '↘';
+      case 'stable': return '→';
+      default: return '→';
+    }
   }
 
   private loadDashboardData(): void {
@@ -369,6 +480,44 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.kpiCards[0].value = pmtValue;
     this.kpiCards[2].value = this.formatCurrency(stats.monthlyRevenue.projected - stats.monthlyRevenue.collected);
     this.kpiCards[3].value = stats.activeContracts.toString();
+  }
+
+  private downloadSavingsReport(range: string = '30d'): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const url = `${environment.apiUrl}/dashboard/savings/export?range=${range}`;
+    window.open(url, '_blank', 'noopener');
+    this.toast.info('Exportando ahorro proyectado (últimos 30 días)...');
+  }
+
+  private triggerEtaRecalculation(): void {
+    if (this.isEtaRecalculating) {
+      this.toast.info('Ya se está recalculando el ETA...');
+      return;
+    }
+
+    this.isEtaRecalculating = true;
+    this.deliveriesService.validateEtaCalculations()
+      .pipe(
+        take(1),
+        finalize(() => {
+          this.isEtaRecalculating = false;
+        })
+      )
+      .subscribe({
+        next: result => {
+          if (result.calculationsAccurate) {
+            this.toast.success('ETA recalculado y validado correctamente.');
+          } else {
+            this.toast.warning(`ETA recalculado con ${result.accuracyPercentage}% de precisión.`);
+          }
+        },
+        error: () => {
+          this.toast.error('No fue posible recalcular el ETA. Inténtalo de nuevo.');
+        }
+      });
   }
 
   formatCurrency(amount: number): string {
@@ -476,7 +625,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         timestamp: new Date(Date.now() - 15 * 60000),
         clientName: 'María González',
         amount: 5000,
-        iconType: 'money'
+        iconType: 'currency-dollar'
       }
     ];
 

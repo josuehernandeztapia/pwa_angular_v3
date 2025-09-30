@@ -19,6 +19,8 @@ export const environment = {
     enableAnalytics: false,
     enablePushNotifications: true,
     enableOfflineMode: true,
+    enableDocumentValidationMock: false,
+    forceOfflineQueueMock: false,
     enableAVISystem: true,
     enableVoiceRecording: true,
     enableStressDetection: true,
@@ -29,7 +31,7 @@ export const environment = {
     // Post-venta: Chips "Agregar a cotización" (dev only)
     enablePostSalesAddToQuote: true,
     // Integraciones BFF (activar cuando haya backend real)
-    enableOdooQuoteBff: false,
+    enableOdooQuoteBff: true,
     // P0.2 SURGICAL FIX - GNV T+1 BFF Activation
     enableGnvBff: true,
     //  P0.2 SURGICAL FIX - KIBAN/HASE System Activation
@@ -39,6 +41,7 @@ export const environment = {
     enableRiskPersistence: true,
     // LAB/Backoffice visibility
     enableTandaLab: true,
+    enableAviMicroLocalBff: true,
     // Dynamic configuration flags
     enableRemoteConfig: false,
     enableConfigShadowMode: false,
@@ -50,12 +53,14 @@ export const environment = {
     enableLocalizationConfig: false,
     enableIntegrationsConfig: false,
     enableAdminConfig: true,
+    enableUsageModule: false,
+    enableGlobalSearch: true,
     enableSecurityConfig: false,
     // Integrations (BFF) flags
-    enableKycBff: false,
-    enablePaymentsBff: false,
-    enableContractsBff: false,
-    enableAutomationBff: false,
+    enableKycBff: true,
+    enablePaymentsBff: true,
+    enableContractsBff: true,
+    enableAutomationBff: true,
     //  KIBAN/HASE BFF activation
     enableRiskBff: true,
     // P0.2 SURGICAL FIX - Delivery Tracking BFF
@@ -63,8 +68,13 @@ export const environment = {
     // New feature flags for parity
     enableLabs: true,
     enablePostventa: true,
+    enablePostSaleBff: false,
+    enableClaimsBff: false,
+    enableAdminBff: false,
+    enableClaimsModule: true,
     enableFlowBuilder: true,
-    enablePerfil: true
+    enablePerfil: true,
+    enableQaTools: true
   },
 
   // Dynamic configuration base paths
@@ -139,6 +149,19 @@ export const environment = {
     documents: '/documents',
     payments: '/payments',
     reports: '/reports'
+  },
+
+  analytics: {
+    // Mock endpoints so analytics traffic in dev never leaves the local stack.
+    eventsEndpoint: 'analytics/mock-track',
+    metricsEndpoint: 'analytics/mock-metrics',
+    flushIntervalMs: 15000
+  },
+
+  monitoring: {
+    eventsEndpoint: 'monitoring/events',
+    datadogEndpoint: 'monitoring/datadog',
+    slackWebhook: ''
   },
 
   // External services

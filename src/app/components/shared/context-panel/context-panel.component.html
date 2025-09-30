@@ -1,0 +1,74 @@
+<div class="context-panel" *ngIf="summaries$ | async as summaries">
+  <ng-container *ngIf="summaries.length; else emptyState">
+    <div *ngFor="let summary of summaries" class="context-panel__card">
+      <div class="context-panel__header">
+        <div class="context-panel__title-group">
+          <app-icon [name]="getIconName(summary.icon)" class="context-panel__icon" aria-hidden="true"></app-icon>
+          <div class="context-panel__title">{{ summary.title }}</div>
+        </div>
+        <span class="context-panel__timestamp">{{ summary.updatedAt }}</span>
+      </div>
+
+      <div *ngIf="summary.statusLabel" class="context-panel__status" [ngClass]="summary.statusAccent ? 'context-panel__status--' + summary.statusAccent : null">
+        {{ summary.statusLabel }}
+      </div>
+
+      <dl class="context-panel__meta">
+        <div *ngFor="let meta of summary.meta" class="context-panel__meta-row">
+          <dt class="context-panel__meta-label">{{ meta.label }}</dt>
+          <dd class="context-panel__meta-value">{{ meta.value }}</dd>
+        </div>
+      </dl>
+
+      <div *ngIf="summary.actions?.length" class="context-panel__actions">
+        <button
+          *ngFor="let action of summary.actions"
+          type="button"
+          class="context-panel__action"
+          [attr.data-kind]="action.kind || 'secondary'"
+          [disabled]="action.disabled"
+          (click)="executeSummaryAction(summary, action)"
+        >
+          {{ action.label }}
+        </button>
+      </div>
+
+      <div *ngIf="summary.issues.length" class="context-panel__issues">
+        <div class="context-panel__issues-title">Pendientes</div>
+        <div *ngFor="let issue of summary.issues" class="context-panel__issue">
+          <div class="context-panel__issue-header">
+            <span class="context-panel__issue-message">{{ issue.message }}</span>
+            <span class="context-panel__issue-status" [attr.data-status]="issue.status">{{ issue.status }}</span>
+          </div>
+          <div class="context-panel__issue-actions">
+            <button
+              *ngFor="let action of issue.actions"
+              type="button"
+              class="context-panel__issue-action"
+              [attr.data-kind]="action.kind || 'secondary'"
+              (click)="executeIssueAction(issue.id, action.id)"
+            >
+              {{ action.label }}
+            </button>
+
+            <button
+              *ngIf="(!issue.actions || !issue.actions.length) && issue.retry"
+              type="button"
+              class="context-panel__issue-action"
+              data-kind="primary"
+              (click)="retryIssue(issue.id)"
+            >
+              Reintentar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #emptyState>
+  <div class="context-panel__empty">
+    <span>No hay contexto activo.</span>
+  </div>
+</ng-template>

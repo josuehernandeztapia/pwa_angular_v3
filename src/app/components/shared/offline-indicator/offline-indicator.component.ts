@@ -1,8 +1,10 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, OnDestroy, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { IconName } from '../icon/icon-definitions';
 import { OfflineService } from '../../../services/offline.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-offline-indicator',
@@ -11,27 +13,34 @@ import { OfflineService } from '../../../services/offline.service';
   templateUrl: './offline-indicator.component.html',
   styleUrls: ['./offline-indicator.component.scss']
 })
-export class OfflineIndicatorComponent {
+export class OfflineIndicatorComponent implements OnDestroy {
   private expanded = signal(false);
   private dismissed = signal(false);
   private lastStatusChange = signal(Date.now());
+  private destroy$ = new Subject<void>();
+  private autoDismissTimeoutId: number | null = null;
 
   constructor(public offlineService: OfflineService) {
     // React to connection changes
-    this.offlineService.online$.subscribe(isOnline => {
+    this.offlineService.online$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isOnline => {
       this.lastStatusChange.set(Date.now());
       if (!isOnline) {
         // Always show when going offline
         this.dismissed.set(false);
         this.expanded.set(true);
+        this.clearAutoDismissTimer();
       } else {
         // Auto-expand briefly when coming back online
         this.expanded.set(true);
         // Auto-dismiss after 3 seconds if no pending requests
-        setTimeout(() => {
+        this.clearAutoDismissTimer();
+        this.autoDismissTimeoutId = window.setTimeout(() => {
           if (!this.hasPendingRequests()) {
             this.expanded.set(false);
           }
+          this.autoDismissTimeoutId = null;
         }, 3000);
       }
     });
@@ -201,5 +210,18 @@ export class OfflineIndicatorComponent {
 
   dismiss(): void {
     this.dismissed.set(true);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.clearAutoDismissTimer();
+  }
+
+  private clearAutoDismissTimer(): void {
+    if (this.autoDismissTimeoutId !== null) {
+      window.clearTimeout(this.autoDismissTimeoutId);
+      this.autoDismissTimeoutId = null;
+    }
   }
 }

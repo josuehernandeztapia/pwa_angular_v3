@@ -15,7 +15,7 @@ export interface StationHealthRow {
   rowsRejected: number;
   warnings: number;
   status: StationHealthStatus;
-  healthScore?: number; // ⛽ P0.2 SURGICAL - Add health score tracking
+  healthScore?: number; // P0.2 SURGICAL - Add health score tracking
   lastSync?: string;
   t1Status?: 'synced' | 'pending' | 'failed';
 }
@@ -36,7 +36,7 @@ export class GnvHealthService {
   private http = inject(HttpClient);
   private csvPath = 'assets/gnv/ingesta_yesterday.csv';
 
-  // ⛽ P0.2 SURGICAL FIX - Enhanced state management
+  // P0.2 SURGICAL FIX - Enhanced state management
   private readonly TARGET_HEALTH = 85; // 85% minimum target
   private readonly BFF_BASE_URL = `${environment.apiUrl}/bff/gnv`;
 
@@ -54,7 +54,7 @@ export class GnvHealthService {
   }
 
   /**
-   * ⛽ P0.2 SURGICAL FIX - Enhanced health monitoring with T+1 sync
+   * P0.2 P0.2 SURGICAL FIX - Enhanced health monitoring with T+1 sync
    */
   getYesterdayHealth(): Observable<StationHealthRow[]> {
     if ((environment.features as any)?.enableGnvBff) {
@@ -113,7 +113,7 @@ export class GnvHealthService {
   }
 
   /**
-   * 🏥 Get real-time health monitoring
+   * Get real-time health monitoring
    */
   startHealthMonitoring(): void {
     this.isMonitoring.set(true);
@@ -297,7 +297,7 @@ export class GnvHealthService {
         rowsRejected: rejected,
         warnings,
         status,
-        healthScore, // ⛽ P0.2 SURGICAL - Include calculated health score
+        healthScore, // P0.2 SURGICAL - Include calculated health score
         lastSync: new Date().toISOString(),
         t1Status: fileName ? 'synced' : 'failed'
       });
@@ -342,11 +342,10 @@ export class GnvHealthService {
         rowsRejected: rejected,
         warnings,
         status,
-        healthScore, // ⛽ P0.2 SURGICAL - Include calculated health score
+        healthScore, // P0.2 SURGICAL - Include calculated health score
         lastSync: new Date().toISOString(),
         t1Status: fileName ? 'synced' : 'failed'
       };
     });
   }
 }
-

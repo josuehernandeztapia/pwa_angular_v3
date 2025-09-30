@@ -81,6 +81,8 @@ module.exports = function (config) {
     files: [
       { pattern: 'src/test-setup.ts', watched: false }
     ],
+    // Allow running in restricted environments where the default 9876 port is unavailable
+    port: process.env.KARMA_PORT ? Number(process.env.KARMA_PORT) : 0,
     restartOnFileChange: true,
     singleRun: false,
     logLevel: config.LOG_INFO

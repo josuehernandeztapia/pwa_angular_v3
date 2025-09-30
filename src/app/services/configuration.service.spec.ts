@@ -515,7 +515,7 @@ describe('ConfigurationService', () => {
 			const uiConfig = service.getSimpleUIConfiguration();
 			const theme = uiConfig.theme;
 			
-			(expect(theme.primaryColor) as any).toBe('#1E40AF');
+			(expect(theme.primaryColor) as any).toBe('var(--openai-black)');
 			(expect(theme.fontSize) as any).toBe('large');
 			(expect(theme.buttonSize) as any).toBe('large');
 			(expect(theme.contrast) as any).toBe('high');

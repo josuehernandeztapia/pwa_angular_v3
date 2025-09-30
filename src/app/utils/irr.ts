@@ -1,5 +1,5 @@
 /**
- * 🧮 IRR (Internal Rate of Return) Calculator
+ * IRR (Internal Rate of Return) calculator
  * Newton-Raphson method implementation for financial calculations
  */
 

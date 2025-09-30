@@ -50,6 +50,10 @@ export class VoiceRecorderComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private durationTimer: any;
+  private readonly voiceValidationHandler = (event: Event) => {
+    const customEvent = event as CustomEvent;
+    this.handleValidationComplete(customEvent.detail);
+  };
 
   constructor(private voiceService: VoiceValidationService) {}
 
@@ -63,6 +67,7 @@ export class VoiceRecorderComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.clearDurationTimer();
+    window.removeEventListener('voiceValidationComplete', this.voiceValidationHandler as EventListener);
   }
 
   private loadInterviewGuide(): void {
@@ -76,9 +81,7 @@ export class VoiceRecorderComponent implements OnInit, OnDestroy {
 
   private setupEventListeners(): void {
     // Listen for validation completion
-    window.addEventListener('voiceValidationComplete', (event: any) => {
-      this.handleValidationComplete(event.detail);
-    });
+    window.addEventListener('voiceValidationComplete', this.voiceValidationHandler as EventListener);
   }
 
   private subscribeToVoiceService(): void {

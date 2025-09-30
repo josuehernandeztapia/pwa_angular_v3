@@ -5,11 +5,12 @@ import { EnhancedTandaSimulationService, TandaScenarioResult } from '../../../se
 import { FinancialCalculatorService } from '../../../services/financial-calculator.service';
 import { RiskService } from '../../../services/risk.service';
 import { environment } from '../../../../environments/environment';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-tanda-enhanced-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IconComponent],
   templateUrl: './tanda-enhanced-panel.component.html',
   styleUrls: ['./tanda-enhanced-panel.component.scss']
 })

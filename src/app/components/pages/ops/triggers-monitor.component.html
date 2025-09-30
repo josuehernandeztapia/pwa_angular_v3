@@ -300,15 +300,39 @@
         <div class="triggers-monitor__pending-checks">
           <div class="triggers-monitor__pending-check" [ngClass]="tanda.meetsMinimumMembers ? 'triggers-monitor__pending-check--ok' : 'triggers-monitor__pending-check--alert'">
             <span class="triggers-monitor__pending-check-dot"></span>
-            <span>{{ tanda.meetsMinimumMembers ? '✓' : '✗' }} Mín. 5 miembros</span>
+            <span class="triggers-monitor__pending-check-label">
+              <app-icon
+                class="triggers-monitor__status-icon"
+                [name]="tanda.meetsMinimumMembers ? 'check' : 'close'"
+                [size]="14"
+                aria-hidden="true"
+              ></app-icon>
+              Mín. 5 miembros
+            </span>
           </div>
           <div class="triggers-monitor__pending-check" [ngClass]="tanda.meetsMinimumDuration ? 'triggers-monitor__pending-check--ok' : 'triggers-monitor__pending-check--alert'">
             <span class="triggers-monitor__pending-check-dot"></span>
-            <span>{{ tanda.meetsMinimumDuration ? '✓' : '✗' }} Mín. 1 mes</span>
+            <span class="triggers-monitor__pending-check-label">
+              <app-icon
+                class="triggers-monitor__status-icon"
+                [name]="tanda.meetsMinimumDuration ? 'check' : 'close'"
+                [size]="14"
+                aria-hidden="true"
+              ></app-icon>
+              Mín. 1 mes
+            </span>
           </div>
           <div class="triggers-monitor__pending-check" [ngClass]="tanda.meetsThreshold ? 'triggers-monitor__pending-check--ok' : 'triggers-monitor__pending-check--alert'">
             <span class="triggers-monitor__pending-check-dot"></span>
-            <span>{{ tanda.meetsThreshold ? '✓' : '✗' }} Umbral 50%</span>
+            <span class="triggers-monitor__pending-check-label">
+              <app-icon
+                class="triggers-monitor__status-icon"
+                [name]="tanda.meetsThreshold ? 'check' : 'close'"
+                [size]="14"
+                aria-hidden="true"
+              ></app-icon>
+              Umbral 50%
+            </span>
           </div>
         </div>
       </article>

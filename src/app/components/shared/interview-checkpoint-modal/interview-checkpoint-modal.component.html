@@ -26,7 +26,7 @@
         [disabled]="isInterviewInProgress"
         aria-label="Cerrar"
       >
-        ✕
+        <app-icon name="close" [size]="16" aria-hidden="true"></app-icon>
       </button>
     </header>
 
@@ -40,7 +40,12 @@
 
     <section class="checkpoint-modal__status" [ngClass]="getStatusClass()">
       <div class="checkpoint-modal__status-header">
-        <span class="checkpoint-modal__status-icon" aria-hidden="true">{{ getStatusIcon() }}</span>
+        <app-icon
+          class="checkpoint-modal__status-icon"
+          [name]="getStatusIcon()"
+          [size]="18"
+          aria-hidden="true"
+        ></app-icon>
         <span class="checkpoint-modal__status-text">{{ getStatusText() }}</span>
       </div>
       <p class="checkpoint-modal__status-details" *ngIf="getStatusDetails()">{{ getStatusDetails() }}</p>
@@ -138,7 +143,12 @@
 
     <section class="checkpoint-modal__help" *ngIf="showHelp">
       <button type="button" class="checkpoint-modal__help-toggle" (click)="toggleHelp()">
-        <span class="checkpoint-modal__help-icon" aria-hidden="true">{{ helpExpanded ? '▼' : '▶' }}</span>
+        <app-icon
+          class="checkpoint-modal__help-icon"
+          [name]="helpExpanded ? 'chevron-down' : 'chevron-right'"
+          [size]="14"
+          aria-hidden="true"
+        ></app-icon>
         <span class="checkpoint-modal__help-text">¿Necesita ayuda?</span>
       </button>
 

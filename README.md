@@ -51,6 +51,26 @@ docker run -p 4200:80 conductores-pwa
 * [🧪 QA Guide](docs/QA_GUIDE.md)
   Estrategia de pruebas, métricas de cobertura, accesibilidad y quality gates.
 
+* [📱 PWA Features](docs/pwa-features.md)
+  Estado actual vs objetivo para prompts, offline e indicadores visuales.
+
+---
+
+## 🔒 Feature Flags y Navegación
+
+- La sidebar productiva muestra únicamente Dashboard, Clientes, Cotizador, Simulador, Documentos, Entregas, GNV, Protección y Configuración.
+- Onboarding/Postventa (`/onboarding`, `/postventa/wizard`), Integraciones (`/integraciones`), Administración (`/administracion`) y Usage continúan detrás de feature flags o como placeholders sin UI activa.
+- Detalles y flujos completos viven en `docs/navigation.md`, actualizado con los estados actuales de cada módulo.
+
+### Notas rápidas para DEV
+
+- Analytics en desarrollo apunta a endpoints mock (`analytics/mock-track`, `analytics/mock-metrics`). `AnalyticsService` detecta estos sufijos y sólo deja el rastro en consola; activa `enableAnalytics` o modifica el endpoint en `src/environments/environment.ts` cuando quieras validar el backend real.
+- Si quieres ver el payload exacto, apunta temporalmente `environment.analytics.eventsEndpoint` a tu propio mock (`http://localhost:3333/analytics/events`) y activa `enableAnalytics`; el servicio seguirá usando la misma cola pero sin tocar el backend productivo.
+- `DocumentValidationService.composeComplianceReport` es el fallback canónico usado por los guards. Si mockeas `/documents/compliance-report`, basta con devolver los campos que quieras sobrescribir; el servicio mezclará el resto con el snapshot local.
+- Las unitarios usan Karma puerto dinámico; si necesitas forzarlo, exporta `KARMA_PORT=9878` antes de `npm test`. Esto evita choques con entornos restringidos como contenedores o CI locales sin puerto 9876.
+- Para un smoke rápido sin watchers, ejecuta `npm run test:single`; fija `KARMA_PORT=9878` y Chrome headless automáticamente.
+- Si sólo necesitas servicios/guards, `npm run test:single:services` levanta Karma en el puerto 9879 usando `tsconfig.spec.services.json`.
+
 ---
 
 ## 🤝 Contribución

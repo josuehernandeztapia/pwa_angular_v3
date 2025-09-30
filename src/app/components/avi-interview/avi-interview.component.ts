@@ -635,6 +635,10 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
 
     this.finalDecision = decision;
     this.finalFlags = top;
+
+    this.aviService.completeSession(decision, {
+      flags: top,
+      score: this.currentScore
+    });
   }
 }
-

@@ -199,7 +199,7 @@ test.describe('AVI Minimalista - Decision & Flags', () => {
     await page.waitForSelector('[data-cy="avi-decision"]');
 
     // Validate minimalista design elements
-    const card = page.locator('.ui-card').first();
+    const card = page.locator('.card').first();
     await expect(card).toBeVisible();
 
     // Validate title styling

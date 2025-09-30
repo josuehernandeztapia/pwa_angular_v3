@@ -1,0 +1,138 @@
+<section class="policy-admin" aria-labelledby="market-policy-admin-title">
+  <header class="policy-admin__header">
+    <div>
+      <h1 id="market-policy-admin-title">Administración de Políticas de Mercado</h1>
+      <p class="policy-admin__subtitle">
+        Edita y recarga la configuración JSON que consume <code>MarketPolicyService</code> para QA sin recompilar.
+      </p>
+      <p *ngIf="lastUpdatedAt" class="policy-admin__timestamp">Última sincronización: {{ lastUpdatedAt | date:'short' }}</p>
+    </div>
+    <div class="policy-admin__actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        data-cy="policy-refresh"
+        (click)="loadRemoteConfig()"
+        [disabled]="isLoading">
+        {{ isLoading ? 'Sincronizando…' : 'Recargar del BFF' }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-cy="policy-apply"
+        (click)="applyChanges()"
+        [disabled]="isLoading">
+        Aplicar cambios
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-cy="policy-save-remote"
+        (click)="persistChanges()"
+        [disabled]="isLoading || isSavingRemote">
+        {{ isSavingRemote ? 'Guardando…' : 'Guardar en BFF' }}
+      </button>
+    </div>
+  </header>
+
+  <section class="policy-admin__editor" aria-label="Editor de políticas">
+    <label class="policy-admin__label" for="policy-json-input">Políticas (JSON)</label>
+    <textarea
+      id="policy-json-input"
+      class="policy-admin__textarea"
+      spellcheck="false"
+      [readOnly]="isLoading"
+      [(ngModel)]="configText"
+      rows="18"
+      data-cy="policy-json-editor"></textarea>
+    <p *ngIf="parseError" class="policy-admin__error" data-cy="policy-json-error">{{ parseError }}</p>
+  </section>
+
+  <section class="policy-admin__preview" aria-label="Previsualización">
+    <header class="policy-admin__preview-header">
+      <h2>Previsualización rápida</h2>
+      <p>Selecciona un contexto para validar documentos y metadatos generados.</p>
+    </header>
+
+    <div class="policy-admin__controls">
+      <label>
+        <span>Mercado</span>
+        <select [ngModel]="market()" (ngModelChange)="updateMarket($event)">
+          <option *ngFor="let marketOption of markets" [value]="marketOption.value">{{ marketOption.label }}</option>
+        </select>
+      </label>
+      <label>
+        <span>Tipo de cliente</span>
+        <select [ngModel]="clientType()" (ngModelChange)="updateClientType($event)">
+          <option *ngFor="let clientOption of clientTypes" [value]="clientOption.value">{{ clientOption.label }}</option>
+        </select>
+      </label>
+      <label>
+        <span>Tipo de venta</span>
+        <select [ngModel]="saleType()" (ngModelChange)="updateSaleType($event)">
+          <option *ngFor="let saleOption of saleTypes" [value]="saleOption.value">{{ saleOption.label }}</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="policy-admin__result">
+      <article class="policy-admin__card" aria-label="Documentos requeridos">
+        <h3>Documentos generados ({{ previewDocuments().length }})</h3>
+        <ul>
+          <li *ngFor="let doc of previewDocuments()" data-cy="policy-preview-doc">
+            <strong>{{ doc.name }}</strong>
+            <span *ngIf="doc.isOptional" class="policy-admin__badge">Opcional</span>
+            <small *ngIf="doc.tooltip">{{ doc.tooltip }}</small>
+          </li>
+        </ul>
+        <p *ngIf="!previewDocuments().length" class="policy-admin__empty">Sin documentos configurados para este contexto.</p>
+      </article>
+
+      <article class="policy-admin__card" aria-label="Metadatos de política">
+        <h3>Metadatos</h3>
+        <dl>
+          <div>
+            <dt>OCR threshold</dt>
+            <dd>{{ previewMetadata().ocrThreshold }}</dd>
+          </div>
+          <div *ngIf="previewMetadata().protection">
+            <dt>Protección requerida</dt>
+            <dd>{{ previewMetadata().protection?.required ? 'Sí' : 'No' }}</dd>
+          </div>
+          <div *ngIf="previewMetadata().tanda">
+            <dt>Tanda</dt>
+            <dd>{{ previewMetadata().tanda?.minMembers }}-{{ previewMetadata().tanda?.maxMembers }} miembros</dd>
+          </div>
+          <div *ngIf="previewMetadata().income">
+            <dt>Umbral ingresos</dt>
+            <dd>{{ previewMetadata().income?.threshold }}</dd>
+          </div>
+        </dl>
+      </article>
+    </div>
+  </section>
+</section>
+
+<div class="policy-admin__modal-backdrop" *ngIf="isConfirmVisible">
+  <div class="policy-admin__modal" role="dialog" aria-modal="true" aria-labelledby="policy-admin-confirm-title">
+    <h2 id="policy-admin-confirm-title">
+      {{ confirmMode === 'apply' ? 'Confirmar cambios en sesión' : 'Confirmar guardado en BFF' }}
+    </h2>
+    <p class="policy-admin__modal-caption">Revisa el resumen de cambios antes de continuar.</p>
+    <ul class="policy-admin__diff-list" data-cy="policy-diff-list">
+      <li *ngFor="let diff of pendingDiff" data-cy="policy-diff-item">{{ formatDiff(diff) }}</li>
+      <li *ngIf="!pendingDiff.length" class="policy-admin__diff-empty">Sin diferencias detectadas.</li>
+    </ul>
+    <div class="policy-admin__modal-actions">
+      <button type="button" class="btn btn-secondary" (click)="cancelPendingAction()" data-cy="policy-confirm-cancel">Cancelar</button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="confirmMode === 'save' && isSavingRemote"
+        (click)="confirmPendingAction()"
+        data-cy="policy-confirm-accept">
+        {{ confirmMode === 'apply' ? 'Aplicar cambios' : (isSavingRemote ? 'Guardando…' : 'Guardar en BFF') }}
+      </button>
+    </div>
+  </div>
+</div>

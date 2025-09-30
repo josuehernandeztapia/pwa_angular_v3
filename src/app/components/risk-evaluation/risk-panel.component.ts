@@ -1,5 +1,5 @@
 /**
- * 🎯 KIBAN/HASE Risk Panel Component
+ * KIBAN/HASE risk panel component
  * Premium UX component with enterprise-grade risk evaluation display
  */
 
@@ -12,7 +12,7 @@ import { shareReplay } from 'rxjs/operators';
 import { HumanMicrocopyService } from '../../services/human-microcopy.service';
 
 // Premium component imports (standalone components)
-import { UiIconComponent } from '../ui/ui-icon/ui-icon.component';
+import { IconComponent } from "../shared/icon/icon.component"
 import { HumanMessageComponent } from '../ui/human-message.component';
 
 export interface RiskEvaluation {
@@ -87,7 +87,7 @@ export interface RiskEvaluation {
     NgFor,
     AsyncPipe,
     DecimalPipe,
-    UiIconComponent,
+    IconComponent,
     HumanMessageComponent
   ],
   templateUrl: './risk-panel.component.html',

@@ -168,7 +168,7 @@ export class PostSalesApiService {
   }
 
   // ==========================================
-  // 📅 MAINTENANCE REMINDERS
+  // MAINTENANCE REMINDERS
   // ==========================================
 
   /**
@@ -383,7 +383,7 @@ export class PostSalesApiService {
   }
 
   // ==========================================
-  // 🎫 WARRANTY MANAGEMENT
+  // WARRANTY MANAGEMENT
   // ==========================================
 
   /**

@@ -16,8 +16,8 @@
   width: auto;
   height: auto;
   padding: 8px 12px;
-  background: var(--color-text-muted, transparent);
-  color: var(--color-text-primary-inverted, transparent);
+  background: var(--color-text-muted);
+  color: var(--color-text-primary-inverted);
   text-decoration: none;
   border-radius: 8px;
   font-size: 14px;
@@ -31,7 +31,7 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: var(--color-bg-secondary, transparent);
+  background: var(--color-bg-secondary);
 }
 
 .login-card {
@@ -48,8 +48,8 @@
   display: flex;
   justify-content: center;
   margin-bottom: 16px;
-  color: var(--color-accent-primary, transparent);
-  --icon-color: var(--color-accent-primary, transparent);
+  color: var(--color-accent-primary);
+  --icon-color: var(--color-accent-primary);
 }
 
 .login-logo-icon {
@@ -61,13 +61,13 @@
   margin: 0 0 8px;
   font-size: 28px;
   font-weight: 600;
-  color: var(--color-text-primary, transparent);
+  color: var(--color-text-primary);
 }
 
 .login-subtitle {
   margin: 0;
   font-size: 14px;
-  color: var(--color-text-secondary, transparent);
+  color: var(--color-text-secondary);
 }
 
 .field-block {
@@ -82,7 +82,7 @@
   position: relative;
 }
 
-.password-field .ui-input {
+.password-field .input {
   padding-right: 42px;
 }
 
@@ -96,13 +96,13 @@
   padding-right: 12px;
   border: 0;
   background: transparent;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
 .password-toggle:hover {
-  color: var(--color-text-primary, transparent);
+  color: var(--color-text-primary);
 }
 
 .password-toggle-icon {
@@ -122,20 +122,20 @@
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: var(--color-text-secondary, transparent);
+  color: var(--color-text-secondary);
 }
 
 .remember-checkbox {
   width: 16px;
   height: 16px;
   margin: 0;
-  accent-color: var(--color-accent-primary, transparent);
+  accent-color: var(--color-accent-primary);
 }
 
 .link-button {
   border: 0;
   background: transparent;
-  color: var(--color-accent-primary, transparent);
+  color: var(--color-accent-primary);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -143,7 +143,7 @@
 }
 
 .link-button:hover {
-  color: var(--color-accent-primary-strong, transparent);
+  color: var(--color-accent-primary-strong);
 }
 
 .submit-button {
@@ -165,7 +165,7 @@
 
 .login-footer {
   padding-top: 24px;
-  border-top: 1px solid var(--color-border-muted, transparent);
+  border-top: 1px solid var(--color-border-muted);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -174,18 +174,18 @@
 .footer-note {
   text-align: center;
   font-size: 14px;
-  color: var(--color-text-secondary, transparent);
+  color: var(--color-text-secondary);
 }
 
 .footer-link {
-  color: var(--color-accent-primary, transparent);
+  color: var(--color-accent-primary);
   font-weight: 500;
   margin-left: 4px;
   text-decoration: none;
 }
 
 .footer-link:hover {
-  color: var(--color-accent-primary-strong, transparent);
+  color: var(--color-accent-primary-strong);
 }
 
 .login-tip {
@@ -210,43 +210,43 @@
 
 @media (prefers-color-scheme: dark) {
   .login-shell {
-    background: var(--color-bg-primary-inverted, transparent);
+    background: var(--color-bg-primary-inverted);
   }
 
   .login-brand-icon {
-    color: var(--color-accent-primary-light, transparent);
-    --icon-color: var(--color-accent-primary-light, transparent);
+    color: var(--color-accent-primary-light);
+    --icon-color: var(--color-accent-primary-light);
   }
 
   .login-title {
-    color: var(--color-text-primary-inverted, transparent);
+    color: var(--color-text-primary-inverted);
   }
 
   .login-subtitle,
   .remember-option,
   .footer-note {
-    color: var(--color-text-secondary-inverted, transparent);
+    color: var(--color-text-secondary-inverted);
   }
 
   .password-toggle {
-    color: var(--color-text-muted-inverted, transparent);
+    color: var(--color-text-muted-inverted);
   }
 
   .password-toggle:hover {
-    color: var(--color-text-primary-inverted, transparent);
+    color: var(--color-text-primary-inverted);
   }
 
   .login-footer {
-    border-top-color: var(--color-border-muted-inverted, transparent);
+    border-top-color: var(--color-border-muted-inverted);
   }
 
   .footer-link,
   .link-button {
-    color: var(--color-accent-primary-light, transparent);
+    color: var(--color-accent-primary-light);
   }
 
   .footer-link:hover,
   .link-button:hover {
-    color: var(--color-accent-primary, transparent);
+    color: var(--color-accent-primary);
   }
 }

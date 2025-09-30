@@ -1,6 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { DocumentValidationService } from './document-validation.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { of, throwError } from 'rxjs';
+
+import { DocumentValidationService, DocumentRequirement } from './document-validation.service';
 import { Document, Client, DocumentStatus, BusinessFlow, Market } from '../models/types';
+import { environment } from '../../environments/environment';
 
 describe('DocumentValidationService', () => {
   let service: DocumentValidationService;
@@ -68,6 +72,7 @@ describe('DocumentValidationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [DocumentValidationService]
     });
     service = TestBed.inject(DocumentValidationService);
@@ -150,6 +155,40 @@ describe('DocumentValidationService', () => {
         done();
       });
     });
+
+    it('should merge remote validation response when mocks are disabled', (done) => {
+      const remoteResponse = {
+        data: {
+          valid: false,
+          score: 55,
+          issues: [{ code: 'REMOTE_BLOCK', type: 'error' as const, message: 'Server validation failed', severity: 8, fixable: false }],
+          suggestions: ['Revisar legibilidad en backend']
+        }
+      };
+
+      const httpClientStub = {
+        post: jasmine.createSpy('post').and.returnValue(of(remoteResponse))
+      } as any;
+
+      (service as any).httpClient = httpClientStub;
+      const useMockSpy = spyOn(service as any, 'shouldUseMock').and.returnValue(false);
+
+      service.validateDocument(mockDocument).subscribe({
+        next: result => {
+          expect(httpClientStub.post).toHaveBeenCalledWith('documents/validate', jasmine.any(Object));
+          expect(result.valid).toBe(false);
+          expect(result.score).toBe(55);
+          expect(result.issues).toEqual(remoteResponse.data.issues);
+          expect(result.suggestions).toEqual(['Revisar legibilidad en backend']);
+        },
+        error: error => done.fail(error),
+        complete: () => {
+          useMockSpy.and.callThrough();
+          (service as any).httpClient = undefined;
+          done();
+        }
+      });
+    });
   });
 
   describe('Compliance Report Generation', () => {
@@ -206,6 +245,40 @@ describe('DocumentValidationService', () => {
       });
     });
 
+    it('should merge remote overrides with local snapshot', () => {
+      const overrideRequirement: DocumentRequirement = {
+        id: 'doc-custom',
+        name: 'Documento Personalizado',
+        description: 'Doc generado desde backend',
+        required: true,
+        validationRules: []
+      };
+
+      const overrides = {
+        clientId: 'remote-client-987',
+        requiredDocuments: [overrideRequirement],
+        submittedDocuments: [],
+        missingDocuments: [overrideRequirement],
+        overallScore: 75,
+        complianceLevel: 'partial' as const,
+        blockingIssues: ['backend_override'],
+        recommendations: ['remote recommendation'],
+        nextSteps: ['remote next step']
+      };
+
+      const report = service.composeComplianceReport(mockClient, overrides);
+
+      (expect(report.clientId) as any).toBe('remote-client-987');
+      (expect(report.requiredDocuments) as any).toEqual([overrideRequirement]);
+      (expect(report.submittedDocuments.length) as any).toBe(0);
+      (expect(report.missingDocuments) as any).toEqual([overrideRequirement]);
+      (expect(report.overallScore) as any).toBe(75);
+      (expect(report.complianceLevel) as any).toBe('partial');
+      (expect(report.blockingIssues) as any).toEqual(['backend_override']);
+      (expect(report.recommendations) as any).toEqual(['remote recommendation']);
+      (expect(report.nextSteps) as any).toEqual(['remote next step']);
+    });
+
     it('should generate appropriate next steps', (done) => {
       service.generateComplianceReport(mockClient).subscribe(report => {
         (expect(report.nextSteps) as any).toBeDefined();
@@ -217,6 +290,68 @@ describe('DocumentValidationService', () => {
           (expect(report.nextSteps.some(step => step.includes('Contactar') || step.includes('Solicitar'))) as any).toBe(true);
         }
         done();
+      });
+    });
+
+    it('should fall back to local report when remote request fails', (done) => {
+      const originalMockFlag = environment.features.enableMockData;
+      environment.features.enableMockData = false;
+
+      const httpClientStub = {
+        post: () => throwError(() => new Error('network error')),
+      } as any;
+
+      (service as any).httpClient = httpClientStub;
+
+      service.generateComplianceReport(mockClient).subscribe({
+        next: report => {
+          (expect(report.clientId) as any).toBe(mockClient.id);
+          environment.features.enableMockData = originalMockFlag;
+          (service as any).httpClient = undefined;
+          done();
+        },
+        error: error => {
+          environment.features.enableMockData = originalMockFlag;
+          (service as any).httpClient = undefined;
+          done.fail(error);
+        }
+      });
+    });
+
+    it('should merge remote compliance report overrides when API succeeds', (done) => {
+      const remoteReport = {
+        data: {
+          clientId: 'remote-client-001',
+          overallScore: 92,
+          complianceLevel: 'complete' as const,
+          missingDocuments: [],
+          recommendations: ['Backend aprobó expediente'],
+          nextSteps: ['Continuar con firma de contrato']
+        }
+      };
+
+      const httpClientStub = {
+        post: jasmine.createSpy('post').and.returnValue(of(remoteReport))
+      } as any;
+
+      (service as any).httpClient = httpClientStub;
+      const useMockSpy = spyOn(service as any, 'shouldUseMock').and.returnValue(false);
+
+      service.generateComplianceReport(mockClient).subscribe({
+        next: report => {
+          expect(httpClientStub.post).toHaveBeenCalledWith('documents/compliance-report', jasmine.any(Object));
+          expect(report.clientId).toBe('remote-client-001');
+          expect(report.overallScore).toBe(92);
+          expect(report.complianceLevel).toBe('complete');
+          expect(report.recommendations).toEqual(['Backend aprobó expediente']);
+          expect(report.nextSteps).toEqual(['Continuar con firma de contrato']);
+        },
+        error: error => done.fail(error),
+        complete: () => {
+          useMockSpy.and.callThrough();
+          (service as any).httpClient = undefined;
+          done();
+        }
       });
     });
   });

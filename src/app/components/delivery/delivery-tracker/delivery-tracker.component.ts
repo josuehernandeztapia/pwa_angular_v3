@@ -1,9 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  effect,
+  inject,
+  signal
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Subject, Subscription } from 'rxjs';
+
+import type { PolicyMarket } from '../../../services/market-policy.service';
 import {
   DeliveryCommitment,
   DeliveryMetrics,
+  DeliveryTimelineEvent,
+  DeliveryTimelineSnapshot,
   DeliveryTrackingService,
   ETAUpdate
 } from '../../../services/delivery-tracking.service';
@@ -13,12 +28,20 @@ import {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './delivery-tracker.component.html',
-  styleUrls: ['./delivery-tracker.component.scss']
+  styleUrls: ['./delivery-tracker.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
-export class DeliveryTrackerComponent {
-  loading = false;
-  eta = 75;
+export class DeliveryTrackerComponent implements OnDestroy {
+  private readonly destroy$ = new Subject<void>();
+  private timelineSubscription: Subscription | null = null;
 
+  loading = signal(true);
+  timeline = signal<DeliveryTimelineEvent[]>([]);
+  lastUpdated = signal<string | null>(null);
+  etaDays = signal<number>(0);
+  timelineSource = signal<'cache' | 'remote'>('remote');
+
+  @Input() market = signal<PolicyMarket>('aguascalientes');
   @Input() showMetrics = signal(true);
   @Input() showTrackingInput = signal(true);
   @Input() showActiveDeliveries = signal(true);
@@ -43,18 +66,23 @@ export class DeliveryTrackerComponent {
   Math = Math;
 
   constructor() {
+    effect(() => {
+      const currentMarket = this.market();
+      this.loadTimeline(currentMarket);
+    });
+
     this.loadMetrics();
     this.loadActiveDeliveries();
-    this.initializeMinimalista();
   }
 
-  private initializeMinimalista(): void {
-    this.loading = true;
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.timelineSubscription?.unsubscribe();
+  }
 
-    setTimeout(() => {
-      this.loading = false;
-      this.eta = Math.floor(Math.random() * 120) + 1;
-    }, 1500);
+  refreshTimeline(): void {
+    this.loadTimeline(this.market(), true);
   }
 
   trackByCode(): void {
@@ -63,7 +91,7 @@ export class DeliveryTrackerComponent {
     this.searchPerformed.set(true);
 
     this.deliveryService.trackDelivery(this.trackingCode).subscribe({
-      next: (result) => {
+      next: result => {
         this.trackingResult.set(result);
       },
       error: () => {
@@ -80,16 +108,37 @@ export class DeliveryTrackerComponent {
     this.deliverySelected.emit(delivery);
   }
 
+  private loadTimeline(market: PolicyMarket, forceRefresh = false): void {
+    this.loading.set(true);
+    this.timelineSubscription?.unsubscribe();
+
+    this.timelineSubscription = this.deliveryService
+      .getDeliveryTimeline({ market, forceRefresh })
+      .subscribe({
+        next: (snapshot: DeliveryTimelineSnapshot) => {
+          this.timeline.set(snapshot.events);
+          this.etaDays.set(snapshot.etaDays);
+          this.lastUpdated.set(snapshot.lastUpdated);
+          this.timelineSource.set(snapshot.source);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.timeline.set([]);
+          this.loading.set(false);
+        }
+      });
+  }
+
   private loadMetrics(): void {
     this.deliveryService.getDeliveryMetrics().subscribe({
-      next: (metrics) => this.metrics.set(metrics),
+      next: metrics => this.metrics.set(metrics),
       error: () => undefined
     });
   }
 
   private loadActiveDeliveries(): void {
     this.deliveryService.getDeliveryCommitments({ status: 'en_route' }).subscribe({
-      next: (deliveries) => this.activeDeliveries.set(deliveries),
+      next: deliveries => this.activeDeliveries.set(deliveries),
       error: () => undefined
     });
   }
@@ -116,6 +165,29 @@ export class DeliveryTrackerComponent {
       rescheduled: 'Reprogramada'
     };
     return statusLabels[status || ''] || 'Desconocido';
+  }
+
+  getTimelineStatusClass(event: DeliveryTimelineEvent): string {
+    return `delivery-tracker__timeline-step--${event.status}`;
+  }
+
+  getTimelineStatusLabel(event: DeliveryTimelineEvent): string {
+    switch (event.status) {
+      case 'completed':
+        return 'Completado';
+      case 'in_progress':
+        return 'En progreso';
+      default:
+        return 'Pendiente';
+    }
+  }
+
+  formatTimelineDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('es-MX', {
+      month: 'short',
+      day: '2-digit'
+    });
   }
 
   getPriorityLabel(priority?: DeliveryCommitment['metadata']['priority']): string {

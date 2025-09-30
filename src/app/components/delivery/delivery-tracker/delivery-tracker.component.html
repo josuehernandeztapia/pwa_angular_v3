@@ -1,29 +1,56 @@
-<section class="delivery-tracker card">
-  <h2 class="delivery-tracker__title">Timeline de Entrega (77 días)</h2>
+<section class="delivery-tracker card" aria-live="polite">
+  <header class="delivery-tracker__header">
+    <div>
+      <h2 class="delivery-tracker__title">Timeline de Entrega</h2>
+      <p class="delivery-tracker__subtitle">
+        Mercado: {{ market() | titlecase }} · Datos {{ timelineSource() === 'cache' ? 'restaurados' : 'simulados' }}
+      </p>
+    </div>
+    <button
+      type="button"
+      class="delivery-tracker__refresh btn btn-secondary"
+      (click)="refreshTimeline()"
+      [disabled]="loading()"
+    >
+      Actualizar
+    </button>
+  </header>
 
-  <ul *ngIf="loading" class="delivery-tracker__skeleton-list">
-    <li class="delivery-tracker__skeleton"></li>
-    <li class="delivery-tracker__skeleton"></li>
-    <li class="delivery-tracker__skeleton"></li>
-  </ul>
+  @if (loading()) {
+    <ul class="delivery-tracker__skeleton-list" role="status">
+      <li class="delivery-tracker__skeleton"></li>
+      <li class="delivery-tracker__skeleton"></li>
+      <li class="delivery-tracker__skeleton"></li>
+    </ul>
+  } @else {
+    <ul class="delivery-tracker__timeline" data-cy="delivery-timeline">
+      @for (event of timeline(); track event.id) {
+        <li class="delivery-tracker__timeline-step" [ngClass]="getTimelineStatusClass(event)" data-cy="delivery-step">
+          <div class="delivery-tracker__timeline-meta">
+            <span class="delivery-tracker__timeline-day">Día {{ event.offsetDays }}</span>
+            <span class="delivery-tracker__timeline-date">{{ formatTimelineDate(event.estimatedDate) }}</span>
+          </div>
+          <div class="delivery-tracker__timeline-content">
+            <div class="delivery-tracker__timeline-header">
+              <span class="delivery-tracker__timeline-description">{{ event.label }}</span>
+              <span class="delivery-tracker__timeline-status">{{ getTimelineStatusLabel(event) }}</span>
+            </div>
+            <p class="delivery-tracker__timeline-copy">{{ event.description }}</p>
+            @if (event.requiresAction) {
+              <span class="delivery-tracker__timeline-action">Acción requerida</span>
+            }
+          </div>
+        </li>
+      }
+    </ul>
+  }
 
-  <ul *ngIf="!loading" class="delivery-tracker__timeline" data-cy="delivery-timeline">
-    <li class="delivery-tracker__timeline-step" data-cy="delivery-step">
-      <span class="delivery-tracker__timeline-day">Día 1</span>
-      <span class="delivery-tracker__timeline-description">Creación de entrega</span>
-    </li>
-    <li class="delivery-tracker__timeline-step" data-cy="delivery-step">
-      <span class="delivery-tracker__timeline-day">Día 30</span>
-      <span class="delivery-tracker__timeline-description">Pago programado</span>
-    </li>
-    <li class="delivery-tracker__timeline-step" data-cy="delivery-step">
-      <span class="delivery-tracker__timeline-day">Día 77</span>
-      <span class="delivery-tracker__timeline-description">Entrega final</span>
-    </li>
-  </ul>
-
-  <div *ngIf="!loading" class="delivery-tracker__eta">
-    ETA calculado:
-    <span class="delivery-tracker__eta-value" data-cy="delivery-eta">{{ eta }} días</span>
-  </div>
+  <footer class="delivery-tracker__footer" *ngIf="!loading()">
+    <div class="delivery-tracker__eta">
+      ETA calculado: <span class="delivery-tracker__eta-value" data-cy="delivery-eta">{{ etaDays() }} días</span>
+    </div>
+    <div class="delivery-tracker__timestamp" *ngIf="lastUpdated() as updated">
+      Última actualización: {{ updated | date:'dd/MM HH:mm' }}
+    </div>
+  </footer>
 </section>

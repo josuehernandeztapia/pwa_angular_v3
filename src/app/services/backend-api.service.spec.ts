@@ -5,6 +5,7 @@ import { skip, take } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { BackendApiService } from './backend-api.service';
 import { StorageService } from './storage.service';
+import { AuthService } from './auth.service';
 
 describe('BackendApiService', () => {
   let service: BackendApiService;
@@ -83,6 +84,8 @@ describe('BackendApiService', () => {
       'saveQuote', 'getQuote', 'getQuotesByClient', 'getPendingActions',
       'removeCompletedAction'
     ]);
+    const authServiceSpyObj = jasmine.createSpyObj('AuthService', ['getToken']);
+    authServiceSpyObj.getToken.and.returnValue('test_jwt_token');
 
     // Seed auth token for header assertions
     localStorage.setItem('auth_token', 'test_jwt_token');
@@ -92,7 +95,8 @@ describe('BackendApiService', () => {
       providers: [
         BackendApiService,
         { provide: HttpClient, useValue: httpClientSpyObj },
-        { provide: StorageService, useValue: storageServiceSpyObj }
+        { provide: StorageService, useValue: storageServiceSpyObj },
+        { provide: AuthService, useValue: authServiceSpyObj }
       ]
     });
 

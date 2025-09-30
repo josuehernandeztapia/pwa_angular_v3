@@ -22,6 +22,17 @@
       <span class="metric-label">Protección</span>
       <span class="metric-pill metric-pill--available">Disponible</span>
     </div>
+
+    <div class="cliente-header__actions" *ngIf="client">
+      <button
+        type="button"
+        class="btn btn-secondary btn-sm"
+        [routerLink]="['/clientes', client.id, 'edit']"
+        data-cy="edit-client"
+      >
+        Editar cliente
+      </button>
+    </div>
   </header>
 
   <section class="cliente-summary">
@@ -52,7 +63,8 @@
           type="button"
           class="action-card action-card--primary"
           [disabled]="!canStartAviVerification()"
-          (click)="startAviVerification()">
+          (click)="startAviVerification()"
+          data-cy="cliente-start-avi">
           <span class="action-card__icon">
             <app-icon name="microphone" [size]="24" />
           </span>
@@ -60,14 +72,15 @@
             <span class="action-card__title">Iniciar Verificación AVI</span>
             <span class="action-card__subtitle">Preguntas micro-locales con análisis de voz</span>
           </span>
-          <span class="action-card__chevron">→</span>
+          <app-icon class="action-card__chevron" name="arrow-right" [size]="16" aria-hidden="true"></app-icon>
         </button>
 
         <button
           type="button"
           class="action-card action-card--secondary"
           [disabled]="!canStartKyc()"
-          (click)="startTraditionalKyc()">
+          (click)="startTraditionalKyc()"
+          data-cy="cliente-start-kyc">
           <span class="action-card__icon">
             <app-icon name="user-network" [size]="24" />
           </span>
@@ -85,7 +98,25 @@
         <p class="section-subtitle">Gestión centralizada de expedientes</p>
       </header>
       <div class="cliente-actions__list">
-        <button type="button" class="action-card" (click)="viewDocuments()">
+        <button
+          type="button"
+          class="action-card"
+          (click)="createQuote()"
+          data-cy="create-quote"
+        >
+          <span class="action-card__icon">
+            <app-icon name="calculator" [size]="24" />
+          </span>
+          <span class="action-card__body">
+            <span class="action-card__title">Crear cotización</span>
+            <span class="action-card__subtitle">Abrir configurador con este cliente</span>
+          </span>
+        </button>
+        <button
+          type="button"
+          class="action-card"
+          (click)="viewDocuments()"
+          data-cy="cliente-view-documents">
           <span class="action-card__icon">
             <app-icon name="collection" [size]="24" />
           </span>
@@ -94,7 +125,11 @@
             <span class="action-card__subtitle">Revisión completa de documentos</span>
           </span>
         </button>
-        <button type="button" class="action-card" (click)="generateContract()">
+        <button
+          type="button"
+          class="action-card"
+          (click)="generateContract()"
+          data-cy="cliente-generate-contract">
           <span class="action-card__icon">
             <app-icon name="camera" [size]="24" />
           </span>

@@ -66,7 +66,7 @@ test('Entregas follows minimalista design patterns', async ({ page }) => {
   await expect(page.locator('[data-cy="delivery-timeline"]')).toBeVisible();
 
   // Validate ui-card container
-  const card = page.locator('section.ui-card');
+  const card = page.locator('section.card');
   await expect(card).toBeVisible();
 
   // Validate title styling (consistent with other minimalista components)

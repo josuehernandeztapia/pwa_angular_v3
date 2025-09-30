@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IconComponent } from '../icon/icon.component';
+import { IconName } from '../icon/icon-definitions';
 
 import { AviQuestionGeneratorService, MicroLocalQuestion } from '../../../services/avi-question-generator.service';
 import { AviSimpleConfigService, SimpleAviQuestion } from '../../../services/avi-simple-config.service';
@@ -13,7 +14,7 @@ import { VoiceValidationService } from '../../../services/voice-validation.servi
 interface QuestionResult {
   questionId: string;
   decision: 'GO' | 'NO-GO' | 'REVIEW';
-  icon: string;
+  icon: IconName;
   message: string;
   flags: string[];
   score: number;
@@ -530,12 +531,16 @@ export class AviVerificationModalComponent implements OnInit, OnDestroy {
     };
   }
 
-  private getDecisionIcon(decision: string): string {
-    switch(decision) {
-      case 'GO': return '';
-      case 'REVIEW': return '';  
-      case 'NO-GO': return '';
-      default: return '';
+  private getDecisionIcon(decision: string): IconName {
+    switch (decision) {
+      case 'GO':
+        return 'check-circle';
+      case 'REVIEW':
+        return 'information-circle';
+      case 'NO-GO':
+        return 'alert-triangle';
+      default:
+        return 'information-circle';
     }
   }
 

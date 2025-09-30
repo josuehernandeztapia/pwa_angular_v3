@@ -1,0 +1,185 @@
+<section class="claims-page">
+  <header class="claims-page__header">
+    <div class="claims-page__title-group">
+      <h1 class="claims-page__title">Claims & Service Desk</h1>
+      <p class="claims-page__subtitle">Gestiona reclamaciones post-venta, garantías y servicios correctivos.</p>
+    </div>
+  </header>
+
+  <app-offline-queue-banner
+    contextLabel="claims"
+    endpointPrefix="/claims"
+    featureTag="claims"
+  ></app-offline-queue-banner>
+
+  <section class="claims-page__summary">
+    <article class="claims-summary-card card">
+      <span class="claims-summary-card__label">Total casos</span>
+      <strong class="claims-summary-card__value">{{ summary().total }}</strong>
+    </article>
+    <article class="claims-summary-card claims-summary-card--open card">
+      <span class="claims-summary-card__label">Abiertos</span>
+      <strong class="claims-summary-card__value">{{ summary().open }}</strong>
+    </article>
+    <article class="claims-summary-card claims-summary-card--review card">
+      <span class="claims-summary-card__label">En revisión</span>
+      <strong class="claims-summary-card__value">{{ summary().inReview }}</strong>
+    </article>
+    <article class="claims-summary-card claims-summary-card--closed card">
+      <span class="claims-summary-card__label">Cerrados</span>
+      <strong class="claims-summary-card__value">{{ summary().closed }}</strong>
+    </article>
+    <article class="claims-summary-card card">
+      <span class="claims-summary-card__label">Ticket promedio</span>
+      <strong class="claims-summary-card__value">{{ formatAmount(summary().avgAmount) }}</strong>
+    </article>
+  </section>
+
+  <section class="claims-page__filters">
+    <div class="claims-filter">
+      <label class="claims-filter__label" for="statusFilter">Estado</label>
+      <select id="statusFilter" class="claims-filter__control" (change)="onStatusFilterChange($any($event.target).value)">
+        <option value="all">Todos</option>
+        @for (option of statusOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="claims-filter claims-filter--search">
+      <label class="claims-filter__label" for="searchInput">Buscar</label>
+      <input
+        id="searchInput"
+        type="search"
+        class="claims-filter__control"
+        placeholder="Buscar por folio, cliente o VIN"
+        (input)="onSearch($any($event.target).value)"
+      />
+    </div>
+
+    <button type="button" class="btn btn-primary" (click)="startCreate()">
+      Nuevo caso
+    </button>
+  </section>
+
+  <section class="claims-page__content">
+    <div class="claims-page__table card">
+      <table>
+        <thead>
+          <tr>
+            <th>Folio</th>
+            <th>Cliente</th>
+            <th>VIN</th>
+            <th>Mercado</th>
+            <th>Tipo</th>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th>Actualizado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (filteredClaims().length === 0) {
+            <tr>
+              <td colspan="9" class="claims-table__empty">No hay casos para los filtros seleccionados.</td>
+            </tr>
+          } @else {
+            @for (claim of filteredClaims(); track claim.id) {
+              <tr (click)="editClaim(claim)" [class.is-selected]="selectedClaimId() === claim.id">
+                <td>
+              <strong>{{ claim.folio }}</strong>
+              <div class="claims-table__meta">{{ claim.assignedTo }}</div>
+              @if (claim.pendingSync) {
+                <div class="claims-table__meta claims-table__meta--pending" data-cy="claim-pending">Pendiente de sincronizar</div>
+              }
+            </td>
+                <td>{{ claim.clientName }}</td>
+                <td>{{ claim.vehicleVin }}</td>
+                <td>{{ claim.market | titlecase }}</td>
+                <td>{{ getTypeLabel(claim.type) }}</td>
+                <td>{{ formatAmount(claim.amount) }}</td>
+                <td>
+                  <select
+                    class="claims-table__status"
+                    [value]="claim.status"
+                    (click)="$event.stopPropagation()"
+                    (change)="updateStatus(claim, $any($event.target).value)"
+                  >
+                    @for (option of statusOptions; track option.value) {
+                      <option [value]="option.value">{{ option.label }}</option>
+                    }
+                  </select>
+                </td>
+                <td>{{ claim.updatedAt | date:'dd/MM HH:mm' }}</td>
+                <td>
+                  <button type="button" class="btn btn-ghost" (click)="$event.stopPropagation(); closeClaim(claim)">
+                    Cerrar
+                  </button>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <aside class="claims-page__form card">
+      <h2 class="claims-form__title">
+        {{ formMode() === 'create' ? 'Registrar reclamo' : 'Editar reclamo' }}
+      </h2>
+
+      <form [formGroup]="form" (ngSubmit)="saveClaim()" novalidate>
+        <div class="claims-form__group">
+          <label for="clientName">Cliente</label>
+          <input id="clientName" type="text" formControlName="clientName" />
+          @if (form.controls['clientName'].invalid && form.controls['clientName'].touched) {
+            <span class="claims-form__error">Ingresa al menos 3 caracteres.</span>
+          }
+        </div>
+
+        <div class="claims-form__group">
+          <label for="vehicleVin">VIN</label>
+          <input id="vehicleVin" type="text" formControlName="vehicleVin" />
+          @if (form.controls['vehicleVin'].invalid && form.controls['vehicleVin'].touched) {
+            <span class="claims-form__error">VIN requerido.</span>
+          }
+        </div>
+
+        <div class="claims-form__row">
+          <div class="claims-form__group">
+            <label for="market">Mercado</label>
+            <select id="market" formControlName="market">
+              @for (market of marketOptions; track market.value) {
+                <option [value]="market.value">{{ market.label }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="claims-form__group">
+            <label for="type">Tipo</label>
+            <select id="type" formControlName="type">
+              @for (option of typeOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="claims-form__group">
+          <label for="amount">Monto estimado</label>
+          <input id="amount" type="number" formControlName="amount" min="0" />
+        </div>
+
+        <div class="claims-form__group">
+          <label for="description">Descripción</label>
+          <textarea id="description" rows="4" formControlName="description"></textarea>
+        </div>
+
+        <div class="claims-form__actions">
+          <button type="submit" class="btn btn-primary">Guardar</button>
+          <button type="button" class="btn btn-ghost" (click)="startCreate()">Limpiar</button>
+        </div>
+      </form>
+    </aside>
+  </section>
+</section>

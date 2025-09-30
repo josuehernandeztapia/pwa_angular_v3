@@ -45,14 +45,14 @@
 
 .logo h1 {
   margin: 0 0 8px 0;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   font-size: 2rem;
   font-weight: 700;
 }
 
 .logo p {
   margin: 0 0 24px 0;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   font-size: 1rem;
 }
 
@@ -85,7 +85,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,18 +94,18 @@
 }
 
 .step.active .step-circle {
-  background: var(--color-text-muted, transparent);
-  color: var(--color-text-primary-inverted, transparent);
+  background: var(--color-text-muted);
+  color: var(--color-text-primary-inverted);
 }
 
 .step.completed .step-circle {
-  background: var(--color-text-muted, transparent);
-  color: var(--color-text-primary-inverted, transparent);
+  background: var(--color-text-muted);
+  color: var(--color-text-primary-inverted);
 }
 
 .step-title {
   font-size: 0.8rem;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   text-align: center;
   max-width: 80px;
 }
@@ -116,13 +116,13 @@
 
 .form-step h2 {
   margin: 0 0 8px 0;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   font-size: 1.5rem;
 }
 
 .step-description {
   margin: 0 0 24px 0;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   font-size: 1rem;
 }
 
@@ -145,7 +145,7 @@
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   font-weight: 600;
   font-size: 0.95rem;
 }
@@ -153,28 +153,28 @@
 .form-input, .form-select {
   width: 100%;
   padding: 14px 16px;
-  border: 2px solid var(--color-text-muted, transparent);
+  border: 2px solid var(--color-text-muted);
   border-radius: 8px; /* OpenAI standard */
   font-size: 1rem;
   transition: all 0.2s;
-  background: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
 }
 
 .form-input:focus, .form-select:focus {
   outline: none;
-  border-color: var(--color-text-muted, transparent);
-  background: var(--color-bg-primary, transparent);
+  border-color: var(--color-text-muted);
+  background: var(--color-bg-primary);
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
 }
 
 .form-input.error, .form-select.error {
-  border-color: var(--color-text-muted, transparent);
-  background: var(--color-text-muted, transparent);
+  border-color: var(--color-text-muted);
+  background: var(--color-text-muted);
 }
 
 .form-input.checking {
-  border-color: var(--color-text-muted, transparent);
-  background: var(--color-text-muted, transparent);
+  border-color: var(--color-text-muted);
+  background: var(--color-text-muted);
 }
 
 .password-input {
@@ -206,7 +206,7 @@
 .strength-bar {
   width: 100%;
   height: 4px;
-  background: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
   border-radius: 8px; /* OpenAI standard */
   overflow: hidden;
   margin-bottom: 4px;
@@ -219,24 +219,24 @@
 }
 
 .strength-fill.weak {
-  background: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
 }
 
 .strength-fill.fair {
-  background: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
 }
 
 .strength-fill.good {
-  background: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
 }
 
 .strength-fill.strong {
-  background: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
 }
 
 .strength-text {
   font-size: 0.8rem;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
 }
 
 .password-requirements {
@@ -248,12 +248,12 @@
 
 .requirement {
   font-size: 0.85rem;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   transition: color 0.2s;
 }
 
 .requirement.met {
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
 }
 
 .checkbox-group {
@@ -276,35 +276,35 @@
 }
 
 .terms-section {
-  background: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
   padding: 20px;
   border-radius: 8px; /* OpenAI standard */
   margin-bottom: 24px;
-  border: 1px solid var(--color-text-muted, transparent);
+  border: 1px solid var(--color-text-muted);
 }
 
 .registration-summary {
-  background: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
   padding: 20px;
   border-radius: 8px; /* OpenAI standard */
-  border: 1px solid var(--color-text-muted, transparent);
+  border: 1px solid var(--color-text-muted);
   margin-top: 24px;
 }
 
 .registration-summary h3 {
   margin: 0 0 16px 0;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   font-size: 1.1rem;
 }
 
 .summary-item {
   margin-bottom: 8px;
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   font-size: 0.95rem;
 }
 
 .error-message {
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   font-size: 0.85rem;
   margin-top: 6px;
   display: flex;
@@ -313,7 +313,7 @@
 }
 
 .info-message {
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   font-size: 0.85rem;
   margin-top: 6px;
   display: flex;
@@ -342,7 +342,7 @@
 
 .btn-primary {
   background: var(--flat-surface-bg); /* FIXED (verify-ux) */
-  color: var(--color-text-primary-inverted, transparent);
+  color: var(--color-text-primary-inverted);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -358,14 +358,14 @@
 }
 
 .btn-secondary {
-  background: var(--color-text-muted, transparent);
-  color: var(--color-text-muted, transparent);
-  border: 2px solid var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
+  color: var(--color-text-muted);
+  border: 2px solid var(--color-text-muted);
 }
 
 .btn-secondary:hover {
-  background: var(--color-text-muted, transparent);
-  border-color: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
+  border-color: var(--color-text-muted);
 }
 
 .loading {
@@ -375,8 +375,8 @@
 }
 
 .register-error {
-  background: var(--color-text-muted, transparent);
-  color: var(--color-text-muted, transparent);
+  background: var(--color-text-muted);
+  color: var(--color-text-muted);
   padding: 12px 16px;
   border-radius: 8px;
   text-align: center;
@@ -388,17 +388,17 @@
   text-align: center;
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid var(--color-text-muted, transparent);
+  border-top: 1px solid var(--color-text-muted);
 }
 
 .link {
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   text-decoration: none;
   font-weight: 600;
 }
 
 .link:hover {
-  color: var(--color-text-muted, transparent);
+  color: var(--color-text-muted);
   text-decoration: underline;
 }
 
