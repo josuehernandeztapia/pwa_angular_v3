@@ -31,7 +31,7 @@
     padding: 4px 8px;
     border-radius: 6px;
     font: inherit;
-    color: var(--accent-blue-600);
+    color: var(--accent-primary-hover);
     cursor: pointer;
     transition: background 0.2s ease;
     display: inline-flex;
@@ -39,7 +39,7 @@
     gap: var(--space-2, 8px);
 
     &:hover {
-      background: var(--accent-blue-100);
+      background: var(--token-surface-accent-weak);
     }
   }
 
@@ -128,8 +128,8 @@
 
     &:focus {
       outline: none;
-      border-color: var(--accent-blue-500);
-      box-shadow: 0 0 0 3px var(--accent-blue-500);
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-primary);
     }
 
     @media (prefers-color-scheme: dark) {
@@ -145,14 +145,14 @@
 
   &__input--error,
   &__select--error {
-    border-color: var(--accent-red-500);
-    box-shadow: 0 0 0 3px var(--accent-red-500);
+    border-color: var(--accent-danger);
+    box-shadow: 0 0 0 3px var(--accent-danger);
   }
 
   &__error {
     margin: 0;
     font-size: 0.75rem;
-    color: var(--accent-red-500);
+    color: var(--accent-danger);
   }
 
   &__actions {
@@ -178,11 +178,11 @@
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 
     &--primary {
-      background: var(--accent-blue-500);
+      background: var(--accent-primary);
       color: var(--flat-surface-bg, var(--openai-white));
 
       &:hover:not(:disabled) {
-        background: var(--accent-blue-600);
+        background: var(--accent-primary-hover);
       }
 
       &:disabled {

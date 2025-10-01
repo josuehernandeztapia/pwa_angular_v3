@@ -13,7 +13,7 @@ test.describe('AVI Minimalista - Decision & Flags', () => {
 
   test('AVI shows GO decision and flags correctly', async ({ page }) => {
     // Start interview
-    await page.locator('.start-btn').first().click();
+    await page.getByTestId('avi-start-button').click();
 
     // Simulate GO scenario by evaluating component directly
     await page.evaluate(() => {
@@ -57,7 +57,7 @@ test.describe('AVI Minimalista - Decision & Flags', () => {
 
   test('AVI shows REVIEW decision and flags correctly', async ({ page }) => {
     // Start interview
-    await page.locator('.start-btn').first().click();
+    await page.getByTestId('avi-start-button').click();
 
     // Simulate REVIEW scenario
     await page.evaluate(() => {
@@ -102,7 +102,7 @@ test.describe('AVI Minimalista - Decision & Flags', () => {
 
   test('AVI shows NO-GO decision and flags correctly', async ({ page }) => {
     // Start interview
-    await page.locator('.start-btn').first().click();
+    await page.getByTestId('avi-start-button').click();
 
     // Simulate NO-GO scenario
     await page.evaluate(() => {
@@ -147,7 +147,7 @@ test.describe('AVI Minimalista - Decision & Flags', () => {
 
   test('AVI shows skeleton loader during analysis', async ({ page }) => {
     // Start interview
-    await page.locator('.start-btn').first().click();
+    await page.getByTestId('avi-start-button').click();
 
     // Simulate analyzing state
     await page.evaluate(() => {
@@ -173,7 +173,7 @@ test.describe('AVI Minimalista - Decision & Flags', () => {
 
   test('AVI card follows minimalista design patterns', async ({ page }) => {
     // Start interview and simulate completed analysis
-    await page.locator('.start-btn').first().click();
+    await page.getByTestId('avi-start-button').click();
 
     await page.evaluate(() => {
       const component = (window as any).ngComponent;
@@ -221,7 +221,7 @@ test.describe('AVI Minimalista - Decision & Flags', () => {
 
   test('AVI validates all required data-cy attributes', async ({ page }) => {
     // Start interview and complete simulation
-    await page.locator('.start-btn').first().click();
+    await page.getByTestId('avi-start-button').click();
 
     await page.evaluate(() => {
       const component = (window as any).ngComponent;

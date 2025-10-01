@@ -14,7 +14,7 @@ test.describe('Configuración Minimalista - Dual-Mode System', () => {
 
   test('Configuración shows dual-mode selector correctly', async ({ page }) => {
     // Wait for configuracion page to load
-    await expect(page.locator('section.card')).toBeVisible();
+    await expect(page.locator('[data-testid="main-card"]')).toBeVisible();
 
     // Validate dual-mode toggle is present
     const modeToggle = page.locator('[data-cy="config-mode-toggle"]');
@@ -198,10 +198,10 @@ test.describe('Configuración Minimalista - Dual-Mode System', () => {
   });
 
   test('Configuración follows minimalista design patterns', async ({ page }) => {
-    await page.waitForSelector('section.card');
+    await page.waitForSelector('[data-testid="main-card"]');
 
     // Validate ui-card container
-    const uiCard = page.locator('section.card');
+    const uiCard = page.locator('[data-testid="main-card"]');
     await expect(uiCard).toBeVisible();
 
     // Validate title styling (consistent with other components)
@@ -226,7 +226,7 @@ test.describe('Configuración Minimalista - Dual-Mode System', () => {
   });
 
   test('Configuración validates all required data-cy attributes', async ({ page }) => {
-    await page.waitForSelector('section.card');
+    await page.waitForSelector('[data-testid="main-card"]');
 
     // Validate all required data-cy attributes exist
     await expect(page.locator('[data-cy="config-mode-toggle"]')).toBeVisible();
@@ -278,7 +278,7 @@ test.describe('Configuración Minimalista - Dual-Mode System', () => {
     await page.goto('/configuracion');
 
     // Wait for content
-    await expect(page.locator('section.card')).toBeVisible();
+    await expect(page.locator('[data-testid="main-card"]')).toBeVisible();
 
     // Validate mode selector still works on mobile
     const modeToggle = page.locator('[data-cy="config-mode-toggle"]');
@@ -310,7 +310,7 @@ test.describe('Configuración Minimalista - Dual-Mode System', () => {
     });
 
     await page.goto('/configuracion');
-    await page.waitForSelector('section.card');
+    await page.waitForSelector('[data-testid="main-card"]');
 
     // Validate dark mode styling is applied
     const title = page.locator('h2:has-text("Configuración de Flujos y Productos")');

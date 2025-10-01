@@ -10,8 +10,8 @@
   justify-content: center;
   background: linear-gradient(
     160deg,
-    color-mix(in srgb, var(--color-neutral-900) 92%, transparent) 0%,
-    color-mix(in srgb, var(--color-neutral-800) 88%, transparent) 100%
+    var(--token-overlay-neutral-alpha-92) 0%,
+    var(--token-surface-neutral-800-alpha-88) 100%
   );
   color: var(--openai-white);
 
@@ -19,7 +19,7 @@
     width: min(540px, 100%);
     padding: 48px 40px;
     border-radius: 24px;
-    background: color-mix(in srgb, var(--color-neutral-900) 88%, transparent);
+    background: var(--token-overlay-neutral-alpha-88);
     box-shadow: var(--shadow-xl);
     display: flex;
     flex-direction: column;
@@ -37,14 +37,14 @@
     width: 96px;
     height: 96px;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--accent-red-500) 22%, transparent);
+    background: var(--token-surface-danger-alpha-22);
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   &__signal-icon {
-    color: var(--accent-red-400);
+    color: var(--accent-danger);
   }
 
   &__alert {
@@ -54,7 +54,7 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: var(--accent-red-500);
+    background: var(--accent-danger);
     color: var(--openai-white);
     font-weight: var(--font-semibold, 600);
     display: flex;
@@ -79,7 +79,7 @@
   &__description {
     margin: 0;
     font-size: var(--text-base, 1rem);
-    color: color-mix(in srgb, var(--openai-white) 72%, transparent);
+    color: var(--token-surface-inverse-light-alpha-72);
     line-height: var(--leading-relaxed, 1.6);
   }
 
@@ -88,7 +88,7 @@
     gap: 16px;
     padding: 16px;
     border-radius: 16px;
-    background: color-mix(in srgb, var(--color-neutral-800) 56%, transparent);
+    background: var(--token-surface-neutral-800-alpha-56);
     text-align: center;
     font-size: var(--text-sm, 0.875rem);
 
@@ -102,21 +102,21 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    color: color-mix(in srgb, var(--openai-white) 75%, transparent);
+    color: var(--token-surface-inverse-light-alpha-75);
   }
 
   &__status-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--openai-white) 40%, transparent);
+    background: var(--token-surface-inverse-light-alpha-40);
 
     &--error {
-      background: var(--accent-red-400);
+      background: var(--accent-danger);
     }
 
     &--warning {
-      background: var(--accent-amber-500);
+      background: var(--accent-muted);
     }
   }
 
@@ -130,7 +130,7 @@
     margin: 0;
     font-size: var(--text-base, 1rem);
     font-weight: var(--font-medium, 500);
-    color: color-mix(in srgb, var(--openai-white) 80%, transparent);
+    color: var(--token-surface-inverse-light-alpha-80);
   }
 
   &__feature-list {
@@ -146,7 +146,7 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    color: color-mix(in srgb, var(--openai-white) 76%, transparent);
+    color: var(--token-surface-inverse-light-alpha-76);
     font-size: var(--text-sm, 0.875rem);
   }
 
@@ -157,9 +157,9 @@
     margin-top: 6px;
     flex-shrink: 0;
 
-    &--info { background: var(--accent-blue-400); }
-    &--success { background: var(--accent-green-400); }
-    &--warning { background: var(--accent-amber-500); }
+    &--info { background: var(--accent-primary); }
+    &--success { background: var(--accent-primary); }
+    &--warning { background: var(--accent-muted); }
   }
 
   &__actions {
@@ -179,7 +179,7 @@
     color: currentColor;
 
     &--spinner {
-      animation: spin 1s linear infinite;
+      animation: offline-pulse 1.2s ease-in-out infinite;
     }
   }
 
@@ -195,7 +195,7 @@
   &__helper {
     padding: 20px;
     border-radius: 16px;
-    background: color-mix(in srgb, var(--accent-blue-500) 16%, transparent);
+    background: var(--token-surface-accent-alpha-16);
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -208,7 +208,7 @@
     align-items: center;
     gap: 8px;
     font-weight: var(--font-medium, 500);
-    color: color-mix(in srgb, var(--accent-blue-200) 80%, transparent);
+    color: color-mix(in srgb, var(--token-surface-accent-strong) 80%, transparent);
   }
 
   &__helper-list {
@@ -217,7 +217,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    color: color-mix(in srgb, var(--openai-white) 76%, transparent);
+    color: var(--token-surface-inverse-light-alpha-76);
   }
 }
 
@@ -232,10 +232,6 @@
 }
 
 @keyframes offline-pulse {
-  0%, 100% { opacity: 0.7; }
+  0%, 100% { opacity: 0.65; }
   50% { opacity: 1; }
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }

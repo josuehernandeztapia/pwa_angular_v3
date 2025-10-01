@@ -168,7 +168,7 @@
 
 .app-shell__quick-action--active {
   border-color: var(--color-primary-500);
-  background: color-mix(in srgb, var(--color-primary-200) 65%, transparent);
+  background: var(--token-color-primary-200-alpha-65);
   color: var(--color-primary-800);
 }
 
@@ -177,7 +177,7 @@
   background: var(--color-primary-200);
   color: var(--color-primary-800);
   border-color: var(--color-primary-300);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary-300) 40%, transparent);
+  box-shadow: 0 0 0 1px var(--token-color-primary-300-alpha-40);
 }
 
 .app-shell__quick-action[data-color='primary'] {
@@ -199,21 +199,21 @@
 }
 
 .app-shell__quick-action[data-color='success'] {
-  background: color-mix(in srgb, var(--accent-primary, #16a34a) 12%, transparent);
-  border-color: color-mix(in srgb, var(--accent-primary, #16a34a) 45%, transparent);
-  color: var(--accent-primary, #16a34a);
+  background: var(--token-surface-accent-tint);
+  border-color: var(--token-border-accent-soft);
+  color: var(--accent-primary);
 }
 
 .app-shell__quick-action[data-color='warning'] {
-  background: color-mix(in srgb, #f59e0b 12%, transparent);
-  border-color: color-mix(in srgb, #f59e0b 35%, transparent);
-  color: #b45309;
+  background: var(--token-surface-warning-alpha-12);
+  border-color: var(--token-surface-warning-alpha-35);
+  color: var(--accent-muted);
 }
 
 .app-shell__quick-action[data-color='danger'] {
-  background: color-mix(in srgb, #ef4444 12%, transparent);
-  border-color: color-mix(in srgb, #ef4444 35%, transparent);
-  color: #b91c1c;
+  background: var(--token-surface-danger-alpha-12);
+  border-color: var(--token-surface-danger-alpha-35);
+  color: var(--accent-danger);
 }
 
 .app-shell__quick-action-badge {
@@ -223,7 +223,7 @@
   min-width: 1.25rem;
   padding: 0 var(--space-2);
   border-radius: var(--radius-full);
-  background: color-mix(in srgb, var(--openai-white) 30%, transparent);
+  background: var(--token-surface-inverse-light-alpha-30);
   color: inherit;
   font-size: 0.65rem;
   font-weight: var(--font-semibold);
@@ -386,12 +386,12 @@
 
 // Selection styles
 ::selection {
-  background: color-mix(in srgb, var(--accent-blue-500) 30%, transparent);
+  background: var(--token-surface-accent-alpha-30);
   color: inherit;
 }
 
 ::-moz-selection {
-  background: color-mix(in srgb, var(--accent-blue-500) 30%, transparent);
+  background: var(--token-surface-accent-alpha-30);
   color: inherit;
 }
 

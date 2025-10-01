@@ -19,7 +19,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  transform: none;
+  transform: none; /* OpenAI no transforms */
 }
 
 .skeleton-card__line--title {

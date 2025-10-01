@@ -56,18 +56,18 @@ test.describe('🎬 PWA Conductores - Complete Demo Journey', () => {
 
     // 🎬 SCENE 1: Professional Landing & Authentication
     await test.step('🚀 Professional Login Flow', async () => {
-      await page.goto('/');
+      await page.goto('/login');
 
       // Wait for PWA to fully load
-      await page.waitForLoadState('networkidle');
+      await page.waitForSelector('[data-cy="login-email"]', { state: 'visible', timeout: 30000 });
       await expect(page).toHaveTitle(/Conductores/i);
 
       // Professional login sequence - using input selectors
-      await page.locator('input[type="email"]').fill(DEMO_USER.email);
-      await page.locator('input[type="password"]').fill(DEMO_USER.password);
+      await page.fill('[data-cy="login-email"]', DEMO_USER.email);
+      await page.fill('[data-cy="login-password"]', DEMO_USER.password);
 
       // Click login and wait for authentication
-      await page.locator('button:has-text("Acceder al Cockpit")').click();
+      await page.getByTestId('login-submit').click();
 
       // Wait for dashboard to load - expect navigation change
       await page.waitForLoadState('networkidle');
@@ -95,15 +95,12 @@ test.describe('🎬 PWA Conductores - Complete Demo Journey', () => {
     // 🎬 SCENE 3: Navigation Demo - Show Available Options
     await test.step('🔍 Navigation Demo - Available Features', async () => {
       // Demonstrate available navigation options with more specific selectors
-      const navigation = page.locator('nav, .navigation, .menu').first();
+      const navIds = ['nav-item-dashboard', 'nav-item-cotizador', 'nav-item-simulador', 'nav-item-clientes'];
 
-      // Look for visible navigation elements without strict matching
-      const navElements = ['Cotizador', 'Simulador', 'Clientes', 'Reportes'];
-
-      for (const element of navElements) {
-        const elementLocator = page.locator(`text=${element}`).first();
-        if (await elementLocator.isVisible().catch(() => false)) {
-          await elementLocator.hover();
+      for (const id of navIds) {
+        const navLocator = page.getByTestId(id);
+        if (await navLocator.isVisible().catch(() => false)) {
+          await navLocator.hover();
           await page.waitForTimeout(300);
         }
       }
@@ -114,12 +111,12 @@ test.describe('🎬 PWA Conductores - Complete Demo Journey', () => {
     // 🎬 SCENE 4: PWA Features Overview
     await test.step('🔍 PWA Features Overview', async () => {
       // Show available PWA features with flexible selectors
-      const features = ['Expedientes', 'Protección', 'Ayuda', 'Configuración'];
+      const featureNavIds = ['nav-item-documentos', 'nav-item-proteccion', 'nav-item-help', 'nav-item-configuracion'];
 
-      for (const feature of features) {
-        const featureLocator = page.locator(`text=${feature}`).first();
-        if (await featureLocator.isVisible().catch(() => false)) {
-          console.log(`✅ Found feature: ${feature}`);
+      for (const id of featureNavIds) {
+        const locator = page.getByTestId(id);
+        if (await locator.isVisible().catch(() => false)) {
+          console.log(`✅ Found feature: ${id}`);
         }
       }
 

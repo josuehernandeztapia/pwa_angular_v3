@@ -898,10 +898,10 @@ export class VoiceValidationService {
   }
 
   getComplianceColor(score: number): string {
-    if (score >= 90) return 'var(--accent-green-500)';
-    if (score >= 70) return 'var(--accent-amber-400)';
-    if (score >= 50) return 'var(--accent-amber-500)';
-    return 'var(--accent-red-500)';
+    if (score >= 90) return 'var(--accent-primary)';
+    if (score >= 70) return 'var(--accent-muted)';
+    if (score >= 50) return 'var(--accent-muted)';
+    return 'var(--accent-danger)';
   }
 
   //  COMPLEMENTO: Geographic Risk Scoring (EDOMEX)

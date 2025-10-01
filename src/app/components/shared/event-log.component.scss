@@ -41,7 +41,7 @@
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+    background: var(--token-surface-accent-tint);
   }
 
   &__icon {
@@ -125,7 +125,7 @@
       color: var(--openai-white);
 
       &.event-log__filter-btn--all {
-        background: var(--color-accent-primary);
+        background: var(--accent-primary);
       }
 
       &.event-log__filter-btn--payments {
@@ -165,7 +165,7 @@
     transition: color 0.2s ease, background-color 0.2s ease;
 
     &--active {
-      background: var(--color-accent-primary);
+      background: var(--accent-primary);
       color: var(--openai-white);
     }
 
@@ -198,7 +198,7 @@
     bottom: 0;
     left: 22px;
     width: 2px;
-    background-color: var(--color-accent-primary);
+    background-color: var(--accent-primary);
   }
 
   &__date-group {
@@ -211,11 +211,11 @@
     z-index: 1;
     padding: 12px 0;
     margin-bottom: 16px;
-    background: color-mix(in srgb, var(--color-neutral-900) 85%, transparent);
+    background: var(--token-overlay-neutral-alpha-85);
     backdrop-filter: blur(8px);
 
     @media (prefers-color-scheme: light) {
-      background: color-mix(in srgb, var(--openai-white) 90%, transparent);
+      background: var(--token-surface-inverse-light-alpha-90);
     }
   }
 
@@ -229,11 +229,11 @@
     width: 18px;
     height: 18px;
     border-radius: 999px;
-    background: var(--color-accent-primary);
-    border: 2px solid color-mix(in srgb, var(--openai-black) 55%, transparent);
+    background: var(--accent-primary);
+    border: 2px solid var(--token-surface-inverse-alpha-55);
 
     @media (prefers-color-scheme: light) {
-      border-color: color-mix(in srgb, var(--openai-white) 60%, transparent);
+      border-color: var(--token-surface-inverse-light-alpha-60);
     }
   }
 
@@ -262,12 +262,12 @@
     font-size: 0.75rem;
     font-weight: 600;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-blue-500) 14%, transparent);
+    background: var(--token-surface-accent-alpha-14);
     color: var(--openai-white);
 
     @media (prefers-color-scheme: light) {
-      background: color-mix(in srgb, var(--accent-blue-500) 10%, transparent);
-      color: var(--color-accent-primary);
+      background: var(--token-surface-accent-alpha-10);
+      color: var(--accent-primary);
     }
   }
 
@@ -304,8 +304,8 @@
     }
 
     &--collection {
-      background: var(--color-accent-secondary);
-      border-color: var(--color-accent-secondary-dark);
+      background: var(--accent-muted);
+      border-color: var(--accent-muted);
     }
 
     &--document {
@@ -332,10 +332,10 @@
     }
 
     &:hover {
-      box-shadow: 0 12px 32px color-mix(in srgb, var(--openai-black) 36%, transparent);
+      box-shadow: 0 12px 32px var(--token-surface-inverse-alpha-36);
 
       @media (prefers-color-scheme: light) {
-        box-shadow: 0 12px 24px color-mix(in srgb, var(--openai-black) 20%, transparent);
+        box-shadow: 0 12px 24px var(--token-surface-inverse-alpha-20);
       }
     }
 
@@ -344,7 +344,7 @@
     }
 
     &--collection {
-      border-left: 4px solid var(--color-accent-secondary);
+      border-left: 4px solid var(--accent-muted);
     }
 
     &--document {
@@ -376,7 +376,7 @@
     justify-content: center;
     width: 36px;
     height: 36px;
-    color: var(--color-accent-primary);
+    color: var(--accent-primary);
 
     svg {
       width: 100%;
@@ -431,17 +431,17 @@
     font-weight: 500;
 
     &--asesor {
-      background-color: color-mix(in srgb, var(--accent-blue-500) 20%, transparent);
+      background-color: var(--token-surface-accent-alpha-20);
       color: var(--color-info);
     }
 
     &--cliente {
-      background-color: color-mix(in srgb, var(--accent-green-500) 20%, transparent);
+      background-color: var(--token-surface-accent-alpha-20);
       color: var(--color-success);
     }
 
     &--sistema {
-      background-color: color-mix(in srgb, var(--color-neutral-500) 20%, transparent);
+      background-color: var(--token-surface-neutral-500-alpha-20);
       color: var(--color-text-secondary);
 
       @media (prefers-color-scheme: dark) {
@@ -466,14 +466,14 @@
     text-align: right;
 
     &--income {
-      background-color: color-mix(in srgb, var(--accent-green-500) 10%, transparent);
-      border-color: color-mix(in srgb, var(--accent-green-500) 20%, transparent);
+      background-color: var(--token-surface-accent-alpha-10);
+      border-color: var(--token-surface-accent-alpha-20);
       color: var(--color-success);
     }
 
     &--expense {
-      background-color: color-mix(in srgb, var(--accent-red-500) 10%, transparent);
-      border-color: color-mix(in srgb, var(--accent-red-500) 20%, transparent);
+      background-color: var(--token-surface-danger-alpha-10);
+      border-color: var(--token-surface-danger-alpha-20);
       color: var(--color-danger);
     }
   }
@@ -544,11 +544,11 @@
     transition: background-color 0.2s ease, color 0.2s ease;
 
     &--secondary {
-      background: color-mix(in srgb, var(--color-neutral-700) 70%, transparent);
+      background: var(--token-surface-neutral-700-alpha-70);
       color: var(--openai-gray-200);
 
       &:hover {
-        background: color-mix(in srgb, var(--color-neutral-600) 90%, transparent);
+        background: var(--token-surface-neutral-600-alpha-90);
       }
 
       @media (prefers-color-scheme: light) {
@@ -600,10 +600,10 @@
   &__table {
     border-radius: 12px;
     overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--color-neutral-600) 40%, transparent);
+    border: 1px solid var(--token-surface-neutral-600-alpha-40);
 
     @media (prefers-color-scheme: light) {
-      border-color: color-mix(in srgb, var(--color-primary-300) 60%, transparent);
+      border-color: var(--token-color-primary-300-alpha-60);
     }
   }
 
@@ -612,7 +612,7 @@
     grid-template-columns: 0.75fr 3fr 1.5fr 1.5fr 1.5fr 1fr;
     gap: 16px;
     padding: 12px 16px;
-    background: color-mix(in srgb, var(--color-neutral-700) 90%, transparent);
+    background: var(--token-surface-neutral-700-alpha-90);
     color: var(--openai-gray-200);
 
     @media (prefers-color-scheme: light) {
@@ -638,20 +638,20 @@
     grid-template-columns: 0.75fr 3fr 1.5fr 1.5fr 1.5fr 1fr;
     gap: 16px;
     padding: 12px 16px;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-neutral-600) 60%, transparent);
+    border-bottom: 1px solid var(--token-surface-neutral-600-alpha-60);
     align-items: center;
     transition: background-color 0.2s ease;
 
     &:hover {
-      background: color-mix(in srgb, var(--color-neutral-700) 40%, transparent);
+      background: var(--token-surface-neutral-700-alpha-40);
 
       @media (prefers-color-scheme: light) {
-        background: color-mix(in srgb, var(--color-primary-200) 40%, transparent);
+        background: var(--token-color-primary-200-alpha-40);
       }
     }
 
     @media (prefers-color-scheme: light) {
-      border-bottom-color: color-mix(in srgb, var(--color-primary-300) 80%, transparent);
+      border-bottom-color: var(--token-color-primary-300-alpha-80);
     }
   }
 
@@ -706,10 +706,10 @@
     transition: background-color 0.2s ease;
 
     &:hover {
-      background: color-mix(in srgb, var(--color-neutral-700) 40%, transparent);
+      background: var(--token-surface-neutral-700-alpha-40);
 
       @media (prefers-color-scheme: light) {
-        background: color-mix(in srgb, var(--color-primary-200) 60%, transparent);
+        background: var(--token-color-primary-200-alpha-60);
       }
     }
   }
@@ -873,12 +873,12 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    margin-top: 6px;
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    margin-top: 0;
   }
 }
 

@@ -178,15 +178,15 @@
       }
 
       &--success {
-        background: var(--color-surface-success-subtle, rgba(16, 185, 129, 0.12));
+        background: var(--color-surface-success-subtle, var(--token-surface-accent-soft));
       }
 
       &--error {
-        background: var(--color-surface-error-subtle, rgba(220, 38, 38, 0.12));
+        background: var(--color-surface-error-subtle, var(--token-surface-danger-soft));
       }
 
       &--info {
-        background: var(--color-surface-info-subtle, rgba(59, 130, 246, 0.12));
+        background: var(--color-surface-info-subtle, var(--token-surface-accent-soft));
       }
     }
   }
@@ -268,7 +268,7 @@
     background: var(--color-bg-secondary);
 
     &--active {
-      background: var(--color-bg-success, var(--accent-green-500));
+      background: var(--color-bg-success, var(--accent-primary));
     }
 
     &--testing {
@@ -276,7 +276,7 @@
     }
 
     &--error {
-      background: var(--color-bg-error, var(--accent-red-500));
+      background: var(--color-bg-error, var(--accent-danger));
     }
 
     &--inactive {
@@ -313,7 +313,7 @@
       color: var(--color-text-secondary-dark);
 
       &--api {
-        background: var(--color-surface-info-subtle-light, rgba(59, 130, 246, 0.16));
+        background: var(--color-surface-info-subtle-light, var(--token-surface-accent-alpha-22));
         color: var(--color-text-info-light);
       }
 

@@ -5,8 +5,8 @@
 
 .context-panel__card {
   border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--color-border-primary) 40%, transparent);
-  background: color-mix(in srgb, var(--flat-surface-bg) 85%, transparent);
+  border: 1px solid var(--token-border-primary-alpha-40);
+  background: var(--token-surface-flat-alpha-85);
   padding: 1rem 1.25rem;
   display: flex;
   flex-direction: column;
@@ -15,8 +15,8 @@
 
 @media (prefers-color-scheme: dark) {
   .context-panel__card {
-    background: color-mix(in srgb, var(--neutral-900) 85%, transparent);
-    border-color: color-mix(in srgb, var(--color-border-secondary) 30%, transparent);
+    background: var(--token-neutral-900-alpha-85);
+    border-color: var(--token-border-neutral-alpha-30);
   }
 
   .context-panel__title {
@@ -68,26 +68,26 @@
   font-weight: 600;
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--color-border-primary) 45%, transparent);
+  background: var(--token-border-primary-alpha-45);
   color: var(--color-text-secondary);
 
   &--success {
-    background: color-mix(in srgb, var(--accent-green-500) 18%, transparent);
-    color: var(--accent-green-700);
+    background: var(--token-surface-accent-soft);
+    color: var(--accent-primary-hover);
   }
 
   &--warning {
-    background: color-mix(in srgb, var(--color-warning-400) 18%, transparent);
+    background: var(--token-surface-warning-alpha-18);
     color: var(--color-warning-600);
   }
 
   &--info {
-    background: color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
-    color: var(--accent-blue-600);
+    background: var(--token-surface-accent-soft);
+    color: var(--accent-primary-hover);
   }
 
   &--danger {
-    background: color-mix(in srgb, var(--color-error-400) 20%, transparent);
+    background: var(--token-surface-danger-strong-alpha-20);
     color: var(--color-error-600);
   }
 }
@@ -132,22 +132,22 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
-  background: color-mix(in srgb, var(--accent-blue-500) 20%, transparent);
-  color: var(--accent-blue-600);
+  background: var(--token-surface-accent-alpha-20);
+  color: var(--accent-primary-hover);
 }
 
 .context-panel__action[data-kind='primary'] {
-  background: color-mix(in srgb, var(--accent-blue-500) 30%, transparent);
+  background: var(--token-surface-accent-alpha-30);
   color: var(--color-white, #fff);
 }
 
 .context-panel__action[data-kind='secondary'] {
-  background: color-mix(in srgb, var(--color-border-primary) 25%, transparent);
+  background: var(--token-border-primary-alpha-25);
   color: var(--color-text-secondary);
 }
 
 .context-panel__action[data-kind='danger'] {
-  background: color-mix(in srgb, var(--color-error-500) 25%, transparent);
+  background: var(--token-surface-danger-strong-alpha-25);
   color: var(--color-white, #fff);
 }
 
@@ -162,7 +162,7 @@
 }
 
 .context-panel__issues {
-  border-top: 1px solid color-mix(in srgb, var(--color-border-primary) 35%, transparent);
+  border-top: 1px solid var(--token-border-primary-alpha-35);
   padding-top: 0.75rem;
   display: grid;
   gap: 0.75rem;
@@ -180,11 +180,11 @@
   font-size: 0.85rem;
   padding: 0.6rem 0.75rem;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--flat-surface-bg) 65%, transparent);
+  background: var(--token-surface-flat-alpha-65);
 }
 
 .context-panel__issue:hover {
-  background: color-mix(in srgb, var(--flat-surface-bg) 75%, transparent);
+  background: var(--token-surface-flat-alpha-75);
 }
 
 .context-panel__issue-header {
@@ -221,46 +221,46 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
-  background: color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
-  color: var(--accent-blue-600);
+  background: var(--token-surface-accent-soft);
+  color: var(--accent-primary-hover);
 }
 
 .context-panel__issue-action[data-kind='primary'] {
-  background: color-mix(in srgb, var(--accent-blue-500) 28%, transparent);
+  background: var(--token-surface-accent-alpha-28);
   color: var(--color-white, #fff);
 }
 
 .context-panel__issue-action[data-kind='danger'] {
-  background: color-mix(in srgb, var(--color-error-500) 25%, transparent);
+  background: var(--token-surface-danger-strong-alpha-25);
   color: var(--color-white, #fff);
 }
 
 .context-panel__issue-action[data-kind='secondary'] {
-  background: color-mix(in srgb, var(--color-border-primary) 20%, transparent);
+  background: var(--token-border-primary-alpha-20);
   color: var(--color-text-secondary);
 }
 
 .context-panel__issue-action:hover,
 .context-panel__issue-action:focus-visible {
-  background: color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+  background: var(--token-surface-accent-alpha-35);
   color: var(--color-white, #fff);
   outline: none;
 }
 
 .context-panel__issue-action[data-kind='secondary']:hover,
 .context-panel__issue-action[data-kind='secondary']:focus-visible {
-  background: color-mix(in srgb, var(--color-border-primary) 35%, transparent);
+  background: var(--token-border-primary-alpha-35);
   color: var(--color-text-primary);
 }
 
 .context-panel__issue-action[data-kind='danger']:hover,
 .context-panel__issue-action[data-kind='danger']:focus-visible {
-  background: color-mix(in srgb, var(--color-error-500) 35%, transparent);
+  background: var(--token-surface-danger-strong-alpha-35);
 }
 
 .context-panel__empty {
   border-radius: 12px;
-  border: 1px dashed color-mix(in srgb, var(--color-border-primary) 35%, transparent);
+  border: 1px dashed var(--token-border-primary-alpha-35);
   padding: 0.75rem 1rem;
   font-size: 0.85rem;
   color: var(--color-text-tertiary);

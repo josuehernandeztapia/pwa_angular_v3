@@ -1,20 +1,20 @@
 .notifications-panel {
+  --notifications-panel-width: min(26rem, 100vw);
   position: fixed;
   top: 0;
-  right: 0;
+  right: calc(var(--notifications-panel-width) * -1);
   height: 100vh;
-  width: min(26rem, 100vw);
+  width: var(--notifications-panel-width);
   display: flex;
   flex-direction: column;
   background: var(--flat-surface-bg, var(--openai-white));
   border-left: 1px solid var(--neutral-300, var(--openai-gray-200));
   box-shadow: var(--shadow-lg, -4px 0 20px rgba(8, 8, 8, 0.12));
-  transform: translate3d(100%, 0, 0);
-  transition: transform var(--transition-fast, 0.3s ease);
+  transition: right var(--transition-fast, 0.3s ease);
   z-index: 1001;
 
   &--open {
-    transform: translate3d(0, 0, 0);
+    right: 0;
   }
 
   &__header {
@@ -47,7 +47,7 @@
     min-width: 2rem;
     padding: 0 var(--space-8, 8px);
     border-radius: 999px;
-    background: var(--accent-red-500);
+    background: var(--accent-danger);
     color: var(--flat-surface-bg, var(--openai-white));
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
@@ -77,18 +77,18 @@
   }
 
   &__filter--active {
-    background: var(--accent-blue-500);
+    background: var(--accent-primary);
     color: var(--flat-surface-bg, var(--openai-white));
   }
 
   &__mark-all {
-    background: var(--accent-green-500);
+    background: var(--accent-primary);
     color: var(--flat-surface-bg, var(--openai-white));
   }
 
   &__close {
-    background: var(--accent-red-200);
-    color: var(--accent-red-700);
+    background: var(--token-surface-danger-strong);
+    color: var(--accent-danger);
   }
 
   &__filter:hover,
@@ -121,8 +121,8 @@
     height: 2.25rem;
     border-radius: 999px;
     border: 2px solid var(--neutral-300, var(--openai-gray-200));
-    border-top-color: var(--accent-blue-500);
-    animation: notifications-panel-spin 0.9s linear infinite;
+    border-top-color: var(--accent-primary);
+    animation: notifications-panel-pulse 1.2s ease-in-out infinite;
   }
 
   &__status-text {
@@ -154,20 +154,20 @@
     }
 
     &--unread {
-      background: var(--accent-blue-50);
-      border-left: 4px solid var(--accent-blue-500);
+      background: var(--token-surface-accent-weak);
+      border-left: 4px solid var(--accent-primary);
     }
 
     &--priority-high {
-      border-left-color: var(--accent-red-500);
+      border-left-color: var(--accent-danger);
     }
 
     &--priority-medium {
-      border-left-color: var(--accent-amber-500);
+      border-left-color: var(--accent-muted);
     }
 
     &--priority-low {
-      border-left-color: var(--accent-green-500);
+      border-left-color: var(--accent-primary);
     }
   }
 
@@ -230,8 +230,8 @@
     font-weight: var(--font-weight-semibold, 600);
 
     &--action {
-      background: var(--accent-blue-500, var(--flat-surface-bg, var(--openai-white)));
-      color: var(--accent-blue-700);
+      background: var(--accent-primary, var(--flat-surface-bg, var(--openai-white)));
+      color: var(--accent-primary-hover);
     }
   }
 
@@ -268,15 +268,15 @@
     color: var(--neutral-500, var(--openai-gray-400));
 
     &--high {
-      color: var(--accent-red-500);
+      color: var(--accent-danger);
     }
 
     &--medium {
-      color: var(--accent-amber-500);
+      color: var(--accent-muted);
     }
 
     &--low {
-      color: var(--accent-green-500);
+      color: var(--accent-primary);
     }
   }
 
@@ -323,10 +323,11 @@
     font-size: 0.8125rem;
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
-    transition: transform var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
+    transition: margin-top var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
+    margin-top: 0;
 
     &:hover:not(:disabled) {
-      transform: translateY(-1px);
+      margin-top: -2px;
       box-shadow: var(--shadow-sm, 0 1px 2px rgba(8, 8, 8, 0.12));
     }
 
@@ -356,7 +357,7 @@
   }
 
   @media (max-width: 48rem) {
-    width: min(22rem, 100vw);
+    --notifications-panel-width: min(22rem, 100vw);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -367,14 +368,22 @@
     }
 
     &__quick-action:hover:not(:disabled) {
-      transform: none;
+      margin-top: 0;
       box-shadow: none;
     }
   }
 }
 
-@keyframes notifications-panel-spin {
-  to {
-    transform: rotate(360deg);
+@keyframes notifications-panel-pulse {
+  0% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.45;
   }
 }

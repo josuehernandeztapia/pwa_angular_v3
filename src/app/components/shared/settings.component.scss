@@ -4,11 +4,11 @@
 
 .settings {
   --settings-surface: var(--flat-surface-bg);
-  --settings-surface-muted: var(--surface-neutral-weak);
-  --settings-surface-dark: color-mix(in srgb, var(--color-neutral-900) 92%, transparent);
+  --settings-surface-muted: var(--token-surface-muted);
+  --settings-surface-dark: var(--token-overlay-neutral-alpha-92);
   --settings-border: var(--border-neutral-weak);
   --settings-border-strong: var(--border-neutral-strong);
-  --settings-shadow-card: 0 4px 12px color-mix(in srgb, var(--openai-black) 12%, transparent);
+  --settings-shadow-card: 0 4px 12px var(--token-surface-inverse-alpha-12);
   --settings-shadow-tab: var(--shadow-sm);
 
   display: flex;
@@ -50,7 +50,7 @@
     border: 1px solid var(--settings-border);
 
     @media (prefers-color-scheme: dark) {
-      background: color-mix(in srgb, var(--settings-surface-dark) 76%, transparent);
+      background: var(--token-surface-settings-dark-alpha-76);
       border-color: var(--settings-border-strong);
     }
   }
@@ -74,7 +74,7 @@
       color: var(--color-text-primary);
 
       @media (prefers-color-scheme: dark) {
-        background: color-mix(in srgb, var(--settings-surface-dark) 84%, transparent);
+        background: var(--token-surface-settings-dark-alpha-84);
         color: var(--color-text-primary-inverted);
       }
     }
@@ -85,7 +85,7 @@
       box-shadow: var(--settings-shadow-tab);
 
       @media (prefers-color-scheme: dark) {
-        background: color-mix(in srgb, var(--settings-surface-dark) 84%, transparent);
+        background: var(--token-surface-settings-dark-alpha-84);
         color: var(--color-text-primary-inverted);
       }
     }

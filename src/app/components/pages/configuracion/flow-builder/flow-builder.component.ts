@@ -173,7 +173,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Market,
       name: 'Ciudad/Mercado',
       iconType: 'building-office',
-      color: 'var(--color-accent-primary)',
+      color: 'var(--accent-primary)',
       category: 'Mercados',
       description: 'Define una nueva ciudad o mercado',
       defaultConfig: {
@@ -244,7 +244,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Verification,
       name: 'Patrón de Voz',
       iconType: 'microphone',
-      color: 'var(--color-accent-secondary)',
+      color: 'var(--accent-muted)',
       category: 'Verificaciones',
       description: 'Verificación por patrón de voz',
       defaultConfig: {
@@ -260,7 +260,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Verification,
       name: 'Análisis AVI',
       iconType: 'monitor',
-      color: 'var(--color-accent-secondary)',
+      color: 'var(--accent-muted)',
       category: 'Verificaciones',
       description: 'Análisis automático de voz e inteligencia',
       defaultConfig: {
@@ -295,7 +295,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Product,
       name: 'Venta a Plazo',
       iconType: 'bank',
-      color: 'var(--color-accent-primary)',
+      color: 'var(--accent-primary)',
       category: 'Productos',
       description: 'Producto de financiamiento completo',
       defaultConfig: {
@@ -312,7 +312,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Product,
       name: 'Ahorro Programado',
       iconType: 'chart',
-      color: 'var(--color-accent-secondary)',
+      color: 'var(--accent-muted)',
       category: 'Productos',
       description: 'Plan de ahorro para vehículo',
       defaultConfig: {
@@ -329,7 +329,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Product,
       name: 'Crédito Colectivo',
       iconType: 'collection',
-      color: 'var(--color-accent-primary)',
+      color: 'var(--accent-primary)',
       category: 'Productos',
       description: 'Crédito grupal para vehículos',
       defaultConfig: {
@@ -348,7 +348,7 @@ export class FlowBuilderComponent implements OnInit, OnDestroy {
       type: NodeType.Product,
       name: 'Tanda Colectiva',
       iconType: 'sparkles',
-      color: 'var(--color-accent-secondary)',
+      color: 'var(--accent-muted)',
       category: 'Productos',
       description: 'Sistema de tanda para ahorro grupal',
       defaultConfig: {
@@ -1209,7 +1209,7 @@ export class ${className}Component {
         type: NodeType.Market,
         name: 'Guadalajara',
         iconType: 'building-office',
-        color: 'var(--color-accent-primary)',
+        color: 'var(--accent-primary)',
         position: { x: 50, y: 100 },
         config: {
           cityCode: 'guadalajara',

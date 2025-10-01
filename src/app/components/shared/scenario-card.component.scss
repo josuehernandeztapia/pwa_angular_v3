@@ -23,8 +23,8 @@
   }
 
   &--selected {
-    background: var(--accent-green-500, var(--neutral-900, var(--openai-gray-800)));
-    border-color: var(--accent-green-500);
+    background: var(--accent-primary, var(--neutral-900, var(--openai-gray-800)));
+    border-color: var(--accent-primary);
   }
 
   &__selected {
@@ -34,7 +34,7 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: var(--accent-green-500);
+    background: var(--accent-primary);
     display: inline-flex;
     align-items: center;
     justify-content: center;

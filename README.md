@@ -18,7 +18,9 @@ Construida con **Angular 17+** y un stack de calidad enterprise.
 npm ci
 
 # Servir en local
-ng serve
+npm start
+# (equivalente a `ng serve --configuration=development --port=4300`)
+# La PWA queda disponible en http://localhost:4300 y el flujo de acceso arranca en /login
 
 # Acceso demo (http://localhost:4200)
 # Usuario: demo@conductores.com
@@ -35,11 +37,29 @@ npm run build:prod
 
 # Servir build localmente
 npm run serve:prod
+```
 
-# Docker
+### 🐳 Docker Deployment
+
+```bash
+# Opción 1: Docker simple
 docker build -t conductores-pwa .
 docker run -p 4200:80 conductores-pwa
+
+# Opción 2: Docker Compose (recomendado)
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f pwa
+
+# Detener
+docker-compose down
+
+# Rebuild después de cambios
+docker-compose up -d --build
 ```
+
+La aplicación estará disponible en `http://localhost:4200`
 
 ---
 

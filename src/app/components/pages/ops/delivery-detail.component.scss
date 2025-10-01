@@ -68,8 +68,8 @@
 .delivery-title__icon {
   width: 18px;
   height: 18px;
-  color: var(--color-accent-primary);
-  --icon-color: var(--color-accent-primary);
+  color: var(--accent-primary);
+  --icon-color: var(--accent-primary);
 }
 
 .delivery-section-icon,
@@ -131,7 +131,7 @@
 }
 
 .delivery-action--primary {
-  background: var(--color-primary-600, var(--color-accent-primary-strong));
+  background: var(--color-primary-600, var(--accent-primary-hover));
   color: var(--color-text-primary-inverted);
   border-color: transparent;
 }
@@ -156,7 +156,7 @@
   width: 28px;
   height: 28px;
   border: 3px solid rgba(30, 41, 59, 0.15);
-  border-top-color: var(--color-primary-600, var(--color-accent-primary-strong));
+  border-top-color: var(--color-primary-600, var(--accent-primary-hover));
   border-radius: 50%;
   animation: deliverySpin 0.8s linear infinite;
 }
@@ -220,7 +220,7 @@
 }
 
 .delivery-info__value--new {
-  color: var(--color-primary-600, var(--color-accent-primary-strong));
+  color: var(--color-primary-600, var(--accent-primary-hover));
 }
 
 .progress-bar {
@@ -233,7 +233,7 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-primary-600, var(--color-accent-primary-strong)) 0%, var(--color-primary-700, var(--color-text-primary)) 100%);
+  background: var(--accent-primary-hover);
 }
 
 .progress-labels {
@@ -299,7 +299,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--color-primary-600, var(--color-accent-primary-strong));
+  background: var(--color-primary-600, var(--accent-primary-hover));
   color: var(--color-text-primary-inverted);
   display: flex;
   align-items: center;
@@ -443,7 +443,7 @@
 .action-card__button.requires-confirmation,
 .modal-button--primary {
   border-color: transparent;
-  background: var(--color-primary-600, var(--color-accent-primary-strong));
+  background: var(--color-primary-600, var(--accent-primary-hover));
   color: var(--color-text-primary-inverted);
 }
 
@@ -574,7 +574,7 @@
 .field-group input:focus,
 .field-group textarea:focus {
   outline: none;
-  border-color: var(--color-primary-600, var(--color-accent-primary-strong));
+  border-color: var(--color-primary-600, var(--accent-primary-hover));
   box-shadow: 0 0 0 3px rgba(30, 41, 59, 0.15);
 }
 

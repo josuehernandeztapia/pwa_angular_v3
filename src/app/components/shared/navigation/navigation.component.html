@@ -10,7 +10,7 @@
     <div class="app-nav__header-actions">
       <button
         type="button"
-        class="app-nav__notifications"
+        class="app-nav__notifications" data-testid="nav-item-notifications"
         (click)="toggleNotifications()"
         [ngClass]="{ 'app-nav__notifications--has': (unreadCount$ | async)! > 0 }"
         aria-label="Abrir notificaciones"
@@ -48,7 +48,7 @@
   </section>
 
   <div class="app-nav__cta">
-    <button type="button" class="app-nav__cta-button" [ngClass]="{ 'app-nav__cta-button--collapsed': isCollapsed }" (click)="createNewOpportunity()" aria-label="Nueva oportunidad">
+    <button type="button" class="app-nav__cta-button" data-testid="nav-item-create-opportunity" [ngClass]="{ 'app-nav__cta-button--collapsed': isCollapsed }" (click)="createNewOpportunity()" aria-label="Nueva oportunidad">
       <span class="app-nav__cta-icon" aria-hidden="true">
         <app-icon class="icon-16" name="plus" [size]="16"></app-icon>
       </span>
@@ -63,6 +63,7 @@
       [ngClass]="getNavItemClasses(item)"
       (click)="navigate(item)"
       [routerLink]="item.route"
+      [attr.data-testid]="getNavTestId(item.route)"
       [attr.aria-label]="isCollapsed ? item.label : null"
       [attr.data-cy]="item.dataCy || null"
       routerLinkActive="is-active"
@@ -80,6 +81,7 @@
           [ngClass]="{ 'is-active': isActive(child.route) }"
           (click)="navigate(child); $event.stopPropagation()"
           [routerLink]="child.route"
+          [attr.data-testid]="getNavTestId(child.route)"
           [attr.data-cy]="child.dataCy || null"
         >
           <span class="app-nav__subitem-icon" aria-hidden="true">
@@ -93,21 +95,21 @@
   </nav>
 
   <footer class="app-nav__footer">
-    <button type="button" class="app-nav__item" (click)="showHelp()">
+    <button type="button" class="app-nav__item" (click)="showHelp()" data-testid="nav-item-help">
       <span class="app-nav__item-icon" aria-hidden="true">
         <app-icon class="icon-20" name="help"></app-icon>
       </span>
       <span class="app-nav__item-label" *ngIf="!isCollapsed">Ayuda</span>
     </button>
 
-    <button type="button" class="app-nav__item" (click)="showSettings()">
+    <button type="button" class="app-nav__item" (click)="showSettings()" data-testid="nav-item-settings">
       <span class="app-nav__item-icon" aria-hidden="true">
         <app-icon class="icon-20" name="settings"></app-icon>
       </span>
       <span class="app-nav__item-label" *ngIf="!isCollapsed">Configuración</span>
     </button>
 
-    <button type="button" class="app-nav__item app-nav__item--logout" (click)="logout()">
+    <button type="button" class="app-nav__item app-nav__item--logout" (click)="logout()" data-testid="nav-item-logout">
       <span class="app-nav__item-icon" aria-hidden="true">
         <app-icon class="icon-20" name="logout"></app-icon>
       </span>

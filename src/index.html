@@ -2,12 +2,12 @@
 <html lang="es" class="dark">
 <head>
   <meta charset="utf-8">
-  <title>Conductores PWA - Fintech Mobility Platform</title>
+  <title>Conductores PWA - Mobility Tech Platform</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="Plataforma fintech para conductores con evaluación de riesgo KIBAN, gestión de entregas y monitoreo GNV en tiempo real">
-  <meta name="keywords" content="fintech,conductores,kiban,gnv,riesgo,movilidad">
+  <meta name="description" content="Plataforma Mobility Tech para conductores con evaluación de riesgo KIBAN, gestión de entregas y monitoreo GNV en tiempo real">
+  <meta name="keywords" content="mobility tech,conductores,kiban,gnv,riesgo,movilidad">
   <meta name="author" content="Conductores PWA Team">
 
   <!-- Favicon and App Icons -->
@@ -74,7 +74,7 @@
 
     .loading-logo{
       width:80px;height:80px;margin-bottom:24px;
-      background:color-mix(in srgb, var(--openai-white) 6%, transparent);border-radius:8px;/* OpenAI standard */
+      background:var(--token-surface-inverse-light-alpha-06);border-radius:8px;/* OpenAI standard */
       display:flex;align-items:center;justify-content:center;
       font-size:32px;animation:pulse 2s infinite
     }
@@ -108,7 +108,7 @@
       transition:all 0.2s cubic-bezier(0.4,0,0.2,1)
     }
     .btn-primary{background:var(--color-text-secondary);color:var(--openai-white)}
-    .btn-primary:hover{background:var(--color-border-focus);transform:none}
+    .btn-primary:hover{background:var(--color-border-focus);transform:none /* OpenAI no transforms */}
 
     /* Performance Optimized Utilities */
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
@@ -149,7 +149,7 @@
     <div class="app-shell-loading" id="initial-loader">
       <div class="loading-logo"></div>
       <div class="loading-text">Conductores PWA</div>
-      <div class="loading-subtitle">Plataforma fintech para movilidad</div>
+      <div class="loading-subtitle">Plataforma Mobility Tech</div>
       <div class="loading-spinner"></div>
     </div>
 

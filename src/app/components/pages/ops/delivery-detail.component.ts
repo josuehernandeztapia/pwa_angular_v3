@@ -215,7 +215,7 @@ export class DeliveryDetailComponent implements OnInit {
     }
 
     if (order.status !== 'DELIVERED' && this.isOverdue(order.eta)) {
-      return 'var(--accent-red-500)';
+      return 'var(--accent-danger)';
     }
 
     return this.deliveriesService.getStatusColor(order.status);

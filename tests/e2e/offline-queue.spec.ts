@@ -6,11 +6,11 @@ const DEMO_USER = {
 };
 
 async function login(page: Page) {
-  await page.goto('/');
-  await page.waitForLoadState('networkidle');
-  await page.locator('input[type="email"]').fill(DEMO_USER.email);
-  await page.locator('input[type="password"]').fill(DEMO_USER.password);
-  await page.locator('button:has-text("Acceder al Cockpit")').click();
+  await page.goto('/login');
+  await page.waitForSelector('[data-cy="login-email"]', { state: 'visible', timeout: 30000 });
+  await page.fill('[data-cy="login-email"]', DEMO_USER.email);
+  await page.fill('[data-cy="login-password"]', DEMO_USER.password);
+  await page.getByTestId('login-submit').click();
   await page.waitForLoadState('networkidle');
 }
 

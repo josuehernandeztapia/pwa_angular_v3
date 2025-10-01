@@ -15,6 +15,10 @@ class FlowContextServiceStub {
     this.context.set(key, value);
   }
 
+  saveContext(key: string, value: any): void {
+    this.setContext(key, value);
+  }
+
   getContextData<T>(key: string): T | null {
     return (this.context.get(key) ?? null) as T | null;
   }

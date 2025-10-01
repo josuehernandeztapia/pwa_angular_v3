@@ -238,17 +238,17 @@
 }
 
 .admin-status--active {
-  background: var(--color-surface-success-subtle, rgba(16, 185, 129, 0.16));
+  background: var(--color-surface-success-subtle, var(--token-surface-accent-alpha-16));
   color: var(--color-text-success-dark);
 }
 
 .admin-status--blocked {
-  background: var(--color-surface-error-subtle, rgba(239, 68, 68, 0.16));
+  background: var(--color-surface-error-subtle, var(--token-surface-danger-alpha-16));
   color: var(--color-text-error-strong);
 }
 
 .btn-danger {
-  background: var(--color-surface-error-subtle, rgba(239, 68, 68, 0.18));
+  background: var(--color-surface-error-subtle, var(--token-surface-danger-soft));
   color: var(--color-text-error-strong);
 }
 
@@ -339,7 +339,7 @@
 }
 
 .toggle__control:checked + .toggle__visual {
-  background: rgba(16, 185, 129, 0.6);
+  background: var(--token-surface-accent-alpha-60);
 }
 
 .toggle__control:checked + .toggle__visual::after {

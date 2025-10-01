@@ -1,0 +1,138 @@
+/*
+ * Core color palette and surface/border tokens extracted from styles.scss.
+ * Keep color-only definitions here; semantic mappings live in _semantic.scss.
+ */
+:root {
+  /* Base palette */
+  --openai-black: #080808;
+  --openai-white: #ffffff;
+  --openai-gray-50: #fafafa;
+  --openai-gray-100: #f5f5f5;
+  --openai-gray-200: #e5e5e5;
+  --openai-gray-300: #d4d4d4;
+  --openai-gray-400: #a3a3a3;
+  --openai-gray-500: #737373;
+  --openai-gray-600: #525252;
+  --openai-gray-700: #404040;
+  --openai-gray-800: #262626;
+  --openai-gray-900: #171717;
+  --openai-blue: #10a37f;
+  --openai-blue-hover: #0c8c6c;
+
+  /* Neutral aliases */
+  --neutral-950: var(--openai-gray-900);
+  --neutral-900: var(--openai-gray-800);
+  --neutral-800: var(--openai-gray-700);
+  --neutral-700: var(--openai-gray-600);
+  --neutral-600: var(--openai-gray-500);
+  --neutral-500: var(--openai-gray-400);
+  --neutral-400: var(--openai-gray-300);
+  --neutral-300: var(--openai-gray-200);
+  --neutral-200: var(--openai-gray-100);
+  --neutral-100: var(--openai-gray-50);
+
+  /* Accent set */
+  --accent-primary: #10a37f;
+  --accent-primary-hover: #0c8c6c;
+  --accent-muted: #2f2f2f;
+  --accent-danger: #d63b3b;
+
+  /* Semantic colors */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+  --color-bg-overlay: rgba(0, 0, 0, 0.05);
+
+  --color-text-primary: #080808;
+  --color-text-secondary: #737373;
+  --color-text-tertiary: #94a3b8;
+  --color-text-placeholder: #94a3b8;
+  --color-text-disabled: #cbd5e1;
+
+  --color-border-primary: #e5e7eb;
+  --color-border-secondary: #e2e8f0;
+  --color-border-muted: #f1f5f9;
+  --color-border-focus: #525252;
+
+  /* Brand scales */
+  --color-primary-50: #eef8f5;
+  --color-primary-100: #d7f1e9;
+  --color-primary-200: #afe3d4;
+  --color-primary-300: #7bd2bc;
+  --color-primary-400: #44bea2;
+  --color-primary-500: #10a37f;
+  --color-primary-600: #0c8c6c;
+  --color-primary-700: #0b745b;
+  --color-primary-800: #085a46;
+  --color-primary-900: #043b2f;
+
+  --color-success-50: #eef8f5;
+  --color-success-100: #d7f1e9;
+  --color-success-500: #10a37f;
+  --color-success-600: #0c8c6c;
+
+  --color-warning-50: #f5f5f5;
+  --color-warning-100: #e5e5e5;
+  --color-warning-500: #2f2f2f;
+  --color-warning-600: #1f1f1f;
+
+  --color-error-50: #fbecec;
+  --color-error-100: #f6d4d4;
+  --color-error-500: #d63b3b;
+  --color-error-600: #b32f2f;
+
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+
+  /* Primary cyan aliases */
+  --primary-cyan-300: var(--accent-primary);
+  --primary-cyan-400: var(--accent-primary);
+  --primary-cyan-500: var(--accent-primary-hover);
+  --primary-cyan-600: var(--accent-primary-hover);
+
+  /* Status base colors */
+  --success-500: var(--openai-gray-600);
+  --success-600: var(--openai-gray-700);
+  --error-500: var(--openai-black);
+  --error-600: var(--openai-gray-900);
+
+  /* Surfaces */
+  --flat-surface-bg: var(--openai-white);
+  --command-center-bg: var(--openai-gray-50);
+  --surface-neutral-weak: color-mix(in srgb, var(--color-neutral-400) 16%, var(--openai-white));
+  --surface-neutral-strong: color-mix(in srgb, var(--color-neutral-500) 26%, var(--openai-white));
+  --surface-skeleton: color-mix(in srgb, var(--color-neutral-300) 22%, var(--openai-white));
+  --surface-skeleton-dark: color-mix(in srgb, var(--color-neutral-800) 65%, transparent);
+  --surface-accent-weak: color-mix(in srgb, var(--accent-primary) 16%, var(--openai-white));
+  --surface-accent-strong: color-mix(in srgb, var(--accent-primary) 30%, var(--openai-white));
+  --surface-danger-weak: color-mix(in srgb, var(--accent-danger) 16%, var(--openai-white));
+  --surface-danger-strong: color-mix(in srgb, var(--accent-danger) 28%, var(--openai-white));
+
+  /* Borders & overlays */
+  --border-neutral-weak: color-mix(in srgb, var(--color-neutral-400) 36%, transparent);
+  --border-neutral-strong: color-mix(in srgb, var(--color-neutral-500) 54%, transparent);
+  --border-accent-weak: color-mix(in srgb, var(--accent-primary) 36%, transparent);
+  --border-accent-strong: color-mix(in srgb, var(--accent-primary) 58%, transparent);
+  --border-danger-weak: color-mix(in srgb, var(--accent-danger) 36%, transparent);
+  --border-danger-strong: color-mix(in srgb, var(--accent-danger) 58%, transparent);
+  --overlay-neutral-strong: color-mix(in srgb, var(--color-neutral-900) 76%, transparent);
+  --overlay-neutral-muted: color-mix(in srgb, var(--color-neutral-800) 56%, transparent);
+
+  /* Dark mode baseline */
+  --color-surface: #080808;
+  --color-surface-2: #1e293b;
+  --color-border: #525252;
+  --color-text: #ffffff;
+  --color-text-muted: #94a3b8;
+
+  /* Focus */
+  --focus-ring-color: var(--accent-primary);
+}

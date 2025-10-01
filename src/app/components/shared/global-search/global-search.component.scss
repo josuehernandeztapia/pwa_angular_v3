@@ -20,7 +20,7 @@
 
   .global-search__item {
     padding: 16px; // More touch-friendly padding
-    border-bottom: 1px solid color-mix(in srgb, var(--color-border-primary) 40%, transparent);
+    border-bottom: 1px solid var(--token-border-primary-alpha-40);
   }
 
   .global-search__item:last-child {
@@ -34,15 +34,15 @@
   gap: 12px;
   padding: 10px 12px;
   border-radius: 12px;
-  background: var(--surface-neutral-weak, #1f2937);
-  border: 1px solid color-mix(in srgb, var(--color-border-primary) 65%, transparent);
+  background: var(--token-surface-muted, #1f2937);
+  border: 1px solid var(--token-border-primary-alpha-65);
   cursor: text;
 }
 
 .global-search__field[data-open="true"] {
-  border-color: var(--accent-blue-500);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 70%, transparent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+  border-color: var(--accent-primary);
+  background: color-mix(in srgb, var(--token-surface-muted) 70%, transparent);
+  box-shadow: 0 0 0 4px var(--token-surface-accent-tint);
 }
 
 .global-search__icon {
@@ -67,7 +67,7 @@
 .global-search__shortcut {
   font-size: 12px;
   color: var(--color-text-tertiary);
-  border: 1px solid color-mix(in srgb, var(--color-border-primary) 60%, transparent);
+  border: 1px solid var(--token-border-primary-alpha-60);
   border-radius: 8px;
   padding: 2px 6px;
   letter-spacing: 0.04em;
@@ -111,8 +111,8 @@
 
 .global-search__chip {
   appearance: none;
-  border: 1px solid color-mix(in srgb, var(--color-border-primary) 60%, transparent);
-  background: color-mix(in srgb, var(--flat-surface-bg) 60%, transparent);
+  border: 1px solid var(--token-border-primary-alpha-60);
+  background: var(--token-surface-flat-alpha-60);
   color: var(--color-text-secondary);
   font-size: 12px;
   padding: 4px 10px;
@@ -123,13 +123,13 @@
 
 .global-search__chip:hover,
 .global-search__chip:focus-visible {
-  border-color: var(--accent-blue-400);
+  border-color: var(--accent-primary);
   color: var(--color-text-primary);
 }
 
 .global-search__chip--active {
-  background: color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
-  border-color: var(--accent-blue-400);
+  background: var(--token-surface-accent-soft);
+  border-color: var(--accent-primary);
   color: var(--color-text-primary);
 }
 
@@ -152,7 +152,7 @@
   height: 20px;
   padding: 0 6px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--color-border-primary) 65%, transparent);
+  background: var(--token-border-primary-alpha-65);
   color: var(--color-text-secondary);
   font-weight: 500;
 }
@@ -168,7 +168,7 @@
 
 .global-search__item--highlighted,
 .global-search__item:hover {
-  background: color-mix(in srgb, var(--accent-blue-500) 14%, transparent);
+  background: var(--token-surface-accent-alpha-14);
 }
 
 .global-search__item-head {
@@ -210,5 +210,5 @@
 }
 
 :host-context(.dark-mode) .global-search__field {
-  background: color-mix(in srgb, var(--color-neutral-800) 85%, transparent);
+  background: var(--token-surface-neutral-800-alpha-85);
 }

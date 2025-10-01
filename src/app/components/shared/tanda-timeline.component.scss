@@ -29,35 +29,35 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface-neutral-weak);
+  background: var(--token-surface-muted);
   border: 1px solid var(--border-neutral-weak);
   transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   --icon-color: currentColor;
 
   @media (prefers-color-scheme: dark) {
-    background: color-mix(in srgb, var(--color-neutral-900) 80%, transparent);
+    background: var(--token-overlay-neutral-alpha-80);
     border-color: var(--border-neutral-strong);
   }
 }
 
 .tanda-timeline__marker-circle--completed {
-  background: var(--accent-green-500);
-  border-color: var(--accent-green-600);
+  background: var(--accent-primary);
+  border-color: var(--accent-primary-hover);
   color: var(--flat-surface-bg);
 }
 
 .tanda-timeline__marker-circle--current {
-  background: var(--accent-blue-500);
-  border-color: var(--accent-blue-600);
+  background: var(--accent-primary);
+  border-color: var(--accent-primary-hover);
   color: var(--flat-surface-bg);
 }
 
 .tanda-timeline__marker-circle--pending {
-  background: var(--surface-neutral-weak);
+  background: var(--token-surface-muted);
   border-color: var(--border-neutral-weak);
 
   @media (prefers-color-scheme: dark) {
-    background: color-mix(in srgb, var(--color-neutral-900) 80%, transparent);
+    background: var(--token-overlay-neutral-alpha-80);
     border-color: var(--border-neutral-strong);
   }
 }
@@ -80,12 +80,12 @@
 }
 
 .tanda-timeline__marker-line--completed {
-  background: var(--accent-green-500);
+  background: var(--accent-primary);
 }
 
 .tanda-timeline__content {
   flex: 1;
-  background: var(--surface-neutral-weak);
+  background: var(--token-surface-muted);
   border: 1px solid var(--border-neutral-weak);
   border-radius: var(--radius-lg, 12px);
   padding: var(--space-4, 16px);
@@ -94,7 +94,7 @@
   gap: var(--space-3, 12px);
 
   @media (prefers-color-scheme: dark) {
-    background: color-mix(in srgb, var(--color-neutral-900) 80%, transparent);
+    background: var(--token-overlay-neutral-alpha-80);
     border-color: var(--border-neutral-strong);
   }
 }
@@ -120,10 +120,10 @@
 .tanda-timeline__month {
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--accent-blue-500);
+  color: var(--accent-primary);
 
   @media (prefers-color-scheme: dark) {
-    color: var(--accent-blue-400);
+    color: var(--accent-primary);
   }
 }
 

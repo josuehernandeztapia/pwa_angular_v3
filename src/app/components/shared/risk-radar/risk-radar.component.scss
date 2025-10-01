@@ -4,19 +4,19 @@
 
 .risk-radar {
   --risk-radar-surface: var(--flat-surface-bg);
-  --risk-radar-surface-muted: var(--surface-neutral-weak);
-  --risk-radar-surface-strong: var(--surface-neutral-strong);
+  --risk-radar-surface-muted: var(--token-surface-muted);
+  --risk-radar-surface-strong: var(--token-surface-elevated);
   --risk-radar-border: var(--border-neutral-weak);
-  --risk-radar-success: var(--accent-green-500);
-  --risk-radar-warning: var(--accent-amber-500);
-  --risk-radar-danger: var(--accent-red-500);
-  --risk-radar-critical: color-mix(in srgb, var(--risk-radar-danger) 85%, var(--color-neutral-900) 15%);
-  --risk-radar-shadow-strong: 0 24px 48px color-mix(in srgb, var(--openai-black) 18%, transparent);
-  --risk-radar-shadow-elevated: 0 18px 32px color-mix(in srgb, var(--openai-black) 16%, transparent);
-  --risk-radar-shadow-soft: 0 12px 24px color-mix(in srgb, var(--openai-black) 14%, transparent);
-  --risk-radar-action-shadow: 0 16px 36px color-mix(in srgb, var(--accent-blue-500) 28%, transparent);
-  --risk-radar-action-shadow-hover: 0 18px 42px color-mix(in srgb, var(--accent-blue-500) 34%, transparent);
-  --risk-radar-surface-alt: color-mix(in srgb, var(--flat-surface-bg) 90%, transparent);
+  --risk-radar-success: var(--accent-primary);
+  --risk-radar-warning: var(--accent-muted);
+  --risk-radar-danger: var(--accent-danger);
+  --risk-radar-critical: var(--token-risk-radar-danger-shade-85);
+  --risk-radar-shadow-strong: 0 24px 48px var(--token-surface-inverse-alpha-18);
+  --risk-radar-shadow-elevated: 0 18px 32px var(--token-surface-inverse-alpha-16);
+  --risk-radar-shadow-soft: 0 12px 24px var(--token-surface-inverse-alpha-14);
+  --risk-radar-action-shadow: 0 16px 36px var(--token-surface-accent-alpha-28);
+  --risk-radar-action-shadow-hover: 0 18px 42px var(--token-surface-accent-alpha-34);
+  --risk-radar-surface-alt: var(--token-surface-flat-alpha-90);
 
   display: flex;
   flex-direction: column;
@@ -107,25 +107,25 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    color-mix(in srgb, var(--risk-radar-success) 16%, transparent) 0%,
-    color-mix(in srgb, var(--risk-radar-warning) 12%, transparent) 45%,
-    color-mix(in srgb, var(--risk-radar-danger) 12%, transparent) 75%
+    var(--token-surface-risk-success-alpha-16) 0%,
+    var(--token-surface-risk-warning-alpha-12) 45%,
+    var(--token-risk-radar-danger-alpha-12) 75%
   );
   overflow: hidden;
 }
 
 .risk-radar__circle {
   position: absolute;
-  inset: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  margin: auto;
   border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--risk-radar-border) 45%, transparent);
+  border: 1px solid var(--token-border-risk-radar-alpha-45);
 }
 
 .risk-radar__axis {
   position: absolute;
   inset: 0;
-  border-color: color-mix(in srgb, var(--risk-radar-border) 50%, transparent);
+  border-color: var(--token-border-risk-radar-alpha-50);
 }
 
 .risk-radar__axis--horizontal {
@@ -143,30 +143,31 @@
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--color-text-secondary);
+  text-align: center;
 }
 
 .risk-radar__zone--safe {
   top: 12%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
 }
 
 .risk-radar__zone--attention {
   top: 50%;
-  left: 88%;
-  transform: translate(-50%, -50%);
+  right: 12%;
+  margin-top: -0.6em;
 }
 
 .risk-radar__zone--danger {
   bottom: 12%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
 }
 
 .risk-radar__zone--critical {
   top: 50%;
   left: 12%;
-  transform: translate(-50%, -50%);
+  margin-top: -0.6em;
 }
 
 .risk-radar__client {
@@ -183,13 +184,12 @@
   font-weight: 700;
   color: var(--openai-white);
   box-shadow: var(--risk-radar-shadow-soft);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
   background: var(--color-neutral-500);
 }
 
 .risk-radar__client:hover,
 .risk-radar__client--selected {
-  transform: scale(1.05);
   box-shadow: var(--risk-radar-shadow-elevated);
 }
 
@@ -218,19 +218,19 @@
 }
 
 .risk-radar__client-pulse--low {
-  background: color-mix(in srgb, var(--risk-radar-success) 35%, transparent);
+  background: var(--token-surface-risk-success-alpha-35);
 }
 
 .risk-radar__client-pulse--medium {
-  background: color-mix(in srgb, var(--risk-radar-warning) 35%, transparent);
+  background: var(--token-surface-risk-warning-alpha-35);
 }
 
 .risk-radar__client-pulse--high {
-  background: color-mix(in srgb, var(--risk-radar-danger) 35%, transparent);
+  background: var(--token-risk-radar-danger-alpha-35);
 }
 
 .risk-radar__client-pulse--critical {
-  background: color-mix(in srgb, var(--risk-radar-danger) 45%, transparent);
+  background: var(--token-risk-radar-danger-alpha-45);
 }
 
 .risk-radar__client-initials {
@@ -243,7 +243,7 @@
   flex-direction: column;
   gap: var(--space-4, 1rem);
   border-radius: var(--radius-2xl, 24px);
-  border: 1px solid color-mix(in srgb, var(--risk-radar-border) 40%, transparent);
+  border: 1px solid var(--token-border-risk-radar-alpha-40);
   background: var(--risk-radar-surface-muted);
   padding: var(--space-5, 1.25rem);
 }
@@ -266,7 +266,7 @@
   height: 36px;
   border-radius: var(--radius-full, 999px);
   border: none;
-  background: color-mix(in srgb, var(--risk-radar-danger) 12%, transparent);
+  background: var(--token-risk-radar-danger-alpha-12);
   color: var(--risk-radar-danger);
   font-size: 1.2rem;
   cursor: pointer;
@@ -274,7 +274,7 @@
 }
 
 .risk-radar__details-close:hover {
-  background: color-mix(in srgb, var(--risk-radar-danger) 18%, transparent);
+  background: var(--token-risk-radar-danger-alpha-18);
 }
 
 .risk-radar__details-body {
@@ -295,6 +295,7 @@
 .risk-radar__healthLabel {
   font-weight: 600;
   color: var(--color-text-secondary);
+  text-align: center;
 }
 
 .risk-radar__healthValue {
@@ -307,7 +308,7 @@
 }
 
 .risk-radar__healthValue--good {
-  color: color-mix(in srgb, var(--risk-radar-success) 80%, var(--risk-radar-warning) 20%);
+  color: var(--token-surface-risk-success-blend-risk-radar-warning-80);
 }
 
 .risk-radar__healthValue--warning {
@@ -329,6 +330,7 @@
   justify-content: space-between;
   font-weight: 600;
   color: var(--color-text-secondary);
+  text-align: center;
 }
 
 .risk-radar__metric-value {
@@ -363,7 +365,7 @@
   border: none;
   border-radius: var(--radius-full, 999px);
   padding: var(--space-3, 0.75rem) var(--space-5, 1.25rem);
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   color: var(--openai-white);
   font-weight: 700;
   cursor: pointer;
@@ -372,7 +374,7 @@
 }
 
 .risk-radar__action:hover {
-  background: color-mix(in srgb, var(--accent-blue-500) 85%, var(--accent-blue-400) 15%);
+  background: var(--token-surface-accent-blend-accent-primary-85);
   box-shadow: var(--risk-radar-action-shadow-hover);
 }
 
@@ -389,7 +391,7 @@
   align-items: center;
   padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
   border-radius: var(--radius-xl, 18px);
-  border: 1px solid color-mix(in srgb, var(--risk-radar-border) 35%, transparent);
+  border: 1px solid var(--token-border-risk-radar-alpha-35);
   background: var(--risk-radar-surface-muted);
 }
 
@@ -405,11 +407,11 @@
 
 @keyframes risk-radar-pulse {
   0%, 100% {
-    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--token-surface-inverse-alpha-12);
     opacity: 0.45;
   }
   50% {
-    transform: scale(1.3);
+    box-shadow: 0 0 0 12px var(--token-surface-inverse-alpha-04);
     opacity: 0.05;
   }
 }
@@ -437,8 +439,8 @@
 
 @media (prefers-color-scheme: dark) {
   .risk-radar {
-    background: color-mix(in srgb, var(--color-neutral-900) 92%, transparent);
-    border-color: color-mix(in srgb, var(--border-neutral-strong) 55%, transparent);
+    background: var(--token-overlay-neutral-alpha-92);
+    border-color: var(--token-border-neutral-strong-alpha-55);
     color: var(--color-neutral-100);
   }
 
@@ -450,8 +452,8 @@
 
   .risk-radar__details,
   .risk-radar__stat {
-    background: color-mix(in srgb, var(--color-neutral-900) 80%, transparent);
-    border-color: color-mix(in srgb, var(--border-neutral-strong) 55%, transparent);
+    background: var(--token-overlay-neutral-alpha-80);
+    border-color: var(--token-border-neutral-strong-alpha-55);
   }
 
   .risk-radar__metric,

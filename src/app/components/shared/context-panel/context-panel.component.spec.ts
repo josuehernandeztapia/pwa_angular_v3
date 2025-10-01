@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, flushMicrotasks } from '@angular/
 import { BehaviorSubject } from 'rxjs';
 
 import { ContextPanelComponent } from './context-panel.component';
+import { buildComponentTestProviders } from '../../../../test-helpers/component-test-providers';
 import { FlowContextEntry, FlowContextService } from '../../../services/flow-context.service';
 import { ErrorBoundaryService, BoundaryIssue } from '../../../services/error-boundary.service';
 import { OfflineService } from '../../../services/offline.service';
@@ -47,10 +48,12 @@ describe('ContextPanelComponent', () => {
     offline = new OfflineServiceStub();
     toast = new ToastServiceStub();
     marketPolicy = new MarketPolicyServiceStub();
+    const providerSetup = buildComponentTestProviders();
 
     await TestBed.configureTestingModule({
       imports: [ContextPanelComponent],
       providers: [
+        ...providerSetup.providers,
         { provide: FlowContextService, useClass: FlowContextServiceStub },
         { provide: ErrorBoundaryService, useClass: ErrorBoundaryServiceStub },
         { provide: OfflineService, useValue: offline },

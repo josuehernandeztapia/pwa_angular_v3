@@ -1,10 +1,10 @@
 .offline-banner {
   margin-bottom: var(--space-3);
   border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, var(--accent-blue-500) 28%, transparent);
-  background: color-mix(in srgb, var(--accent-blue-500) 10%, transparent);
+  border: 1px solid var(--token-surface-accent-alpha-28);
+  background: var(--token-surface-accent-alpha-10);
   padding: var(--space-3) var(--space-4);
-  color: var(--accent-blue-900);
+  color: var(--accent-primary-hover);
 
   &__row {
     display: flex;
@@ -15,7 +15,7 @@
   &__icon {
     font-size: 1.2rem;
     margin-top: var(--space-1);
-    color: var(--accent-blue-700);
+    color: var(--accent-primary-hover);
   }
 
   &__message {
@@ -24,7 +24,7 @@
     line-height: 1.45;
 
     &--success {
-      color: var(--accent-green-700);
+      color: var(--accent-primary-hover);
     }
   }
 }

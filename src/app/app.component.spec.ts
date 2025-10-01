@@ -7,6 +7,11 @@ import { BehaviorSubject } from 'rxjs';
 import { AppComponent } from './app.component';
 import { MediaPermissionsService } from './services/media-permissions.service';
 import { SwUpdateService } from './services/sw-update.service';
+import { FlowContextService } from './services/flow-context.service';
+import { NavigationService, QuickAction } from './services/navigation.service';
+import { KeyboardShortcutsService } from './services/keyboard-shortcuts.service';
+import { OfflineService } from './services/offline.service';
+import { of } from 'rxjs';
 import * as designTokens from './styles/design-tokens';
 
 const theme = designTokens.theme;
@@ -28,6 +33,25 @@ class SwUpdateServiceStub {
   updateAvailable$ = new BehaviorSubject<boolean>(false);
 }
 
+class FlowContextServiceStub {
+  breadcrumbs$ = of([] as string[]);
+  getContextData(): any { return null; }
+  saveContext(): void {}
+}
+
+class NavigationServiceStub {
+  executeQuickAction = jasmine.createSpy('executeQuickAction');
+  getQuickActions() {
+    return of([] as QuickAction[]);
+  }
+}
+
+class KeyboardShortcutsServiceStub {
+  open = jasmine.createSpy('open');
+}
+
+class OfflineServiceStub {}
+
 describe('AppComponent', () => {
   let router: Router;
   let fixture: ComponentFixture<AppComponent> | undefined;
@@ -46,7 +70,11 @@ describe('AppComponent', () => {
       ],
       providers: [
         { provide: MediaPermissionsService, useClass: MediaPermissionsStub },
-        { provide: SwUpdateService, useClass: SwUpdateServiceStub }
+        { provide: SwUpdateService, useClass: SwUpdateServiceStub },
+        { provide: FlowContextService, useClass: FlowContextServiceStub },
+        { provide: NavigationService, useClass: NavigationServiceStub },
+        { provide: KeyboardShortcutsService, useClass: KeyboardShortcutsServiceStub },
+        { provide: OfflineService, useClass: OfflineServiceStub }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();

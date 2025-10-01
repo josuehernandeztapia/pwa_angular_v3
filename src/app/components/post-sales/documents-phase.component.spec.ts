@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { DocumentsPhaseComponent } from './documents-phase.component';
+import { buildComponentTestProviders } from '../../../test-helpers/component-test-providers';
 import { IntegratedImportTrackerService } from '../../services/integrated-import-tracker.service';
 import { PostSalesApiService } from '../../services/post-sales-api.service';
 import { PostSalesQuoteApiService } from '../../services/post-sales-quote-api.service';
@@ -15,20 +16,23 @@ describe('DocumentsPhaseComponent', () => {
   let mockPostSalesApi: jasmine.SpyObj<PostSalesApiService>;
 
   beforeEach(async () => {
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const providerSetup = buildComponentTestProviders();
+    const routerSpy = providerSetup.mocks.router;
+    routerSpy.navigate.and.returnValue(Promise.resolve(true));
     const importTrackerSpy = jasmine.createSpyObj('IntegratedImportTrackerService', 
       ['completeDocumentsPhase']);
     const postSalesApiSpy = jasmine.createSpyObj('PostSalesApiService', 
       ['getClientInfo']);
+    const quoteApiSpy = jasmine.createSpyObj('PostSalesQuoteApiService', ['getOrCreateDraftQuote', 'addLine']);
 
     await TestBed.configureTestingModule({
       imports: [DocumentsPhaseComponent, ReactiveFormsModule],
       providers: [
+        ...providerSetup.providers,
         FormBuilder,
-        { provide: Router, useValue: routerSpy },
         { provide: IntegratedImportTrackerService, useValue: importTrackerSpy },
         { provide: PostSalesApiService, useValue: postSalesApiSpy },
-        { provide: PostSalesQuoteApiService, useValue: jasmine.createSpyObj('PostSalesQuoteApiService', ['getOrCreateDraftQuote', 'addLine']) }
+        { provide: PostSalesQuoteApiService, useValue: quoteApiSpy }
       ]
     }).compileComponents();
 

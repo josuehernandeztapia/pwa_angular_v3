@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { BehaviorSubject, Subject } from 'rxjs';
 
 import { OfflineQueueBannerComponent } from './offline-queue-banner.component';
+import { buildComponentTestProviders } from '../../../../test-helpers/component-test-providers';
 import { OfflineService, OfflineData, OfflineProcessResult } from '../../../services/offline.service';
 import { AnalyticsService } from '../../../services/analytics.service';
 
@@ -24,10 +25,12 @@ describe('OfflineQueueBannerComponent', () => {
   beforeEach(async () => {
     offlineStub = new OfflineServiceStub();
     analyticsStub = new AnalyticsServiceStub();
+    const providerSetup = buildComponentTestProviders();
 
     await TestBed.configureTestingModule({
       imports: [OfflineQueueBannerComponent],
       providers: [
+        ...providerSetup.providers,
         { provide: OfflineService, useValue: offlineStub },
         { provide: AnalyticsService, useValue: analyticsStub },
       ],

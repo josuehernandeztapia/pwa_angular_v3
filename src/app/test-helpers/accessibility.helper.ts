@@ -216,6 +216,28 @@ export class AccessibilityChecker {
     return AccessibilityChecker.hasAriaLabel(element);
   }
 
+  static hasAccessibleName(target: AccessibilityTarget): boolean {
+    const element = resolveElement(target);
+
+    if (AccessibilityChecker.hasAriaLabel(element)) {
+      return true;
+    }
+
+    const labelledBy = element.getAttribute('aria-labelledby');
+    if (labelledBy) {
+      const referenced = labelledBy
+        .split(/\s+/)
+        .map(id => element.ownerDocument?.getElementById(id))
+        .filter(Boolean) as HTMLElement[];
+      if (referenced.some(node => (node.textContent ?? '').trim().length > 0)) {
+        return true;
+      }
+    }
+
+    const textContent = (element.textContent ?? '').trim();
+    return textContent.length > 0;
+  }
+
   static isKeyboardAccessible(target: AccessibilityTarget): boolean {
     const element = resolveElement(target);
     const tagName = element.tagName.toLowerCase();
@@ -332,4 +354,3 @@ export function createAccessibilityTestSuite(options: string | AccessibilitySuit
 
   return suite;
 }
-

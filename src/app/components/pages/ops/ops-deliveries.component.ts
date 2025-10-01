@@ -188,6 +188,8 @@ export class OpsDeliveriesComponent implements OnInit, OnDestroy {
     'READY_FOR_HANDOVER', 'DELIVERED'
   ];
 
+  private readonly defaultStatusIcon: IconName = 'package';
+
   constructor() {
     // React to market changes to load routes
     effect(() => {
@@ -556,13 +558,14 @@ export class OpsDeliveriesComponent implements OnInit, OnDestroy {
 
   getStatusColor(delivery: DeliveryOrder): string {
     if (delivery.status !== 'DELIVERED' && this.isOverdue(delivery.eta)) {
-      return 'var(--accent-red-500)';
+      return 'var(--accent-danger)';
     }
     return this.deliveriesService.getStatusColor(delivery.status);
   }
 
   getStatusIcon(status: DeliveryStatus): IconName {
-    return this.deliveriesService.getStatusIcon(status);
+    const icon = this.deliveriesService.getStatusIcon(status);
+    return icon ?? this.defaultStatusIcon;
   }
 
   getProgress(status: DeliveryStatus): number {

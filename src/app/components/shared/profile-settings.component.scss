@@ -17,7 +17,7 @@
   width: 100%;
 
   @media (prefers-color-scheme: dark) {
-    background: var(--surface-neutral-strong);
+    background: var(--token-surface-elevated);
     border-color: var(--border-neutral-strong);
   }
 
@@ -72,21 +72,21 @@
     transition: background-color 0.2s ease, color 0.2s ease;
 
     &--primary {
-      background: var(--accent-blue-500);
+      background: var(--accent-primary);
       color: var(--color-surface-primary);
 
       &:hover {
-        background: var(--accent-blue-600);
+        background: var(--accent-primary-hover);
       }
     }
 
     &--danger {
-      background: color-mix(in srgb, var(--accent-red-500) 18%, transparent);
-      color: var(--accent-red-600);
-      border-color: color-mix(in srgb, var(--accent-red-500) 32%, transparent);
+      background: var(--token-surface-danger-soft);
+      color: var(--accent-danger);
+      border-color: var(--token-surface-danger-alpha-32);
 
       &:hover {
-        background: color-mix(in srgb, var(--accent-red-500) 32%, transparent);
+        background: var(--token-surface-danger-alpha-32);
       }
     }
   }

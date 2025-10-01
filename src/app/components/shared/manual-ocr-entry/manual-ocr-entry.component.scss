@@ -5,7 +5,7 @@
 .manual-entry {
   position: fixed;
   inset: 0;
-  background: color-mix(in srgb, var(--openai-black) 70%, transparent);
+  background: var(--token-surface-inverse-alpha-70);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,7 +24,7 @@
     overflow: hidden;
 
     @media (prefers-color-scheme: dark) {
-      background: var(--surface-neutral-strong);
+      background: var(--token-surface-elevated);
     }
   }
 
@@ -60,7 +60,7 @@
     cursor: pointer;
 
     &:hover {
-      background: color-mix(in srgb, var(--color-neutral-400) 18%, transparent);
+      background: var(--token-surface-neutral-400-alpha-18);
       color: var(--color-text-primary);
     }
   }
@@ -69,8 +69,8 @@
     margin: 0 28px;
     padding: 16px 20px;
     border-radius: 16px;
-    background: var(--surface-amber-weak);
-    color: var(--accent-amber-700);
+    background: var(--token-surface-elevated);
+    color: var(--accent-muted);
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -80,8 +80,8 @@
     }
 
     @media (prefers-color-scheme: dark) {
-      background: color-mix(in srgb, var(--accent-amber-400) 22%, transparent);
-      color: var(--accent-amber-200);
+      background: var(--token-surface-warning-alpha-22);
+      color: var(--token-surface-elevated);
     }
   }
 
@@ -121,13 +121,13 @@
     border-radius: 12px;
     border: 1px solid var(--border-neutral-weak);
     font-size: var(--text-base, 1rem);
-    background: var(--surface-neutral-weak);
+    background: var(--token-surface-muted);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
     &:focus {
       outline: none;
-      border-color: var(--accent-blue-500);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500) 20%, transparent);
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--token-surface-accent-alpha-20);
     }
 
     &--select {
@@ -140,12 +140,12 @@
     }
 
     &--invalid {
-      border-color: var(--accent-red-500);
-      background: color-mix(in srgb, var(--accent-red-500) 12%, transparent);
+      border-color: var(--accent-danger);
+      background: var(--token-surface-danger-alpha-12);
     }
 
     @media (prefers-color-scheme: dark) {
-      background: color-mix(in srgb, var(--color-neutral-900) 85%, transparent);
+      background: var(--token-overlay-neutral-alpha-85);
       border-color: var(--border-neutral-strong);
       color: var(--color-text-primary-inverted);
     }
@@ -160,7 +160,7 @@
   &__error {
     margin: 0;
     font-size: var(--text-xs, 0.75rem);
-    color: var(--accent-red-500);
+    color: var(--accent-danger);
     font-weight: var(--font-medium, 500);
   }
 

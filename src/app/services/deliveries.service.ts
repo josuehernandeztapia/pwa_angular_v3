@@ -378,7 +378,7 @@ export class DeliveriesService {
    * Get status color for UI components
    */
   getStatusColor(status: DeliveryStatus): string {
-    return DELIVERY_STATUS_DESCRIPTIONS[status]?.color || 'var(--accent-amber-500)';
+    return DELIVERY_STATUS_DESCRIPTIONS[status]?.color || 'var(--accent-muted)';
   }
 
   /**

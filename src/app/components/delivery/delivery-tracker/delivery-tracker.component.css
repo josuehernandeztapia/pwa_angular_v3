@@ -4,22 +4,6 @@
   padding: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
-
-  /* Local palette aliases */
-  --dt-surface-primary: var(--color-bg-primary, #ffffff);
-  --dt-surface-muted: var(--color-bg-secondary, #f8fafc);
-  --dt-border: var(--color-border-primary, #e5e7eb);
-  --dt-border-strong: var(--color-border-secondary, #e2e8f0);
-  --dt-text-strong: var(--color-text-primary, #080808);
-  --dt-text-muted: var(--color-text-secondary, #737373);
-  --dt-text-subtle: var(--color-text-tertiary, #94a3b8);
-  --dt-neutral: var(--openai-gray-400, #a3a3a3);
-  --dt-accent-blue: var(--accent-blue-500, #3b82f6);
-  --dt-accent-blue-strong: var(--accent-blue-600, #2563eb);
-  --dt-accent-green: var(--accent-green-500, #16a34a);
-  --dt-accent-red: var(--accent-red-500, #dc2626);
-  --dt-accent-amber: var(--accent-amber-500, #f59e0b);
-  --dt-accent-purple: var(--accent-purple-500, #8b5cf6);
 }
 
 /*  Metrics Overview */
@@ -35,8 +19,8 @@
 }
 
 .metric-card {
-  background: var(--dt-surface-primary);
-  border: 1px solid var(--dt-border);
+  background: var(--token-surface-default);
+  border: 1px solid var(--token-border-default);
   border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
   text-align: center;
@@ -52,13 +36,13 @@
 .metric-value {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--dt-text-strong);
+  color: var(--token-text-primary);
   margin-bottom: 0.5rem;
 }
 
 .metric-label {
   font-size: 0.875rem;
-  color: var(--dt-text-muted);
+  color: var(--token-text-secondary);
   font-weight: 500;
 }
 
@@ -69,16 +53,16 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: var(--dt-neutral);
+  background: var(--border-neutral-strong);
 }
-.metric-status.good { background: var(--dt-neutral); }
-.metric-status.warning { background: var(--dt-neutral); }
-.metric-status.critical { background: var(--dt-neutral); }
+.metric-status.good { background: var(--border-neutral-strong); }
+.metric-status.warning { background: var(--border-neutral-strong); }
+.metric-status.critical { background: var(--border-neutral-strong); }
 
 /*  Tracking Input */
 .tracking-input {
-  background: var(--dt-surface-primary);
-  border: 1px solid var(--dt-border);
+  background: var(--token-surface-default);
+  border: 1px solid var(--token-border-default);
   border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -93,7 +77,7 @@
 .tracking-code-input {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 2px solid var(--dt-border);
+  border: 2px solid var(--token-border-default);
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -101,14 +85,14 @@
 
 .tracking-code-input:focus {
   outline: none;
-  border-color: var(--dt-accent-blue-strong);
+  border-color: var(--token-cta-bg-hover);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .track-button {
   padding: 0.75rem 1.5rem;
-  background: var(--openai-black, #080808);
-  color: var(--color-text-inverted, #ffffff);
+  background: var(--token-cta-bg);
+  color: var(--token-cta-text);
   border: none;
   border-radius: 8px;
   font-weight: 600;
@@ -117,19 +101,19 @@
 }
 
 .track-button:hover:not(:disabled) {
-  background: var(--dt-accent-blue-strong);
+  background: var(--token-cta-bg-hover);
   transform: none; /* OpenAI no transforms */
 }
 
 .track-button:disabled {
-  background: var(--dt-text-subtle);
+  background: var(--token-surface-muted);
   cursor: not-allowed;
 }
 
 /* Tracking Results */
 .tracking-results {
   margin-top: 1.5rem;
-  border-top: 1px solid var(--dt-border);
+  border-top: 1px solid var(--token-border-default);
   padding-top: 1.5rem;
 }
 
@@ -139,7 +123,7 @@
   gap: 0.5rem;
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--dt-text-strong);
+  color: var(--token-text-primary);
   margin-bottom: 1rem;
 }
 
@@ -154,15 +138,15 @@
   margin-bottom: 1rem;
 }
 
-.status-scheduled { background: var(--accent-blue-100, #dbeafe); color: var(--accent-blue-700, #1d4ed8); }
-.status-en-route { background: var(--accent-amber-100, #fef3c7); color: var(--accent-amber-600, #d97706); }
-.status-arriving { background: var(--accent-green-100, #bbf7d0); color: var(--accent-green-600, #15803d); }
-.status-delivered { background: var(--accent-green-100, #bbf7d0); color: var(--accent-green-500, #16a34a); }
-.status-failed { background: var(--accent-red-100, #fecaca); color: var(--accent-red-500, #dc2626); }
-.status-rescheduled { background: var(--accent-purple-200, #ddd6fe); color: var(--accent-purple-500, #8b5cf6); }
+.status-scheduled { background: var(--token-surface-accent-weak); color: var(--accent-primary-hover); }
+.status-en-route { background: var(--token-surface-muted); color: var(--token-text-muted); }
+.status-arriving { background: var(--token-surface-accent-strong); color: var(--accent-primary-hover); }
+.status-delivered { background: var(--token-surface-accent-strong); color: var(--accent-primary); }
+.status-failed { background: var(--token-badge-danger-bg); color: var(--token-badge-danger-text); }
+.status-rescheduled { background: var(--token-surface-muted); color: var(--token-text-muted); }
 
 .delivery-details {
-  background: var(--dt-surface-muted);
+  background: var(--token-surface-muted);
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1.5rem;
@@ -173,7 +157,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0;
-  border-bottom: 1px solid var(--dt-border);
+  border-bottom: 1px solid var(--token-border-default);
 }
 
 .detail-row:last-child {
@@ -182,12 +166,12 @@
 
 .detail-row .label {
   font-weight: 500;
-  color: var(--dt-text-muted);
+  color: var(--token-text-secondary);
 }
 
 .detail-row .value {
   font-weight: 600;
-  color: var(--dt-text-strong);
+  color: var(--token-text-primary);
 }
 
 /* ETA Display */
@@ -234,7 +218,7 @@
 }
 
 .factor {
-  background: color-mix(in srgb, var(--dt-surface-primary) 10%, transparent);
+  background: color-mix(in srgb, var(--token-surface-default) 10%, transparent);
   padding: 0.5rem 0.75rem;
   border-radius: 8px; /* OpenAI standard */
   font-size: 0.875rem;
@@ -243,26 +227,26 @@
 .factor.light,
 .factor.clear,
 .factor.optimal {
-  background: color-mix(in srgb, var(--dt-accent-green) 20%, transparent);
+  background: var(--token-surface-accent-alpha-20);
 }
 
 .factor.moderate,
 .factor.rain,
 .factor.detour {
-  background: color-mix(in srgb, var(--dt-accent-amber) 20%, transparent);
+  background: color-mix(in srgb, var(--token-text-muted) 20%, transparent);
 }
 
 .factor.heavy,
 .factor.adverse,
 .factor.blocked {
-  background: color-mix(in srgb, var(--dt-accent-red) 20%, transparent);
+  background: var(--token-surface-danger-alpha-20);
 }
 
 /* Location & Instructions */
 .delivery-location,
 .special-instructions {
-  background: var(--dt-surface-muted);
-  border: 1px solid var(--dt-border);
+  background: var(--token-surface-muted);
+  border: 1px solid var(--token-border-default);
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
@@ -271,18 +255,18 @@
 .location-header,
 .instructions-header {
   font-weight: 600;
-  color: var(--dt-text-strong);
+  color: var(--token-text-primary);
   margin-bottom: 0.5rem;
 }
 
 .location-address,
 .instructions-text {
-  color: var(--dt-text-muted);
+  color: var(--token-text-secondary);
   line-height: 1.6;
 }
 
 .location-landmark {
-  color: var(--dt-text-muted);
+  color: var(--token-text-secondary);
   font-size: 0.875rem;
   margin-top: 0.25rem;
 }
@@ -291,7 +275,7 @@
 .no-results {
   text-align: center;
   padding: 2rem;
-  color: var(--dt-text-muted);
+  color: var(--token-text-secondary);
 }
 
 .no-results-icon {
@@ -311,7 +295,7 @@
 .active-deliveries h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--dt-text-strong);
+  color: var(--token-text-primary);
   margin-bottom: 1rem;
 }
 
@@ -322,8 +306,8 @@
 }
 
 .delivery-card {
-  background: var(--dt-surface-primary);
-  border: 1px solid var(--dt-border);
+  background: var(--token-surface-default);
+  border: 1px solid var(--token-border-default);
   border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
   transition: all 0.2s ease;
@@ -335,11 +319,11 @@
 }
 
 .delivery-card.status-en-route {
-  border-left: 4px solid var(--dt-accent-blue);
+  border-left: 4px solid var(--token-cta-bg);
 }
 
 .delivery-card.status-arriving {
-  border-left: 4px solid var(--dt-accent-green);
+  border-left: 4px solid var(--accent-primary);
 }
 
 .delivery-header {
@@ -351,7 +335,7 @@
 
 .tracking-code {
   font-weight: 700;
-  color: var(--dt-text-strong);
+  color: var(--token-text-primary);
   font-size: 1.1rem;
 }
 
@@ -364,7 +348,7 @@
 
 .client-id {
   font-size: 0.875rem;
-  color: var(--dt-text-muted);
+  color: var(--token-text-secondary);
 }
 
 .priority {
@@ -374,12 +358,12 @@
   font-weight: 600;
 }
 
-.priority-normal { background: var(--dt-border); color: var(--dt-text-muted); }
-.priority-high { background: var(--accent-amber-100, #fef3c7); color: var(--dt-accent-amber); }
-.priority-urgent { background: var(--accent-red-100, #fecaca); color: var(--dt-accent-red); }
+.priority-normal { background: var(--token-border-default); color: var(--token-text-secondary); }
+.priority-high { background: var(--token-surface-muted); color: var(--token-text-muted); }
+.priority-urgent { background: var(--token-badge-danger-bg); color: var(--token-badge-danger-text); }
 
 .delivery-window {
-  background: var(--dt-surface-muted);
+  background: var(--token-surface-muted);
   border-radius: 8px; /* OpenAI standard */
   padding: 0.75rem;
   margin-bottom: 1rem;
@@ -388,22 +372,22 @@
 
 .window-date {
   font-weight: 600;
-  color: var(--dt-text-strong);
+  color: var(--token-text-primary);
   margin-bottom: 0.25rem;
 }
 
 .window-time {
-  color: var(--dt-text-muted);
+  color: var(--token-text-secondary);
   margin-bottom: 0.25rem;
 }
 
 .eta {
-  color: var(--openai-black, #080808);
+  color: var(--token-text-primary);
   font-weight: 600;
 }
 
 .delivery-address {
-  color: var(--dt-text-muted);
+  color: var(--token-text-secondary);
   font-size: 0.875rem;
   margin-bottom: 1rem;
   line-height: 1.5;
@@ -433,25 +417,25 @@
 }
 
 .btn-primary {
-  background: var(--openai-black, #080808);
-  color: var(--color-text-inverted, #ffffff);
-  border: 1px solid var(--openai-black, #080808);
+  background: var(--openai-black);
+  color: var(--token-text-inverse);
+  border: 1px solid var(--openai-black);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--dt-accent-blue-strong);
-  border-color: var(--dt-accent-blue-strong);
+  background: var(--token-cta-bg-hover);
+  border-color: var(--token-cta-bg-hover);
 }
 
 .btn-outline {
-  background: var(--dt-surface-primary);
-  color: var(--dt-text-muted);
-  border: 1px solid var(--dt-border-strong);
+  background: var(--token-surface-default);
+  color: var(--token-text-secondary);
+  border: 1px solid var(--token-border-strong);
 }
 
 .btn-outline:hover {
-  background: var(--dt-surface-muted);
-  color: var(--dt-text-strong);
+  background: var(--token-surface-muted);
+  color: var(--token-text-primary);
 }
 
 .btn:disabled {
@@ -463,7 +447,7 @@
 .empty-deliveries {
   text-align: center;
   padding: 3rem;
-  color: var(--dt-text-muted);
+  color: var(--token-text-secondary);
 }
 
 .empty-icon {
@@ -477,8 +461,8 @@
 
 /*  System Status */
 .system-status {
-  background: var(--dt-surface-primary);
-  border: 1px solid var(--dt-border);
+  background: var(--token-surface-default);
+  border: 1px solid var(--token-border-default);
   border-radius: 8px; /* OpenAI standard */
   padding: 1.5rem;
 }
@@ -491,21 +475,21 @@
 }
 
 .status-icon.online {
-  color: var(--dt-accent-green);
+  color: var(--accent-primary);
 }
 
 .status-icon.offline {
-  color: var(--dt-accent-red);
+  color: var(--accent-danger);
 }
 
 .status-text {
   font-weight: 600;
-  color: var(--dt-text-strong);
+  color: var(--token-text-primary);
 }
 
 .last-sync {
   font-size: 0.875rem;
-  color: var(--dt-text-muted);
+  color: var(--token-text-secondary);
   margin-bottom: 1rem;
 }
 
@@ -515,14 +499,14 @@
 
 .reliability-label {
   font-size: 0.875rem;
-  color: var(--dt-text-muted);
+  color: var(--token-text-secondary);
   margin-bottom: 0.5rem;
 }
 
 .reliability-bar {
   width: 100%;
   height: 8px;
-  background: var(--dt-border);
+  background: var(--token-border-default);
   border-radius: 8px; /* OpenAI standard */
   overflow: hidden;
   margin-bottom: 0.5rem;
@@ -534,16 +518,16 @@
   border-radius: 8px; /* OpenAI standard */
 }
 
-.reliability-fill.excellent { background: var(--dt-accent-blue); }
-.reliability-fill.good { background: var(--openai-black, #080808); }
-.reliability-fill.warning { background: var(--dt-accent-amber); }
-.reliability-fill.critical { background: var(--dt-accent-red); }
+.reliability-fill.excellent { background: var(--token-cta-bg); }
+.reliability-fill.good { background: var(--openai-black); }
+.reliability-fill.warning { background: var(--token-text-muted); }
+.reliability-fill.critical { background: var(--accent-danger); }
 
 .reliability-value {
   text-align: center;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--dt-text-strong);
+  color: var(--token-text-primary);
 }
 
 /*  Responsive Design */
@@ -622,7 +606,7 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: var(--dt-accent-blue);
+  background: var(--token-cta-bg);
   animation: deliveryPulse 2s infinite;
 }
 
@@ -633,6 +617,6 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: var(--dt-accent-green);
+  background: var(--accent-primary);
   animation: deliveryPulse 1s infinite;
 }

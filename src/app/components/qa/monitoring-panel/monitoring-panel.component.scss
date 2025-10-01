@@ -48,13 +48,13 @@
 }
 
 .monitoring-panel__item[data-level="error"] {
-  border-color: color-mix(in srgb, var(--color-text-error-strong) 40%, transparent);
-  background: color-mix(in srgb, var(--color-text-error-strong) 12%, transparent);
+  border-color: var(--token-text-danger-strong-alpha-40);
+  background: var(--token-text-danger-strong-alpha-12);
 }
 
 .monitoring-panel__item[data-level="warn"] {
-  border-color: color-mix(in srgb, var(--accent-amber-500) 40%, transparent);
-  background: color-mix(in srgb, var(--accent-amber-500) 12%, transparent);
+  border-color: var(--token-surface-warning-alpha-40);
+  background: var(--token-surface-warning-alpha-12);
 }
 
 .monitoring-panel__meta {

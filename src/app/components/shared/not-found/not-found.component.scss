@@ -10,15 +10,15 @@
   padding: 32px 16px;
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--color-neutral-900) 88%, transparent) 0%,
-    color-mix(in srgb, var(--color-neutral-800) 90%, transparent) 100%
+    var(--token-overlay-neutral-alpha-88) 0%,
+    var(--token-surface-neutral-800-alpha-90) 100%
   );
 
   &__card {
     width: min(520px, 100%);
     padding: 48px 40px;
     border-radius: 24px;
-    background: color-mix(in srgb, var(--color-neutral-900) 88%, transparent);
+    background: var(--token-overlay-neutral-alpha-88);
     box-shadow: var(--shadow-lg);
     text-align: center;
     display: flex;
@@ -39,8 +39,8 @@
     font-size: clamp(3rem, 12vw, 5.5rem);
     font-weight: var(--font-black, 900);
     letter-spacing: 0.08em;
-    color: var(--accent-blue-400);
-    text-shadow: 0 8px 20px color-mix(in srgb, var(--accent-blue-500) 32%, transparent);
+    color: var(--accent-primary);
+    text-shadow: 0 8px 20px var(--token-surface-accent-alpha-32);
   }
 
   &__glyph {
@@ -49,7 +49,7 @@
     justify-content: center;
     padding: 12px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
+    background: var(--token-surface-accent-soft);
   }
 
   &__message {
@@ -66,7 +66,7 @@
 
   &__subtitle {
     margin: 0;
-    color: color-mix(in srgb, var(--openai-white) 70%, transparent);
+    color: var(--token-surface-inverse-light-alpha-70);
     line-height: var(--leading-relaxed, 1.6);
     font-size: var(--text-base, 1rem);
   }
@@ -85,7 +85,7 @@
   }
 
   &__help {
-    border-top: 1px solid color-mix(in srgb, var(--openai-white) 16%, transparent);
+    border-top: 1px solid var(--token-surface-inverse-light-alpha-16);
     padding-top: 24px;
     display: flex;
     flex-direction: column;
@@ -96,7 +96,7 @@
     margin: 0;
     font-size: var(--text-base, 1rem);
     font-weight: var(--font-medium, 500);
-    color: color-mix(in srgb, var(--accent-blue-200) 80%, transparent);
+    color: color-mix(in srgb, var(--token-surface-accent-strong) 80%, transparent);
   }
 
   &__help-links {
@@ -113,15 +113,15 @@
     padding: 8px 16px;
     border-radius: 999px;
     border: 1px solid transparent;
-    background: color-mix(in srgb, var(--accent-blue-500) 16%, transparent);
-    color: var(--accent-blue-100);
+    background: var(--token-surface-accent-alpha-16);
+    color: var(--token-surface-accent-weak);
     font-size: var(--text-sm, 0.875rem);
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 
     &:hover {
-      background: color-mix(in srgb, var(--accent-blue-500) 26%, transparent);
-      border-color: color-mix(in srgb, var(--accent-blue-400) 40%, transparent);
+      background: var(--token-surface-accent-alpha-26);
+      border-color: var(--token-surface-accent-alpha-40);
     }
   }
 }

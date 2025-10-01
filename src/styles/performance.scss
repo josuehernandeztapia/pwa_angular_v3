@@ -233,17 +233,17 @@
   font-weight: 500;
 
   &--success {
-    background: rgba(16, 185, 129, 0.1);
+    background: var(--token-surface-accent-alpha-10);
     color: var(--success);
   }
 
   &--warning {
-    background: rgba(245, 158, 11, 0.1);
+    background: var(--token-surface-warning-alpha-10);
     color: var(--warning);
   }
 
   &--error {
-    background: rgba(239, 68, 68, 0.1);
+    background: var(--token-surface-danger-alpha-10);
     color: var(--error);
   }
 

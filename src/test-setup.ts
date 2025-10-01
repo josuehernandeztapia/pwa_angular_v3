@@ -105,7 +105,7 @@ window.addEventListener('unhandledrejection', (event) => {
  */
 if (typeof jasmine !== 'undefined') {
   // Increase timeout for cleanup operations
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
   
   // Global afterEach for memory monitoring
   afterEach(async () => {

@@ -35,7 +35,7 @@
     width: 48px;
     height: 48px;
     border-radius: 16px;
-    background: rgba(59, 130, 246, 0.18);
+    background: var(--token-surface-accent-soft);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -123,10 +123,10 @@
     font-weight: 600;
     color: rgba(12, 14, 18, 0.85);
 
-    &--approved { background: rgba(34, 197, 94, 0.8); }
-    &--review { background: rgba(245, 158, 11, 0.8); }
+    &--approved { background: var(--token-surface-accent-alpha-80); }
+    &--review { background: var(--token-surface-warning-alpha-80); }
     &--pending { background: rgba(148, 163, 184, 0.7); }
-    &--rejected { background: rgba(239, 68, 68, 0.85); }
+    &--rejected { background: var(--token-surface-danger-alpha-85); }
     &--neutral {
       background: rgba(148, 163, 184, 0.4);
       color: rgba(255, 255, 255, 0.85);
@@ -170,10 +170,10 @@
     background: rgba(148, 163, 184, 0.2);
     color: rgba(226, 232, 240, 0.9);
 
-    &--approved { background: rgba(16, 185, 129, 0.18); color: var(--color-success-strong); }
-    &--pending { background: rgba(107, 114, 128, 0.25); color: var(--accent-blue-200); }
-    &--review { background: rgba(245, 158, 11, 0.18); color: var(--color-warning-400); }
-    &--rejected { background: rgba(239, 68, 68, 0.18); color: var(--accent-red-400); }
+    &--approved { background: var(--token-surface-accent-soft); color: var(--color-success-strong); }
+    &--pending { background: rgba(107, 114, 128, 0.25); color: var(--token-surface-accent-strong); }
+    &--review { background: var(--token-surface-warning-alpha-18); color: var(--color-warning-400); }
+    &--rejected { background: var(--token-surface-danger-soft); color: var(--accent-danger); }
   }
 
   &__optional-badge {
@@ -186,7 +186,7 @@
     font-size: 0.75rem;
     font-weight: 500;
     background: rgba(130, 173, 255, 0.22);
-  color: var(--accent-blue-200);
+  color: var(--token-surface-accent-strong);
   }
 
   &__document-actions {
@@ -222,9 +222,9 @@
     }
 
     &--resubmit {
-      background: rgba(239, 68, 68, 0.22);
+      background: var(--token-surface-danger-alpha-22);
 
-      &:hover { background: rgba(239, 68, 68, 0.32); }
+      &:hover { background: var(--token-surface-danger-alpha-32); }
     }
   }
 
@@ -274,7 +274,7 @@
   &__progress-fill {
     height: 100%;
     border-radius: inherit;
-    background: linear-gradient(90deg, rgba(34, 197, 94, 0.8), rgba(16, 185, 129, 0.6));
+    background: var(--token-surface-accent-alpha-75);
     transition: width 0.3s ease;
   }
 
@@ -369,7 +369,7 @@
   &__summary-progress-fill {
     height: 100%;
     border-radius: inherit;
-    background: linear-gradient(90deg, rgba(59, 130, 246, 0.85), rgba(96, 165, 250, 0.85));
+    background: var(--accent-primary);
     transition: width 0.3s ease;
   }
 
@@ -381,18 +381,18 @@
     transition: border-color 0.2s ease, background 0.2s ease;
 
     &--low {
-      border-color: rgba(34, 197, 94, 0.4);
-      background: rgba(34, 197, 94, 0.08);
+      border-color: var(--token-border-accent-soft);
+      background: var(--token-surface-accent-tint);
     }
 
     &--medium {
-      border-color: rgba(245, 158, 11, 0.4);
-      background: rgba(245, 158, 11, 0.08);
+      border-color: var(--token-surface-warning-alpha-45);
+      background: var(--token-surface-warning-alpha-12);
     }
 
     &--high {
-      border-color: rgba(239, 68, 68, 0.45);
-      background: rgba(239, 68, 68, 0.1);
+      border-color: var(--token-surface-danger-alpha-45);
+      background: var(--token-surface-danger-alpha-12);
     }
   }
 
@@ -409,7 +409,7 @@
 
     &--success { background: var(--color-success-strong); }
     &--warning { background: var(--color-warning-400); }
-    &--danger { background: var(--accent-red-500); }
+    &--danger { background: var(--accent-danger); }
   }
 
   &__risk-title {
@@ -443,7 +443,7 @@
   }
 
   &__primary-action {
-    background: var(--color-bg-info, var(--color-accent-primary));
+    background: var(--color-bg-info, var(--accent-primary));
     color: var(--color-text-primary-inverted);
 
     &:hover:not(:disabled) {

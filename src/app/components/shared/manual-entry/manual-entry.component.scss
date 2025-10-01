@@ -3,20 +3,20 @@
 }
 
 .manual-entry {
-  --manual-overlay: color-mix(in srgb, var(--color-neutral-900) 65%, transparent);
+  --manual-overlay: var(--token-overlay-neutral-alpha-65);
   --manual-surface: var(--flat-surface-bg);
-  --manual-surface-muted: var(--surface-neutral-weak);
-  --manual-surface-strong: var(--surface-neutral-strong);
+  --manual-surface-muted: var(--token-surface-muted);
+  --manual-surface-strong: var(--token-surface-elevated);
   --manual-border: var(--border-neutral-weak);
   --manual-border-strong: var(--border-neutral-strong);
-  --manual-accent: var(--accent-blue-500);
-  --manual-accent-soft: color-mix(in srgb, var(--accent-blue-500) 22%, transparent);
-  --manual-success: var(--accent-green-500);
-  --manual-success-strong: var(--accent-green-600);
-  --manual-warning: var(--accent-amber-500);
-  --manual-shadow-dialog: 0 28px 68px color-mix(in srgb, var(--openai-black) 32%, transparent);
-  --manual-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--manual-accent) 22%, transparent);
-  --manual-shadow-success: 0 16px 32px color-mix(in srgb, var(--manual-success) 25%, transparent);
+  --manual-accent: var(--accent-primary);
+  --manual-accent-soft: var(--token-surface-accent-alpha-22);
+  --manual-success: var(--accent-primary);
+  --manual-success-strong: var(--accent-primary-hover);
+  --manual-warning: var(--accent-muted);
+  --manual-shadow-dialog: 0 28px 68px var(--token-surface-inverse-alpha-32);
+  --manual-shadow-focus: 0 0 0 3px var(--token-surface-manual-accent-alpha-22);
+  --manual-shadow-success: 0 16px 32px var(--token-surface-manual-success-alpha-25);
 
   position: fixed;
   inset: 0;
@@ -40,10 +40,11 @@
   width: min(520px, 100%);
   background: var(--manual-surface);
   border-radius: var(--radius-2xl, 24px);
-  border: 1px solid color-mix(in srgb, var(--manual-border) 45%, transparent);
+  border: 1px solid var(--token-manual-border-alpha-45);
   box-shadow: var(--manual-shadow-dialog);
   overflow: hidden;
   animation: manual-entry-rise 0.32s ease-out;
+  margin-top: 0;
 }
 
 .manual-entry__header {
@@ -51,7 +52,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-5, 1.25rem) var(--space-6, 1.5rem) var(--space-4, 1rem);
-  border-bottom: 1px solid color-mix(in srgb, var(--manual-border) 32%, transparent);
+  border-bottom: 1px solid var(--token-manual-border-alpha-32);
 }
 
 .manual-entry__title {
@@ -90,7 +91,7 @@
 }
 
 .manual-entry__close:hover {
-  background: color-mix(in srgb, var(--manual-surface-muted) 85%, transparent);
+  background: var(--token-surface-manual-muted-alpha-85);
   color: var(--color-text-primary);
 }
 
@@ -107,8 +108,8 @@
   align-items: flex-start;
   border-radius: var(--radius-xl, 20px);
   padding: var(--space-4, 1rem) var(--space-5, 1.25rem);
-  background: color-mix(in srgb, var(--manual-warning) 12%, var(--manual-surface-muted) 88%);
-  border: 1px solid color-mix(in srgb, var(--manual-warning) 28%, transparent);
+  background: var(--token-manual-warning-blend-manual-surface-muted-12);
+  border: 1px solid var(--token-manual-warning-alpha-28);
 }
 
 .manual-entry__banner-icon {
@@ -118,7 +119,7 @@
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--manual-warning) 20%, transparent);
+  background: var(--token-manual-warning-alpha-20);
 }
 
 .manual-entry__banner-icon--warning {
@@ -171,7 +172,7 @@
   width: 100%;
   padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
   border-radius: var(--radius-lg, 16px);
-  border: 1px solid color-mix(in srgb, var(--manual-border) 55%, transparent);
+  border: 1px solid var(--token-manual-border-alpha-55);
   background: var(--manual-surface);
   color: var(--color-text-primary);
   font-size: 1rem;
@@ -180,12 +181,12 @@
 
 .manual-entry__input:focus {
   outline: none;
-  border-color: color-mix(in srgb, var(--manual-accent) 60%, transparent);
+  border-color: var(--token-surface-manual-accent-alpha-60);
   box-shadow: var(--manual-shadow-focus);
 }
 
 .manual-entry__input.ng-invalid.ng-touched {
-  border-color: var(--accent-red-500);
+  border-color: var(--accent-danger);
 }
 
 .manual-entry__hint {
@@ -195,7 +196,7 @@
 
 .manual-entry__error {
   font-size: 0.85rem;
-  color: var(--accent-red-500);
+  color: var(--accent-danger);
 }
 
 .manual-entry__actions {
@@ -220,24 +221,24 @@
 }
 
 .manual-entry__button--ghost {
-  background: color-mix(in srgb, var(--manual-surface-muted) 90%, transparent);
+  background: var(--token-surface-manual-muted-alpha-90);
   color: var(--color-text-secondary);
-  border: 1px solid color-mix(in srgb, var(--manual-border) 40%, transparent);
+  border: 1px solid var(--token-manual-border-alpha-40);
 }
 
 .manual-entry__button--ghost:hover {
-  background: color-mix(in srgb, var(--manual-surface-muted) 96%, transparent);
+  background: var(--token-surface-manual-muted-alpha-96);
   color: var(--color-text-primary);
 }
 
 .manual-entry__button--retry {
-  background: color-mix(in srgb, var(--color-neutral-900) 6%, var(--manual-surface-muted) 94%);
+  background: var(--token-overlay-neutral-blend-manual-surface-muted-06);
   color: var(--color-text-primary);
-  border: 1px solid color-mix(in srgb, var(--manual-border) 45%, transparent);
+  border: 1px solid var(--token-manual-border-alpha-45);
 }
 
 .manual-entry__button--retry:hover {
-  background: color-mix(in srgb, var(--color-neutral-900) 10%, var(--manual-surface-muted) 90%);
+  background: var(--token-overlay-neutral-blend-manual-surface-muted-10);
 }
 
 .manual-entry__button--primary {
@@ -247,7 +248,7 @@
 }
 
 .manual-entry__button--primary:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--manual-success) 85%, var(--manual-success-strong) 15%);
+  background: var(--token-surface-manual-success-blend-manual-success-strong-85);
 }
 
 .manual-entry__button--primary:disabled {
@@ -274,11 +275,11 @@
 @keyframes manual-entry-rise {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    margin-top: 18px;
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    margin-top: 0;
   }
 }
 
@@ -303,8 +304,8 @@
 
 @media (prefers-color-scheme: dark) {
   .manual-entry__dialog {
-    background: color-mix(in srgb, var(--color-neutral-900) 94%, transparent);
-    border-color: color-mix(in srgb, var(--manual-border-strong) 55%, transparent);
+    background: var(--token-overlay-neutral-alpha-94);
+    border-color: var(--token-manual-border-strong-alpha-55);
   }
 
   .manual-entry__heading,
@@ -318,12 +319,12 @@
 
   .manual-entry__close:hover {
     color: var(--color-neutral-100);
-    background: color-mix(in srgb, var(--color-neutral-800) 70%, transparent);
+    background: var(--token-surface-neutral-800-alpha-70);
   }
 
   .manual-entry__banner {
-    background: color-mix(in srgb, var(--manual-warning) 18%, var(--color-neutral-900) 82%);
-    border-color: color-mix(in srgb, var(--manual-warning) 40%, transparent);
+    background: var(--token-manual-warning-shade-18);
+    border-color: var(--token-manual-warning-alpha-40);
   }
 
   .manual-entry__banner-subtitle,
@@ -333,24 +334,24 @@
   }
 
   .manual-entry__input {
-    background: color-mix(in srgb, var(--color-neutral-900) 78%, transparent);
-    border-color: color-mix(in srgb, var(--manual-border-strong) 60%, transparent);
+    background: var(--token-overlay-neutral-alpha-78);
+    border-color: var(--token-manual-border-strong-alpha-60);
     color: var(--color-neutral-50);
   }
 
   .manual-entry__button--ghost {
-    background: color-mix(in srgb, var(--color-neutral-800) 70%, transparent);
+    background: var(--token-surface-neutral-800-alpha-70);
     color: var(--color-neutral-200);
-    border-color: color-mix(in srgb, var(--manual-border-strong) 50%, transparent);
+    border-color: var(--token-manual-border-strong-alpha-50);
   }
 
   .manual-entry__button--ghost:hover {
-    background: color-mix(in srgb, var(--color-neutral-800) 85%, transparent);
+    background: var(--token-surface-neutral-800-alpha-85);
   }
 
   .manual-entry__button--retry {
-    background: color-mix(in srgb, var(--color-neutral-800) 80%, transparent);
+    background: var(--token-surface-neutral-800-alpha-80);
     color: var(--color-neutral-50);
-    border-color: color-mix(in srgb, var(--manual-border-strong) 55%, transparent);
+    border-color: var(--token-manual-border-strong-alpha-55);
   }
 }

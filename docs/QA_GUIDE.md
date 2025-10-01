@@ -39,6 +39,7 @@ La aplicación **Conductores PWA** ha alcanzado el estatus de **testing enterpri
 * **800+ tests passing (99.2% success rate)**
 * Core services: >95% coverage (financial calculators, validators, business rules)
 * Component tests: >90% average coverage across all critical components
+* **Nota 01/10/2025:** última corrida dejó **49 pruebas unitarias fallando (95.4% de éxito)** por mocks/configuración → ver `TEST-FAILURES-ANALYSIS.md` (impacto bajo, código productivo estable)
 
 ### Integration Tests
 

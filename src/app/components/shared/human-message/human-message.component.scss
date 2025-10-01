@@ -68,13 +68,13 @@
   }
 
   &__action-button--primary {
-    background: var(--accent-blue-600);
+    background: var(--accent-primary-hover);
     color: var(--flat-surface-bg, var(--openai-white));
   }
 
   &__action-button--primary:hover,
   &__action-button--primary:focus-visible {
-    background: var(--accent-blue-700);
+    background: var(--accent-primary-hover);
     outline: none;
   }
 
@@ -130,14 +130,14 @@
 
   &--context-onboarding {
     background: var(--flat-surface-bg, var(--openai-white));
-    border-color: var(--accent-blue-600);
-    color: var(--accent-blue-800);
+    border-color: var(--accent-primary-hover);
+    color: var(--accent-primary-hover);
   }
 
   &--context-success {
     background: var(--flat-surface-bg, var(--openai-white));
-    border-color: var(--accent-green-500);
-    color: var(--accent-green-700);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary-hover);
   }
 
   &--context-celebration {
@@ -157,20 +157,20 @@
 
   &--context-error {
     background: var(--flat-surface-bg, var(--openai-white));
-    border-color: var(--accent-red-500);
-    color: var(--accent-red-700);
+    border-color: var(--accent-danger);
+    color: var(--accent-danger);
   }
 
   &--context-guidance {
     background: var(--flat-surface-bg, var(--openai-white));
-    border-color: var(--accent-purple-500);
-    color: var(--accent-purple-700);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
   }
 
   &--context-encouragement {
     background: var(--flat-surface-bg, var(--openai-white));
-    border-color: var(--accent-blue-600);
-    color: var(--accent-blue-800);
+    border-color: var(--accent-primary-hover);
+    color: var(--accent-primary-hover);
   }
 
   &--context-reassurance {

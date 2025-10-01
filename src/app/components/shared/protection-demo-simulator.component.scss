@@ -50,8 +50,8 @@
 
 .protection-demo__input:focus {
   outline: none;
-  border-color: var(--accent-blue-600);
-  box-shadow: 0 0 0 2px var(--accent-blue-500);
+  border-color: var(--accent-primary-hover);
+  box-shadow: 0 0 0 2px var(--accent-primary);
 }
 
 .protection-demo__submit {
@@ -59,7 +59,7 @@
   font-size: var(--text-sm, 0.875rem);
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text-primary-inverted);
-  background: var(--accent-blue-600);
+  background: var(--accent-primary-hover);
   border: none;
   border-radius: var(--radius-md, 8px);
   cursor: pointer;
@@ -68,7 +68,7 @@
 }
 
 .protection-demo__submit:hover:not(:disabled) {
-  background: var(--accent-blue-700);
+  background: var(--accent-primary-hover);
 }
 
 .protection-demo__submit:disabled {
@@ -87,8 +87,8 @@
   height: 32px;
   border-radius: 50%;
   border: 3px solid var(--color-border-primary);
-  border-top-color: var(--accent-blue-600);
-  animation: protectionDemoSpin 0.8s linear infinite;
+  border-top-color: var(--accent-primary-hover);
+  animation: protectionDemoPulse 1.2s ease-in-out infinite;
 }
 
 .protection-demo__scenarios {
@@ -116,7 +116,7 @@
   font-size: var(--text-sm, 0.875rem);
   font-weight: var(--font-weight-medium, 500);
   color: var(--color-text-secondary);
-  background: var(--surface-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 16%, var(--openai-white)));
+  background: var(--token-surface-muted, var(--token-surface-neutral-400-tint-16));
   border: 1px solid var(--color-border-primary);
   border-radius: var(--radius-md, 8px);
   cursor: pointer;
@@ -129,13 +129,10 @@
   color: var(--color-text-primary);
 }
 
-@keyframes protectionDemoSpin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+@keyframes protectionDemoPulse {
+  0%,
+  100% { opacity: 0.65; }
+  50% { opacity: 1; }
 }
 
 @media (max-width: 768px) {

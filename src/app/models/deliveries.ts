@@ -188,77 +188,77 @@ export const DELIVERY_STATUS_DESCRIPTIONS: Record<DeliveryStatus, {
   PO_ISSUED: {
     title: 'Orden Emitida',
     description: 'Orden de compra enviada a fábrica',
-    color: 'var(--accent-amber-500)',
+    color: 'var(--accent-muted)',
     iconType: 'clipboard-list',
     clientFriendly: 'Procesando pedido'
   },
   IN_PRODUCTION: {
     title: 'En Producción',
     description: 'Vagoneta siendo fabricada en China',
-    color: 'var(--accent-amber-500)',
+    color: 'var(--accent-muted)',
     iconType: 'factory',
     clientFriendly: 'En producción'
   },
   READY_AT_FACTORY: {
     title: 'Lista en Fábrica',
     description: 'Producción completa, lista para envío',
-    color: 'var(--accent-amber-500)',
+    color: 'var(--accent-muted)',
     iconType: 'check-circle',
     clientFriendly: 'En producción'
   },
   AT_ORIGIN_PORT: {
     title: 'En Puerto Origen',
     description: 'En puerto de China para embarque',
-    color: 'var(--accent-amber-500)',
+    color: 'var(--accent-muted)',
     iconType: 'ship',
     clientFriendly: 'En camino'
   },
   ON_VESSEL: {
     title: 'En Tránsito Marítimo',
     description: 'Navegando hacia México',
-    color: 'var(--accent-amber-500)',
+    color: 'var(--accent-muted)',
     iconType: 'waves',
     clientFriendly: 'En camino'
   },
   AT_DEST_PORT: {
     title: 'En Puerto Destino',
     description: 'Arribó a puerto mexicano',
-    color: 'var(--accent-amber-500)',
+    color: 'var(--accent-muted)',
     iconType: 'building-construction',
     clientFriendly: 'En camino'
   },
   IN_CUSTOMS: {
     title: 'En Aduanas',
     description: 'Proceso de liberación aduanal',
-    color: 'var(--accent-amber-500)',
+    color: 'var(--accent-muted)',
     iconType: 'document-text',
     clientFriendly: 'En camino'
   },
   RELEASED: {
     title: 'Liberado',
     description: 'Liberado de aduanas, en transporte local',
-    color: 'var(--accent-amber-500)',
+    color: 'var(--accent-muted)',
     iconType: 'truck',
     clientFriendly: 'En camino'
   },
   AT_WH: {
     title: 'En Bodega',
     description: 'En bodega local, preparando entrega',
-    color: 'var(--accent-amber-500)',
+    color: 'var(--accent-muted)',
     iconType: 'store',
     clientFriendly: 'Lista para entrega'
   },
   READY_FOR_HANDOVER: {
     title: 'Lista para Entrega',
     description: 'Lista para coordinar entrega con cliente',
-    color: 'var(--accent-green-400)',
+    color: 'var(--accent-primary)',
     iconType: 'target',
     clientFriendly: 'Lista para entrega'
   },
   DELIVERED: {
     title: 'Entregada',
     description: 'Entregada exitosamente al cliente',
-    color: 'var(--accent-green-500)',
+    color: 'var(--accent-primary)',
     iconType: 'celebration',
     clientFriendly: 'Entregada'
   }

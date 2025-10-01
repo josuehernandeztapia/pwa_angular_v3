@@ -73,11 +73,11 @@
   }
 
   &__stat-trend[data-trend='up'] {
-    color: #16a34a;
+    color: var(--accent-primary);
   }
 
   &__stat-trend[data-trend='down'] {
-    color: #dc2626;
+    color: var(--accent-danger);
   }
 
   &__table {

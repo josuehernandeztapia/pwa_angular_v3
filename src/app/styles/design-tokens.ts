@@ -39,42 +39,42 @@ export const DESIGN_TOKENS = {
     brand: {
       get primary() { return resolveCssColor('--openai-black'); },
       get success() { return resolveCssColor('--accent-primary'); },
-      get warn() { return resolveCssColor('--accent-amber-500'); },
-      get danger() { return resolveCssColor('--accent-red-500'); }
+      get warn() { return resolveCssColor('--accent-muted'); },
+      get danger() { return resolveCssColor('--accent-danger'); }
     },
 
     // Data Visualization Colors - OpenAI Compliant
     data: {
-      get primary() { return resolveCssColor('--accent-blue-600'); },
-      get secondary() { return resolveCssColor('--accent-green-500'); },
-      get tertiary() { return resolveCssColor('--accent-purple-600'); },
-      get warning() { return resolveCssColor('--accent-amber-500'); },
-      get danger() { return resolveCssColor('--accent-red-500'); },
+      get primary() { return resolveCssColor('--accent-primary-hover'); },
+      get secondary() { return resolveCssColor('--accent-primary'); },
+      get tertiary() { return resolveCssColor('--accent-primary-hover'); },
+      get warning() { return resolveCssColor('--accent-muted'); },
+      get danger() { return resolveCssColor('--accent-danger'); },
       get neutral() { return resolveCssColor('--color-text-secondary'); },
-      get accent() { return resolveCssColor('--accent-cyan-500'); },
-      get highlight() { return resolveCssColor('--accent-purple-600'); }
+      get accent() { return resolveCssColor('--accent-primary'); },
+      get highlight() { return resolveCssColor('--accent-primary-hover'); }
     },
 
     // Chart specific colors
     chart: {
       // Line charts
       line: {
-        get primary() { return resolveCssColor('--accent-blue-600'); },
-        get secondary() { return resolveCssColor('--accent-green-500'); },
+        get primary() { return resolveCssColor('--accent-primary-hover'); },
+        get secondary() { return resolveCssColor('--accent-primary'); },
         get grid() { return resolveCssColor('--color-border-primary'); },
         get axis() { return resolveCssColor('--color-text-secondary'); }
       },
       // Bar charts
       bar: {
-        get primary() { return resolveCssColor('--accent-blue-600'); },
-        get secondary() { return resolveCssColor('--accent-green-500'); },
-        get tertiary() { return resolveCssColor('--accent-purple-600'); },
+        get primary() { return resolveCssColor('--accent-primary-hover'); },
+        get secondary() { return resolveCssColor('--accent-primary'); },
+        get tertiary() { return resolveCssColor('--accent-primary-hover'); },
         background: 'transparent'
       },
       // Progress indicators
       progress: {
-        get complete() { return resolveCssColor('--accent-green-500'); },
-        get inProgress() { return resolveCssColor('--accent-blue-600'); },
+        get complete() { return resolveCssColor('--accent-primary'); },
+        get inProgress() { return resolveCssColor('--accent-primary-hover'); },
         get pending() { return resolveCssColor('--color-text-secondary'); }
       }
     },

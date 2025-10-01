@@ -47,7 +47,7 @@
       left: 0;
       right: 0;
       height: 3px;
-      background: var(--accent-blue-500);
+      background: var(--accent-primary);
     }
 
     &:hover {
@@ -60,7 +60,7 @@
   }
 
   &__card--color-accent::before {
-    background: var(--accent-amber-500);
+    background: var(--accent-muted);
   }
 
   &__card--color-success::before {
@@ -68,7 +68,7 @@
   }
 
   &__card--color-warning::before {
-    background: var(--accent-amber-400);
+    background: var(--accent-muted);
   }
 
   &__card--color-error::before {
@@ -99,15 +99,15 @@
   }
 
   &__trend--up {
-    background: var(--accent-green-500);
-    border: 1px solid var(--accent-green-500);
-    color: var(--accent-green-600);
+    background: var(--accent-primary);
+    border: 1px solid var(--accent-primary);
+    color: var(--accent-primary-hover);
   }
 
   &__trend--down {
-    background: var(--accent-red-500);
-    border: 1px solid var(--accent-red-500);
-    color: var(--accent-red-600);
+    background: var(--accent-danger);
+    border: 1px solid var(--accent-danger);
+    color: var(--accent-danger);
   }
 
   &__trend--stable {
@@ -139,38 +139,23 @@
   }
 
   &__value--color-primary {
-    background: linear-gradient(135deg, var(--primary-cyan-300, var(--openai-blue)), var(--primary-cyan-500, var(--openai-blue-hover)));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--accent-primary);
   }
 
   &__value--color-accent {
-    background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--accent-muted);
   }
 
   &__value--color-success {
-    background: linear-gradient(135deg, var(--accent-green-400), var(--accent-green-600));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--accent-primary-hover);
   }
 
   &__value--color-warning {
-    background: linear-gradient(135deg, var(--accent-amber-300), var(--accent-amber-500));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--accent-muted);
   }
 
   &__value--color-error {
-    background: linear-gradient(135deg, var(--accent-red-400), var(--accent-red-600));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--accent-danger);
   }
 
   &__label {
@@ -200,15 +185,15 @@
   }
 
   &__trend-fill--up {
-    background: linear-gradient(90deg, var(--accent-green-500), var(--accent-green-300));
+    background: var(--accent-primary);
   }
 
   &__trend-fill--down {
-    background: linear-gradient(90deg, var(--accent-red-500), var(--accent-red-400));
+    background: var(--accent-danger);
   }
 
   &__trend-fill--stable {
-    background: linear-gradient(90deg, var(--neutral-500, var(--openai-gray-400)), var(--neutral-400, var(--openai-gray-300)));
+    background: var(--accent-muted);
   }
 
   @media (max-width: 48rem) {

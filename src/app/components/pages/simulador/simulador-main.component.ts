@@ -629,8 +629,8 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
         datasets: [{
           label: 'Ahorro Acumulado',
           data: [3250, 19500, 39000, 58500, 78000],
-          borderColor: 'var(--color-accent-primary)',
-          backgroundColor: 'var(--color-accent-primary-muted, rgba(14, 165, 233, 0.1))',
+          borderColor: 'var(--accent-primary)',
+          backgroundColor: 'var(--token-surface-accent-weak, var(--token-surface-accent-alpha-10))',
           borderWidth: 2,
           fill: true,
           tension: 0.4
@@ -676,7 +676,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
         datasets: [{
           label: 'PMT Mensual',
           data: [3250, 3250, 3250],
-          backgroundColor: ['var(--color-accent-primary)', 'var(--color-accent-primary)', 'var(--color-success)'],
+          backgroundColor: ['var(--accent-primary)', 'var(--accent-primary)', 'var(--color-success)'],
           borderRadius: 4
         }]
       },

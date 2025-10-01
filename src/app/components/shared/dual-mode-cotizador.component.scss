@@ -19,7 +19,7 @@
   padding: var(--space-5, 1.25rem);
   border-radius: var(--radius-2xl, 24px);
   background: var(--flat-surface-bg);
-  box-shadow: 0 24px 54px color-mix(in srgb, var(--openai-black) 18%, transparent);
+  box-shadow: 0 24px 54px var(--token-surface-inverse-alpha-18);
 }
 
 .dual-cotizador__mode-title {
@@ -40,7 +40,7 @@
   align-items: center;
   gap: var(--space-2, 0.5rem);
   border-radius: var(--radius-full, 999px);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 92%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 92%, transparent);
   padding: var(--space-1, 0.25rem);
 }
 
@@ -56,9 +56,9 @@
 }
 
 .dual-cotizador__mode-tab--active {
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   color: var(--flat-surface-bg);
-  box-shadow: 0 14px 32px color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+  box-shadow: 0 14px 32px var(--token-surface-accent-alpha-35);
 }
 
 .dual-cotizador__content {
@@ -80,8 +80,8 @@
   padding: var(--space-5, 1.25rem);
   border-radius: var(--radius-2xl, 24px);
   background: var(--flat-surface-bg);
-  box-shadow: 0 24px 54px color-mix(in srgb, var(--openai-black) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 40%, transparent);
+  box-shadow: 0 24px 54px var(--token-surface-inverse-alpha-14);
+  border: 1px solid var(--token-border-neutral-weak-alpha-40);
 }
 
 .dual-cotizador__section {
@@ -138,7 +138,7 @@
 .dual-cotizador__input {
   width: 100%;
   border-radius: var(--radius-xl, 18px);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 60%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-60);
   background: var(--flat-surface-bg);
   color: var(--color-text-primary);
   padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
@@ -149,8 +149,8 @@
 .dual-cotizador__select:focus,
 .dual-cotizador__input:focus {
   outline: none;
-  border-color: color-mix(in srgb, var(--accent-blue-500) 60%, transparent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500) 22%, transparent);
+  border-color: var(--token-surface-accent-alpha-60);
+  box-shadow: 0 0 0 3px var(--token-surface-accent-alpha-22);
 }
 
 .dual-cotizador__input--compact {
@@ -176,7 +176,7 @@
 
 .dual-cotizador__range {
   width: 100%;
-  accent-color: var(--accent-blue-500);
+  accent-color: var(--accent-primary);
 }
 
 .dual-cotizador__range-info {
@@ -203,12 +203,12 @@
   gap: var(--space-3, 0.75rem);
   padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
   border-radius: var(--radius-xl, 18px);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 45%, transparent);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 92%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-45);
+  background: color-mix(in srgb, var(--token-surface-muted) 92%, transparent);
 }
 
 .dual-cotizador__component--required {
-  border-left: 4px solid var(--accent-blue-500);
+  border-left: 4px solid var(--accent-primary);
 }
 
 .dual-cotizador__component-toggle {
@@ -220,7 +220,7 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
 }
 
 .dual-cotizador__component-name {
@@ -238,8 +238,8 @@
   gap: var(--space-3, 0.75rem);
   padding: var(--space-4, 1rem);
   border-radius: var(--radius-xl, 20px);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 35%, transparent);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 92%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-35);
+  background: color-mix(in srgb, var(--token-surface-muted) 92%, transparent);
 }
 
 .dual-cotizador__collection-title {
@@ -259,16 +259,16 @@
   height: 36px;
   border-radius: var(--radius-full, 999px);
   border: none;
-  background: color-mix(in srgb, var(--accent-red-500) 12%, transparent);
-  color: var(--accent-red-500);
+  background: var(--token-surface-danger-alpha-12);
+  color: var(--accent-danger);
   font-size: 1.2rem;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
 .dual-cotizador__icon-button:hover {
-  background: color-mix(in srgb, var(--accent-red-500) 18%, transparent);
-  color: var(--accent-red-600);
+  background: var(--token-surface-danger-soft);
+  color: var(--accent-danger);
 }
 
 .dual-cotizador__add-button {
@@ -276,15 +276,15 @@
   border: none;
   border-radius: var(--radius-full, 999px);
   padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
-  color: var(--accent-blue-500);
+  background: var(--token-surface-accent-tint);
+  color: var(--accent-primary);
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .dual-cotizador__add-button:hover {
-  background: color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
+  background: var(--token-surface-accent-soft);
 }
 
 .dual-cotizador__loading {
@@ -294,8 +294,8 @@
   gap: var(--space-3, 0.75rem);
   padding: var(--space-6, 1.5rem);
   border-radius: var(--radius-2xl, 24px);
-  border: 1px dashed color-mix(in srgb, var(--border-neutral-weak) 45%, transparent);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 92%, transparent);
+  border: 1px dashed var(--token-border-neutral-weak-alpha-45);
+  background: color-mix(in srgb, var(--token-surface-muted) 92%, transparent);
   text-align: center;
 }
 
@@ -303,9 +303,9 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 4px solid color-mix(in srgb, var(--border-neutral-weak) 55%, transparent);
-  border-inline-start-color: var(--accent-blue-500);
-  animation: dual-cotizador-spin 1s linear infinite;
+  border: 4px solid var(--token-border-neutral-weak-alpha-55);
+  border-inline-start-color: var(--accent-primary);
+  animation: dual-cotizador-pulse 1.2s ease-in-out infinite;
 }
 
 .dual-cotizador__results {
@@ -331,13 +331,13 @@
   gap: var(--space-3, 0.75rem);
   padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
   border-radius: var(--radius-xl, 18px);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 40%, transparent);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 90%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-40);
+  background: color-mix(in srgb, var(--token-surface-muted) 90%, transparent);
 }
 
 .dual-cotizador__summary-item--highlight {
-  border-color: color-mix(in srgb, var(--accent-green-500) 40%, transparent);
-  background: color-mix(in srgb, var(--accent-green-500) 15%, transparent);
+  border-color: var(--token-surface-accent-alpha-40);
+  background: var(--token-surface-accent-alpha-15);
 }
 
 .dual-cotizador__summary-label {
@@ -367,13 +367,13 @@
 }
 
 .dual-cotizador__button--outlined {
-  border: 1px solid color-mix(in srgb, var(--accent-blue-500) 45%, transparent);
+  border: 1px solid var(--token-border-accent-soft);
   background: transparent;
-  color: var(--accent-blue-500);
+  color: var(--accent-primary);
 }
 
 .dual-cotizador__button--outlined:hover {
-  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+  background: var(--token-surface-accent-tint);
 }
 
 .dual-cotizador__savings-bars {
@@ -387,7 +387,7 @@
   width: 100%;
   height: 18px;
   border-radius: var(--radius-full, 999px);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 80%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 80%, transparent);
   overflow: hidden;
 }
 
@@ -398,11 +398,11 @@
 }
 
 .dual-cotizador__savings-segment--down-payment {
-  background: var(--accent-green-500);
+  background: var(--accent-primary);
 }
 
 .dual-cotizador__savings-segment--savings {
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
 }
 
 .dual-cotizador__savings-legend {
@@ -425,18 +425,18 @@
   gap: var(--space-1, 0.25rem);
   padding: var(--space-4, 1rem);
   border-radius: var(--radius-xl, 20px);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 35%, transparent);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 92%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-35);
+  background: color-mix(in srgb, var(--token-surface-muted) 92%, transparent);
 }
 
 .dual-cotizador__card--highlight {
-  border-color: color-mix(in srgb, var(--accent-amber-500) 40%, transparent);
-  background: color-mix(in srgb, var(--accent-amber-500) 15%, transparent);
+  border-color: var(--token-surface-warning-alpha-40);
+  background: var(--token-surface-warning-alpha-15);
 }
 
 .dual-cotizador__card--success {
-  border-color: color-mix(in srgb, var(--accent-green-500) 40%, transparent);
-  background: color-mix(in srgb, var(--accent-green-500) 15%, transparent);
+  border-color: var(--token-surface-accent-alpha-40);
+  background: var(--token-surface-accent-alpha-15);
 }
 
 .dual-cotizador__card-label {
@@ -455,8 +455,8 @@
   gap: var(--space-3, 0.75rem);
   padding: var(--space-4, 1rem);
   border-radius: var(--radius-xl, 20px);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 35%, transparent);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 92%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-35);
+  background: color-mix(in srgb, var(--token-surface-muted) 92%, transparent);
 }
 
 .dual-cotizador__chart-title {
@@ -482,7 +482,7 @@
 
 .dual-cotizador__chart-bar-fill {
   width: 100%;
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   border-radius: var(--radius-full, 999px);
   transition: height 0.3s ease;
 }
@@ -508,7 +508,7 @@
   width: 32px;
   height: 32px;
   border-radius: var(--radius-full, 999px);
-  background: color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
+  background: var(--token-surface-accent-soft);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -525,8 +525,8 @@
   gap: var(--space-3, 0.75rem);
   padding: var(--space-3, 0.75rem);
   border-radius: var(--radius-xl, 20px);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 35%, transparent);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 92%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-35);
+  background: color-mix(in srgb, var(--token-surface-muted) 92%, transparent);
 }
 
 .dual-cotizador__timeline-marker {
@@ -541,11 +541,11 @@
 }
 
 .dual-cotizador__timeline-marker--entrega {
-  background: var(--accent-green-500);
+  background: var(--accent-primary);
 }
 
 .dual-cotizador__timeline-marker--espera {
-  background: var(--accent-amber-500);
+  background: var(--accent-muted);
 }
 
 .dual-cotizador__timeline-content {
@@ -571,19 +571,19 @@
 }
 
 .dual-cotizador__button--secondary {
-  background: color-mix(in srgb, var(--surface-neutral-weak) 92%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 40%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 92%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-40);
   color: var(--color-text-primary);
 }
 
 .dual-cotizador__button--primary {
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   color: var(--flat-surface-bg);
-  box-shadow: 0 16px 44px color-mix(in srgb, var(--accent-blue-500) 32%, transparent);
+  box-shadow: 0 16px 44px var(--token-surface-accent-alpha-32);
 }
 
 .dual-cotizador__button--primary:hover {
-  background: color-mix(in srgb, var(--accent-blue-500) 85%, var(--accent-blue-400) 15%);
+  background: var(--token-surface-accent-blend-accent-primary-85);
 }
 
 .dual-cotizador__modal {
@@ -593,7 +593,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-5, 1.25rem);
-  background: color-mix(in srgb, var(--openai-black) 40%, transparent);
+  background: var(--token-surface-inverse-alpha-40);
   z-index: 1000;
 }
 
@@ -605,7 +605,7 @@
   gap: var(--space-4, 1rem);
   border-radius: var(--radius-2xl, 24px);
   background: var(--flat-surface-bg);
-  box-shadow: var(--shadow-2xl, 0 32px 64px color-mix(in srgb, var(--openai-black) 40%, transparent));
+  box-shadow: var(--shadow-2xl, 0 32px 64px var(--token-surface-inverse-alpha-40));
   overflow: hidden;
 }
 
@@ -614,7 +614,7 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--space-5, 1.25rem);
-  border-bottom: 1px solid color-mix(in srgb, var(--border-neutral-weak) 45%, transparent);
+  border-bottom: 1px solid var(--token-border-neutral-weak-alpha-45);
 }
 
 .dual-cotizador__modal-header h2 {
@@ -626,7 +626,7 @@
   display: grid;
   gap: var(--space-3, 0.75rem);
   padding: 0 var(--space-5, 1.25rem) var(--space-4, 1rem);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 88%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 88%, transparent);
 }
 
 .dual-cotizador__table-wrapper {
@@ -644,12 +644,12 @@
 .dual-cotizador__table th {
   text-align: left;
   padding: var(--space-3, 0.75rem);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 85%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 85%, transparent);
 }
 
 .dual-cotizador__table td {
   padding: var(--space-3, 0.75rem);
-  border-bottom: 1px solid color-mix(in srgb, var(--border-neutral-weak) 40%, transparent);
+  border-bottom: 1px solid var(--token-border-neutral-weak-alpha-40);
 }
 
 .dual-cotizador__cell--numeric {
@@ -658,21 +658,26 @@
 }
 
 .dual-cotizador__cell--positive {
-  color: var(--accent-green-500);
+  color: var(--accent-primary);
   font-weight: 600;
 }
 
 .dual-cotizador__cell--warning {
-  color: var(--accent-red-500);
+  color: var(--accent-danger);
   font-weight: 600;
 }
 
-@keyframes dual-cotizador-spin {
-  0% {
-    transform: rotate(0deg);
-  }
+@keyframes dual-cotizador-pulse {
+  0%,
   100% {
-    transform: rotate(360deg);
+    border-inline-start-color: var(--accent-primary);
+    box-shadow: 0 0 0 0 var(--token-surface-accent-soft);
+    opacity: 0.8;
+  }
+  50% {
+    border-inline-start-color: var(--token-surface-accent-alpha-40);
+    box-shadow: 0 0 0 8px var(--token-surface-accent-alpha-20);
+    opacity: 1;
   }
 }
 
@@ -710,8 +715,8 @@
   .dual-cotizador__mode,
   .dual-cotizador__panel,
   .dual-cotizador__modal-dialog {
-    background: color-mix(in srgb, var(--color-neutral-900) 90%, transparent);
-    border-color: color-mix(in srgb, var(--border-neutral-strong) 55%, transparent);
+    background: var(--token-overlay-neutral-alpha-90);
+    border-color: var(--token-border-neutral-strong-alpha-55);
     color: var(--color-neutral-100);
   }
 
@@ -720,13 +725,13 @@
   }
 
   .dual-cotizador__mode-tab--active {
-    background: color-mix(in srgb, var(--accent-blue-500) 85%, transparent);
+    background: var(--token-surface-accent-alpha-85);
   }
 
   .dual-cotizador__select,
   .dual-cotizador__input {
-    background: color-mix(in srgb, var(--color-neutral-900) 70%, transparent);
-    border-color: color-mix(in srgb, var(--border-neutral-strong) 55%, transparent);
+    background: var(--token-overlay-neutral-alpha-70);
+    border-color: var(--token-border-neutral-strong-alpha-55);
     color: var(--color-neutral-50);
   }
 
@@ -735,12 +740,12 @@
   .dual-cotizador__card,
   .dual-cotizador__chart,
   .dual-cotizador__timeline-item {
-    background: color-mix(in srgb, var(--color-neutral-900) 75%, transparent);
-    border-color: color-mix(in srgb, var(--border-neutral-strong) 45%, transparent);
+    background: var(--token-overlay-neutral-alpha-75);
+    border-color: var(--token-border-neutral-strong-alpha-45);
   }
 
   .dual-cotizador__button--secondary {
-    background: color-mix(in srgb, var(--color-neutral-900) 70%, transparent);
+    background: var(--token-overlay-neutral-alpha-70);
     color: var(--color-neutral-100);
   }
 }

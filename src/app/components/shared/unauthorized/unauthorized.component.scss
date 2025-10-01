@@ -29,15 +29,15 @@
     display: inline-flex;
     padding: var(--space-4);
     border-radius: 50%;
-    background: var(--accent-red-500);
-    color: var(--accent-red-500);
+    background: var(--accent-danger);
+    color: var(--accent-danger);
   }
 
   &__illustration-title {
     margin: 0;
     font-size: 1.5rem;
     font-weight: var(--font-weight-bold, 700);
-    color: var(--accent-red-600);
+    color: var(--accent-danger);
   }
 
   &__message {
@@ -83,7 +83,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--accent-blue-500);
+    background: var(--accent-primary);
     color: var(--flat-surface-bg, var(--openai-white));
     font-size: 1.25rem;
     font-weight: var(--font-weight-bold, 700);
@@ -119,8 +119,8 @@
     align-items: center;
     padding: 4px 10px;
     border-radius: 999px;
-    background: var(--accent-blue-500);
-    color: var(--accent-blue-600);
+    background: var(--accent-primary);
+    color: var(--accent-primary-hover);
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
 
@@ -152,12 +152,12 @@
       border-color var(--transition-quick, 0.2s ease);
 
     &--primary {
-      background: var(--accent-green-500);
+      background: var(--accent-primary);
       color: var(--flat-surface-bg, var(--openai-white));
     }
 
     &--primary:hover {
-      background: var(--accent-green-600);
+      background: var(--accent-primary-hover);
     }
 
     &--secondary {
@@ -231,14 +231,14 @@
     padding: 8px 12px;
     border-radius: 999px;
     border: none;
-    background: var(--accent-red-500);
-    color: var(--accent-red-600);
+    background: var(--accent-danger);
+    color: var(--accent-danger);
     font-size: 0.875rem;
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
 
     &:hover {
-      background: var(--accent-red-500);
+      background: var(--accent-danger);
     }
   }
 

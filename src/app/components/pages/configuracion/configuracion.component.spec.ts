@@ -1,5 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ConfiguracionComponent } from './configuracion.component';
+import { buildComponentTestProviders } from '../../../../test-helpers/component-test-providers';
 
 const createInputEvent = (value: string | number, type: 'number' | 'text' = 'number'): Event => {
   const input = document.createElement('input');
@@ -21,8 +22,11 @@ describe('ConfiguracionComponent', () => {
   let component: ConfiguracionComponent | undefined;
 
   beforeEach(async () => {
+    const providerSetup = buildComponentTestProviders();
+
     await TestBed.configureTestingModule({
-      imports: [ConfiguracionComponent]
+      imports: [ConfiguracionComponent],
+      providers: providerSetup.providers
     }).compileComponents();
 
     fixture = TestBed.createComponent(ConfiguracionComponent);
@@ -97,4 +101,3 @@ describe('ConfiguracionComponent', () => {
     expect(results.total).toBeGreaterThan(results.ahorro);
   }));
 });
-

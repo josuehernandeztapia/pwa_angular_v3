@@ -52,31 +52,32 @@
     flex-direction: column;
     gap: 16px;
     box-shadow: var(--shadow-sm);
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: box-shadow 0.2s ease, margin-top 0.2s ease;
+    margin-top: 0;
 
     &:hover {
       box-shadow: var(--shadow-md);
-      transform: translateY(-2px);
+      margin-top: -2px;
     }
 
     @media (prefers-color-scheme: dark) {
-      background: var(--surface-neutral-strong);
+      background: var(--token-surface-elevated);
       border-color: var(--border-neutral-strong);
     }
 
     &--critical {
-      border-left: 4px solid var(--accent-red-500);
+      border-left: 4px solid var(--accent-danger);
 
       @media (prefers-color-scheme: dark) {
-        border-left-color: var(--accent-red-400);
+        border-left-color: var(--accent-danger);
       }
     }
 
     &--key {
-      border-left: 4px solid var(--accent-amber-500);
+      border-left: 4px solid var(--accent-muted);
 
       @media (prefers-color-scheme: dark) {
-        border-left-color: var(--accent-amber-400);
+        border-left-color: var(--accent-muted);
       }
     }
   }
@@ -99,13 +100,13 @@
     border-radius: 999px;
     font-size: var(--text-xs, 0.75rem);
     font-weight: var(--font-semibold, 600);
-    background: var(--surface-blue-weak);
-    color: var(--accent-blue-500);
+    background: var(--token-badge-positive-bg);
+    color: var(--token-badge-positive-text);
     white-space: nowrap;
 
     @media (prefers-color-scheme: dark) {
-      background: color-mix(in srgb, var(--accent-blue-600) 32%, transparent);
-      color: var(--accent-blue-300);
+      background: var(--token-surface-accent-hover-alpha-32);
+      color: var(--token-surface-accent-strong);
     }
   }
 
@@ -133,22 +134,22 @@
     font-weight: var(--font-semibold, 600);
 
     &--critical {
-      background: var(--surface-red-weak);
-      color: var(--accent-red-500);
+      background: var(--token-badge-danger-bg);
+      color: var(--token-badge-danger-text);
 
       @media (prefers-color-scheme: dark) {
-        background: color-mix(in srgb, var(--accent-red-500) 30%, transparent);
-        color: var(--accent-red-300);
+        background: var(--token-surface-danger-alpha-30);
+        color: var(--token-surface-danger-strong);
       }
     }
 
     &--key {
-      background: var(--surface-amber-weak);
-      color: var(--accent-amber-500);
+      background: var(--token-badge-warning-bg);
+      color: var(--token-badge-warning-text);
 
       @media (prefers-color-scheme: dark) {
-        background: color-mix(in srgb, var(--accent-amber-500) 30%, transparent);
-        color: var(--accent-amber-300);
+        background: var(--token-surface-warning-alpha-30);
+        color: var(--token-surface-elevated);
       }
     }
   }

@@ -92,23 +92,23 @@
   font-weight: var(--font-medium);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  background: color-mix(in srgb, var(--color-neutral-400) 18%, transparent);
+  background: var(--token-surface-neutral-400-alpha-18);
   color: var(--color-text-secondary);
 }
 
 .cliente-status-badge--active {
-  background: color-mix(in srgb, var(--accent-green-500) 16%, transparent);
-  color: var(--accent-green-600);
+  background: var(--token-surface-accent-alpha-16);
+  color: var(--accent-primary-hover);
 }
 
 .cliente-status-badge--progress {
-  background: color-mix(in srgb, var(--accent-blue-500) 16%, transparent);
-  color: var(--accent-blue-700);
+  background: var(--token-surface-accent-alpha-16);
+  color: var(--accent-primary-hover);
 }
 
 .cliente-status-badge--blocked {
-  background: color-mix(in srgb, var(--accent-red-500) 16%, transparent);
-  color: var(--accent-red-600);
+  background: var(--token-surface-danger-alpha-16);
+  color: var(--accent-danger);
 }
 
 .metric-label {
@@ -135,8 +135,8 @@
 }
 
 .metric-pill--available {
-  background: color-mix(in srgb, var(--accent-blue-500) 16%, transparent);
-  color: var(--accent-blue-700);
+  background: var(--token-surface-accent-alpha-16);
+  color: var(--accent-primary-hover);
 }
 
 .cliente-header__metrics {
@@ -147,15 +147,15 @@
 }
 
 .metric-value--excellent {
-  color: var(--accent-green-600);
+  color: var(--accent-primary-hover);
 }
 
 .metric-value--good {
-  color: var(--accent-amber-600);
+  color: var(--accent-muted);
 }
 
 .metric-value--poor {
-  color: var(--accent-red-600);
+  color: var(--accent-danger);
 }
 
 .metric-value--neutral {
@@ -289,14 +289,14 @@
   width: 40px;
   height: 40px;
   border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+  background: var(--token-surface-accent-tint);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .action-card--secondary .action-card__icon {
-  background: color-mix(in srgb, var(--color-neutral-400) 18%, transparent);
+  background: var(--token-surface-neutral-400-alpha-18);
 }
 
 .action-card__body {
@@ -454,7 +454,7 @@
 .progress-widget__track {
   height: 8px;
   border-radius: var(--radius-xl);
-  background: color-mix(in srgb, var(--color-neutral-400) 20%, transparent);
+  background: var(--token-surface-neutral-400-alpha-20);
   overflow: hidden;
 }
 
@@ -465,11 +465,11 @@
 }
 
 .progress-widget__bar--savings {
-  background: var(--accent-green-500);
+  background: var(--accent-primary);
 }
 
 .progress-widget__bar--payments {
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
 }
 
 .payment-options {
@@ -511,13 +511,13 @@
 }
 
 .payment-option__icon--spei {
-  background: color-mix(in srgb, var(--accent-blue-500) 15%, transparent);
-  color: var(--accent-blue-700);
+  background: var(--token-surface-accent-alpha-15);
+  color: var(--accent-primary-hover);
 }
 
 .payment-option__icon--card {
-  background: color-mix(in srgb, var(--accent-purple-600) 15%, transparent);
-  color: var(--accent-purple-600);
+  background: var(--token-surface-accent-hover-alpha-15);
+  color: var(--accent-primary-hover);
 }
 
 .payment-option__body {
@@ -630,7 +630,7 @@
 .cliente-modal__backdrop {
   position: absolute;
   inset: 0;
-  background: color-mix(in srgb, var(--color-neutral-900) 55%, transparent);
+  background: var(--token-overlay-neutral-alpha-55);
   backdrop-filter: blur(3px);
 }
 
@@ -696,7 +696,7 @@
 
 @media (prefers-color-scheme: dark) {
   .cliente-shell {
-    background: color-mix(in srgb, var(--color-neutral-900) 96%, transparent);
+    background: var(--token-overlay-neutral-alpha-96);
   }
 
   .cliente-header,
@@ -708,8 +708,8 @@
   .cliente-import,
   .cliente-event,
   .cliente-protection {
-    background: color-mix(in srgb, var(--color-neutral-800) 80%, transparent);
-    border-color: color-mix(in srgb, var(--color-neutral-400) 25%, transparent);
+    background: var(--token-surface-neutral-800-alpha-80);
+    border-color: var(--token-surface-neutral-400-alpha-25);
   }
 
   .summary-card,
@@ -718,22 +718,22 @@
   .payment-option,
   .account-card,
   .progress-widget {
-    background: color-mix(in srgb, var(--color-neutral-800) 60%, transparent);
-    border-color: color-mix(in srgb, var(--color-neutral-400) 20%, transparent);
+    background: var(--token-surface-neutral-800-alpha-60);
+    border-color: var(--token-surface-neutral-400-alpha-20);
   }
 
   .cliente-placeholder {
-    border-color: color-mix(in srgb, var(--color-neutral-400) 25%, transparent);
-    color: color-mix(in srgb, var(--color-primary-300) 70%, transparent);
+    border-color: var(--token-surface-neutral-400-alpha-25);
+    color: var(--token-color-primary-300-alpha-70);
   }
 
   .event-feed__item {
-    border-bottom-color: color-mix(in srgb, var(--color-neutral-400) 20%, transparent);
+    border-bottom-color: var(--token-surface-neutral-400-alpha-20);
   }
 
   .cliente-modal__panel {
-    background: color-mix(in srgb, var(--color-neutral-800) 95%, transparent);
-    border-color: color-mix(in srgb, var(--color-neutral-400) 25%, transparent);
+    background: var(--token-surface-neutral-800-alpha-95);
+    border-color: var(--token-surface-neutral-400-alpha-25);
   }
 }
 

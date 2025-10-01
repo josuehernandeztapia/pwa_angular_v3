@@ -42,7 +42,7 @@ describe('UsuariosService', () => {
       expect(users[0].email).toBe('ana@test.com');
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/admin/usuarios`);
+    const req = httpMock.expectOne('/bff/users');
     expect(req.request.method).toBe('GET');
     req.flush(mock);
   });
@@ -56,7 +56,7 @@ describe('UsuariosService', () => {
       expect(u.rol).toBe('operaciones');
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/admin/usuarios`);
+    const req = httpMock.expectOne('/bff/users');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(dto);
     req.flush(response);
@@ -70,7 +70,7 @@ describe('UsuariosService', () => {
       expect(u.rol).toBe('admin');
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/admin/usuarios/1`);
+    const req = httpMock.expectOne('/bff/users/1');
     expect(req.request.method).toBe('PUT');
     req.flush(response);
   });
@@ -82,10 +82,9 @@ describe('UsuariosService', () => {
       expect(u.activo).toBeFalse();
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/admin/usuarios/1/status`);
+    const req = httpMock.expectOne('/bff/users/1/status');
     expect(req.request.method).toBe('PATCH');
     expect(req.request.body).toEqual({ activo: false });
     req.flush(response);
   });
 });
-

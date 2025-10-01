@@ -32,33 +32,33 @@
   }
 
   &__card--offline {
-    background: var(--accent-red-500, var(--flat-surface-bg, var(--openai-white)));
-    border-color: var(--accent-red-500);
-    color: var(--accent-red-700);
+    background: var(--accent-danger, var(--flat-surface-bg, var(--openai-white)));
+    border-color: var(--accent-danger);
+    color: var(--accent-danger);
   }
 
   &__card--excellent {
-    background: var(--accent-green-500, var(--flat-surface-bg, var(--openai-white)));
-    border-color: var(--accent-green-500);
-    color: var(--accent-green-700);
+    background: var(--accent-primary, var(--flat-surface-bg, var(--openai-white)));
+    border-color: var(--accent-primary);
+    color: var(--accent-primary-hover);
   }
 
   &__card--good {
-    background: var(--accent-blue-500, var(--flat-surface-bg, var(--openai-white)));
-    border-color: var(--accent-blue-500);
-    color: var(--accent-blue-700);
+    background: var(--accent-primary, var(--flat-surface-bg, var(--openai-white)));
+    border-color: var(--accent-primary);
+    color: var(--accent-primary-hover);
   }
 
   &__card--fair {
-    background: var(--accent-amber-400, var(--flat-surface-bg, var(--openai-white)));
-    border-color: var(--accent-amber-400);
-    color: var(--accent-amber-700);
+    background: var(--accent-muted, var(--flat-surface-bg, var(--openai-white)));
+    border-color: var(--accent-muted);
+    color: var(--accent-muted);
   }
 
   &__card--poor {
-    background: var(--accent-amber-500, var(--flat-surface-bg, var(--openai-white)));
-    border-color: var(--accent-amber-500);
-    color: var(--accent-amber-700);
+    background: var(--accent-muted, var(--flat-surface-bg, var(--openai-white)));
+    border-color: var(--accent-muted);
+    color: var(--accent-muted);
   }
 
   &__card--neutral {
@@ -81,7 +81,7 @@
     position: absolute;
     inset: -4px;
     border-radius: 999px;
-    background: var(--accent-amber-400);
+    background: var(--accent-muted);
     animation: connection-indicator-pulse 1.6s ease-out infinite;
     pointer-events: none;
   }
@@ -109,7 +109,7 @@
     right: 0;
     bottom: 0;
     padding: var(--space-12, 12px) var(--space-16, 16px);
-    background: var(--accent-red-500);
+    background: var(--accent-danger);
     color: var(--flat-surface-bg, var(--openai-white));
     transition: opacity var(--transition-fast, 0.3s ease), max-height var(--transition-fast, 0.3s ease), padding var(--transition-fast, 0.3s ease);
     max-height: 160px;
@@ -196,17 +196,17 @@
     bottom: var(--space-16, 16px);
     max-width: 20rem;
     margin-inline: auto;
-    transition: opacity var(--transition-fast, 0.3s ease), max-height var(--transition-fast, 0.3s ease), transform var(--transition-fast, 0.3s ease);
+    transition: opacity var(--transition-fast, 0.3s ease), max-height var(--transition-fast, 0.3s ease), margin-bottom var(--transition-fast, 0.3s ease);
     opacity: 0;
     max-height: 0;
-    transform: translateY(12px);
+    margin-bottom: -12px;
     pointer-events: none;
   }
 
   &__toast--visible {
     opacity: 1;
     max-height: 240px;
-    transform: translateY(0);
+    margin-bottom: 0;
     pointer-events: auto;
   }
 
@@ -235,11 +235,11 @@
   }
 
   &__toast-card--online {
-    border-color: var(--accent-green-500);
+    border-color: var(--accent-primary);
   }
 
   &__toast-card--offline {
-    border-color: var(--accent-red-500);
+    border-color: var(--accent-danger);
   }
 
   &__toast-icon {
@@ -256,11 +256,11 @@
   }
 
   &__toast-symbol--online {
-    color: var(--accent-green-600);
+    color: var(--accent-primary-hover);
   }
 
   &__toast-symbol--offline {
-    color: var(--accent-red-500);
+    color: var(--accent-danger);
   }
 
   &__toast-body {

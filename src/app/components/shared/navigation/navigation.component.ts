@@ -144,6 +144,15 @@ export class NavigationComponent implements OnInit, OnDestroy {
     }
   }
 
+  getNavTestId(route: string): string {
+    if (!route) {
+      return 'nav-item-root';
+    }
+    const trimmed = route.startsWith('/') ? route.slice(1) : route;
+    const normalized = trimmed.split('/').filter(Boolean).join('-') || 'root';
+    return `nav-item-${normalized}`;
+  }
+
   isActive(route: string): boolean {
     return this.router.url === route || this.router.url.startsWith(route + '/');
   }

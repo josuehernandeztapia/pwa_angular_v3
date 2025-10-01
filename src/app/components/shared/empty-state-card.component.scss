@@ -14,7 +14,7 @@
   }
 
   &__icon {
-    color: var(--accent-blue-500);
+    color: var(--accent-primary);
   }
 
   &__title {
@@ -46,12 +46,12 @@
     transition: background var(--transition-quick, 0.2s ease), border-color var(--transition-quick, 0.2s ease);
 
     &--primary {
-      background: var(--accent-blue-500);
+      background: var(--accent-primary);
       color: var(--flat-surface-bg, var(--openai-white));
     }
 
     &--primary:hover {
-      background: var(--accent-blue-600);
+      background: var(--accent-primary-hover);
     }
 
     &--secondary {

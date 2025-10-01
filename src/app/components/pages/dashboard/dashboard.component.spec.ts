@@ -8,6 +8,7 @@ import { DashboardService } from '../../../services/dashboard.service';
 import { DeliveriesService } from '../../../services/deliveries.service';
 import { ToastService } from '../../../services/toast.service';
 import { DashboardComponent } from './dashboard.component';
+import { buildComponentTestProviders } from '../../../../test-helpers/component-test-providers';
 import { FlowContextService } from '../../../services/flow-context.service';
 
 describe('DashboardComponent', () => {
@@ -98,7 +99,8 @@ describe('DashboardComponent', () => {
       'updateMarket'
     ]);
 
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate'], { url: '/dashboard' });
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate', 'navigateByUrl', 'createUrlTree'], { url: '/dashboard' });
+    const providerSetup = buildComponentTestProviders({ router: routerSpy });
     const deliveriesSpy = jasmine.createSpyObj('DeliveriesService', ['validateEtaCalculations']);
     const toastSpy = jasmine.createSpyObj('ToastService', ['info', 'success', 'warning', 'error']);
     const flowContextSpy = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'getContextData', 'updateContext', 'clearContext'], {
@@ -109,8 +111,8 @@ describe('DashboardComponent', () => {
     await TestBed.configureTestingModule({
       imports: [DashboardComponent, HttpClientTestingModule],
       providers: [
+        ...providerSetup.providers,
         { provide: DashboardService, useValue: dashboardServiceSpy },
-        { provide: Router, useValue: routerSpy },
         { provide: DeliveriesService, useValue: deliveriesSpy },
         { provide: ToastService, useValue: toastSpy },
         { provide: FlowContextService, useValue: flowContextSpy }
@@ -304,10 +306,11 @@ describe('DashboardComponent Integration Tests', () => {
       updateMarket: jasmine.createSpy()
     };
 
+    const { providers } = buildComponentTestProviders();
     const { container } = await render(DashboardComponent, {
       providers: [
-        { provide: DashboardService, useValue: mockDashboardService },
-        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) }
+        ...providers,
+        { provide: DashboardService, useValue: mockDashboardService }
       ]
     });
 
@@ -334,10 +337,11 @@ describe('DashboardComponent Integration Tests', () => {
       updateMarket: jasmine.createSpy()
     };
 
+    const { providers } = buildComponentTestProviders();
     const { container } = await render(DashboardComponent, {
       providers: [
-        { provide: DashboardService, useValue: mockDashboardService },
-        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) }
+        ...providers,
+        { provide: DashboardService, useValue: mockDashboardService }
       ]
     });
 
@@ -364,10 +368,11 @@ describe('DashboardComponent Integration Tests', () => {
       updateMarket: jasmine.createSpy()
     };
 
+    const { providers } = buildComponentTestProviders();
     const { container } = await render(DashboardComponent, {
       providers: [
-        { provide: DashboardService, useValue: mockDashboardService },
-        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) }
+        ...providers,
+        { provide: DashboardService, useValue: mockDashboardService }
       ]
     });
 

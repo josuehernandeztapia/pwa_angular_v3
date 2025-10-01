@@ -7,7 +7,7 @@
   flex-direction: column;
   gap: var(--space-6);
   padding: var(--space-6) var(--space-5);
-  background: color-mix(in srgb, var(--color-bg-secondary) 92%, transparent);
+  background: var(--token-surface-neutral-alpha-92);
   color: var(--color-text-primary);
 }
 
@@ -35,8 +35,8 @@
   border-radius: var(--radius-full);
   font-weight: 700;
   font-size: 1.4rem;
-  background: color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
-  color: var(--accent-blue-700);
+  background: var(--token-surface-accent-soft);
+  color: var(--accent-primary-hover);
 }
 
 .documents-phase__phase-copy {
@@ -89,7 +89,7 @@
   gap: var(--space-2);
   padding: var(--space-3);
   border-radius: var(--radius-md);
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+  border: 1px solid var(--token-border-neutral-soft);
   background: var(--color-bg-primary);
 }
 
@@ -100,7 +100,7 @@
   width: 36px;
   height: 36px;
   border-radius: var(--radius-full);
-  background: color-mix(in srgb, var(--color-border-secondary) 40%, transparent);
+  background: var(--token-border-neutral-alpha-40);
   color: var(--color-text-secondary);
   font-weight: 600;
 }
@@ -115,21 +115,21 @@
 }
 
 .documents-phase__step--completed {
-  border-color: color-mix(in srgb, var(--accent-green-500) 45%, transparent);
+  border-color: var(--token-border-accent-soft);
 }
 
 .documents-phase__step--completed .documents-phase__step-number {
-  background: var(--accent-green-500);
+  background: var(--accent-primary);
   color: var(--color-bg-primary);
 }
 
 .documents-phase__step--active {
-  border-color: color-mix(in srgb, var(--accent-blue-500) 45%, transparent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
+  border-color: var(--token-border-accent-soft);
+  box-shadow: 0 0 0 3px var(--token-surface-accent-soft);
 }
 
 .documents-phase__step--active .documents-phase__step-number {
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   color: var(--color-bg-primary);
 }
 
@@ -177,7 +177,7 @@
   width: 100%;
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 40%, transparent);
+  border: 1px solid var(--token-border-neutral-alpha-40);
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
   font-size: 0.95rem;
@@ -187,13 +187,13 @@
 .documents-phase__input:focus,
 .documents-phase__textarea:focus {
   outline: none;
-  border-color: color-mix(in srgb, var(--accent-blue-500) 55%, transparent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
+  border-color: var(--token-surface-accent-alpha-55);
+  box-shadow: 0 0 0 3px var(--token-surface-accent-soft);
 }
 
 .documents-phase__input.is-invalid {
-  border-color: var(--accent-red-500);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-red-500) 18%, transparent);
+  border-color: var(--accent-danger);
+  box-shadow: 0 0 0 3px var(--token-surface-danger-soft);
 }
 
 .documents-phase__documents {
@@ -207,8 +207,8 @@
   gap: var(--space-3);
   padding: var(--space-4);
   border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 30%, transparent);
-  background: color-mix(in srgb, var(--color-bg-secondary) 92%, transparent);
+  border: 1px solid var(--token-border-neutral-alpha-30);
+  background: var(--token-surface-neutral-alpha-92);
 }
 
 .documents-phase__document--optional {
@@ -238,13 +238,13 @@
 }
 
 .documents-phase__badge--required {
-  background: color-mix(in srgb, var(--accent-blue-500) 22%, transparent);
-  color: var(--accent-blue-700);
+  background: var(--token-surface-accent-alpha-22);
+  color: var(--accent-primary-hover);
 }
 
 .documents-phase__badge--optional {
-  background: color-mix(in srgb, var(--accent-purple-500) 22%, transparent);
-  color: var(--accent-purple-700);
+  background: var(--token-surface-accent-alpha-22);
+  color: var(--accent-muted);
 }
 
 .documents-phase__upload {
@@ -253,7 +253,7 @@
   justify-items: center;
   padding: var(--space-4);
   border-radius: var(--radius-md);
-  border: 2px dashed color-mix(in srgb, var(--color-border-secondary) 40%, transparent);
+  border: 2px dashed var(--token-border-neutral-alpha-40);
   background: var(--color-bg-primary);
   color: var(--color-text-secondary);
   cursor: pointer;
@@ -261,8 +261,8 @@
 }
 
 .documents-phase__upload:hover {
-  border-color: color-mix(in srgb, var(--accent-blue-500) 55%, transparent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-blue-500) 14%, transparent);
+  border-color: var(--token-surface-accent-alpha-55);
+  box-shadow: 0 0 0 4px var(--token-surface-accent-alpha-14);
 }
 
 .documents-phase__upload-icon {
@@ -286,7 +286,7 @@
   padding: var(--space-3);
   border-radius: var(--radius-md);
   background: var(--color-bg-primary);
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+  border: 1px solid var(--token-border-neutral-soft);
 }
 
 .documents-phase__file-info {
@@ -319,7 +319,7 @@
 }
 
 .documents-phase__file-action--danger {
-  color: var(--accent-red-600);
+  color: var(--accent-danger);
 }
 
 .documents-phase__list {
@@ -334,7 +334,7 @@
   padding: var(--space-3);
   border-radius: var(--radius-md);
   background: var(--color-bg-primary);
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+  border: 1px solid var(--token-border-neutral-soft);
 }
 
 .documents-phase__checklist {
@@ -365,9 +365,9 @@
   width: 16px;
   height: 16px;
   border-radius: var(--radius-full);
-  border: 2px solid color-mix(in srgb, var(--color-border-secondary) 60%, transparent);
-  border-top-color: var(--accent-blue-500);
-  animation: documents-phase__spin 0.9s linear infinite;
+  border: 2px solid var(--token-border-neutral-alpha-60);
+  border-top-color: var(--accent-primary);
+  animation: documents-phase__pulse 1.2s ease-in-out infinite;
 }
 
 .documents-phase__quote {
@@ -380,14 +380,14 @@
 
 .documents-phase__quote-status {
   font-weight: 600;
-  color: var(--accent-blue-600);
+  color: var(--accent-primary-hover);
 }
 
 .documents-phase__validation {
   padding: var(--space-4);
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--accent-amber-500) 18%, transparent);
-  color: var(--accent-amber-900);
+  background: var(--token-surface-warning-alpha-18);
+  color: var(--accent-muted);
 }
 
 .documents-phase__validation-title {
@@ -424,7 +424,7 @@
   inset: 0;
   display: grid;
   place-items: center;
-  background: color-mix(in srgb, var(--color-neutral-950) 65%, transparent);
+  background: var(--token-surface-neutral-950-alpha-65);
   z-index: 999;
 }
 
@@ -473,8 +473,8 @@
 .documents-phase__next-step {
   padding: var(--space-3);
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--accent-blue-500) 15%, transparent);
-  color: var(--accent-blue-800);
+  background: var(--token-surface-accent-alpha-15);
+  color: var(--accent-primary-hover);
 }
 
 .documents-phase__modal-actions {

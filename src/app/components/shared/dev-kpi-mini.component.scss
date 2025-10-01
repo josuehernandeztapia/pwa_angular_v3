@@ -32,7 +32,7 @@
 
 @media (prefers-color-scheme: light) {
   .dev-kpi-card {
-    background: var(--surface-neutral-weak, var(--color-neutral-400));
+    background: var(--token-surface-muted, var(--color-neutral-400));
     border-color: var(--color-border-secondary);
     color: var(--color-text-primary);
   }

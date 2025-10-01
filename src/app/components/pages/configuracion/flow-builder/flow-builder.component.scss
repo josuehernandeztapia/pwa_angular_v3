@@ -56,12 +56,12 @@
 }
 
 .btn-primary {
-  background: var(--color-accent-primary);
+  background: var(--accent-primary);
   color: var(--color-text-primary-inverted);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--color-accent-primary-strong);
+  background: var(--accent-primary-hover);
 }
 
 .btn-primary:disabled {
@@ -328,7 +328,7 @@
 }
 
 .remove-btn:hover {
-  color: var(--color-danger, var(--accent-red-500));
+  color: var(--color-danger, var(--accent-danger));
 }
 
 .canvas-controls {
@@ -434,7 +434,7 @@
 
 .flow-node:hover {
   box-shadow: 0 4px 16px var(--color-text-primary);
-  transform: none;
+  transform: none; /* OpenAI no transforms */
 }
 
 .flow-node.node-selected {
@@ -516,7 +516,7 @@
 .node-ports {
   position: absolute;
   top: 50%;
-  transform: none;
+  transform: none; /* OpenAI no transforms */
 }
 
 .node-ports.inputs {
@@ -545,7 +545,7 @@
 .port-connector:hover {
   border-color: var(--color-text-primary);
   background: var(--color-text-primary);
-  transform: none;
+  transform: none; /* OpenAI no transforms */
 }
 
 /* Properties Panel */

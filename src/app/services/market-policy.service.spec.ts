@@ -37,7 +37,7 @@ describe('MarketPolicyService', () => {
     return { service, config, http };
   }
 
-  it('registers policies provided by remote configuration', () => {
+  it('registers policies provided by remote configuration', async () => {
     const remoteConfig = {
       ags: {
         documents: [
@@ -50,6 +50,7 @@ describe('MarketPolicyService', () => {
     };
 
     const { service, config } = createServiceWithRemoteConfig(remoteConfig);
+    await service.reloadRemotePolicies();
 
     expect(config.lastNamespace).toBe('markets/market-policies');
 
@@ -81,7 +82,7 @@ describe('MarketPolicyService', () => {
     expect(policy.documents.length).toBeGreaterThan(0);
   });
 
-  it('maps unknown remote keys to default market and preserves snapshot', () => {
+  it('maps unknown remote keys to default market and preserves snapshot', async () => {
     const remoteConfig: RemoteMarketPolicyConfig = {
       'custom-market': {
         documents: [{ id: 'doc-x', label: 'Doc X', optional: true }],
@@ -90,6 +91,7 @@ describe('MarketPolicyService', () => {
     };
 
     const { service } = createServiceWithRemoteConfig(remoteConfig);
+    await service.reloadRemotePolicies();
     const fallbackContext: MarketPolicyContext = {
       market: 'otros',
       clientType: 'individual',
@@ -113,6 +115,7 @@ describe('MarketPolicyService', () => {
     };
 
     const { service, http } = createServiceWithRemoteConfig(remoteConfig, true);
+    await service.reloadRemotePolicies();
     const updatedConfig: RemoteMarketPolicyConfig = {
       ags: {
         documents: [{ id: 'doc-updated', label: 'Documento Actualizado' }],

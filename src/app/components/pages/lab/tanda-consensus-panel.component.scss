@@ -96,8 +96,8 @@
 
     &:focus {
       outline: none;
-      border-color: var(--accent-blue-500);
-      box-shadow: 0 0 0 3px var(--accent-blue-500);
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-primary);
     }
 
     @media (prefers-color-scheme: dark) {
@@ -116,30 +116,30 @@
     padding: 10px 16px;
     border-radius: 10px;
     border: 1px solid transparent;
-    background: var(--accent-blue-500);
+    background: var(--accent-primary);
     color: var(--flat-surface-bg, var(--openai-white));
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s ease, transform 0.2s ease;
 
     &:hover {
-      background: var(--accent-blue-600);
-      transform: none;
+      background: var(--accent-primary-hover);
+      transform: none; /* OpenAI no transforms */
     }
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 3px var(--accent-blue-500);
+      box-shadow: 0 0 0 3px var(--accent-primary);
     }
   }
 
   &__feedback {
     margin: 0;
     font-size: 0.875rem;
-    color: var(--accent-blue-600);
+    color: var(--accent-primary-hover);
 
     @media (prefers-color-scheme: dark) {
-      color: var(--accent-blue-300);
+      color: var(--token-surface-accent-strong);
     }
   }
 
@@ -196,9 +196,9 @@
 }
 
 .tanda-consensus__status-icon--go {
-  color: var(--accent-green-600);
+  color: var(--accent-primary-hover);
 }
 
 .tanda-consensus__status-icon--no-go {
-  color: var(--accent-red-500);
+  color: var(--accent-danger);
 }

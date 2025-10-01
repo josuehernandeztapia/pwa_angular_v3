@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { render, screen, waitFor, fireEvent } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { LoginComponent } from './login.component';
+import { buildComponentTestProviders } from '../../../../test-helpers/component-test-providers';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -11,12 +12,14 @@ describe('LoginComponent', () => {
   let mockRouter: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const providerSetup = buildComponentTestProviders();
+    mockRouter = providerSetup.mocks.router;
+    mockRouter.navigate.and.returnValue(Promise.resolve(true));
 
     await TestBed.configureTestingModule({
       imports: [LoginComponent, ReactiveFormsModule],
       providers: [
-        { provide: Router, useValue: routerSpy }
+        ...providerSetup.providers
       ]
     }).compileComponents();
 
@@ -143,12 +146,9 @@ describe('LoginComponent', () => {
 
 describe('LoginComponent Integration Tests', () => {
   it('should render login form with all required fields', async () => {
-    const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-    
+    const { providers } = buildComponentTestProviders();
     await render(LoginComponent, {
-      providers: [
-        { provide: Router, useValue: mockRouter }
-      ]
+      providers
     });
 
     expect(screen.getByText('Conductores')).toBeTruthy();
@@ -160,12 +160,9 @@ describe('LoginComponent Integration Tests', () => {
   });
 
   it('should show validation errors when form is submitted empty', async () => {
-    const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-    
+    const { providers } = buildComponentTestProviders();
     await render(LoginComponent, {
-      providers: [
-        { provide: Router, useValue: mockRouter }
-      ]
+      providers
     });
 
     const emailInput = screen.getByLabelText('Correo electrónico');
@@ -181,13 +178,13 @@ describe('LoginComponent Integration Tests', () => {
   });
 
   it('should show email format error for invalid email', async () => {
-    const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    const { providers, mocks } = buildComponentTestProviders();
+    const mockRouter = mocks.router;
+    mockRouter.navigate.and.returnValue(Promise.resolve(true));
     const user = userEvent.setup();
     
     await render(LoginComponent, {
-      providers: [
-        { provide: Router, useValue: mockRouter }
-      ]
+      providers
     });
 
     const emailInput = screen.getByLabelText('Correo electrónico');
@@ -200,13 +197,13 @@ describe('LoginComponent Integration Tests', () => {
   });
 
   it('should enable submit button when form is valid', async () => {
-    const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    const { providers, mocks } = buildComponentTestProviders();
+    const mockRouter = mocks.router;
+    mockRouter.navigate.and.returnValue(Promise.resolve(true));
     const user = userEvent.setup();
     
     await render(LoginComponent, {
-      providers: [
-        { provide: Router, useValue: mockRouter }
-      ]
+      providers
     });
 
     const emailInput = screen.getByLabelText('Correo electrónico');
@@ -220,13 +217,13 @@ describe('LoginComponent Integration Tests', () => {
   });
 
   it('should handle form submission with valid data', async () => {
-    const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    const { providers, mocks } = buildComponentTestProviders();
+    const mockRouter = mocks.router;
+    mockRouter.navigate.and.returnValue(Promise.resolve(true));
     const user = userEvent.setup();
     
     await render(LoginComponent, {
-      providers: [
-        { provide: Router, useValue: mockRouter }
-      ]
+      providers
     });
 
     const emailInput = screen.getByLabelText('Correo electrónico');
@@ -242,13 +239,13 @@ describe('LoginComponent Integration Tests', () => {
   });
 
   it('should toggle password visibility', async () => {
-    const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    const { providers, mocks } = buildComponentTestProviders();
+    const mockRouter = mocks.router;
+    mockRouter.navigate.and.returnValue(Promise.resolve(true));
     const user = userEvent.setup();
     
     const { container } = await render(LoginComponent, {
-      providers: [
-        { provide: Router, useValue: mockRouter }
-      ]
+      providers
     });
 
     const passwordInput = screen.getByLabelText('Contraseña', { selector: 'input#password' }) as HTMLInputElement;
@@ -263,12 +260,9 @@ describe('LoginComponent Integration Tests', () => {
   });
 
   it('should have proper accessibility attributes', async () => {
-    const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-    
+    const { providers } = buildComponentTestProviders();
     await render(LoginComponent, {
-      providers: [
-        { provide: Router, useValue: mockRouter }
-      ]
+      providers
     });
 
     const emailInput = screen.getByLabelText('Correo electrónico');
@@ -280,12 +274,9 @@ describe('LoginComponent Integration Tests', () => {
   });
 
   it('should display brand information', async () => {
-    const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-    
+    const { providers } = buildComponentTestProviders();
     await render(LoginComponent, {
-      providers: [
-        { provide: Router, useValue: mockRouter }
-      ]
+      providers
     });
 
     expect(screen.getByText('Conductores')).toBeTruthy();

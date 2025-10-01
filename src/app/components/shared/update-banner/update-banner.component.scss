@@ -1,23 +1,26 @@
 .update-banner {
   position: fixed;
-  left: 50%;
+  left: 0;
+  right: 0;
   bottom: var(--space-16, 16px);
-  transform: translate(-50%, 12px);
   display: inline-flex;
   border-radius: 999px;
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   color: var(--flat-surface-bg, var(--openai-white));
   box-shadow: 0 12px 24px rgba(8, 8, 8, 0.24);
   padding: 0;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--transition-fast, 0.3s ease), transform var(--transition-fast, 0.3s ease);
+  transition: opacity var(--transition-fast, 0.3s ease), margin-bottom var(--transition-fast, 0.3s ease);
   z-index: 1100;
+  margin-inline: auto;
+  width: max-content;
+  margin-bottom: -12px;
 
   &--visible {
     opacity: 1;
     pointer-events: auto;
-    transform: translate(-50%, 0);
+    margin-bottom: 0;
   }
 
   &--hidden {
@@ -41,17 +44,17 @@
     border: none;
     border-radius: 999px;
     background: var(--flat-surface-bg, var(--openai-white));
-    color: var(--accent-blue-600);
+    color: var(--accent-primary-hover);
     font-size: 0.875rem;
     font-weight: var(--font-weight-semibold, 600);
     padding: 0.5rem 1rem;
     cursor: pointer;
-    transition: transform var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
+    transition: box-shadow var(--transition-quick, 0.2s ease), margin-top var(--transition-quick, 0.2s ease);
   }
 
   &__action:hover,
   &__action:focus-visible {
-    transform: translateY(-1px);
+    margin-top: -1px;
     box-shadow: var(--shadow-md, 0 2px 4px rgba(8, 8, 8, 0.16));
     outline: none;
   }

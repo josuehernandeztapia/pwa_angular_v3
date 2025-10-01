@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContractGenerationComponent } from './contract-generation.component';
+import { buildComponentTestProviders } from '../../../../test-helpers/component-test-providers';
 import { FlowContextService } from '../../../services/flow-context.service';
 import { ContractContextSnapshot } from '../../../models/contract-context';
 
@@ -19,10 +20,14 @@ describe('ContractGenerationComponent', () => {
 
   beforeEach(async () => {
     flowContext = new FlowContextServiceStub();
+    const providerSetup = buildComponentTestProviders();
 
     await TestBed.configureTestingModule({
       imports: [ContractGenerationComponent],
-      providers: [{ provide: FlowContextService, useValue: flowContext }]
+      providers: [
+        ...providerSetup.providers,
+        { provide: FlowContextService, useValue: flowContext }
+      ]
     }).compileComponents();
   });
 

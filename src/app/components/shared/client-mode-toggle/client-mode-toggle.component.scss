@@ -4,18 +4,18 @@
 
 .client-mode-toggle {
   --mode-surface: var(--flat-surface-bg);
-  --mode-surface-muted: var(--surface-neutral-weak);
-  --mode-surface-dark: color-mix(in srgb, var(--color-neutral-900) 88%, transparent);
+  --mode-surface-muted: var(--token-surface-muted);
+  --mode-surface-dark: var(--token-overlay-neutral-alpha-88);
   --mode-border: var(--border-neutral-weak);
   --mode-border-strong: var(--border-neutral-strong);
-  --mode-info: var(--accent-blue-500);
-  --mode-info-light: var(--accent-blue-400);
-  --mode-info-strong: var(--accent-blue-600);
-  --mode-overlay: color-mix(in srgb, var(--openai-black) 88%, transparent);
-  --mode-shadow-base: 0 6px 16px color-mix(in srgb, var(--openai-black) 8%, transparent);
-  --mode-shadow-hover: 0 8px 20px color-mix(in srgb, var(--openai-black) 12%, transparent);
-  --mode-shadow-dark: 0 10px 24px color-mix(in srgb, var(--openai-black) 35%, transparent);
-  --mode-handle-shadow: 0 3px 6px color-mix(in srgb, var(--openai-black) 15%, transparent);
+  --mode-info: var(--accent-primary);
+  --mode-info-light: var(--accent-primary);
+  --mode-info-strong: var(--accent-primary-hover);
+  --mode-overlay: var(--token-surface-inverse-alpha-88);
+  --mode-shadow-base: 0 6px 16px var(--token-surface-inverse-alpha-08);
+  --mode-shadow-hover: 0 8px 20px var(--token-surface-inverse-alpha-12);
+  --mode-shadow-dark: 0 10px 24px var(--token-surface-inverse-alpha-35);
+  --mode-handle-shadow: 0 3px 6px var(--token-surface-inverse-alpha-15);
 
   position: relative;
 }
@@ -38,7 +38,7 @@
   }
 
   &:hover {
-    border-color: color-mix(in srgb, var(--mode-border-strong) 45%, transparent);
+    border-color: var(--token-border-mode-strong-alpha-45);
     box-shadow: var(--mode-shadow-hover);
   }
 }
@@ -118,18 +118,18 @@
   }
 
   &--client {
-    background: color-mix(in srgb, var(--mode-info) 14%, transparent);
+    background: var(--token-mode-info-alpha-14);
     border-color: var(--mode-info);
 
     @media (prefers-color-scheme: dark) {
-      background: color-mix(in srgb, var(--mode-info) 25%, transparent);
+      background: var(--token-mode-info-alpha-25);
       border-color: var(--mode-info-strong);
     }
 
     .client-mode-toggle__handle {
       left: calc(100% - 28px);
       background: var(--mode-surface);
-      border-color: color-mix(in srgb, var(--mode-info) 30%, transparent);
+      border-color: var(--token-mode-info-alpha-30);
     }
   }
 }
@@ -150,7 +150,7 @@
   transition: left 0.2s ease, background 0.2s ease;
 
   @media (prefers-color-scheme: dark) {
-    background: color-mix(in srgb, var(--color-neutral-900) 80%, transparent);
+    background: var(--token-overlay-neutral-alpha-80);
     border-color: var(--mode-border-strong);
   }
 }
@@ -242,7 +242,7 @@
 .client-mode-toggle__overlay-description {
   margin: 0;
   font-size: 0.95rem;
-  color: color-mix(in srgb, var(--openai-white) 72%, transparent);
+  color: var(--token-surface-inverse-light-alpha-72);
 }
 
 .client-mode-toggle__loading {
@@ -266,11 +266,11 @@
 
 @keyframes client-mode-toggle-loading {
   0%, 80%, 100% {
-    transform: none;
+    transform: none; /* OpenAI no transforms */
     opacity: 0.4;
   }
   40% {
-    transform: none;
+    transform: none; /* OpenAI no transforms */
     opacity: 1;
   }
 }

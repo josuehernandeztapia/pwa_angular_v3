@@ -1,0 +1,445 @@
+/* Semantic tokens derived from core palette. */
+:root {
+  /* State aliases */
+  --state-success: var(--accent-primary);
+  --state-warning: var(--accent-muted);
+  --state-error: var(--accent-danger);
+  --state-info: var(--accent-primary);
+
+  /* CTA & interactive */
+  --token-cta-bg: var(--accent-primary);
+  --token-cta-bg-hover: var(--accent-primary-hover);
+  --token-cta-text: var(--openai-white);
+  --token-cta-border: var(--border-accent-strong);
+
+  --token-link: var(--accent-primary);
+  --token-link-hover: var(--accent-primary-hover);
+
+  /* Surfaces */
+  --token-surface-default: var(--color-bg-primary);
+  --token-surface-muted: var(--surface-neutral-weak);
+  --token-surface-elevated: var(--surface-neutral-strong);
+  --token-surface-accent-weak: var(--surface-accent-weak);
+  --token-surface-accent-strong: var(--surface-accent-strong);
+  --token-surface-danger: var(--surface-danger-weak);
+  --token-surface-danger-strong: var(--surface-danger-strong);
+  --token-surface-accent-soft: color-mix(in srgb, var(--accent-primary) 18%, transparent);
+  --token-surface-accent-tint: color-mix(in srgb, var(--accent-primary) 12%, transparent);
+  --token-surface-danger-soft: color-mix(in srgb, var(--accent-danger) 18%, transparent);
+
+  /* Surface overlays (transparent mixes) */
+  --token-surface-default-alpha-45: color-mix(in srgb, var(--color-bg-primary) 45%, transparent);
+  --token-surface-accent-alpha-08: color-mix(in srgb, var(--accent-primary) 8%, transparent);
+  --token-surface-accent-alpha-10: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+  --token-surface-accent-alpha-14: color-mix(in srgb, var(--accent-primary) 14%, transparent);
+  --token-surface-accent-alpha-15: color-mix(in srgb, var(--accent-primary) 15%, transparent);
+  --token-surface-accent-alpha-16: color-mix(in srgb, var(--accent-primary) 16%, transparent);
+  --token-surface-accent-alpha-20: color-mix(in srgb, var(--accent-primary) 20%, transparent);
+  --token-surface-accent-alpha-22: color-mix(in srgb, var(--accent-primary) 22%, transparent);
+  --token-surface-accent-alpha-24: color-mix(in srgb, var(--accent-primary) 24%, transparent);
+  --token-surface-accent-alpha-25: color-mix(in srgb, var(--accent-primary) 25%, transparent);
+  --token-surface-accent-alpha-28: color-mix(in srgb, var(--accent-primary) 28%, transparent);
+  --token-surface-accent-alpha-30: color-mix(in srgb, var(--accent-primary) 30%, transparent);
+  --token-surface-accent-alpha-32: color-mix(in srgb, var(--accent-primary) 32%, transparent);
+  --token-surface-accent-alpha-35: color-mix(in srgb, var(--accent-primary) 35%, transparent);
+  --token-surface-accent-alpha-40: color-mix(in srgb, var(--accent-primary) 40%, transparent);
+  --token-surface-accent-alpha-55: color-mix(in srgb, var(--accent-primary) 55%, transparent);
+  --token-surface-accent-alpha-60: color-mix(in srgb, var(--accent-primary) 60%, transparent);
+  --token-surface-accent-alpha-85: color-mix(in srgb, var(--accent-primary) 85%, transparent);
+  --token-surface-accent-blend-accent-primary-85: color-mix(in srgb, var(--accent-primary) 85%, var(--accent-primary) 15%);
+  --token-surface-accent-hover-alpha-25: color-mix(in srgb, var(--accent-primary-hover) 25%, transparent);
+  --token-surface-accent-hover-blend-accent-primary-70: color-mix(in srgb, var(--accent-primary-hover) 70%, var(--accent-primary) 30%);
+  --token-surface-danger-alpha-10: color-mix(in srgb, var(--accent-danger) 10%, transparent);
+  --token-surface-danger-alpha-12: color-mix(in srgb, var(--accent-danger) 12%, transparent);
+  --token-surface-danger-alpha-20: color-mix(in srgb, var(--accent-danger) 20%, transparent);
+  --token-surface-danger-alpha-22: color-mix(in srgb, var(--accent-danger) 22%, transparent);
+  --token-surface-danger-alpha-25: color-mix(in srgb, var(--accent-danger) 25%, transparent);
+  --token-surface-danger-alpha-30: color-mix(in srgb, var(--accent-danger) 30%, transparent);
+  --token-surface-danger-alpha-32: color-mix(in srgb, var(--accent-danger) 32%, transparent);
+  --token-surface-danger-alpha-35: color-mix(in srgb, var(--accent-danger) 35%, transparent);
+  --token-surface-danger-alpha-40: color-mix(in srgb, var(--accent-danger) 40%, transparent);
+  --token-surface-danger-alpha-45: color-mix(in srgb, var(--accent-danger) 45%, transparent);
+  --token-surface-danger-alpha-85: color-mix(in srgb, var(--accent-danger) 85%, transparent);
+  --token-surface-warning-alpha-10: color-mix(in srgb, var(--accent-muted) 10%, transparent);
+  --token-surface-warning-alpha-12: color-mix(in srgb, var(--accent-muted) 12%, transparent);
+  --token-surface-warning-alpha-15: color-mix(in srgb, var(--accent-muted) 15%, transparent);
+  --token-surface-warning-alpha-16: color-mix(in srgb, var(--accent-muted) 16%, transparent);
+  --token-surface-warning-alpha-18: color-mix(in srgb, var(--accent-muted) 18%, transparent);
+  --token-surface-warning-alpha-25: color-mix(in srgb, var(--accent-muted) 25%, transparent);
+  --token-surface-warning-alpha-30: color-mix(in srgb, var(--accent-muted) 30%, transparent);
+  --token-surface-warning-alpha-35: color-mix(in srgb, var(--accent-muted) 35%, transparent);
+  --token-surface-warning-alpha-40: color-mix(in srgb, var(--accent-muted) 40%, transparent);
+  --token-surface-warning-alpha-45: color-mix(in srgb, var(--accent-muted) 45%, transparent);
+  --token-surface-warning-blend-color-warning-500-80: color-mix(in srgb, var(--color-warning-400) 80%, var(--color-warning-500) 20%);
+  --token-surface-neutral-alpha-85: color-mix(in srgb, var(--color-bg-secondary) 85%, transparent);
+  --token-surface-neutral-alpha-90: color-mix(in srgb, var(--color-bg-secondary) 90%, transparent);
+  --token-surface-neutral-alpha-92: color-mix(in srgb, var(--color-bg-secondary) 92%, transparent);
+  --token-surface-neutral-400-alpha-18: color-mix(in srgb, var(--color-neutral-400) 18%, transparent);
+  --token-surface-neutral-400-alpha-20: color-mix(in srgb, var(--color-neutral-400) 20%, transparent);
+  --token-surface-neutral-400-alpha-25: color-mix(in srgb, var(--color-neutral-400) 25%, transparent);
+  --token-surface-neutral-400-alpha-36: color-mix(in srgb, var(--color-neutral-400) 36%, transparent);
+  --token-surface-neutral-400-tint-16: color-mix(in srgb, var(--color-neutral-400) 16%, var(--openai-white));
+  --token-surface-neutral-700-alpha-40: color-mix(in srgb, var(--color-neutral-700) 40%, transparent);
+  --token-surface-neutral-800-alpha-70: color-mix(in srgb, var(--color-neutral-800) 70%, transparent);
+  --token-surface-neutral-800-alpha-80: color-mix(in srgb, var(--color-neutral-800) 80%, transparent);
+  --token-surface-neutral-800-alpha-85: color-mix(in srgb, var(--color-neutral-800) 85%, transparent);
+  --token-surface-flat-alpha-20: color-mix(in srgb, var(--flat-surface-bg) 20%, transparent);
+  --token-surface-flat-alpha-92: color-mix(in srgb, var(--flat-surface-bg) 92%, transparent);
+  --token-surface-inverse-alpha-12: color-mix(in srgb, var(--openai-black) 12%, transparent);
+  --token-surface-inverse-alpha-14: color-mix(in srgb, var(--openai-black) 14%, transparent);
+  --token-surface-inverse-alpha-18: color-mix(in srgb, var(--openai-black) 18%, transparent);
+  --token-surface-inverse-alpha-20: color-mix(in srgb, var(--openai-black) 20%, transparent);
+  --token-surface-inverse-alpha-40: color-mix(in srgb, var(--openai-black) 40%, transparent);
+  --token-surface-inverse-light-alpha-30: color-mix(in srgb, var(--openai-white) 30%, transparent);
+
+  /* Borders */
+  --token-border-default: var(--color-border-secondary);
+  --token-border-strong: var(--border-neutral-strong);
+  --token-border-accent: var(--border-accent-strong);
+  --token-border-accent-weak: var(--border-accent-weak);
+  --token-border-danger: var(--border-danger-strong);
+  --token-border-accent-soft: color-mix(in srgb, var(--accent-primary) 45%, transparent);
+  --token-border-neutral-soft: color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+
+  /* Border overlays */
+  --token-border-neutral-alpha-12: color-mix(in srgb, var(--color-border-secondary) 12%, transparent);
+  --token-border-neutral-alpha-18: color-mix(in srgb, var(--color-border-secondary) 18%, transparent);
+  --token-border-neutral-alpha-20: color-mix(in srgb, var(--color-border-secondary) 20%, transparent);
+  --token-border-neutral-alpha-30: color-mix(in srgb, var(--color-border-secondary) 30%, transparent);
+  --token-border-neutral-alpha-40: color-mix(in srgb, var(--color-border-secondary) 40%, transparent);
+  --token-border-neutral-alpha-45: color-mix(in srgb, var(--color-border-secondary) 45%, transparent);
+  --token-border-neutral-alpha-50: color-mix(in srgb, var(--color-border-secondary) 50%, transparent);
+  --token-border-neutral-alpha-55: color-mix(in srgb, var(--color-border-secondary) 55%, transparent);
+  --token-border-neutral-alpha-60: color-mix(in srgb, var(--color-border-secondary) 60%, transparent);
+  --token-border-neutral-alpha-65: color-mix(in srgb, var(--color-border-secondary) 65%, transparent);
+  --token-border-neutral-weak-alpha-35: color-mix(in srgb, var(--border-neutral-weak) 35%, transparent);
+  --token-border-neutral-weak-alpha-40: color-mix(in srgb, var(--border-neutral-weak) 40%, transparent);
+  --token-border-neutral-weak-alpha-45: color-mix(in srgb, var(--border-neutral-weak) 45%, transparent);
+  --token-border-neutral-weak-alpha-50: color-mix(in srgb, var(--border-neutral-weak) 50%, transparent);
+  --token-border-neutral-strong-alpha-55: color-mix(in srgb, var(--border-neutral-strong) 55%, transparent);
+  --token-border-primary-alpha-35: color-mix(in srgb, var(--color-border-primary) 35%, transparent);
+
+  /* Overlay neutrals */
+  --token-overlay-neutral-alpha-40: color-mix(in srgb, var(--color-neutral-900) 40%, transparent);
+  --token-overlay-neutral-alpha-70: color-mix(in srgb, var(--color-neutral-900) 70%, transparent);
+  --token-overlay-neutral-alpha-80: color-mix(in srgb, var(--color-neutral-900) 80%, transparent);
+  --token-overlay-neutral-alpha-85: color-mix(in srgb, var(--color-neutral-900) 85%, transparent);
+  --token-overlay-neutral-alpha-88: color-mix(in srgb, var(--color-neutral-900) 88%, transparent);
+  --token-overlay-neutral-alpha-90: color-mix(in srgb, var(--color-neutral-900) 90%, transparent);
+  --token-overlay-neutral-alpha-92: color-mix(in srgb, var(--color-neutral-900) 92%, transparent);
+
+  /* Text */
+  --token-text-primary: var(--color-text-primary);
+  --token-text-secondary: var(--color-text-secondary);
+  --token-text-tertiary: var(--color-text-tertiary);
+  --token-text-inverse: var(--openai-white);
+  --token-text-muted: var(--accent-muted);
+  --token-text-danger: var(--accent-danger);
+
+  /* Text overlays */
+  --token-text-primary-blend-color-text-secondary-92: color-mix(in srgb, var(--color-text-primary) 92%, var(--color-text-secondary) 8%);
+  --token-text-secondary-alpha-85: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  --token-text-secondary-alpha-90: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+  --token-text-secondary-blend-color-text-primary-85: color-mix(in srgb, var(--color-text-secondary) 85%, var(--color-text-primary) 15%);
+  --token-text-tertiary-alpha-12: color-mix(in srgb, var(--color-text-tertiary) 12%, transparent);
+  --token-text-tertiary-alpha-30: color-mix(in srgb, var(--color-text-tertiary) 30%, transparent);
+
+  /* Auto Border */
+  --token-border-mode-strong-alpha-45: color-mix(in srgb, var(--mode-border-strong) 45%, transparent);
+  --token-border-neutral-alpha-08: color-mix(in srgb, var(--color-border-secondary) 8%, transparent);
+  --token-border-neutral-alpha-10: color-mix(in srgb, var(--color-border-secondary) 10%, transparent);
+  --token-border-neutral-alpha-14: color-mix(in srgb, var(--color-border-secondary) 14%, transparent);
+  --token-border-neutral-alpha-15: color-mix(in srgb, var(--color-border-secondary) 15%, transparent);
+  --token-border-neutral-alpha-16: color-mix(in srgb, var(--color-border-secondary) 16%, transparent);
+  --token-border-neutral-alpha-25: color-mix(in srgb, var(--color-border-secondary) 25%, transparent);
+  --token-border-neutral-alpha-38: color-mix(in srgb, var(--color-border-secondary) 38%, transparent);
+  --token-border-neutral-alpha-90: color-mix(in srgb, var(--color-border-secondary) 90%, transparent);
+  --token-border-neutral-strong-alpha-40: color-mix(in srgb, var(--border-neutral-strong) 40%, transparent);
+  --token-border-neutral-strong-alpha-45: color-mix(in srgb, var(--border-neutral-strong) 45%, transparent);
+  --token-border-neutral-strong-alpha-60: color-mix(in srgb, var(--border-neutral-strong) 60%, transparent);
+  --token-border-neutral-tint-65: color-mix(in srgb, var(--color-border-secondary) 65%, var(--openai-white) 35%);
+  --token-border-neutral-weak-alpha-28: color-mix(in srgb, var(--border-neutral-weak) 28%, transparent);
+  --token-border-neutral-weak-alpha-30: color-mix(in srgb, var(--border-neutral-weak) 30%, transparent);
+  --token-border-neutral-weak-alpha-55: color-mix(in srgb, var(--border-neutral-weak) 55%, transparent);
+  --token-border-neutral-weak-alpha-60: color-mix(in srgb, var(--border-neutral-weak) 60%, transparent);
+  --token-border-primary-alpha-20: color-mix(in srgb, var(--color-border-primary) 20%, transparent);
+  --token-border-primary-alpha-25: color-mix(in srgb, var(--color-border-primary) 25%, transparent);
+  --token-border-primary-alpha-40: color-mix(in srgb, var(--color-border-primary) 40%, transparent);
+  --token-border-primary-alpha-45: color-mix(in srgb, var(--color-border-primary) 45%, transparent);
+  --token-border-primary-alpha-60: color-mix(in srgb, var(--color-border-primary) 60%, transparent);
+  --token-border-primary-alpha-65: color-mix(in srgb, var(--color-border-primary) 65%, transparent);
+  --token-border-risk-radar-alpha-35: color-mix(in srgb, var(--risk-radar-border) 35%, transparent);
+  --token-border-risk-radar-alpha-40: color-mix(in srgb, var(--risk-radar-border) 40%, transparent);
+  --token-border-risk-radar-alpha-45: color-mix(in srgb, var(--risk-radar-border) 45%, transparent);
+  --token-border-risk-radar-alpha-50: color-mix(in srgb, var(--risk-radar-border) 50%, transparent);
+
+  /* Auto Color */
+  --token-color-neutral-200-alpha-70: color-mix(in srgb, var(--color-neutral-200) 70%, transparent);
+  --token-color-primary-200-alpha-40: color-mix(in srgb, var(--color-primary-200) 40%, transparent);
+  --token-color-primary-200-alpha-60: color-mix(in srgb, var(--color-primary-200) 60%, transparent);
+  --token-color-primary-200-alpha-65: color-mix(in srgb, var(--color-primary-200) 65%, transparent);
+  --token-color-primary-300-alpha-40: color-mix(in srgb, var(--color-primary-300) 40%, transparent);
+  --token-color-primary-300-alpha-60: color-mix(in srgb, var(--color-primary-300) 60%, transparent);
+  --token-color-primary-300-alpha-70: color-mix(in srgb, var(--color-primary-300) 70%, transparent);
+  --token-color-primary-300-alpha-80: color-mix(in srgb, var(--color-primary-300) 80%, transparent);
+  --token-color-primary-700-alpha-90: color-mix(in srgb, var(--color-primary-700) 90%, transparent);
+  --token-color-primary-800-alpha-75: color-mix(in srgb, var(--color-primary-800) 75%, transparent);
+  --token-color-primary-800-alpha-85: color-mix(in srgb, var(--color-primary-800) 85%, transparent);
+
+  /* Auto Manual */
+  --token-manual-border-alpha-32: color-mix(in srgb, var(--manual-border) 32%, transparent);
+  --token-manual-border-alpha-40: color-mix(in srgb, var(--manual-border) 40%, transparent);
+  --token-manual-border-alpha-45: color-mix(in srgb, var(--manual-border) 45%, transparent);
+  --token-manual-border-alpha-55: color-mix(in srgb, var(--manual-border) 55%, transparent);
+  --token-manual-border-strong-alpha-50: color-mix(in srgb, var(--manual-border-strong) 50%, transparent);
+  --token-manual-border-strong-alpha-55: color-mix(in srgb, var(--manual-border-strong) 55%, transparent);
+  --token-manual-border-strong-alpha-60: color-mix(in srgb, var(--manual-border-strong) 60%, transparent);
+  --token-manual-warning-alpha-20: color-mix(in srgb, var(--manual-warning) 20%, transparent);
+  --token-manual-warning-alpha-28: color-mix(in srgb, var(--manual-warning) 28%, transparent);
+  --token-manual-warning-alpha-40: color-mix(in srgb, var(--manual-warning) 40%, transparent);
+  --token-manual-warning-blend-manual-surface-muted-12: color-mix(in srgb, var(--manual-warning) 12%, var(--manual-surface-muted) 88%);
+  --token-manual-warning-shade-18: color-mix(in srgb, var(--manual-warning) 18%, var(--color-neutral-900) 82%);
+
+  /* Auto Mode */
+  --token-mode-info-alpha-14: color-mix(in srgb, var(--mode-info) 14%, transparent);
+  --token-mode-info-alpha-25: color-mix(in srgb, var(--mode-info) 25%, transparent);
+  --token-mode-info-alpha-30: color-mix(in srgb, var(--mode-info) 30%, transparent);
+
+  /* Auto Neutral */
+  --token-neutral-700-alpha-55: color-mix(in srgb, var(--neutral-700) 55%, transparent);
+  --token-neutral-700-alpha-60: color-mix(in srgb, var(--neutral-700) 60%, transparent);
+  --token-neutral-900-alpha-85: color-mix(in srgb, var(--neutral-900) 85%, transparent);
+  --token-neutral-900-alpha-88: color-mix(in srgb, var(--neutral-900) 88%, transparent);
+  --token-neutral-900-alpha-92: color-mix(in srgb, var(--neutral-900) 92%, transparent);
+  --token-neutral-900-alpha-94: color-mix(in srgb, var(--neutral-900) 94%, transparent);
+
+  /* Auto Overlay */
+  --token-overlay-neutral-alpha-06: color-mix(in srgb, var(--color-neutral-900) 6%, transparent);
+  --token-overlay-neutral-alpha-08: color-mix(in srgb, var(--color-neutral-900) 8%, transparent);
+  --token-overlay-neutral-alpha-15: color-mix(in srgb, var(--color-neutral-900) 15%, transparent);
+  --token-overlay-neutral-alpha-20: color-mix(in srgb, var(--color-neutral-900) 20%, transparent);
+  --token-overlay-neutral-alpha-35: color-mix(in srgb, var(--color-neutral-900) 35%, transparent);
+  --token-overlay-neutral-alpha-55: color-mix(in srgb, var(--color-neutral-900) 55%, transparent);
+  --token-overlay-neutral-alpha-60: color-mix(in srgb, var(--color-neutral-900) 60%, transparent);
+  --token-overlay-neutral-alpha-65: color-mix(in srgb, var(--color-neutral-900) 65%, transparent);
+  --token-overlay-neutral-alpha-75: color-mix(in srgb, var(--color-neutral-900) 75%, transparent);
+  --token-overlay-neutral-alpha-78: color-mix(in srgb, var(--color-neutral-900) 78%, transparent);
+  --token-overlay-neutral-alpha-94: color-mix(in srgb, var(--color-neutral-900) 94%, transparent);
+  --token-overlay-neutral-alpha-95: color-mix(in srgb, var(--color-neutral-900) 95%, transparent);
+  --token-overlay-neutral-alpha-96: color-mix(in srgb, var(--color-neutral-900) 96%, transparent);
+  --token-overlay-neutral-blend-manual-surface-muted-06: color-mix(in srgb, var(--color-neutral-900) 6%, var(--manual-surface-muted) 94%);
+  --token-overlay-neutral-blend-manual-surface-muted-10: color-mix(in srgb, var(--color-neutral-900) 10%, var(--manual-surface-muted) 90%);
+  --token-overlay-surface-alpha-55: color-mix(in srgb, var(--color-bg-overlay) 55%, transparent);
+  --token-overlay-surface-alpha-60: color-mix(in srgb, var(--color-bg-overlay) 60%, transparent);
+
+  /* Auto Premium */
+  --token-premium-loading-color-alpha-15: color-mix(in srgb, var(--premium-loading-color) 15%, transparent);
+  --token-premium-loading-color-alpha-16: color-mix(in srgb, var(--premium-loading-color) 16%, transparent);
+  --token-premium-loading-color-alpha-25: color-mix(in srgb, var(--premium-loading-color) 25%, transparent);
+  --token-premium-loading-color-alpha-28: color-mix(in srgb, var(--premium-loading-color) 28%, transparent);
+  --token-premium-loading-color-alpha-40: color-mix(in srgb, var(--premium-loading-color) 40%, transparent);
+  --token-premium-loading-color-alpha-50: color-mix(in srgb, var(--premium-loading-color) 50%, transparent);
+
+  /* Auto Risk */
+  --token-risk-radar-danger-alpha-12: color-mix(in srgb, var(--risk-radar-danger) 12%, transparent);
+  --token-risk-radar-danger-alpha-18: color-mix(in srgb, var(--risk-radar-danger) 18%, transparent);
+  --token-risk-radar-danger-alpha-35: color-mix(in srgb, var(--risk-radar-danger) 35%, transparent);
+  --token-risk-radar-danger-alpha-45: color-mix(in srgb, var(--risk-radar-danger) 45%, transparent);
+  --token-risk-radar-danger-shade-85: color-mix(in srgb, var(--risk-radar-danger) 85%, var(--color-neutral-900) 15%);
+
+  /* Auto Surface */
+  --token-surface-accent-alpha-26: color-mix(in srgb, var(--accent-primary) 26%, transparent);
+  --token-surface-accent-alpha-34: color-mix(in srgb, var(--accent-primary) 34%, transparent);
+  --token-surface-accent-alpha-36: color-mix(in srgb, var(--accent-primary) 36%, transparent);
+  --token-surface-accent-alpha-50: color-mix(in srgb, var(--accent-primary) 50%, transparent);
+  --token-surface-accent-alpha-65: color-mix(in srgb, var(--accent-primary) 65%, transparent);
+  --token-surface-accent-alpha-70: color-mix(in srgb, var(--accent-primary) 70%, transparent);
+  --token-surface-accent-alpha-75: color-mix(in srgb, var(--accent-primary) 75%, transparent);
+  --token-surface-accent-alpha-80: color-mix(in srgb, var(--accent-primary) 80%, transparent);
+  --token-surface-accent-alpha-88: color-mix(in srgb, var(--accent-primary) 88%, transparent);
+  --token-surface-accent-alpha-95: color-mix(in srgb, var(--accent-primary) 95%, transparent);
+  --token-surface-accent-blend-accent-primary-80: color-mix(in srgb, var(--accent-primary) 80%, var(--accent-primary) 20%);
+  --token-surface-accent-blend-accent-primary-hover-70: color-mix(in srgb, var(--accent-primary) 70%, var(--accent-primary-hover));
+  --token-surface-accent-blend-accent-primary-hover-85: color-mix(in srgb, var(--accent-primary) 85%, var(--accent-primary-hover) 15%);
+  --token-surface-accent-blend-color-success-strong-85: color-mix(in srgb, var(--accent-primary) 85%, var(--color-success-strong) 15%);
+  --token-surface-accent-blend-flat-surface-bg-06: color-mix(in srgb, var(--accent-primary) 6%, var(--flat-surface-bg));
+  --token-surface-accent-blend-flat-surface-bg-10: color-mix(in srgb, var(--accent-primary) 10%, var(--flat-surface-bg));
+  --token-surface-accent-hover-alpha-06: color-mix(in srgb, var(--accent-primary-hover) 6%, transparent);
+  --token-surface-accent-hover-alpha-10: color-mix(in srgb, var(--accent-primary-hover) 10%, transparent);
+  --token-surface-accent-hover-alpha-15: color-mix(in srgb, var(--accent-primary-hover) 15%, transparent);
+  --token-surface-accent-hover-alpha-16: color-mix(in srgb, var(--accent-primary-hover) 16%, transparent);
+  --token-surface-accent-hover-alpha-20: color-mix(in srgb, var(--accent-primary-hover) 20%, transparent);
+  --token-surface-accent-hover-alpha-30: color-mix(in srgb, var(--accent-primary-hover) 30%, transparent);
+  --token-surface-accent-hover-alpha-32: color-mix(in srgb, var(--accent-primary-hover) 32%, transparent);
+  --token-surface-accent-hover-alpha-40: color-mix(in srgb, var(--accent-primary-hover) 40%, transparent);
+  --token-surface-accent-hover-shade-65: color-mix(in srgb, var(--accent-primary-hover) 65%, var(--color-neutral-900) 35%);
+  --token-surface-accent-hover-shade-80: color-mix(in srgb, var(--accent-primary-hover) 80%, var(--color-neutral-900) 20%);
+  --token-surface-accent-shade-10: color-mix(in srgb, var(--accent-primary) 10%, var(--color-neutral-900) 90%);
+  --token-surface-danger-alpha-06: color-mix(in srgb, var(--accent-danger) 6%, transparent);
+  --token-surface-danger-alpha-14: color-mix(in srgb, var(--accent-danger) 14%, transparent);
+  --token-surface-danger-alpha-15: color-mix(in srgb, var(--accent-danger) 15%, transparent);
+  --token-surface-danger-alpha-16: color-mix(in srgb, var(--accent-danger) 16%, transparent);
+  --token-surface-danger-alpha-28: color-mix(in srgb, var(--accent-danger) 28%, transparent);
+  --token-surface-danger-alpha-50: color-mix(in srgb, var(--accent-danger) 50%, transparent);
+  --token-surface-danger-alpha-55: color-mix(in srgb, var(--accent-danger) 55%, transparent);
+  --token-surface-danger-alpha-90: color-mix(in srgb, var(--accent-danger) 90%, transparent);
+  --token-surface-danger-alpha-92: color-mix(in srgb, var(--accent-danger) 92%, transparent);
+  --token-surface-danger-blend-accent-danger-70: color-mix(in srgb, var(--accent-danger) 70%, var(--accent-danger));
+  --token-surface-danger-blend-flat-surface-bg-08: color-mix(in srgb, var(--accent-danger) 8%, var(--flat-surface-bg));
+  --token-surface-danger-strong-alpha-20: color-mix(in srgb, var(--color-error-400) 20%, transparent);
+  --token-surface-danger-strong-alpha-25: color-mix(in srgb, var(--color-error-500) 25%, transparent);
+  --token-surface-danger-strong-alpha-35: color-mix(in srgb, var(--color-error-500) 35%, transparent);
+  --token-surface-default-alpha-18: color-mix(in srgb, var(--color-bg-primary) 18%, transparent);
+  --token-surface-default-alpha-20: color-mix(in srgb, var(--color-bg-primary) 20%, transparent);
+  --token-surface-default-alpha-95: color-mix(in srgb, var(--color-bg-primary) 95%, transparent);
+  --token-surface-default-alpha-96: color-mix(in srgb, var(--color-bg-primary) 96%, transparent);
+  --token-surface-flat-alpha-10: color-mix(in srgb, var(--flat-surface-bg) 10%, transparent);
+  --token-surface-flat-alpha-12: color-mix(in srgb, var(--flat-surface-bg) 12%, transparent);
+  --token-surface-flat-alpha-18: color-mix(in srgb, var(--flat-surface-bg) 18%, transparent);
+  --token-surface-flat-alpha-22: color-mix(in srgb, var(--flat-surface-bg) 22%, transparent);
+  --token-surface-flat-alpha-24: color-mix(in srgb, var(--flat-surface-bg) 24%, transparent);
+  --token-surface-flat-alpha-25: color-mix(in srgb, var(--flat-surface-bg) 25%, transparent);
+  --token-surface-flat-alpha-26: color-mix(in srgb, var(--flat-surface-bg) 26%, transparent);
+  --token-surface-flat-alpha-50: color-mix(in srgb, var(--flat-surface-bg) 50%, transparent);
+  --token-surface-flat-alpha-60: color-mix(in srgb, var(--flat-surface-bg) 60%, transparent);
+  --token-surface-flat-alpha-65: color-mix(in srgb, var(--flat-surface-bg) 65%, transparent);
+  --token-surface-flat-alpha-75: color-mix(in srgb, var(--flat-surface-bg) 75%, transparent);
+  --token-surface-flat-alpha-82: color-mix(in srgb, var(--flat-surface-bg) 82%, transparent);
+  --token-surface-flat-alpha-85: color-mix(in srgb, var(--flat-surface-bg) 85%, transparent);
+  --token-surface-flat-alpha-90: color-mix(in srgb, var(--flat-surface-bg) 90%, transparent);
+  --token-surface-flat-alpha-96: color-mix(in srgb, var(--flat-surface-bg) 96%, transparent);
+  --token-surface-inverse-alpha-04: color-mix(in srgb, var(--openai-black) 4%, transparent);
+  --token-surface-inverse-alpha-08: color-mix(in srgb, var(--openai-black) 8%, transparent);
+  --token-surface-inverse-alpha-10: color-mix(in srgb, var(--openai-black) 10%, transparent);
+  --token-surface-inverse-alpha-15: color-mix(in srgb, var(--openai-black) 15%, transparent);
+  --token-surface-inverse-alpha-16: color-mix(in srgb, var(--openai-black) 16%, transparent);
+  --token-surface-inverse-alpha-24: color-mix(in srgb, var(--openai-black) 24%, transparent);
+  --token-surface-inverse-alpha-28: color-mix(in srgb, var(--openai-black) 28%, transparent);
+  --token-surface-inverse-alpha-32: color-mix(in srgb, var(--openai-black) 32%, transparent);
+  --token-surface-inverse-alpha-35: color-mix(in srgb, var(--openai-black) 35%, transparent);
+  --token-surface-inverse-alpha-36: color-mix(in srgb, var(--openai-black) 36%, transparent);
+  --token-surface-inverse-alpha-45: color-mix(in srgb, var(--openai-black) 45%, transparent);
+  --token-surface-inverse-alpha-55: color-mix(in srgb, var(--openai-black) 55%, transparent);
+  --token-surface-inverse-alpha-60: color-mix(in srgb, var(--openai-black) 60%, transparent);
+  --token-surface-inverse-alpha-68: color-mix(in srgb, var(--openai-black) 68%, transparent);
+  --token-surface-inverse-alpha-70: color-mix(in srgb, var(--openai-black) 70%, transparent);
+  --token-surface-inverse-alpha-72: color-mix(in srgb, var(--openai-black) 72%, transparent);
+  --token-surface-inverse-alpha-80: color-mix(in srgb, var(--openai-black) 80%, transparent);
+  --token-surface-inverse-alpha-88: color-mix(in srgb, var(--openai-black) 88%, transparent);
+  --token-surface-inverse-light-alpha-06: color-mix(in srgb, var(--openai-white) 6%, transparent);
+  --token-surface-inverse-light-alpha-10: color-mix(in srgb, var(--openai-white) 10%, transparent);
+  --token-surface-inverse-light-alpha-16: color-mix(in srgb, var(--openai-white) 16%, transparent);
+  --token-surface-inverse-light-alpha-20: color-mix(in srgb, var(--openai-white) 20%, transparent);
+  --token-surface-inverse-light-alpha-40: color-mix(in srgb, var(--openai-white) 40%, transparent);
+  --token-surface-inverse-light-alpha-52: color-mix(in srgb, var(--openai-white) 52%, transparent);
+  --token-surface-inverse-light-alpha-55: color-mix(in srgb, var(--openai-white) 55%, transparent);
+  --token-surface-inverse-light-alpha-60: color-mix(in srgb, var(--openai-white) 60%, transparent);
+  --token-surface-inverse-light-alpha-68: color-mix(in srgb, var(--openai-white) 68%, transparent);
+  --token-surface-inverse-light-alpha-70: color-mix(in srgb, var(--openai-white) 70%, transparent);
+  --token-surface-inverse-light-alpha-72: color-mix(in srgb, var(--openai-white) 72%, transparent);
+  --token-surface-inverse-light-alpha-75: color-mix(in srgb, var(--openai-white) 75%, transparent);
+  --token-surface-inverse-light-alpha-76: color-mix(in srgb, var(--openai-white) 76%, transparent);
+  --token-surface-inverse-light-alpha-80: color-mix(in srgb, var(--openai-white) 80%, transparent);
+  --token-surface-inverse-light-alpha-90: color-mix(in srgb, var(--openai-white) 90%, transparent);
+  --token-surface-inverse-light-alpha-95: color-mix(in srgb, var(--openai-white) 95%, transparent);
+  --token-surface-manual-accent-alpha-22: color-mix(in srgb, var(--manual-accent) 22%, transparent);
+  --token-surface-manual-accent-alpha-60: color-mix(in srgb, var(--manual-accent) 60%, transparent);
+  --token-surface-manual-muted-alpha-85: color-mix(in srgb, var(--manual-surface-muted) 85%, transparent);
+  --token-surface-manual-muted-alpha-90: color-mix(in srgb, var(--manual-surface-muted) 90%, transparent);
+  --token-surface-manual-muted-alpha-96: color-mix(in srgb, var(--manual-surface-muted) 96%, transparent);
+  --token-surface-manual-success-alpha-25: color-mix(in srgb, var(--manual-success) 25%, transparent);
+  --token-surface-manual-success-blend-manual-success-strong-85: color-mix(in srgb, var(--manual-success) 85%, var(--manual-success-strong) 15%);
+  --token-surface-neutral-300-alpha-70: color-mix(in srgb, var(--color-neutral-300) 70%, transparent);
+  --token-surface-neutral-400-alpha-06: color-mix(in srgb, var(--color-neutral-400) 6%, transparent);
+  --token-surface-neutral-400-alpha-08: color-mix(in srgb, var(--color-neutral-400) 8%, transparent);
+  --token-surface-neutral-400-alpha-16: color-mix(in srgb, var(--color-neutral-400) 16%, transparent);
+  --token-surface-neutral-400-alpha-35: color-mix(in srgb, var(--color-neutral-400) 35%, transparent);
+  --token-surface-neutral-400-alpha-40: color-mix(in srgb, var(--color-neutral-400) 40%, transparent);
+  --token-surface-neutral-400-alpha-70: color-mix(in srgb, var(--color-neutral-400) 70%, transparent);
+  --token-surface-neutral-50-alpha-12: color-mix(in srgb, var(--color-neutral-50) 12%, transparent);
+  --token-surface-neutral-50-alpha-60: color-mix(in srgb, var(--color-neutral-50) 60%, transparent);
+  --token-surface-neutral-500-alpha-20: color-mix(in srgb, var(--color-neutral-500) 20%, transparent);
+  --token-surface-neutral-500-alpha-30: color-mix(in srgb, var(--color-neutral-500) 30%, transparent);
+  --token-surface-neutral-600-alpha-12: color-mix(in srgb, var(--neutral-600) 12%, transparent);
+  --token-surface-neutral-600-alpha-40: color-mix(in srgb, var(--color-neutral-600) 40%, transparent);
+  --token-surface-neutral-600-alpha-45: color-mix(in srgb, var(--color-neutral-600) 45%, transparent);
+  --token-surface-neutral-600-alpha-60: color-mix(in srgb, var(--color-neutral-600) 60%, transparent);
+  --token-surface-neutral-600-alpha-90: color-mix(in srgb, var(--color-neutral-600) 90%, transparent);
+  --token-surface-neutral-700-alpha-60: color-mix(in srgb, var(--color-neutral-700) 60%, transparent);
+  --token-surface-neutral-700-alpha-70: color-mix(in srgb, var(--color-neutral-700) 70%, transparent);
+  --token-surface-neutral-700-alpha-90: color-mix(in srgb, var(--color-neutral-700) 90%, transparent);
+  --token-surface-neutral-800-alpha-56: color-mix(in srgb, var(--color-neutral-800) 56%, transparent);
+  --token-surface-neutral-800-alpha-60: color-mix(in srgb, var(--color-neutral-800) 60%, transparent);
+  --token-surface-neutral-800-alpha-75: color-mix(in srgb, var(--color-neutral-800) 75%, transparent);
+  --token-surface-neutral-800-alpha-78: color-mix(in srgb, var(--color-neutral-800) 78%, transparent);
+  --token-surface-neutral-800-alpha-88: color-mix(in srgb, var(--color-neutral-800) 88%, transparent);
+  --token-surface-neutral-800-alpha-90: color-mix(in srgb, var(--color-neutral-800) 90%, transparent);
+  --token-surface-neutral-800-alpha-95: color-mix(in srgb, var(--color-neutral-800) 95%, transparent);
+  --token-surface-neutral-950-alpha-25: color-mix(in srgb, var(--color-neutral-950) 25%, transparent);
+  --token-surface-neutral-950-alpha-30: color-mix(in srgb, var(--color-neutral-950) 30%, transparent);
+  --token-surface-neutral-950-alpha-35: color-mix(in srgb, var(--color-neutral-950) 35%, transparent);
+  --token-surface-neutral-950-alpha-45: color-mix(in srgb, var(--color-neutral-950) 45%, transparent);
+  --token-surface-neutral-950-alpha-65: color-mix(in srgb, var(--color-neutral-950) 65%, transparent);
+  --token-surface-neutral-950-alpha-85: color-mix(in srgb, var(--color-neutral-950) 85%, transparent);
+  --token-surface-neutral-alpha-70: color-mix(in srgb, var(--color-bg-secondary) 70%, transparent);
+  --token-surface-neutral-alpha-80: color-mix(in srgb, var(--color-bg-secondary) 80%, transparent);
+  --token-surface-neutral-alpha-88: color-mix(in srgb, var(--color-bg-secondary) 88%, transparent);
+  --token-surface-neutral-alpha-94: color-mix(in srgb, var(--color-bg-secondary) 94%, transparent);
+  --token-surface-neutral-tint-85: color-mix(in srgb, var(--color-bg-secondary) 85%, var(--color-bg-primary) 15%);
+  --token-surface-premium-loading-alpha-60: color-mix(in srgb, var(--premium-loading-surface) 60%, transparent);
+  --token-surface-premium-loading-alpha-70: color-mix(in srgb, var(--premium-loading-surface) 70%, transparent);
+  --token-surface-risk-success-alpha-16: color-mix(in srgb, var(--risk-radar-success) 16%, transparent);
+  --token-surface-risk-success-alpha-35: color-mix(in srgb, var(--risk-radar-success) 35%, transparent);
+  --token-surface-risk-success-blend-risk-radar-warning-80: color-mix(in srgb, var(--risk-radar-success) 80%, var(--risk-radar-warning) 20%);
+  --token-surface-risk-warning-alpha-12: color-mix(in srgb, var(--risk-radar-warning) 12%, transparent);
+  --token-surface-risk-warning-alpha-35: color-mix(in srgb, var(--risk-radar-warning) 35%, transparent);
+  --token-surface-settings-dark-alpha-76: color-mix(in srgb, var(--settings-surface-dark) 76%, transparent);
+  --token-surface-settings-dark-alpha-84: color-mix(in srgb, var(--settings-surface-dark) 84%, transparent);
+  --token-surface-warning-alpha-06: color-mix(in srgb, var(--accent-muted) 6%, transparent);
+  --token-surface-warning-alpha-08: color-mix(in srgb, var(--accent-muted) 8%, transparent);
+  --token-surface-warning-alpha-14: color-mix(in srgb, var(--accent-muted) 14%, transparent);
+  --token-surface-warning-alpha-20: color-mix(in srgb, var(--accent-muted) 20%, transparent);
+  --token-surface-warning-alpha-20: color-mix(in srgb, var(--color-warning-400) 20%, transparent);
+  --token-surface-warning-alpha-22: color-mix(in srgb, var(--accent-muted) 22%, transparent);
+  --token-surface-warning-alpha-24: color-mix(in srgb, var(--accent-muted) 24%, transparent);
+  --token-surface-warning-alpha-28: color-mix(in srgb, var(--accent-muted) 28%, transparent);
+  --token-surface-warning-alpha-55: color-mix(in srgb, var(--accent-muted) 55%, transparent);
+  --token-surface-warning-alpha-60: color-mix(in srgb, var(--accent-muted) 60%, transparent);
+  --token-surface-warning-alpha-65: color-mix(in srgb, var(--accent-muted) 65%, transparent);
+  --token-surface-warning-alpha-80: color-mix(in srgb, var(--accent-muted) 80%, transparent);
+  --token-surface-warning-alpha-90: color-mix(in srgb, var(--accent-muted) 90%, transparent);
+  --token-surface-warning-blend-accent-muted-80: color-mix(in srgb, var(--accent-muted) 80%, var(--accent-muted) 20%);
+  --token-surface-warning-strong-alpha-85: color-mix(in srgb, var(--color-warning-600) 85%, transparent);
+
+  /* Auto Text */
+  --token-text-danger-strong-alpha-12: color-mix(in srgb, var(--color-text-error-strong) 12%, transparent);
+  --token-text-danger-strong-alpha-40: color-mix(in srgb, var(--color-text-error-strong) 40%, transparent);
+  --token-text-primary-alpha-80: color-mix(in srgb, var(--color-text-primary) 80%, transparent);
+  --token-text-secondary-alpha-10: color-mix(in srgb, var(--color-text-secondary) 10%, transparent);
+  --token-text-secondary-alpha-18: color-mix(in srgb, var(--color-text-secondary) 18%, transparent);
+  --token-text-secondary-alpha-60: color-mix(in srgb, var(--color-text-secondary) 60%, transparent);
+  --token-text-secondary-alpha-70: color-mix(in srgb, var(--color-text-secondary) 70%, transparent);
+  --token-text-secondary-alpha-75: color-mix(in srgb, var(--color-text-secondary) 75%, transparent);
+  --token-text-secondary-alpha-80: color-mix(in srgb, var(--color-text-secondary) 80%, transparent);
+  --token-text-secondary-alpha-92: color-mix(in srgb, var(--color-text-secondary) 92%, transparent);
+  --token-text-secondary-alpha-95: color-mix(in srgb, var(--color-text-secondary) 95%, transparent);
+  --token-text-tertiary-alpha-18: color-mix(in srgb, var(--color-text-tertiary) 18%, transparent);
+  --token-text-tertiary-alpha-20: color-mix(in srgb, var(--color-text-tertiary) 20%, transparent);
+  --token-text-tertiary-alpha-24: color-mix(in srgb, var(--color-text-tertiary) 24%, transparent);
+  --token-text-tertiary-alpha-25: color-mix(in srgb, var(--color-text-tertiary) 25%, transparent);
+  --token-text-tertiary-alpha-70: color-mix(in srgb, var(--color-text-tertiary) 70%, transparent);
+
+  /* Badges / chips */
+  --token-badge-neutral-bg: var(--token-surface-elevated);
+  --token-badge-neutral-text: var(--color-text-secondary);
+  --token-badge-positive-bg: var(--token-surface-accent-weak);
+  --token-badge-positive-text: var(--accent-primary);
+  --token-badge-warning-bg: var(--token-surface-elevated);
+  --token-badge-warning-text: var(--accent-muted);
+  --token-badge-danger-bg: var(--token-surface-danger);
+  --token-badge-danger-text: var(--accent-danger);
+
+  /* Focus */
+  --token-focus-ring: var(--focus-ring-color);
+  --token-focus-shadow: var(--shadow-focus-primary);
+}

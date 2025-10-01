@@ -126,7 +126,7 @@ export class RiskRadarComponent implements OnInit {
       {
         value: stats['medium'] || 0,
         label: 'Atención',
-        color: 'var(--accent-amber-500)'
+        color: 'var(--accent-muted)'
       },
       {
         value: stats['low'] || 0,

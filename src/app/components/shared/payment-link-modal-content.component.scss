@@ -10,8 +10,8 @@
   border-radius: var(--radius-lg, 16px);
   background: var(--flat-surface-bg);
   color: var(--color-text-primary);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 30%, transparent);
-  box-shadow: 0 16px 44px color-mix(in srgb, var(--openai-black) 24%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-30);
+  box-shadow: 0 16px 44px var(--token-surface-inverse-alpha-24);
   min-width: min(520px, 100%);
 }
 
@@ -33,17 +33,22 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 2px solid color-mix(in srgb, var(--border-neutral-strong) 60%, transparent);
-  border-inline-start-color: var(--accent-blue-500);
-  animation: payment-link-modal-spin 1s linear infinite;
+  border: 2px solid var(--token-border-neutral-strong-alpha-60);
+  border-inline-start-color: var(--accent-primary);
+  animation: payment-link-modal-pulse 1.4s ease-in-out infinite;
 }
 
-@keyframes payment-link-modal-spin {
-  0% {
-    transform: rotate(0deg);
-  }
+@keyframes payment-link-modal-pulse {
+  0%,
   100% {
-    transform: rotate(360deg);
+    border-inline-start-color: var(--accent-primary);
+    box-shadow: 0 0 0 0 var(--token-surface-accent-soft);
+    opacity: 0.7;
+  }
+  50% {
+    border-inline-start-color: var(--token-border-accent-soft);
+    box-shadow: 0 0 0 8px var(--token-surface-accent-alpha-22);
+    opacity: 1;
   }
 }
 
@@ -72,16 +77,16 @@
   gap: var(--space-3, 0.75rem);
   padding: var(--space-4, 1rem);
   border-radius: var(--radius-lg, 16px);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 92%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 35%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 92%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-35);
 }
 
 .payment-link-modal__payment-block--conekta {
-  background: color-mix(in srgb, var(--accent-blue-400) 14%, var(--surface-neutral-weak) 86%);
+  background: color-mix(in srgb, var(--accent-primary) 14%, var(--token-surface-muted) 86%);
 }
 
 .payment-link-modal__payment-block--spei {
-  background: color-mix(in srgb, var(--color-neutral-900) 8%, var(--surface-neutral-weak) 92%);
+  background: color-mix(in srgb, var(--color-neutral-900) 8%, var(--token-surface-muted) 92%);
 }
 
 .payment-link-modal__field-label {
@@ -100,7 +105,7 @@
   width: 100%;
   padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
   border-radius: var(--radius-md, 12px);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 45%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-45);
   background: var(--flat-surface-bg);
   color: var(--color-text-primary);
   font-size: 1rem;
@@ -109,12 +114,12 @@
 
 .payment-link-modal__input:focus {
   outline: none;
-  border-color: var(--accent-blue-500);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-blue-500) 25%, transparent);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--token-surface-accent-alpha-25);
 }
 
 .payment-link-modal__input--readonly {
-  background: color-mix(in srgb, var(--color-neutral-900) 8%, transparent);
+  background: var(--token-overlay-neutral-alpha-08);
   color: var(--color-text-secondary);
 }
 
@@ -129,8 +134,10 @@
 .payment-link-modal__currency-symbol {
   position: absolute;
   inset-inline-start: var(--space-3, 0.75rem);
-  inset-block-start: 50%;
-  transform: translateY(-50%);
+  inset-block-start: 0;
+  inset-block-end: 0;
+  display: inline-flex;
+  align-items: center;
   color: var(--color-text-tertiary);
   pointer-events: none;
   font-weight: 600;
@@ -143,7 +150,7 @@
   padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
   border-radius: var(--radius-md, 12px);
   border: none;
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   color: var(--flat-surface-bg);
   font-weight: 600;
   cursor: pointer;
@@ -151,8 +158,8 @@
 }
 
 .payment-link-modal__clipboard-btn:hover {
-  background: color-mix(in srgb, var(--accent-blue-500) 80%, var(--accent-blue-400) 20%);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--accent-blue-500) 22%, transparent);
+  background: var(--token-surface-accent-blend-accent-primary-80);
+  box-shadow: 0 10px 24px var(--token-surface-accent-alpha-22);
 }
 
 .payment-link-modal__clipboard-btn--block {
@@ -196,22 +203,22 @@
 }
 
 .payment-link-modal__action-btn--primary {
-  background: var(--accent-green-500);
+  background: var(--accent-primary);
   color: var(--flat-surface-bg);
-  box-shadow: 0 14px 28px color-mix(in srgb, var(--accent-green-500) 26%, transparent);
+  box-shadow: 0 14px 28px var(--token-surface-accent-alpha-26);
 }
 
 .payment-link-modal__action-btn--primary:hover {
-  background: color-mix(in srgb, var(--accent-green-500) 85%, var(--accent-green-600) 15%);
+  background: var(--token-surface-accent-blend-accent-primary-hover-85);
 }
 
 .payment-link-modal__action-btn--ghost {
-  background: color-mix(in srgb, var(--surface-neutral-weak) 90%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 90%, transparent);
   color: var(--color-text-secondary);
 }
 
 .payment-link-modal__action-btn--ghost:hover {
-  background: color-mix(in srgb, var(--surface-neutral-weak) 95%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 95%, transparent);
   color: var(--color-text-primary);
 }
 
@@ -251,8 +258,8 @@
 
 @media (prefers-color-scheme: dark) {
   .payment-link-modal {
-    background: color-mix(in srgb, var(--color-neutral-900) 92%, transparent);
-    border-color: color-mix(in srgb, var(--border-neutral-strong) 55%, transparent);
+    background: var(--token-overlay-neutral-alpha-92);
+    border-color: var(--token-border-neutral-strong-alpha-55);
     color: var(--color-neutral-100);
   }
 
@@ -265,8 +272,8 @@
 
   .payment-link-modal__input,
   .payment-link-modal__input--readonly {
-    background: color-mix(in srgb, var(--color-neutral-900) 70%, transparent);
-    border-color: color-mix(in srgb, var(--border-neutral-strong) 60%, transparent);
+    background: var(--token-overlay-neutral-alpha-70);
+    border-color: var(--token-border-neutral-strong-alpha-60);
     color: var(--color-neutral-50);
   }
 
@@ -279,16 +286,16 @@
   }
 
   .payment-link-modal__payment-block--spei {
-    background: color-mix(in srgb, var(--color-neutral-900) 85%, transparent);
-    border-color: color-mix(in srgb, var(--border-neutral-strong) 55%, transparent);
+    background: var(--token-overlay-neutral-alpha-85);
+    border-color: var(--token-border-neutral-strong-alpha-55);
   }
 
   .payment-link-modal__action-btn--ghost {
-    background: color-mix(in srgb, var(--color-neutral-800) 75%, transparent);
+    background: var(--token-surface-neutral-800-alpha-75);
     color: var(--color-neutral-200);
   }
 
   .payment-link-modal__action-btn--ghost:hover {
-    background: color-mix(in srgb, var(--color-neutral-800) 85%, transparent);
+    background: var(--token-surface-neutral-800-alpha-85);
   }
 }

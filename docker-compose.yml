@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Angular PWA Frontend
+  pwa:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: conductores-pwa
+    ports:
+      - "4200:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - conductores-network
+
+  # BFF Backend (optional - uncomment if needed)
+  # bff:
+  #   build:
+  #     context: ./bff
+  #     dockerfile: Dockerfile
+  #   container_name: conductores-bff
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - PORT=3000
+  #   restart: unless-stopped
+  #   networks:
+  #     - conductores-network
+
+networks:
+  conductores-network:
+    driver: bridge

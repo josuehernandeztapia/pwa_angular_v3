@@ -17,7 +17,7 @@
     justify-content: space-between;
     align-items: center;
     padding-bottom: var(--space-5, 20px);
-    border-bottom: 2px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    border-bottom: 2px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
   }
 
   &__header-content {
@@ -60,7 +60,7 @@
     gap: var(--space-5, 20px);
     align-items: center;
     border-radius: var(--radius-xl, 16px);
-    border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
     background: var(--flat-surface-bg, var(--openai-white));
     padding: var(--space-6, 24px);
     box-shadow: 0 12px 24px var(--openai-black);
@@ -79,13 +79,13 @@
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: var(--surface-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 16%, var(--openai-white)));
-    border: 3px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    background: var(--token-surface-muted, var(--token-surface-neutral-400-tint-16));
+    border: 3px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
     overflow: hidden;
     transition: border-color var(--transition-quick, 0.2s ease);
 
     &--image {
-      border-color: var(--accent-blue-400);
+      border-color: var(--accent-primary);
     }
 
     img {
@@ -103,8 +103,8 @@
   }
 
   &__avatar-button {
-    border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
-    background: var(--surface-neutral-weak, var(--color-neutral-400));
+    border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
+    background: var(--token-surface-muted, var(--color-neutral-400));
     border-radius: var(--radius-md, 8px);
     padding: var(--space-2, 8px) var(--space-3, 12px);
     font-size: 0.85rem;
@@ -116,7 +116,7 @@
     transition: background var(--transition-quick, 0.2s ease);
 
     &:hover {
-      background: var(--surface-neutral-weak, var(--color-neutral-400));
+      background: var(--token-surface-muted, var(--color-neutral-400));
     }
   }
 
@@ -136,11 +136,11 @@
     }
 
     &--success {
-      color: var(--accent-green-500);
+      color: var(--accent-primary);
     }
 
     &--danger {
-      color: var(--accent-red-500);
+      color: var(--accent-danger);
     }
   }
 
@@ -160,7 +160,7 @@
   &__summary-position {
     margin: 0;
     font-weight: var(--font-weight-semibold, 600);
-    color: var(--accent-blue-500);
+    color: var(--accent-primary);
   }
 
   &__summary-company {
@@ -193,7 +193,7 @@
 
   &__panel {
     border-radius: var(--radius-xl, 16px);
-    border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
     background: var(--flat-surface-bg, var(--openai-white));
     padding: var(--space-5, 20px);
     display: flex;
@@ -220,18 +220,18 @@
   }
 
   &__edit-toggle {
-    border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
     border-radius: var(--radius-md, 8px);
     padding: var(--space-2, 8px) var(--space-4, 16px);
-    background: var(--surface-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 16%, var(--openai-white)));
+    background: var(--token-surface-muted, var(--token-surface-neutral-400-tint-16));
     color: var(--color-text-secondary);
     cursor: pointer;
     transition: background var(--transition-quick, 0.2s ease), border-color var(--transition-quick, 0.2s ease);
 
     &--active {
-      background: var(--accent-red-500);
-      border-color: var(--accent-red-400);
-      color: var(--accent-red-700);
+      background: var(--accent-danger);
+      border-color: var(--accent-danger);
+      color: var(--accent-danger);
     }
   }
 
@@ -264,7 +264,7 @@
 
   &__input {
     padding: var(--space-3, 12px) var(--space-4, 16px);
-    border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
     border-radius: var(--radius-md, 8px);
     font-size: 1rem;
     transition: border-color var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
@@ -273,12 +273,12 @@
 
     &:focus-visible {
       outline: none;
-      border-color: var(--accent-blue-500);
-      box-shadow: 0 0 0 3px var(--accent-blue-500);
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-primary);
     }
 
     &--disabled {
-      background: var(--surface-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 16%, var(--openai-white)));
+      background: var(--token-surface-muted, var(--token-surface-neutral-400-tint-16));
       color: var(--color-text-tertiary);
       cursor: not-allowed;
     }
@@ -308,52 +308,52 @@
     }
 
     &--primary {
-      background: var(--accent-blue-600);
+      background: var(--accent-primary-hover);
       color: var(--flat-surface-bg, var(--openai-white));
 
       &:hover:enabled,
       &:focus-visible {
-        background: var(--accent-blue-700);
+        background: var(--accent-primary-hover);
       }
     }
 
     &--secondary {
-      background: var(--surface-neutral-weak, var(--color-neutral-400));
+      background: var(--token-surface-muted, var(--color-neutral-400));
       color: var(--color-text-secondary);
-      border-color: var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+      border-color: var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
 
       &:hover:enabled,
       &:focus-visible {
-        background: var(--surface-neutral-weak, var(--color-neutral-400));
+        background: var(--token-surface-muted, var(--color-neutral-400));
       }
     }
 
     &--tertiary {
       background: transparent;
-      color: var(--accent-blue-500);
-      border-color: var(--accent-blue-500);
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
 
       &:hover:enabled,
       &:focus-visible {
-        background: var(--accent-blue-500);
-        color: var(--accent-blue-600);
+        background: var(--accent-primary);
+        color: var(--accent-primary-hover);
       }
     }
 
     &--neutral {
-      background: var(--surface-neutral-weak, var(--color-neutral-400));
+      background: var(--token-surface-muted, var(--color-neutral-400));
       color: var(--color-text-secondary);
-      border-color: var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+      border-color: var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
     }
 
     &--danger {
-      background: var(--accent-red-400);
-      color: var(--accent-red-700);
-      border-color: var(--accent-red-500);
+      background: var(--accent-danger);
+      color: var(--accent-danger);
+      border-color: var(--accent-danger);
 
       &:hover:enabled,
       &:focus-visible {
-        background: var(--accent-red-500);
+        background: var(--accent-danger);
       }
     }
   }
@@ -370,8 +370,8 @@
     align-items: center;
     padding: var(--space-4, 16px);
     border-radius: var(--radius-lg, 12px);
-    border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
-    background: var(--surface-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 16%, var(--openai-white)));
+    border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
+    background: var(--token-surface-muted, var(--token-surface-neutral-400-tint-16));
   }
 
   &__security-info {

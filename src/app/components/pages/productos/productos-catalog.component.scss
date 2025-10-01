@@ -17,7 +17,7 @@
     gap: var(--space-4, 16px);
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    border-bottom: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
     padding-bottom: var(--space-4, 16px);
 
     @media (max-width: 768px) {
@@ -41,7 +41,7 @@
   &__title-icon {
     width: 28px;
     height: 28px;
-    color: var(--accent-blue-500);
+    color: var(--accent-primary);
   }
 
   &__title {
@@ -81,23 +81,23 @@
     }
 
     &--primary {
-      background: var(--accent-blue-600);
+      background: var(--accent-primary-hover);
       color: var(--flat-surface-bg, var(--openai-white));
 
       &:hover:enabled,
       &:focus-visible {
-        background: var(--accent-blue-700);
+        background: var(--accent-primary-hover);
       }
     }
 
     &--secondary {
-      background: var(--surface-neutral-weak, var(--color-neutral-400));
+      background: var(--token-surface-muted, var(--color-neutral-400));
       color: var(--color-text-secondary);
-      border-color: var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+      border-color: var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
 
       &:hover:enabled,
       &:focus-visible {
-        background: var(--surface-neutral-weak, var(--color-neutral-400));
+        background: var(--token-surface-muted, var(--color-neutral-400));
       }
     }
   }
@@ -108,8 +108,8 @@
     gap: var(--space-4, 16px);
     padding: var(--space-4, 16px);
     border-radius: var(--radius-xl, 16px);
-    border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
-    background: var(--surface-neutral-weak, var(--color-neutral-400));
+    border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
+    background: var(--token-surface-muted, var(--color-neutral-400));
   }
 
   &__filter-group {
@@ -129,7 +129,7 @@
     align-items: center;
     gap: var(--space-1, 4px);
     border-radius: var(--radius-md, 8px);
-    border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
     background: var(--flat-surface-bg, var(--openai-white));
     color: var(--color-text-secondary);
     padding: var(--space-2, 8px) var(--space-3, 12px);
@@ -138,9 +138,9 @@
     transition: background var(--transition-quick, 0.2s ease), border-color var(--transition-quick, 0.2s ease), color var(--transition-quick, 0.2s ease);
 
     &--active {
-      border-color: var(--accent-blue-500);
-      background: var(--accent-blue-500);
-      color: var(--accent-blue-700);
+      border-color: var(--accent-primary);
+      background: var(--accent-primary);
+      color: var(--accent-primary-hover);
     }
   }
 
@@ -158,8 +158,8 @@
   &__loading {
     padding: var(--space-6, 24px);
     border-radius: var(--radius-xl, 16px);
-    border: 1px dashed var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
-    background: var(--surface-neutral-weak, var(--color-neutral-400));
+    border: 1px dashed var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
+    background: var(--token-surface-muted, var(--color-neutral-400));
     text-align: center;
   }
 
@@ -181,19 +181,20 @@
   flex-direction: column;
   gap: var(--space-4, 16px);
   border-radius: var(--radius-xl, 16px);
-  border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+  border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
   padding: var(--space-5, 20px);
   background: var(--flat-surface-bg, var(--openai-white));
   box-shadow: 0 12px 28px var(--openai-black);
-  transition: transform var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
+  transition: margin-top var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
+  margin-top: 0;
 
   &:hover {
-    transform: translateY(-2px);
+    margin-top: -2px;
     box-shadow: 0 16px 32px var(--openai-black);
   }
 
   &--popular {
-    border-color: var(--accent-purple-500);
+    border-color: var(--accent-primary);
   }
 
   &__badge {
@@ -205,8 +206,8 @@
     gap: var(--space-1, 4px);
     padding: 4px 10px;
     border-radius: var(--radius-md, 8px);
-    background: var(--accent-purple-500);
-    color: var(--accent-purple-700);
+    background: var(--accent-primary);
+    color: var(--flat-surface-bg, var(--openai-white));
     font-weight: var(--font-weight-semibold, 600);
     font-size: 0.85rem;
   }
@@ -238,7 +239,7 @@
 
   &__market {
     font-size: 0.9rem;
-    color: var(--accent-blue-600);
+    color: var(--accent-primary-hover);
     font-weight: var(--font-weight-medium, 500);
   }
 
@@ -285,7 +286,7 @@
   &__section-icon {
     width: 18px;
     height: 18px;
-    color: var(--accent-blue-500);
+    color: var(--accent-primary);
   }
 
   &__components {
@@ -301,11 +302,11 @@
     gap: var(--space-3, 12px);
     padding: var(--space-2, 8px) var(--space-3, 12px);
     border-radius: var(--radius-md, 8px);
-    border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
 
     &--optional {
-      border-color: var(--accent-orange-500);
-      background: var(--accent-orange-500);
+      border-color: var(--accent-muted);
+      background: var(--accent-muted);
     }
   }
 
@@ -323,14 +324,14 @@
   &__component-pill {
     padding: 2px 8px;
     border-radius: var(--radius-md, 8px);
-    background: var(--accent-purple-500);
-    color: var(--accent-purple-600);
+    background: var(--accent-primary);
+    color: var(--accent-primary-hover);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.02em;
 
     &--muted {
-      background: var(--surface-neutral-weak, var(--color-neutral-400));
+      background: var(--token-surface-muted, var(--color-neutral-400));
       color: var(--color-text-tertiary);
     }
   }
@@ -349,8 +350,8 @@
   &__feature {
     padding: 4px 10px;
     border-radius: var(--radius-md, 8px);
-    background: var(--accent-blue-500);
-    color: var(--accent-blue-700);
+    background: var(--accent-primary);
+    color: var(--accent-primary-hover);
     font-size: 0.85rem;
     font-weight: var(--font-weight-medium, 500);
   }

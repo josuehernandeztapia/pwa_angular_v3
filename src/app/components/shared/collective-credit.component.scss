@@ -28,7 +28,7 @@
 }
 
 .collective-credit__title-icon {
-  color: var(--color-accent-primary);
+  color: var(--accent-primary);
 }
 
 .collective-credit__layout {
@@ -113,8 +113,8 @@
 .collective-credit__input:focus,
 .collective-credit__select:focus {
   outline: none;
-  border-color: var(--color-accent-primary);
-  box-shadow: 0 0 0 3px var(--color-accent-primary);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-primary);
 }
 
 .collective-credit__event-form {
@@ -147,13 +147,13 @@
 }
 
 .collective-credit__button--primary {
-  background: var(--color-accent-primary);
+  background: var(--accent-primary);
   color: var(--color-bg-primary);
-  box-shadow: 0 16px 36px rgba(14, 165, 233, 0.28);
+  box-shadow: 0 16px 36px var(--token-surface-accent-alpha-28);
 }
 
 .collective-credit__button--primary:hover {
-  background: var(--color-accent-primary, var(--color-accent-secondary) 15%);
+  background: var(--accent-primary, var(--accent-muted) 15%);
 }
 
 .collective-credit__button--secondary {
@@ -236,8 +236,8 @@
   height: 42px;
   border-radius: 50%;
   border: 3px solid var(--color-border-secondary);
-  border-inline-start-color: var(--color-accent-primary);
-  animation: collective-credit-spin 1s linear infinite;
+  border-inline-start-color: var(--accent-primary);
+  animation: collective-credit-pulse 1.2s ease-in-out infinite;
 }
 
 .collective-credit__results {
@@ -266,7 +266,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-accent-primary);
+  color: var(--accent-primary);
 }
 
 .collective-credit__kpi-copy {
@@ -357,7 +357,7 @@
 }
 
 .collective-credit__detail-value--savings {
-  color: var(--color-accent-primary);
+  color: var(--accent-primary);
 }
 
 .collective-credit__detailGroup--emphasis {
@@ -402,10 +402,6 @@
   color: var(--color-text-secondary);
 }
 
-@keyframes collective-credit-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 
 @media (max-width: 1080px) {
   .collective-credit__layout {
@@ -455,3 +451,17 @@
     color: var(--color-neutral-100);
   }
 }
+@keyframes collective-credit-pulse {
+  0%,
+  100% {
+    border-inline-start-color: var(--accent-primary);
+    box-shadow: 0 0 0 0 var(--token-surface-accent-soft);
+    opacity: 0.8;
+  }
+  50% {
+    border-inline-start-color: var(--token-surface-accent-alpha-40);
+    box-shadow: 0 0 0 6px var(--token-surface-accent-alpha-20);
+    opacity: 1;
+  }
+}
+

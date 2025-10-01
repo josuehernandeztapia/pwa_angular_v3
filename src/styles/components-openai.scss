@@ -147,22 +147,22 @@
 
 .btn-ghost {
   background: transparent;
-  color: color-mix(in srgb, var(--color-primary-800) 75%, transparent);
+  color: var(--token-color-primary-800-alpha-75);
   border: 1px solid transparent;
 
   &:hover {
-    background: color-mix(in srgb, var(--color-text-tertiary) 12%, transparent);
-    border-color: color-mix(in srgb, var(--color-text-tertiary) 30%, transparent);
+    background: var(--token-text-tertiary-alpha-12);
+    border-color: var(--token-text-tertiary-alpha-30);
     color: var(--color-text-primary);
     box-shadow: var(--shadow-xs);
   }
 
   &:active {
-    background: color-mix(in srgb, var(--color-text-secondary) 18%, transparent);
+    background: var(--token-text-secondary-alpha-18);
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-text-tertiary) 25%, transparent);
+    box-shadow: 0 0 0 3px var(--token-text-tertiary-alpha-25);
   }
 }
 
@@ -284,12 +284,12 @@
 .text-token-tertiary { color: var(--color-text-tertiary); }
 .text-token-inverse { color: var(--openai-white); }
 .text-token-success { color: var(--success-500); }
-.text-token-warning { color: var(--accent-amber-500); }
+.text-token-warning { color: var(--accent-muted); }
 .text-token-danger { color: var(--error-500); }
 
-.text-muted { color: color-mix(in srgb, var(--openai-white) 68%, transparent); }
-.text-subtle { color: color-mix(in srgb, var(--openai-white) 52%, transparent); }
-.text-accent { color: color-mix(in srgb, var(--accent-blue-400) 70%, var(--accent-green-200) 30%); }
+.text-muted { color: var(--token-surface-inverse-light-alpha-68); }
+.text-subtle { color: var(--token-surface-inverse-light-alpha-52); }
+.text-accent { color: color-mix(in srgb, var(--accent-primary) 70%, var(--token-surface-accent-strong) 30%); }
 
 .weight-medium { font-weight: var(--font-medium); }
 .weight-semibold { font-weight: var(--font-semibold); }
@@ -308,12 +308,12 @@
 }
 
 .badge-neutral {
-  background: color-mix(in srgb, var(--color-text-tertiary) 20%, transparent);
-  color: color-mix(in srgb, var(--color-border-secondary) 92%, transparent);
+  background: var(--token-badge-neutral-bg);
+  color: var(--token-badge-neutral-text);
 }
-.badge-positive { background: var(--surface-green-weak); color: var(--accent-green-400); }
-.badge-warning { background: var(--surface-amber-weak); color: var(--accent-amber-300); }
-.badge-danger { background: var(--surface-red-weak); color: var(--accent-red-300); }
+.badge-positive { background: var(--token-badge-positive-bg); color: var(--token-badge-positive-text); }
+.badge-warning { background: var(--token-badge-warning-bg); color: var(--token-badge-warning-text); }
+.badge-danger { background: var(--token-badge-danger-bg); color: var(--token-badge-danger-text); }
 
 /* ===== ICON SIZES ===== */
 .icon-16,
@@ -388,7 +388,7 @@
 .icon-secondary { color: var(--color-text-secondary); }
 .icon-primary { color: var(--color-text-primary); }
 .icon-success { color: var(--success-500); }
-.icon-warning { color: var(--accent-amber-500); }
+.icon-warning { color: var(--accent-muted); }
 .icon-danger { color: var(--error-500); }
 
 .btn-danger {
@@ -452,8 +452,8 @@
   font-size: var(--text-xs);
   font-weight: var(--font-medium);
   line-height: 1.4;
-  background: color-mix(in srgb, var(--color-text-tertiary) 18%, transparent);
-  color: color-mix(in srgb, var(--color-primary-800) 85%, transparent);
+  background: var(--token-text-tertiary-alpha-18);
+  color: var(--token-color-primary-800-alpha-85);
 }
 
 .chip::before {
@@ -466,58 +466,58 @@
 }
 
 .chip--neutral {
-  background: color-mix(in srgb, var(--color-text-tertiary) 18%, transparent);
-  color: color-mix(in srgb, var(--color-primary-700) 90%, transparent);
+  background: var(--token-text-tertiary-alpha-18);
+  color: var(--token-color-primary-700-alpha-90);
 }
 
 .chip--success {
-  background: var(--surface-green-weak);
-  color: color-mix(in srgb, var(--accent-green-600) 80%, var(--accent-green-300) 20%);
+  background: var(--token-badge-positive-bg);
+  color: var(--token-badge-positive-text);
 }
 
 .chip--warning {
-  background: var(--surface-amber-weak);
-  color: color-mix(in srgb, var(--accent-amber-600) 80%, var(--accent-amber-300) 20%);
+  background: var(--token-badge-warning-bg);
+  color: var(--token-badge-warning-text);
 }
 
 .chip--danger {
-  background: var(--surface-red-weak);
-  color: var(--accent-red-600);
+  background: var(--token-badge-danger-bg);
+  color: var(--token-badge-danger-text);
 }
 
 /* ===== BUTTON VARIANTS ===== */
 .btn-warning {
-  background: color-mix(in srgb, var(--accent-amber-500) 15%, transparent);
-  color: color-mix(in srgb, var(--accent-amber-600) 80%, var(--accent-amber-400) 20%);
-  border: 1px solid color-mix(in srgb, var(--accent-amber-500) 35%, transparent);
+  background: var(--token-surface-warning-alpha-15);
+  color: var(--token-surface-warning-blend-accent-muted-80);
+  border: 1px solid var(--token-surface-warning-alpha-35);
 }
 
 .btn-warning:hover {
-  background: color-mix(in srgb, var(--accent-amber-500) 25%, transparent);
-  border-color: color-mix(in srgb, var(--accent-amber-500) 55%, transparent);
+  background: var(--token-surface-warning-alpha-25);
+  border-color: var(--token-surface-warning-alpha-55);
 }
 
 .btn-warning:focus-visible {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-amber-500) 25%, transparent);
+  box-shadow: 0 0 0 3px var(--token-surface-warning-alpha-25);
 }
 
 .btn-ghost {
   background: transparent;
-  color: color-mix(in srgb, var(--color-primary-800) 75%, transparent);
+  color: var(--token-color-primary-800-alpha-75);
   border: 1px solid transparent;
 
   &:hover {
-    background: color-mix(in srgb, var(--color-text-tertiary) 12%, transparent);
-    border-color: color-mix(in srgb, var(--color-text-tertiary) 30%, transparent);
+    background: var(--token-text-tertiary-alpha-12);
+    border-color: var(--token-text-tertiary-alpha-30);
     color: var(--color-text-primary);
   }
 
   &:active {
-    background: color-mix(in srgb, var(--color-text-secondary) 18%, transparent);
+    background: var(--token-text-secondary-alpha-18);
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-text-tertiary) 25%, transparent);
+    box-shadow: 0 0 0 3px var(--token-text-tertiary-alpha-25);
   }
 }
 
@@ -605,17 +605,17 @@
 @media (prefers-color-scheme: dark) {
   .heading-md,
   .heading-sm {
-    color: color-mix(in srgb, var(--openai-white) 95%, transparent);
+    color: var(--token-surface-inverse-light-alpha-95);
   }
   .body-sm,
   .body-xs {
-    color: color-mix(in srgb, var(--color-border-secondary) 65%, var(--openai-white) 35%);
+    color: var(--token-border-neutral-tint-65);
   }
 }
 
 /* Gradient Button - Premium */
 .btn-gradient {
-  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+  background: var(--color-primary-500);
   color: white;
   position: relative;
   overflow: hidden;
@@ -637,7 +637,7 @@
 
   &:hover {
     transform: none; /* OpenAI no transforms */
-    box-shadow: 0 10px 25px rgba(0, 191, 191, 0.3);
+    box-shadow: 0 10px 25px var(--token-surface-accent-alpha-30);
   }
 }
 
@@ -1534,10 +1534,10 @@
 @media (prefers-color-scheme: dark) {
   .heading-md,
   .heading-sm {
-    color: color-mix(in srgb, var(--openai-white) 95%, transparent);
+    color: var(--token-surface-inverse-light-alpha-95);
   }
   .body-sm,
   .body-xs {
-    color: color-mix(in srgb, var(--color-border-secondary) 65%, var(--openai-white) 35%);
+    color: var(--token-border-neutral-tint-65);
   }
 }

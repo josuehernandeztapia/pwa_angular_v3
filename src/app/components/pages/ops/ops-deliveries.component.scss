@@ -30,7 +30,7 @@
     margin: 0;
     font-size: var(--font-h1-size, 1.75rem);
     font-weight: var(--font-weight-bold, 700);
-    color: var(--accent-blue-200);
+    color: var(--token-surface-accent-strong);
   }
 
   &__subtitle {
@@ -64,17 +64,17 @@
     }
 
     &:not(:disabled):hover {
-      border-color: var(--accent-blue-500);
+      border-color: var(--accent-primary);
       background: var(--neutral-800, var(--openai-gray-700));
     }
 
     &--recompute {
       border-color: transparent;
-      background: var(--accent-blue-500);
+      background: var(--accent-primary);
       color: var(--flat-surface-bg, var(--openai-white));
 
       &:not(:disabled):hover {
-        background: var(--accent-blue-600);
+        background: var(--accent-primary-hover);
       }
     }
   }
@@ -115,8 +115,8 @@
 
     &:focus {
       outline: none;
-      border-color: var(--accent-blue-500);
-      box-shadow: 0 0 0 3px var(--accent-blue-500);
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-primary);
     }
   }
 
@@ -136,16 +136,16 @@
   &__clear-button {
     padding: 8px 16px;
     border-radius: var(--radius-md, 8px);
-    background: var(--accent-red-500);
-    border: 1px solid var(--accent-red-500);
-    color: var(--accent-red-200);
+    background: var(--accent-danger);
+    border: 1px solid var(--accent-danger);
+    color: var(--token-surface-danger-strong);
     font-size: var(--font-small-size, 0.875rem);
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
     transition: var(--transition-quick, all 0.2s ease);
 
     &:hover {
-      background: var(--accent-red-500);
+      background: var(--accent-danger);
     }
   }
 
@@ -191,7 +191,7 @@
     justify-content: center;
     padding: 6px 12px;
     border-radius: 999px;
-    background: var(--accent-purple-500);
+    background: var(--accent-primary);
     color: var(--flat-surface-bg, var(--openai-white));
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold, 600);
@@ -223,7 +223,7 @@
     color: var(--neutral-100, var(--openai-gray-50));
 
     &--low {
-      color: var(--accent-amber-400);
+      color: var(--accent-muted);
     }
   }
 
@@ -238,21 +238,21 @@
     font-size: var(--font-small-size, 0.875rem);
 
     &--high {
-      background: var(--accent-red-500);
-      color: var(--accent-red-200);
-      border: 1px solid var(--accent-red-500);
+      background: var(--accent-danger);
+      color: var(--token-surface-danger-strong);
+      border: 1px solid var(--accent-danger);
     }
 
     &--medium {
-      background: var(--accent-amber-500);
-      color: var(--accent-amber-200);
-      border: 1px solid var(--accent-amber-500);
+      background: var(--accent-muted);
+      color: var(--token-surface-elevated);
+      border: 1px solid var(--accent-muted);
     }
 
     &--low {
-      background: var(--accent-green-500);
-      color: var(--accent-green-200);
-      border: 1px solid var(--accent-green-500);
+      background: var(--accent-primary);
+      color: var(--token-surface-accent-strong);
+      border: 1px solid var(--accent-primary);
     }
   }
 
@@ -396,7 +396,7 @@
     color: var(--neutral-200, var(--openai-gray-100));
 
     &--overdue {
-      color: var(--accent-red-300);
+      color: var(--token-surface-danger-strong);
       font-weight: var(--font-weight-semibold, 600);
     }
   }
@@ -418,7 +418,7 @@
     left: 0;
     top: 0;
     bottom: 0;
-    background: var(--accent-blue-500);
+    background: var(--accent-primary);
     transition: width 0.3s ease;
   }
 
@@ -449,11 +449,11 @@
 
     &:hover {
       background: var(--neutral-900, var(--openai-gray-800));
-      border-color: var(--accent-blue-500);
+      border-color: var(--accent-primary);
     }
 
     &--advance {
-      color: var(--accent-green-200);
+      color: var(--token-surface-accent-strong);
     }
   }
 
@@ -509,7 +509,7 @@
     transition: border-color var(--transition-quick, 0.2s ease);
 
     &:hover {
-      border-color: var(--accent-blue-500);
+      border-color: var(--accent-primary);
     }
   }
 
@@ -532,12 +532,12 @@
   }
 
   &__market-badge {
-    background: var(--accent-blue-500);
+    background: var(--accent-primary);
     color: var(--flat-surface-bg, var(--openai-white));
   }
 
   &__route-badge {
-    background: var(--accent-purple-500);
+    background: var(--accent-primary);
     color: var(--flat-surface-bg, var(--openai-white));
   }
 
@@ -585,7 +585,7 @@
 
   &__contract-amount {
     font-size: var(--font-small-size, 0.875rem);
-    color: var(--accent-green-200);
+    color: var(--token-surface-accent-strong);
   }
 
   &__card-actions {
@@ -610,17 +610,17 @@
     transition: var(--transition-quick, all 0.2s ease);
 
     &:hover {
-      border-color: var(--accent-blue-500);
+      border-color: var(--accent-primary);
       background: var(--neutral-900, var(--openai-gray-800));
     }
 
     &--advance {
       border-color: transparent;
-      background: var(--accent-green-500);
+      background: var(--accent-primary);
       color: var(--flat-surface-bg, var(--openai-white));
 
       &:hover {
-        background: var(--accent-green-600);
+        background: var(--accent-primary-hover);
       }
     }
 
@@ -728,13 +728,13 @@
     padding: 10px 16px;
     border-radius: var(--radius-md, 8px);
     border: 1px solid transparent;
-    background: var(--accent-blue-500);
+    background: var(--accent-primary);
     color: var(--flat-surface-bg, var(--openai-white));
     font-weight: var(--font-weight-semibold, 600);
     cursor: pointer;
 
     &:hover {
-      background: var(--accent-blue-600);
+      background: var(--accent-primary-hover);
     }
   }
 

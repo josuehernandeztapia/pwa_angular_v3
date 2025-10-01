@@ -60,6 +60,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroy$ = new Subject<void>();
   private pmtChart?: Chart;
   private revenueChart?: Chart;
+  private readonly trendIconMap: Record<'up' | 'down' | 'stable', IconName> = {
+    up: 'trending-up',
+    down: 'trending-down',
+    stable: 'minus'
+  };
+  private readonly defaultTrendIcon: IconName = 'minus';
 
   // State management
   userName = 'Ricardo';
@@ -416,13 +422,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getTrendIcon(trend: KPICard['trend']): IconName {
-    if (trend === 'up') {
-      return 'trending-up';
+    if (!trend) {
+      return this.defaultTrendIcon;
     }
-    if (trend === 'down') {
-      return 'trending-down';
-    }
-    return 'minus';
+
+    return this.trendIconMap[trend] ?? this.defaultTrendIcon;
   }
 
   getTrendSymbol(trend: KPICard['trend']): string {

@@ -11,7 +11,7 @@
   }
 
   &__header {
-    border-bottom: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    border-bottom: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
     padding-bottom: var(--space-4, 16px);
   }
 
@@ -34,7 +34,7 @@
   }
 
   &__title-icon {
-    color: var(--accent-blue-500);
+    color: var(--accent-primary);
   }
 
   &__title {
@@ -66,12 +66,12 @@
     }
 
     &--primary {
-      background: var(--accent-blue-600);
+      background: var(--accent-primary-hover);
       color: var(--flat-surface-bg, var(--openai-white));
 
       &:hover:enabled,
       &:focus-visible {
-        background: var(--accent-blue-700);
+        background: var(--accent-primary-hover);
       }
     }
 
@@ -86,13 +86,13 @@
     justify-content: center;
 
     &--spin {
-      animation: calibration-admin-spin 0.9s linear infinite;
+      animation: calibration-admin-pulse 0.9s ease-in-out infinite;
     }
   }
 
   &__status-card {
     border-radius: var(--radius-xl, 16px);
-    border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
     background: var(--flat-surface-bg, var(--openai-white));
     padding: var(--space-5, 20px);
     box-shadow: 0 16px 32px var(--openai-black);
@@ -101,15 +101,15 @@
     gap: var(--space-4, 16px);
 
     &[data-status='PASSED'] {
-      border-color: var(--accent-green-500);
+      border-color: var(--accent-primary);
     }
 
     &[data-status='FAILED'] {
-      border-color: var(--accent-red-500);
+      border-color: var(--accent-danger);
     }
 
     &[data-status='PENDING'] {
-      border-color: var(--accent-orange-500);
+      border-color: var(--accent-muted);
     }
   }
 
@@ -134,15 +134,15 @@
     color: var(--color-text-secondary);
 
     &--passed {
-      color: var(--accent-green-500);
+      color: var(--accent-primary);
     }
 
     &--failed {
-      color: var(--accent-red-500);
+      color: var(--accent-danger);
     }
 
     &--pending {
-      color: var(--accent-orange-500);
+      color: var(--accent-muted);
     }
   }
 
@@ -170,7 +170,7 @@
     padding: var(--space-3, 12px);
     border-radius: var(--radius-lg, 12px);
     border: 1px solid var(--border-neutral-weak, var(--color-neutral-400));
-    background: var(--surface-neutral-weak, var(--color-neutral-400));
+    background: var(--token-surface-muted, var(--color-neutral-400));
   }
 
   &__metric-value {
@@ -189,14 +189,14 @@
     margin-top: var(--space-2, 8px);
     padding: 4px 10px;
     border-radius: var(--radius-md, 8px);
-    background: var(--accent-orange-500);
-    color: var(--accent-orange-700);
+    background: var(--accent-muted);
+    color: var(--accent-muted);
     font-size: 0.8rem;
     font-weight: var(--font-weight-semibold, 600);
 
     &--passed {
-      background: var(--accent-green-500);
-      color: var(--accent-green-700);
+      background: var(--accent-primary);
+      color: var(--accent-primary-hover);
     }
   }
 
@@ -219,7 +219,7 @@
     gap: var(--space-3, 12px);
     padding: var(--space-4, 16px);
     border-radius: var(--radius-xl, 16px);
-    border: 1px solid var(--border-neutral-weak, color-mix(in srgb, var(--color-neutral-400) 36%, transparent));
+    border: 1px solid var(--border-neutral-weak, var(--token-surface-neutral-400-alpha-36));
     background: var(--flat-surface-bg, var(--openai-white));
   }
 
@@ -236,16 +236,16 @@
   &__matrix-cell {
     padding: var(--space-3, 12px);
     border-radius: var(--radius-lg, 12px);
-    background: var(--surface-neutral-weak, var(--color-neutral-400));
+    background: var(--token-surface-muted, var(--color-neutral-400));
     display: flex;
     flex-direction: column;
     gap: var(--space-1, 4px);
     align-items: flex-start;
 
-    &--tp { border-left: 4px solid var(--accent-green-500); }
-    &--tn { border-left: 4px solid var(--accent-blue-500); }
-    &--fp { border-left: 4px solid var(--accent-red-500); }
-    &--fn { border-left: 4px solid var(--accent-orange-500); }
+    &--tp { border-left: 4px solid var(--accent-primary); }
+    &--tn { border-left: 4px solid var(--accent-primary); }
+    &--fp { border-left: 4px solid var(--accent-danger); }
+    &--fn { border-left: 4px solid var(--accent-muted); }
   }
 
   &__matrix-value {
@@ -282,15 +282,15 @@
     background: var(--flat-surface-bg, var(--openai-white));
 
     &[data-status='FAILED'] {
-      border-left: 4px solid var(--accent-red-500);
+      border-left: 4px solid var(--accent-danger);
     }
 
     &[data-status='PASSED'] {
-      border-left: 4px solid var(--accent-green-500);
+      border-left: 4px solid var(--accent-primary);
     }
 
     &[data-status='PENDING'] {
-      border-left: 4px solid var(--accent-orange-500);
+      border-left: 4px solid var(--accent-muted);
     }
   }
 
@@ -314,18 +314,18 @@
     font-size: 0.85rem;
 
     &--passed {
-      background: var(--accent-green-500);
-      color: var(--accent-green-700);
+      background: var(--accent-primary);
+      color: var(--accent-primary-hover);
     }
 
     &--failed {
-      background: var(--accent-red-500);
-      color: var(--accent-red-700);
+      background: var(--accent-danger);
+      color: var(--accent-danger);
     }
 
     &--pending {
-      background: var(--accent-orange-500);
-      color: var(--accent-orange-700);
+      background: var(--accent-muted);
+      color: var(--accent-muted);
     }
   }
 
@@ -352,7 +352,7 @@
   }
 
   &__overlay-icon {
-    color: var(--accent-blue-500);
+    color: var(--accent-primary);
   }
 
   &__overlay-title {
@@ -372,21 +372,25 @@
     max-width: 100%;
     height: 6px;
     border-radius: var(--radius-md, 8px);
-    background: var(--surface-neutral-weak, var(--color-neutral-400));
+    background: var(--token-surface-muted, var(--color-neutral-400));
     overflow: hidden;
   }
 
   &__progress-fill {
     height: 100%;
     border-radius: inherit;
-    background: linear-gradient(90deg, var(--accent-blue-500), var(--accent-purple-500));
+    background: var(--accent-primary);
     transition: width var(--transition-base, 0.3s ease);
   }
 }
 
-@keyframes calibration-admin-spin {
-  to {
-    transform: rotate(360deg);
+@keyframes calibration-admin-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
   }
 }
 

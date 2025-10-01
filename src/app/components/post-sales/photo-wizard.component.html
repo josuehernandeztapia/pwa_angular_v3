@@ -81,7 +81,7 @@
         <div class="photo-wizard__step-body">
           <div class="photo-wizard__actions">
             <label
-              class="btn btn-ghost ui-btn photo-wizard__action"
+              class="btn btn-ghost photo-wizard__action"
               [class.is-disabled]="step.uploading"
               [attr.data-cy]="'postventa-upload-photo-' + step.id"
             >
@@ -98,7 +98,7 @@
             </label>
 
             @if (step.done) {
-              <button type="button" class="btn btn-secondary ui-btn photo-wizard__action" (click)="retake(step.id)">
+              <button type="button" class="btn btn-secondary photo-wizard__action" (click)="retake(step.id)">
                 Repetir
               </button>
             }
@@ -171,7 +171,7 @@
                     @if (step.id === 'vin' || step.id === 'odometer') {
                       <button
                         type="button"
-                        class="btn btn-primary ui-btn"
+                        class="btn btn-primary"
                         [attr.data-cy]="'postventa-ocr-' + step.id"
                         (click)="openManualEntry(step.id)"
                         data-testid="manual-entry-btn"
@@ -284,7 +284,7 @@
   <footer class="photo-wizard__footer">
     <button
       type="button"
-      class="btn btn-primary ui-btn"
+      class="btn btn-primary"
       (click)="next()"
       [attr.data-cy]="isAllGood ? 'postventa-confirm' : 'postventa-next'"
     >

@@ -693,6 +693,26 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     return 'REVIEW';
   }
 
+  formatAviDecision(decision: 'GO' | 'REVIEW' | 'NO_GO' | null, score?: number | null): string {
+    if (!decision) {
+      return 'Sin evaluación';
+    }
+
+    const labels: Record<'GO' | 'REVIEW' | 'NO_GO', string> = {
+      GO: 'GO - Aprobado',
+      REVIEW: 'REVIEW - Revisión',
+      NO_GO: 'NO GO - Rechazado'
+    };
+
+    const normalizedScore = typeof score === 'number'
+      ? Math.round(this.clampScore(score) * 100)
+      : null;
+
+    return normalizedScore !== null
+      ? `${labels[decision]} (${normalizedScore}%)`
+      : labels[decision];
+  }
+
   private clampScore(score: number): number {
     if (!Number.isFinite(score)) {
       return 0;

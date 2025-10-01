@@ -1,16 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { fireEvent } from '@testing-library/angular';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { ClienteFormComponent } from './cliente-form.component';
+import { buildComponentTestProviders } from '../../../../test-helpers/component-test-providers';
 import { ToastService } from '../../../services/toast.service';
 import { ApiService } from '../../../services/api.service';
 import { Client, BusinessFlow } from '../../../models/types';
 import { FlowContextService } from '../../../services/flow-context.service';
 import { ErrorBoundaryService } from '../../../services/error-boundary.service';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 const mockClient: Client = {
   id: '1',
@@ -28,17 +30,36 @@ const mockClient: Client = {
   lastModified: new Date()
 };
 
+const setRouteParams = (route: Partial<ActivatedRoute>, params: Record<string, any>) => {
+  route.params = of(params);
+  if (route.snapshot) {
+    const snapshot: any = route.snapshot;
+    snapshot.params = params;
+    snapshot.paramMap = convertToParamMap(params);
+  }
+};
+
+const setQueryParams = (route: Partial<ActivatedRoute>, params: Record<string, any>) => {
+  route.queryParams = of(params);
+  if (route.snapshot) {
+    const snapshot: any = route.snapshot;
+    snapshot.queryParams = params;
+    snapshot.queryParamMap = convertToParamMap(params);
+  }
+};
+
 describe('ClienteFormComponent', () => {
   let component: ClienteFormComponent;
   let fixture: ComponentFixture<ClienteFormComponent>;
   let mockRouter: jasmine.SpyObj<Router>;
-  let mockActivatedRoute: any;
+  let activatedRouteMock: Partial<ActivatedRoute>;
   let mockToastService: jasmine.SpyObj<ToastService>;
   let mockApiService: jasmine.SpyObj<ApiService>;
   let mockErrorBoundary: jasmine.SpyObj<ErrorBoundaryService>;
+  let providerSetup: ReturnType<typeof buildComponentTestProviders>;
 
   beforeEach(async () => {
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate', 'navigateByUrl']);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate', 'navigateByUrl', 'createUrlTree']);
     const toastServiceSpy = jasmine.createSpyObj('ToastService', ['success', 'error']);
     const apiServiceSpy = jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']);
     const flowContextSpy = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'clearContext', 'getContextData', 'updateContext']);
@@ -46,24 +67,15 @@ describe('ClienteFormComponent', () => {
     const errorBoundarySpy = jasmine.createSpyObj('ErrorBoundaryService', ['reportNetworkTimeout', 'resolveIssueByContext']);
     errorBoundarySpy.reportNetworkTimeout.and.callFake(() => ({ id: 'issue-1' } as any));
 
-    const queryParamMap = {
-      get: (_: string) => null
-    };
-
-    mockActivatedRoute = {
-      params: of({ id: null }),
-      snapshot: {
-        params: { id: null },
-        queryParamMap
-      },
-      data: of({})
-    };
+    providerSetup = buildComponentTestProviders({ router: routerSpy });
+    activatedRouteMock = providerSetup.mocks.activatedRoute;
+    setRouteParams(activatedRouteMock, {});
+    setQueryParams(activatedRouteMock, {});
 
     await TestBed.configureTestingModule({
-      imports: [ClienteFormComponent, ReactiveFormsModule],
+      imports: [ClienteFormComponent, ReactiveFormsModule, IconComponent],
       providers: [
-        { provide: Router, useValue: routerSpy },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        ...providerSetup.providers,
         { provide: ToastService, useValue: toastServiceSpy },
         { provide: ApiService, useValue: apiServiceSpy },
         { provide: FlowContextService, useValue: flowContextSpy },
@@ -162,8 +174,7 @@ describe('ClienteFormComponent', () => {
   });
 
   it('should load existing client data in edit mode', () => {
-    mockActivatedRoute.params = of({ id: '1' });
-    mockActivatedRoute.snapshot.params = { id: '1' };
+    setRouteParams(activatedRouteMock, { id: '1' });
     mockApiService.getClientById.and.returnValue(of(mockClient));
 
     component.ngOnInit();
@@ -304,12 +315,6 @@ describe('ClienteFormComponent', () => {
 
 describe('ClienteFormComponent Integration Tests', () => {
   it('should render form with all required fields', async () => {
-    const mockActivatedRoute = {
-      params: of({ id: null }),
-      snapshot: { params: { id: null }, queryParamMap: { get: (_: string) => null } },
-      data: of({})
-    };
-
     const mockApiService = jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']);
     mockApiService.createClient.and.returnValue(of(mockClient));
     mockApiService.updateClient.and.returnValue(of(mockClient));
@@ -320,10 +325,17 @@ describe('ClienteFormComponent Integration Tests', () => {
     const errorBoundary = jasmine.createSpyObj('ErrorBoundaryService', ['reportNetworkTimeout', 'resolveIssueByContext']);
     errorBoundary.reportNetworkTimeout.and.returnValue({ id: 'issue' });
 
+    const providerSetup = buildComponentTestProviders();
+    const activatedRoute = providerSetup.mocks.activatedRoute;
+    setRouteParams(activatedRoute, {});
+    setQueryParams(activatedRoute, {});
+    const mockRouter = providerSetup.mocks.router;
+    mockRouter.navigate.and.returnValue(Promise.resolve(true));
+
     await render(ClienteFormComponent, {
+      imports: [IconComponent],
       providers: [
-        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        ...providerSetup.providers,
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
         { provide: ApiService, useValue: mockApiService },
         { provide: FlowContextService, useValue: flowContext },
@@ -339,12 +351,6 @@ describe('ClienteFormComponent Integration Tests', () => {
   });
 
   it('should show validation errors when submitting empty form', async () => {
-    const mockActivatedRoute = {
-      params: of({ id: null }),
-      snapshot: { params: { id: null }, queryParamMap: { get: (_: string) => null } },
-      data: of({})
-    };
-
     const mockApiService = jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']);
     mockApiService.createClient.and.returnValue(of(mockClient));
     mockApiService.updateClient.and.returnValue(of(mockClient));
@@ -355,10 +361,17 @@ describe('ClienteFormComponent Integration Tests', () => {
     const errorBoundary = jasmine.createSpyObj('ErrorBoundaryService', ['reportNetworkTimeout', 'resolveIssueByContext']);
     errorBoundary.reportNetworkTimeout.and.returnValue({ id: 'issue' });
 
+    const providerSetup = buildComponentTestProviders();
+    const activatedRoute = providerSetup.mocks.activatedRoute;
+    setRouteParams(activatedRoute, {});
+    setQueryParams(activatedRoute, {});
+    const mockRouter = providerSetup.mocks.router;
+    mockRouter.navigate.and.returnValue(Promise.resolve(true));
+
     await render(ClienteFormComponent, {
+      imports: [IconComponent],
       providers: [
-        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        ...providerSetup.providers,
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
         { provide: ApiService, useValue: mockApiService },
         { provide: FlowContextService, useValue: flowContext },
@@ -376,12 +389,6 @@ describe('ClienteFormComponent Integration Tests', () => {
   });
 
   it('should handle form input correctly', async () => {
-    const mockActivatedRoute = {
-      params: of({ id: null }),
-      snapshot: { params: { id: null }, queryParamMap: { get: (_: string) => null } },
-      data: of({})
-    };
-
     const user = userEvent.setup();
 
     const flowContext = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'clearContext', 'getContextData', 'updateContext']);
@@ -389,10 +396,17 @@ describe('ClienteFormComponent Integration Tests', () => {
     const errorBoundary = jasmine.createSpyObj('ErrorBoundaryService', ['reportNetworkTimeout', 'resolveIssueByContext']);
     errorBoundary.reportNetworkTimeout.and.returnValue({ id: 'issue' });
 
+    const providerSetup = buildComponentTestProviders();
+    const activatedRoute = providerSetup.mocks.activatedRoute;
+    setRouteParams(activatedRoute, {});
+    setQueryParams(activatedRoute, {});
+    const mockRouter = providerSetup.mocks.router;
+    mockRouter.navigate.and.returnValue(Promise.resolve(true));
+
     await render(ClienteFormComponent, {
+      imports: [IconComponent],
       providers: [
-        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        ...providerSetup.providers,
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
         { provide: ApiService, useValue: jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']) },
         { provide: FlowContextService, useValue: flowContext },
@@ -414,12 +428,6 @@ describe('ClienteFormComponent Integration Tests', () => {
   });
 
   it('should submit form with valid data', async () => {
-    const mockActivatedRoute = {
-      params: of({ id: null }),
-      snapshot: { params: { id: null }, queryParamMap: { get: (_: string) => null } },
-      data: of({})
-    };
-
     const mockApiService = jasmine.createSpyObj('ApiService', ['createClient']);
     mockApiService.createClient.and.returnValue(of({
       id: '123',
@@ -428,7 +436,12 @@ describe('ClienteFormComponent Integration Tests', () => {
       phone: '5551234567'
     }));
 
-    const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    const providerSetup = buildComponentTestProviders();
+    const activatedRoute = providerSetup.mocks.activatedRoute;
+    setRouteParams(activatedRoute, {});
+    setQueryParams(activatedRoute, {});
+    const mockRouter = providerSetup.mocks.router;
+    mockRouter.navigate.and.returnValue(Promise.resolve(true));
     const user = userEvent.setup();
 
     const flowContext = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'clearContext', 'getContextData', 'updateContext']);
@@ -437,9 +450,9 @@ describe('ClienteFormComponent Integration Tests', () => {
     errorBoundary.reportNetworkTimeout.and.returnValue({ id: 'issue' });
 
     await render(ClienteFormComponent, {
+      imports: [IconComponent],
       providers: [
-        { provide: Router, useValue: mockRouter },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        ...providerSetup.providers,
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
         { provide: ApiService, useValue: mockApiService },
         { provide: FlowContextService, useValue: flowContext },
@@ -464,13 +477,6 @@ describe('ClienteFormComponent Integration Tests', () => {
   });
 
   it('should handle back button click', async () => {
-    const mockActivatedRoute = {
-      params: of({ id: null }),
-      snapshot: { params: { id: null }, queryParamMap: { get: (_: string) => null } },
-      data: of({})
-    };
-
-    const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     const user = userEvent.setup();
 
     const flowContext = jasmine.createSpyObj('FlowContextService', ['setBreadcrumbs', 'saveContext', 'clearContext', 'getContextData', 'updateContext']);
@@ -478,10 +484,17 @@ describe('ClienteFormComponent Integration Tests', () => {
     const errorBoundary = jasmine.createSpyObj('ErrorBoundaryService', ['reportNetworkTimeout', 'resolveIssueByContext']);
     errorBoundary.reportNetworkTimeout.and.returnValue({ id: 'issue' });
 
+    const providerSetupBack = buildComponentTestProviders();
+    const activatedRoute = providerSetupBack.mocks.activatedRoute;
+    setRouteParams(activatedRoute, {});
+    setQueryParams(activatedRoute, {});
+    const mockRouter = providerSetupBack.mocks.router;
+    mockRouter.navigate.and.returnValue(Promise.resolve(true));
+
     await render(ClienteFormComponent, {
+      imports: [IconComponent],
       providers: [
-        { provide: Router, useValue: mockRouter },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        ...providerSetupBack.providers,
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
         { provide: ApiService, useValue: jasmine.createSpyObj('ApiService', ['createClient', 'updateClient', 'getClientById']) },
         { provide: FlowContextService, useValue: flowContext },

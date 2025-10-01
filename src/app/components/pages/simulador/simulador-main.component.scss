@@ -358,7 +358,7 @@ canvas {
   padding: 16px;
 
   &--selected {
-    box-shadow: 0 0 0 2px var(--color-accent-primary);
+    box-shadow: 0 0 0 2px var(--accent-primary);
   }
 }
 
@@ -371,12 +371,12 @@ canvas {
 .simulation-card__checkbox input {
   width: 1rem;
   height: 1rem;
-  color: var(--color-accent-primary-dark);
+  color: var(--accent-primary-hover);
   border-radius: 8px; /* OpenAI standard */
   border: 1px solid var(--color-border-secondary);
 
   &:focus {
-    outline: 2px solid var(--color-accent-primary);
+    outline: 2px solid var(--accent-primary);
     outline-offset: 2px;
   }
 }
@@ -505,21 +505,21 @@ canvas {
   }
 
   &--completed {
-    background: rgba(34, 197, 94, 0.15);
-    color: color-mix(in srgb, var(--accent-green-500) 85%, var(--color-success-strong) 15%);
+    background: var(--token-surface-accent-alpha-15);
+    color: var(--token-surface-accent-blend-color-success-strong-85);
   }
 }
 
 @media (prefers-color-scheme: dark) {
   .simulation-card__status {
     &--draft {
-      background: rgba(245, 158, 11, 0.3);
+      background: var(--token-surface-warning-alpha-30);
       color: var(--color-warning-400);
     }
 
     &--completed {
-      background: rgba(34, 197, 94, 0.3);
-      color: var(--accent-green-300);
+      background: var(--token-surface-accent-alpha-30);
+      color: var(--token-surface-accent-strong);
     }
   }
 }
@@ -894,7 +894,7 @@ input:focus,
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--color-border-primary) 35%, transparent);
+  border: 1px solid var(--token-border-primary-alpha-35);
 }
 
 .comparison-modal__table {
@@ -904,16 +904,16 @@ input:focus,
 }
 
 .comparison-modal__table-header {
-  background: color-mix(in srgb, var(--color-border-secondary) 15%, transparent);
+  background: var(--token-border-neutral-alpha-15);
 }
 
 .comparison-modal__table-cell {
   padding: 0.6rem 0.75rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-border-secondary) 25%, transparent);
+  border-bottom: 1px solid var(--token-border-neutral-alpha-25);
 }
 
 .comparison-modal__table-row:nth-child(even) {
-  background: color-mix(in srgb, var(--flat-surface-bg) 92%, transparent);
+  background: var(--token-surface-flat-alpha-92);
 }
 
 @media (max-width: 960px) {
@@ -1065,26 +1065,26 @@ input:focus,
   font-weight: 500;
 
   &--draft {
-    background: rgba(245, 158, 11, 0.15);
+    background: var(--token-surface-warning-alpha-15);
     color: var(--color-warning-600);
   }
 
   &--completed {
-    background: rgba(34, 197, 94, 0.15);
-    color: color-mix(in srgb, var(--accent-green-500) 85%, var(--color-success-strong) 15%);
+    background: var(--token-surface-accent-alpha-15);
+    color: var(--token-surface-accent-blend-color-success-strong-85);
   }
 }
 
 @media (prefers-color-scheme: dark) {
   .comparison-modal__status-badge {
     &--draft {
-      background: rgba(245, 158, 11, 0.3);
-      color: var(--color-warning-400);
+      background: var(--token-surface-warning-alpha-30);
+      color: var(--accent-muted);
     }
 
     &--completed {
-      background: rgba(34, 197, 94, 0.3);
-      color: var(--accent-green-300);
+      background: var(--token-surface-accent-alpha-30);
+      color: var(--token-surface-accent-strong);
     }
   }
 }
@@ -1096,46 +1096,46 @@ input:focus,
   font-weight: 600;
 
   &--excellent {
-    background: rgba(34, 197, 94, 0.15);
-    color: color-mix(in srgb, var(--accent-green-500) 85%, var(--color-success-strong) 15%);
+    background: var(--token-surface-accent-alpha-15);
+    color: var(--accent-primary-hover);
   }
 
   &--good {
-    background: rgba(59, 130, 246, 0.15);
-    color: var(--accent-blue-700);
+    background: var(--token-surface-accent-alpha-10);
+    color: var(--accent-primary);
   }
 
   &--fair {
-    background: rgba(245, 158, 11, 0.15);
-    color: var(--color-warning-600);
+    background: var(--token-surface-warning-alpha-15);
+    color: var(--accent-muted);
   }
 
   &--poor {
-    background: rgba(239, 68, 68, 0.15);
-    color: var(--color-danger-dark);
+    background: var(--token-surface-danger-alpha-15);
+    color: var(--accent-danger);
   }
 }
 
 @media (prefers-color-scheme: dark) {
   .comparison-modal__efficiency-badge {
     &--excellent {
-      background: rgba(34, 197, 94, 0.3);
-      color: var(--accent-green-300);
+      background: var(--token-surface-accent-alpha-30);
+      color: var(--token-surface-accent-strong);
     }
 
     &--good {
-      background: rgba(59, 130, 246, 0.3);
-      color: var(--accent-blue-400);
+      background: var(--token-surface-accent-alpha-22);
+      color: var(--accent-primary);
     }
 
     &--fair {
-      background: rgba(245, 158, 11, 0.3);
-      color: var(--color-warning-400);
+      background: var(--token-surface-warning-alpha-28);
+      color: var(--accent-muted);
     }
 
     &--poor {
-      background: rgba(239, 68, 68, 0.3);
-      color: var(--accent-red-400);
+      background: var(--token-surface-danger-alpha-30);
+      color: var(--accent-danger);
     }
   }
 }
@@ -1203,8 +1203,8 @@ input:focus,
   }
 
   &--success {
-    color: var(--accent-green-500);
-    --icon-color: var(--accent-green-500);
+    color: var(--accent-primary);
+    --icon-color: var(--accent-primary);
   }
 }
 

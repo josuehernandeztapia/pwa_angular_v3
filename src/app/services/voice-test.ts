@@ -85,5 +85,5 @@ async function testVoiceEvaluation(voiceValidationService: any) {
 if (typeof window !== 'undefined') {
   (window as any).testVoiceEvaluation = testVoiceEvaluation;
   (window as any).createMockAudioBlob = createMockAudioBlob;
-  console.info('%c[VoiceTest] Voice evaluation helpers attached to window', 'color:var(--accent-green-500)');
+  console.info('%c[VoiceTest] Voice evaluation helpers attached to window', 'color:var(--accent-primary)');
 }

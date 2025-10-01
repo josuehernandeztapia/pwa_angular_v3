@@ -10,7 +10,7 @@
   padding: var(--space-6, 24px);
   border-radius: var(--radius-lg, 12px);
   border: 1px solid var(--color-border-secondary);
-  background: var(--surface-neutral-weak, var(--color-neutral-400));
+  background: var(--token-surface-muted, var(--color-neutral-400));
 
   @media (prefers-color-scheme: dark) {
     background: var(--color-neutral-900);
@@ -66,7 +66,7 @@
   }
 
   &--active {
-    background: linear-gradient(135deg, var(--accent-blue-500), var(--accent-blue-600));
+    background: var(--accent-primary);
     border-color: transparent;
     color: var(--color-bg-primary);
     box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
@@ -92,7 +92,7 @@
 }
 
 .activity-feed__stream::-webkit-scrollbar-thumb {
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   border-radius: var(--radius-sm, 8px);
 }
 
@@ -112,12 +112,12 @@
   }
 
   &--high {
-    border-left: 3px solid var(--accent-amber-500);
-    background: var(--accent-amber-500);
+    border-left: 3px solid var(--accent-muted);
+    background: var(--accent-muted);
   }
 
   &--medium {
-    border-left: 3px solid var(--accent-blue-500);
+    border-left: 3px solid var(--accent-primary);
   }
 
   &--low {
@@ -142,29 +142,21 @@
   border: 2px solid var(--color-border-secondary);
   color: var(--color-bg-primary);
 
-  &--payment {
-    background: linear-gradient(135deg, var(--accent-green-400), var(--accent-green-600));
-  }
-
-  &--document {
-    background: linear-gradient(135deg, var(--accent-blue-400), var(--accent-blue-600));
-  }
-
-  &--communication {
-    background: linear-gradient(135deg, var(--primary-cyan-400, var(--openai-blue)), var(--primary-cyan-600, var(--openai-blue-hover)));
+  &--payment,
+  &--document,
+  &--communication,
+  &--achievement {
+    background: var(--accent-primary);
   }
 
   &--opportunity {
-    background: linear-gradient(135deg, var(--accent-amber-400), var(--accent-amber-600));
-    color: var(--color-neutral-900);
+    background: var(--accent-muted);
+    color: var(--flat-surface-bg, var(--openai-white));
   }
 
   &--renewal {
-    background: linear-gradient(135deg, var(--color-warning-500), var(--color-warning-600));
-  }
-
-  &--achievement {
-    background: linear-gradient(135deg, var(--accent-purple-400), var(--accent-purple-600));
+    background: var(--accent-muted);
+    color: var(--flat-surface-bg, var(--openai-white));
   }
 }
 
@@ -209,8 +201,8 @@
   color: var(--color-text-secondary);
 
   &--system {
-    background: var(--accent-blue-500);
-    color: var(--accent-blue-500);
+    background: var(--accent-primary);
+    color: var(--accent-primary);
   }
 
   &--advisor {
@@ -219,8 +211,8 @@
   }
 
   &--client {
-    background: var(--accent-amber-500);
-    color: var(--accent-amber-600);
+    background: var(--accent-muted);
+    color: var(--accent-muted);
   }
 
   &--automated {
@@ -238,7 +230,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1, 4px);
-  color: var(--accent-red-500);
+  color: var(--accent-danger);
   font-size: var(--text-sm, 0.875rem);
   font-weight: var(--font-medium, 500);
 }
@@ -258,7 +250,7 @@
 }
 
 .activity-feed__client {
-  color: var(--accent-blue-500);
+  color: var(--accent-primary);
   font-weight: var(--font-semibold, 600);
 }
 
@@ -292,7 +284,7 @@
   border-radius: var(--radius-sm, 8px);
   border: none;
   cursor: pointer;
-  background: linear-gradient(135deg, var(--accent-amber-500), var(--accent-amber-600));
+  background: var(--accent-muted);
   color: var(--color-neutral-900);
   font-size: var(--text-sm, 0.875rem);
   font-weight: var(--font-semibold, 600);

@@ -44,7 +44,7 @@ export class EventLogComponent implements OnInit {
       EventType.Collection,
       this.iconRegistry.toSvg('collection', {
         className: 'icon-16',
-        color: 'var(--color-accent-secondary)'
+        color: 'var(--accent-muted)'
       })
     );
 
@@ -76,7 +76,7 @@ export class EventLogComponent implements OnInit {
       EventType.GoalAchieved,
       this.iconRegistry.toSvg('target', {
         className: 'icon-16',
-        color: 'var(--color-accent-primary)'
+        color: 'var(--accent-primary)'
       })
     );
 
@@ -108,7 +108,7 @@ export class EventLogComponent implements OnInit {
       EventType.KYCCompleted,
       this.iconRegistry.toSvg('badge-check', {
         className: 'icon-16',
-        color: 'var(--color-accent-primary)'
+        color: 'var(--accent-primary)'
       })
     );
 

@@ -68,8 +68,8 @@
 
     &:focus {
       outline: none;
-      border-color: var(--accent-blue-600);
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-blue-500) 25%, transparent);
+      border-color: var(--accent-primary-hover);
+      box-shadow: 0 0 0 2px var(--token-surface-accent-alpha-25);
     }
   }
 
@@ -91,22 +91,23 @@
     font-weight: var(--font-weight-semibold);
     cursor: pointer;
     color: var(--color-text-primary-inverted);
-    background: var(--accent-blue-600);
+    background: var(--accent-primary-hover);
     transition:
       background var(--transition-quick),
-      transform var(--transition-quick);
+      margin-top var(--transition-quick);
+    margin-top: 0;
 
     &:hover {
-      background: var(--accent-blue-700);
+      background: var(--accent-primary-hover);
     }
 
     &:active {
-      transform: translateY(1px);
+      margin-top: 1px;
     }
 
     &:focus-visible {
       outline: none;
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+      box-shadow: 0 0 0 3px var(--token-surface-accent-alpha-35);
     }
   }
 
@@ -139,18 +140,18 @@
   }
 
   &__kpi-icon {
-    color: var(--accent-blue-600);
+    color: var(--accent-primary-hover);
 
     &--success {
-      color: var(--accent-green-600);
+      color: var(--accent-primary-hover);
     }
 
     &--transit {
-      color: var(--accent-blue-500);
+      color: var(--accent-primary);
     }
 
     &--warning {
-      color: var(--accent-orange-500);
+      color: var(--accent-muted);
     }
   }
 
@@ -279,7 +280,7 @@
   }
 
   &__milestone-icon {
-    color: var(--accent-blue-600);
+    color: var(--accent-primary-hover);
     flex-shrink: 0;
   }
 
@@ -328,21 +329,21 @@
 
     &:hover {
       background: var(--color-bg-tertiary);
-      border-color: color-mix(in srgb, var(--accent-blue-500) 28%, transparent);
+      border-color: var(--token-surface-accent-alpha-28);
     }
 
     &:focus-visible {
       outline: none;
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500) 30%, transparent);
+      box-shadow: 0 0 0 3px var(--token-surface-accent-alpha-30);
     }
 
     &--primary {
-      background: var(--accent-blue-600);
+      background: var(--accent-primary-hover);
       border-color: transparent;
       color: var(--color-text-primary-inverted);
 
       &:hover {
-        background: var(--accent-blue-700);
+        background: var(--accent-primary-hover);
       }
     }
   }
@@ -374,7 +375,7 @@
   }
 
   &__trigger-icon {
-    color: var(--accent-blue-600);
+    color: var(--accent-primary-hover);
   }
 
   &__trigger-meta {
@@ -395,7 +396,7 @@
     gap: var(--space-2);
     padding: var(--space-4);
     border-radius: var(--radius-md);
-    background: var(--surface-neutral-weak);
+    background: var(--token-surface-muted);
     color: var(--color-text-secondary);
     text-align: center;
   }
@@ -435,7 +436,7 @@
 
 @media (prefers-color-scheme: dark) {
   .ops-import-tracker {
-    background: color-mix(in srgb, var(--neutral-900) 92%, transparent);
+    background: var(--token-neutral-900-alpha-92);
     color: var(--neutral-100);
 
     &__subtitle,
@@ -446,8 +447,8 @@
     }
 
     &__search {
-      background: color-mix(in srgb, var(--neutral-900) 88%, transparent);
-      border-color: color-mix(in srgb, var(--neutral-700) 60%, transparent);
+      background: var(--token-neutral-900-alpha-88);
+      border-color: var(--token-neutral-700-alpha-60);
       color: var(--neutral-100);
 
       &::placeholder {
@@ -464,8 +465,8 @@
     &__summary-card,
     &__milestone,
     &__trigger-entry {
-      background: color-mix(in srgb, var(--neutral-900) 94%, transparent);
-      border-color: color-mix(in srgb, var(--neutral-700) 55%, transparent);
+      background: var(--token-neutral-900-alpha-94);
+      border-color: var(--token-neutral-700-alpha-55);
       box-shadow: none;
     }
 
@@ -477,16 +478,16 @@
     }
 
     &__milestone-action {
-      background: color-mix(in srgb, var(--neutral-900) 92%, transparent);
-      border-color: color-mix(in srgb, var(--neutral-700) 55%, transparent);
+      background: var(--token-neutral-900-alpha-92);
+      border-color: var(--token-neutral-700-alpha-55);
       color: var(--neutral-200);
 
       &:hover {
-        background: color-mix(in srgb, var(--neutral-800) 70%, transparent);
+        background: var(--token-surface-neutral-800-alpha-70);
       }
 
       &--primary {
-        background: var(--accent-blue-600);
+        background: var(--accent-primary-hover);
       }
     }
 
@@ -496,7 +497,7 @@
     }
 
     &__empty-message {
-      background: color-mix(in srgb, var(--neutral-800) 70%, transparent);
+      background: var(--token-surface-neutral-800-alpha-70);
       color: var(--neutral-300);
     }
 
@@ -505,4 +506,3 @@
     }
   }
 }
-

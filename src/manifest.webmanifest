@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Conductores del Mundo PWA",
   "short_name": "Conductores PWA",
-  "theme_color": "#737373",
+  "theme_color": "#10a37f",
   "background_color": "#080808",
   "display": "standalone",
   "scope": "/",

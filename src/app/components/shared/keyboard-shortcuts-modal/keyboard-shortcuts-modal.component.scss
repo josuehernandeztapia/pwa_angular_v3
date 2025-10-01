@@ -4,12 +4,14 @@
   background: rgba(15, 23, 42, 0.55);
   backdrop-filter: blur(3px);
   z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
 }
 
 .shortcuts__dialog {
-  position: fixed;
-  inset: 50% auto auto 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   width: min(480px, calc(100% - 32px));
   max-height: calc(100vh - 64px);
   background: var(--surface-dark, #111827);
@@ -87,7 +89,7 @@
   font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
   font-weight: 600;
   letter-spacing: 0.01em;
-  background: rgba(96, 165, 250, 0.16);
+  background: var(--token-surface-accent-alpha-16);
   color: var(--brand, #38bdf8);
   padding: 6px 12px;
   border-radius: 10px;

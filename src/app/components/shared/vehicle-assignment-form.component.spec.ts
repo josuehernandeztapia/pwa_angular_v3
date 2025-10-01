@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 import { VehicleAssignmentFormComponent } from './vehicle-assignment-form.component';
+import { buildComponentTestProviders } from '../../../test-helpers/component-test-providers';
 import { VehicleAssignmentService } from '../../services/vehicle-assignment.service';
 import { IntegratedImportTrackerService } from '../../services/integrated-import-tracker.service';
 
@@ -16,10 +17,12 @@ describe('VehicleAssignmentFormComponent', () => {
       ['assignVehicleToClient', 'validateVIN']);
     const importTrackerSpy = jasmine.createSpyObj('IntegratedImportTrackerService', 
       ['updateVehicleAssignment']);
+    const providerSetup = buildComponentTestProviders();
 
     await TestBed.configureTestingModule({
       imports: [VehicleAssignmentFormComponent, ReactiveFormsModule],
       providers: [
+        ...providerSetup.providers,
         FormBuilder,
         { provide: VehicleAssignmentService, useValue: vehicleServiceSpy },
         { provide: IntegratedImportTrackerService, useValue: importTrackerSpy }

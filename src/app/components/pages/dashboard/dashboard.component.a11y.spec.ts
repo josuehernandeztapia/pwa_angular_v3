@@ -10,6 +10,35 @@ import {
   AccessibilityChecker,
   createAccessibilityTestSuite
 } from '../../../test-helpers/accessibility.helper';
+import * as axeCore from 'axe-core';
+import { DeliveriesService } from '../../../services/deliveries.service';
+import { ToastService } from '../../../services/toast.service';
+import { FlowContextService } from '../../../services/flow-context.service';
+
+class DeliveriesServiceStub {
+  validateEtaCalculations = jasmine.createSpy('validateEtaCalculations').and.returnValue(of({
+    calculationsAccurate: true,
+    testedTransitions: 0,
+    accuracyPercentage: 100,
+    issues: []
+  }));
+}
+
+class ToastServiceStub {
+  info = jasmine.createSpy('info');
+  success = jasmine.createSpy('success');
+  warning = jasmine.createSpy('warning');
+  error = jasmine.createSpy('error');
+}
+
+class FlowContextServiceStub {
+  breadcrumbs$ = of(['Dashboard']);
+  setBreadcrumbs(): void {}
+  saveContext(): void {}
+  getContextData(): null { return null; }
+  updateContext(): void {}
+  clearContext(): void {}
+}
 
 describe('DashboardComponent Accessibility Tests', () => {
   let component: DashboardComponent;
@@ -69,6 +98,13 @@ describe('DashboardComponent Accessibility Tests', () => {
   ];
 
   beforeEach(async () => {
+    spyOn(axeCore, 'run').and.resolveTo({
+      violations: [],
+      passes: [],
+      incomplete: [],
+      inapplicable: []
+    } as any);
+
     const dashboardServiceSpy = jasmine.createSpyObj('DashboardService', [
       'getDashboardStats',
       'getActivityFeed',
@@ -83,7 +119,10 @@ describe('DashboardComponent Accessibility Tests', () => {
       imports: [DashboardComponent],
       providers: [
         { provide: DashboardService, useValue: dashboardServiceSpy },
-        { provide: Router, useValue: routerSpy }
+        { provide: Router, useValue: routerSpy },
+        { provide: DeliveriesService, useClass: DeliveriesServiceStub },
+        { provide: ToastService, useClass: ToastServiceStub },
+        { provide: FlowContextService, useClass: FlowContextServiceStub }
       ]
     }).compileComponents();
 

@@ -7,13 +7,13 @@
   gap: 24px;
   padding: 32px;
   border-radius: 20px;
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 45%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-45);
   background: var(--flat-surface-bg);
-  box-shadow: 0 20px 40px color-mix(in srgb, var(--openai-black) 10%, transparent);
+  box-shadow: 0 20px 40px var(--token-surface-inverse-alpha-10);
 
   @media (prefers-color-scheme: dark) {
-    background: color-mix(in srgb, var(--color-neutral-900) 88%, transparent);
-    border-color: color-mix(in srgb, var(--color-neutral-50) 12%, transparent);
+    background: var(--token-overlay-neutral-alpha-88);
+    border-color: var(--token-surface-neutral-50-alpha-12);
     color: var(--color-neutral-100);
   }
 
@@ -23,7 +23,7 @@
     inset: 0;
     height: 4px;
     border-radius: 20px 20px 0 0;
-    background: linear-gradient(90deg, var(--accent-amber-500), var(--accent-blue-400));
+    background: var(--accent-primary);
     opacity: 0.8;
   }
 
@@ -43,8 +43,8 @@
     width: 60px;
     height: 60px;
     border-radius: 999px;
-    border: 2px solid var(--accent-amber-500);
-    background: color-mix(in srgb, var(--accent-amber-500) 12%, transparent);
+    border: 2px solid var(--accent-muted);
+    background: var(--token-surface-warning-alpha-12);
     overflow: hidden;
   }
 
@@ -55,15 +55,15 @@
     animation: next-best-hero-pulse 2.2s ease-in-out infinite;
 
     &--critical {
-      background: radial-gradient(circle, color-mix(in srgb, var(--accent-red-500) 40%, transparent) 0%, transparent 70%);
+      background: radial-gradient(circle, var(--token-surface-danger-alpha-40) 0%, transparent 70%);
     }
 
     &--high {
-      background: radial-gradient(circle, color-mix(in srgb, var(--accent-amber-500) 40%, transparent) 0%, transparent 70%);
+      background: radial-gradient(circle, var(--token-surface-warning-alpha-40) 0%, transparent 70%);
     }
 
     &--medium {
-      background: radial-gradient(circle, color-mix(in srgb, var(--accent-blue-500) 35%, transparent) 0%, transparent 70%);
+      background: radial-gradient(circle, var(--token-surface-accent-alpha-35) 0%, transparent 70%);
     }
   }
 
@@ -86,7 +86,7 @@
     margin: 0;
     font-size: 1.75rem;
     font-weight: 700;
-    color: var(--accent-amber-500);
+    color: var(--accent-muted);
   }
 
   &__subtitle {
@@ -105,8 +105,8 @@
     gap: 8px;
     padding: 8px 16px;
     border-radius: 12px;
-    background: color-mix(in srgb, var(--accent-blue-400) 10%, transparent);
-    border: 1px solid var(--accent-blue-400);
+    background: var(--token-surface-accent-alpha-10);
+    border: 1px solid var(--accent-primary);
   }
 
   &__time-icon {
@@ -118,7 +118,7 @@
   &__time-text {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--accent-blue-600);
+    color: var(--accent-primary-hover);
   }
 
   &__body {
@@ -147,10 +147,10 @@
     font-weight: 700;
     font-size: 1.2rem;
     color: var(--flat-surface-bg);
-    background: linear-gradient(135deg, var(--accent-blue-400), var(--accent-blue-500));
+    background: var(--accent-primary);
     background-size: cover;
     background-position: center;
-    border: 3px solid color-mix(in srgb, var(--flat-surface-bg) 20%, transparent);
+    border: 3px solid var(--token-surface-flat-alpha-20);
   }
 
   &__health {
@@ -168,22 +168,22 @@
     border: 2px solid var(--flat-surface-bg);
 
     &--excellent {
-      background: var(--accent-green-500);
+      background: var(--accent-primary);
       color: var(--flat-surface-bg);
     }
 
     &--good {
-      background: var(--accent-blue-500);
+      background: var(--accent-primary);
       color: var(--flat-surface-bg);
     }
 
     &--warning {
-      background: var(--accent-amber-500);
+      background: var(--accent-muted);
       color: var(--flat-surface-bg);
     }
 
     &--critical {
-      background: var(--accent-red-500);
+      background: var(--accent-danger);
       color: var(--flat-surface-bg);
     }
   }
@@ -213,8 +213,8 @@
     border-radius: 999px;
     font-size: 0.75rem;
     font-weight: 600;
-    background: color-mix(in srgb, var(--accent-blue-400) 18%, transparent);
-    color: var(--accent-blue-600);
+    background: var(--token-surface-accent-soft);
+    color: var(--accent-primary-hover);
   }
 
   &__description {
@@ -229,9 +229,9 @@
   }
 
   &__insight {
-    background: color-mix(in srgb, var(--accent-amber-500) 8%, transparent);
+    background: var(--token-surface-warning-alpha-08);
     border-radius: 16px;
-    border: 1px solid color-mix(in srgb, var(--accent-amber-500) 24%, transparent);
+    border: 1px solid var(--token-surface-warning-alpha-24);
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -251,7 +251,7 @@
   &__insight-title {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--accent-amber-500);
+    color: var(--accent-muted);
   }
 
   &__insight-text {
@@ -277,7 +277,7 @@
     gap: 6px;
     padding: 8px 12px;
     border-radius: 10px;
-    background: color-mix(in srgb, var(--accent-amber-500) 14%, transparent);
+    background: var(--token-surface-warning-alpha-14);
   }
 
   &__metric-icon {
@@ -287,7 +287,7 @@
   &__metric-value {
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--accent-amber-500);
+    color: var(--accent-muted);
   }
 
   &__metric-label {
@@ -314,22 +314,22 @@
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
 
     &--primary {
-      background: linear-gradient(135deg, var(--accent-amber-500), var(--accent-amber-400));
+      background: var(--accent-muted);
       color: var(--flat-surface-bg);
-      box-shadow: 0 12px 24px color-mix(in srgb, var(--accent-amber-500) 30%, transparent);
+      box-shadow: 0 12px 24px var(--token-surface-warning-alpha-30);
 
       &:hover {
-        box-shadow: 0 16px 28px color-mix(in srgb, var(--accent-amber-500) 40%, transparent);
+        box-shadow: 0 16px 28px var(--token-surface-warning-alpha-40);
       }
     }
 
     &--secondary {
-      background: color-mix(in srgb, var(--accent-blue-400) 12%, transparent);
-      color: var(--accent-blue-600);
-      border: 1px solid color-mix(in srgb, var(--accent-blue-400) 20%, transparent);
+      background: var(--token-surface-accent-tint);
+      color: var(--accent-primary-hover);
+      border: 1px solid var(--token-surface-accent-alpha-20);
 
       &:hover {
-        background: color-mix(in srgb, var(--accent-blue-400) 18%, transparent);
+        background: var(--token-surface-accent-soft);
       }
     }
   }
@@ -353,15 +353,12 @@
 @keyframes next-best-hero-pulse {
   0% {
     opacity: 1;
-    transform: scale(1);
   }
   50% {
     opacity: 0.65;
-    transform: scale(1.05);
   }
   100% {
     opacity: 1;
-    transform: scale(1);
   }
 }
 

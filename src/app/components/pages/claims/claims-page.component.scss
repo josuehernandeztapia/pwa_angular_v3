@@ -63,7 +63,7 @@
     }
 
     thead {
-      background: color-mix(in srgb, var(--color-border-secondary) 14%, transparent);
+      background: var(--token-border-neutral-alpha-14);
 
       th {
         font-weight: var(--font-semibold);
@@ -77,11 +77,11 @@
       transition: background var(--duration-150) var(--ease-out);
 
       &:hover {
-        background: color-mix(in srgb, var(--accent-blue-500) 10%, transparent);
+        background: var(--token-surface-accent-alpha-10);
       }
 
       &.is-selected {
-        background: color-mix(in srgb, var(--accent-blue-500) 16%, transparent);
+        background: var(--token-surface-accent-alpha-16);
       }
     }
   }
@@ -106,7 +106,7 @@
   gap: var(--space-1);
   padding: var(--space-4);
   border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 40%, transparent);
+  border: 1px solid var(--token-border-neutral-alpha-40);
   background: var(--color-bg-primary);
 
   &__label {
@@ -123,18 +123,18 @@
   }
 
   &--open {
-    border-color: color-mix(in srgb, var(--accent-amber-500) 35%, transparent);
-    background: color-mix(in srgb, var(--accent-amber-500) 8%, transparent);
+    border-color: var(--token-surface-warning-alpha-35);
+    background: var(--token-surface-warning-alpha-08);
   }
 
   &--review {
-    border-color: color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
-    background: color-mix(in srgb, var(--accent-blue-500) 8%, transparent);
+    border-color: var(--token-surface-accent-alpha-35);
+    background: var(--token-surface-accent-alpha-08);
   }
 
   &--closed {
-    border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
-    background: color-mix(in srgb, var(--accent-green-500) 8%, transparent);
+    border-color: var(--token-surface-accent-alpha-35);
+    background: var(--token-surface-accent-alpha-08);
   }
 }
 
@@ -174,7 +174,7 @@
 }
 
 .claims-table__meta--pending {
-  color: var(--accent-amber-600);
+  color: var(--accent-muted);
   font-weight: var(--font-semibold);
 }
 
@@ -236,7 +236,7 @@
 
 .claims-form__error {
   font-size: var(--text-xs);
-  color: var(--accent-amber-700);
+  color: var(--accent-muted);
 }
 
 @media (max-width: 960px) {

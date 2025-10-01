@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CotizadorMainComponent } from './cotizador-main.component';
+import { buildComponentTestProviders } from '../../../../test-helpers/component-test-providers';
 import { ToastService } from '../../../services/toast.service';
 
 describe('CotizadorMainComponent – PMT and Amortization', () => {
@@ -8,9 +9,12 @@ describe('CotizadorMainComponent – PMT and Amortization', () => {
   let fixture: ComponentFixture<CotizadorMainComponent>;
 
   beforeEach(async () => {
+    const providerSetup = buildComponentTestProviders();
+
     await TestBed.configureTestingModule({
       imports: [CotizadorMainComponent, HttpClientTestingModule],
       providers: [
+        ...providerSetup.providers,
         { provide: ToastService, useValue: { success: () => {}, error: () => {}, info: () => {} } }
       ]
     }).compileComponents();
@@ -79,5 +83,4 @@ describe('CotizadorMainComponent – PMT and Amortization', () => {
     expect(withinTolerance(row1.balance, S1)).toBeTrue();
   });
 });
-
 

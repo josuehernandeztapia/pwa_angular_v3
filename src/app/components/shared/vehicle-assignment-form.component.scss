@@ -38,7 +38,7 @@
 
 .vehicle-assignment__status {
   font-weight: var(--font-semibold, 600);
-  color: var(--accent-green-500);
+  color: var(--accent-primary);
 }
 
 .vehicle-assignment__form {
@@ -58,7 +58,7 @@
 }
 
 .vehicle-assignment__section--muted {
-  background: var(--surface-neutral-weak, var(--color-neutral-400));
+  background: var(--token-surface-muted, var(--color-neutral-400));
 }
 
 .vehicle-assignment__section-title {
@@ -93,7 +93,7 @@
 }
 
 .vehicle-assignment__required {
-  color: var(--accent-red-500);
+  color: var(--accent-danger);
 }
 
 .vehicle-assignment__input,
@@ -112,13 +112,13 @@
 .vehicle-assignment__select:focus,
 .vehicle-assignment__textarea:focus {
   outline: none;
-  border-color: var(--accent-blue-500);
-  box-shadow: 0 0 0 3px var(--accent-blue-500);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-primary);
 }
 
 .vehicle-assignment__input--error {
-  border-color: var(--accent-red-500);
-  box-shadow: 0 0 0 3px var(--accent-red-500);
+  border-color: var(--accent-danger);
+  box-shadow: 0 0 0 3px var(--accent-danger);
 }
 
 .vehicle-assignment__hint {
@@ -128,7 +128,7 @@
 
 .vehicle-assignment__error {
   font-size: var(--text-sm, 0.875rem);
-  color: var(--accent-red-500);
+  color: var(--accent-danger);
 }
 
 .vehicle-assignment__specs {
@@ -157,20 +157,20 @@
 .vehicle-assignment__validation {
   padding: var(--space-4, 16px);
   border-radius: var(--radius-md, 10px);
-  background: var(--surface-red-weak, var(--accent-red-500));
-  border: 1px solid var(--accent-red-500);
+  background: var(--token-surface-danger, var(--accent-danger));
+  border: 1px solid var(--accent-danger);
 }
 
 .vehicle-assignment__validation-title {
   margin: 0 0 var(--space-2, 8px) 0;
   font-weight: var(--font-semibold, 600);
-  color: var(--accent-red-500);
+  color: var(--accent-danger);
 }
 
 .vehicle-assignment__validation-list {
   margin: 0;
   padding-left: var(--space-4, 16px);
-  color: var(--accent-red-600);
+  color: var(--accent-danger);
   font-size: var(--text-sm, 0.875rem);
 }
 
@@ -198,15 +198,15 @@
 }
 
 .vehicle-assignment__button--primary {
-  background: var(--accent-blue-600);
+  background: var(--accent-primary-hover);
   color: var(--color-bg-primary);
 
   &:hover:not(:disabled) {
-    background: var(--accent-blue-700);
+    background: var(--accent-primary-hover);
   }
 
   &:disabled {
-    background: var(--accent-blue-200);
+    background: var(--token-surface-accent-strong);
     cursor: not-allowed;
   }
 }
@@ -228,12 +228,16 @@
   border: 2px solid transparent;
   border-top: 2px solid currentColor;
   border-radius: 50%;
-  animation: vehicle-assignment-spinner 1s linear infinite;
+  animation: vehicle-assignment-pulse 1.2s ease-in-out infinite;
 }
 
-@keyframes vehicle-assignment-spinner {
+@keyframes vehicle-assignment-pulse {
+  0%,
   100% {
-    transform: none;
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
   }
 }
 
@@ -245,13 +249,13 @@
 }
 
 .vehicle-assignment__result--success {
-  background: var(--surface-green-weak, var(--accent-green-500));
-  border-color: var(--accent-green-500);
+  background: var(--token-surface-accent-weak, var(--accent-primary));
+  border-color: var(--accent-primary);
 }
 
 .vehicle-assignment__result--error {
-  background: var(--surface-red-weak, var(--accent-red-500));
-  border-color: var(--accent-red-500);
+  background: var(--token-surface-danger, var(--accent-danger));
+  border-color: var(--accent-danger);
 }
 
 .vehicle-assignment__result-title {
@@ -270,7 +274,7 @@
   margin-top: var(--space-3, 12px);
   padding: var(--space-3, 12px);
   border-radius: var(--radius-sm, 8px);
-  border: 1px solid var(--accent-green-400);
+  border: 1px solid var(--accent-primary);
   background: var(--color-bg-primary);
   display: flex;
   flex-direction: column;

@@ -62,18 +62,18 @@
   }
 
   &__metric-badge--success {
-    background: var(--accent-green-500);
-    color: var(--accent-green-600);
+    background: var(--accent-primary);
+    color: var(--accent-primary-hover);
   }
 
   &__metric-badge--warning {
-    background: var(--accent-amber-500);
-    color: var(--accent-amber-700);
+    background: var(--accent-muted);
+    color: var(--accent-muted);
   }
 
   &__metric-badge--error {
-    background: var(--accent-red-500);
-    color: var(--accent-red-600);
+    background: var(--accent-danger);
+    color: var(--accent-danger);
   }
 
   &__actions {

@@ -11,13 +11,13 @@
   --space-4: 16px;
 
   /* Color System - Semantic */
-  --color-primary: var(--accent-blue-500);
+  --color-primary: var(--accent-primary);
   --color-secondary: var(--color-text-secondary);
-  --color-success: var(--accent-green-500);
+  --color-success: var(--accent-primary);
   --color-warning: var(--color-warning-400);
-  --color-error: var(--accent-red-500);
-  --color-info: var(--accent-blue-500);
-  --color-accent: var(--accent-blue-500);
+  --color-error: var(--accent-danger);
+  --color-info: var(--accent-primary);
+  --color-accent: var(--accent-primary);
 
   /* Text Colors */
   --color-text-primary: var(--color-text-primary);
@@ -44,13 +44,13 @@
 @media (prefers-color-scheme: dark) {
   :host {
     /* Dark Mode Colors */
-    --color-primary-dark: var(--accent-blue-400);
+    --color-primary-dark: var(--accent-primary);
     --color-secondary-dark: var(--color-text-muted);
-    --color-success-dark: var(--accent-green-400);
+    --color-success-dark: var(--accent-primary);
     --color-warning-dark: var(--color-warning-400);
-    --color-error-dark: var(--accent-red-400);
-    --color-info-dark: var(--accent-blue-400);
-    --color-accent-dark: var(--accent-blue-400);
+    --color-error-dark: var(--accent-danger);
+    --color-info-dark: var(--accent-primary);
+    --color-accent-dark: var(--accent-primary);
 
     /* Dark Mode Text Colors */
     --color-text-primary-dark: var(--color-bg-secondary);
@@ -88,7 +88,7 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, var(--color-text-primary) 15%);
+  color: var(--token-text-secondary-blend-color-text-primary-85);
   transition: all 0.2s;
 }
 
@@ -99,7 +99,7 @@
 
 .header-section h1 {
   margin: 0;
-  color: color-mix(in srgb, var(--color-text-primary) 92%, var(--color-text-secondary) 8%);
+  color: var(--token-text-primary-blend-color-text-secondary-92);
   font-size: 2.5rem;
   font-weight: 700;
 }
@@ -136,7 +136,7 @@
 }
 
 .form-section h2 {
-  color: color-mix(in srgb, var(--color-text-primary) 92%, var(--color-text-secondary) 8%);
+  color: var(--token-text-primary-blend-color-text-secondary-92);
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0 0 16px 0;
@@ -162,7 +162,7 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: color-mix(in srgb, var(--color-text-primary) 92%, var(--color-text-secondary) 8%);
+  color: var(--token-text-primary-blend-color-text-secondary-92);
   font-size: 0.95rem;
 }
 
@@ -178,13 +178,13 @@
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
   outline: none;
-  border-color: var(--accent-blue-500);
+  border-color: var(--accent-primary);
   background: white;
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
 }
 
 .form-input.error, .form-select.error, .form-textarea.error {
-  border-color: var(--accent-red-500);
+  border-color: var(--accent-danger);
   background: var(--color-surface-error-subtle);
 }
 
@@ -194,7 +194,7 @@
 }
 
 .error-message {
-  color: var(--accent-red-500);
+  color: var(--accent-danger);
   font-size: 0.85rem;
   margin-top: 6px;
   display: flex;
@@ -221,13 +221,13 @@
 }
 
 .opportunity-card:hover {
-  border-color: var(--accent-blue-500);
+  border-color: var(--accent-primary);
   transform: none; /* OpenAI no transforms */
   box-shadow: 0 8px 25px rgba(66, 153, 225, 0.15);
 }
 
 .opportunity-card.selected {
-  border-color: var(--accent-blue-500);
+  border-color: var(--accent-primary);
   background: var(--flat-surface-bg); /* FIXED (verify-ux) */
   box-shadow: 0 8px 25px rgba(66, 153, 225, 0.2);
 }
@@ -239,7 +239,7 @@
 
 .card-content h3 {
   margin: 0 0 12px 0;
-  color: color-mix(in srgb, var(--color-text-primary) 92%, var(--color-text-secondary) 8%);
+  color: var(--token-text-primary-blend-color-text-secondary-92);
   font-size: 1.3rem;
   font-weight: 600;
 }
@@ -251,7 +251,7 @@
 }
 
 .card-tag {
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   color: white;
   padding: 6px 12px;
   border-radius: 8px; /* OpenAI standard */
@@ -263,8 +263,8 @@
 .info-card {
   display: flex;
   gap: 16px;
-  background: color-mix(in srgb, var(--accent-blue-400) 20%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent-blue-200) 70%, transparent);
+  background: var(--token-surface-accent-alpha-20);
+  border: 1px solid color-mix(in srgb, var(--token-surface-accent-strong) 70%, transparent);
   border-radius: 8px; /* OpenAI standard */
   padding: 20px;
   margin-top: 16px;
@@ -277,14 +277,14 @@
 
 .info-content h4 {
   margin: 0 0 8px 0;
-  color: var(--accent-blue-700);
+  color: var(--accent-primary-hover);
   font-size: 1rem;
   font-weight: 600;
 }
 
 .info-content p {
   margin: 0;
-  color: var(--accent-blue-800);
+  color: var(--accent-primary-hover);
   line-height: 1.5;
 }
 
@@ -329,7 +329,7 @@
 
 .btn-secondary {
   background: var(--color-bg-secondary);
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, var(--color-text-primary) 15%);
+  color: var(--token-text-secondary-blend-color-text-primary-85);
   border: 2px solid var(--color-border-primary);
 }
 
@@ -362,7 +362,7 @@
 
 .helper-card h3 {
   margin: 0 0 24px 0;
-  color: color-mix(in srgb, var(--color-text-primary) 92%, var(--color-text-secondary) 8%);
+  color: var(--token-text-primary-blend-color-text-secondary-92);
   font-size: 1.3rem;
   font-weight: 600;
 }
@@ -376,7 +376,7 @@
   align-items: center;
   gap: var(--space-2, 8px);
   margin: 0 0 12px 0;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, var(--color-text-primary) 15%);
+  color: var(--token-text-secondary-blend-color-text-primary-85);
   font-size: 1rem;
   font-weight: 600;
 }
@@ -402,12 +402,12 @@
   background: var(--color-bg-secondary);
   padding: 12px;
   border-radius: 8px;
-  border-left: 4px solid var(--accent-blue-500);
+  border-left: 4px solid var(--accent-primary);
 }
 
 .market-item strong {
   display: block;
-  color: color-mix(in srgb, var(--color-text-primary) 92%, var(--color-text-secondary) 8%);
+  color: var(--token-text-primary-blend-color-text-secondary-92);
   margin-bottom: 6px;
 }
 
@@ -475,19 +475,19 @@
 }
 
 .step.completed {
-  color: var(--accent-green-400);
+  color: var(--accent-primary);
   font-weight: 600;
 }
 
 .step.active {
-  color: var(--accent-blue-500);
+  color: var(--accent-primary);
   font-weight: 600;
 }
 
 .next-step-pill {
   align-self: center;
   background: var(--color-bg-tertiary);
-  color: color-mix(in srgb, var(--color-text-primary) 92%, var(--color-text-secondary) 8%);
+  color: var(--token-text-primary-blend-color-text-secondary-92);
   padding: 6px 12px;
   border-radius: 8px; /* OpenAI standard */
   font-size: 0.85rem;
@@ -503,7 +503,7 @@
 /* Draft Banner Styles */
 .draft-banner {
   background: var(--flat-surface-bg); /* FIXED (verify-ux) */
-  border: 1px solid color-mix(in srgb, var(--color-warning-400) 80%, var(--color-warning-500) 20%);
+  border: 1px solid var(--token-surface-warning-blend-color-warning-500-80);
   border-radius: 8px; /* OpenAI standard */
   padding: 16px;
   margin: 16px 0;
@@ -530,7 +530,7 @@
 }
 
 .banner-text p {
-  color: color-mix(in srgb, var(--color-warning-600) 85%, transparent);
+  color: var(--token-surface-warning-strong-alpha-85);
   margin: 4px 0 0 0;
   font-size: 0.9rem;
 }
@@ -543,7 +543,7 @@
 .btn-link {
   background: none;
   border: none;
-  color: var(--accent-blue-500);
+  color: var(--accent-primary);
   text-decoration: underline;
   cursor: pointer;
   font-size: 0.9rem;
@@ -560,8 +560,8 @@
 }
 
 .form-input.checking {
-  border-color: color-mix(in srgb, var(--color-warning-400) 80%, var(--color-warning-500) 20%);
-  background: color-mix(in srgb, var(--color-warning-400) 20%, transparent);
+  border-color: var(--token-surface-warning-blend-color-warning-500-80);
+  background: var(--token-surface-warning-alpha-20);
 }
 
 .input-status {
@@ -572,12 +572,12 @@
 }
 
 .checking-icon {
-  animation: spin 1s linear infinite;
+  animation: checking-pulse 1.2s ease-in-out infinite;
 }
 
-@keyframes spin {
-  from { transform: none; /* OpenAI no transforms */ }
-  to { transform: none; /* OpenAI no transforms */ }
+@keyframes checking-pulse {
+  0%, 100% { opacity: 0.65; }
+  50% { opacity: 1; }
 }
 
 /* Suggestions skeletons */
@@ -602,8 +602,8 @@
 
 /* Similar Clients Warning Styles */
 .similar-clients-warning {
-  background: color-mix(in srgb, var(--color-warning-400) 20%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-warning-400) 80%, var(--color-warning-500) 20%);
+  background: var(--token-surface-warning-alpha-20);
+  border: 1px solid var(--token-surface-warning-blend-color-warning-500-80);
   border-radius: 8px; /* OpenAI standard */
   padding: 16px;
   margin-top: 12px;
@@ -637,7 +637,7 @@
   align-items: center;
   gap: 12px;
   background: white;
-  border: 1px solid color-mix(in srgb, var(--color-warning-400) 40%, transparent);
+  border: 1px solid var(--token-surface-warning-alpha-40);
   border-radius: 8px;
   padding: 12px;
   cursor: pointer;
@@ -645,7 +645,7 @@
 }
 
 .similar-client-item:hover {
-  border-color: color-mix(in srgb, var(--color-warning-400) 80%, var(--color-warning-500) 20%);
+  border-color: var(--token-surface-warning-blend-color-warning-500-80);
   transform: none; /* OpenAI no transforms */
   box-shadow: 0 4px 12px rgba(246, 173, 85, 0.2);
 }
@@ -670,7 +670,7 @@
 
 .client-name {
   font-weight: 600;
-  color: color-mix(in srgb, var(--color-text-primary) 92%, var(--color-text-secondary) 8%);
+  color: var(--token-text-primary-blend-color-text-secondary-92);
   margin-bottom: 2px;
 }
 
@@ -680,7 +680,7 @@
 }
 
 .btn-use-client {
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   color: white;
   border: none;
   border-radius: 8px; /* OpenAI standard */
@@ -692,13 +692,13 @@
 }
 
 .btn-use-client:hover {
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
 }
 
 .continue-anyway {
   text-align: center;
   padding-top: 12px;
-  border-top: 1px solid color-mix(in srgb, var(--color-warning-400) 40%, transparent);
+  border-top: 1px solid var(--token-surface-warning-alpha-40);
 }
 
 /* === SEMANTIC ICON SYSTEM (OpenAI Compliance) === */
@@ -852,12 +852,12 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: var(--accent-green-500);
+  background: var(--accent-primary);
   color: var(--flat-surface-bg, var(--openai-white));
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+  box-shadow: 0 4px 12px var(--token-surface-accent-alpha-25);
   --icon-color: currentColor;
 }
 

@@ -8,16 +8,16 @@
   gap: var(--space-4, 1rem);
   padding: var(--space-4, 1rem);
   border-radius: var(--radius-lg, 16px);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 35%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-35);
   background: var(--flat-surface-bg);
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--openai-black) 8%, transparent);
+  box-shadow: 0 8px 24px var(--token-surface-inverse-alpha-08);
   color: var(--color-text-primary);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .plan-config-form--collection-enabled {
-  border-color: color-mix(in srgb, var(--accent-blue-500) 45%, transparent);
-  box-shadow: 0 12px 32px color-mix(in srgb, var(--accent-blue-500) 16%, transparent);
+  border-color: var(--token-border-accent-soft);
+  box-shadow: 0 12px 32px var(--token-surface-accent-alpha-16);
 }
 
 .plan-config-form__group {
@@ -54,7 +54,7 @@
   width: 100%;
   padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
   border-radius: var(--radius-md, 12px);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 50%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-50);
   background: var(--flat-surface-bg);
   color: var(--color-text-primary);
   font-size: 1rem;
@@ -62,13 +62,13 @@
 }
 
 .plan-config-form__input::placeholder {
-  color: color-mix(in srgb, var(--color-text-tertiary) 70%, transparent);
+  color: var(--token-text-tertiary-alpha-70);
 }
 
 .plan-config-form__input:focus {
   outline: none;
-  border-color: color-mix(in srgb, var(--accent-blue-500) 60%, transparent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500) 18%, transparent);
+  border-color: var(--token-surface-accent-alpha-60);
+  box-shadow: 0 0 0 3px var(--token-surface-accent-soft);
 }
 
 .plan-config-form__input--currency {
@@ -88,22 +88,22 @@
   gap: var(--space-3, 0.75rem);
   padding: var(--space-3, 0.75rem);
   border-radius: var(--radius-md, 12px);
-  background: color-mix(in srgb, var(--surface-neutral-weak) 80%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border-neutral-weak) 28%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 80%, transparent);
+  border: 1px solid var(--token-border-neutral-weak-alpha-28);
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .plan-config-form__method:hover {
-  background: color-mix(in srgb, var(--surface-neutral-weak) 90%, transparent);
-  border-color: color-mix(in srgb, var(--border-neutral-weak) 50%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 90%, transparent);
+  border-color: var(--token-border-neutral-weak-alpha-50);
 }
 
 .plan-config-form__checkbox {
   width: 18px;
   height: 18px;
   margin: 0;
-  accent-color: var(--accent-blue-500);
+  accent-color: var(--accent-primary);
 }
 
 .plan-config-form__method-label {
@@ -120,8 +120,8 @@
   padding: var(--space-4, 1rem);
   margin-top: var(--space-2, 0.5rem);
   border-radius: var(--radius-lg, 16px);
-  background: color-mix(in srgb, var(--accent-blue-500) 12%, var(--surface-neutral-weak) 88%);
-  border: 1px solid color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+  background: color-mix(in srgb, var(--accent-primary) 12%, var(--token-surface-muted) 88%);
+  border: 1px solid var(--token-surface-accent-alpha-35);
 }
 
 .plan-config-form__actions {
@@ -147,23 +147,23 @@
 }
 
 .plan-config-form__button--secondary {
-  background: color-mix(in srgb, var(--surface-neutral-weak) 85%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 85%, transparent);
   color: var(--color-text-secondary);
 }
 
 .plan-config-form__button--secondary:hover {
-  background: color-mix(in srgb, var(--surface-neutral-weak) 95%, transparent);
+  background: color-mix(in srgb, var(--token-surface-muted) 95%, transparent);
 }
 
 .plan-config-form__button--primary {
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   color: var(--flat-surface-bg);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--accent-blue-500) 30%, transparent);
+  box-shadow: 0 10px 24px var(--token-surface-accent-alpha-30);
 }
 
 .plan-config-form__button--primary:hover {
-  background: color-mix(in srgb, var(--accent-blue-500) 85%, var(--accent-blue-400) 15%);
-  box-shadow: 0 12px 28px color-mix(in srgb, var(--accent-blue-500) 36%, transparent);
+  background: var(--token-surface-accent-blend-accent-primary-85);
+  box-shadow: 0 12px 28px var(--token-surface-accent-alpha-36);
 }
 
 @media (max-width: 768px) {
@@ -182,9 +182,9 @@
 
 @media (prefers-color-scheme: dark) {
   .plan-config-form {
-    background: color-mix(in srgb, var(--color-neutral-900) 88%, transparent);
-    border-color: color-mix(in srgb, var(--border-neutral-strong) 45%, transparent);
-    box-shadow: 0 16px 40px color-mix(in srgb, var(--openai-black) 45%, transparent);
+    background: var(--token-overlay-neutral-alpha-88);
+    border-color: var(--token-border-neutral-strong-alpha-45);
+    box-shadow: 0 16px 40px var(--token-surface-inverse-alpha-45);
     color: var(--color-neutral-100);
   }
 
@@ -194,13 +194,13 @@
   }
 
   .plan-config-form__input {
-    background: color-mix(in srgb, var(--color-neutral-900) 70%, transparent);
-    border-color: color-mix(in srgb, var(--border-neutral-strong) 55%, transparent);
+    background: var(--token-overlay-neutral-alpha-70);
+    border-color: var(--token-border-neutral-strong-alpha-55);
     color: var(--color-neutral-100);
   }
 
   .plan-config-form__input::placeholder {
-    color: color-mix(in srgb, var(--color-neutral-400) 70%, transparent);
+    color: var(--token-surface-neutral-400-alpha-70);
   }
 
   .plan-config-form__currency-symbol {
@@ -208,25 +208,25 @@
   }
 
   .plan-config-form__method {
-    background: color-mix(in srgb, var(--color-neutral-900) 60%, transparent);
-    border-color: color-mix(in srgb, var(--border-neutral-strong) 40%, transparent);
+    background: var(--token-overlay-neutral-alpha-60);
+    border-color: var(--token-border-neutral-strong-alpha-40);
   }
 
   .plan-config-form__method:hover {
-    background: color-mix(in srgb, var(--color-neutral-900) 70%, transparent);
+    background: var(--token-overlay-neutral-alpha-70);
   }
 
   .plan-config-form__collection {
-    background: color-mix(in srgb, var(--accent-blue-500) 10%, var(--color-neutral-900) 90%);
-    border-color: color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+    background: var(--token-surface-accent-shade-10);
+    border-color: var(--token-surface-accent-alpha-35);
   }
 
   .plan-config-form__button--secondary {
-    background: color-mix(in srgb, var(--color-neutral-800) 70%, transparent);
+    background: var(--token-surface-neutral-800-alpha-70);
     color: var(--color-neutral-200);
   }
 
   .plan-config-form__button--secondary:hover {
-    background: color-mix(in srgb, var(--color-neutral-800) 85%, transparent);
+    background: var(--token-surface-neutral-800-alpha-85);
   }
 }

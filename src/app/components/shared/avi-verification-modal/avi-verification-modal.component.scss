@@ -4,7 +4,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: color-mix(in srgb, var(--openai-black) 80%, transparent);
+      background: var(--token-surface-inverse-alpha-80);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -22,7 +22,7 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 20px 40px color-mix(in srgb, var(--openai-black) 36%, transparent);
+      box-shadow: 0 20px 40px var(--token-surface-inverse-alpha-36);
     }
 
     .avi-verification__header {
@@ -51,7 +51,7 @@
     }
 
     .avi-verification__close {
-      background: color-mix(in srgb, var(--openai-white) 20%, transparent);
+      background: var(--token-surface-inverse-light-alpha-20);
       border: none;
       color: var(--openai-white);
       width: 40px;
@@ -67,7 +67,7 @@
     }
 
     .avi-verification__close:hover {
-      background: color-mix(in srgb, var(--openai-white) 30%, transparent);
+      background: var(--token-surface-inverse-light-alpha-30);
     }
 
     .avi-verification__content {
@@ -88,8 +88,8 @@
     }
 
     .avi-verification__recording--active {
-      background: var(--surface-red-weak);
-      border: 2px solid var(--accent-red-100);
+      background: var(--token-surface-danger);
+      border: 2px solid var(--token-surface-danger);
     }
 
     .avi-verification__recording-indicator {
@@ -141,12 +141,12 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s;
-      box-shadow: 0 8px 24px color-mix(in srgb, var(--accent-blue-600) 30%, transparent);
+      box-shadow: 0 8px 24px var(--token-surface-accent-hover-alpha-30);
     }
 
     .avi-verification__mic-button:hover:not(:disabled) {
       transform: none; /* OpenAI no transforms */
-      box-shadow: 0 12px 32px color-mix(in srgb, var(--accent-blue-600) 40%, transparent);
+      box-shadow: 0 12px 32px var(--token-surface-accent-hover-alpha-40);
     }
 
     .avi-verification__mic-button--recording {
@@ -182,7 +182,7 @@
     }
 
     .avi-verification__message--success {
-      color: var(--accent-green-600) !important;
+      color: var(--accent-primary-hover) !important;
       font-weight: 600 !important;
     }
 
@@ -190,7 +190,7 @@
       background: var(--color-bg-secondary);
       padding: 20px;
       border-radius: 8px; /* OpenAI standard */
-      border-left: 4px solid color-mix(in srgb, var(--accent-blue-600) 70%, var(--accent-purple-500) 30%);
+      border-left: 4px solid var(--token-surface-accent-hover-blend-accent-primary-70);
     }
 
     .avi-verification__transcription h3 {
@@ -212,10 +212,10 @@
     }
 
     .avi-verification__progress {
-      background: var(--surface-green-strong);
+      background: var(--token-surface-accent-strong);
       padding: 20px;
       border-radius: 8px; /* OpenAI standard */
-      border-left: 4px solid var(--accent-green-500);
+      border-left: 4px solid var(--accent-primary);
     }
 
     .avi-verification__progress h3 {
@@ -247,13 +247,13 @@
     .avi-verification__progress-value {
       font-size: 18px;
       font-weight: 700;
-      color: var(--accent-green-600);
+      color: var(--accent-primary-hover);
     }
 
     .avi-verification__progress-bar {
       width: 100%;
       height: 8px;
-      background: var(--surface-neutral-weak);
+      background: var(--token-surface-muted);
       border-radius: 8px; /* OpenAI standard */
       overflow: hidden;
     }
@@ -271,7 +271,7 @@
       padding: 24px;
       background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       border-radius: 8px; /* OpenAI standard */
-      border: 1px solid color-mix(in srgb, var(--accent-blue-200) 80%, var(--openai-white) 20%);
+      border: 1px solid color-mix(in srgb, var(--token-surface-accent-strong) 80%, var(--openai-white) 20%);
       text-align: center;
     }
 
@@ -289,14 +289,14 @@
 
     .avi-verification__completion h3 {
       margin: 0;
-      color: color-mix(in srgb, var(--accent-blue-700) 80%, var(--color-neutral-900) 20%);
+      color: var(--token-surface-accent-hover-shade-80);
       font-size: 24px;
       font-weight: 700;
     }
 
     .avi-verification__completion-text {
       margin: 0;
-      color: color-mix(in srgb, var(--accent-blue-700) 65%, var(--color-neutral-900) 35%);
+      color: var(--token-surface-accent-hover-shade-65);
       font-size: 16px;
       line-height: 1.6;
       max-width: 400px;
@@ -307,20 +307,20 @@
       align-items: center;
       gap: 12px;
       padding: 16px 24px;
-      background: color-mix(in srgb, var(--openai-white) 80%, transparent);
+      background: var(--token-surface-inverse-light-alpha-80);
       border-radius: 8px; /* OpenAI standard */
-      border: 1px solid color-mix(in srgb, var(--accent-blue-200) 80%, var(--openai-white) 20%);
+      border: 1px solid color-mix(in srgb, var(--token-surface-accent-strong) 80%, var(--openai-white) 20%);
     }
 
     .avi-verification__score-label {
       font-size: 16px;
-      color: color-mix(in srgb, var(--accent-blue-700) 65%, var(--color-neutral-900) 35%);
+      color: var(--token-surface-accent-hover-shade-65);
       font-weight: 600;
     }
 
     .avi-verification__score-value {
       font-size: 28px;
-      color: color-mix(in srgb, var(--accent-blue-700) 80%, var(--color-neutral-900) 20%);
+      color: var(--token-surface-accent-hover-shade-80);
       font-weight: 700;
     }
 
@@ -361,7 +361,7 @@
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: var(--surface-neutral-weak);
+      background: var(--token-surface-muted);
       color: var(--color-text-secondary);
       display: flex;
       align-items: center;
@@ -371,12 +371,12 @@
     }
 
     .avi-verification__step--active .avi-verification__step-number {
-      background: color-mix(in srgb, var(--accent-blue-600) 70%, var(--accent-purple-500) 30%);
+      background: var(--token-surface-accent-hover-blend-accent-primary-70);
       color: var(--openai-white);
     }
 
     .avi-verification__step--completed .avi-verification__step-number {
-      background: var(--accent-green-500);
+      background: var(--accent-primary);
       color: var(--openai-white);
     }
 
@@ -388,12 +388,12 @@
     }
 
     .avi-verification__step--active .avi-verification__step-label {
-      color: color-mix(in srgb, var(--accent-blue-600) 70%, var(--accent-purple-500) 30%);
+      color: var(--token-surface-accent-hover-blend-accent-primary-70);
       font-weight: 600;
     }
 
     .avi-verification__step--completed .avi-verification__step-label {
-      color: var(--accent-green-600);
+      color: var(--accent-primary-hover);
       font-weight: 600;
     }
 
@@ -425,13 +425,13 @@
     }
 
     .avi-verification__action--primary {
-      background: color-mix(in srgb, var(--accent-blue-600) 70%, var(--accent-purple-500) 30%);
+      background: var(--token-surface-accent-hover-blend-accent-primary-70);
       color: var(--openai-white);
       border: none;
     }
 
     .avi-verification__action--primary:hover:not(:disabled) {
-      background: var(--accent-blue-700);
+      background: var(--accent-primary-hover);
     }
 
     .avi-verification__action--secondary {
@@ -547,26 +547,26 @@
       align-items: center;
       gap: 16px;
       transition: all 0.2s;
-      box-shadow: 0 2px 4px color-mix(in srgb, var(--openai-black) 12%, transparent);
+      box-shadow: 0 2px 4px var(--token-surface-inverse-alpha-12);
     }
 
     /* Semáforo Colors */
     .avi-verification__result-card--go {
-      border-color: var(--accent-green-500);
+      border-color: var(--accent-primary);
       background: var(--flat-surface-bg); /* FIXED (verify-ux) */
-      color: var(--accent-green-600);
+      color: var(--accent-primary-hover);
     }
 
     .avi-verification__result-card--no-go {
-      border-color: var(--accent-red-500);
+      border-color: var(--accent-danger);
       background: var(--flat-surface-bg); /* FIXED (verify-ux) */
-      color: var(--accent-red-600);
+      color: var(--accent-danger);
     }
 
     .avi-verification__result-card--review {
-      border-color: var(--accent-amber-500);
+      border-color: var(--accent-muted);
       background: var(--flat-surface-bg); /* FIXED (verify-ux) */
-      color: var(--accent-amber-600);
+      color: var(--accent-muted);
     }
 
     .avi-verification__result-indicator {
@@ -578,7 +578,7 @@
       justify-content: center;
       border-radius: 50%;
       background: var(--color-bg-primary);
-      box-shadow: 0 2px 8px color-mix(in srgb, var(--openai-black) 24%, transparent);
+      box-shadow: 0 2px 8px var(--token-surface-inverse-alpha-24);
     }
 
     .avi-verification__result-icon {
@@ -622,7 +622,7 @@
     }
 
     .avi-verification__flag {
-      background: color-mix(in srgb, var(--color-text-secondary) 10%, transparent);
+      background: var(--token-text-secondary-alpha-10);
       color: var(--color-text-secondary);
       padding: 4px 8px;
       border-radius: 8px; /* OpenAI standard */
@@ -644,9 +644,9 @@
       width: 20px;
       height: 20px;
       border: 2px solid var(--color-border-secondary);
-      border-top: 2px solid var(--accent-blue-500);
+      border-top: 2px solid var(--accent-primary);
       border-radius: 50%;
-      animation: spin 1s linear infinite;
+      animation: avi-verification-pulse 1.2s ease-in-out infinite;
     }
 
     .avi-verification__loading-text {
@@ -654,9 +654,10 @@
       font-weight: 500;
     }
 
-    @keyframes spin {
-      0% { transform: none; } /* OpenAI no transforms */
-      100% { transform: none; } /* OpenAI no transforms */
+    @keyframes avi-verification-pulse {
+      0%,
+      100% { opacity: 0.65; }
+      50% { opacity: 1; }
     }
 
     /*  NUEVO: Resilience Summary Styles */
@@ -664,12 +665,12 @@
       background: var(--flat-surface-bg); /* FIXED (verify-ux) */
       padding: 24px;
       border-radius: 8px; /* OpenAI standard */
-      border: 1px solid var(--accent-purple-200);
+      border: 1px solid var(--token-surface-accent-strong);
     }
 
     .avi-verification__resilience h3 {
       margin: 0 0 20px 0;
-      color: var(--accent-purple-800);
+      color: var(--accent-primary-hover);
       font-size: 18px;
       font-weight: 600;
     }
@@ -684,7 +685,7 @@
       background: var(--color-bg-primary);
       padding: 20px;
       border-radius: 8px; /* OpenAI standard */
-      box-shadow: 0 2px 8px color-mix(in srgb, var(--openai-black) 20%, transparent);
+      box-shadow: 0 2px 8px var(--token-surface-inverse-alpha-20);
       text-align: center;
       min-width: 200px;
     }
@@ -709,21 +710,21 @@
     }
 
     .avi-verification__score-value--high {
-      color: var(--accent-green-600);
+      color: var(--accent-primary-hover);
     }
 
     .avi-verification__score-value--medium {
-      color: var(--accent-amber-600);
+      color: var(--accent-muted);
     }
 
     .avi-verification__score-value--low {
-      color: var(--accent-red-600);
+      color: var(--accent-danger);
     }
 
     .avi-verification__resilience-level {
       font-size: 14px;
       font-weight: 600;
-      color: var(--accent-purple-800);
+      color: var(--accent-primary-hover);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -733,7 +734,7 @@
       background: var(--color-bg-primary);
       padding: 20px;
       border-radius: 8px; /* OpenAI standard */
-      box-shadow: 0 2px 8px color-mix(in srgb, var(--openai-black) 20%, transparent);
+      box-shadow: 0 2px 8px var(--token-surface-inverse-alpha-20);
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -767,18 +768,18 @@
     .avi-verification-modal {
       &__icon {
         &--error {
-          color: var(--color-text-error, var(--accent-red-500));
+          color: var(--color-text-error, var(--accent-danger));
 
           @media (prefers-color-scheme: dark) {
-            color: var(--color-text-error-light, var(--accent-red-300));
+            color: var(--color-text-error-light, var(--token-surface-danger-strong));
           }
         }
 
         &--info {
-          color: var(--color-text-info, var(--accent-blue-600));
+          color: var(--color-text-info, var(--accent-primary-hover));
 
           @media (prefers-color-scheme: dark) {
-            color: var(--color-text-info-light, var(--accent-blue-400));
+            color: var(--color-text-info-light, var(--accent-primary));
           }
         }
       }

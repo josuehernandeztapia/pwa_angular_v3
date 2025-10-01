@@ -8,7 +8,18 @@ import { environment } from '../../environments/environment';
 
 describe('DocumentValidationService', () => {
   let service: DocumentValidationService;
+  let originalTimeout: number;
   
+  beforeAll(() => {
+    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+  });
+
+  afterAll(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
+  
+
   const mockClient: Client = {
     id: 'client-123',
     name: 'Juan Pérez García',

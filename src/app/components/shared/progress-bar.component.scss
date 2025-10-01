@@ -41,7 +41,7 @@
     color: var(--color-text-primary);
 
     &--success {
-      color: var(--accent-green-500);
+      color: var(--accent-primary);
     }
 
     &--primary {
@@ -53,11 +53,11 @@
     }
 
     &--warning {
-      color: var(--accent-amber-600);
+      color: var(--accent-muted);
     }
 
     &--danger {
-      color: var(--accent-red-500);
+      color: var(--accent-danger);
     }
   }
 
@@ -75,10 +75,10 @@
     height: 0.5rem;
     border-radius: 10px;
     overflow: hidden;
-    background: color-mix(in srgb, var(--color-neutral-400) 20%, transparent);
+    background: var(--token-surface-neutral-400-alpha-20);
 
     &--dark {
-      background: color-mix(in srgb, var(--color-neutral-500) 30%, transparent);
+      background: var(--token-surface-neutral-500-alpha-30);
     }
   }
 
@@ -97,42 +97,42 @@
     transition: width 0.4s ease-out;
 
     &--success {
-      background: var(--accent-green-500);
+      background: var(--accent-primary);
     }
 
     &--warning {
-      background: var(--accent-amber-500);
+      background: var(--accent-muted);
     }
 
     &--danger {
-      background: var(--accent-red-500);
+      background: var(--accent-danger);
     }
 
     &--info {
-      background: var(--accent-blue-500);
+      background: var(--accent-primary);
     }
 
     &--gradient {
-      background: linear-gradient(90deg, var(--color-text-primary), color-mix(in srgb, var(--color-text-primary) 80%, transparent));
+      background: linear-gradient(90deg, var(--color-text-primary), var(--token-text-primary-alpha-80));
     }
 
     @media (prefers-color-scheme: dark) {
       background: var(--color-neutral-50);
 
       &--success {
-        background: var(--accent-green-200);
+        background: var(--token-surface-accent-strong);
       }
 
       &--warning {
-        background: var(--accent-amber-400);
+        background: var(--accent-muted);
       }
 
       &--danger {
-        background: var(--accent-red-300);
+        background: var(--token-surface-danger-strong);
       }
 
       &--info {
-        background: var(--accent-blue-300);
+        background: var(--token-surface-accent-strong);
       }
 
       &--gradient {
@@ -147,9 +147,10 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      color-mix(in srgb, var(--flat-surface-bg) 50%, transparent) 50%,
+      var(--token-surface-flat-alpha-50) 50%,
       transparent 100%
     );
+    background-size: 200% 100%;
     animation: progress-bar-shimmer 1.8s ease infinite;
     opacity: 0.4;
   }
@@ -161,8 +162,8 @@
       45deg,
       transparent,
       transparent 8px,
-      color-mix(in srgb, var(--flat-surface-bg) 20%, transparent) 8px,
-      color-mix(in srgb, var(--flat-surface-bg) 20%, transparent) 16px
+      var(--token-surface-flat-alpha-20) 8px,
+      var(--token-surface-flat-alpha-20) 16px
     );
     animation: progress-bar-stripes 1s linear infinite;
     opacity: 0.6;
@@ -190,10 +191,10 @@
   &__milestone-line {
     flex: 1;
     width: 2px;
-    background: color-mix(in srgb, var(--color-neutral-900) 40%, transparent);
+    background: var(--token-overlay-neutral-alpha-40);
 
     @media (prefers-color-scheme: dark) {
-      background: color-mix(in srgb, var(--color-neutral-50) 60%, transparent);
+      background: var(--token-surface-neutral-50-alpha-60);
     }
   }
 
@@ -261,7 +262,7 @@
 
   &__status {
     &--completed {
-      color: var(--accent-green-500);
+      color: var(--accent-primary);
     }
 
     &--on-track {
@@ -269,11 +270,11 @@
     }
 
     &--behind {
-      color: var(--accent-amber-600);
+      color: var(--accent-muted);
     }
 
     &--at-risk {
-      color: var(--accent-red-500);
+      color: var(--accent-danger);
     }
   }
 
@@ -308,7 +309,7 @@
     }
 
     &--success {
-      background: var(--accent-green-500);
+      background: var(--accent-primary);
       color: var(--flat-surface-bg);
 
       &:hover:not(:disabled) {
@@ -341,10 +342,10 @@
 
 @keyframes progress-bar-shimmer {
   0% {
-    transform: translateX(-100%);
+    background-position: -100% 0;
   }
   100% {
-    transform: translateX(100%);
+    background-position: 100% 0;
   }
 }
 

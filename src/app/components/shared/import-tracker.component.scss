@@ -60,7 +60,7 @@
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: color-mix(in srgb, var(--color-border-secondary) 12%, transparent);
+  background: var(--token-border-neutral-alpha-12);
   color: var(--neutral-500);
 }
 
@@ -71,7 +71,7 @@
 }
 
 .import-tracker__icon--info {
-  color: var(--accent-blue-600);
+  color: var(--accent-primary-hover);
 }
 
 .import-tracker__lead-copy {
@@ -95,7 +95,7 @@
 .import-tracker__order-id {
   margin: 0;
   font-size: var(--text-xs, 0.75rem);
-  color: var(--accent-blue-600);
+  color: var(--accent-primary-hover);
 }
 
 .import-tracker__status {
@@ -112,26 +112,26 @@
   font-size: var(--text-sm, 0.875rem);
   font-weight: var(--font-medium, 500);
   border: 1px solid transparent;
-  background: color-mix(in srgb, var(--color-border-secondary) 10%, transparent);
+  background: var(--token-border-neutral-alpha-10);
   color: var(--openai-black);
 }
 
 .import-tracker__status-chip--completed {
-  background: color-mix(in srgb, var(--accent-green-500) 12%, transparent);
-  border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
-  color: var(--accent-green-400);
+  background: var(--token-surface-accent-tint);
+  border-color: var(--token-surface-accent-alpha-35);
+  color: var(--accent-primary);
 }
 
 .import-tracker__status-chip--in-transit {
-  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
-  border-color: color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
-  color: var(--accent-blue-400);
+  background: var(--token-surface-accent-tint);
+  border-color: var(--token-surface-accent-alpha-35);
+  color: var(--accent-primary);
 }
 
 .import-tracker__status-chip--delayed {
-  background: color-mix(in srgb, var(--accent-red-300) 12%, transparent);
-  border-color: color-mix(in srgb, var(--accent-red-300) 35%, transparent);
-  color: var(--accent-red-300);
+  background: color-mix(in srgb, var(--token-surface-danger-strong) 12%, transparent);
+  border-color: color-mix(in srgb, var(--token-surface-danger-strong) 35%, transparent);
+  color: var(--token-surface-danger-strong);
 }
 
 .import-tracker__status-dot {
@@ -143,16 +143,16 @@
 }
 
 .import-tracker__status-dot--completed {
-  background: var(--accent-green-400);
+  background: var(--accent-primary);
 }
 
 .import-tracker__status-dot--active {
-  background: var(--accent-blue-400);
+  background: var(--accent-primary);
   animation: trackerPulse 1.2s ease-in-out infinite;
 }
 
 .import-tracker__status-dot--delayed {
-  background: var(--accent-red-300);
+  background: var(--token-surface-danger-strong);
 }
 
 .import-tracker__status-text {
@@ -174,7 +174,7 @@
   width: 100%;
   height: 8px;
   border-radius: 9999px;
-  background: color-mix(in srgb, var(--color-border-secondary) 20%, transparent);
+  background: var(--token-border-neutral-alpha-20);
 }
 
 .import-tracker__progress-fill {
@@ -192,7 +192,7 @@
   right: 0;
   font-size: var(--text-sm, 0.875rem);
   font-weight: var(--font-medium, 500);
-  color: var(--accent-blue-600);
+  color: var(--accent-primary-hover);
 }
 
 .import-tracker__milestones {
@@ -202,31 +202,31 @@
 }
 
 .import-tracker__milestone {
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 18%, transparent);
+  border: 1px solid var(--token-border-neutral-alpha-18);
   border-radius: 12px;
-  background: color-mix(in srgb, var(--color-neutral-950) 35%, transparent);
+  background: var(--token-surface-neutral-950-alpha-35);
   padding: 16px;
   transition: border-color 150ms ease, background-color 150ms ease;
   cursor: pointer;
 
   @media (prefers-color-scheme: light) {
-    background: color-mix(in srgb, var(--color-border-secondary) 8%, transparent);
+    background: var(--token-border-neutral-alpha-08);
   }
 }
 
 .import-tracker__milestone--selected {
   border-color: var(--neutral-600);
-  background: color-mix(in srgb, var(--neutral-600) 12%, transparent);
+  background: var(--token-surface-neutral-600-alpha-12);
 }
 
 .import-tracker__milestone--completed {
-  border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
-  background: color-mix(in srgb, var(--accent-green-500) 12%, transparent);
+  border-color: var(--token-surface-accent-alpha-35);
+  background: var(--token-surface-accent-tint);
 }
 
 .import-tracker__milestone--in-progress {
-  border-color: color-mix(in srgb, var(--accent-amber-500) 35%, transparent);
-  background: color-mix(in srgb, var(--accent-amber-500) 12%, transparent);
+  border-color: var(--token-surface-warning-alpha-35);
+  background: var(--token-surface-warning-alpha-12);
 }
 
 .import-tracker__milestone-body {
@@ -248,23 +248,23 @@
   border-radius: 16px;
   width: 48px;
   height: 48px;
-  background: color-mix(in srgb, var(--color-border-secondary) 18%, transparent);
+  background: var(--token-border-neutral-alpha-18);
   border: 2px solid transparent;
   color: var(--neutral-100);
 }
 
 .import-tracker__milestone-circle--completed {
-  border-color: var(--accent-green-400);
-  background: color-mix(in srgb, var(--accent-green-500) 18%, transparent);
+  border-color: var(--accent-primary);
+  background: var(--token-surface-accent-soft);
 }
 
 .import-tracker__milestone-circle--in-progress {
-  border-color: var(--accent-amber-500);
-  background: color-mix(in srgb, var(--accent-amber-500) 18%, transparent);
+  border-color: var(--accent-muted);
+  background: var(--token-surface-warning-alpha-18);
 }
 
 .import-tracker__milestone-circle--pending {
-  border-color: color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+  border-color: var(--token-border-neutral-soft);
 }
 
 .import-tracker__milestone-indicator {
@@ -277,12 +277,12 @@
 }
 
 .import-tracker__milestone-indicator--progress {
-  background: color-mix(in srgb, var(--accent-amber-500) 60%, transparent);
+  background: var(--token-surface-warning-alpha-60);
   animation: trackerPulse 1.2s ease-in-out infinite;
 }
 
 .import-tracker__milestone-indicator--completed {
-  background: var(--accent-green-400);
+  background: var(--accent-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -346,23 +346,23 @@
 }
 
 .import-tracker__milestone-action--update {
-  background: color-mix(in srgb, var(--accent-blue-500) 16%, transparent);
-  color: var(--accent-blue-400);
-  border-color: color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
+  background: var(--token-surface-accent-alpha-16);
+  color: var(--accent-primary);
+  border-color: var(--token-surface-accent-alpha-35);
 }
 
 .import-tracker__milestone-action--update:hover {
-  background: color-mix(in srgb, var(--accent-blue-500) 28%, transparent);
+  background: var(--token-surface-accent-alpha-28);
 }
 
 .import-tracker__milestone-action--complete {
-  background: color-mix(in srgb, var(--accent-green-500) 16%, transparent);
-  color: var(--accent-green-400);
-  border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
+  background: var(--token-surface-accent-alpha-16);
+  color: var(--accent-primary);
+  border-color: var(--token-surface-accent-alpha-35);
 }
 
 .import-tracker__milestone-action--complete:hover {
-  background: color-mix(in srgb, var(--accent-green-500) 28%, transparent);
+  background: var(--token-surface-accent-alpha-28);
 }
 
 .import-tracker__milestone-meta {
@@ -380,7 +380,7 @@
 }
 
 .import-tracker__time-icon {
-  color: var(--accent-blue-600);
+  color: var(--accent-primary-hover);
 }
 
 .import-tracker__time-label {
@@ -396,11 +396,11 @@
 }
 
 .import-tracker__milestone-completed {
-  color: var(--accent-green-400);
+  color: var(--accent-primary);
 }
 
 .import-tracker__milestone-progress {
-  color: var(--accent-amber-500);
+  color: var(--accent-muted);
 }
 
 .import-tracker__progress-spinner {
@@ -423,31 +423,31 @@
   font-size: var(--text-xs, 0.75rem);
   font-weight: var(--font-medium, 500);
   border: 1px solid transparent;
-  background: color-mix(in srgb, var(--color-border-secondary) 14%, transparent);
+  background: var(--token-border-neutral-alpha-14);
   color: var(--neutral-500);
 }
 
 .import-tracker__status-badge--completed {
-  background: color-mix(in srgb, var(--accent-green-500) 18%, transparent);
-  border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
-  color: var(--accent-green-400);
+  background: var(--token-surface-accent-soft);
+  border-color: var(--token-surface-accent-alpha-35);
+  color: var(--accent-primary);
 }
 
 .import-tracker__status-badge--in-progress {
-  background: color-mix(in srgb, var(--accent-amber-500) 18%, transparent);
-  border-color: color-mix(in srgb, var(--accent-amber-500) 35%, transparent);
-  color: var(--accent-amber-500);
+  background: var(--token-surface-warning-alpha-18);
+  border-color: var(--token-surface-warning-alpha-35);
+  color: var(--accent-muted);
 }
 
 .import-tracker__status-badge--pending {
-  background: color-mix(in srgb, var(--color-border-secondary) 18%, transparent);
-  border-color: color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+  background: var(--token-border-neutral-alpha-18);
+  border-color: var(--token-border-neutral-soft);
 }
 
 .import-tracker__details {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid color-mix(in srgb, var(--color-border-secondary) 25%, transparent);
+  border-top: 1px solid var(--token-border-neutral-alpha-25);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -466,11 +466,11 @@
 .import-tracker__detail-card {
   padding: 16px;
   border-radius: 12px;
-  background: color-mix(in srgb, var(--color-neutral-950) 45%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 20%, transparent);
+  background: var(--token-surface-neutral-950-alpha-45);
+  border: 1px solid var(--token-border-neutral-alpha-20);
 
   @media (prefers-color-scheme: light) {
-    background: color-mix(in srgb, var(--color-border-secondary) 10%, transparent);
+    background: var(--token-border-neutral-alpha-10);
   }
 }
 
@@ -532,8 +532,8 @@
 .import-tracker__action {
   padding: 12px;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--color-neutral-950) 30%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 20%, transparent);
+  background: var(--token-surface-neutral-950-alpha-30);
+  border: 1px solid var(--token-border-neutral-alpha-20);
   font-size: var(--text-sm, 0.875rem);
 }
 
@@ -570,23 +570,23 @@
 .import-tracker__stat-card {
   padding: 16px;
   border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 20%, transparent);
-  background: color-mix(in srgb, var(--color-neutral-950) 30%, transparent);
+  border: 1px solid var(--token-border-neutral-alpha-20);
+  background: var(--token-surface-neutral-950-alpha-30);
 }
 
 .import-tracker__stat-card--info {
-  border-color: color-mix(in srgb, var(--accent-blue-500) 35%, transparent);
-  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+  border-color: var(--token-surface-accent-alpha-35);
+  background: var(--token-surface-accent-tint);
 }
 
 .import-tracker__stat-card--warning {
-  border-color: color-mix(in srgb, var(--accent-amber-500) 35%, transparent);
-  background: color-mix(in srgb, var(--accent-amber-500) 12%, transparent);
+  border-color: var(--token-surface-warning-alpha-35);
+  background: var(--token-surface-warning-alpha-12);
 }
 
 .import-tracker__stat-card--success {
-  border-color: color-mix(in srgb, var(--accent-green-500) 35%, transparent);
-  background: color-mix(in srgb, var(--accent-green-500) 12%, transparent);
+  border-color: var(--token-surface-accent-alpha-35);
+  background: var(--token-surface-accent-tint);
 }
 
 .import-tracker__stat-content {
@@ -602,7 +602,7 @@
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--color-neutral-950) 25%, transparent);
+  background: var(--token-surface-neutral-950-alpha-25);
 }
 
 .import-tracker__stat-value {
@@ -639,21 +639,21 @@
 }
 
 .import-tracker__report-button {
-  background: color-mix(in srgb, var(--accent-blue-500) 16%, transparent);
-  color: var(--accent-blue-400);
+  background: var(--token-surface-accent-alpha-16);
+  color: var(--accent-primary);
 }
 
 .import-tracker__report-button:hover {
-  background: color-mix(in srgb, var(--accent-blue-500) 28%, transparent);
+  background: var(--token-surface-accent-alpha-28);
 }
 
 .import-tracker__notify {
-  background: color-mix(in srgb, var(--accent-green-500) 16%, transparent);
-  color: var(--accent-green-400);
+  background: var(--token-surface-accent-alpha-16);
+  color: var(--accent-primary);
 }
 
 .import-tracker__notify:hover {
-  background: color-mix(in srgb, var(--accent-green-500) 28%, transparent);
+  background: var(--token-surface-accent-alpha-28);
 }
 
 @keyframes trackerPulse {

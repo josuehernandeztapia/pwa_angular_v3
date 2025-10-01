@@ -9,13 +9,13 @@
 
 @media (prefers-color-scheme: dark) {
   .dashboard-shell {
-    background: color-mix(in srgb, var(--color-neutral-900) 92%, transparent);
+    background: var(--token-overlay-neutral-alpha-92);
   }
 }
 
 .dashboard-header {
   background: var(--color-bg-primary);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-neutral-400) 35%, transparent);
+  border-bottom: 1px solid var(--token-surface-neutral-400-alpha-35);
   padding: 16px 20px;
 }
 
@@ -116,7 +116,7 @@
 .dashboard-mobile-actions {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid color-mix(in srgb, var(--color-neutral-400) 35%, transparent);
+  border-top: 1px solid var(--token-surface-neutral-400-alpha-35);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -221,13 +221,13 @@
 
 @media (prefers-color-scheme: dark) {
   .kpi-label {
-    color: color-mix(in srgb, var(--openai-black) 68%, transparent);
+    color: var(--token-surface-inverse-alpha-68);
   }
   .kpi-value {
     color: var(--openai-black);
   }
   .kpi-subvalue {
-    color: color-mix(in srgb, var(--openai-black) 72%, transparent);
+    color: var(--token-surface-inverse-alpha-72);
   }
 }
 
@@ -238,7 +238,7 @@
   width: 44px;
   height: 44px;
   border-radius: 8px; /* OpenAI standard */
-  background: var(--surface-neutral-weak);
+  background: var(--token-surface-muted);
 }
 
 .kpi-icon {
@@ -247,23 +247,23 @@
 }
 
 .kpi-icon--money {
-  background: var(--surface-blue-weak);
-  color: var(--accent-blue-600);
+  background: var(--token-surface-accent-weak);
+  color: var(--accent-primary-hover);
 }
 
 .kpi-icon--chart-up {
-  background: var(--surface-purple-weak);
-  color: var(--accent-purple-500);
+  background: var(--token-surface-accent-strong);
+  color: var(--accent-primary);
 }
 
 .kpi-icon--target {
-  background: var(--surface-red-weak);
-  color: var(--accent-red-500);
+  background: var(--token-surface-danger);
+  color: var(--accent-danger);
 }
 
 .kpi-icon--delivery {
-  background: var(--surface-green-weak);
-  color: var(--accent-green-600);
+  background: var(--token-surface-accent-strong);
+  color: var(--accent-primary-hover);
 }
 
 .kpi-trend {
@@ -279,11 +279,11 @@
 }
 
 .kpi-trend--up {
-  color: var(--accent-green-600);
+  color: var(--accent-primary-hover);
 }
 
 .kpi-trend--down {
-  color: var(--accent-red-600);
+  color: var(--accent-danger);
 }
 
 .kpi-trend--stable {
@@ -380,8 +380,8 @@
   min-width: 32px;
   padding: 0 10px;
   border-radius: 8px; /* OpenAI standard */
-  background: color-mix(in srgb, var(--accent-blue-700) 16%, transparent);
-  color: var(--accent-blue-700);
+  background: var(--token-surface-accent-hover-alpha-16);
+  color: var(--accent-primary-hover);
   font-weight: 600;
   font-size: 12px;
 }
@@ -406,7 +406,7 @@
 .action-more {
   border: none;
   background: transparent;
-  color: var(--accent-blue-500);
+  color: var(--accent-primary);
   font-size: 12px;
   font-weight: 500;
   text-align: left;
@@ -415,7 +415,7 @@
 }
 
 .action-more:hover {
-  color: var(--accent-blue-600);
+  color: var(--accent-primary-hover);
 }
 
 .dashboard-activity-card {
@@ -428,7 +428,7 @@
   align-items: flex-start;
   gap: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-neutral-300) 70%, transparent);
+  border-bottom: 1px solid var(--token-surface-neutral-300-alpha-70);
 }
 
 .activity-item--last {
@@ -440,7 +440,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--accent-blue-400) 18%, transparent);
+  background: var(--token-surface-accent-soft);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -449,7 +449,7 @@
 .activity-icon-symbol {
   width: 18px;
   height: 18px;
-  color: var(--accent-blue-500);
+  color: var(--accent-primary);
 }
 
 .activity-content {
@@ -478,9 +478,9 @@
   .client-status,
   .activity-timestamp,
   .kpi-trend-caption {
-    color: color-mix(in srgb, var(--openai-black) 68%, transparent);
+    color: var(--token-surface-inverse-alpha-68);
   }
   .activity-item {
-    border-bottom-color: color-mix(in srgb, var(--color-neutral-600) 60%, transparent);
+    border-bottom-color: var(--token-surface-neutral-600-alpha-60);
   }
 }

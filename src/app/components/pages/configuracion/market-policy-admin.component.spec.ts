@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { MarketPolicyAdminComponent } from './market-policy-admin.component';
+import { buildComponentTestProviders } from '../../../../test-helpers/component-test-providers';
 import { MarketPolicyService } from '../../../services/market-policy.service';
 import { ToastService } from '../../../services/toast.service';
 import { MonitoringService } from '../../../services/monitoring.service';
@@ -42,10 +43,12 @@ describe('MarketPolicyAdminComponent', () => {
 
     toast = jasmine.createSpyObj<ToastService>('ToastService', ['info', 'success', 'error']);
     monitoring = jasmine.createSpyObj<MonitoringService>('MonitoringService', ['auditEvent']);
+    const providerSetup = buildComponentTestProviders();
 
     await TestBed.configureTestingModule({
       imports: [MarketPolicyAdminComponent],
       providers: [
+        ...providerSetup.providers,
         { provide: MarketPolicyService, useValue: policyService },
         { provide: ToastService, useValue: toast },
         { provide: MonitoringService, useValue: monitoring }

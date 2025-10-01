@@ -20,7 +20,7 @@
 
 .interview-header {
   background: var(--flat-surface-bg);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+  border-bottom: 1px solid var(--token-border-neutral-soft);
   padding: var(--space-4) var(--space-5);
 }
 
@@ -31,7 +31,7 @@
 
 .progress-bar {
   width: 100%;
-  background: color-mix(in srgb, var(--color-border-secondary) 90%, transparent);
+  background: var(--token-border-neutral-alpha-90);
   border-radius: 999px;
   height: 8px;
   overflow: hidden;
@@ -39,13 +39,13 @@
 
 @media (prefers-color-scheme: dark) {
   .progress-bar {
-    background: color-mix(in srgb, var(--color-neutral-800) 70%, transparent);
+    background: var(--token-surface-neutral-800-alpha-70);
   }
 }
 
 .progress-fill {
   height: 100%;
-  background: var(--accent-blue-500);
+  background: var(--accent-primary);
   border-radius: 999px;
   transition: width 0.3s ease;
 }
@@ -64,8 +64,8 @@
   width: 72px;
   height: 72px;
   border-radius: 18px;
-  background: color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
-  color: var(--accent-blue-500);
+  background: var(--token-surface-accent-tint);
+  color: var(--accent-primary);
   margin: 0 auto;
   font-size: 32px;
 }
@@ -79,7 +79,7 @@
 
 .interview-logo .subtitle {
   margin: 0;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  color: var(--token-text-secondary-alpha-85);
   font-size: 14px;
 }
 
@@ -88,12 +88,12 @@
     color: var(--color-bg-secondary);
   }
   .interview-logo .subtitle {
-    color: var(--accent-blue-200);
+    color: var(--token-surface-accent-strong);
   }
 }
 
 .info-item span {
-  color: color-mix(in srgb, var(--color-text-secondary) 92%, transparent);
+  color: var(--token-text-secondary-alpha-92);
   font-size: 14px;
 }
 
@@ -120,7 +120,7 @@
 }
 
 .question-header {
-  border-bottom: 1px solid color-mix(in srgb, var(--color-border-secondary) 40%, transparent);
+  border-bottom: 1px solid var(--token-border-neutral-alpha-40);
   padding-bottom: var(--space-4);
 }
 
@@ -137,7 +137,7 @@
 }
 
 .audio-indicator.ready {
-  color: var(--accent-green-700);
+  color: var(--accent-primary-hover);
 }
 
 .question-text h2 {
@@ -149,7 +149,7 @@
 
 .question-meta-time,
 .question-hint {
-  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+  color: var(--token-text-secondary-alpha-90);
 }
 
 .pill-feedback {
@@ -159,7 +159,7 @@
 }
 
 .pill-reason {
-  color: color-mix(in srgb, var(--color-text-secondary) 80%, transparent);
+  color: var(--token-text-secondary-alpha-80);
 }
 
 .response-area {
@@ -171,8 +171,8 @@
   min-height: 120px;
   padding: var(--space-4);
   border-radius: var(--radius-md);
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 50%, transparent);
-  background: color-mix(in srgb, var(--color-bg-primary) 95%, transparent);
+  border: 1px solid var(--token-border-neutral-alpha-50);
+  background: var(--token-surface-default-alpha-95);
   color: var(--color-text-primary);
   font-size: 14px;
   resize: vertical;
@@ -180,8 +180,8 @@
 
 .response-input:focus {
   outline: none;
-  border-color: color-mix(in srgb, var(--accent-blue-500) 50%, transparent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-500) 12%, transparent);
+  border-color: var(--token-surface-accent-alpha-50);
+  box-shadow: 0 0 0 3px var(--token-surface-accent-tint);
 }
 
 .voice-controls {
@@ -280,7 +280,7 @@
 .engine-risk,
 .engine-time {
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  color: var(--token-text-secondary-alpha-85);
 }
 
 .red-flags-section h3 {
@@ -293,7 +293,7 @@
 .red-flag-icon {
   width: 18px;
   height: 18px;
-  color: var(--accent-red-500);
+  color: var(--accent-danger);
 }
 
 .red-flag-item {
@@ -302,19 +302,19 @@
   gap: var(--space-2);
   padding: var(--space-4);
   border-radius: var(--radius-md);
-  border: 1px solid color-mix(in srgb, var(--accent-red-300) 35%, transparent);
-  background: color-mix(in srgb, var(--accent-red-100) 25%, transparent);
+  border: 1px solid color-mix(in srgb, var(--token-surface-danger-strong) 35%, transparent);
+  background: color-mix(in srgb, var(--token-surface-danger) 25%, transparent);
 }
 
 .flag-heading {
   font-size: 14px;
   font-weight: 600;
-  color: var(--accent-red-700);
+  color: var(--accent-danger);
 }
 
 .flag-description {
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  color: var(--token-text-secondary-alpha-85);
 }
 
 .metrics-grid {
@@ -328,18 +328,18 @@
   gap: var(--space-1);
   padding: var(--space-4);
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--color-bg-secondary) 70%, transparent);
+  background: var(--token-surface-neutral-alpha-70);
 }
 
 @media (prefers-color-scheme: dark) {
   .metric {
-    background: color-mix(in srgb, var(--color-neutral-900) 55%, transparent);
+    background: var(--token-overlay-neutral-alpha-55);
   }
 }
 
 .metric-label {
   font-size: 12px;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  color: var(--token-text-secondary-alpha-85);
 }
 
 .metric-value {
@@ -366,13 +366,13 @@
 .card {
   background: var(--flat-surface-bg);
   border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, var(--color-border-secondary) 35%, transparent);
+  border: 1px solid var(--token-border-neutral-soft);
   padding: var(--space-5);
 }
 @media (prefers-color-scheme: dark) {
   .card {
-    background: color-mix(in srgb, var(--color-neutral-950) 85%, transparent);
-    border-color: color-mix(in srgb, var(--color-neutral-700) 60%, transparent);
+    background: var(--token-surface-neutral-950-alpha-85);
+    border-color: var(--token-surface-neutral-700-alpha-60);
   }
 }
 
@@ -448,18 +448,18 @@
 
 .score-label {
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 70%, transparent);
+  color: var(--token-text-secondary-alpha-70);
 }
 
 .risk-level {
   font-size: 13px;
   font-weight: 500;
-  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+  color: var(--token-text-secondary-alpha-90);
 }
 
 .score-description {
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  color: var(--token-text-secondary-alpha-85);
 }
 
 .engine-advantages {
@@ -470,7 +470,7 @@
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: color-mix(in srgb, var(--color-text-secondary) 75%, transparent);
+  color: var(--token-text-secondary-alpha-75);
   margin-bottom: var(--space-1);
 }
 
@@ -481,7 +481,7 @@
   flex-direction: column;
   gap: 4px;
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+  color: var(--token-text-secondary-alpha-90);
 }
 
 .consensus-analysis {
@@ -501,7 +501,7 @@
 .consensus-agreement,
 .consensus-confidence {
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  color: var(--token-text-secondary-alpha-85);
 }
 
 .consensus-info {
@@ -533,12 +533,12 @@
   align-items: center;
   padding: var(--space-3);
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--color-bg-secondary) 70%, transparent);
+  background: var(--token-surface-neutral-alpha-70);
 }
 
 .category-name {
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 95%, transparent);
+  color: var(--token-text-secondary-alpha-95);
 }
 
 .category-score {
@@ -563,9 +563,9 @@
 .recommendation-item {
   padding: var(--space-3);
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--color-border-secondary) 45%, transparent);
+  background: var(--token-border-neutral-alpha-45);
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+  color: var(--token-text-secondary-alpha-90);
 }
 
 .final-actions {
@@ -582,7 +582,7 @@
 .label,
 .value {
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  color: var(--token-text-secondary-alpha-85);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -597,35 +597,35 @@
   .consensus-level,
   .consensus-agreement,
   .consensus-confidence {
-    color: var(--accent-blue-200);
+    color: var(--token-surface-accent-strong);
   }
 
   .category-item,
   .recommendation-item {
-    background: color-mix(in srgb, var(--color-neutral-900) 60%, transparent);
+    background: var(--token-overlay-neutral-alpha-60);
   }
 }
 
 .consensus-description {
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  color: var(--token-text-secondary-alpha-85);
   line-height: 1.5;
 }
 
-.chip.clear { background: color-mix(in srgb, var(--accent-green-500) 16%, transparent); color: var(--accent-green-700); }
-.chip.review { background: color-mix(in srgb, var(--accent-amber-100) 70%, transparent); color: var(--accent-amber-700); }
-.chip.evasive { background: color-mix(in srgb, var(--accent-red-100) 70%, transparent); color: var(--accent-red-600); }
+.chip.clear { background: var(--token-surface-accent-alpha-16); color: var(--accent-primary-hover); }
+.chip.review { background: color-mix(in srgb, var(--token-surface-muted) 70%, transparent); color: var(--accent-muted); }
+.chip.evasive { background: color-mix(in srgb, var(--token-surface-danger) 70%, transparent); color: var(--accent-danger); }
 
 
 .progress-info {
   display: flex;
   justify-content: space-between;
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 80%, transparent);
+  color: var(--token-text-secondary-alpha-80);
 }
 
 .interview-info {
-  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+  color: var(--token-text-secondary-alpha-90);
 }
 
 .input-container {
@@ -657,7 +657,7 @@
   flex-direction: column;
   gap: 4px;
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+  color: var(--token-text-secondary-alpha-90);
 }
 
 .flag-header {
@@ -677,7 +677,7 @@
 .flag-reason,
 .flag-question {
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  color: var(--token-text-secondary-alpha-85);
 }
 
 .result-decision {
@@ -697,7 +697,7 @@
 
 .result-flag {
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+  color: var(--token-text-secondary-alpha-85);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -707,7 +707,7 @@
   .flag-reason,
   .flag-question,
   .result-flag {
-    color: var(--accent-blue-200);
+    color: var(--token-surface-accent-strong);
   }
 
   .result-decision {
@@ -722,14 +722,14 @@
 }
 
 .voice-button.recording {
-  background: color-mix(in srgb, var(--accent-red-300) 18%, transparent);
-  color: var(--accent-red-600);
+  background: color-mix(in srgb, var(--token-surface-danger-strong) 18%, transparent);
+  color: var(--accent-danger);
 }
 
-.consolidated-score.risk-low { background: color-mix(in srgb, var(--accent-green-500) 18%, transparent); color: var(--accent-green-700); }
-.consolidated-score.risk-medium { background: color-mix(in srgb, var(--accent-amber-100) 70%, transparent); color: var(--accent-amber-700); }
-.consolidated-score.risk-high { background: color-mix(in srgb, var(--accent-red-100) 80%, transparent); color: var(--accent-red-600); }
-.consolidated-score.risk-critical { background: color-mix(in srgb, var(--accent-red-800) 25%, transparent); color: var(--accent-red-800); }
+.consolidated-score.risk-low { background: var(--token-surface-accent-soft); color: var(--accent-primary-hover); }
+.consolidated-score.risk-medium { background: color-mix(in srgb, var(--token-surface-muted) 70%, transparent); color: var(--accent-muted); }
+.consolidated-score.risk-high { background: color-mix(in srgb, var(--token-surface-danger) 80%, transparent); color: var(--accent-danger); }
+.consolidated-score.risk-critical { background: var(--token-surface-danger-alpha-25); color: var(--accent-danger); }
 
 .analysis-state {
   display: flex;

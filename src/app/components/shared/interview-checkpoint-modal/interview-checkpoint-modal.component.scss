@@ -34,7 +34,7 @@
     align-items: center;
     gap: 16px;
     padding: 24px;
-    border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+    border-bottom: 1px solid var(--token-surface-danger-alpha-20);
     background: rgba(254, 242, 242, 0.85);
 
     @media (prefers-color-scheme: dark) {
@@ -300,14 +300,14 @@
       color: var(--openai-white);
 
       &:hover {
-        background: var(--accent-green-500);
-        border-color: var(--accent-green-500);
+        background: var(--accent-primary);
+        border-color: var(--accent-primary);
       }
     }
 
     &--supervisor {
-      background: var(--accent-red-500);
-      border-color: var(--accent-red-500);
+      background: var(--accent-danger);
+      border-color: var(--accent-danger);
       color: var(--openai-white);
 
       &:hover {
@@ -408,15 +408,12 @@
 @keyframes next-best-hero-pulse {
   0% {
     opacity: 1;
-    transform: scale(1);
   }
   50% {
     opacity: 0.65;
-    transform: scale(1.05);
   }
   100% {
     opacity: 1;
-    transform: scale(1);
   }
 }
 

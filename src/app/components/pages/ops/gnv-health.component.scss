@@ -69,11 +69,11 @@
 }
 
 .gnv-status-dot--success {
-  background: var(--accent-green-500);
+  background: var(--accent-primary);
 }
 
 .gnv-status-dot--processing {
-  background: var(--accent-amber-400);
+  background: var(--accent-muted);
 }
 
 .gnv-status-dot--idle {
@@ -81,7 +81,7 @@
 }
 
 .gnv-status-dot--error {
-  background: var(--accent-red-500);
+  background: var(--accent-danger);
 }
 
 .gnv-status-text {
@@ -158,21 +158,21 @@
 }
 
 .gnv-summary-card--green {
-  background: var(--accent-green-50);
-  border-color: var(--accent-green-100);
-  color: var(--accent-green-700);
+  background: var(--token-surface-accent-weak);
+  border-color: var(--token-surface-accent-weak);
+  color: var(--accent-primary-hover);
 }
 
 .gnv-summary-card--yellow {
-  background: var(--accent-amber-50);
-  border-color: var(--accent-amber-100);
-  color: var(--accent-amber-700);
+  background: var(--token-surface-muted);
+  border-color: var(--token-surface-muted);
+  color: var(--accent-muted);
 }
 
 .gnv-summary-card--red {
-  background: var(--accent-red-50);
-  border-color: var(--accent-red-100);
-  color: var(--accent-red-600);
+  background: var(--token-surface-danger);
+  border-color: var(--token-surface-danger);
+  color: var(--accent-danger);
 }
 
 .gnv-skeleton {
@@ -211,18 +211,18 @@
 }
 
 .gnv-station-card--green {
-  border-color: var(--accent-green-100);
-  background: var(--accent-green-50);
+  border-color: var(--token-surface-accent-weak);
+  background: var(--token-surface-accent-weak);
 }
 
 .gnv-station-card--yellow {
-  border-color: var(--accent-amber-100);
-  background: var(--accent-amber-50);
+  border-color: var(--token-surface-muted);
+  background: var(--token-surface-muted);
 }
 
 .gnv-station-card--red {
-  border-color: var(--accent-red-100);
-  background: var(--accent-red-50);
+  border-color: var(--token-surface-danger);
+  background: var(--token-surface-danger);
 }
 
 .gnv-station-card__header {
@@ -254,15 +254,15 @@
 }
 
 .gnv-state-indicator--green {
-  background: var(--accent-green-500);
+  background: var(--accent-primary);
 }
 
 .gnv-state-indicator--yellow {
-  background: var(--accent-amber-400);
+  background: var(--accent-muted);
 }
 
 .gnv-state-indicator--red {
-  background: var(--accent-red-300);
+  background: var(--token-surface-danger-strong);
 }
 
 .gnv-status-pill {
@@ -275,18 +275,18 @@
 }
 
 .gnv-status-pill--green {
-  background: var(--accent-green-100);
-  color: var(--accent-green-700);
+  background: var(--token-surface-accent-weak);
+  color: var(--accent-primary-hover);
 }
 
 .gnv-status-pill--yellow {
-  background: var(--accent-amber-100);
-  color: var(--accent-amber-700);
+  background: var(--token-surface-muted);
+  color: var(--accent-muted);
 }
 
 .gnv-status-pill--red {
-  background: var(--accent-red-100);
-  color: var(--accent-red-600);
+  background: var(--token-surface-danger);
+  color: var(--accent-danger);
 }
 
 .gnv-station-card__stats {
@@ -316,15 +316,15 @@
 }
 
 .gnv-stat-value--positive {
-  color: var(--accent-green-700);
+  color: var(--accent-primary-hover);
 }
 
 .gnv-stat-value--warning {
-  color: var(--accent-amber-700);
+  color: var(--accent-muted);
 }
 
 .gnv-stat-value--negative {
-  color: var(--accent-red-600);
+  color: var(--accent-danger);
 }
 
 .gnv-station-card__actions {

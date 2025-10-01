@@ -1,0 +1,58 @@
+# Node modules
+node_modules
+npm-debug.log
+
+# Build artifacts
+dist
+.angular
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Testing
+coverage
+.nyc_output
+test-results
+playwright-report
+
+# Git
+.git
+.gitignore
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation (not needed in container)
+docs
+*.md
+!package.json
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Temporary files
+tmp
+temp
+*.tmp
+
+# BFF (if running separately)
+bff/node_modules
+bff/dist
+
+# AVI Lab (if running separately)
+avi-lab/node_modules
+avi-lab/dist
