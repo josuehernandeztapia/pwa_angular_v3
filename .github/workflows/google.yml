@@ -1,0 +1,48 @@
+name: Prueba de Frontend con Gemini CLI
+
+on: [push]
+
+jobs:
+  test_with_gemini:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install MCP and Gemini CLI
+        run: |
+          npm install -g chrome-devtools-mcp
+          npm install -g @google/gemini-cli
+
+      - name: Start local server
+        run: npm run dev & # Inicia tu servidor en segundo plano
+        env:
+          PORT: 3000
+        timeout-minutes: 2
+
+      - name: Wait for server to start
+        run: sleep 10 # Esperar a que el servidor se inicie
+
+      - name: Run MCP server
+        run: chrome-devtools-mcp &
+
+      - name: Run tests with Gemini CLI
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          gemini analyze "http://localhost:3000" --mcp-server
+
+      - name: Run automated interaction test
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          gemini automate "navegar a la página principal y hacer clic en el botón de 'Ver detalles'" en "http://localhost:3000" --mcp-server
+
