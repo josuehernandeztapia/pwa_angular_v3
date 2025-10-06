@@ -1,0 +1,141 @@
+{
+  "timestamp": "2025-10-06T08:29:56.659Z",
+  "summary": {
+    "totalTests": 4,
+    "passedTests": 4,
+    "successRate": 100,
+    "screenshotCount": 7,
+    "consoleErrorCount": 0,
+    "networkFailureCount": 0
+  },
+  "testResults": [
+    {
+      "test": "login_page_load",
+      "startTime": 1759739385125,
+      "issues": [],
+      "success": true,
+      "demoUsersPresent": true,
+      "elementsFound": 3,
+      "endTime": 1759739388063
+    },
+    {
+      "test": "demo_user_selection",
+      "startTime": 1759739388063,
+      "issues": [],
+      "success": true,
+      "successfulClicks": 3,
+      "elementsFound": 3,
+      "endTime": 1759739391371
+    },
+    {
+      "test": "bff_authentication",
+      "user": "admin",
+      "startTime": 1759739391372,
+      "issues": [],
+      "success": true,
+      "authResult": "success",
+      "finalUrl": "http://localhost:4300/dashboard",
+      "authState": {
+        "hasToken": true,
+        "hasUser": true,
+        "localStorageKeys": [
+          "auth_token",
+          "current_user",
+          "refresh_token"
+        ],
+        "sessionStorageKeys": [
+          "__flow_context_state__"
+        ],
+        "cookies": ""
+      },
+      "newNetworkFailures": 0,
+      "newConsoleErrors": 0,
+      "endTime": 1759739393532
+    },
+    {
+      "test": "dashboard_access",
+      "startTime": 1759739393532,
+      "issues": [],
+      "success": true,
+      "onDashboard": true,
+      "elementsFound": 1,
+      "navigationWorks": true,
+      "endTime": 1759739396659
+    }
+  ],
+  "consoleErrors": [],
+  "networkFailures": [],
+  "screenshots": [
+    {
+      "filename": "pwa-e2e-screenshots/01-login-page-loaded-1759739387943.png",
+      "name": "01-login-page-loaded",
+      "description": "Initial login page state",
+      "timestamp": 1759739388045,
+      "test": "login_page_load"
+    },
+    {
+      "filename": "pwa-e2e-screenshots/02-demo-user-1-selected-1759739389088.png",
+      "name": "02-demo-user-1-selected",
+      "description": "Demo user 1 form populated",
+      "timestamp": 1759739389166,
+      "test": "demo_user_selection"
+    },
+    {
+      "filename": "pwa-e2e-screenshots/02-demo-user-2-selected-1759739390198.png",
+      "name": "02-demo-user-2-selected",
+      "description": "Demo user 2 form populated",
+      "timestamp": 1759739390271,
+      "test": "demo_user_selection"
+    },
+    {
+      "filename": "pwa-e2e-screenshots/02-demo-user-3-selected-1759739391297.png",
+      "name": "02-demo-user-3-selected",
+      "description": "Demo user 3 form populated",
+      "timestamp": 1759739391370,
+      "test": "demo_user_selection"
+    },
+    {
+      "filename": "pwa-e2e-screenshots/03-login-form-filled-admin-1759739392337.png",
+      "name": "03-login-form-filled-admin",
+      "description": "Login form filled for admin",
+      "timestamp": 1759739392411,
+      "test": "bff_authentication"
+    },
+    {
+      "filename": "pwa-e2e-screenshots/03-auth-result-admin-1759739393428.png",
+      "name": "03-auth-result-admin",
+      "description": "Authentication result for admin: success",
+      "timestamp": 1759739393532,
+      "test": "bff_authentication"
+    },
+    {
+      "filename": "pwa-e2e-screenshots/04-dashboard-loaded-1759739395533.png",
+      "name": "04-dashboard-loaded",
+      "description": "Dashboard successfully loaded",
+      "timestamp": 1759739395633,
+      "test": "dashboard_access"
+    }
+  ],
+  "demoUsers": [
+    {
+      "email": "asesor@conductores.com",
+      "password": "demo123",
+      "role": "asesor"
+    },
+    {
+      "email": "supervisor@conductores.com",
+      "password": "super123",
+      "role": "supervisor"
+    },
+    {
+      "email": "admin@conductores.com",
+      "password": "admin123",
+      "role": "admin"
+    }
+  ],
+  "configuration": {
+    "frontendUrl": "http://localhost:4300",
+    "bffUrl": "http://localhost:3000",
+    "chromeDevTools": true
+  }
+}

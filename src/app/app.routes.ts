@@ -41,7 +41,7 @@ const commonBeforeWildcard: Routes = [
   {
     path: 'dashboard',
     loadComponent: () => import('./components/pages/dashboard/dashboard.component').then(c => c.DashboardComponent),
-    canActivate: [AuthGuard, ContractValidGuard],
+    canActivate: [AuthGuard],
     title: 'Dashboard - Conductores PWA'
   },
 
@@ -312,10 +312,6 @@ const commonBeforeWildcard: Routes = [
     canActivate: [AuthGuard],
     title: 'Flow Builder - Conductores PWA'
   }] : []),
-
-  {
-    canActivate: [AuthGuard],
-  },
 
   ...(environment.features.enablePerfil ? [{
     path: 'perfil',

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { delay, map, catchError } from 'rxjs/operators';
+import { delay, map, catchError, tap } from 'rxjs/operators';
 
 export interface RegistrationData {
   firstName: string;
@@ -54,11 +55,12 @@ export class AuthService {
   private tokenKey = 'auth_token';
   private refreshTokenKey = 'refresh_token';
   private userKey = 'current_user';
+  private bffBaseUrl = 'http://localhost:3000'; // BFF URL
 
   public currentUser$ = this.currentUserSubject.asObservable();
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.initializeAuth();
   }
 
@@ -85,74 +87,18 @@ export class AuthService {
    * Login with email and password
    */
   login(credentials: LoginCredentials): Observable<AuthResponse> {
-    if (!credentials.email.endsWith('@conductores.com')) {
-      console.warn('[AuthService] Login failed', { email: credentials.email, reason: 'non-corporate-email' });
-      return throwError(() => new Error('Credenciales incorrectas'));
-    }
-    const demoUsers = [
-      {
-        email: 'asesor@conductores.com',
-        password: 'demo123',
-        user: {
-          id: '1',
-          name: 'Ana Torres',
-          email: 'asesor@conductores.com',
-          role: 'asesor' as const,
-          permissions: ['read:clients', 'write:quotes', 'read:reports'],
-          avatarUrl: 'https://picsum.photos/seed/asesor/100/100'
-        }
-      },
-      {
-        email: 'supervisor@conductores.com',
-        password: 'super123',
-        user: {
-          id: '2',
-          name: 'Laura Martínez',
-          email: 'supervisor@conductores.com',
-          role: 'supervisor' as const,
-          permissions: ['read:clients', 'write:quotes', 'read:reports', 'approve:quotes', 'manage:team'],
-          avatarUrl: 'https://picsum.photos/seed/supervisor/100/100'
-        }
-      },
-      {
-        email: 'admin@conductores.com',
-        password: 'admin123',
-        user: {
-          id: '3',
-          name: 'Carlos Flores',
-          email: 'admin@conductores.com',
-          role: 'admin' as const,
-          permissions: ['*'],
-          avatarUrl: 'https://picsum.photos/seed/admin/100/100'
-        }
-      }
-    ];
-
-    // Simulate API call delay
-    return of(null).pipe(
-      delay(1500), // Simulate network delay
-      map(() => {
-        const demoUser = demoUsers.find(
-          u => u.email === credentials.email && u.password === credentials.password
-        );
-
-        if (!demoUser) {
-          throw new Error('Invalid credentials');
-        }
-
-        const authResponse: AuthResponse = {
-          user: demoUser.user,
-          token: 'demo_jwt_token_' + Date.now(),
-          refreshToken: 'demo_refresh_token_' + Date.now(),
-          expiresIn: 3600 // 1 hour
-        };
-
-        this.setAuthData(authResponse, credentials.rememberMe);
-        return authResponse;
+    return this.http.post<AuthResponse>(`${this.bffBaseUrl}/auth/login`, {
+      email: credentials.email,
+      password: credentials.password
+    }).pipe(
+      tap(response => {
+        this.setAuthData(response, credentials.rememberMe);
+        console.log('[AuthService] Login successful', { user: response.user.name, role: response.user.role });
       }),
       catchError(error => {
         console.warn('[AuthService] Login failed', { email: credentials.email, error });
-        return throwError(() => new Error('Credenciales incorrectas'));
+        const errorMessage = error.error?.message || 'Credenciales incorrectas';
+        return throwError(() => new Error(errorMessage));
       })
     );
   }
@@ -212,31 +158,20 @@ export class AuthService {
    */
   refreshToken(): Observable<AuthResponse> {
     const refreshToken = localStorage.getItem(this.refreshTokenKey);
-    
+
     if (!refreshToken) {
       this.logout();
       return throwError(() => new Error('No refresh token available'));
     }
 
-    // Simulate refresh token API call
-    return of(null).pipe(
-      delay(1000),
-      map(() => {
-        const currentUser = this.getCurrentUser();
-        
-        if (!currentUser) {
-          throw new Error('No current user');
-        }
-
-        const authResponse: AuthResponse = {
-          user: currentUser,
-          token: 'refreshed_jwt_token_' + Date.now(),
-          refreshToken: 'new_refresh_token_' + Date.now(),
-          expiresIn: 3600
-        };
-
-        this.setAuthData(authResponse);
-        return authResponse;
+    return this.http.post<AuthResponse>(`${this.bffBaseUrl}/auth/refresh`, {}, {
+      headers: {
+        'Authorization': `Bearer ${refreshToken}`
+      }
+    }).pipe(
+      tap(response => {
+        this.setAuthData(response);
+        console.log('[AuthService] Token refreshed successfully');
       }),
       catchError(error => {
         console.warn('[AuthService] Refresh token failed', error);
@@ -336,24 +271,51 @@ export class AuthService {
   isTokenExpired(): boolean {
     const token = this.getToken();
     if (!token) return true;
-    // In a real app, decode JWT and check exp.
-    let tokenCreated = 0;
-    const digitMatch = token.match(/(\d{10,})/g);
-    if (digitMatch && digitMatch.length) {
-      tokenCreated = parseInt(digitMatch[digitMatch.length - 1]);
-    } else {
-      const tokenParts = token.split(/[_\.]/);
-      const timestampPart = tokenParts.pop();
-      tokenCreated = timestampPart ? parseInt(timestampPart) : 0;
+
+    // For BFF tokens, we can validate them via API
+    return false; // Let BFF handle token validation
+  }
+
+  /**
+   * Validate token with BFF
+   */
+  validateToken(): Observable<any> {
+    const token = this.getToken();
+    if (!token) {
+      return throwError(() => new Error('No token available'));
     }
-    
-    // If parsing failed or token format is invalid, consider expired
-    if (isNaN(tokenCreated) || tokenCreated === 0) {
-      return true;
-    }
-    
-    const oneHourInMs = 60 * 60 * 1000;
-    return Date.now() - tokenCreated > oneHourInMs;
+
+    return this.http.post(`${this.bffBaseUrl}/auth/validate`, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).pipe(
+      catchError(error => {
+        console.warn('[AuthService] Token validation failed', error);
+        this.logout();
+        return throwError(() => new Error('Token validation failed'));
+      })
+    );
+  }
+
+  /**
+   * Get demo users for login UI
+   */
+  getDemoUsers(): Observable<any> {
+    return this.http.get(`${this.bffBaseUrl}/auth/demo-users`).pipe(
+      catchError(error => {
+        console.warn('[AuthService] Failed to fetch demo users', error);
+        // Fallback to local demo users for UI
+        return of({
+          users: [
+            { email: 'asesor@conductores.com', role: 'asesor', name: 'Ana Torres' },
+            { email: 'supervisor@conductores.com', role: 'supervisor', name: 'Carlos Mendez' },
+            { email: 'admin@conductores.com', role: 'admin', name: 'Maria Rodriguez' }
+          ],
+          message: 'Usuarios demo disponibles para testing'
+        });
+      })
+    );
   }
 
   /**
