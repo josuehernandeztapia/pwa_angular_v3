@@ -394,6 +394,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.router.navigate(['/opportunities']);
   }
 
+  navigateToRoute(route: string): void {
+    this.router.navigate([route]);
+  }
+
   handleKpiAction(action: KPIAction): void {
     if (!action) {
       return;

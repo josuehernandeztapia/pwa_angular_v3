@@ -38,12 +38,73 @@
   </header>
 
   <section class="app-nav__user" *ngIf="!isCollapsed">
-    <div class="app-nav__avatar" aria-hidden="true">
+    <div class="app-nav__avatar" aria-hidden="true" (click)="showUserProfileDropdown = !showUserProfileDropdown">
       <span>{{ userInitials }}</span>
     </div>
     <div class="app-nav__user-info">
       <div class="app-nav__user-name">{{ userName }}</div>
       <div class="app-nav__user-role">{{ userRole }}</div>
+    </div>
+    <button
+      type="button"
+      class="app-nav__user-menu-toggle"
+      aria-label="Menu de usuario"
+      data-cy="user-menu-toggle"
+      (click)="showUserProfileDropdown = !showUserProfileDropdown"
+    >
+      <app-icon name="chevron-down" [size]="16" aria-hidden="true"></app-icon>
+    </button>
+
+    <!-- User Profile Dropdown -->
+    <div *ngIf="showUserProfileDropdown" class="app-nav__user-dropdown">
+      <div class="app-nav__user-dropdown-header">
+        <div class="app-nav__user-dropdown-avatar">
+          <span>{{ userInitials }}</span>
+        </div>
+        <div class="app-nav__user-dropdown-info">
+          <div class="app-nav__user-dropdown-name">{{ userName }}</div>
+          <div class="app-nav__user-dropdown-role">{{ userRole }}</div>
+        </div>
+      </div>
+      <div class="app-nav__user-dropdown-actions">
+        <button
+          type="button"
+          class="app-nav__user-dropdown-action"
+          (click)="navigateToProfile()"
+          data-cy="nav-user-profile"
+        >
+          <app-icon name="user" [size]="16" aria-hidden="true"></app-icon>
+          <span>Mi Perfil</span>
+        </button>
+        <button
+          type="button"
+          class="app-nav__user-dropdown-action"
+          (click)="navigateToSettings()"
+          data-cy="nav-user-settings"
+        >
+          <app-icon name="settings" [size]="16" aria-hidden="true"></app-icon>
+          <span>Configuración</span>
+        </button>
+        <button
+          type="button"
+          class="app-nav__user-dropdown-action"
+          (click)="showHelp()"
+          data-cy="nav-user-help"
+        >
+          <app-icon name="help-circle" [size]="16" aria-hidden="true"></app-icon>
+          <span>Ayuda</span>
+        </button>
+        <div class="app-nav__user-dropdown-divider"></div>
+        <button
+          type="button"
+          class="app-nav__user-dropdown-action app-nav__user-dropdown-action--danger"
+          (click)="logout()"
+          data-cy="nav-user-logout"
+        >
+          <app-icon name="log-out" [size]="16" aria-hidden="true"></app-icon>
+          <span>Cerrar Sesión</span>
+        </button>
+      </div>
     </div>
   </section>
 

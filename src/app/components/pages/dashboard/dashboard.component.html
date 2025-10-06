@@ -50,6 +50,162 @@
   <main class="dashboard-main">
     <section class="dashboard-section">
       <h2 class="section-title">Métricas Principales</h2>
+      <div class="dashboard-quick-access-section">
+        <h3 class="section-subtitle">Acceso Rápido a Componentes</h3>
+        <div class="dashboard-quick-access-grid">
+          <!-- Hidden Components Access -->
+          <div class="quick-access-card card" data-cy="quick-access-productos">
+            <div class="quick-access-content">
+              <div class="quick-access-icon-wrapper quick-access-icon--productos">
+                <app-icon
+                  class="quick-access-icon"
+                  name="cube"
+                  [size]="24"
+                  aria-hidden="true"
+                ></app-icon>
+              </div>
+              <div class="quick-access-info">
+                <span class="quick-access-title">Productos</span>
+                <span class="quick-access-subtitle">Catálogo y configuración</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="navigateToRoute('/productos')"
+              data-cy="dashboard-productos-access"
+            >
+              Acceder
+            </button>
+          </div>
+
+          <div class="quick-access-card card" data-cy="quick-access-expedientes">
+            <div class="quick-access-content">
+              <div class="quick-access-icon-wrapper quick-access-icon--expedientes">
+                <app-icon
+                  class="quick-access-icon"
+                  name="folder-open"
+                  [size]="24"
+                  aria-hidden="true"
+                ></app-icon>
+              </div>
+              <div class="quick-access-info">
+                <span class="quick-access-title">Expedientes</span>
+                <span class="quick-access-subtitle">Gestión documental</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="navigateToRoute('/expedientes')"
+              data-cy="dashboard-expedientes-access"
+            >
+              Acceder
+            </button>
+          </div>
+
+          <div class="quick-access-card card" data-cy="quick-access-reportes">
+            <div class="quick-access-content">
+              <div class="quick-access-icon-wrapper quick-access-icon--reportes">
+                <app-icon
+                  class="quick-access-icon"
+                  name="document-text"
+                  [size]="24"
+                  aria-hidden="true"
+                ></app-icon>
+              </div>
+              <div class="quick-access-info">
+                <span class="quick-access-title">Reportes</span>
+                <span class="quick-access-subtitle">Análisis y estadísticas</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="navigateToRoute('/reportes')"
+              data-cy="dashboard-reportes-access"
+            >
+              Acceder
+            </button>
+          </div>
+
+          <div class="quick-access-card card" data-cy="quick-access-pipeline">
+            <div class="quick-access-content">
+              <div class="quick-access-icon-wrapper quick-access-icon--pipeline">
+                <app-icon
+                  class="quick-access-icon"
+                  name="funnel"
+                  [size]="24"
+                  aria-hidden="true"
+                ></app-icon>
+              </div>
+              <div class="quick-access-info">
+                <span class="quick-access-title">Pipeline</span>
+                <span class="quick-access-subtitle">Oportunidades de venta</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="navigateToRoute('/oportunidades')"
+              data-cy="dashboard-pipeline-access"
+            >
+              Acceder
+            </button>
+          </div>
+
+          <div class="quick-access-card card" data-cy="quick-access-usage">
+            <div class="quick-access-content">
+              <div class="quick-access-icon-wrapper quick-access-icon--usage">
+                <app-icon
+                  class="quick-access-icon"
+                  name="cpu-chip"
+                  [size]="24"
+                  aria-hidden="true"
+                ></app-icon>
+              </div>
+              <div class="quick-access-info">
+                <span class="quick-access-title">Uso del Sistema</span>
+                <span class="quick-access-subtitle">Métricas de uso</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="navigateToRoute('/usage')"
+              data-cy="dashboard-usage-access"
+            >
+              Acceder
+            </button>
+          </div>
+
+          <div class="quick-access-card card" data-cy="quick-access-flow-builder">
+            <div class="quick-access-content">
+              <div class="quick-access-icon-wrapper quick-access-icon--flow-builder">
+                <app-icon
+                  class="quick-access-icon"
+                  name="git-branch"
+                  [size]="24"
+                  aria-hidden="true"
+                ></app-icon>
+              </div>
+              <div class="quick-access-info">
+                <span class="quick-access-title">Flow Builder</span>
+                <span class="quick-access-subtitle">Constructor de flujos</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="navigateToRoute('/configuracion/flow-builder')"
+              data-cy="dashboard-flow-builder-access"
+            >
+              Acceder
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="dashboard-kpi-grid">
         <div *ngFor="let kpi of kpiCards" class="dashboard-kpi-card card">
           <div class="kpi-card-header">

@@ -469,6 +469,143 @@
   color: var(--color-text-secondary);
 }
 
+// Quick Access Section Styles
+.dashboard-quick-access-section {
+  margin-bottom: 24px;
+}
+
+.dashboard-quick-access-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin-top: 16px;
+}
+
+@media (min-width: 768px) {
+  .dashboard-quick-access-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-quick-access-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.quick-access-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--token-surface-neutral-300-alpha-70);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--accent-primary-alpha-20);
+    box-shadow: 0 2px 8px var(--token-surface-neutral-400-alpha-12);
+  }
+}
+
+.quick-access-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.quick-access-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.quick-access-icon--productos {
+  background: var(--token-surface-accent-weak);
+  color: var(--accent-primary);
+}
+
+.quick-access-icon--expedientes {
+  background: var(--token-surface-success-weak);
+  color: var(--accent-success);
+}
+
+.quick-access-icon--reportes {
+  background: var(--token-surface-warning-weak);
+  color: var(--accent-warning);
+}
+
+.quick-access-icon--pipeline {
+  background: var(--token-surface-info-weak);
+  color: var(--accent-info);
+}
+
+.quick-access-icon--usage {
+  background: var(--token-surface-neutral-400-alpha-20);
+  color: var(--color-text-secondary);
+}
+
+.quick-access-icon--flow-builder {
+  background: var(--token-surface-accent-strong);
+  color: var(--accent-primary-hover);
+}
+
+.quick-access-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.quick-access-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.quick-access-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quick-access-subtitle {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (prefers-color-scheme: dark) {
+  .quick-access-card {
+    background: var(--color-bg-secondary);
+    border-color: var(--token-surface-neutral-600-alpha-60);
+
+    &:hover {
+      border-color: var(--accent-primary-alpha-30);
+    }
+  }
+
+  .quick-access-title {
+    color: var(--openai-black);
+  }
+
+  .quick-access-subtitle {
+    color: var(--token-surface-inverse-alpha-72);
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .action-title,
   .activity-message {

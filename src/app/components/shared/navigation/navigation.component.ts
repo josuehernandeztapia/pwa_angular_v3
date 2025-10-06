@@ -31,6 +31,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   isCollapsed = false;
   showMobileMenu = false;
   isMobileView = false;
+  showUserProfileDropdown = false;
 
   userName = 'Ana Domínguez';
   userRole = 'Asesor Financiero';
@@ -41,14 +42,69 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   navigationItems: NavigationItem[] = [
     { label: 'Dashboard', route: '/dashboard', iconType: 'home', dataCy: 'nav-dashboard' },
+    { label: 'Onboarding', route: '/onboarding', iconType: 'user-plus', dataCy: 'nav-onboarding' },
+    {
+      label: 'Cotizador',
+      route: '/cotizador',
+      iconType: 'calculator',
+      dataCy: 'nav-cotizador',
+      children: [
+        { label: 'AGS Individual', route: '/cotizador/ags-individual', iconType: 'user', dataCy: 'nav-cotizador-ags' },
+        { label: 'EdoMex Colectivo', route: '/cotizador/edomex-colectivo', iconType: 'users', dataCy: 'nav-cotizador-edomex' }
+      ]
+    },
+    {
+      label: 'Simulador',
+      route: '/simulador',
+      iconType: 'target',
+      dataCy: 'nav-simulador',
+      children: [
+        { label: 'Plan de Ahorro', route: '/simulador/ags-ahorro', iconType: 'piggy-bank', dataCy: 'nav-simulador-ahorro' },
+        { label: 'Venta a Plazo', route: '/simulador/edomex-individual', iconType: 'credit-card', dataCy: 'nav-simulador-plazo' },
+        { label: 'Tanda Colectiva', route: '/simulador/tanda-colectiva', iconType: 'users', dataCy: 'nav-simulador-tanda' }
+      ]
+    },
     { label: 'Clientes', route: '/clientes', iconType: 'users', dataCy: 'nav-clientes' },
-    { label: 'Cotizador', route: '/cotizador', iconType: 'calculator', dataCy: 'nav-cotizador' },
-    { label: 'Simulador', route: '/simulador', iconType: 'target', dataCy: 'nav-simulador' },
+    { label: 'Productos', route: '/productos', iconType: 'cube', dataCy: 'nav-productos' },
+    { label: 'Expedientes', route: '/expedientes', iconType: 'folder-open', dataCy: 'nav-expedientes' },
     { label: 'Documentos', route: '/documentos', iconType: 'document', dataCy: 'nav-documentos' },
-    { label: 'Entregas', route: '/entregas', iconType: 'truck', dataCy: 'nav-entregas' },
+    {
+      label: 'Análisis',
+      route: '/reportes',
+      iconType: 'chart-bar',
+      dataCy: 'nav-analytics',
+      children: [
+        { label: 'Reportes', route: '/reportes', iconType: 'document-text', dataCy: 'nav-reportes' },
+        { label: 'Pipeline', route: '/oportunidades', iconType: 'funnel', dataCy: 'nav-pipeline' },
+        { label: 'Uso del Sistema', route: '/usage', iconType: 'cpu-chip', dataCy: 'nav-usage' }
+      ]
+    },
+    {
+      label: 'Operaciones',
+      route: '/ops',
+      iconType: 'truck',
+      dataCy: 'nav-ops',
+      children: [
+        { label: 'Entregas', route: '/ops/deliveries', iconType: 'truck', dataCy: 'nav-ops-entregas' },
+        { label: 'Import Tracker', route: '/ops/import-tracker', iconType: 'package', dataCy: 'nav-ops-tracker' },
+        { label: 'Monitor GNV', route: '/ops/gnv-health', iconType: 'fuel', dataCy: 'nav-ops-gnv' },
+        { label: 'Triggers', route: '/ops/triggers', iconType: 'zap', dataCy: 'nav-ops-triggers' }
+      ]
+    },
     { label: 'GNV', route: '/gnv', iconType: 'fuel', dataCy: 'nav-gnv' },
     { label: 'Protección', route: '/proteccion', iconType: 'shield', dataCy: 'nav-proteccion' },
-    { label: 'Configuración', route: '/configuracion', iconType: 'settings', dataCy: 'nav-configuracion' }
+    {
+      label: 'Configuración',
+      route: '/configuracion',
+      iconType: 'settings',
+      dataCy: 'nav-configuracion',
+      children: [
+        { label: 'General', route: '/configuracion', iconType: 'cog', dataCy: 'nav-config-general' },
+        { label: 'Políticas', route: '/configuracion/politicas', iconType: 'document-text', dataCy: 'nav-config-politicas' },
+        { label: 'Flow Builder', route: '/configuracion/flow-builder', iconType: 'git-branch', dataCy: 'nav-config-flow' },
+        { label: 'Integraciones', route: '/integraciones', iconType: 'puzzle-piece', dataCy: 'nav-integraciones' }
+      ]
+    }
   ];
 
   constructor(
@@ -159,6 +215,17 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   showHelp() {
     // Implement help functionality
+    this.showUserProfileDropdown = false;
+  }
+
+  navigateToProfile() {
+    this.router.navigate(['/perfil']);
+    this.showUserProfileDropdown = false;
+  }
+
+  navigateToSettings() {
+    this.router.navigate(['/configuracion']);
+    this.showUserProfileDropdown = false;
   }
 
   showSettings() {
@@ -168,6 +235,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   logout() {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('rememberMe');
+    this.showUserProfileDropdown = false;
     this.router.navigate(['/login']);
   }
 

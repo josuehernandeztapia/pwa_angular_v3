@@ -11,6 +11,8 @@ async function bootstrap() {
     origin: [
       'http://localhost:4200',
       'http://127.0.0.1:4200',
+      'http://localhost:4300',
+      'http://127.0.0.1:4300',
       'http://localhost:8080',
       'http://127.0.0.1:8080',
       process.env.PWA_URL || 'http://localhost:4200'

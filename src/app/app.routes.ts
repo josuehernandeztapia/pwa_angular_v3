@@ -120,6 +120,13 @@ const commonBeforeWildcard: Routes = [
     ]
   },
 
+  // Alias para cotizadores (plural)
+  {
+    path: 'cotizadores',
+    redirectTo: '/cotizador',
+    pathMatch: 'full'
+  },
+
   // Simulador routes
   {
     path: 'simulador',
@@ -308,6 +315,14 @@ const commonBeforeWildcard: Routes = [
   // Flow Builder direct route (optional entry point; gated by flag)
   ...(environment.features.enableFlowBuilder ? [{
     path: 'flow-builder',
+    loadComponent: () => import('./components/pages/configuracion/flow-builder/flow-builder.component').then(c => c.FlowBuilderComponent),
+    canActivate: [AuthGuard],
+    title: 'Flow Builder - Conductores PWA'
+  }] : []),
+
+  // Flow Builder through configuration menu
+  ...(environment.features.enableFlowBuilder ? [{
+    path: 'configuracion/flow-builder',
     loadComponent: () => import('./components/pages/configuracion/flow-builder/flow-builder.component').then(c => c.FlowBuilderComponent),
     canActivate: [AuthGuard],
     title: 'Flow Builder - Conductores PWA'
