@@ -14,13 +14,15 @@ import { EventsModule } from './events/events.module';
 import { DeliveriesModule } from './deliveries/deliveries.module';
 import { KibanModule } from './kiban/kiban.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ 
+    ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.local', '.env'],
     }),
+    AuthModule,
     HealthModule,
     DbModule,
     NeonModule,

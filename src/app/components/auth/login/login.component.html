@@ -144,10 +144,33 @@
         </a>
       </div>
 
+      <!-- Demo Users Section -->
       <div class="alert alert--info login-tip">
-        <div class="tip-title">Credenciales de prueba:</div>
-        <div class="tip-body">
-          <div><span class="tip-label">Contraseña:</span> demo123</div>
+        <div class="tip-title">Usuarios de prueba disponibles:</div>
+        <div class="demo-users-grid">
+          <button
+            *ngFor="let user of demoUsers"
+            type="button"
+            class="demo-user-card"
+            (click)="selectDemoUser(user)"
+            [attr.aria-label]="'Seleccionar usuario demo: ' + user.name + ' (' + user.role + ')'"
+          >
+            <div class="demo-user-avatar">
+              <app-icon
+                [name]="user.role === 'admin' ? 'shield' : user.role === 'supervisor' ? 'users' : 'user'"
+                [size]="20"
+                aria-hidden="true"
+              ></app-icon>
+            </div>
+            <div class="demo-user-info">
+              <div class="demo-user-name">{{ user.name }}</div>
+              <div class="demo-user-role">{{ user.role | titlecase }}</div>
+              <div class="demo-user-email">{{ user.email }}</div>
+            </div>
+          </button>
+        </div>
+        <div class="tip-note">
+          <small>Haz click en cualquier usuario para llenar el formulario automáticamente</small>
         </div>
       </div>
     </div>

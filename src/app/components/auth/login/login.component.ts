@@ -1,9 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,23 +13,29 @@ import { IconComponent } from '../../shared/icon/icon.component';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   showPassword = false;
   isLoading = false;
   errorMessage = '';
+  demoUsers: any[] = [];
 
   private subscriptions = new Subscription();
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false]
     });
+  }
+
+  ngOnInit(): void {
+    this.loadDemoUsers();
   }
 
   ngOnDestroy(): void {
@@ -55,30 +62,72 @@ export class LoginComponent implements OnDestroy {
 
     const credentials = this.loginForm.value;
 
-    // Simulate API call
-    const loginSub = new Promise<boolean>((resolve) => {
-      setTimeout(() => {
-        if (credentials.email === 'demo@conductores.com' && credentials.password === 'demo123') {
-          resolve(true);
-        } else {
-          resolve(false);
+    // Use AuthService for login
+    const loginCredentials = {
+      email: credentials.email,
+      password: credentials.password
+    };
+
+    const loginSub = this.authService.login(loginCredentials)
+      .subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          // If we receive a response, login was successful
+          // AuthService returns AuthResponse with user, token, etc.
+          if (response && response.user && response.token) {
+            // Store remember me preference if needed
+            if (credentials.rememberMe) {
+              localStorage.setItem('rememberLogin', 'true');
+            }
+            // AuthService handles token and user storage, just navigate
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.errorMessage = 'Error en la respuesta del servidor. Intente nuevamente.';
+          }
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.errorMessage = error.message || 'Credenciales incorrectas. Verifique su email y contraseña.';
         }
-      }, 1500);
-    }).then((success) => {
-      this.isLoading = false;
-      if (success) {
-        // Store login state (in real app, this would be handled by auth service)
-        if (credentials.rememberMe) {
-          localStorage.setItem('rememberLogin', 'true');
-        }
-        localStorage.setItem('isLoggedIn', 'true');
-        this.router.navigate(['/dashboard']);
-      } else {
+      });
+
+    this.subscriptions.add(loginSub);
+  }
+
+  private loadDemoUsers(): void {
+    this.authService.getDemoUsers().subscribe({
+      next: (response) => {
+        this.demoUsers = response.users || [];
+      },
+      error: (error) => {
+        console.warn('Failed to load demo users:', error);
+        // Fallback to default demo users
+        this.demoUsers = [
+          { email: 'asesor@conductores.com', role: 'asesor', name: 'Ana Torres' },
+          { email: 'supervisor@conductores.com', role: 'supervisor', name: 'Carlos Mendez' },
+          { email: 'admin@conductores.com', role: 'admin', name: 'Maria Rodriguez' }
+        ];
       }
-    }).catch(() => {
-      this.isLoading = false;
-      this.errorMessage = 'Error de conexión. Intente nuevamente.';
     });
+  }
+
+  selectDemoUser(user: any): void {
+    this.loginForm.patchValue({
+      email: user.email,
+      password: this.getDemoPassword(user.role)
+    });
+
+    // Clear any previous error messages
+    this.errorMessage = '';
+  }
+
+  private getDemoPassword(role: string): string {
+    switch (role) {
+      case 'asesor': return 'demo123';
+      case 'supervisor': return 'super123';
+      case 'admin': return 'admin123';
+      default: return 'demo123';
+    }
   }
 
   // Methods referenced by unit spec

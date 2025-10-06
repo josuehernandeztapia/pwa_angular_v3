@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-10-06T00:00:00.000Z",
+  "markets": {
+    "aguascalientes": {
+      "enabled": true,
+      "policies": {
+        "minAge": 18,
+        "maxAge": 75,
+        "requiresLicense": true,
+        "coverageTypes": ["basic", "premium"]
+      }
+    },
+    "edomex": {
+      "enabled": true,
+      "policies": {
+        "minAge": 21,
+        "maxAge": 70,
+        "requiresLicense": true,
+        "coverageTypes": ["basic", "premium", "comprehensive"]
+      }
+    }
+  },
+  "global": {
+    "defaultCoverage": "basic",
+    "allowOnlineVerification": true,
+    "requireBiometric": false
+  }
+}
