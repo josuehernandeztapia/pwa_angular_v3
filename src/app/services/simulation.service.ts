@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { Client, EventLog, PaymentLinkDetails, Actor, EventType, Document, ProtectionScenario } from '../models/types';
 import { MockApiService } from './mock-api.service';
+import { ProtectionEngineService } from './protection-engine.service';
+import { FinancialCalculatorService } from './financial-calculator.service';
+import { BusinessFlow } from '../models/types';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +12,11 @@ import { MockApiService } from './mock-api.service';
 export class SimulationService {
   private clientsDB = new Map<string, Client>();
 
-  constructor(private mockApi: MockApiService) {}
+  constructor(
+    private mockApi: MockApiService,
+    private protectionEngine: ProtectionEngineService,
+    private financialCalc: FinancialCalculatorService
+  ) {}
 
   // Port exacto de generatePaymentLink desde React líneas 431-450
   generatePaymentLink(clientId: string, amount: number): Promise<PaymentLinkDetails> {
@@ -113,90 +120,116 @@ export class SimulationService {
 
   // Port exacto de simulateProtectionDemo desde React líneas 748-807
   async simulateProtectionDemo(
-    baseQuote: { amountToFinance: number; monthlyPayment: number; term: number },
+    baseQuote: {
+      amountToFinance: number;
+      monthlyPayment: number;
+      term: number;
+      market?: string;
+      monthsPaid?: number;
+    },
     monthsToSimulate: number
   ): Promise<ProtectionScenario[]> {
-    const { amountToFinance: P, monthlyPayment: M, term: originalTerm } = baseQuote;
-    
-    const r = 0.255 / 12; 
-    
-    // Simulate what protection looks like 1 year (12 months) into the loan
-    const monthsPaid = 12;
-    
-    // The simulation only makes sense if there are enough months left in the term
-    const remainingTerm = originalTerm - monthsPaid;
+    const {
+      amountToFinance: principal,
+      monthlyPayment,
+      term,
+      market = 'aguascalientes',
+      monthsPaid = 12,
+    } = baseQuote;
+
+    const monthlyRate = this.financialCalc.getTIRMin(market) / 12;
+    const remainingTerm = Math.max(term - monthsPaid, 0);
+
     if (remainingTerm <= monthsToSimulate) {
-      return Promise.resolve([]);
+      return [];
     }
-    
-    // Get the outstanding balance after 12 payments
-    const B_k = this.getBalance(P, M, r, monthsPaid);
-    const scenarios: ProtectionScenario[] = [];
 
-    // Scenario A: Deferral
-    const newRemainingTerm_A = remainingTerm - monthsToSimulate;
-    const newPayment_A = this.annuity(B_k, r, newRemainingTerm_A);
-    scenarios.push({
-      type: 'DEFER',
-      params: { deferMonths: monthsToSimulate },
-      title: 'Pausa y Prorrateo',
-      description: 'Pausa los pagos y distribuye el monto en las mensualidades restantes.',
-      newMonthlyPayment: newPayment_A,
-      newTerm: originalTerm,
-      termChange: 0,
-      details: [
-        `Pagos de $0 por ${monthsToSimulate} meses`, 
-        `El pago mensual sube a ${new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(newPayment_A)} después.`
-      ]
-    });
+    const outstandingBalance = this.financialCalc.getBalance(principal, monthlyPayment, monthlyRate, monthsPaid);
 
-    // Scenario B: Step-down
-    const reducedPayment = M * 0.5;
-    const principalAfterStepDown = this.getBalance(B_k, reducedPayment, r, monthsToSimulate);
-    const compensationPayment = this.annuity(principalAfterStepDown, r, remainingTerm - monthsToSimulate);
-    scenarios.push({
-      type: 'STEPDOWN',
-      params: { reduction: 0.5, months: monthsToSimulate },
-      title: 'Reducción y Compensación',
-      description: 'Reduce el pago a la mitad y compensa la diferencia más adelante.',
-      newMonthlyPayment: compensationPayment,
-      newTerm: originalTerm,
-      termChange: 0,
-      details: [
-        `Pagos de ${new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(reducedPayment)} por ${monthsToSimulate} meses`, 
-        `El pago sube a ${new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(compensationPayment)} después.`
-      ]
-    });
+    const scenarios = [
+      this.protectionEngine.generateScenarioWithTIR(
+        'DEFER',
+        'Pausa y prorrateo',
+        `Pausa ${monthsToSimulate} mes(es) y redistribuye el saldo en el plazo restante.`,
+        outstandingBalance,
+        monthlyRate,
+        monthlyPayment,
+        remainingTerm,
+        monthsToSimulate,
+        1,
+        market
+      ),
+      this.protectionEngine.generateScenarioWithTIR(
+        'STEPDOWN',
+        'Reducción temporal de pago',
+        `Reduce el pago mensual y compensa al finalizar los ${monthsToSimulate} mes(es).`,
+        outstandingBalance,
+        monthlyRate,
+        monthlyPayment,
+        remainingTerm,
+        monthsToSimulate,
+        0.6,
+        market
+      ),
+      this.protectionEngine.generateScenarioWithTIR(
+        'RECALENDAR',
+        'Extensión de plazo',
+        `Pausa ${monthsToSimulate} mes(es) y extiende el plazo del crédito para mantener el pago actual.`,
+        outstandingBalance,
+        monthlyRate,
+        monthlyPayment,
+        remainingTerm,
+        monthsToSimulate,
+        1,
+        market
+      )
+    ].filter((scenario): scenario is ProtectionScenario => !!scenario);
 
-    // Scenario C: Recalendar (Term Extension)
-    const newTerm_C = originalTerm + monthsToSimulate;
-    scenarios.push({
-      type: 'RECALENDAR',
-      params: { extendMonths: monthsToSimulate },
-      title: 'Extensión de Plazo',
-      description: 'Pausa los pagos y extiende el plazo del crédito para compensar.',
-      newMonthlyPayment: M,
-      newTerm: newTerm_C,
-      termChange: monthsToSimulate,
-      details: [
-        `Pagos de $0 por ${monthsToSimulate} meses`, 
-        `El plazo se extiende en ${monthsToSimulate} meses.`
-      ]
-    });
+    if (!scenarios.length) {
+      return [];
+    }
 
-    return this.mockApi.delay(scenarios, 1500);
+    return scenarios.map(scenario => this.enrichDemoScenario(scenario, monthlyPayment, remainingTerm, monthsToSimulate));
   }
 
-  // Financial calculation helpers
-  private getBalance(P: number, M: number, r: number, k: number): number {
-    // Calculate outstanding balance after k payments using annuity formula
-    if (r === 0) return P - (M * k);
-    return P * Math.pow(1 + r, k) - M * ((Math.pow(1 + r, k) - 1) / r);
-  }
+  private enrichDemoScenario(
+    scenario: ProtectionScenario,
+    basePayment: number,
+    baseTerm: number,
+    monthsToSimulate: number
+  ): ProtectionScenario {
+    const formatter = (value: number) => new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
 
-  private annuity(P: number, r: number, n: number): number {
-    // Calculate annuity payment (monthly payment for given principal, rate, and term)
-    if (r === 0) return P / n;
-    return P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    switch (scenario.type) {
+      case 'DEFER':
+        return {
+          ...scenario,
+          title: scenario.title ?? 'Pausa y prorrateo',
+          details: [
+            `Pagos de $0 por ${monthsToSimulate} mes(es)`,
+            `El pago mensual sube a ${formatter(scenario.newPayment ?? scenario.Mprime ?? basePayment)} después.`,
+          ]
+        };
+      case 'STEPDOWN':
+        return {
+          ...scenario,
+          title: scenario.title ?? 'Reducción temporal de pago',
+          details: [
+            `Pagos de ${formatter((scenario.params?.alpha ?? 0.6) * basePayment)} por ${monthsToSimulate} mes(es)`,
+            `El pago sube a ${formatter(scenario.newPayment ?? scenario.Mprime ?? basePayment)} después.`
+          ]
+        };
+      case 'RECALENDAR':
+        return {
+          ...scenario,
+          title: scenario.title ?? 'Extensión de plazo',
+          details: [
+            `Pagos de $0 por ${monthsToSimulate} mes(es)`,
+            `El plazo se extiende en ${Math.max((scenario.newTerm ?? scenario.nPrime ?? baseTerm) - baseTerm, 0)} mes(es).`
+          ]
+        };
+      default:
+        return scenario;
+    }
   }
 }

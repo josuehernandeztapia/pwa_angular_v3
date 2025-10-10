@@ -1,0 +1,140 @@
+{
+  "timestamp": "2025-10-09T23:55:16.142Z",
+  "tool": "AVI Complete E2E Validation",
+  "description": "Comprehensive AVI System validation: Laboratory + Components + Services + Flow Integration",
+  "baseUrl": "http://localhost:4300",
+  "total": 6,
+  "passed": 2,
+  "failed": 4,
+  "successRate": 33,
+  "authenticationPassed": true,
+  "tests": [
+    {
+      "test": "AVI Authentication",
+      "passed": true,
+      "details": "Auth success: true, URL: http://localhost:4300/dashboard",
+      "url": "http://localhost:4300/dashboard"
+    },
+    {
+      "test": "AVI Laboratory Validation",
+      "passed": false,
+      "details": "Lab accessible: false, Elements: 311, AVI System: false",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/404",
+        "hasAppContainer": false,
+        "hasAVILabComponent": false,
+        "hasToggles": false,
+        "hasFlowControls": true,
+        "totalElements": 311,
+        "hasContent": true,
+        "hasAVISystem": false,
+        "hasStressDetection": false,
+        "hasVoiceRecording": false,
+        "aviLabFeatures": {
+          "hasQuestions": false,
+          "hasScoring": false,
+          "hasAnalytics": false,
+          "hasThresholds": false
+        }
+      },
+      "url": "http://localhost:4300/404"
+    },
+    {
+      "test": "AVI Configuration Validation",
+      "passed": false,
+      "details": "Config valid: false, Services: false",
+      "metrics": {
+        "hasEnvironmentConfig": false,
+        "hasAVIFeatureFlags": false,
+        "aviSystemEnabled": false,
+        "voiceRecordingEnabled": false,
+        "stressDetectionEnabled": false,
+        "hasAVIThresholds": false,
+        "hasAVILocalStorage": false,
+        "hasAVIServices": false
+      }
+    },
+    {
+      "test": "AVI Interview Component Validation",
+      "passed": false,
+      "details": "Error: SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:contains(\"AVI\")' is not a valid selector.",
+      "error": "SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:contains(\"AVI\")' is not a valid selector."
+    },
+    {
+      "test": "AVI Services Validation",
+      "passed": true,
+      "details": "Services working: true, Angular: true",
+      "metrics": {
+        "hasAVIService": false,
+        "hasScientificEngine": false,
+        "hasAngularServices": true,
+        "serviceErrors": []
+      }
+    },
+    {
+      "test": "AVI Flow Integration Validation",
+      "passed": false,
+      "details": "2/3 flows working, 3 with AVI integration",
+      "metrics": {
+        "workingFlows": 2,
+        "totalFlows": 3,
+        "aviIntegratedFlows": 3,
+        "flows": [
+          {
+            "flow": "Document Upload",
+            "working": false,
+            "aviIntegrated": true,
+            "analysis": {
+              "currentUrl": "http://localhost:4300/onboarding?redirectTo=%2Fdocumentos",
+              "hasDocumentFlow": false,
+              "hasAVIIntegration": true,
+              "totalElements": 341
+            }
+          },
+          {
+            "flow": "Onboarding",
+            "working": true,
+            "aviIntegrated": true,
+            "analysis": {
+              "currentUrl": "http://localhost:4300/onboarding",
+              "hasOnboardingFlow": true,
+              "hasAVIIntegration": true,
+              "hasInterviewCheckpoint": false,
+              "totalElements": 340
+            }
+          },
+          {
+            "flow": "Flow Builder",
+            "working": true,
+            "aviIntegrated": true,
+            "analysis": {
+              "currentUrl": "http://localhost:4300/configuracion/flow-builder",
+              "hasFlowBuilder": true,
+              "hasAVIIntegration": true,
+              "hasAVISteps": true,
+              "totalElements": 608
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "screenshots": [
+    "avi-e2e-01-login-page-1760054068877.png",
+    "avi-e2e-02-auth-completed-1760054088035.png",
+    "avi-e2e-03-avi-lab-page-1760054093012.png",
+    "avi-e2e-04-avi-lab-analysis-1760054093778.png",
+    "avi-e2e-05-documents-flow-1760054099622.png",
+    "avi-e2e-avi-interview-error-1760054100350.png",
+    "avi-e2e-07-document-flow-avi-1760054105864.png",
+    "avi-e2e-08-onboarding-avi-1760054110776.png",
+    "avi-e2e-09-flow-builder-avi-1760054115694.png"
+  ],
+  "errors": [
+    "Console Error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Console Error: [monitoring:error] JSHandle@object",
+    "Console Error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Console Error: [monitoring:error] JSHandle@object"
+  ],
+  "method": "Puppeteer E2E with AVI Focus"
+}

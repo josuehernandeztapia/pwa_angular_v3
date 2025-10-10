@@ -2,7 +2,7 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:4200',
+    baseUrl: 'http://localhost:4300',
     supportFile: 'cypress/support/e2e.ts',
     specPattern: 'cypress/e2e/**/*.cy.ts',
     fixturesFolder: 'cypress/fixtures',
@@ -32,7 +32,23 @@ export default defineConfig({
     // Environment variables
     env: {
       apiUrl: 'http://localhost:3000/api',
-      coverage: true
+      coverage: true,
+      bypassAuth: true,
+      testingBypassUser: {
+        id: 'testing-bypass-user',
+        name: 'QA Automation User',
+        email: 'qa.automation@conductores.com',
+        role: 'asesor',
+        permissions: [
+          'dashboard:view',
+          'clients:view',
+          'quotes:create',
+          'documents:upload',
+          'postventa:manage'
+        ],
+        token: 'testing-bypass-token',
+        refreshToken: 'testing-bypass-refresh'
+      }
     },
     
     // Setup and teardown

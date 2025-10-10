@@ -1,0 +1,191 @@
+{
+  "timestamp": "2025-10-06T06:43:35.699Z",
+  "summary": {
+    "totalUsers": 3,
+    "successfulUsers": 0,
+    "totalTests": 7,
+    "passedTests": 4,
+    "successRate": 57.1
+  },
+  "testResults": [
+    {
+      "test": "login_flow",
+      "user": "asesor",
+      "issues": [
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732971171
+        }
+      ],
+      "startTime": 1759732971121,
+      "success": true,
+      "endTime": 1759732976599
+    },
+    {
+      "test": "navigation_flow",
+      "user": "asesor",
+      "issues": [
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732976639
+        },
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732976788
+        },
+        {
+          "type": "console_error",
+          "message": "[monitoring:error] JSHandle@object",
+          "timestamp": 1759732976790
+        },
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732978883
+        },
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732981424
+        },
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732983974
+        }
+      ],
+      "startTime": 1759732976600,
+      "success": true,
+      "endTime": 1759732986316
+    },
+    {
+      "test": "logout_flow",
+      "user": "asesor",
+      "issues": [
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732986347
+        },
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732987118
+        },
+        {
+          "type": "logout_failed",
+          "message": "Expected redirect to /login, stayed on /login",
+          "timestamp": 1759732989810
+        }
+      ],
+      "startTime": 1759732986316,
+      "success": false,
+      "endTime": 1759732989810
+    },
+    {
+      "test": "login_flow",
+      "user": "supervisor",
+      "issues": [
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732990851
+        }
+      ],
+      "startTime": 1759732990811,
+      "success": true,
+      "endTime": 1759732996108
+    },
+    {
+      "test": "navigation_flow",
+      "user": "supervisor",
+      "issues": [
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732996141
+        },
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732996292
+        },
+        {
+          "type": "console_error",
+          "message": "[monitoring:error] JSHandle@object",
+          "timestamp": 1759732996292
+        },
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759732998764
+        },
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759733001292
+        },
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759733003825
+        }
+      ],
+      "startTime": 1759732996108,
+      "success": true,
+      "endTime": 1759733006134
+    },
+    {
+      "test": "logout_flow",
+      "user": "supervisor",
+      "issues": [
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759733006163
+        },
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759733006883
+        },
+        {
+          "type": "logout_failed",
+          "message": "Expected redirect to /login, stayed on /login",
+          "timestamp": 1759733009571
+        }
+      ],
+      "startTime": 1759733006134,
+      "success": false,
+      "endTime": 1759733009571
+    },
+    {
+      "test": "login_flow",
+      "user": "admin",
+      "issues": [
+        {
+          "type": "console_error",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1759733010609
+        },
+        {
+          "type": "auth_state_mismatch",
+          "message": "Expected authenticated, got unauthenticated",
+          "timestamp": 1759733015632
+        },
+        {
+          "type": "login_redirect_failed",
+          "message": "Expected /dashboard, got /login",
+          "timestamp": 1759733015699
+        }
+      ],
+      "startTime": 1759733010572,
+      "success": false,
+      "endTime": 1759733015699
+    }
+  ],
+  "chromeDevToolsMode": true
+}

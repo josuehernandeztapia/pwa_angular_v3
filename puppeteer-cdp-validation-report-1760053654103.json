@@ -1,0 +1,324 @@
+{
+  "timestamp": "2025-10-09T23:47:34.101Z",
+  "tool": "Puppeteer Chrome DevTools - Complete E2E Validation",
+  "description": "Comprehensive Puppeteer CDP authentication + click-by-click validation",
+  "baseUrl": "http://localhost:4300",
+  "total": 9,
+  "passed": 9,
+  "failed": 0,
+  "successRate": 100,
+  "authenticationPassed": true,
+  "tests": [
+    {
+      "test": "Complete Authentication Flow (Puppeteer CDP)",
+      "passed": true,
+      "details": "URL changed: true, Auth data: true, Storage: true",
+      "beforeUrl": "http://localhost:4300/login",
+      "afterUrl": "http://localhost:4300/dashboard",
+      "authData": {
+        "hasUserData": false,
+        "hasToken": true
+      },
+      "formFilled": true
+    },
+    {
+      "test": "Simuladores Validation (Puppeteer CDP)",
+      "passed": true,
+      "details": "Loaded: true, Elements: 393, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/simulador",
+        "pathname": "/simulador",
+        "title": "Simulador - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 1397,
+        "totalElements": 393,
+        "buttons": 24,
+        "inputs": 1,
+        "forms": 0,
+        "links": 14,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": true,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/simulador",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Cotizadores Validation (Puppeteer CDP)",
+      "passed": true,
+      "details": "Loaded: true, Elements: 371, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/cotizador",
+        "pathname": "/cotizador",
+        "title": "Cotizador - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 1047,
+        "totalElements": 371,
+        "buttons": 22,
+        "inputs": 1,
+        "forms": 0,
+        "links": 13,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": true,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/cotizador",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Flow Builder Validation (Puppeteer CDP)",
+      "passed": true,
+      "details": "Loaded: true, Elements: 624, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/configuracion/flow-builder",
+        "pathname": "/configuracion/flow-builder",
+        "title": "Flow Builder - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 1891,
+        "totalElements": 624,
+        "buttons": 35,
+        "inputs": 4,
+        "forms": 0,
+        "links": 14,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": true,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/configuracion/flow-builder",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Onboarding Validation (Puppeteer CDP)",
+      "passed": true,
+      "details": "Loaded: true, Elements: 324, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/onboarding",
+        "pathname": "/onboarding",
+        "title": "Onboarding - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 825,
+        "totalElements": 324,
+        "buttons": 20,
+        "inputs": 1,
+        "forms": 0,
+        "links": 10,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": true,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/onboarding",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Productos Validation (Puppeteer CDP)",
+      "passed": true,
+      "details": "Loaded: true, Elements: 508, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/productos",
+        "pathname": "/productos",
+        "title": "Catálogo de Productos - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 1629,
+        "totalElements": 508,
+        "buttons": 33,
+        "inputs": 1,
+        "forms": 0,
+        "links": 10,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": true,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/productos",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Protección Validation (Puppeteer CDP)",
+      "passed": true,
+      "details": "Loaded: true, Elements: 418, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/proteccion",
+        "pathname": "/proteccion",
+        "title": "Protección - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 1447,
+        "totalElements": 418,
+        "buttons": 28,
+        "inputs": 4,
+        "forms": 1,
+        "links": 11,
+        "hasContent": true,
+        "hasErrors": 2,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": true
+        }
+      },
+      "url": "http://localhost:4300/proteccion",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Dashboard Validation (Puppeteer CDP)",
+      "passed": true,
+      "details": "Loaded: true, Elements: 561, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/dashboard",
+        "pathname": "/dashboard",
+        "title": "Dashboard - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 1823,
+        "totalElements": 561,
+        "buttons": 40,
+        "inputs": 1,
+        "forms": 0,
+        "links": 10,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/dashboard",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Business Logic Detection (Puppeteer CDP)",
+      "passed": true,
+      "details": "3/3 calculators working: AGS Ahorro(OK), EdoMex Individual(OK), EdoMex Colectivo(OK)",
+      "metrics": {
+        "workingCalculators": 3,
+        "totalCalculators": 3,
+        "calculators": [
+          {
+            "name": "AGS Ahorro",
+            "working": true,
+            "analysis": {
+              "currentUrl": "http://localhost:4300/simulador/ags-ahorro",
+              "hasUnitValueInput": true,
+              "hasConsumptionInput": true,
+              "hasSimulateButton": true,
+              "hasResultsArea": true,
+              "hasAnyInput": true,
+              "hasAnyButton": true,
+              "totalElements": 367,
+              "hasContent": true
+            }
+          },
+          {
+            "name": "EdoMex Individual",
+            "working": true,
+            "analysis": {
+              "currentUrl": "http://localhost:4300/simulador/edomex-individual",
+              "hasTargetInput": true,
+              "hasConsumptionInput": true,
+              "hasCalculateButton": true,
+              "hasResultsArea": false,
+              "hasAnyInput": true,
+              "hasAnyButton": true,
+              "totalElements": 374,
+              "hasContent": true
+            }
+          },
+          {
+            "name": "EdoMex Colectivo",
+            "working": true,
+            "analysis": {
+              "currentUrl": "http://localhost:4300/simulador/tanda-colectiva",
+              "hasMembersInput": true,
+              "hasUnitPriceInput": true,
+              "hasRunButton": true,
+              "hasResultsArea": false,
+              "hasAnyInput": true,
+              "hasAnyButton": true,
+              "totalElements": 348,
+              "hasContent": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "screenshots": [
+    "puppeteer-cdp-01-login-page-loaded-1760053584806.png",
+    "puppeteer-cdp-02-demo-user-clicked-1760053597514.png",
+    "puppeteer-cdp-03-auth-completed-1760053602232.png",
+    "puppeteer-cdp-simuladores-1760053607026.png",
+    "puppeteer-cdp-cotizadores-1760053612209.png",
+    "puppeteer-cdp-flow-builder-1760053617124.png",
+    "puppeteer-cdp-onboarding-1760053622455.png",
+    "puppeteer-cdp-productos-1760053627651.png",
+    "puppeteer-cdp-protección-1760053632645.png",
+    "puppeteer-cdp-dashboard-1760053637680.png",
+    "puppeteer-cdp-04-business-logic-ags ahorro-1760053643216.png",
+    "puppeteer-cdp-05-business-logic-edomex individual-1760053648455.png",
+    "puppeteer-cdp-06-business-logic-edomex colectivo-1760053653713.png"
+  ],
+  "errors": [
+    "Console Error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Console Error: [monitoring:error] JSHandle@object",
+    "Console Error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Console Error: [monitoring:error] JSHandle@object",
+    "Console Error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Console Error: [monitoring:error] JSHandle@object",
+    "Console Error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Console Error: [monitoring:error] JSHandle@object"
+  ],
+  "method": "Puppeteer Chrome DevTools Protocol"
+}

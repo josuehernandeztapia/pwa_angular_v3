@@ -7,12 +7,10 @@
         <p class="delivery-phase__subtitle">Inspección final y entrega al cliente</p>
       </div>
     </div>
-    @if (clientInfo() as info) {
-      <div class="delivery-phase__client">
-        <span class="delivery-phase__client-name">{{ info.name }}</span>
-        <span class="delivery-phase__client-vin">VIN: {{ info.vin }}</span>
-      </div>
-    }
+    <div *ngIf="clientInfo() as info" class="delivery-phase__client">
+      <span class="delivery-phase__client-name">{{ info.name }}</span>
+      <span class="delivery-phase__client-vin">VIN: {{ info.vin }}</span>
+    </div>
   </header>
 
   <section

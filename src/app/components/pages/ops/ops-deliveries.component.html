@@ -22,6 +22,11 @@
       [keys]="['entregas', 'documentos', 'cotizador']">
     </app-context-panel>
 
+    <app-delivery-tracker
+      class="ops-deliveries__tracker"
+      [market]="trackerMarket">
+    </app-delivery-tracker>
+
     <section class="ops-deliveries__metrics" aria-label="Indicadores de desempeño">
       <div *ngIf="metricsLoading()" class="ops-deliveries__metrics-loading">Cargando indicadores de entrega…</div>
       <div *ngIf="!metricsLoading() && performanceMetrics() as metrics" class="ops-deliveries__summary-grid">

@@ -1,106 +1,57 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 .app-shell {
-  display: flex;
   min-height: var(--viewport-height, 100vh);
-  background: var(--color-bg-secondary);
-  color: var(--color-text-primary);
-}
-
-.app-shell__sidebar {
-  width: 260px;
-  display: flex;
-  flex-direction: column;
-  background: var(--color-neutral-900);
-  border-right: 1px solid var(--color-neutral-800);
-  color: var(--color-neutral-200);
-}
-
-.app-shell__sidebar-header {
-  padding: var(--space-4);
-  font-weight: var(--font-semibold);
-  color: var(--openai-white);
-  border-bottom: 1px solid var(--color-neutral-800);
-}
-
-.app-shell__nav {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  padding: var(--space-4) var(--space-3) var(--space-6);
-  overflow-y: auto;
-}
-
-.app-shell__nav-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.app-shell__nav-label {
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-text-tertiary);
-  padding: 0 var(--space-2);
-}
-
-.app-shell__nav-links {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.app-shell__nav-link {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  font-size: var(--text-sm);
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  transition: background var(--transition-fast), color var(--transition-fast);
-  --icon-color: var(--color-text-tertiary);
-}
-
-.app-shell__nav-link:hover,
-.app-shell__nav-link:focus-visible {
-  background: var(--color-neutral-800);
-  color: var(--openai-white);
-  --icon-color: var(--openai-white);
-}
-
-.app-shell__main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   background: var(--flat-surface-bg);
+  color: var(--color-text-primary);
+  padding-left: var(--app-shell-nav-width, 280px);
+  transition: padding-left var(--transition-medium, 0.3s ease);
+}
+
+.app-shell__layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .app-shell__topbar {
   display: grid;
-  grid-template-columns: minmax(0, 220px) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 280px) minmax(200px, 1fr) auto;
   align-items: center;
   gap: var(--space-5);
   height: 64px;
   padding: 0 var(--space-6);
   border-bottom: 1px solid var(--color-border-primary);
   background: var(--flat-surface-bg);
+  position: sticky;
+  top: 0;
+  z-index: 900;
 }
 
-.app-shell__topbar-left {
+.app-shell__topbar-start {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   min-width: 0;
 }
 
-.app-shell__topbar-info {
+.app-shell__org {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
 }
 
-.app-shell__topbar-info span {
+.app-shell__org span {
   color: var(--color-text-primary);
 }
 
@@ -113,10 +64,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.app-shell__breadcrumb {
-  color: var(--color-text-tertiary);
 }
 
 .app-shell__breadcrumb:last-child {
@@ -136,6 +83,62 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
+}
+
+.app-shell__update-banner {
+  margin-right: var(--space-3);
+}
+
+.app-shell__offline-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-secondary);
+  background: var(--token-surface-warning-alpha-12);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.app-shell__offline-btn:not([disabled]):hover,
+.app-shell__offline-btn:not([disabled]):focus-visible {
+  border-color: var(--color-primary-400);
+  color: var(--color-text-primary);
+}
+
+.app-shell__offline-btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.app-shell__offline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-success, var(--color-primary-600));
+  display: inline-flex;
+}
+
+.app-shell__offline-dot.is-offline {
+  background: var(--accent-danger);
+}
+
+.app-shell__offline-label {
+  line-height: 1;
+}
+
+.app-shell__offline-count {
+  min-width: 18px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--accent-danger);
+  color: var(--openai-white);
+  font-weight: var(--font-semibold);
+  font-size: 0.7rem;
+  text-align: center;
 }
 
 .app-shell__quick-actions {
@@ -190,7 +193,6 @@
 .app-shell__quick-action[data-color='primary']:focus-visible {
   background: var(--color-primary-700);
   border-color: var(--color-primary-700);
-  color: var(--openai-white);
 }
 
 .app-shell__quick-action[data-color='secondary'] {
@@ -229,31 +231,6 @@
   font-weight: var(--font-semibold);
 }
 
-@media (max-width: 768px) {
-  .app-shell__quick-actions {
-    display: none;
-  }
-
-  .app-shell__topbar-actions {
-    gap: var(--space-2);
-  }
-
-  .app-shell__topbar-actions .btn {
-    padding-inline: var(--space-2);
-  }
-
-  .app-shell__topbar {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--space-3);
-    padding: 0 var(--space-4);
-    height: 56px;
-  }
-
-  .app-shell__topbar-left {
-    display: none;
-  }
-}
-
 .app-shell__topbar-actions .btn {
   --icon-color: var(--color-text-tertiary);
 }
@@ -266,39 +243,8 @@
 .app-shell__content {
   flex: 1;
   padding: var(--space-6);
+  background: var(--flat-surface-bg);
   overflow: auto;
-}
-
-.app-shell__empty {
-  padding: var(--space-12) 0;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.app-shell__empty-icon {
-  width: 64px;
-  height: 64px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--color-bg-tertiary);
-  color: var(--color-text-secondary);
-}
-
-.app-shell__empty-title {
-  font-size: var(--text-lg);
-  font-weight: var(--font-semibold);
-}
-
-.app-shell__empty-subtitle {
-  max-width: 420px;
-  margin: 0 auto;
-  color: var(--color-text-tertiary);
-  font-size: var(--text-sm);
 }
 
 .app-shell__mobile-nav {
@@ -307,26 +253,30 @@
 
 @media (max-width: 1024px) {
   .app-shell {
-    flex-direction: column;
-  }
-
-  .app-shell__sidebar {
-    display: none;
+    padding-left: 0;
   }
 
   .app-shell__topbar {
-    grid-template-columns: 1fr;
-    padding: var(--space-3) var(--space-4);
+    grid-template-columns: 1fr auto;
     gap: var(--space-3);
+    padding: 0 var(--space-4);
+    height: 56px;
+  }
+
+  .app-shell__topbar-start {
+    display: none;
   }
 
   .app-shell__global-search {
     width: 100%;
-    order: 2;
   }
 
   .app-shell__topbar-actions {
-    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+
+  .app-shell__topbar-actions .btn {
+    padding-inline: var(--space-2);
   }
 
   .app-shell__content {
@@ -339,22 +289,12 @@
   }
 }
 
-// Ensure smooth transitions
-* {
-  box-sizing: border-box;
+@media (max-width: 768px) {
+  .app-shell__quick-actions {
+    display: none;
+  }
 }
 
-// Global styles for the app
-:host {
-  display: block;
-  width: 100%;
-  min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-// Scrollbar styling
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -374,7 +314,6 @@
   background: var(--color-neutral-500);
 }
 
-// Focus styles for accessibility
 *:focus {
   outline: 2px solid var(--color-primary-500);
   outline-offset: 2px;
@@ -384,7 +323,6 @@
   outline: none;
 }
 
-// Selection styles
 ::selection {
   background: var(--token-surface-accent-alpha-30);
   color: inherit;
@@ -395,7 +333,6 @@
   color: inherit;
 }
 
-// Skip link styles
 .skip-link {
   position: absolute;
   top: -40px;

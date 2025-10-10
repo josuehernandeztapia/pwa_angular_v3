@@ -56,8 +56,9 @@ export class OfflineQueueBannerComponent implements OnInit, OnDestroy {
         if (result.success && this.pendingCount === 0) {
           this.lastSyncMessage = `Sincronizamos la cola de ${this.contextLabel}.`;
           this.analytics.track('offline_queue_flush', {
-            context: this.featureTag ?? this.contextLabel,
-            attempts: result.request.attempts ?? 0
+            feature: this.featureTag ?? this.contextLabel,
+            processed: (result.request.attempts ?? 0) + 1,
+            remaining: this.pendingCount
           });
           if (this.flushTimeout) {
             clearTimeout(this.flushTimeout);

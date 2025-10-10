@@ -2,7 +2,7 @@ import { Injectable, Optional } from '@angular/core';
 import { firstValueFrom, Observable, throwError } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
 
-import { BusinessFlow, Document, DocumentStatus } from '../models/types';
+import { BusinessFlow, Document, DocumentStatus, DOC_NAME_KYC_CONTAINS } from '../models/types';
 import { ConfigurationService } from './configuration.service';
 import { HttpClientService } from './http-client.service';
 
@@ -43,6 +43,11 @@ export interface MarketPolicyContext {
   businessFlow?: BusinessFlow;
   requiresIncomeProof?: boolean;
   collectiveSize?: number;
+  incomeThreshold?: number;
+  incomeThresholdRatio?: number;
+  metadata?: {
+    tanda?: TandaPolicyMetadata;
+  };
 }
 
 export interface MarketPolicyDocument {
@@ -170,6 +175,41 @@ export class MarketPolicyService {
     return this.cloneMetadata(this.getPolicyDocuments(context).metadata);
   }
 
+  getAvailablePolicies(): Array<{ market: PolicyMarket; clientType: PolicyClientType }> {
+    const combos = new Map<PolicyKey, { market: PolicyMarket; clientType: PolicyClientType }>();
+
+    Object.entries(this.policyBuilders).forEach(([key, builder]) => {
+      if (!builder) {
+        return;
+      }
+
+      const [market, clientType] = key.split(':') as [PolicyMarket, PolicyClientType];
+      combos.set(`${market}:${clientType}` as PolicyKey, { market, clientType });
+    });
+
+    return Array.from(combos.values()).sort((a, b) => {
+      if (a.market === b.market) {
+        return a.clientType.localeCompare(b.clientType);
+      }
+      return a.market.localeCompare(b.market);
+    });
+  }
+
+  getAvailableMarkets(): PolicyMarket[] {
+    const markets = new Set<PolicyMarket>();
+    this.getAvailablePolicies().forEach(policy => markets.add(policy.market));
+    return Array.from(markets.values()).sort();
+  }
+
+  getClientTypesForMarket(market: PolicyMarket): PolicyClientType[] {
+    const clientTypes = new Set<PolicyClientType>();
+    this.getAvailablePolicies()
+      .filter(policy => policy.market === market)
+      .forEach(policy => clientTypes.add(policy.clientType));
+
+    return Array.from(clientTypes.values()).sort();
+  }
+
   getOcrThreshold(context: MarketPolicyContext): number {
     return this.getPolicyMetadata(context).ocrThreshold;
   }
@@ -293,17 +333,35 @@ savePoliciesToRemote(config: RemoteMarketPolicyConfig): Observable<void> {
   private buildAguascalientesIndividual(context: MarketPolicyContext): MarketPolicyResult {
     const baseDocs: readonly MarketPolicyDocument[] = [
       { id: 'doc-ine', label: 'INE anverso/reverso', tooltip: 'Debe estar vigente al menos 90 días' },
-      { id: 'doc-proof', label: 'Comprobante de domicilio', tooltip: 'Factura o recibo no mayor a 3 meses' }
+      { id: 'doc-proof', label: 'Comprobante de domicilio', tooltip: 'Factura o recibo no mayor a 3 meses' },
+      { id: 'doc-csf', label: 'Constancia de situación fiscal', tooltip: 'Descargar desde el portal del SAT (máx. 90 días)' }
     ] as const;
 
     const conditionalDocs: MarketPolicyDocument[] = [];
 
     if (context.saleType === 'financiero') {
-      conditionalDocs.push({
-        id: 'doc-rfc',
-        label: 'RFC del cliente',
-        tooltip: 'Requerido solo para planes con financiamiento'
-      });
+      conditionalDocs.push(
+        {
+          id: 'doc-rfc',
+          label: 'RFC del cliente',
+          tooltip: 'Requerido solo para planes con financiamiento'
+        },
+        {
+          id: 'doc-tarjeta-circulacion',
+          label: 'Tarjeta de circulación',
+          tooltip: 'Tarjeta vigente de la unidad titular'
+        },
+        {
+          id: 'doc-concesion',
+          label: 'Copia de la concesión',
+          tooltip: 'Documento que acredita la concesión activa de la ruta'
+        },
+        {
+          id: 'doc-kyc',
+          label: `${DOC_NAME_KYC_CONTAINS} (Metamap)`,
+          tooltip: 'Verificación biométrica obligatoria en Metamap'
+        }
+      );
     }
 
     conditionalDocs.push(this.buildIncomeDocument(context));
@@ -314,7 +372,10 @@ savePoliciesToRemote(config: RemoteMarketPolicyConfig): Observable<void> {
         ocrThreshold: this.defaultThreshold,
         expiryRules: {
           'doc-ine': 'vigencia >= 90d',
-          'doc-proof': '<= 3m'
+          'doc-proof': '<= 3m',
+          'doc-csf': '<= 90d',
+          'doc-tarjeta-circulacion': 'vigencia >= 90d',
+          'doc-concesion': 'vigencia >= 1a'
         },
         protection: {
           required: false,
@@ -334,19 +395,39 @@ savePoliciesToRemote(config: RemoteMarketPolicyConfig): Observable<void> {
   }
 
   private buildEdomexIndividual(context: MarketPolicyContext): MarketPolicyResult {
-    const baseDocs: readonly MarketPolicyDocument[] = [
+    const baseDocs: MarketPolicyDocument[] = [
       { id: 'doc-ine', label: 'INE anverso/reverso', tooltip: 'Debe estar vigente al menos 90 días' },
       { id: 'doc-proof', label: 'Comprobante de domicilio', tooltip: 'Factura o recibo no mayor a 3 meses' },
-      { id: 'doc-rfc', label: 'RFC del cliente', tooltip: 'Validación obligatoria en EdoMex' }
-    ] as const;
+      { id: 'doc-rfc', label: 'RFC del cliente', tooltip: 'Validación obligatoria en EdoMex' },
+      { id: 'doc-csf', label: 'Constancia de situación fiscal', tooltip: 'Descargar desde el portal del SAT (máx. 90 días)' },
+      { id: 'doc-tarjeta-circulacion', label: 'Tarjeta de circulación', tooltip: 'Tarjeta vigente de la unidad titular' },
+      { id: 'doc-concesion', label: 'Copia de la concesión', tooltip: 'Documento emitido por la autoridad local' },
+      { id: 'doc-carta-aval', label: 'Carta Aval de Ruta', tooltip: 'Documento emitido y validado por el ecosistema/ruta' },
+      { id: 'doc-convenio-dacion', label: 'Convenio de Dación en Pago', tooltip: 'Anexo que formaliza el colateral social' }
+    ];
+
+    const documents: MarketPolicyDocument[] = [...baseDocs];
+
+    if (context.saleType === 'financiero') {
+      documents.push({
+        id: 'doc-kyc',
+        label: `${DOC_NAME_KYC_CONTAINS} (Metamap)`,
+        tooltip: 'Verificación biométrica obligatoria en Metamap'
+      });
+    }
+
+    documents.push(this.buildIncomeDocument(context));
 
     return {
-      documents: [...baseDocs, this.buildIncomeDocument(context)],
+      documents,
       metadata: {
         ocrThreshold: this.defaultThreshold,
         expiryRules: {
           'doc-ine': 'vigencia >= 90d',
-          'doc-proof': '<= 3m'
+          'doc-proof': '<= 3m',
+          'doc-csf': '<= 90d',
+          'doc-tarjeta-circulacion': 'vigencia >= 90d',
+          'doc-concesion': 'vigencia >= 1a'
         },
         protection: {
           required: false,

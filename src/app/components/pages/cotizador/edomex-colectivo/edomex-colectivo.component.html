@@ -176,7 +176,12 @@
         <button type="button" class="premium-button" (click)="proceedToClientCreation()">
           Crear grupo de clientes
         </button>
-        <button type="button" class="premium-button outline" (click)="generatePDF()">
+        <button
+          type="button"
+          class="premium-button outline"
+          (click)="generatePDF()"
+          data-cy="cotizador-pdf"
+        >
           Descargar PDF
         </button>
         <button type="button" class="premium-button ghost" (click)="recalculate()">

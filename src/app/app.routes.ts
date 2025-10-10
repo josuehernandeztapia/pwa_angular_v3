@@ -127,6 +127,30 @@ const commonBeforeWildcard: Routes = [
     pathMatch: 'full'
   },
 
+  // Alias para simuladores (plural)
+  {
+    path: 'simuladores',
+    redirectTo: '/simulador',
+    pathMatch: 'full'
+  },
+
+  // Preview routes sin guardia para validaciones manuales (no exponer en producción real)
+  {
+    path: 'preview/cotizador',
+    loadComponent: () => import('./components/pages/cotizador/cotizador-main.component').then(c => c.CotizadorMainComponent),
+    title: 'Cotizador (Preview) - Conductores PWA'
+  },
+  {
+    path: 'preview/simulador',
+    loadComponent: () => import('./components/pages/simulador/simulador-main.component').then(c => c.SimuladorMainComponent),
+    title: 'Simulador (Preview) - Conductores PWA'
+  },
+  {
+    path: 'preview/proteccion',
+    loadComponent: () => import('./components/pages/proteccion/proteccion.component').then(c => c.ProteccionComponent),
+    title: 'Protección (Preview) - Conductores PWA'
+  },
+
   // Simulador routes
   {
     path: 'simulador',

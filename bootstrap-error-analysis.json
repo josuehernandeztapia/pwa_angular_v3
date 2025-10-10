@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-10-06T06:19:55.177Z",
+  "capturedErrors": {
+    "bootstrapErrors": [
+      {
+        "args": [
+          "Error starting app:",
+          {
+            "message": "NG04014: Invalid configuration of route ''. One of the following must be provided: component, loadComponent, redirectTo, children or loadChildren",
+            "stack": "Error: NG04014: Invalid configuration of route ''. One of the following must be provided: component, loadComponent, redirectTo, children or loadChildren\n    at validateNode (http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_router.js?v=67db753e:2053:13)\n    at validateConfig (http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_router.js?v=67db753e:2000:5)\n    at _Router.resetConfig (http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_router.js?v=67db753e:4218:56)\n    at new _Router (http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_router.js?v=67db753e:4087:10)\n    at Object.Router_Factory [as factory] (http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_router.js?v=67db753e:4466:14)\n    at http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-YV74OZ5W.js?v=bc17f62c:2243:35\n    at runInInjectorProfilerContext (http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-YV74OZ5W.js?v=bc17f62c:869:5)\n    at R3Injector.hydrate (http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-YV74OZ5W.js?v=bc17f62c:2242:11)\n    at R3Injector.get (http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-YV74OZ5W.js?v=bc17f62c:2135:23)\n    at R3Injector.get (http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-YV74OZ5W.js?v=bc17f62c:2140:27)",
+            "name": "Error",
+            "toString": "Error: NG04014: Invalid configuration of route ''. One of the following must be provided: component, loadComponent, redirectTo, children or loadChildren"
+          }
+        ],
+        "timestamp": 1759731587162,
+        "stack": "Error\n    at console.error (<anonymous>:20:24)\n    at http://localhost:4300/main.js:4030:11\n    at _ZoneDelegate.invoke (http://localhost:4300/polyfills.js:301:158)\n    at ZoneImpl.run (http://localhost:4300/polyfills.js:97:35)\n    at http://localhost:4300/polyfills.js:2005:30\n    at _ZoneDelegate.invokeTask (http://localhost:4300/polyfills.js:327:171)\n    at ZoneImpl.runTask (http://localhost:4300/polyfills.js:135:37)\n    at drainMicroTaskQueue (http://localhost:4300/polyfills.js:482:23)"
+      }
+    ],
+    "angularPresent": true,
+    "appRootContent": "",
+    "hasContext": false
+  },
+  "pageErrors": [],
+  "mainJsAnalysis": {
+    "mainScriptsFound": 1,
+    "mainScriptSrcs": [
+      "http://localhost:4300/main.js"
+    ],
+    "currentErrors": 1
+  },
+  "recommendations": [
+    "🚨 Bootstrap errors captured - review detailed error analysis above",
+    "🎯 Angular loads but AppComponent not rendering - check AppComponent constructor/OnInit"
+  ]
+}

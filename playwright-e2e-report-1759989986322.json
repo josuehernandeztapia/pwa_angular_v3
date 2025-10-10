@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-10-09T06:06:17.916Z",
+  "total": 1,
+  "passed": 0,
+  "failed": 1,
+  "tests": [
+    {
+      "name": "Demo Users Buttons",
+      "passed": false,
+      "details": "No se encontraron botones de demo users",
+      "timestamp": "2025-10-09T06:06:26.322Z"
+    }
+  ],
+  "screenshots": [
+    "playwright-01-login-page-1759989985118.png"
+  ],
+  "summary": {
+    "successRate": 0,
+    "totalTests": 1,
+    "passedTests": 0,
+    "failedTests": 1
+  }
+}

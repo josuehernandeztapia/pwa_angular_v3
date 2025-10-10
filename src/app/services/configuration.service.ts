@@ -589,7 +589,8 @@ export class ConfigurationService {
               weight: 8,
               required: true
             }
-          ]
+          ],
+          otros: []
         }
       },
       randomQuestions: {

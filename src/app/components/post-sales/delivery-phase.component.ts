@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IconName } from '../shared/icon/icon-definitions';
@@ -60,7 +60,27 @@ export class DeliveryPhaseComponent {
   ]);
 
   // Signals
-  clientId = signal<string>('client_001'); // En producción vendría de la ruta
+  private readonly caseIdSignal = signal<string | null>(null);
+  private readonly clientIdSignal = signal<string | null>(null);
+  @Input()
+  set caseId(value: string | null) {
+    this.caseIdSignal.set(value ?? null);
+  }
+
+  @Input()
+  set clientId(value: string | null) {
+    this.clientIdSignal.set(value ?? null);
+    if (value) {
+      this.loadDeliveryData(value);
+    }
+  }
+
+  @Input()
+  reopenWizardStep: ((step: 'plate' | 'vin' | 'odometer' | 'evidence') => void) | null = null;
+
+  @Output()
+  phaseNavigate = new EventEmitter<'documents' | 'plates'>();
+
   clientInfo = signal<{ name: string; vin: string } | null>(null);
   vehicleInfo = signal<any | null>(null);
   checklistItems = signal<DeliveryChecklistItem[]>([
@@ -157,10 +177,10 @@ export class DeliveryPhaseComponent {
     this.loadDeliveryData();
   }
 
-  private loadDeliveryData(): void {
-    // Simulate loading client and vehicle data
+  private loadDeliveryData(clientId?: string | null): void {
+    const name = clientId ? `Cliente ${clientId}` : 'Cliente Postventa';
     this.clientInfo.set({
-      name: 'José Hernández Pérez',
+      name,
       vin: '3N1CN7AP8KL123456'
     });
 
@@ -230,6 +250,12 @@ export class DeliveryPhaseComponent {
 
     this.isSubmitting.set(true);
 
+    const clientId = this.clientIdSignal();
+    if (!clientId) {
+      this.isSubmitting.set(false);
+      return;
+    }
+
     const deliveryData: DeliveryData = {
       odometroEntrega: this.deliveryForm.get('odometroEntrega')?.value,
       fechaEntrega: new Date(this.deliveryForm.get('fechaEntrega')?.value),
@@ -245,7 +271,7 @@ export class DeliveryPhaseComponent {
     };
 
     // Complete delivery phase
-    this.importTracker.completeDeliveryPhase(this.clientId(), deliveryData).subscribe({
+    this.importTracker.completeDeliveryPhase(clientId, deliveryData).subscribe({
       next: () => {
         this.isSubmitting.set(false);
         this.showSuccessModal.set(true);
@@ -262,7 +288,16 @@ export class DeliveryPhaseComponent {
   }
 
   goToDocumentsPhase(): void {
-    this.router.navigate(['/post-sales/documents', this.clientId()]);
+    if (this.phaseNavigate.observers.length > 0) {
+      this.phaseNavigate.emit('documents');
+      this.closeSuccessModal();
+      return;
+    }
+
+    const clientId = this.clientIdSignal();
+    if (clientId) {
+      this.router.navigate(['/post-sales/documents', clientId]);
+    }
     this.closeSuccessModal();
   }
 
@@ -270,6 +305,10 @@ export class DeliveryPhaseComponent {
     if (event.key === 'Escape') {
       this.closeSuccessModal();
     }
+  }
+
+  onRequestWizardStep(step: 'plate' | 'vin' | 'odometer' | 'evidence'): void {
+    this.reopenWizardStep?.(step);
   }
 
   getSectionIcon(key: SectionIconKey): IconName {

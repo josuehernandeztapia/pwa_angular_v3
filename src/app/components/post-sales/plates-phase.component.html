@@ -7,14 +7,12 @@
         <p class="plates-phase__subtitle">Finalización y activación del sistema post-venta</p>
       </div>
     </div>
-    @if (clientInfo() as info) {
-      <div class="plates-phase__client">
-        <span class="plates-phase__client-name">{{ info.name }}</span>
-        <span class="plates-phase__client-meta">
-          VIN: {{ info.vin }} • Placa: {{ platesForm.get('numeroPlacas')?.value || 'Pendiente' }}
-        </span>
-      </div>
-    }
+    <div *ngIf="clientInfo() as info" class="plates-phase__client">
+      <span class="plates-phase__client-name">{{ info.name }}</span>
+      <span class="plates-phase__client-meta">
+        VIN: {{ info.vin }} • Placa: {{ platesForm.get('numeroPlacas')?.value || 'Pendiente' }}
+      </span>
+    </div>
   </header>
 
   <section class="plates-phase__steps" aria-label="Progreso post-venta">

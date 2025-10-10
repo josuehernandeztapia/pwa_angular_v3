@@ -71,7 +71,7 @@
             Estrés: {{ currentQuestion.stressLevel }}/5
           </span>
           <span class="chip chip--neutral audio-indicator" [class.ready]="isAudioReady(currentQuestion.id)">
-            <app-icon [name]="isAudioReady(currentQuestion.id) ? 'volume-up' : 'volume-off'" [size]="20" />
+            <app-icon [name]="isAudioReady(currentQuestion.id) ? 'volume-2' : 'volume-2'" [size]="20" />
             {{ isAudioReady(currentQuestion.id) ? 'Audio listo' : 'Sin audio' }}
           </span>
         </div>

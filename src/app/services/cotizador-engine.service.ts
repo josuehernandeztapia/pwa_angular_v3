@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { BusinessFlow, Market } from '../models/types';
+import { PolicyClientType, PolicyMarket } from './market-policy.service';
 import { Quote } from '../models/business';
 import { monthsToYearsCeil, round2, toAnnualFromMonthly } from '../utils/math.util';
 import { FinancialCalculatorService } from './financial-calculator.service';
@@ -24,6 +25,12 @@ export interface ProductPackage {
   defaultMembers?: number;
   maxMembers?: number; // Máximo lógico para crédito colectivo
   components: ProductComponent[];
+}
+
+export interface ProductPackageContext {
+  market: PolicyMarket;
+  saleType: 'contado' | 'financiero';
+  clientType: PolicyClientType;
 }
 
 export interface CotizadorConfig {
@@ -127,6 +134,23 @@ export class CotizadorEngineService {
 
     // Port exacto de mockApi delay desde React
     return of(selectedPackage).pipe(delay(600));
+  }
+
+  getProductPackageForContext(context: ProductPackageContext): Observable<ProductPackage> {
+    const key = this.resolvePackageKey(context);
+    return this.getProductPackage(key);
+  }
+
+  private resolvePackageKey(context: ProductPackageContext): string {
+    if (context.saleType === 'contado') {
+      return `${context.market}-directa`;
+    }
+
+    if (context.clientType === 'colectivo') {
+      return `${context.market}-colectivo`;
+    }
+
+    return `${context.market}-plazo`;
   }
 
   /**
@@ -385,3 +409,4 @@ export class CotizadorEngineService {
     return { valid: errors.length === 0, errors };
   }
 }
+

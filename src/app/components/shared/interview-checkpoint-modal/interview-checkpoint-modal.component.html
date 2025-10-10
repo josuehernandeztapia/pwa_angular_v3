@@ -84,20 +84,34 @@
 
     <section class="checkpoint-modal__recorder" *ngIf="canStartInterview()">
       <h3 class="checkpoint-modal__section-title">REC Grabación de Entrevista</h3>
-      <app-voice-recorder
-        #voiceRecorder
-        [advisorId]="advisorId"
-        [clientId]="modalData.clientId"
-        [sessionType]="'documentation'"
-        [municipality]="modalData.checkpoint.municipality"
-        [productType]="modalData.checkpoint.product_type"
-        [showGuide]="true"
-        [showLiveFeedback]="true"
-        [formData]="modalData.clientData"
-        (validationComplete)="onValidationComplete($event)"
-        (interviewApproved)="onInterviewApproved($event)"
-        (errorOccurred)="onRecorderError($event)"
-      ></app-voice-recorder>
+      <ng-container *ngIf="aviEnabled; else legacyRecorder">
+        <app-avi-interview
+          [clientId]="modalData.clientId"
+          [advisorId]="advisorId"
+          [municipality]="modalData.checkpoint?.municipality"
+          [productType]="modalData.checkpoint?.product_type"
+          (interviewStarted)="onAdvancedInterviewStarted()"
+          (interviewCompleted)="onAdvancedInterviewCompleted($event)"
+          (interviewCancelled)="onAdvancedInterviewCancelled()"
+          data-qa="avi-interview"
+        ></app-avi-interview>
+      </ng-container>
+      <ng-template #legacyRecorder>
+        <app-voice-recorder
+          #voiceRecorder
+          [advisorId]="advisorId"
+          [clientId]="modalData.clientId"
+          [sessionType]="'documentation'"
+          [municipality]="modalData.checkpoint.municipality"
+          [productType]="modalData.checkpoint.product_type"
+          [showGuide]="true"
+          [showLiveFeedback]="true"
+          [formData]="modalData.clientData"
+          (validationComplete)="onValidationComplete($event)"
+          (interviewApproved)="onInterviewApproved($event)"
+          (errorOccurred)="onRecorderError($event)"
+        ></app-voice-recorder>
+      </ng-template>
     </section>
 
     <div class="checkpoint-modal__error" *ngIf="errorMessage">

@@ -23,6 +23,38 @@
     </div>
   </header>
 
+  <section class="documents-phase__wizard-context" *ngIf="photoPreviewCount() > 0">
+    <p class="documents-phase__wizard-text">
+      {{ photoPreviewCount() }} foto{{ photoPreviewCount() === 1 ? '' : 's' }} del wizard listas para documentar.
+    </p>
+    <div class="documents-phase__wizard-actions" *ngIf="reopenWizardStep">
+      <button
+        type="button"
+        class="btn btn-ghost documents-phase__wizard-action"
+        (click)="onRequestWizardStep('plate')"
+        *ngIf="platePreview()"
+      >
+        Revisar placa
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost documents-phase__wizard-action"
+        (click)="onRequestWizardStep('vin')"
+        *ngIf="vinPreview()"
+      >
+        Revisar VIN
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost documents-phase__wizard-action"
+        (click)="onRequestWizardStep('odometer')"
+        *ngIf="odometerPreview()"
+      >
+        Revisar odómetro
+      </button>
+    </div>
+  </section>
+
   <section class="documents-phase__steps" aria-label="Progreso de postventa">
     <div class="documents-phase__step documents-phase__step--completed">
       <span class="documents-phase__step-number">

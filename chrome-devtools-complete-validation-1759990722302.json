@@ -1,0 +1,166 @@
+{
+  "timestamp": "2025-10-09T06:18:36.009Z",
+  "total": 24,
+  "passed": 3,
+  "failed": 21,
+  "tests": [
+    {
+      "name": "Demo Users Detection",
+      "passed": false,
+      "details": "No se encontraron botones de demo users",
+      "timestamp": "2025-10-09T06:18:39.064Z"
+    },
+    {
+      "name": "Simulador AGS Ahorro",
+      "passed": false,
+      "details": "Selector no encontrado",
+      "timestamp": "2025-10-09T06:18:39.719Z"
+    },
+    {
+      "name": "Simulador EdoMex Individual",
+      "passed": false,
+      "details": "Selector no encontrado",
+      "timestamp": "2025-10-09T06:18:39.734Z"
+    },
+    {
+      "name": "Simulador Tanda Colectiva",
+      "passed": false,
+      "details": "Selector no encontrado",
+      "timestamp": "2025-10-09T06:18:39.737Z"
+    },
+    {
+      "name": "Cotizador Estado de México - Individual",
+      "passed": false,
+      "details": "Cotizador not found",
+      "timestamp": "2025-10-09T06:18:40.380Z"
+    },
+    {
+      "name": "Cotizador Estado de México - Colectivo",
+      "passed": false,
+      "details": "Cotizador not found",
+      "timestamp": "2025-10-09T06:18:40.382Z"
+    },
+    {
+      "name": "Cotizador Aguascalientes - Individual",
+      "passed": false,
+      "details": "Cotizador not found",
+      "timestamp": "2025-10-09T06:18:40.385Z"
+    },
+    {
+      "name": "Cotizador Aguascalientes - Venta Plazos",
+      "passed": false,
+      "details": "Cotizador not found",
+      "timestamp": "2025-10-09T06:18:40.387Z"
+    },
+    {
+      "name": "Flow Builder Header",
+      "passed": false,
+      "details": ".flow-builder__header, [class*=\"flow-builder\"], [class*=\"header\"] not found",
+      "timestamp": "2025-10-09T06:18:41.012Z"
+    },
+    {
+      "name": "Flow Builder Paleta de nodos",
+      "passed": false,
+      "details": ".flow-builder__palette, [class*=\"palette\"], [class*=\"toolbar\"] not found",
+      "timestamp": "2025-10-09T06:18:41.015Z"
+    },
+    {
+      "name": "Flow Builder Lienzo",
+      "passed": false,
+      "details": ".flow-builder__canvas, [class*=\"canvas\"], [class*=\"workspace\"] not found",
+      "timestamp": "2025-10-09T06:18:41.018Z"
+    },
+    {
+      "name": "Flow Builder Panel de propiedades",
+      "passed": false,
+      "details": ".flow-builder__properties, [class*=\"properties\"], [class*=\"panel\"] not found",
+      "timestamp": "2025-10-09T06:18:41.021Z"
+    },
+    {
+      "name": "Flow Builder Save Flow",
+      "passed": false,
+      "details": "[data-cy=\"save-flow\"], [data-qa=\"save-flow\"], button:has-text(\"Guardar\"), button:has-text(\"Save\") not found",
+      "timestamp": "2025-10-09T06:18:41.025Z"
+    },
+    {
+      "name": "Flow Builder Clear Flow",
+      "passed": false,
+      "details": "[data-cy=\"clear-flow\"], [data-qa=\"clear-flow\"], button:has-text(\"Limpiar\"), button:has-text(\"Clear\") not found",
+      "timestamp": "2025-10-09T06:18:41.029Z"
+    },
+    {
+      "name": "Flow Builder Deploy Flow",
+      "passed": false,
+      "details": "[data-cy=\"deploy-flow\"], [data-qa=\"deploy-flow\"], button:has-text(\"Deploy\"), button:has-text(\"Desplegar\") not found",
+      "timestamp": "2025-10-09T06:18:41.034Z"
+    },
+    {
+      "name": "Onboarding Document Upload General",
+      "passed": false,
+      "details": "[data-cy^=\"doc-upload-\"], [data-qa^=\"doc-upload-\"], input[type=\"file\"], [class*=\"upload\"] not found",
+      "timestamp": "2025-10-09T06:18:41.666Z"
+    },
+    {
+      "name": "Onboarding INE Upload",
+      "passed": false,
+      "details": "[data-cy=\"doc-upload-ine\"], [data-qa=\"doc-upload-ine\"], input[accept*=\"image\"] not found",
+      "timestamp": "2025-10-09T06:18:41.668Z"
+    },
+    {
+      "name": "Onboarding Income Document Upload",
+      "passed": false,
+      "details": "[data-cy=\"doc-upload-income\"], [data-qa=\"doc-upload-income\"], input[accept*=\"pdf\"] not found",
+      "timestamp": "2025-10-09T06:18:41.670Z"
+    },
+    {
+      "name": "Onboarding Address Document Upload",
+      "passed": false,
+      "details": "[data-cy=\"doc-upload-address\"], [data-qa=\"doc-upload-address\"], input[name*=\"address\"] not found",
+      "timestamp": "2025-10-09T06:18:41.672Z"
+    },
+    {
+      "name": "Productos Detection",
+      "passed": false,
+      "details": "No product cards found",
+      "timestamp": "2025-10-09T06:18:42.296Z"
+    },
+    {
+      "name": "Market Filters",
+      "passed": false,
+      "details": "No market filters found",
+      "timestamp": "2025-10-09T06:18:42.298Z"
+    },
+    {
+      "name": "Tracking System",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-09T06:18:42.300Z"
+    },
+    {
+      "name": "IndexedDB Support",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-09T06:18:42.301Z"
+    },
+    {
+      "name": "Mathematical Functions",
+      "passed": true,
+      "details": "",
+      "timestamp": "2025-10-09T06:18:42.302Z"
+    }
+  ],
+  "screenshots": [
+    "chrome-devtools-01-authentication-login-page-1759990717782.png",
+    "chrome-devtools-03-simuladores-main-1759990719623.png",
+    "chrome-devtools-05-cotizadores-main-1759990720288.png",
+    "chrome-devtools-07-flow-builder-page-1759990720934.png",
+    "chrome-devtools-08-onboarding-page-1759990721577.png",
+    "chrome-devtools-09-productos-page-1759990722217.png"
+  ],
+  "summary": {
+    "successRate": 13,
+    "totalTests": 24,
+    "passedTests": 3,
+    "failedTests": 21
+  }
+}

@@ -231,9 +231,9 @@ export class DeliveryTrackingService {
   private readonly timelineStaleMs = 30 * 60 * 1000; // 30 minutos de cache
 
   // P0.2 SURGICAL - Enhanced state management with persistence
-  private deliveryCommitments$ = new BehaviorSubject<DeliveryCommitment[]>([]);
-  private activeDeliveries$ = new BehaviorSubject<DeliveryCommitment[]>([]);
-  private etaUpdates$ = new BehaviorSubject<ETAUpdate[]>([]);
+  private deliveryCommitmentsSubject = new BehaviorSubject<DeliveryCommitment[]>([]);
+  private activeDeliveriesSubject = new BehaviorSubject<DeliveryCommitment[]>([]);
+  private etaUpdatesSubject = new BehaviorSubject<ETAUpdate[]>([]);
   private deliveryTimelineSubject = new BehaviorSubject<DeliveryTimelineSnapshot | null>(null);
 
   // Reactive signals for UI
@@ -268,7 +268,7 @@ export class DeliveryTrackingService {
           'DeliveryTrackingService',
           'syncWithBFF',
           'BFF sync failed, storing locally',
-          { deliveryId, error: error.message }
+          { deliveryId: newCommitment.id, error: error.message }
         );
         this.addCommitmentToState(newCommitment);
         this.persistCommitment(newCommitment);
@@ -300,7 +300,7 @@ export class DeliveryTrackingService {
           'DeliveryTrackingService',
           'updateETA',
           'ETA sync failed, persisting locally',
-          { deliveryId, newETA, error: error.message }
+          { deliveryId: commitmentId, estimatedArrival: eta.estimatedArrival, error: error.message }
         );
         this.addETAToState(etaUpdate);
         this.persistETAUpdate(etaUpdate);
@@ -318,7 +318,7 @@ export class DeliveryTrackingService {
     dateRange?: { start: string; end: string };
     priority?: DeliveryCommitment['metadata']['priority'];
   }): Observable<DeliveryCommitment[]> {
-    return this.deliveryCommitments$.pipe(
+    return this.deliveryCommitmentsSubject.pipe(
       map(commitments => {
         if (!filters) return commitments;
 
@@ -354,7 +354,7 @@ export class DeliveryTrackingService {
       return throwError(() => new Error(`Delivery not found: ${trackingCode}`));
     }
 
-    const etaHistory = this.etaUpdates$.value.filter(
+    const etaHistory = this.etaUpdatesSubject.value.filter(
       eta => eta.commitmentId === commitment.id
     );
 
@@ -490,20 +490,20 @@ export class DeliveryTrackingService {
       const storedCommitments = localStorage.getItem(`${this.STORAGE_PREFIX}commitments`);
       if (storedCommitments) {
         const commitments: DeliveryCommitment[] = JSON.parse(storedCommitments);
-        this.deliveryCommitments$.next(commitments);
+        this.deliveryCommitmentsSubject.next(commitments);
 
         // Filter active deliveries
         const active = commitments.filter(c =>
           c.status === 'scheduled' || c.status === 'en_route' || c.status === 'arriving'
         );
-        this.activeDeliveries$.next(active);
+        this.activeDeliveriesSubject.next(active);
       }
 
       // Load ETA updates
       const storedETAs = localStorage.getItem(`${this.STORAGE_PREFIX}eta_updates`);
       if (storedETAs) {
         const updates: ETAUpdate[] = JSON.parse(storedETAs);
-        this.etaUpdates$.next(updates);
+        this.etaUpdatesSubject.next(updates);
       }
 
     } catch (error) {
@@ -519,7 +519,7 @@ export class DeliveryTrackingService {
 
   private persistCommitment(commitment: DeliveryCommitment): void {
     try {
-      const current = this.deliveryCommitments$.value;
+      const current = this.deliveryCommitmentsSubject.value;
       const updated = current.some(c => c.id === commitment.id) ?
         current.map(c => c.id === commitment.id ? commitment : c) :
         [...current, commitment];
@@ -530,7 +530,7 @@ export class DeliveryTrackingService {
         'DeliveryTrackingService',
         'persistCommitmentUpdate',
         error,
-        { deliveryId },
+        { deliveryId: commitment.id },
         'medium'
       );
     }
@@ -538,7 +538,7 @@ export class DeliveryTrackingService {
 
   private persistETAUpdate(eta: ETAUpdate): void {
     try {
-      const current = this.etaUpdates$.value;
+      const current = this.etaUpdatesSubject.value;
       const updated = [...current, eta];
 
       // Keep only last 50 ETA updates per commitment to manage storage
@@ -558,33 +558,33 @@ export class DeliveryTrackingService {
         'DeliveryTrackingService',
         'persistETAUpdate',
         error,
-        { deliveryId, newETA },
+        { deliveryId: eta.commitmentId, estimatedArrival: eta.estimatedArrival },
         'medium'
       );
     }
   }
 
   private addCommitmentToState(commitment: DeliveryCommitment): void {
-    const current = this.deliveryCommitments$.value;
+    const current = this.deliveryCommitmentsSubject.value;
     const updated = [...current.filter(c => c.id !== commitment.id), commitment];
-    this.deliveryCommitments$.next(updated);
+    this.deliveryCommitmentsSubject.next(updated);
 
     // Update active deliveries if applicable
     if (commitment.status === 'scheduled' || commitment.status === 'en_route' || commitment.status === 'arriving') {
-      const activeList = this.activeDeliveries$.value;
+      const activeList = this.activeDeliveriesSubject.value;
       const updatedActive = [...activeList.filter(c => c.id !== commitment.id), commitment];
-      this.activeDeliveries$.next(updatedActive);
+      this.activeDeliveriesSubject.next(updatedActive);
     }
   }
 
   private addETAToState(eta: ETAUpdate): void {
-    const current = this.etaUpdates$.value;
+    const current = this.etaUpdatesSubject.value;
     const updated = [...current, eta];
-    this.etaUpdates$.next(updated);
+    this.etaUpdatesSubject.next(updated);
   }
 
   private updateCommitmentETA(commitmentId: string, estimatedArrival: string): void {
-    const current = this.deliveryCommitments$.value;
+    const current = this.deliveryCommitmentsSubject.value;
     const updated = current.map(commitment => {
       if (commitment.id === commitmentId) {
         return {
@@ -599,7 +599,7 @@ export class DeliveryTrackingService {
       return commitment;
     });
 
-    this.deliveryCommitments$.next(updated);
+    this.deliveryCommitmentsSubject.next(updated);
   }
 
   private syncCommitmentWithBFF(commitment: DeliveryCommitment): Observable<DeliveryCommitment> {
@@ -623,7 +623,7 @@ export class DeliveryTrackingService {
   }
 
   private findCommitmentByTrackingCode(trackingCode: string): DeliveryCommitment | null {
-    return this.deliveryCommitments$.value.find(c => c.trackingCode === trackingCode) || null;
+    return this.deliveryCommitmentsSubject.value.find((commitment: DeliveryCommitment) => commitment.trackingCode === trackingCode) || null;
   }
 
   private generateCommitmentId(): string {
@@ -785,14 +785,14 @@ export class DeliveryTrackingService {
 
   // Public getters for reactive data
   get deliveryCommitments$() {
-    return this.deliveryCommitments$.asObservable();
+    return this.deliveryCommitmentsSubject.asObservable();
   }
 
   get activeDeliveries$() {
-    return this.activeDeliveries$.asObservable();
+    return this.activeDeliveriesSubject.asObservable();
   }
 
   get etaUpdates$() {
-    return this.etaUpdates$.asObservable();
+    return this.etaUpdatesSubject.asObservable();
   }
 }

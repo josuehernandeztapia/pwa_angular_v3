@@ -1,0 +1,630 @@
+{
+  "timestamp": "2025-10-06T09:39:42.294Z",
+  "totalScreens": 15,
+  "completedScreens": 15,
+  "validations": [
+    {
+      "screen": "Login Screen",
+      "element": "Email input field",
+      "status": "PASS",
+      "details": "Elemento encontrado y visible",
+      "selector": "input[type=\"email\"]",
+      "timestamp": "2025-10-06T09:39:43.525Z"
+    },
+    {
+      "screen": "Login Screen",
+      "element": "Password input field",
+      "status": "PASS",
+      "details": "Elemento encontrado y visible",
+      "selector": "input[type=\"password\"]",
+      "timestamp": "2025-10-06T09:39:43.527Z"
+    },
+    {
+      "screen": "Login Screen",
+      "element": "Login submit button",
+      "status": "PASS",
+      "details": "Elemento encontrado y visible",
+      "selector": "button[type=\"submit\"]",
+      "timestamp": "2025-10-06T09:39:43.528Z"
+    },
+    {
+      "screen": "Login Screen",
+      "element": "Demo users grid",
+      "status": "PASS",
+      "details": "Elemento encontrado y visible",
+      "selector": ".demo-users-grid",
+      "timestamp": "2025-10-06T09:39:43.530Z"
+    },
+    {
+      "screen": "Login Screen",
+      "element": "Demo user buttons",
+      "status": "PASS",
+      "details": "Encontrados 3 elementos",
+      "selector": "button[class*=\"demo\"]",
+      "timestamp": "2025-10-06T09:39:43.533Z"
+    },
+    {
+      "screen": "Dashboard Screen",
+      "element": "Navigation component",
+      "status": "PASS",
+      "details": "Elemento encontrado y visible",
+      "selector": "nav",
+      "timestamp": "2025-10-06T09:39:48.020Z"
+    },
+    {
+      "screen": "Dashboard Screen",
+      "element": "Navigation links",
+      "status": "PASS",
+      "details": "Encontrados 9 elementos",
+      "selector": "[routerlink]",
+      "timestamp": "2025-10-06T09:39:48.022Z"
+    },
+    {
+      "screen": "Dashboard Screen",
+      "element": "Dashboard content area",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".dashboard-content",
+      "timestamp": "2025-10-06T09:39:53.024Z"
+    },
+    {
+      "screen": "Dashboard Screen",
+      "element": "Header component",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".header",
+      "timestamp": "2025-10-06T09:39:58.026Z"
+    },
+    {
+      "screen": "Cotizadores Screen",
+      "element": "Cotizadores container",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".cotizadores-container",
+      "timestamp": "2025-10-06T09:40:04.716Z"
+    },
+    {
+      "screen": "Cotizadores Screen",
+      "element": "Market selector",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".market-selector",
+      "timestamp": "2025-10-06T09:40:09.718Z"
+    },
+    {
+      "screen": "Cotizadores Screen",
+      "element": "Quote form",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".quote-form",
+      "timestamp": "2025-10-06T09:40:14.720Z"
+    },
+    {
+      "screen": "Clientes Screen",
+      "element": "Clientes list",
+      "status": "PASS",
+      "details": "Elemento encontrado y visible",
+      "selector": ".clientes-list",
+      "timestamp": "2025-10-06T09:40:16.836Z"
+    },
+    {
+      "screen": "Clientes Screen",
+      "element": "Client form",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".client-form",
+      "timestamp": "2025-10-06T09:40:21.837Z"
+    },
+    {
+      "screen": "Documentos Screen",
+      "element": "Documentos container",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".documentos-container",
+      "timestamp": "2025-10-06T09:40:28.968Z"
+    },
+    {
+      "screen": "Documentos Screen",
+      "element": "Document list",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".document-list",
+      "timestamp": "2025-10-06T09:40:33.970Z"
+    },
+    {
+      "screen": "Reportes Screen",
+      "element": "Reportes container",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".reportes-container",
+      "timestamp": "2025-10-06T09:40:41.067Z"
+    },
+    {
+      "screen": "Reportes Screen",
+      "element": "Report filters",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".report-filters",
+      "timestamp": "2025-10-06T09:40:46.069Z"
+    },
+    {
+      "screen": "Configuracion Screen",
+      "element": "Configuration container",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".config-container",
+      "timestamp": "2025-10-06T09:40:53.027Z"
+    },
+    {
+      "screen": "Configuracion Screen",
+      "element": "Configuration form",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".config-form",
+      "timestamp": "2025-10-06T09:40:58.029Z"
+    },
+    {
+      "screen": "Simulador Screen",
+      "element": "Simulador container",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".simulador-container",
+      "timestamp": "2025-10-06T09:41:05.136Z"
+    },
+    {
+      "screen": "Simulador Screen",
+      "element": "Simulator forms",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".simulator-forms",
+      "timestamp": "2025-10-06T09:41:10.138Z"
+    },
+    {
+      "screen": "Simulador Screen",
+      "element": "Calculation results",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".calculation-results",
+      "timestamp": "2025-10-06T09:41:15.138Z"
+    },
+    {
+      "screen": "Flow Builder Screen",
+      "element": "Flow Builder container",
+      "status": "PASS",
+      "details": "Elemento encontrado y visible",
+      "selector": ".flow-builder-container",
+      "timestamp": "2025-10-06T09:41:17.266Z"
+    },
+    {
+      "screen": "Flow Builder Screen",
+      "element": "Flow nodes",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".flow-nodes",
+      "timestamp": "2025-10-06T09:41:22.266Z"
+    },
+    {
+      "screen": "Flow Builder Screen",
+      "element": "Flow canvas",
+      "status": "PASS",
+      "details": "Elemento encontrado y visible",
+      "selector": ".flow-canvas",
+      "timestamp": "2025-10-06T09:41:22.269Z"
+    },
+    {
+      "screen": "Tracking Screen",
+      "element": "Deliveries container",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".deliveries-container",
+      "timestamp": "2025-10-06T09:41:29.381Z"
+    },
+    {
+      "screen": "Tracking Screen",
+      "element": "Tracking list",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".tracking-list",
+      "timestamp": "2025-10-06T09:41:34.383Z"
+    },
+    {
+      "screen": "Tracking Screen",
+      "element": "Delivery status",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".delivery-status",
+      "timestamp": "2025-10-06T09:41:39.385Z"
+    },
+    {
+      "screen": "Entregas Screen",
+      "element": "Entregas container",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".entregas-container",
+      "timestamp": "2025-10-06T09:41:46.501Z"
+    },
+    {
+      "screen": "Entregas Screen",
+      "element": "Delivery tracking",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".delivery-tracking",
+      "timestamp": "2025-10-06T09:41:51.503Z"
+    },
+    {
+      "screen": "Entregas Screen",
+      "element": "Unit status",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".unit-status",
+      "timestamp": "2025-10-06T09:41:56.505Z"
+    },
+    {
+      "screen": "Productos Screen",
+      "element": "Products container",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".productos-container",
+      "timestamp": "2025-10-06T09:42:03.676Z"
+    },
+    {
+      "screen": "Productos Screen",
+      "element": "Product list",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".product-list",
+      "timestamp": "2025-10-06T09:42:08.678Z"
+    },
+    {
+      "screen": "Productos Screen",
+      "element": "Product requirements by city",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".product-requirements",
+      "timestamp": "2025-10-06T09:42:13.680Z"
+    },
+    {
+      "screen": "Import Tracker Screen",
+      "element": "Import tracker container",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".import-tracker-container",
+      "timestamp": "2025-10-06T09:42:20.781Z"
+    },
+    {
+      "screen": "Import Tracker Screen",
+      "element": "Import status",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".import-status",
+      "timestamp": "2025-10-06T09:42:25.783Z"
+    },
+    {
+      "screen": "Import Tracker Screen",
+      "element": "Tracking progress",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".tracking-progress",
+      "timestamp": "2025-10-06T09:42:30.785Z"
+    },
+    {
+      "screen": "Onboarding Screen",
+      "element": "Onboarding container",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".onboarding-container",
+      "timestamp": "2025-10-06T09:42:37.896Z"
+    },
+    {
+      "screen": "Onboarding Screen",
+      "element": "Onboarding steps",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".onboarding-steps",
+      "timestamp": "2025-10-06T09:42:42.897Z"
+    },
+    {
+      "screen": "Onboarding Screen",
+      "element": "Progress indicator",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".progress-indicator",
+      "timestamp": "2025-10-06T09:42:47.899Z"
+    },
+    {
+      "screen": "Nueva Oportunidad Screen",
+      "element": "Nueva oportunidad container",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".oportunidad-container",
+      "timestamp": "2025-10-06T09:42:55.032Z"
+    },
+    {
+      "screen": "Nueva Oportunidad Screen",
+      "element": "Opportunity form",
+      "status": "PASS",
+      "details": "Elemento encontrado y visible",
+      "selector": ".opportunity-form",
+      "timestamp": "2025-10-06T09:42:55.035Z"
+    },
+    {
+      "screen": "Nueva Oportunidad Screen",
+      "element": "City requirements",
+      "status": "OPTIONAL_MISSING",
+      "details": "Elemento opcional no encontrado",
+      "selector": ".city-requirements",
+      "timestamp": "2025-10-06T09:43:00.036Z"
+    },
+    {
+      "screen": "Business Logic",
+      "element": "BFF Authentication Service",
+      "status": "FAIL",
+      "details": "Esperados 3 usuarios, encontrados 0",
+      "timestamp": "2025-10-06T09:43:01.075Z"
+    },
+    {
+      "screen": "Business Logic",
+      "element": "JWT Token Generation",
+      "status": "PASS",
+      "details": "Tokens JWT generados correctamente",
+      "timestamp": "2025-10-06T09:43:01.079Z"
+    },
+    {
+      "screen": "Business Logic",
+      "element": "Market Policies Configuration",
+      "status": "PASS",
+      "details": "2 mercados configurados",
+      "timestamp": "2025-10-06T09:43:01.080Z"
+    }
+  ],
+  "screenshots": [
+    "complete-validation-Login-Screen-1759743583417.png",
+    "complete-validation-Dashboard-Screen-1759743587925.png",
+    "complete-validation-Cotizadores-Screen-1759743599642.png",
+    "complete-validation-Clientes-Screen-1759743616762.png",
+    "complete-validation-Documentos-Screen-1759743623911.png",
+    "complete-validation-Reportes-Screen-1759743636010.png",
+    "complete-validation-Configuracion-Screen-1759743647957.png",
+    "complete-validation-Simulador-Screen-1759743660062.png",
+    "complete-validation-Flow-Builder-Screen-1759743677178.png",
+    "complete-validation-Tracking-Screen-1759743684310.png",
+    "complete-validation-Entregas-Screen-1759743701419.png",
+    "complete-validation-Productos-Screen-1759743718542.png",
+    "complete-validation-Import-Tracker-Screen-1759743735711.png",
+    "complete-validation-Onboarding-Screen-1759743752828.png",
+    "complete-validation-Nueva-Oportunidad-Screen-1759743769935.png"
+  ],
+  "errors": [
+    {
+      "type": "network_error",
+      "message": "404 - http://localhost:4300/api/v1/triggers/history?limit=10",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[monitoring:error] JSHandle@object",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "network_error",
+      "message": "404 - http://localhost:4300/api/v1/import-tracker/metrics",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[monitoring:error] JSHandle@object",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "network_error",
+      "message": "404 - http://localhost:4300/api/v1/import-tracker/metrics",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[monitoring:error] JSHandle@object",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "network_error",
+      "message": "404 - http://localhost:4300/api/v1/import-tracker/metrics",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[monitoring:error] JSHandle@object",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "network_error",
+      "message": "404 - http://localhost:4300/api/v1/import-tracker/metrics",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.785Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[monitoring:error] JSHandle@object",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.786Z"
+    },
+    {
+      "type": "network_error",
+      "message": "404 - http://localhost:4300/api/v1/triggers/pending-analysis",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.786Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.786Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[monitoring:error] JSHandle@object",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "timestamp": "2025-10-06T09:42:14.786Z"
+    }
+  ],
+  "performance": [
+    {
+      "screen": "Login Screen",
+      "url": "http://localhost:4300/login",
+      "loadTime": "664ms",
+      "timestamp": "2025-10-06T09:39:43.417Z"
+    },
+    {
+      "screen": "Dashboard Screen",
+      "url": "http://localhost:4300/dashboard",
+      "loadTime": "626ms",
+      "timestamp": "2025-10-06T09:39:47.925Z"
+    },
+    {
+      "screen": "Cotizadores Screen",
+      "url": "http://localhost:4300/cotizadores",
+      "loadTime": "614ms",
+      "timestamp": "2025-10-06T09:39:59.642Z"
+    },
+    {
+      "screen": "Clientes Screen",
+      "url": "http://localhost:4300/clientes",
+      "loadTime": "1041ms",
+      "timestamp": "2025-10-06T09:40:16.762Z"
+    },
+    {
+      "screen": "Documentos Screen",
+      "url": "http://localhost:4300/documentos",
+      "loadTime": "1071ms",
+      "timestamp": "2025-10-06T09:40:23.910Z"
+    },
+    {
+      "screen": "Reportes Screen",
+      "url": "http://localhost:4300/reportes",
+      "loadTime": "1038ms",
+      "timestamp": "2025-10-06T09:40:36.010Z"
+    },
+    {
+      "screen": "Configuracion Screen",
+      "url": "http://localhost:4300/configuracion",
+      "loadTime": "886ms",
+      "timestamp": "2025-10-06T09:40:47.957Z"
+    },
+    {
+      "screen": "Simulador Screen",
+      "url": "http://localhost:4300/simulador",
+      "loadTime": "1031ms",
+      "timestamp": "2025-10-06T09:41:00.062Z"
+    },
+    {
+      "screen": "Flow Builder Screen",
+      "url": "http://localhost:4300/flow-builder",
+      "loadTime": "1039ms",
+      "timestamp": "2025-10-06T09:41:17.178Z"
+    },
+    {
+      "screen": "Tracking Screen",
+      "url": "http://localhost:4300/ops/deliveries",
+      "loadTime": "1039ms",
+      "timestamp": "2025-10-06T09:41:24.310Z"
+    },
+    {
+      "screen": "Entregas Screen",
+      "url": "http://localhost:4300/entregas",
+      "loadTime": "1032ms",
+      "timestamp": "2025-10-06T09:41:41.419Z"
+    },
+    {
+      "screen": "Productos Screen",
+      "url": "http://localhost:4300/productos",
+      "loadTime": "1036ms",
+      "timestamp": "2025-10-06T09:41:58.542Z"
+    },
+    {
+      "screen": "Import Tracker Screen",
+      "url": "http://localhost:4300/ops/import-tracker",
+      "loadTime": "1029ms",
+      "timestamp": "2025-10-06T09:42:15.711Z"
+    },
+    {
+      "screen": "Onboarding Screen",
+      "url": "http://localhost:4300/onboarding",
+      "loadTime": "1041ms",
+      "timestamp": "2025-10-06T09:42:32.828Z"
+    },
+    {
+      "screen": "Nueva Oportunidad Screen",
+      "url": "http://localhost:4300/nueva-oportunidad",
+      "loadTime": "1034ms",
+      "timestamp": "2025-10-06T09:42:49.935Z"
+    }
+  ],
+  "userFlows": [
+    {
+      "screen": "Login Screen",
+      "interaction": "demo_user_click",
+      "target": "admin@conductores.com",
+      "status": "SUCCESS",
+      "timestamp": "2025-10-06T09:39:44.546Z"
+    },
+    {
+      "screen": "Login Screen",
+      "interaction": "form_submit",
+      "target": "N/A",
+      "status": "SUCCESS",
+      "timestamp": "2025-10-06T09:39:44.613Z"
+    }
+  ],
+  "score": 145,
+  "summary": {
+    "totalScreens": 15,
+    "completedScreens": 15,
+    "completionRate": "100.0%",
+    "totalValidations": 47,
+    "passedValidations": 13,
+    "failedValidations": 1,
+    "optionalMissing": 33,
+    "finalScore": 100,
+    "successRate": "27.7%",
+    "totalErrors": 18,
+    "totalScreenshots": 15,
+    "status": "PARTIAL_SUCCESS"
+  }
+}

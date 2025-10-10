@@ -99,8 +99,8 @@
       @if (ocrResult.needsManualEntry) {
         <app-human-message
           class="ocr-scanner__message"
-          [context]="'ocr-manual-verification'"
-          [data]="{ field: getScannerLabel(), confidence: ocrResult.confidence }"
+[microcopyId]="'ocr-manual-verification'"
+          [context]="{ field: getScannerLabel(), confidence: ocrResult.confidence }"
         ></app-human-message>
       }
     </section>
@@ -132,8 +132,8 @@
 
       <app-human-message
         class="ocr-scanner__message"
-        [context]="'manual-entry-guidance'"
-        [data]="{ field: getScannerLabel() }"
+[microcopyId]="'manual-entry-guidance'"
+        [context]="{ field: getScannerLabel() }"
       ></app-human-message>
     </section>
   }
@@ -166,8 +166,8 @@
     <section class="ocr-scanner__error">
       <app-human-message
         class="ocr-scanner__message"
-        context="ocr-error"
-        [data]="{ error: errorMessage, canRetry: true }"
+microcopyId="ocr-error"
+        [context]="{ error: errorMessage, canRetry: true }"
       ></app-human-message>
       <button type="button" class="btn btn-ghost" (click)="retry()">
         <app-icon name="refresh" [size]="18" color="currentColor"></app-icon>

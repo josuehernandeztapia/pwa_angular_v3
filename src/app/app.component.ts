@@ -14,15 +14,37 @@ import { GlobalSearchComponent } from './components/shared/global-search/global-
 import { FlowContextService } from './services/flow-context.service';
 import { KeyboardShortcutsModalComponent } from './components/shared/keyboard-shortcuts-modal/keyboard-shortcuts-modal.component';
 import { KeyboardShortcutsService } from './services/keyboard-shortcuts.service';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
+import { map, distinctUntilChanged } from 'rxjs/operators';
 import { OfflineService } from './services/offline.service';
 import { environment } from '../environments/environment';
 import { NavigationService, QuickAction } from './services/navigation.service';
+import { NavigationComponent } from './components/shared/navigation/navigation.component';
+
+interface OfflineShellState {
+  isOffline: boolean;
+  pending: number;
+  endpoints: string[];
+  lastUpdated: number | null;
+}
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, RouterOutlet, BottomNavBarComponent, UpdateBannerComponent, OfflineIndicatorComponent, PwaInstallPromptComponent, LucideAngularModule, IconComponent, GlobalSearchComponent, KeyboardShortcutsModalComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    RouterOutlet,
+    BottomNavBarComponent,
+    UpdateBannerComponent,
+    OfflineIndicatorComponent,
+    PwaInstallPromptComponent,
+    LucideAngularModule,
+    IconComponent,
+    GlobalSearchComponent,
+    KeyboardShortcutsModalComponent,
+    NavigationComponent
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -36,6 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
   breadcrumbs$: Observable<string[]>;
   readonly isGlobalSearchEnabled = environment.features.enableGlobalSearch ?? false;
   readonly quickActions$ = this.navigation.getQuickActions();
+  readonly offlineState$ = this.createOfflineStateStream();
 
   constructor(
     private mediaPermissions: MediaPermissionsService,
@@ -129,6 +152,14 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isDarkMode = isDark;
   }
 
+  async flushOfflineQueue(): Promise<void> {
+    if (!this.offlineService) {
+      return;
+    }
+
+    await this.offlineService.flushQueueNow();
+  }
+
   private handleResize = () => {
     if (typeof window === 'undefined') {
       return;
@@ -184,5 +215,36 @@ export class AppComponent implements OnInit, OnDestroy {
 
     const tagName = target.tagName;
     return tagName === 'INPUT' || tagName === 'TEXTAREA' || target.isContentEditable;
+  }
+
+  private createOfflineStateStream(): Observable<OfflineShellState> {
+    if (!this.offlineService) {
+      return of({ isOffline: false, pending: 0, endpoints: [], lastUpdated: null });
+    }
+
+    const offlineQueue$ = this.flowContext.contexts$.pipe(
+      map(entries =>
+        entries.find(entry => entry.key === 'offlineQueue')?.data as
+          | { pending?: number; endpoints?: string[]; lastUpdated?: number }
+          | undefined
+      )
+    );
+
+    return combineLatest([
+      this.offlineService.online$.pipe(map(isOnline => !isOnline)),
+      offlineQueue$
+    ]).pipe(
+      map(([isOffline, queue]) => ({
+        isOffline,
+        pending: queue?.pending ?? 0,
+        endpoints: queue?.endpoints ?? [],
+        lastUpdated: queue?.lastUpdated ?? null
+      })),
+      distinctUntilChanged((prev, curr) =>
+        prev.isOffline === curr.isOffline &&
+        prev.pending === curr.pending &&
+        prev.lastUpdated === curr.lastUpdated
+      )
+    );
   }
 }

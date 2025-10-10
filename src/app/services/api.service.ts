@@ -4,6 +4,7 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import { HttpClientService, ApiResponse } from './http-client.service';
 import { Client, BusinessFlow, Document, EventLog, DocumentStatus } from '../models/types';
 import { Quote } from '../models/business';
+import { getDemoClients, getDemoQuotes } from '../demo/demo-seed';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -199,8 +200,8 @@ export class ApiService {
    */
   getClientQuotes(clientId: string): Observable<Quote[]> {
     if (environment.features.enableMockData) {
-      // No persisted mock quotes; return empty list to satisfy mock flow
-      return of([]);
+      const quotes = getDemoQuotes().filter(quote => quote.clientId === clientId);
+      return of(quotes);
     }
 
     return this.httpClient.get<Quote[]>(`clients/${clientId}/quotes`).pipe(
@@ -339,77 +340,7 @@ export class ApiService {
   }
 
   private getMockClients(): Client[] {
-    return [
-      {
-        id: '1',
-        name: 'Ana García López',
-        avatarUrl: '',
-        email: 'ana.garcia@email.com',
-        phone: '5551234567',
-        rfc: 'GALA850315ABC',
-        market: 'aguascalientes',
-        flow: BusinessFlow.VentaPlazo,
-        status: 'Activo',
-        createdAt: new Date('2024-01-15'),
-        lastModified: new Date(),
-        events: [
-          {
-            id: '1',
-            timestamp: new Date('2024-01-15'),
-            message: 'Cliente registrado en el sistema',
-            actor: 'Sistema' as any,
-            type: 'System' as any
-          }
-        ],
-        documents: this.generateDefaultDocuments(BusinessFlow.VentaPlazo)
-      },
-      {
-        id: '2',
-        name: 'Carlos Rodríguez Martín',
-        avatarUrl: '',
-        email: 'carlos.rodriguez@email.com',
-        phone: '5552345678',
-        rfc: 'ROMC780922DEF',
-        market: 'edomex',
-        flow: BusinessFlow.AhorroProgramado,
-        status: 'Pendiente',
-        createdAt: new Date('2024-02-10'),
-        lastModified: new Date(),
-        events: [
-          {
-            id: '2',
-            timestamp: new Date('2024-02-10'),
-            message: 'Cotización generada para Plan de Ahorro',
-            actor: 'Asesor' as any,
-            type: 'AdvisorAction' as any
-          }
-        ],
-        documents: this.generateDefaultDocuments(BusinessFlow.AhorroProgramado)
-      },
-      {
-        id: '3',
-        name: 'María Elena Sánchez',
-        avatarUrl: '',
-        email: 'maria.sanchez@email.com',
-        phone: '5553456789',
-        rfc: 'SAME901205GHI',
-        market: 'aguascalientes',
-        flow: BusinessFlow.CreditoColectivo,
-        status: 'Activo',
-        createdAt: new Date('2024-01-28'),
-        lastModified: new Date(),
-        events: [
-          {
-            id: '3',
-            timestamp: new Date('2024-01-28'),
-            message: 'Agregada a grupo de crédito colectivo',
-            actor: 'Asesor' as any,
-            type: 'AdvisorAction' as any
-          }
-        ],
-        documents: this.generateDefaultDocuments(BusinessFlow.CreditoColectivo)
-      }
-    ];
+    return getDemoClients();
   }
 
   /**

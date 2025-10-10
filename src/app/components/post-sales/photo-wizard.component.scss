@@ -294,6 +294,27 @@
   border-top: 1px solid var(--token-border-neutral-alpha-65);
 }
 
+.photo-wizard__detected {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.photo-wizard__detected-label {
+  font-weight: 600;
+}
+
+.photo-wizard__detected-code {
+  font-family: var(--font-mono, 'Roboto Mono', monospace);
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-primary);
+}
+
 .photo-wizard__review-card {
   display: flex;
   flex-direction: column;
@@ -608,6 +629,57 @@
 
 .photo-wizard__quote-clear {
   align-self: flex-start;
+}
+
+.photo-wizard__phases {
+  margin-top: var(--space-10);
+  display: grid;
+  gap: var(--space-6);
+}
+
+.photo-wizard__phases-title {
+  font-size: var(--font-h3-size, 1.25rem);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-primary);
+}
+
+.photo-wizard__ocr-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 12, 27, 0.55);
+  display: grid;
+  place-items: center;
+  z-index: 2000;
+}
+
+.photo-wizard__ocr-panel {
+  position: relative;
+  width: min(640px, 92vw);
+  max-height: 92vh;
+  overflow: auto;
+  padding: var(--space-6);
+  border-radius: var(--radius-xl, 24px);
+  background: var(--color-surface-primary, #0f1116);
+  box-shadow: var(--shadow-lg, 0 24px 48px rgba(15, 23, 42, 0.32));
+}
+
+.photo-wizard__ocr-close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm, 8px);
+  transition: background var(--transition-fast, 0.2s ease);
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-text-primary);
+  }
 }
 
 .photo-wizard__footer {

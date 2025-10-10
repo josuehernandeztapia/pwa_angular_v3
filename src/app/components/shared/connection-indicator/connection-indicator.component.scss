@@ -4,8 +4,8 @@
 
   &__desktop {
     position: fixed;
-    top: var(--space-16, 16px);
     right: var(--space-16, 16px);
+    bottom: var(--space-16, 16px);
     display: none;
     pointer-events: none;
   }

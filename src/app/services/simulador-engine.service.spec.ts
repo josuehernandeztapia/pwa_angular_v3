@@ -3,11 +3,13 @@ import { SimuladorEngineService, SavingsScenario, CollectiveScenarioConfig } fro
 import { TandaEngineService } from './tanda-engine.service';
 import { TandaMemberSim } from '../models/tanda';
 import { FinancialCalculatorService } from './financial-calculator.service';
+import { MarketPolicyService } from './market-policy.service';
 
 describe('SimuladorEngineService', () => {
   let service: SimuladorEngineService;
   let mockTandaEngine: jasmine.SpyObj<TandaEngineService>;
   let mockFinancialCalc: jasmine.SpyObj<FinancialCalculatorService>;
+  let mockMarketPolicy: jasmine.SpyObj<MarketPolicyService>;
 
   beforeEach(() => {
     mockTandaEngine = jasmine.createSpyObj('TandaEngineService', [
@@ -20,6 +22,19 @@ describe('SimuladorEngineService', () => {
     mockFinancialCalc = jasmine.createSpyObj('FinancialCalculatorService', [
       'formatCurrency'
     ]);
+
+    mockMarketPolicy = jasmine.createSpyObj('MarketPolicyService', ['getPolicyMetadata']);
+    mockMarketPolicy.getPolicyMetadata.and.returnValue({
+      ocrThreshold: 0.85,
+      tanda: {
+        minMembers: 5,
+        maxMembers: 20,
+        minContribution: 0,
+        maxContribution: 10000,
+        minRounds: 12,
+        maxRounds: 60,
+      }
+    });
 
     // Set up default return values
     mockTandaEngine.generateBaselineTanda.and.returnValue({
@@ -62,7 +77,8 @@ describe('SimuladorEngineService', () => {
       providers: [
         SimuladorEngineService,
         { provide: TandaEngineService, useValue: mockTandaEngine },
-        { provide: FinancialCalculatorService, useValue: mockFinancialCalc }
+        { provide: FinancialCalculatorService, useValue: mockFinancialCalc },
+        { provide: MarketPolicyService, useValue: mockMarketPolicy }
       ]
     });
 
@@ -283,6 +299,62 @@ describe('SimuladorEngineService', () => {
       const result = await service.generateEdoMexCollectiveScenario(mockConfig);
 
       (expect(result.scenario.monthsToTarget) as any).toBe(12); // Fallback
+    });
+
+    it('clamps member contributions to policy metadata bounds', async () => {
+      const defaultMetadata = mockMarketPolicy.getPolicyMetadata.calls.mostRecent()?.returnValue ?? {
+        ocrThreshold: 0.85,
+        tanda: {
+          minMembers: 5,
+          maxMembers: 20,
+          minContribution: 0,
+          maxContribution: 10000,
+          minRounds: 6,
+          maxRounds: 18,
+        }
+      };
+
+      mockMarketPolicy.getPolicyMetadata.and.returnValue({
+        ocrThreshold: 0.85,
+        tanda: {
+          minMembers: 5,
+          maxMembers: 20,
+          minContribution: 500,
+          maxContribution: 600,
+          minRounds: 6,
+          maxRounds: 18,
+        }
+      });
+
+      mockConfig.avgConsumption = 50; // base collection per member = 100
+      mockConfig.overpricePerLiter = 2;
+      mockConfig.voluntaryMonthly = 0;
+
+      const minClamped = await service.generateEdoMexCollectiveScenario(mockConfig);
+      expect(minClamped.scenario.collectionContribution).toBe(500 * mockConfig.memberCount);
+
+      mockMarketPolicy.getPolicyMetadata.and.returnValue({
+        ocrThreshold: 0.85,
+        tanda: {
+          minMembers: 5,
+          maxMembers: 20,
+          minContribution: 100,
+          maxContribution: 300,
+          minRounds: 6,
+          maxRounds: 18,
+        }
+      });
+
+      mockConfig.avgConsumption = 500; // base per member = 1000
+      mockConfig.overpricePerLiter = 2;
+
+      const maxClamped = await service.generateEdoMexCollectiveScenario(mockConfig);
+      expect(maxClamped.scenario.collectionContribution).toBe(300 * mockConfig.memberCount);
+
+      mockMarketPolicy.getPolicyMetadata.and.returnValue(defaultMetadata);
+      mockConfig.avgConsumption = 400;
+      mockConfig.overpricePerLiter = 2.0;
+      mockConfig.voluntaryMonthly = 1500;
     });
   });
 
@@ -508,7 +580,7 @@ describe('SimuladorEngineService', () => {
       (expect(scenario.monthsToTarget) as any).toBeGreaterThan(1000);
     });
 
-    it('should handle zero member count in collective scenario', async () => {
+    it('normalises member count to policy minimum when zero provided', async () => {
       const config: CollectiveScenarioConfig = {
         memberCount: 0,
         unitPrice: 800000,
@@ -519,8 +591,9 @@ describe('SimuladorEngineService', () => {
 
       const result = await service.generateEdoMexCollectiveScenario(config);
 
-      (expect(result.scenario.monthlyContribution) as any).toBe(0);
-      (expect(result.scenario.targetAmount) as any).toBe(0);
+      (expect(result.scenario.monthlyContribution) as any).toBe(11500);
+      (expect(result.scenario.targetAmount) as any).toBe(600000);
+      (expect(mockMarketPolicy.getPolicyMetadata) as any).toHaveBeenCalled();
     });
   });
 });

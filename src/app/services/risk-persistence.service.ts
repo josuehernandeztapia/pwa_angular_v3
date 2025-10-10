@@ -11,6 +11,7 @@ import { MonitoringService } from './monitoring.service';
 
 import { environment } from '../../environments/environment';
 import { RiskEvaluation } from '../components/risk-evaluation/risk-panel.component';
+import { getDemoRiskEvaluations } from '../demo/demo-seed';
 
 interface StoredRiskEvaluation {
   id: string;
@@ -23,6 +24,7 @@ interface StoredRiskEvaluation {
     source: string;
     sessionId?: string;
     deviceInfo?: string;
+    synced?: boolean;
   };
 }
 
@@ -53,6 +55,7 @@ export class RiskPersistenceService {
 
   constructor(private http: HttpClient) {
     this.loadFromLocalStorage();
+    this.bootstrapDemoEvaluations();
   }
 
   /**
@@ -78,6 +81,7 @@ export class RiskPersistenceService {
         source: 'web-app',
         sessionId: this.getSessionId(),
         deviceInfo: this.getDeviceInfo(),
+        synced: !this.shouldUseRemoteStorage(),
         ...metadata
       }
     };
@@ -195,7 +199,7 @@ export class RiskPersistenceService {
             'RiskPersistenceService',
             'getSummary',
             'Remote summary failed, using local calculation',
-            { clientId, error: error.message }
+            { error: error.message }
           );
           return of(this.calculateLocalSummary());
         })
@@ -324,7 +328,7 @@ export class RiskPersistenceService {
           'RiskPersistenceService',
           'syncWithRemote',
           error,
-          { localItemsCount: localItems.length },
+          { localItemsCount: unsyncedEvaluations.length },
           'medium'
         );
         return of({ synced: false, conflicts: 0 });
@@ -358,6 +362,45 @@ export class RiskPersistenceService {
     const updated = [...evaluations, ...filtered].slice(0, 100);
     this.evaluationsCache$.next(updated);
     this.updateLocalStorage();
+  }
+
+  private bootstrapDemoEvaluations(): void {
+    if (!this.enabled || !environment.features?.enableMockData) {
+      return;
+    }
+
+    if (this.evaluationsCache$.value.length > 0) {
+      return;
+    }
+
+    const demoEntries = getDemoRiskEvaluations();
+    if (demoEntries.length === 0) {
+      return;
+    }
+
+    const storedEvaluations = demoEntries.map(entry => this.toStoredEvaluation(entry.clientId, entry.evaluation));
+    this.evaluationsCache$.next(storedEvaluations);
+    this.summaryCache$.next(this.calculateLocalSummary());
+    this.updateLocalStorage();
+  }
+
+  private toStoredEvaluation(clientId: string, evaluation: RiskEvaluation): StoredRiskEvaluation {
+    const processedAt = evaluation.processedAt instanceof Date
+      ? evaluation.processedAt.toISOString()
+      : new Date(evaluation.processedAt as any).toISOString();
+
+    return {
+      id: evaluation.evaluationId,
+      clientId,
+      evaluation,
+      createdAt: processedAt,
+      updatedAt: processedAt,
+      version: 1,
+      metadata: {
+        source: 'demo-seed',
+        synced: true
+      }
+    };
   }
 
   private calculateLocalSummary(): RiskEvaluationSummary {
@@ -437,7 +480,7 @@ export class RiskPersistenceService {
         'RiskPersistenceService',
         'saveToLocalStorage',
         error,
-        { evaluationsCount: this.evaluations.length },
+        { evaluationsCount: this.evaluationsCache$.value.length },
         'medium'
       );
     }

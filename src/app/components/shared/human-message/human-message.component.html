@@ -3,14 +3,14 @@
   [attr.role]="microcopy?.context === 'error' ? 'alert' : 'status'"
   [attr.aria-live]="getAriaLive()"
   [attr.data-microcopy-id]="microcopy?.id"
-  [attr.data-context]="microcopy?.context"
-  [attr.data-tone]="microcopy?.tone"
+  [attr.data-context]="microcopy?.context ?? null"
+  [attr.data-tone]="microcopy?.tone ?? null"
 >
   <div *ngIf="showIcon" [ngClass]="getIconClasses()" aria-hidden="true">
     <app-icon
       class="human-message__icon-symbol"
       [name]="getContextIcon()"
-      [size]="iconSize"
+      [size]="iconPixelSize"
     ></app-icon>
   </div>
 
@@ -20,7 +20,7 @@
     <div
       *ngIf="microcopy?.secondaryText"
       class="human-message__secondary"
-      [innerHTML]="microcopy.secondaryText"
+      [innerHTML]="microcopy?.secondaryText"
     ></div>
 
     <div *ngIf="microcopy?.actionText && showAction" class="human-message__action">
@@ -28,9 +28,9 @@
         type="button"
         [ngClass]="getActionButtonClasses()"
         (click)="onActionClick()"
-        [attr.aria-label]="microcopy.accessibility?.description || microcopy.actionText"
+        [attr.aria-label]="microcopy?.accessibility?.description || microcopy?.actionText || 'Acción'"
       >
-        {{ microcopy.actionText }}
+        {{ microcopy?.actionText }}
       </button>
     </div>
   </div>
@@ -42,6 +42,6 @@
     (click)="onDismiss()"
     aria-label="Cerrar mensaje"
   >
-    <app-icon name="alert-circle" size="sm"></app-icon>
+    <app-icon name="alert-circle" [size]="16"></app-icon>
   </button>
 </div>

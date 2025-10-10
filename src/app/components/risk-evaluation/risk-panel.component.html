@@ -9,11 +9,11 @@
     class="risk-panel__state risk-panel__state--loading"
     data-testid="evaluation-loading"
   >
-    <app-icon class="risk-panel__state-icon" name="refresh" size="md"></app-icon>
+    <app-icon class="risk-panel__state-icon" name="refresh" [size]="24"></app-icon>
     <app-human-message
       class="risk-panel__state-message"
-      message-context="loading-evaluation"
-      [show-animation]="true"
+      microcopyId="loading-evaluation"
+      [animateIcon]="true"
     ></app-human-message>
   </section>
 
@@ -25,8 +25,8 @@
     <app-icon class="risk-panel__state-icon" name="alert-triangle"></app-icon>
     <app-human-message
       class="risk-panel__state-message"
-      message-context="evaluation-error"
-      [show-retry]="true"
+      microcopyId="evaluation-error"
+      [showAction]="true"
       (retry)="onRetryEvaluation()"
     ></app-human-message>
     <button type="button" class="risk-panel__button risk-panel__button--primary" (click)="onRetryEvaluation()">
@@ -40,7 +40,7 @@
   >
     <header class="risk-panel__header">
       <div class="risk-panel__title-group">
-        <app-icon class="risk-panel__title-icon" name="proteccion"></app-icon>
+        <app-icon class="risk-panel__title-icon" name="shield"></app-icon>
         <div>
           <h2 class="risk-panel__title">Evaluación de Riesgo KIBAN/HASE</h2>
           <div class="risk-panel__meta">
@@ -63,30 +63,30 @@
             [ngClass]="getScoreClass()"
             data-testid="kiban-score"
           >
-            {{ riskEvaluation()?.kiban.scoreRaw || 'N/A' }}
+            {{ riskEvaluation()?.kiban?.scoreRaw ?? 'N/A' }}
           </span>
           <span
             class="risk-panel__score-band"
             [ngClass]="getBandClass()"
             data-testid="score-band"
           >
-            Banda {{ riskEvaluation()?.kiban.scoreBand }}
+            Banda {{ riskEvaluation()?.kiban?.scoreBand ?? 'N/A' }}
           </span>
         </div>
 
         <div class="risk-panel__score-summary">
-          <app-icon class="risk-panel__score-icon" name="cotizador"></app-icon>
+          <app-icon class="risk-panel__score-icon" name="calculator"></app-icon>
           <div class="risk-panel__score-details">
             <div class="risk-panel__score-detail">
               <span class="risk-panel__score-detail-label">Score final</span>
               <span class="risk-panel__score-detail-value">
-                {{ riskEvaluation()?.scoreBreakdown.finalScore }}/100
+                {{ riskEvaluation()?.scoreBreakdown?.finalScore ?? 'N/A' }}/100
               </span>
             </div>
             <div class="risk-panel__score-detail">
               <span class="risk-panel__score-detail-label">Confianza</span>
               <span class="risk-panel__score-detail-value">
-                {{ riskEvaluation()?.confidenceLevel }}%
+                {{ riskEvaluation()?.confidenceLevel ?? 'N/A' }}%
               </span>
             </div>
           </div>
@@ -113,7 +113,7 @@
 
     <section class="risk-panel__section risk-panel__section--hase">
       <header class="risk-panel__section-header">
-        <app-icon class="risk-panel__section-icon" name="simulador"></app-icon>
+        <app-icon class="risk-panel__section-icon" name="calculator"></app-icon>
         <h3 class="risk-panel__section-title">HASE · Análisis integral</h3>
       </header>
 
@@ -122,15 +122,15 @@
         [ngClass]="getHaseCategoryClass()"
         data-testid="hase-category"
       >
-        <span class="risk-panel__hase-label">{{ riskEvaluation()?.hase.category }}</span>
+        <span class="risk-panel__hase-label">{{ riskEvaluation()?.hase?.category || 'N/A' }}</span>
         <span class="risk-panel__hase-score">
-          {{ (riskEvaluation()?.hase.riskScore01 * 100 | number:'1.1-1') }}%
+          {{ ((riskEvaluation()?.hase?.riskScore01 ?? 0) * 100 | number:'1.1-1') }}%
         </span>
       </div>
 
       <div class="risk-panel__explain-list">
         <div
-          *ngFor="let factor of riskEvaluation()?.hase.explain"
+          *ngFor="let factor of riskEvaluation()?.hase?.explain || []"
           class="risk-panel__explain-item"
           [ngClass]="getFactorImpactClass(factor.impact)"
         >
@@ -226,15 +226,15 @@
 
       <div class="risk-panel__decision-message">
         <app-human-message
-          [message-context]="getDecisionMessageContext()"
+          [microcopyId]="getDecisionMicrocopyId()"
           [personalization-data]="getPersonalizationData()"
           [show-animation]="true"
         ></app-human-message>
       </div>
 
-      <ul class="risk-panel__decision-reasons" *ngIf="riskEvaluation()?.decisionReasons?.length">
+      <ul class="risk-panel__decision-reasons" *ngIf="(riskEvaluation()?.decisionReasons?.length ?? 0) > 0">
         <li
-          *ngFor="let reason of riskEvaluation()?.decisionReasons"
+          *ngFor="let reason of riskEvaluation()?.decisionReasons || []"
           class="risk-panel__decision-reason"
         >
           {{ reason }}
@@ -247,7 +247,7 @@
       *ngIf="riskEvaluation()?.financialRecommendations"
     >
       <header class="risk-panel__section-header">
-        <app-icon class="risk-panel__section-icon" name="cotizador"></app-icon>
+        <app-icon class="risk-panel__section-icon" name="calculator"></app-icon>
         <h3 class="risk-panel__section-title">Recomendaciones financieras</h3>
       </header>
 
@@ -267,13 +267,13 @@
         <div class="risk-panel__financial-item">
           <span class="risk-panel__financial-label">Plazo máximo</span>
           <span class="risk-panel__financial-value">
-            {{ riskEvaluation()?.financialRecommendations.maxTermMonths }} meses
+            {{ riskEvaluation()?.financialRecommendations?.maxTermMonths ?? 'N/A' }} meses
           </span>
         </div>
         <div class="risk-panel__financial-item">
           <span class="risk-panel__financial-label">Tasa sugerida</span>
           <span class="risk-panel__financial-value">
-            {{ riskEvaluation()?.financialRecommendations.suggestedInterestRate }}% anual
+            {{ riskEvaluation()?.financialRecommendations?.suggestedInterestRate ?? 'N/A' }}% anual
           </span>
         </div>
         <div class="risk-panel__financial-item">
@@ -285,7 +285,7 @@
         <div class="risk-panel__financial-item">
           <span class="risk-panel__financial-label">Ratio deuda/ingreso</span>
           <span class="risk-panel__financial-value" [ngClass]="getDebtRatioClass()">
-            {{ riskEvaluation()?.financialRecommendations.resultingDebtToIncomeRatio }}%
+            {{ riskEvaluation()?.financialRecommendations?.resultingDebtToIncomeRatio ?? 'N/A' }}%
           </span>
         </div>
       </div>
@@ -293,16 +293,16 @@
 
     <section
       class="risk-panel__section risk-panel__section--steps"
-      *ngIf="riskEvaluation()?.nextSteps?.length || getSuggestions().length"
+      *ngIf="(riskEvaluation()?.nextSteps?.length ?? 0) > 0 || getSuggestions().length"
     >
       <header class="risk-panel__section-header">
         <app-icon class="risk-panel__section-icon" name="check-circle"></app-icon>
         <h3 class="risk-panel__section-title">Siguientes pasos</h3>
       </header>
 
-      <div class="risk-panel__steps-list" *ngIf="riskEvaluation()?.nextSteps?.length">
+      <div class="risk-panel__steps-list" *ngIf="(riskEvaluation()?.nextSteps?.length ?? 0) > 0">
         <div
-          *ngFor="let step of riskEvaluation()?.nextSteps; let i = index"
+          *ngFor="let step of riskEvaluation()?.nextSteps || []; let i = index"
           class="risk-panel__step"
           [style.animation-delay]="(i * 100) + 'ms'"
         >
@@ -346,7 +346,7 @@
             data-testid="upload-documents-btn"
             (click)="onUploadDocuments()"
           >
-            <app-icon class="risk-panel__button-icon" name="scan"></app-icon>
+            <app-icon class="risk-panel__button-icon" name="document"></app-icon>
             Cargar documentos
           </button>
         </div>
@@ -355,12 +355,12 @@
 
     <section
       class="risk-panel__section risk-panel__section--notice"
-      *ngIf="riskEvaluation()?.kiban.status === 'NOT_FOUND'"
+      *ngIf="riskEvaluation()?.kiban?.status === 'NOT_FOUND'"
       data-testid="fallback-message"
     >
       <app-icon class="risk-panel__section-icon" name="info"></app-icon>
       <app-human-message
-        message-context="not-found-fallback"
+        microcopyId="not-found-fallback"
         [personalization-data]="getPersonalizationData()"
       ></app-human-message>
     </section>
@@ -372,7 +372,7 @@
     >
       <app-icon class="risk-panel__section-icon" name="alert-circle"></app-icon>
       <app-human-message
-        message-context="rejection-explanation"
+        microcopyId="rejection-explanation"
         [personalization-data]="getPersonalizationData()"
       ></app-human-message>
     </section>

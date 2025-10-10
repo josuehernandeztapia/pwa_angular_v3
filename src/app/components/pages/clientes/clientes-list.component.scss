@@ -343,6 +343,10 @@
 .clientes-list__indicator--urgent { background: var(--token-surface-danger-soft); color: var(--accent-danger); }
 .clientes-list__indicator--opportunity { background: var(--token-surface-accent-soft); color: var(--accent-primary-hover); }
 .clientes-list__indicator--risk { background: var(--token-surface-warning-alpha-18); color: var(--accent-muted); }
+.clientes-list__indicator--risk-bajo { background: var(--token-surface-success-soft, rgba(46, 204, 113, 0.12)); color: var(--accent-success, #2ecc71); }
+.clientes-list__indicator--risk-medio { background: var(--token-surface-warning-alpha-18); color: var(--accent-warning, #f1c40f); }
+.clientes-list__indicator--risk-alto,
+.clientes-list__indicator--risk-critico { background: var(--token-surface-danger-soft, rgba(231, 76, 60, 0.16)); color: var(--accent-danger); }
 .clientes-list__indicator--protection { background: var(--token-surface-accent-soft); color: var(--accent-primary-hover); }
 
 .clientes-list__actions {

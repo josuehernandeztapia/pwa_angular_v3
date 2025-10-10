@@ -1,0 +1,846 @@
+[
+  {
+    "selector": "app-login",
+    "file": "src/app/components/auth/login/login.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/auth/login/login.component"
+    ]
+  },
+  {
+    "selector": "app-register",
+    "file": "src/app/components/auth/register/register.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/auth/register/register.component"
+    ]
+  },
+  {
+    "selector": "app-verify-email",
+    "file": "src/app/components/auth/verify-email/verify-email.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/auth/verify-email/verify-email.component"
+    ]
+  },
+  {
+    "selector": "app-avi-interview",
+    "file": "src/app/components/avi-interview/avi-interview.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-avi-validation-runner",
+    "file": "src/app/components/avi-validation-runner/avi-validation-runner.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-delivery-tracker",
+    "file": "src/app/components/delivery/delivery-tracker/delivery-tracker.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/components/pages/ops/ops-deliveries.component.html"
+    ]
+  },
+  {
+    "selector": "app-admin-panel",
+    "file": "src/app/components/pages/admin/admin-panel.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/admin/admin-panel.component"
+    ]
+  },
+  {
+    "selector": "app-claims-page",
+    "file": "src/app/components/pages/claims/claims-page.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/claims/claims-page.component"
+    ]
+  },
+  {
+    "selector": "app-client-tracking",
+    "file": "src/app/components/pages/client/client-tracking.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/client/client-tracking.component"
+    ]
+  },
+  {
+    "selector": "app-cliente-detail",
+    "file": "src/app/components/pages/clientes/cliente-detail.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/clientes/cliente-detail.component"
+    ]
+  },
+  {
+    "selector": "app-cliente-form",
+    "file": "src/app/components/pages/clientes/cliente-form.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/clientes/cliente-form.component"
+    ]
+  },
+  {
+    "selector": "app-clientes-list",
+    "file": "src/app/components/pages/clientes/clientes-list.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/clientes/clientes-list.component"
+    ]
+  },
+  {
+    "selector": "app-configuracion",
+    "file": "src/app/components/pages/configuracion/configuracion.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/configuracion/configuracion.component"
+    ]
+  },
+  {
+    "selector": "app-flow-builder",
+    "file": "src/app/components/pages/configuracion/flow-builder/flow-builder.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/configuracion/flow-builder/flow-builder.component"
+    ]
+  },
+  {
+    "selector": "app-market-policy-admin",
+    "file": "src/app/components/pages/configuracion/market-policy-admin.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/configuracion/market-policy-admin.component"
+    ]
+  },
+  {
+    "selector": "app-contract-generation",
+    "file": "src/app/components/pages/contracts/contract-generation.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/contracts/contract-generation.component"
+    ]
+  },
+  {
+    "selector": "app-ags-individual",
+    "file": "src/app/components/pages/cotizador/ags-individual/ags-individual.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/cotizador/ags-individual/ags-individual.component"
+    ]
+  },
+  {
+    "selector": "app-cotizador-main",
+    "file": "src/app/components/pages/cotizador/cotizador-main.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/cotizador/cotizador-main.component"
+    ]
+  },
+  {
+    "selector": "app-edomex-colectivo",
+    "file": "src/app/components/pages/cotizador/edomex-colectivo/edomex-colectivo.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/cotizador/edomex-colectivo/edomex-colectivo.component"
+    ]
+  },
+  {
+    "selector": "app-dashboard",
+    "file": "src/app/components/pages/dashboard/dashboard.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/dashboard/dashboard.component"
+    ]
+  },
+  {
+    "selector": "app-expedientes",
+    "file": "src/app/components/pages/expedientes/expedientes.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/expedientes/expedientes.component"
+    ]
+  },
+  {
+    "selector": "app-integraciones",
+    "file": "src/app/components/pages/integraciones/integraciones.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/integraciones/integraciones.component"
+    ]
+  },
+  {
+    "selector": "app-tanda-consensus-panel",
+    "file": "src/app/components/pages/lab/tanda-consensus-panel.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/lab/tanda-consensus-panel.component"
+    ]
+  },
+  {
+    "selector": "app-tanda-enhanced-panel",
+    "file": "src/app/components/pages/lab/tanda-enhanced-panel.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/lab/tanda-enhanced-panel.component"
+    ]
+  },
+  {
+    "selector": "app-nueva-oportunidad",
+    "file": "src/app/components/pages/nueva-oportunidad/nueva-oportunidad.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/nueva-oportunidad/nueva-oportunidad.component"
+    ]
+  },
+  {
+    "selector": "app-onboarding-main",
+    "file": "src/app/components/pages/onboarding/onboarding-main.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/onboarding/onboarding-main.component"
+    ]
+  },
+  {
+    "selector": "app-opportunities-pipeline",
+    "file": "src/app/components/pages/opportunities/opportunities-pipeline.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/opportunities/opportunities-pipeline.component"
+    ]
+  },
+  {
+    "selector": "app-delivery-detail",
+    "file": "src/app/components/pages/ops/delivery-detail.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/ops/delivery-detail.component"
+    ]
+  },
+  {
+    "selector": "app-gnv-health",
+    "file": "src/app/components/pages/ops/gnv-health.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/ops/gnv-health.component"
+    ]
+  },
+  {
+    "selector": "app-ops-deliveries",
+    "file": "src/app/components/pages/ops/ops-deliveries.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/ops/ops-deliveries.component"
+    ]
+  },
+  {
+    "selector": "app-ops-import-tracker",
+    "file": "src/app/components/pages/ops/ops-import-tracker.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/ops/ops-import-tracker.component"
+    ]
+  },
+  {
+    "selector": "app-triggers-monitor",
+    "file": "src/app/components/pages/ops/triggers-monitor.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/ops/triggers-monitor.component"
+    ]
+  },
+  {
+    "selector": "app-perfil",
+    "file": "src/app/components/pages/perfil/perfil.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/perfil/perfil.component"
+    ]
+  },
+  {
+    "selector": "app-productos-catalog",
+    "file": "src/app/components/pages/productos/productos-catalog.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/productos/productos-catalog.component"
+    ]
+  },
+  {
+    "selector": "app-proteccion",
+    "file": "src/app/components/pages/proteccion/proteccion.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/proteccion/proteccion.component"
+    ]
+  },
+  {
+    "selector": "app-protection-real",
+    "file": "src/app/components/pages/protection-real/protection-real.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-reportes",
+    "file": "src/app/components/pages/reportes/reportes.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/reportes/reportes.component"
+    ]
+  },
+  {
+    "selector": "app-ags-ahorro",
+    "file": "src/app/components/pages/simulador/ags-ahorro/ags-ahorro.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/simulador/ags-ahorro/ags-ahorro.component"
+    ]
+  },
+  {
+    "selector": "app-edomex-individual",
+    "file": "src/app/components/pages/simulador/edomex-individual/edomex-individual.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/simulador/edomex-individual/edomex-individual.component"
+    ]
+  },
+  {
+    "selector": "app-simulador-main",
+    "file": "src/app/components/pages/simulador/simulador-main.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/simulador/simulador-main.component"
+    ]
+  },
+  {
+    "selector": "app-tanda-colectiva",
+    "file": "src/app/components/pages/simulador/tanda-colectiva/tanda-colectiva.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/simulador/tanda-colectiva/tanda-colectiva.component"
+    ]
+  },
+  {
+    "selector": "app-usage-reports",
+    "file": "src/app/components/pages/usage/usage-reports.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/pages/usage/usage-reports.component"
+    ]
+  },
+  {
+    "selector": "app-delivery-phase",
+    "file": "src/app/components/post-sales/delivery-phase.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-documents-phase",
+    "file": "src/app/components/post-sales/documents-phase.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-ocr-scanner-enhanced",
+    "file": "src/app/components/post-sales/ocr-scanner-enhanced.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-photo-wizard",
+    "file": "src/app/components/post-sales/photo-wizard.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/post-sales/photo-wizard.component"
+    ]
+  },
+  {
+    "selector": "app-plates-phase",
+    "file": "src/app/components/post-sales/plates-phase.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-monitoring-panel",
+    "file": "src/app/components/qa/monitoring-panel/monitoring-panel.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/qa/monitoring-panel/monitoring-panel.component"
+    ]
+  },
+  {
+    "selector": "app-risk-panel",
+    "file": "src/app/components/risk-evaluation/risk-panel.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-avi-verification-modal",
+    "file": "src/app/components/shared/avi-verification-modal/avi-verification-modal.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-bottom-nav-bar",
+    "file": "src/app/components/shared/bottom-nav-bar/bottom-nav-bar.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/app.component.html"
+    ]
+  },
+  {
+    "selector": "app-client-mode-toggle",
+    "file": "src/app/components/shared/client-mode-toggle/client-mode-toggle.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-collective-credit",
+    "file": "src/app/components/shared/collective-credit.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-connection-indicator",
+    "file": "src/app/components/shared/connection-indicator/connection-indicator.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/components/pages/dashboard/dashboard.component.html"
+    ]
+  },
+  {
+    "selector": "app-context-panel",
+    "file": "src/app/components/shared/context-panel/context-panel.component.ts",
+    "usageCount": 4,
+    "usages": [
+      "src/app/components/pages/onboarding/onboarding-main.component.html",
+      "src/app/components/pages/ops/ops-deliveries.component.html",
+      "src/app/components/pages/proteccion/proteccion.component.html",
+      "src/app/components/shared/document-upload-flow.component.html"
+    ]
+  },
+  {
+    "selector": "app-contextual-kpis",
+    "file": "src/app/components/shared/contextual-kpis/contextual-kpis.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-dev-kpi-mini",
+    "file": "src/app/components/shared/dev-kpi-mini.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-document-upload-flow",
+    "file": "src/app/components/shared/document-upload-flow.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/shared/document-upload-flow.component"
+    ]
+  },
+  {
+    "selector": "app-dual-mode-cotizador",
+    "file": "src/app/components/shared/dual-mode-cotizador.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-empty-state-card",
+    "file": "src/app/components/shared/empty-state-card.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/components/pages/productos/productos-catalog.component.html"
+    ]
+  },
+  {
+    "selector": "app-event-log",
+    "file": "src/app/components/shared/event-log.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-form-field",
+    "file": "src/app/components/shared/form-field.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-global-search",
+    "file": "src/app/components/shared/global-search/global-search.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/app.component.html"
+    ]
+  },
+  {
+    "selector": "app-guarantee-panel",
+    "file": "src/app/components/shared/guarantee-panel.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-human-activity-feed",
+    "file": "src/app/components/shared/human-activity-feed/human-activity-feed.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-human-message",
+    "file": "src/app/components/shared/human-message/human-message.component.ts",
+    "usageCount": 4,
+    "usages": [
+      "src/app/admin/avi-calibration/avi-calibration-admin.component.html",
+      "src/app/components/post-sales/ocr-scanner-enhanced.component.html",
+      "src/app/components/risk-evaluation/risk-panel.component.html",
+      "src/app/components/shared/premium-dashboard-showcase.component.html"
+    ]
+  },
+  {
+    "selector": "app-icon",
+    "file": "src/app/components/shared/icon/icon.component.ts",
+    "usageCount": 85,
+    "usages": [
+      "src/app/admin/avi-calibration/avi-calibration-admin.component.html",
+      "src/app/app.component.html",
+      "src/app/components/auth/login/login.component.html",
+      "src/app/components/auth/register/register.component.html",
+      "src/app/components/auth/verify-email/verify-email.component.html",
+      "src/app/components/avi-interview/avi-interview.component.html",
+      "src/app/components/avi-validation-runner/avi-validation-runner.component.html",
+      "src/app/components/pages/client/client-tracking.component.html",
+      "src/app/components/pages/clientes/cliente-detail.component.html",
+      "src/app/components/pages/clientes/cliente-form.component.html",
+      "src/app/components/pages/clientes/clientes-list.component.html",
+      "src/app/components/pages/configuracion/configuracion.component.html",
+      "src/app/components/pages/configuracion/flow-builder/flow-builder.component.html",
+      "src/app/components/pages/cotizador/ags-individual/ags-individual.component.html",
+      "src/app/components/pages/cotizador/cotizador-main.component.html",
+      "src/app/components/pages/cotizador/edomex-colectivo/edomex-colectivo.component.html",
+      "src/app/components/pages/dashboard/dashboard.component.html",
+      "src/app/components/pages/expedientes/expedientes.component.html",
+      "src/app/components/pages/integraciones/integraciones.component.html",
+      "src/app/components/pages/lab/tanda-consensus-panel.component.html",
+      "src/app/components/pages/lab/tanda-enhanced-panel.component.html",
+      "src/app/components/pages/nueva-oportunidad/nueva-oportunidad.component.html",
+      "src/app/components/pages/onboarding/onboarding-main.component.html",
+      "src/app/components/pages/opportunities/opportunities-pipeline.component.html",
+      "src/app/components/pages/ops/delivery-detail.component.html",
+      "src/app/components/pages/ops/gnv-health.component.html",
+      "src/app/components/pages/ops/ops-deliveries.component.html",
+      "src/app/components/pages/ops/ops-import-tracker.component.html",
+      "src/app/components/pages/ops/triggers-monitor.component.html",
+      "src/app/components/pages/perfil/perfil.component.html",
+      "src/app/components/pages/productos/productos-catalog.component.html",
+      "src/app/components/pages/proteccion/proteccion.component.html",
+      "src/app/components/pages/protection-real/protection-real.component.html",
+      "src/app/components/pages/simulador/ags-ahorro/ags-ahorro.component.html",
+      "src/app/components/pages/simulador/edomex-individual/edomex-individual.component.html",
+      "src/app/components/pages/simulador/simulador-main.component.html",
+      "src/app/components/pages/simulador/tanda-colectiva/tanda-colectiva.component.html",
+      "src/app/components/post-sales/delivery-phase.component.html",
+      "src/app/components/post-sales/documents-phase.component.html",
+      "src/app/components/post-sales/ocr-scanner-enhanced.component.html",
+      "src/app/components/post-sales/photo-wizard.component.html",
+      "src/app/components/post-sales/plates-phase.component.html",
+      "src/app/components/risk-evaluation/risk-panel.component.html",
+      "src/app/components/shared/avi-verification-modal/avi-verification-modal.component.html",
+      "src/app/components/shared/bottom-nav-bar/bottom-nav-bar.component.html",
+      "src/app/components/shared/client-mode-toggle/client-mode-toggle.component.html",
+      "src/app/components/shared/collective-credit.component.html",
+      "src/app/components/shared/connection-indicator/connection-indicator.component.html",
+      "src/app/components/shared/context-panel/context-panel.component.html",
+      "src/app/components/shared/contextual-kpis/contextual-kpis.component.html",
+      "src/app/components/shared/document-upload-flow.component.html",
+      "src/app/components/shared/dual-mode-cotizador.component.html",
+      "src/app/components/shared/empty-state-card.component.html",
+      "src/app/components/shared/event-log.component.html",
+      "src/app/components/shared/global-search/global-search.component.html",
+      "src/app/components/shared/guarantee-panel.component.html",
+      "src/app/components/shared/human-activity-feed/human-activity-feed.component.html",
+      "src/app/components/shared/human-message/human-message.component.html",
+      "src/app/components/shared/human-message/human-message.component.ts",
+      "src/app/components/shared/import-tracker.component.html",
+      "src/app/components/shared/integration-demo.component.html",
+      "src/app/components/shared/interview-checkpoint-modal/interview-checkpoint-modal.component.html",
+      "src/app/components/shared/keyboard-shortcuts-modal/keyboard-shortcuts-modal.component.html",
+      "src/app/components/shared/manual-entry/manual-entry.component.html",
+      "src/app/components/shared/manual-ocr-entry/manual-ocr-entry.component.html",
+      "src/app/components/shared/manual-ocr-entry/manual-ocr-entry.component.ts",
+      "src/app/components/shared/modal-accessible.component.html",
+      "src/app/components/shared/navigation/navigation.component.html",
+      "src/app/components/shared/next-best-action-hero/next-best-action-hero.component.html",
+      "src/app/components/shared/next-best-action-widget/next-best-action-widget.component.html",
+      "src/app/components/shared/not-found/not-found.component.html",
+      "src/app/components/shared/notification-center/notification-center.component.html",
+      "src/app/components/shared/notifications-panel/notifications-panel.component.html",
+      "src/app/components/shared/offline-indicator/offline-indicator.component.html",
+      "src/app/components/shared/offline-queue-banner/offline-queue-banner.component.html",
+      "src/app/components/shared/offline/offline.component.html",
+      "src/app/components/shared/premium-dashboard-showcase.component.html",
+      "src/app/components/shared/protection-simulator.component.html",
+      "src/app/components/shared/pwa-install-prompt/pwa-install-prompt.component.html",
+      "src/app/components/shared/settings.component.html",
+      "src/app/components/shared/stepper/stepper.component.ts",
+      "src/app/components/shared/tanda-timeline.component.html",
+      "src/app/components/shared/unauthorized/unauthorized.component.html",
+      "src/app/components/shared/voice-recorder/voice-recorder.component.html",
+      "src/app/components/ui/premium-loading/premium-loading.component.html"
+    ]
+  },
+  {
+    "selector": "app-import-tracker",
+    "file": "src/app/components/shared/import-tracker.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-interview-checkpoint-modal",
+    "file": "src/app/components/shared/interview-checkpoint-modal/interview-checkpoint-modal.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/components/pages/onboarding/onboarding-main.component.html"
+    ]
+  },
+  {
+    "selector": "app-keyboard-shortcuts-modal",
+    "file": "src/app/components/shared/keyboard-shortcuts-modal/keyboard-shortcuts-modal.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/app.component.html"
+    ]
+  },
+  {
+    "selector": "app-manual-entry",
+    "file": "src/app/components/shared/manual-entry/manual-entry.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-manual-ocr-entry",
+    "file": "src/app/components/shared/manual-ocr-entry/manual-ocr-entry.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/components/post-sales/photo-wizard.component.html"
+    ]
+  },
+  {
+    "selector": "app-modal-accessible",
+    "file": "src/app/components/shared/modal-accessible.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-navigation",
+    "file": "src/app/components/shared/navigation/navigation.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/app.component.html"
+    ]
+  },
+  {
+    "selector": "app-next-best-action-hero",
+    "file": "src/app/components/shared/next-best-action-hero/next-best-action-hero.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-next-best-action-widget",
+    "file": "src/app/components/shared/next-best-action-widget/next-best-action-widget.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-not-found",
+    "file": "src/app/components/shared/not-found/not-found.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/shared/not-found/not-found.component"
+    ]
+  },
+  {
+    "selector": "app-notification-center",
+    "file": "src/app/components/shared/notification-center/notification-center.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/components/shared/navigation/navigation.component.html"
+    ]
+  },
+  {
+    "selector": "app-notifications-panel",
+    "file": "src/app/components/shared/notifications-panel/notifications-panel.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-offline",
+    "file": "src/app/components/shared/offline/offline.component.ts",
+    "usageCount": 5,
+    "usages": [
+      "app.routes.ts::./components/shared/offline/offline.component",
+      "src/app/app.component.html",
+      "src/app/components/pages/claims/claims-page.component.html",
+      "src/app/components/pages/cotizador/cotizador-main.component.html",
+      "src/app/components/pages/proteccion/proteccion.component.html"
+    ]
+  },
+  {
+    "selector": "app-offline-indicator",
+    "file": "src/app/components/shared/offline-indicator/offline-indicator.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/app.component.html"
+    ]
+  },
+  {
+    "selector": "app-offline-queue-banner",
+    "file": "src/app/components/shared/offline-queue-banner/offline-queue-banner.component.ts",
+    "usageCount": 3,
+    "usages": [
+      "src/app/components/pages/claims/claims-page.component.html",
+      "src/app/components/pages/cotizador/cotizador-main.component.html",
+      "src/app/components/pages/proteccion/proteccion.component.html"
+    ]
+  },
+  {
+    "selector": "app-payment-link-modal-content",
+    "file": "src/app/components/shared/payment-link-modal-content.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-plan-config-form",
+    "file": "src/app/components/shared/plan-config-form.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-dashboard-showcase",
+    "file": "src/app/components/shared/premium-dashboard-showcase.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-progress-bar",
+    "file": "src/app/components/shared/progress-bar.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-protection-simulator",
+    "file": "src/app/components/shared/protection-simulator.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-pwa-install-prompt",
+    "file": "src/app/components/shared/pwa-install-prompt/pwa-install-prompt.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/app.component.html"
+    ]
+  },
+  {
+    "selector": "app-risk-radar",
+    "file": "src/app/components/shared/risk-radar/risk-radar.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-savings-projection-chart",
+    "file": "src/app/components/shared/savings-projection-chart.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/components/pages/cotizador/cotizador-main.component.html"
+    ]
+  },
+  {
+    "selector": "app-scenario-card",
+    "file": "src/app/components/shared/scenario-card.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/components/shared/protection-demo-simulator.component.html"
+    ]
+  },
+  {
+    "selector": "app-settings",
+    "file": "src/app/components/shared/settings.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-simulate-payment-modal-content",
+    "file": "src/app/components/shared/simulate-payment-modal-content.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-skeleton-card",
+    "file": "src/app/components/shared/skeleton-card.component.ts",
+    "usageCount": 3,
+    "usages": [
+      "src/app/components/pages/ops/triggers-monitor.component.html",
+      "src/app/components/pages/simulador/ags-ahorro/ags-ahorro.component.html",
+      "src/app/components/pages/simulador/edomex-individual/edomex-individual.component.html"
+    ]
+  },
+  {
+    "selector": "app-stepper",
+    "file": "src/app/components/shared/stepper/stepper.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-summary-panel",
+    "file": "src/app/components/shared/summary-panel/summary-panel.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/components/pages/simulador/edomex-individual/edomex-individual.component.html"
+    ]
+  },
+  {
+    "selector": "app-tanda-timeline",
+    "file": "src/app/components/shared/tanda-timeline.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/components/pages/cotizador/cotizador-main.component.html"
+    ]
+  },
+  {
+    "selector": "app-unauthorized",
+    "file": "src/app/components/shared/unauthorized/unauthorized.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "app.routes.ts::./components/shared/unauthorized/unauthorized.component"
+    ]
+  },
+  {
+    "selector": "app-update-banner",
+    "file": "src/app/components/shared/update-banner/update-banner.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/app.component.html"
+    ]
+  },
+  {
+    "selector": "app-vehicle-assignment-form",
+    "file": "src/app/components/shared/vehicle-assignment-form.component.ts",
+    "usageCount": 0,
+    "usages": []
+  },
+  {
+    "selector": "app-voice-recorder",
+    "file": "src/app/components/shared/voice-recorder/voice-recorder.component.ts",
+    "usageCount": 1,
+    "usages": [
+      "src/app/components/shared/interview-checkpoint-modal/interview-checkpoint-modal.component.html"
+    ]
+  },
+  {
+    "selector": "app-premium-loading",
+    "file": "src/app/components/ui/premium-loading/premium-loading.component.ts",
+    "usageCount": 0,
+    "usages": []
+  }
+]

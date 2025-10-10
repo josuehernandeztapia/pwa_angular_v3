@@ -1,0 +1,154 @@
+{
+  "timestamp": "2025-10-09T07:05:00.853Z",
+  "total": 27,
+  "passed": 6,
+  "failed": 21,
+  "successRate": 22,
+  "tests": [
+    {
+      "test": "Authentication",
+      "passed": true,
+      "details": "Login successful"
+    },
+    {
+      "test": "Simulador Premium Cards",
+      "passed": false,
+      "details": ".premium-card, .card not found"
+    },
+    {
+      "test": "Simulador Action Buttons",
+      "passed": true,
+      "details": "Found simulator element"
+    },
+    {
+      "test": "Simulador Navigation Links",
+      "passed": false,
+      "details": ".nav-link not found"
+    },
+    {
+      "test": "Simulador Main Content",
+      "passed": false,
+      "details": ".container, .content not found"
+    },
+    {
+      "test": "Cotizador Cotizador Cards",
+      "passed": true,
+      "details": "Cotizador element found"
+    },
+    {
+      "test": "Cotizador Number Inputs",
+      "passed": false,
+      "details": "input[type=\"number\"] not found"
+    },
+    {
+      "test": "Cotizador Buttons",
+      "passed": true,
+      "details": "Cotizador element found"
+    },
+    {
+      "test": "Cotizador Form Groups",
+      "passed": false,
+      "details": ".form-group, .field not found"
+    },
+    {
+      "test": "Cotizador Content Container",
+      "passed": false,
+      "details": ".container not found"
+    },
+    {
+      "test": "Flow Builder Flow Builder Container",
+      "passed": false,
+      "details": "[data-cy=\"flow-builder\"] not found"
+    },
+    {
+      "test": "Flow Builder Flow Header",
+      "passed": false,
+      "details": "[data-cy=\"flow-builder-header\"] not found"
+    },
+    {
+      "test": "Flow Builder Flow Palette",
+      "passed": false,
+      "details": "[data-cy=\"flow-palette\"] not found"
+    },
+    {
+      "test": "Flow Builder Flow Canvas",
+      "passed": false,
+      "details": "[data-cy=\"flow-canvas\"] not found"
+    },
+    {
+      "test": "Flow Builder Flow Properties",
+      "passed": false,
+      "details": "[data-cy=\"flow-properties\"] not found"
+    },
+    {
+      "test": "Flow Builder Clear Button",
+      "passed": false,
+      "details": "[data-cy=\"flow-clear\"] not found"
+    },
+    {
+      "test": "Flow Builder Save Button",
+      "passed": false,
+      "details": "[data-cy=\"flow-save\"] not found"
+    },
+    {
+      "test": "Flow Builder Deploy Button",
+      "passed": false,
+      "details": "[data-cy=\"flow-deploy\"] not found"
+    },
+    {
+      "test": "Onboarding Market Select",
+      "passed": false,
+      "details": "[data-cy=\"onboarding-market-select\"] not found"
+    },
+    {
+      "test": "Onboarding Sale Type",
+      "passed": false,
+      "details": "[data-cy=\"onboarding-sale-type\"] not found"
+    },
+    {
+      "test": "Onboarding Client Type",
+      "passed": false,
+      "details": "[data-cy=\"onboarding-client-type\"] not found"
+    },
+    {
+      "test": "Onboarding Client Name",
+      "passed": false,
+      "details": "[data-cy=\"onboarding-client-name\"] not found"
+    },
+    {
+      "test": "Onboarding Create Button",
+      "passed": false,
+      "details": "[data-cy=\"onboarding-create\"] not found"
+    },
+    {
+      "test": "Onboarding Form Controls",
+      "passed": false,
+      "details": "select, .form-control not found"
+    },
+    {
+      "test": "Onboarding Primary Buttons",
+      "passed": true,
+      "details": "Onboarding element found"
+    },
+    {
+      "test": "Products Detection",
+      "passed": true,
+      "details": "Found 1 products"
+    },
+    {
+      "test": "Protection Cards",
+      "passed": false,
+      "details": "No protection cards found"
+    }
+  ],
+  "screenshots": [
+    "mcp-01-login-page-1759993477806.png",
+    "mcp-02-after-auth-1759993484279.png",
+    "mcp-03-simuladores-1759993485093.png",
+    "mcp-04-sim-action-buttons-1759993489637.png",
+    "mcp-05-cotizadores-1759993490405.png",
+    "mcp-06-flow-builder-1759993493191.png",
+    "mcp-07-onboarding-1759993495973.png",
+    "mcp-08-productos-1759993498760.png"
+  ]
+}

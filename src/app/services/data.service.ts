@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map, catchError } from 'rxjs/operators';
 import { Client } from '../models/types';
 import { Quote, CompleteBusinessScenario } from '../models/business';
+import { getDemoClients, getDemoQuotes } from '../demo/demo-seed';
 
 export interface DataState {
   clients: Client[];
@@ -60,41 +61,12 @@ export class DataService {
     }
 
     const load = () => {
-      const demoClients: Client[] = [
-        {
-          id: '1',
-          name: 'Juan Pérez Gómez',
-          avatarUrl: 'https://picsum.photos/seed/juan/100/100',
-          flow: 'Venta a Plazo' as any,
-          status: 'Activo',
-          healthScore: 85,
-          documents: [],
-          events: []
-        },
-        {
-          id: '2',
-          name: 'María García López',
-          avatarUrl: 'https://picsum.photos/seed/maria/100/100',
-          flow: 'Crédito Colectivo' as any,
-          status: 'En Proceso',
-          healthScore: 92,
-          documents: [],
-          events: []
-        },
-        {
-          id: '3',
-          name: 'Carlos Rodríguez Sánchez',
-          avatarUrl: 'https://picsum.photos/seed/carlos/100/100',
-          flow: 'Plan de Ahorro' as any,
-          status: 'Aprobado',
-          healthScore: 78,
-          documents: [],
-          events: []
-        }
-      ];
+      const demoClients: Client[] = getDemoClients();
+      const demoQuotes: Quote[] = getDemoQuotes();
 
       this.updateDataState({
         clients: demoClients,
+        quotes: demoQuotes,
         loading: false,
         error: null
       });
@@ -501,4 +473,3 @@ export class DataService {
     return csvRows.join('\n');
   }
 }
-

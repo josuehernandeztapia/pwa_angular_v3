@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PostSalesQuoteApiService } from '../../services/post-sales-quote-api.service';
@@ -10,6 +10,8 @@ import {
 } from '../../models/types';
 import { IntegratedImportTrackerService } from '../../services/integrated-import-tracker.service';
 import { PostSalesApiService } from '../../services/post-sales-api.service';
+import { FlowContextService } from '../../services/flow-context.service';
+import { ClientContextSnapshot } from '../../models/client-context';
 import { IconComponent } from '../shared/icon/icon.component';
 
 /**
@@ -30,10 +32,13 @@ export class DocumentsPhaseComponent {
   private importTracker = inject(IntegratedImportTrackerService);
   private quoteApi = inject(PostSalesQuoteApiService);
   private postSalesApi = inject(PostSalesApiService);
+  private flowContext = inject(FlowContextService, { optional: true });
 
   // Signals
-  clientId = signal<string>('client_001');
+  private readonly caseIdSignal = signal<string | null>(null);
+  private readonly clientIdSignal = signal<string | null>(null);
   clientInfo = signal<{ name: string; vin: string } | null>(null);
+  photoSnapshots = signal<Record<string, string | null>>({});
   currentUploadType = signal<'factura' | 'polizaSeguro' | 'contratos' | 'endosos' | null>(null);
   uploadedDocuments = signal<{
     factura: DocumentFile | null;
@@ -52,6 +57,38 @@ export class DocumentsPhaseComponent {
   addingToQuote = signal(false);
   quoteStatus = signal<string>('');
   features = (environment as any).features || {};
+
+  @Input()
+  set caseId(value: string | null) {
+    this.caseIdSignal.set(value ?? null);
+  }
+
+  @Input()
+  set clientId(value: string | null) {
+    this.clientIdSignal.set(value ?? null);
+    if (value) {
+      this.hydrateClientInfo(value);
+    }
+  }
+
+  @Input()
+  set postSalePhotoSnapshots(value: Record<string, string | null> | null) {
+    this.photoSnapshots.set(value ?? {});
+  }
+
+  @Input()
+  reopenWizardStep: ((step: 'plate' | 'vin' | 'odometer' | 'evidence') => void) | null = null;
+
+  @Output()
+  phaseNavigate = new EventEmitter<'delivery' | 'plates'>();
+
+  photoPreviewCount = computed(() =>
+    Object.values(this.photoSnapshots()).filter(Boolean).length
+  );
+
+  vinPreview = computed(() => this.photoSnapshots()['vin'] ?? null);
+  odometerPreview = computed(() => this.photoSnapshots()['odometer'] ?? null);
+  platePreview = computed(() => this.photoSnapshots()['plate'] ?? null);
 
   // Form
   documentsForm: FormGroup;
@@ -96,10 +133,44 @@ export class DocumentsPhaseComponent {
     return errors;
   }
 
+  onRequestWizardStep(step: 'plate' | 'vin' | 'odometer' | 'evidence'): void {
+    this.reopenWizardStep?.(step);
+  }
+
+  private hydrateClientInfo(clientId?: string | null): void {
+    if (!clientId) {
+      return;
+    }
+
+    const existing = this.clientInfo();
+    if (existing && existing.name && existing.name !== `Cliente ${clientId}`) {
+      return;
+    }
+
+    const snapshot = this.flowContext?.getContextData<ClientContextSnapshot>('client');
+    if (snapshot && snapshot.clientId === clientId) {
+      this.clientInfo.set({
+        name: `Cliente ${clientId}`,
+        vin: snapshot.contractId ?? 'VIN pendiente'
+      });
+      return;
+    }
+
+    this.clientInfo.set({
+      name: `Cliente ${clientId}`,
+      vin: 'VIN pendiente'
+    });
+  }
+
   addToQuote(): void {
     this.quoteStatus.set('');
     this.addingToQuote.set(true);
-    const clientId = this.clientId();
+    const clientId = this.clientIdSignal();
+    if (!clientId) {
+      this.addingToQuote.set(false);
+      this.quoteStatus.set('Cliente no disponible');
+      return;
+    }
     // Create or get draft, then add a simple line item representing this phase
     this.quoteApi.getOrCreateDraftQuote(clientId).subscribe({
       next: (res: any) => {
@@ -271,6 +342,13 @@ export class DocumentsPhaseComponent {
 
     this.isSubmitting.set(true);
 
+    const clientId = this.clientIdSignal();
+    if (!clientId) {
+      this.isSubmitting.set(false);
+      this.quoteStatus.set('Cliente no disponible');
+      return;
+    }
+
     const legalDocuments: LegalDocuments = {
       factura: this.uploadedDocuments().factura!,
       polizaSeguro: this.uploadedDocuments().polizaSeguro!,
@@ -283,7 +361,7 @@ export class DocumentsPhaseComponent {
     };
 
     // Complete documents phase
-    this.importTracker.completeDocumentsPhase(this.clientId(), legalDocuments).subscribe({
+    this.importTracker.completeDocumentsPhase(clientId, legalDocuments).subscribe({
       next: (result) => {
         this.isSubmitting.set(false);
         this.showSuccessModal.set(true);
@@ -296,7 +374,15 @@ export class DocumentsPhaseComponent {
   }
 
   goBack(): void {
-    this.router.navigate(['/post-sales/delivery', this.clientId()]);
+    if (this.phaseNavigate.observers.length > 0) {
+      this.phaseNavigate.emit('delivery');
+      return;
+    }
+
+    const clientId = this.clientIdSignal();
+    if (clientId) {
+      this.router.navigate(['/post-sales/delivery', clientId]);
+    }
   }
 
   closeSuccessModal(): void {
@@ -304,7 +390,16 @@ export class DocumentsPhaseComponent {
   }
 
   goToPlatesPhase(): void {
-    this.router.navigate(['/post-sales/plates', this.clientId()]);
+    if (this.phaseNavigate.observers.length > 0) {
+      this.phaseNavigate.emit('plates');
+      this.closeSuccessModal();
+      return;
+    }
+
+    const clientId = this.clientIdSignal();
+    if (clientId) {
+      this.router.navigate(['/post-sales/plates', clientId]);
+    }
     this.closeSuccessModal();
   }
 

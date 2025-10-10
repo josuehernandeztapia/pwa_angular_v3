@@ -319,7 +319,11 @@
 .icon-16,
 .icon-20,
 .icon-24,
-.icon-32 {
+.icon-32,
+.icon-16-block,
+.icon-20-block,
+.icon-24-block,
+.icon-32-block {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -336,6 +340,10 @@
 .icon-20 { width: 20px; height: 20px; }
 .icon-24 { width: 24px; height: 24px; }
 .icon-32 { width: 32px; height: 32px; }
+.icon-16-block { width: 16px; height: 16px; }
+.icon-20-block { width: 20px; height: 20px; }
+.icon-24-block { width: 24px; height: 24px; }
+.icon-32-block { width: 32px; height: 32px; }
 
 /* Inline icon helper with 4px gap for text labels */
 .icon-inline-xs {

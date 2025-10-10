@@ -109,6 +109,17 @@
                 }
               ]
             },
+            "testing": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.testing.ts"
+                }
+              ]
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
@@ -125,6 +136,9 @@
             },
             "staging": {
               "buildTarget": "conductores-pwa:build:staging"
+            },
+            "testing": {
+              "buildTarget": "conductores-pwa:build:testing"
             },
             "development": {
               "buildTarget": "conductores-pwa:build:development"

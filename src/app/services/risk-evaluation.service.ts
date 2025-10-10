@@ -5,7 +5,7 @@
 
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError, timer } from 'rxjs';
+import { Observable, BehaviorSubject, throwError, timer, of, TimeoutError } from 'rxjs';
 import { catchError, retry, timeout, map, tap } from 'rxjs/operators';
 
 import { RiskEvaluation } from '../components/risk-evaluation/risk-panel.component';
@@ -702,11 +702,19 @@ export class RiskEvaluationService {
   /**
    * Get error message from HTTP error
    */
-  private getErrorMessage(error: HttpErrorResponse): string {
+  private getErrorMessage(error: unknown): string {
+    if (error instanceof TimeoutError) {
+      return 'Timeout en evaluación. El proceso tomó demasiado tiempo.';
+    }
+
+    if (!(error instanceof HttpErrorResponse)) {
+      return 'Error desconocido en la evaluación de riesgo.';
+    }
+
     if (error.status === 0) {
       return 'Sin conexión al servidor. Verificar conectividad.';
     }
-    
+
     if (error.status >= 500) {
       return 'Error interno del servidor. Intente nuevamente.';
     }
@@ -714,11 +722,11 @@ export class RiskEvaluationService {
     if (error.status === 404) {
       return 'Servicio de evaluación no disponible.';
     }
-    
-    if (error.status === 408 || error.name === 'TimeoutError') {
+
+    if (error.status === 408) {
       return 'Timeout en evaluación. El proceso tomó demasiado tiempo.';
     }
-    
+
     return error.error?.message || 'Error desconocido en la evaluación de riesgo.';
   }
 

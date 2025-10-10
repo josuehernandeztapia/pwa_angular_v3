@@ -205,12 +205,20 @@ export class ApiConfigService {
   getEndpointUrl(name: string): string {
     const config = this.configSubject.value;
     const endpoint = this.ENDPOINTS[name];
-    
+
     if (!config || !endpoint) {
       throw new Error(`Endpoint ${name} not found`);
     }
-    
+
     return `${config.baseUrl}${endpoint.path}`;
+  }
+
+  /**
+   * Get base API URL
+   */
+  getApiUrl(): string {
+    const config = this.configSubject.value;
+    return config?.baseUrl || this.DEFAULT_CONFIG.baseUrl;
   }
   
   /**

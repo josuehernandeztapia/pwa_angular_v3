@@ -163,7 +163,7 @@
             class="btn btn-secondary"
             [disabled]="isUploading(doc)"
             (click)="uploadDocument(doc)"
-            [attr.data-cy]="'doc-upload-' + doc.id">
+            [attr.data-cy]="getDocUploadDataCy(doc.id)">
             {{ isUploading(doc) ? 'Cargando…' : 'Subir documento' }}
           </button>
 

@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-10-09T06:56:38.525Z",
+  "total": 6,
+  "passed": 0,
+  "failed": 6,
+  "successRate": 0,
+  "tests": [
+    {
+      "test": "Authentication",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/\", waiting until \"networkidle\"\u001b[22m\n"
+    },
+    {
+      "test": "Simuladores Navigation",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/simuladores\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/simuladores\", waiting until \"networkidle\"\u001b[22m\n"
+    },
+    {
+      "test": "Cotizadores Navigation",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/cotizadores\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/cotizadores\", waiting until \"networkidle\"\u001b[22m\n"
+    },
+    {
+      "test": "Flow Builder Navigation",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/configuracion/flow-builder\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/configuracion/flow-builder\", waiting until \"networkidle\"\u001b[22m\n"
+    },
+    {
+      "test": "Onboarding Navigation",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/onboarding\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/onboarding\", waiting until \"networkidle\"\u001b[22m\n"
+    },
+    {
+      "test": "Productos Navigation",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/productos\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/productos\", waiting until \"networkidle\"\u001b[22m\n"
+    }
+  ],
+  "screenshots": []
+}

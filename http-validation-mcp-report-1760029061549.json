@@ -1,0 +1,83 @@
+{
+  "timestamp": "2025-10-09T16:57:41.548Z",
+  "tool": "HTTP Validation MCP",
+  "baseUrl": "http://localhost:4300",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "successRate": 100,
+  "tests": [
+    {
+      "test": "Home/Login",
+      "path": "",
+      "passed": true,
+      "statusCode": 200,
+      "contentLength": 14832,
+      "hasAngularContent": true,
+      "details": "HTTP 200, Angular: true, Size: 14832"
+    },
+    {
+      "test": "Simuladores",
+      "path": "/simuladores",
+      "passed": true,
+      "statusCode": 200,
+      "contentLength": 14832,
+      "hasAngularContent": true,
+      "details": "HTTP 200, Angular: true, Size: 14832"
+    },
+    {
+      "test": "Cotizadores",
+      "path": "/cotizadores",
+      "passed": true,
+      "statusCode": 200,
+      "contentLength": 14832,
+      "hasAngularContent": true,
+      "details": "HTTP 200, Angular: true, Size: 14832"
+    },
+    {
+      "test": "Flow Builder",
+      "path": "/configuracion/flow-builder",
+      "passed": true,
+      "statusCode": 200,
+      "contentLength": 14832,
+      "hasAngularContent": true,
+      "details": "HTTP 200, Angular: true, Size: 14832"
+    },
+    {
+      "test": "Onboarding",
+      "path": "/onboarding",
+      "passed": true,
+      "statusCode": 200,
+      "contentLength": 14832,
+      "hasAngularContent": true,
+      "details": "HTTP 200, Angular: true, Size: 14832"
+    },
+    {
+      "test": "Productos",
+      "path": "/productos",
+      "passed": true,
+      "statusCode": 200,
+      "contentLength": 14832,
+      "hasAngularContent": true,
+      "details": "HTTP 200, Angular: true, Size: 14832"
+    },
+    {
+      "test": "Protección",
+      "path": "/proteccion",
+      "passed": true,
+      "statusCode": 200,
+      "contentLength": 14832,
+      "hasAngularContent": true,
+      "details": "HTTP 200, Angular: true, Size: 14832"
+    },
+    {
+      "test": "Dashboard",
+      "path": "/dashboard",
+      "passed": true,
+      "statusCode": 200,
+      "contentLength": 14832,
+      "hasAngularContent": true,
+      "details": "HTTP 200, Angular: true, Size: 14832"
+    }
+  ]
+}

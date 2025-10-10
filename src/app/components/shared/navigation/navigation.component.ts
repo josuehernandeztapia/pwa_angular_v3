@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Optional } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Observable, Subject, fromEvent } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PushNotificationService } from '../../../services/push-notification.service';
 import { UserPreferencesService } from '../../../services/user-preferences.service';
+import { FlowContextService } from '../../../services/flow-context.service';
+import { NavigationService, ShellNavigationItem } from '../../../services/navigation.service';
 import { NotificationCenterComponent } from '../notification-center/notification-center.component';
 import { IconComponent } from '../icon/icon.component';
 import { IconName } from '../icon/icon-definitions';
@@ -40,79 +42,20 @@ export class NavigationComponent implements OnInit, OnDestroy {
   unreadCount$: Observable<number>;
   private destroy$ = new Subject<void>();
 
-  navigationItems: NavigationItem[] = [
-    { label: 'Dashboard', route: '/dashboard', iconType: 'home', dataCy: 'nav-dashboard' },
-    { label: 'Onboarding', route: '/onboarding', iconType: 'user-plus', dataCy: 'nav-onboarding' },
-    {
-      label: 'Cotizador',
-      route: '/cotizador',
-      iconType: 'calculator',
-      dataCy: 'nav-cotizador',
-      children: [
-        { label: 'AGS Individual', route: '/cotizador/ags-individual', iconType: 'user', dataCy: 'nav-cotizador-ags' },
-        { label: 'EdoMex Colectivo', route: '/cotizador/edomex-colectivo', iconType: 'users', dataCy: 'nav-cotizador-edomex' }
-      ]
-    },
-    {
-      label: 'Simulador',
-      route: '/simulador',
-      iconType: 'target',
-      dataCy: 'nav-simulador',
-      children: [
-        { label: 'Plan de Ahorro', route: '/simulador/ags-ahorro', iconType: 'piggy-bank', dataCy: 'nav-simulador-ahorro' },
-        { label: 'Venta a Plazo', route: '/simulador/edomex-individual', iconType: 'credit-card', dataCy: 'nav-simulador-plazo' },
-        { label: 'Tanda Colectiva', route: '/simulador/tanda-colectiva', iconType: 'users', dataCy: 'nav-simulador-tanda' }
-      ]
-    },
-    { label: 'Clientes', route: '/clientes', iconType: 'users', dataCy: 'nav-clientes' },
-    { label: 'Productos', route: '/productos', iconType: 'cube', dataCy: 'nav-productos' },
-    { label: 'Expedientes', route: '/expedientes', iconType: 'folder-open', dataCy: 'nav-expedientes' },
-    { label: 'Documentos', route: '/documentos', iconType: 'document', dataCy: 'nav-documentos' },
-    {
-      label: 'Análisis',
-      route: '/reportes',
-      iconType: 'chart-bar',
-      dataCy: 'nav-analytics',
-      children: [
-        { label: 'Reportes', route: '/reportes', iconType: 'document-text', dataCy: 'nav-reportes' },
-        { label: 'Pipeline', route: '/oportunidades', iconType: 'funnel', dataCy: 'nav-pipeline' },
-        { label: 'Uso del Sistema', route: '/usage', iconType: 'cpu-chip', dataCy: 'nav-usage' }
-      ]
-    },
-    {
-      label: 'Operaciones',
-      route: '/ops',
-      iconType: 'truck',
-      dataCy: 'nav-ops',
-      children: [
-        { label: 'Entregas', route: '/ops/deliveries', iconType: 'truck', dataCy: 'nav-ops-entregas' },
-        { label: 'Import Tracker', route: '/ops/import-tracker', iconType: 'package', dataCy: 'nav-ops-tracker' },
-        { label: 'Monitor GNV', route: '/ops/gnv-health', iconType: 'fuel', dataCy: 'nav-ops-gnv' },
-        { label: 'Triggers', route: '/ops/triggers', iconType: 'zap', dataCy: 'nav-ops-triggers' }
-      ]
-    },
-    { label: 'GNV', route: '/gnv', iconType: 'fuel', dataCy: 'nav-gnv' },
-    { label: 'Protección', route: '/proteccion', iconType: 'shield', dataCy: 'nav-proteccion' },
-    {
-      label: 'Configuración',
-      route: '/configuracion',
-      iconType: 'settings',
-      dataCy: 'nav-configuracion',
-      children: [
-        { label: 'General', route: '/configuracion', iconType: 'cog', dataCy: 'nav-config-general' },
-        { label: 'Políticas', route: '/configuracion/politicas', iconType: 'document-text', dataCy: 'nav-config-politicas' },
-        { label: 'Flow Builder', route: '/configuracion/flow-builder', iconType: 'git-branch', dataCy: 'nav-config-flow' },
-        { label: 'Integraciones', route: '/integraciones', iconType: 'puzzle-piece', dataCy: 'nav-integraciones' }
-      ]
-    }
-  ];
+  navigationItems: NavigationItem[] = [];
+  private baseNavigationItems: ShellNavigationItem[] = [];
+  private offlinePendingCount = 0;
 
   constructor(
     private router: Router,
     private notificationService: PushNotificationService,
-    private userPrefs: UserPreferencesService
+    private userPrefs: UserPreferencesService,
+    private navigationService: NavigationService,
+    @Optional() private readonly flowContext?: FlowContextService
   ) {
     this.unreadCount$ = this.notificationService.getUnreadCount();
+    this.baseNavigationItems = this.navigationService.getShellNavigationItems();
+    this.updateNavigationItems(0);
   }
 
   getNavStateClasses(): Record<string, boolean> {
@@ -142,6 +85,20 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.fontScale = this.userPrefs.getFontScale();
     this.highContrast = this.userPrefs.getHighContrast();
 
+    if (this.flowContext) {
+      this.flowContext.contexts$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(entries => {
+          const offlineEntry = entries.find(entry => entry.key === 'offlineQueue');
+          const pending = typeof offlineEntry?.data?.pending === 'number' ? offlineEntry.data.pending : 0;
+          if (pending !== this.offlinePendingCount) {
+            this.offlinePendingCount = pending;
+            this.updateNavigationItems(pending);
+          }
+        });
+    } else {
+      this.updateNavigationItems(this.offlinePendingCount);
+    }
   }
 
   ngOnDestroy(): void {
@@ -173,6 +130,22 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   closeMobileMenu() {
     this.showMobileMenu = false;
+  }
+
+  private updateNavigationItems(pending: number): void {
+    this.navigationItems = this.baseNavigationItems.map(item => this.decorateNavigationItem(item, pending));
+  }
+
+  private decorateNavigationItem(item: ShellNavigationItem, pending: number): NavigationItem {
+    const badge = item.route === '/documentos' && pending > 0 ? pending : item.badge;
+    return {
+      label: item.label,
+      route: item.route,
+      iconType: item.iconType,
+      dataCy: item.dataCy,
+      badge,
+      children: item.children ? item.children.map(child => this.decorateNavigationItem(child, pending)) : undefined
+    };
   }
 
   toggleNotifications() {

@@ -53,6 +53,19 @@
     })();
   </script>
 
+  <!-- Enable mock data / preview routes when requested -->
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('useMockData') === 'true' || location.search.includes('useMockData=true')) {
+          window.__USE_MOCK_DATA__ = true;
+        }
+      } catch (e) {
+        /* no-op */
+      }
+    })();
+  </script>
+
   <!-- Critical Above-the-fold CSS - Inline for immediate render (Minimal Dark) -->
   <style>
     /* CSS Reset & Base Styles */

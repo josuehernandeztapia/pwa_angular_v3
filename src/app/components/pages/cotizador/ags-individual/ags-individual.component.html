@@ -38,14 +38,14 @@
           <legend class="ags-quote__group-title">Unidad</legend>
           <div class="ags-quote__radio-group">
             <label class="ags-quote__radio">
-              <input type="radio" formControlName="saleType" value="aguascalientes-plazo" (change)="onSaleTypeChange()">
+              <input type="radio" formControlName="saleType" value="aguascalientes-plazo" (change)="onSaleTypeChange()" data-qa="ags-sale-plazo">
               <div class="ags-quote__radio-info">
                 <span class="ags-quote__radio-title">Venta a Plazo</span>
                 <span class="ags-quote__radio-copy">12-24 meses • Enganche 60% • Tasa 25.5%</span>
               </div>
             </label>
             <label class="ags-quote__radio">
-              <input type="radio" formControlName="saleType" value="aguascalientes-directa" (change)="onSaleTypeChange()">
+              <input type="radio" formControlName="saleType" value="aguascalientes-directa" (change)="onSaleTypeChange()" data-qa="ags-sale-contado">
               <div class="ags-quote__radio-info">
                 <span class="ags-quote__radio-title">Compra de Contado</span>
                 <span class="ags-quote__radio-copy">Sin financiamiento • Enganche 50%</span>
@@ -103,7 +103,7 @@
 
           <div class="ags-quote__field" *ngIf="isPlazoSale()">
             <label class="ags-quote__label" for="term">Plazo</label>
-            <select id="term" formControlName="term" (change)="onConfigChange()" class="premium-select">
+            <select id="term" formControlName="term" (change)="onConfigChange()" class="premium-select" data-qa="ags-term">
               <option value="">Seleccionar</option>
               <option *ngFor="let term of availableTerms" [value]="term">{{ term }} meses</option>
             </select>
@@ -120,12 +120,13 @@
                 [min]="minDownPayment"
                 (input)="onConfigChange()"
                 placeholder="Monto"
+                data-qa="ags-downpayment"
               >
             </div>
             <span class="ags-quote__hint">Mínimo: {{ minDownPayment | currency:'MXN':'symbol':'1.0-0' }}</span>
           </div>
 
-          <button type="button" class="premium-button ags-quote__calculate" (click)="calculateQuote()" [disabled]="!canCalculate()">
+          <button type="button" class="premium-button ags-quote__calculate" (click)="calculateQuote()" [disabled]="!canCalculate()" data-qa="ags-calculate">
             {{ isCalculating ? 'Calculando...' : 'Calcular' }}
           </button>
         </section>
@@ -138,7 +139,7 @@
       <div class="ags-quote__result-cards">
         <article class="ags-quote__result-card">
           <span class="ags-quote__result-label">Pago mensual</span>
-          <span class="ags-quote__result-value">{{ (currentQuote.monthlyPayment || 0) | currency:'MXN':'symbol':'1.0-0' }}</span>
+          <span class="ags-quote__result-value" data-qa="ags-result-pmt">{{ (currentQuote.monthlyPayment || 0) | currency:'MXN':'symbol':'1.0-0' }}</span>
         </article>
         <article class="ags-quote__result-card">
           <span class="ags-quote__result-label">Plazo</span>
@@ -182,7 +183,12 @@
           <app-icon class="icon-16" name="volume-2" [size]="16"></app-icon>
           Escuchar
         </button>
-        <button type="button" class="premium-button outline ags-quote__action" (click)="generatePDF()">
+        <button
+          type="button"
+          class="premium-button outline ags-quote__action"
+          (click)="generatePDF()"
+          data-cy="cotizador-pdf"
+        >
           <app-icon class="icon-16" name="file-text" [size]="16"></app-icon>
           Descargar PDF
         </button>

@@ -1,0 +1,238 @@
+{
+  "timestamp": "2025-10-09T17:05:45.768Z",
+  "tool": "DOM Component Validation",
+  "baseUrl": "http://localhost:4300",
+  "total": 5,
+  "passed": 1,
+  "failed": 4,
+  "successRate": 20,
+  "tests": [
+    {
+      "test": "Login Page",
+      "path": "",
+      "passed": true,
+      "totalChecks": 9,
+      "passedChecks": 1,
+      "percentage": 11,
+      "components": {
+        "App Root": [
+          {
+            "description": "Angular app-root element",
+            "found": true,
+            "value": "app-root"
+          },
+          {
+            "description": "Angular version 17",
+            "found": false,
+            "value": "17"
+          }
+        ],
+        "Login Component": [
+          {
+            "description": "Login component",
+            "found": false,
+            "value": "app-login"
+          },
+          {
+            "description": "Email input",
+            "found": false,
+            "value": "login-email"
+          },
+          {
+            "description": "Password input",
+            "found": false,
+            "value": "login-password"
+          },
+          {
+            "description": "Login submit button",
+            "found": false,
+            "value": "login-submit"
+          }
+        ],
+        "Demo Users": [
+          {
+            "description": "Demo user buttons",
+            "found": false,
+            "value": "demo-user-"
+          },
+          {
+            "description": "Admin demo user",
+            "found": false,
+            "value": "Admin"
+          },
+          {
+            "description": "Vendedor demo user",
+            "found": false,
+            "value": "Vendedor"
+          }
+        ]
+      },
+      "details": "1/9 component checks passed"
+    },
+    {
+      "test": "Simuladores Page",
+      "path": "/simuladores",
+      "passed": false,
+      "totalChecks": 6,
+      "passedChecks": 0,
+      "percentage": 0,
+      "components": {
+        "Simuladores Container": [
+          {
+            "description": "Simuladores main component",
+            "found": false,
+            "value": "app-simulador-main"
+          },
+          {
+            "description": "Premium card styling",
+            "found": false,
+            "value": "premium-card"
+          },
+          {
+            "description": "Page title",
+            "found": false,
+            "value": "Simuladores"
+          }
+        ],
+        "TIR Components": [
+          {
+            "description": "TIR mentions",
+            "found": false,
+            "value": "TIR"
+          },
+          {
+            "description": "Interest rate mentions",
+            "found": false,
+            "value": "tasa"
+          },
+          {
+            "description": "Input fields",
+            "found": false,
+            "value": "input"
+          }
+        ]
+      },
+      "details": "0/6 component checks passed"
+    },
+    {
+      "test": "Cotizadores Page",
+      "path": "/cotizadores",
+      "passed": false,
+      "totalChecks": 5,
+      "passedChecks": 0,
+      "percentage": 0,
+      "components": {
+        "Cotizadores Container": [
+          {
+            "description": "Cotizadores main component",
+            "found": false,
+            "value": "app-cotizador-main"
+          },
+          {
+            "description": "Page title",
+            "found": false,
+            "value": "Cotizadores"
+          }
+        ],
+        "PMT Elements": [
+          {
+            "description": "PMT calculations",
+            "found": false,
+            "value": "PMT"
+          },
+          {
+            "description": "Newton-Raphson method",
+            "found": false,
+            "value": "Newton"
+          },
+          {
+            "description": "Action buttons",
+            "found": false,
+            "value": "button"
+          }
+        ]
+      },
+      "details": "0/5 component checks passed"
+    },
+    {
+      "test": "Flow Builder Page",
+      "path": "/configuracion/flow-builder",
+      "passed": false,
+      "totalChecks": 5,
+      "passedChecks": 0,
+      "percentage": 0,
+      "components": {
+        "Flow Builder Container": [
+          {
+            "description": "Flow Builder component",
+            "found": false,
+            "value": "app-flow-builder"
+          },
+          {
+            "description": "Flow builder container",
+            "found": false,
+            "value": "flow-builder"
+          }
+        ],
+        "Flow Elements": [
+          {
+            "description": "Flow palette",
+            "found": false,
+            "value": "flow-palette"
+          },
+          {
+            "description": "Flow canvas",
+            "found": false,
+            "value": "flow-canvas"
+          },
+          {
+            "description": "Flow mentions",
+            "found": false,
+            "value": "Flow"
+          }
+        ]
+      },
+      "details": "0/5 component checks passed"
+    },
+    {
+      "test": "Onboarding Page",
+      "path": "/onboarding",
+      "passed": false,
+      "totalChecks": 5,
+      "passedChecks": 0,
+      "percentage": 0,
+      "components": {
+        "Onboarding Container": [
+          {
+            "description": "Onboarding main component",
+            "found": false,
+            "value": "app-onboarding-main"
+          },
+          {
+            "description": "Page title",
+            "found": false,
+            "value": "Onboarding"
+          }
+        ],
+        "Form Elements": [
+          {
+            "description": "Market selector",
+            "found": false,
+            "value": "onboarding-market-select"
+          },
+          {
+            "description": "Select elements",
+            "found": false,
+            "value": "select"
+          },
+          {
+            "description": "Input elements",
+            "found": false,
+            "value": "input"
+          }
+        ]
+      },
+      "details": "0/5 component checks passed"
+    }
+  ]
+}

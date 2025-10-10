@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-10-09T05:32:14.216Z",
+  "total": 0,
+  "passed": 0,
+  "failed": 0,
+  "tests": [],
+  "screenshots": [
+    "flow-builder-01-login-page-1759987936110.png"
+  ],
+  "summary": {
+    "successRate": null,
+    "totalTests": 0,
+    "passedTests": 0,
+    "failedTests": 0
+  }
+}

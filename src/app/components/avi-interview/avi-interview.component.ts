@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy, EventEmitter, Output, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../shared/icon/icon.component';
 import { BehaviorSubject, Subject, timer } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
+import { from } from 'rxjs';
 
 import {
   AVIQuestionEnhanced,
@@ -30,6 +31,15 @@ import { ApiConfigService } from '../../services/api-config.service';
 export class AVIInterviewComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   
+  @Input() clientId = '';
+  @Input() advisorId = '';
+  @Input() municipality = '';
+  @Input() productType = '';
+
+  @Output() interviewStarted = new EventEmitter<void>();
+  @Output() interviewCompleted = new EventEmitter<{ validationResult: any; sessionType: string; advisorId: string; clientId: string }>();
+  @Output() interviewCancelled = new EventEmitter<void>();
+
   // Estado de la entrevista
   currentSession: string | null = null;
   currentQuestion: AVIQuestionEnhanced | null = null;
@@ -37,6 +47,7 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   questionStartTime = 0;
   isRecording = false;
   @ViewChild('questionTitle') questionTitleEl?: ElementRef<HTMLElement>;
+  private sessionStartedAt: number | null = null;
   
   // UI timer de grabación
   recordingSeconds = 0;
@@ -67,7 +78,7 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
   finalFlags: string[] = [];
   
   private voiceAnalysisEnabled = true;
-  private stressIndicators = new BehaviorSubject<string[]>([]);
+  stressIndicators = new BehaviorSubject<string[]>([]);
 
   // Guided Basic Info (6)
   guidedBasicActive = false;
@@ -127,6 +138,8 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
         this.isInterviewActive = true;
         this.showResults = false;
         this.answeredQuestions = [];
+        this.sessionStartedAt = Date.now();
+        this.interviewStarted.emit();
         if (this.guidedBasicActive) {
           this.startGuidedBasic();
         } else {
@@ -220,9 +233,8 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
     this.isAnalyzing = true;
     
     // Ejecutar análisis con dual engine
-    this.dualEngine.calculateDualEngineScore(this.answeredQuestions)
+    from(this.dualEngine.calculateDualEngineScore(this.answeredQuestions))
       .pipe(
-        switchMap((result: Promise<DualEngineResult>) => result), // Unwrap Promise
         takeUntil(this.destroy$)
       )
       .subscribe((result: DualEngineResult) => {
@@ -428,6 +440,8 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
     this.guidedBasicActive = false;
     this.guidedList = [];
     this.guidedIndex = 0;
+    this.sessionStartedAt = null;
+    this.interviewCancelled.emit();
   }
 
   /**
@@ -444,7 +458,7 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
       form.append('contextId', this.currentSession || 'unknown');
       form.append('skipped', 'true');
       // orderIndex no disponible en este flujo; se puede agregar si se usa guided flow
-      const url = `${this.apiConfig.getBffUrl()}/v1/voice/evaluate`;
+      const url = `${this.apiConfig.getApiUrl()}/v1/voice/evaluate`;
       this.http.post(url, form).subscribe({
         next: () => { if (this.guidedBasicActive) this.guidedIndex += 1; this.loadNextQuestion(); },
         error: () => { if (this.guidedBasicActive) this.guidedIndex += 1; this.loadNextQuestion(); }, // continuar flujo aunque falle persistencia
@@ -495,7 +509,7 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
     }));
   }
 
-  private formatCategoryName(category: string): string {
+  formatCategoryName(category: string): string {
     const categoryNames: {[key: string]: string} = {
       'basic_info': 'Información Básica',
       'daily_operation': 'Operación Diaria',
@@ -639,6 +653,35 @@ export class AVIInterviewComponent implements OnInit, OnDestroy {
     this.aviService.completeSession(decision, {
       flags: top,
       score: this.currentScore
+    });
+
+    this.emitInterviewCompleted(decision, top);
+  }
+
+  private emitInterviewCompleted(decision: 'GO' | 'REVIEW' | 'NO-GO', flags: string[]): void {
+    const totalScore = this.currentScore?.totalScore ?? 0;
+    const complianceScore = Math.max(0, Math.min(100, Math.round(totalScore / 10)));
+    const sessionDuration = this.sessionStartedAt
+      ? Date.now() - this.sessionStartedAt
+      : this.answeredQuestions.reduce((sum, response) => sum + (response.responseTime || 0), 0);
+
+    const validationResult = {
+      compliance_score: complianceScore,
+      session_duration: sessionDuration,
+      risk_flags: flags.map(flag => ({ name: flag, severity: 'moderate' })),
+      questions_missing: [],
+      questions_answered: this.answeredQuestions.length,
+      decision,
+      municipality: this.municipality,
+      product_type: this.productType,
+      transcript: this.answeredQuestions.map(r => r.transcription || r.value || '').join(' ')
+    };
+
+    this.interviewCompleted.emit({
+      validationResult,
+      sessionType: 'avi_full',
+      advisorId: this.advisorId,
+      clientId: this.clientId
     });
   }
 }

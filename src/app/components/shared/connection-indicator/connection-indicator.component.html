@@ -1,5 +1,5 @@
 <div class="connection-indicator">
-  <div class="connection-indicator__desktop" aria-live="polite">
+  <div class="connection-indicator__desktop" aria-live="polite" *ngIf="shouldShowDesktopCard()">
     <div
       class="connection-indicator__card"
       [ngClass]="getDesktopCardClasses()"

@@ -1,0 +1,138 @@
+{
+  "timestamp": "2025-10-09T07:03:01.509Z",
+  "total": 24,
+  "passed": 1,
+  "failed": 23,
+  "successRate": 4,
+  "tests": [
+    {
+      "test": "Authentication",
+      "passed": true,
+      "details": "Login successful"
+    },
+    {
+      "test": "Simulador TIR Real",
+      "passed": false,
+      "details": "[data-cy=\"simulador-tir-real\"] not found"
+    },
+    {
+      "test": "Simulador TIR Real Anual",
+      "passed": false,
+      "details": "[data-cy=\"simulador-tir-real-anual\"] not found"
+    },
+    {
+      "test": "Simulador AGS Ahorro",
+      "passed": false,
+      "details": "[data-cy=\"simulador-ags-ahorro\"] not found"
+    },
+    {
+      "test": "Simulador Simulador Cards",
+      "passed": false,
+      "details": ".simuladores-grid .premium-card not found"
+    },
+    {
+      "test": "Cotizador Cotizador Header",
+      "passed": false,
+      "details": "[data-cy=\"cotizador-header\"] not found"
+    },
+    {
+      "test": "Cotizador TIR Nominal",
+      "passed": false,
+      "details": "[data-cy=\"tir-nominal\"] not found"
+    },
+    {
+      "test": "Cotizador TIR Real",
+      "passed": false,
+      "details": "[data-cy=\"tir-real\"] not found"
+    },
+    {
+      "test": "Cotizador Newton Iterations",
+      "passed": false,
+      "details": "[data-cy=\"newton-iterations\"] not found"
+    },
+    {
+      "test": "Cotizador Cotizadores Container",
+      "passed": false,
+      "details": ".cotizadores-container not found"
+    },
+    {
+      "test": "Flow Builder Flow Header",
+      "passed": false,
+      "details": "[data-cy=\"flow-builder-header\"] not found"
+    },
+    {
+      "test": "Flow Builder Flow Palette",
+      "passed": false,
+      "details": "[data-cy=\"flow-palette\"] not found"
+    },
+    {
+      "test": "Flow Builder Flow Canvas",
+      "passed": false,
+      "details": "[data-cy=\"flow-canvas\"] not found"
+    },
+    {
+      "test": "Flow Builder Flow Properties",
+      "passed": false,
+      "details": "[data-cy=\"flow-properties\"] not found"
+    },
+    {
+      "test": "Flow Builder Clear Button",
+      "passed": false,
+      "details": "[data-cy=\"flow-clear\"] not found"
+    },
+    {
+      "test": "Flow Builder Save Button",
+      "passed": false,
+      "details": "[data-cy=\"flow-save\"] not found"
+    },
+    {
+      "test": "Flow Builder Deploy Button",
+      "passed": false,
+      "details": "[data-cy=\"flow-deploy\"] not found"
+    },
+    {
+      "test": "Onboarding Market Select",
+      "passed": false,
+      "details": "[data-cy=\"onboarding-market-select\"] not found"
+    },
+    {
+      "test": "Onboarding Sale Type",
+      "passed": false,
+      "details": "[data-cy=\"onboarding-sale-type\"] not found"
+    },
+    {
+      "test": "Onboarding Client Type",
+      "passed": false,
+      "details": "[data-cy=\"onboarding-client-type\"] not found"
+    },
+    {
+      "test": "Onboarding Client Name",
+      "passed": false,
+      "details": "[data-cy=\"onboarding-client-name\"] not found"
+    },
+    {
+      "test": "Onboarding Create Button",
+      "passed": false,
+      "details": "[data-cy=\"onboarding-create\"] not found"
+    },
+    {
+      "test": "Products Detection",
+      "passed": false,
+      "details": "No products found"
+    },
+    {
+      "test": "Protection Cards",
+      "passed": false,
+      "details": "No protection cards found"
+    }
+  ],
+  "screenshots": [
+    "mcp-01-login-page-1759993361323.png",
+    "mcp-02-after-auth-1759993367597.png",
+    "mcp-03-simuladores-1759993368371.png",
+    "mcp-05-cotizadores-1759993371150.png",
+    "mcp-06-flow-builder-1759993373906.png",
+    "mcp-07-onboarding-1759993376675.png",
+    "mcp-08-productos-1759993379441.png"
+  ]
+}

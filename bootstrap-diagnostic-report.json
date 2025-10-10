@@ -1,0 +1,121 @@
+{
+  "timestamp": "2025-10-06T06:16:29.980Z",
+  "angularDiagnostic": {
+    "timestamp": 1759731386891,
+    "windowGlobals": {
+      "ng": true,
+      "angular": false,
+      "Zone": true,
+      "ngDevMode": true,
+      "ngI18nClosureMode": false
+    },
+    "angularState": {
+      "hasGetContext": true,
+      "hasPlatform": false,
+      "version": "unknown",
+      "appContext": {
+        "hasInjector": false,
+        "hasComponentInstance": false,
+        "hasElement": false
+      }
+    },
+    "domState": {
+      "appRootExists": true,
+      "appRootHTML": "",
+      "routerOutletExists": false,
+      "bodyChildrenCount": 4,
+      "headScriptsCount": 3,
+      "hasStylesheets": 1
+    },
+    "scriptAnalysis": {
+      "totalScripts": 3,
+      "mainJsLoaded": true,
+      "polyfillsLoaded": true,
+      "failedScripts": 0
+    },
+    "errorDetails": {}
+  },
+  "consoleMessages": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost:4300/assets/fonts/inter-var.woff2"
+      },
+      "timestamp": "2025-10-06T06:16:21.750Z"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://localhost:4300/@vite/client",
+        "lineNumber": 488,
+        "columnNumber": 8
+      },
+      "timestamp": "2025-10-06T06:16:21.795Z"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://localhost:4300/@vite/client",
+        "lineNumber": 611,
+        "columnNumber": 14
+      },
+      "timestamp": "2025-10-06T06:16:21.822Z"
+    },
+    {
+      "type": "error",
+      "text": "Error starting app: JSHandle@error",
+      "location": {
+        "url": "http://localhost:4300/main.js",
+        "lineNumber": 4029,
+        "columnNumber": 10
+      },
+      "timestamp": "2025-10-06T06:16:21.886Z"
+    },
+    {
+      "type": "error",
+      "text": "Error while trying to use the following icon from the Manifest: http://localhost:4300/assets/icons/icon-144x144.png (Download error or resource isn't a valid image)",
+      "location": {
+        "url": "http://localhost:4300/"
+      },
+      "timestamp": "2025-10-06T06:16:21.935Z"
+    },
+    {
+      "type": "warn",
+      "text": "The resource http://localhost:4300/assets/fonts/inter-var.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+      "location": {
+        "url": "http://localhost:4300/"
+      },
+      "timestamp": "2025-10-06T06:16:24.935Z"
+    }
+  ],
+  "networkErrors": [
+    {
+      "url": "http://localhost:4300/assets/fonts/inter-var.woff2",
+      "status": 404,
+      "statusText": "Not Found"
+    },
+    {
+      "url": "http://localhost:4300/manifest.webmanifest",
+      "status": 304,
+      "statusText": "Not Modified"
+    }
+  ],
+  "fixAttempt": {
+    "manualBootstrapAttempted": false,
+    "routerNavigationAttempted": false,
+    "errorsCaught": []
+  },
+  "postFixState": {
+    "appRootHasContent": false,
+    "routerOutletActive": false,
+    "currentUrl": "http://localhost:4300/"
+  },
+  "recommendations": [
+    "🗺️ Router not accessible - verify router configuration in app.config.ts",
+    "🚨 Bootstrap error detected - check dependencies in app.config.ts",
+    "🌐 Network errors detected - check asset paths and server setup"
+  ]
+}

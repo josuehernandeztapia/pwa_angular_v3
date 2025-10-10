@@ -1,0 +1,91 @@
+{
+  "finalState": {
+    "url": "http://localhost:4300/onboarding?redirectTo=%2Fdocumentos",
+    "pathname": "/onboarding",
+    "hasAngular": true,
+    "storage": {
+      "auth_token": "demo_jwt_token_1759732766943",
+      "current_user": "{\"id\":\"1\",\"name\":\"Ana Torres\",\"email\":\"asesor@conductores.com\",\"role\":\"asesor\",\"permissions\":[\"read:clients\",\"write:quotes\",\"read:reports\"],\"avatarUrl\":\"https://picsum.photos/seed/asesor/100/100\"}",
+      "refresh_token": "demo_refresh_token_1759732766943"
+    }
+  },
+  "debugLogs": [
+    {
+      "timestamp": 1759732764360,
+      "message": "Cleared all storage",
+      "data": {},
+      "localStorage": {
+        "auth_token": null,
+        "current_user": null,
+        "refresh_token": null
+      }
+    },
+    {
+      "timestamp": 1759732765430,
+      "message": "About to submit login form",
+      "data": {
+        "url": "http://localhost:4300/login",
+        "hasAuthService": true
+      },
+      "localStorage": {
+        "auth_token": null,
+        "current_user": null,
+        "refresh_token": null
+      }
+    },
+    {
+      "timestamp": 1759732766943,
+      "message": "localStorage.setItem('auth_token')",
+      "data": {
+        "key": "auth_token",
+        "value": "demo_jwt_token_1759732766943..."
+      },
+      "localStorage": {
+        "auth_token": null,
+        "current_user": null,
+        "refresh_token": null
+      }
+    },
+    {
+      "timestamp": 1759732766944,
+      "message": "localStorage.setItem('refresh_token')",
+      "data": {
+        "key": "refresh_token",
+        "value": "demo_refresh_token_1759732766943..."
+      },
+      "localStorage": {
+        "auth_token": "demo_jwt_token_1759732766943",
+        "current_user": null,
+        "refresh_token": null
+      }
+    },
+    {
+      "timestamp": 1759732766944,
+      "message": "localStorage.setItem('current_user')",
+      "data": {
+        "key": "current_user",
+        "value": "{\"id\":\"1\",\"name\":\"Ana Torres\",\"email\":\"asesor@cond..."
+      },
+      "localStorage": {
+        "auth_token": "demo_jwt_token_1759732766943",
+        "current_user": null,
+        "refresh_token": "demo_refresh_token_1759732766943"
+      }
+    },
+    {
+      "timestamp": 1759732767057,
+      "message": "URL changed",
+      "data": {
+        "from": "http://localhost:4300/login",
+        "to": "http://localhost:4300/onboarding?redirectTo=%2Fdocumentos",
+        "pathname": "/onboarding"
+      },
+      "localStorage": {
+        "auth_token": "demo_jwt_token_1759732766943",
+        "current_user": "{\"id\":\"1\",\"name\":\"Ana Torres\",\"email\":\"asesor@conductores.com\",\"role\":\"asesor\",\"permissions\":[\"read:clients\",\"write:quotes\",\"read:reports\"],\"avatarUrl\":\"https://picsum.photos/seed/asesor/100/100\"}",
+        "refresh_token": "demo_refresh_token_1759732766943"
+      }
+    }
+  ],
+  "timestamp": "2025-10-06T06:39:30.480Z"
+}

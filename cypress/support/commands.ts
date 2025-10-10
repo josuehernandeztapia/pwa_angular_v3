@@ -2,6 +2,65 @@
 // Custom commands for Conductores PWA E2E Testing
 // ***********************************************
 
+interface TestingBypassUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  permissions?: string[];
+  token?: string;
+  refreshToken?: string;
+}
+
+interface TestingBypassConfig {
+  token: string;
+  refreshToken: string;
+  user: TestingBypassUser;
+}
+
+const DEFAULT_BYPASS_CONFIG: TestingBypassConfig = {
+  token: 'testing-bypass-token',
+  refreshToken: 'testing-bypass-refresh',
+  user: {
+    id: 'testing-bypass-user',
+    name: 'QA Automation User',
+    email: 'qa.automation@conductores.com',
+    role: 'asesor',
+    permissions: [
+      'dashboard:view',
+      'clients:view',
+      'quotes:create',
+      'documents:upload',
+      'postventa:manage'
+    ]
+  }
+};
+
+function resolveBypassConfig(): TestingBypassConfig {
+  const envConfig = Cypress.env('testingBypassUser') as TestingBypassUser | undefined;
+
+  if (!envConfig || typeof envConfig !== 'object') {
+    return DEFAULT_BYPASS_CONFIG;
+  }
+
+  return {
+    token: envConfig.token || DEFAULT_BYPASS_CONFIG.token,
+    refreshToken: envConfig.refreshToken || DEFAULT_BYPASS_CONFIG.refreshToken,
+    user: {
+      ...DEFAULT_BYPASS_CONFIG.user,
+      ...envConfig,
+      permissions: envConfig.permissions || DEFAULT_BYPASS_CONFIG.user.permissions
+    }
+  };
+}
+
+function seedBypassAuthStorage(win: Window, config: TestingBypassConfig): void {
+  win.localStorage.setItem('auth_token', config.token);
+  win.localStorage.setItem('refresh_token', config.refreshToken);
+  win.localStorage.setItem('current_user', JSON.stringify(config.user));
+  win.localStorage.setItem('rememberMe', 'true');
+}
+
 /**
  * Login command - handles authentication flow
  */
@@ -26,10 +85,21 @@ Cypress.Commands.add('login', (email = 'test@conductores.com', password = 'testP
   });
 });
 
+Cypress.Commands.add('useTestingBypassAuth', () => {
+  const config = resolveBypassConfig();
+  cy.window({ log: false }).then((win) => {
+    seedBypassAuthStorage(win, config);
+  });
+});
+
 /**
  * Setup default API intercepts for consistent testing
  */
 Cypress.Commands.add('setupDefaultIntercepts', () => {
+  if (Cypress.env('mockApis') === false) {
+    cy.log('Skipping default API intercepts (mockApis disabled)');
+    return;
+  }
   // Dashboard stats
   cy.intercept('GET', '**/api/dashboard/stats', {
     fixture: 'dashboard-stats.json'
@@ -284,7 +354,7 @@ declare global {
       selectDropdownOption(testId: string, value: string): Chainable<Element>;
       waitForFormValidation(formSelector: string): Chainable<Element>;
       
-      navigateAndWait(url: string): Chainable<any>;
+      navigateAndWait(url: string, options?: { bypassAuth?: boolean }): Chainable<any>;
       waitForPageLoad(expectedUrl?: string): Chainable<any>;
       
       retryAction(actionFn: () => void, maxAttempts?: number): Chainable<any>;
@@ -292,6 +362,8 @@ declare global {
       
       uploadFileReliably(selector: string, fileName: string): Chainable<Element>;
       waitForUploadComplete(uploadContainerSelector: string): Chainable<Element>;
+
+      useTestingBypassAuth(): Chainable<void>;
     }
   }
 }

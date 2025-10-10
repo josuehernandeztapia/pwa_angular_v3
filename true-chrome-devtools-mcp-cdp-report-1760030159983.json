@@ -1,0 +1,141 @@
+{
+  "timestamp": "2025-10-09T17:15:59.982Z",
+  "tool": "True Chrome DevTools MCP with CDP",
+  "baseUrl": "http://localhost:4300",
+  "cdpPort": 9223,
+  "total": 8,
+  "passed": 0,
+  "failed": 8,
+  "successRate": 0,
+  "tests": [
+    {
+      "test": "Authentication via CDP/Playwright",
+      "passed": false,
+      "details": "Login successful with 3 demo users, authenticated: false"
+    },
+    {
+      "test": "Simuladores Component Rendering",
+      "passed": false,
+      "details": "Structure: false, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "hasSimuladorMain": false,
+        "hasSimulatorButtons": 23,
+        "hasInputFields": 1,
+        "hasPremiumCards": 0,
+        "totalButtons": 23,
+        "totalInputs": 1,
+        "totalSelects": 0,
+        "totalForms": 0
+      }
+    },
+    {
+      "test": "Cotizadores Component Rendering",
+      "passed": false,
+      "details": "Structure: false, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "hasCotizadorMain": false,
+        "hasNumberInputs": 0,
+        "hasFormGroups": 0,
+        "totalButtons": 25,
+        "totalInputs": 4,
+        "totalSelects": 0,
+        "totalForms": 1
+      }
+    },
+    {
+      "test": "Flow Builder Component Rendering",
+      "passed": false,
+      "details": "Structure: false, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "hasFlowBuilder": false,
+        "hasFlowPalette": false,
+        "hasFlowCanvas": false,
+        "hasFlowElements": 0,
+        "totalButtons": 25,
+        "totalInputs": 4,
+        "totalSelects": 0,
+        "totalForms": 1
+      }
+    },
+    {
+      "test": "Onboarding Component Rendering",
+      "passed": false,
+      "details": "Structure: false, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "hasOnboardingMain": false,
+        "hasMarketSelect": false,
+        "hasFormControls": 0,
+        "totalButtons": 25,
+        "totalInputs": 4,
+        "totalSelects": 0,
+        "totalForms": 1
+      }
+    },
+    {
+      "test": "Productos Component Rendering",
+      "passed": false,
+      "details": "Structure: false, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "hasProducts": 0,
+        "hasProductCards": 1,
+        "totalButtons": 25,
+        "totalInputs": 4,
+        "totalSelects": 0,
+        "totalForms": 1
+      }
+    },
+    {
+      "test": "Protección Component Rendering",
+      "passed": false,
+      "details": "Structure: false, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "totalButtons": 25,
+        "totalInputs": 4,
+        "totalSelects": 0,
+        "totalForms": 1
+      }
+    },
+    {
+      "test": "Business Logic Detection",
+      "passed": false,
+      "details": "Calculation functions: false, Calculator inputs: false",
+      "metrics": {
+        "hasCalculation": false,
+        "hasCalculatorInputs": false,
+        "hasResults": false,
+        "numberInputs": 0,
+        "calculateButtons": 23
+      }
+    }
+  ],
+  "screenshots": [
+    "mcp-fallback-01-login-page-1760030131157.png",
+    "mcp-fallback-02-after-auth-1760030134246.png",
+    "mcp-fallback-simuladores-1760030137940.png",
+    "mcp-fallback-cotizadores-1760030141622.png",
+    "mcp-fallback-flow builder-1760030145286.png",
+    "mcp-fallback-onboarding-1760030148946.png",
+    "mcp-fallback-productos-1760030152612.png",
+    "mcp-fallback-protección-1760030156276.png",
+    "mcp-fallback-03-business-logic-simuladores-1760030159926.png"
+  ],
+  "method": "Playwright Fallback"
+}

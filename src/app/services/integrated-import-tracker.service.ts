@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, combineLatest, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, combineLatest, forkJoin, map, of, tap, throwError } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 import { DeliveryOrder } from '../models/deliveries';
 import { Client, Market } from '../models/types';
 import {
@@ -122,12 +123,12 @@ export class IntegratedImportTrackerService {
 
   // ADD this missing method to the class:
   getEnhancedImportStatus(clientId: string): Observable<any> {
-    return this.http.get<any>(`/api/clients/${clientId}/import-status/enhanced`);
+    return this.http.get<any>(`${this.baseUrl}/v1/clients/${clientId}/import-status/enhanced`);
   }
 
   // ADD this missing method:
   private getContractsWithVehicles(clientId: string): Observable<any[]> {
-    return this.http.get<any[]>(`/api/clients/${clientId}/contracts-vehicles`);
+    return this.http.get<any[]>(`${this.baseUrl}/v1/clients/${clientId}/contracts-vehicles`);
   }
 
   /**
@@ -213,26 +214,43 @@ export class IntegratedImportTrackerService {
       }
     }).pipe(
       tap(updatedStatus => {
-        // Registrar evento de milestone
-        this.recordMilestoneEvent(clientId, milestone, status, metadata);
-        
-        // Sincronizar con delivery order si existe
-        this.syncMilestoneWithDeliveryOrder(clientId, milestone, status);
-        
-        //  NUEVA FUNCIONALIDAD: Trigger asignación de unidad al completar fabricación
         if (milestone === 'unidadFabricada' && status === 'completed') {
           this.triggerVehicleAssignmentFlow(clientId, metadata);
         }
-        
-        // Enviar notificaciones automáticas WhatsApp
-        this.sendMilestoneNotifications(clientId, milestone, status, updatedStatus, metadata);
+      }),
+      switchMap(updatedStatus => {
+        const milestoneEvent$ = this.recordMilestoneEvent(clientId, milestone, status, metadata).pipe(
+          catchError(error => {
+            console.error('[IntegratedImportTracker] Failed to record milestone event', { clientId, milestone, error });
+            return of(void 0);
+          })
+        );
+
+        const sync$ = this.syncMilestoneWithDeliveryOrder(clientId, milestone, status).pipe(
+          catchError(error => {
+            console.error('[IntegratedImportTracker] Failed to sync milestone with delivery order', { clientId, milestone, error });
+            return of(void 0);
+          })
+        );
+
+        const notifications$ = this.sendMilestoneNotifications(clientId, milestone, status, updatedStatus, metadata).pipe(
+          catchError(error => {
+            console.error('[IntegratedImportTracker] Failed to send milestone notifications', { clientId, milestone, error });
+            return of(void 0);
+          })
+        );
+
+        return forkJoin([milestoneEvent$, sync$, notifications$]).pipe(map(() => updatedStatus));
       }),
       map(importStatus => ({
         ...importStatus,
         syncStatus: 'synced' as const,
         lastSyncDate: new Date()
       } as IntegratedImportStatus)),
-      catchError(() => of({} as IntegratedImportStatus))
+      catchError(error => {
+        console.error('[IntegratedImportTracker] updateImportMilestone failed', { clientId, milestone, error });
+        return throwError(() => error);
+      })
     );
   }
 
@@ -244,7 +262,6 @@ export class IntegratedImportTrackerService {
     if (!triggerEvent.clientId || !deliveryOrder.id) {
       return of();
     }
-
 
     return this.initializeImportTrackingForDeliveryOrder(triggerEvent.clientId, deliveryOrder).pipe(
       tap(() => {
@@ -585,37 +602,28 @@ export class IntegratedImportTrackerService {
   }
 
   private sendMilestoneNotifications(
-    clientId: string, 
-    milestone: keyof ImportStatus, 
+    clientId: string,
+    milestone: keyof ImportStatus,
     status: 'completed' | 'in_progress' | 'pending',
     importStatus: IntegratedImportStatus,
     metadata?: any
-  ): void {
-    // Solo enviar para estados activos (no pending)
-    if (status === 'pending') return;
+  ): Observable<void> {
+    if (status === 'pending') {
+      return of(void 0);
+    }
 
-    // Obtener datos del cliente para personalizar la notificación
-    this.getClientData(clientId).subscribe({
-      next: (clientData) => {
+    return this.getClientData(clientId).pipe(
+      switchMap(clientData =>
         this.importWhatsAppService.sendMilestoneNotification(
           clientId,
           milestone,
           status,
           importStatus,
           clientData
-        ).subscribe({
-          next: (result) => {
-            if (result.success) {
-            } else {
-            }
-          },
-          error: (error) => {
-          }
-        });
-      },
-      error: (error) => {
-      }
-    });
+        )
+      ),
+      map(() => void 0)
+    );
   }
 
   private getClientData(clientId: string): Observable<Partial<Client>> {
@@ -772,14 +780,12 @@ export class IntegratedImportTrackerService {
 
     // Validar que el cliente esté en el estado correcto (unidadFabricada completed)
     return this.getIntegratedImportStatus(clientId).pipe(
-      map(importStatus => {
+      take(1),
+      switchMap(importStatus => {
         if (!importStatus || importStatus.unidadFabricada.status !== 'completed') {
           throw new Error('El cliente debe tener el milestone "unidadFabricada" completado para asignar unidad');
         }
-        return importStatus;
-      }),
-      // Proceder con la asignación
-      tap(() => {
+
         const assignmentRequest: VehicleAssignmentRequest = {
           clientId,
           vin: vehicleData.vin,
@@ -794,45 +800,32 @@ export class IntegratedImportTrackerService {
           notes: vehicleData.notes
         };
 
-        // Validar datos
         const validation = this.vehicleAssignmentService.validateVehicleData(assignmentRequest);
         if (!validation.valid) {
           throw new Error(`Datos de vehículo inválidos: ${validation.errors.join(', ')}`);
         }
 
-        // Ejecutar asignación
-        this.vehicleAssignmentService.assignVehicleToClient(assignmentRequest).subscribe({
-          next: (result) => {
+        return this.vehicleAssignmentService.assignVehicleToClient(assignmentRequest).pipe(
+          tap(result => {
             if (result.success && result.assignedUnit) {
               console.info('[IntegratedImportTracker] Vehicle assignment succeeded', {
                 clientId,
                 unitId: result.assignedUnit.id,
                 vin: result.assignedUnit.vin
               });
-              
-              // Actualizar el import status con la unidad asignada
+
               this.updateImportStatusWithAssignedUnit(clientId, result.assignedUnit);
-              
-              //  NUEVA FUNCIONALIDAD: Actualizar contrato con unidad asignada
               this.updateContractWithAssignedVehicle(clientId, result.assignedUnit);
-              
-              // Enviar notificación de asignación exitosa
               this.sendVehicleAssignmentNotification(clientId, result.assignedUnit);
-              
-            } else {
-              console.warn('[IntegratedImportTracker] Vehicle assignment returned no unit', {
+            } else if (!result.success) {
+              console.warn('[IntegratedImportTracker] Vehicle assignment returned error', {
                 clientId,
-                success: result.success,
                 error: result.error
               });
             }
-          },
-          error: (error) => {
-            console.error('[IntegratedImportTracker] assignVehicleToClient emitted error', error);
-          }
-        });
+          })
+        );
       }),
-      map(() => ({ success: true })),
       catchError((error) => {
         console.error('[IntegratedImportTracker] Vehicle assignment flow failed', error);
         return of({ success: false, error: error.message });

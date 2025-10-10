@@ -6,6 +6,7 @@ import { FlowContextService } from '../services/flow-context.service';
 import { MarketPolicyContext, MarketPolicyService, TandaPolicyMetadata } from '../services/market-policy.service';
 import { TandaFlowContextState } from '../services/tanda-validation.service';
 import { ToastService } from '../services/toast.service';
+import { MathValidationSnapshot } from '../models/math-validation';
 
 interface StoredDocumentContext {
   flowContext?: {
@@ -15,9 +16,12 @@ interface StoredDocumentContext {
     businessFlow?: BusinessFlow;
     collectiveMembers?: number;
     requiresIncomeProof?: boolean;
+    incomeThreshold?: number;
+    incomeThresholdRatio?: number;
   };
   policyContext?: MarketPolicyContext;
   documents?: Document[];
+  mathValidation?: MathValidationSnapshot | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -79,12 +83,12 @@ export class TandaValidGuard implements CanActivate {
       return true;
     }
 
-    const tandaRules = this.marketPolicy.getTandaRules(policyContext);
+    const tandaRules = policyContext.metadata?.tanda ?? this.marketPolicy.getTandaRules(policyContext);
     if (!tandaRules) {
       return true;
     }
 
-    const collectiveMembers = stored.flowContext?.collectiveMembers ?? policyContext.collectiveSize;
+    const collectiveMembers = policyContext.collectiveSize ?? stored.flowContext?.collectiveMembers;
     if (typeof collectiveMembers !== 'number') {
       this.failureMessage = 'Captura el número de integrantes de la Tanda antes de continuar.';
       return false;
@@ -149,6 +153,8 @@ export class TandaValidGuard implements CanActivate {
       businessFlow: flow.businessFlow ?? BusinessFlow.CreditoColectivo,
       requiresIncomeProof: flow.requiresIncomeProof,
       collectiveSize: flow.collectiveMembers,
+      incomeThreshold: flow.incomeThreshold,
+      incomeThresholdRatio: flow.incomeThresholdRatio,
     };
   }
 

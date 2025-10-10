@@ -548,10 +548,21 @@ export class AVIService {
   }
 
   private calculateRiskLevel(score: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
-    // Updated thresholds: GO ≥780, REVIEW 551–779, NO-GO ≤550
-    if (score >= 780) return 'LOW';
-    if (score >= 551) return 'MEDIUM';
-    if (score >= 550) return 'HIGH';
+    const { goMin, noGoMax, reviewMid } = this.getCalibratedThresholds();
+    const normalizedScore = this.normalizeScore(score);
+
+    if (normalizedScore >= goMin) {
+      return 'LOW';
+    }
+
+    if (normalizedScore >= reviewMid) {
+      return 'MEDIUM';
+    }
+
+    if (normalizedScore >= noGoMax) {
+      return 'HIGH';
+    }
+
     return 'CRITICAL';
   }
 
@@ -614,12 +625,14 @@ export class AVIService {
   private generateRecommendations(score: number, redFlags: RedFlag[]): string[] {
     const recommendations: string[] = [];
 
-    // Updated thresholds
-    if (score >= 780) {
+    const { goMin, noGoMax, reviewMid } = this.getCalibratedThresholds();
+    const normalizedScore = this.normalizeScore(score);
+
+    if (normalizedScore >= goMin) {
       recommendations.push('Cliente de bajo riesgo - puede proceder (GO)');
-    } else if (score >= 551) {
+    } else if (normalizedScore >= reviewMid) {
       recommendations.push('Riesgo moderado - revisar documentación adicional (REVIEW)');
-    } else if (score >= 550) {
+    } else if (normalizedScore >= noGoMax) {
       recommendations.push('Alto riesgo - requiere garantías adicionales (REVIEW)');
     } else {
       recommendations.push('Riesgo crítico - no recomendado para crédito (NO-GO)');
@@ -637,6 +650,39 @@ export class AVIService {
     });
 
     return recommendations;
+  }
+
+  private normalizeScore(score: number): number {
+    if (!Number.isFinite(score)) {
+      return 0;
+    }
+
+    const normalized = score / 1000;
+    return Math.max(0, Math.min(1, normalized));
+  }
+
+  private getCalibratedThresholds(): { goMin: number; noGoMax: number; reviewMid: number } {
+    const profile = environment.avi?.decisionProfile ?? 'conservative';
+    const configured = environment.avi?.thresholds?.[profile as 'conservative' | 'permissive']
+      ?? environment.avi?.thresholds?.conservative
+      ?? { GO_MIN: 0.78, NOGO_MAX: 0.55 };
+
+    const goMin = typeof configured.GO_MIN === 'number' && Number.isFinite(configured.GO_MIN)
+      ? configured.GO_MIN
+      : 0.78;
+    const noGoMax = typeof configured.NOGO_MAX === 'number' && Number.isFinite(configured.NOGO_MAX)
+      ? configured.NOGO_MAX
+      : 0.55;
+
+    const clampedGoMin = Math.min(Math.max(goMin, 0), 1);
+    const clampedNoGoMax = Math.max(0, Math.min(Math.max(noGoMax, 0), clampedGoMin - 0.01));
+    const reviewMid = clampedNoGoMax + ((clampedGoMin - clampedNoGoMax) / 2);
+
+    return {
+      goMin: clampedGoMin,
+      noGoMax: clampedNoGoMax,
+      reviewMid,
+    };
   }
 
   private validateResponse(response: AVIResponse): void {

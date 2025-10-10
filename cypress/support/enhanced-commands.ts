@@ -1,6 +1,67 @@
 // 🚀 ENHANCED CYPRESS COMMANDS FOR 90%+ SUCCESS RATE
 // Custom commands implementing robust wait strategies and reliable selectors
 
+interface NavigateOptions {
+  bypassAuth?: boolean;
+}
+
+interface BypassUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  permissions?: string[];
+  token?: string;
+  refreshToken?: string;
+}
+
+const DEFAULT_BYPASS_USER: BypassUser = {
+  id: 'testing-bypass-user',
+  name: 'QA Automation User',
+  email: 'qa.automation@conductores.com',
+  role: 'asesor',
+  permissions: [
+    'dashboard:view',
+    'clients:view',
+    'quotes:create',
+    'documents:upload',
+    'postventa:manage'
+  ],
+  token: 'testing-bypass-token',
+  refreshToken: 'testing-bypass-refresh'
+};
+
+function resolveBypassUser(): BypassUser {
+  const envUser = Cypress.env('testingBypassUser') as BypassUser | undefined;
+  if (!envUser || typeof envUser !== 'object') {
+    return DEFAULT_BYPASS_USER;
+  }
+  return {
+    ...DEFAULT_BYPASS_USER,
+    ...envUser,
+    permissions: envUser.permissions || DEFAULT_BYPASS_USER.permissions,
+    token: envUser.token || DEFAULT_BYPASS_USER.token,
+    refreshToken: envUser.refreshToken || DEFAULT_BYPASS_USER.refreshToken,
+  };
+}
+
+function applyBypassAuth(win: Window, user: BypassUser): void {
+  if (!user.token || !user.refreshToken) {
+    throw new Error('Bypass auth requires token and refreshToken values.');
+  }
+
+  win.localStorage.setItem('auth_token', user.token);
+  win.localStorage.setItem('refresh_token', user.refreshToken);
+  win.localStorage.setItem('current_user', JSON.stringify({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    permissions: user.permissions || []
+  }));
+  win.localStorage.setItem('rememberMe', 'true');
+}
+
 declare global {
   namespace Cypress {
     interface Chainable {
@@ -21,7 +82,7 @@ declare global {
       waitForFormValidation(formSelector: string): Chainable<Element>;
       
       // Navigation and page helpers
-      navigateAndWait(url: string): Chainable<any>;
+      navigateAndWait(url: string, options?: NavigateOptions): Chainable<any>;
       waitForPageLoad(expectedUrl?: string): Chainable<any>;
       
       // Error recovery and retry mechanisms
@@ -159,8 +220,18 @@ Cypress.Commands.add('waitForFormValidation', (formSelector: string) => {
 });
 
 // 4. Navigation and Page Helpers
-Cypress.Commands.add('navigateAndWait', (url: string) => {
-  cy.visit(url);
+Cypress.Commands.add('navigateAndWait', (url: string, options: NavigateOptions = {}) => {
+  const shouldBypass = options.bypassAuth ?? Cypress.env('bypassAuth');
+  if (shouldBypass) {
+    const bypassUser = resolveBypassUser();
+    cy.visit(url, {
+      onBeforeLoad(win) {
+        applyBypassAuth(win, bypassUser);
+      }
+    });
+  } else {
+    cy.visit(url);
+  }
   cy.waitForPageLoad(url);
   cy.waitForLoadComplete();
 });

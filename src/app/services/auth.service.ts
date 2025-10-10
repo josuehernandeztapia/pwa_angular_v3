@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map, catchError, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface RegistrationData {
   firstName: string;
@@ -57,6 +58,48 @@ export class AuthService {
   private userKey = 'current_user';
   private bffBaseUrl = 'http://localhost:3000'; // BFF URL
 
+  private readonly mockAccounts: Array<{
+    email: string;
+    password: string;
+    user: User;
+  }> = [
+    {
+      email: 'asesor@conductores.com',
+      password: 'demo123',
+      user: {
+        id: 'mock-asesor',
+        name: 'Ana Torres',
+        email: 'asesor@conductores.com',
+        role: 'asesor',
+        permissions: ['dashboard:view', 'clients:view', 'quotes:create', 'documents:upload', 'postventa:manage']
+      }
+    },
+    {
+      email: 'supervisor@conductores.com',
+      password: 'super123',
+      user: {
+        id: 'mock-supervisor',
+        name: 'Carlos Mendez',
+        email: 'supervisor@conductores.com',
+        role: 'supervisor',
+        permissions: ['dashboard:view', 'clients:view', 'quotes:approve', 'documents:review', 'postventa:manage']
+      }
+    },
+    {
+      email: 'admin@conductores.com',
+      password: 'admin123',
+      user: {
+        id: 'mock-admin',
+        name: 'Maria Rodriguez',
+        email: 'admin@conductores.com',
+        role: 'admin',
+        permissions: ['dashboard:view', 'clients:view', 'quotes:create', 'quotes:approve', 'admin:manage', 'postventa:manage']
+      }
+    }
+  ];
+
+  private readonly testingBypassEnabled = environment.testing && environment.bypassAuth;
+
   public currentUser$ = this.currentUserSubject.asObservable();
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
@@ -76,10 +119,16 @@ export class AuthService {
         const user = JSON.parse(userData);
         this.currentUserSubject.next(user);
         this.isAuthenticatedSubject.next(true);
+        return;
       } catch (error) {
         console.warn('[AuthService] Failed to restore persisted session', error);
         this.logout();
       }
+    }
+
+    if (this.shouldBypassAuth()) {
+      const bypassAuth = this.buildBypassAuthResponse();
+      this.setAuthData(bypassAuth);
     }
   }
 
@@ -87,6 +136,13 @@ export class AuthService {
    * Login with email and password
    */
   login(credentials: LoginCredentials): Observable<AuthResponse> {
+    if (this.shouldBypassAuth()) {
+      const bypassAuth = this.buildBypassAuthResponse(credentials.email);
+      this.setAuthData(bypassAuth, credentials.rememberMe);
+      console.info('[AuthService] Bypass auth enabled - returning testing credentials');
+      return of(bypassAuth);
+    }
+
     return this.http.post<AuthResponse>(`${this.bffBaseUrl}/auth/login`, {
       email: credentials.email,
       password: credentials.password
@@ -97,7 +153,17 @@ export class AuthService {
       }),
       catchError(error => {
         console.warn('[AuthService] Login failed', { email: credentials.email, error });
-        const errorMessage = error.error?.message || 'Credenciales incorrectas';
+
+        if (environment.features?.enableMockData) {
+          const mockAuth = this.tryMockLogin(credentials);
+          if (mockAuth) {
+            this.setAuthData(mockAuth, credentials.rememberMe);
+            console.info('[AuthService] Mock login activated (BFF unreachable)', { email: credentials.email });
+            return of(mockAuth);
+          }
+        }
+
+        const errorMessage = error?.error?.message || 'Credenciales incorrectas';
         return throwError(() => new Error(errorMessage));
       })
     );
@@ -157,6 +223,12 @@ export class AuthService {
    * Refresh authentication token
    */
   refreshToken(): Observable<AuthResponse> {
+    if (this.shouldBypassAuth()) {
+      const bypassAuth = this.buildBypassAuthResponse();
+      this.setAuthData(bypassAuth);
+      return of(bypassAuth);
+    }
+
     const refreshToken = localStorage.getItem(this.refreshTokenKey);
 
     if (!refreshToken) {
@@ -256,11 +328,11 @@ export class AuthService {
     localStorage.setItem(this.tokenKey, authResponse.token);
     localStorage.setItem(this.refreshTokenKey, authResponse.refreshToken);
     localStorage.setItem(this.userKey, JSON.stringify(authResponse.user));
-    
+
     if (rememberMe) {
       localStorage.setItem('rememberMe', 'true');
     }
-    
+
     this.currentUserSubject.next(authResponse.user);
     this.isAuthenticatedSubject.next(true);
   }
@@ -280,6 +352,10 @@ export class AuthService {
    * Validate token with BFF
    */
   validateToken(): Observable<any> {
+    if (this.shouldBypassAuth()) {
+      return of(true);
+    }
+
     const token = this.getToken();
     if (!token) {
       return throwError(() => new Error('No token available'));
@@ -302,20 +378,67 @@ export class AuthService {
    * Get demo users for login UI
    */
   getDemoUsers(): Observable<any> {
+    if (this.shouldBypassAuth()) {
+      const bypassUser = this.resolveBypassUser();
+      return of({
+        users: [
+          {
+            email: bypassUser.email,
+            role: bypassUser.role,
+            name: bypassUser.name
+          }
+        ],
+        message: 'Bypass auth enabled for testing'
+      });
+    }
+
     return this.http.get(`${this.bffBaseUrl}/auth/demo-users`).pipe(
       catchError(error => {
         console.warn('[AuthService] Failed to fetch demo users', error);
         // Fallback to local demo users for UI
         return of({
-          users: [
-            { email: 'asesor@conductores.com', role: 'asesor', name: 'Ana Torres' },
-            { email: 'supervisor@conductores.com', role: 'supervisor', name: 'Carlos Mendez' },
-            { email: 'admin@conductores.com', role: 'admin', name: 'Maria Rodriguez' }
-          ],
+          users: this.mockAccounts.map(account => ({
+            email: account.email,
+            role: account.user.role,
+            name: account.user.name
+          })),
           message: 'Usuarios demo disponibles para testing'
         });
       })
     );
+  }
+
+  private shouldBypassAuth(): boolean {
+    return this.testingBypassEnabled === true;
+  }
+
+  private resolveBypassUser(emailOverride?: string): User {
+    const fallbackUser = this.mockAccounts[0]?.user;
+    const configuredUser = environment.authTesting?.bypassUser ?? fallbackUser;
+
+    if (!configuredUser) {
+      throw new Error('Bypass user is not configured');
+    }
+
+    return {
+      ...configuredUser,
+      email: emailOverride ?? configuredUser.email
+    };
+  }
+
+  private buildBypassAuthResponse(emailOverride?: string): AuthResponse {
+    const user = this.resolveBypassUser(emailOverride);
+
+    const token = environment.authTesting?.token ?? `testing-token-${user.id}`;
+    const refreshToken = environment.authTesting?.refreshToken ?? `testing-refresh-${user.id}`;
+    const expiresIn = environment.authTesting?.expiresIn ?? 3600;
+
+    return {
+      user,
+      token,
+      refreshToken,
+      expiresIn
+    };
   }
 
   /**
@@ -393,6 +516,24 @@ export class AuthService {
         return throwError(() => error);
       })
     );
+  }
+
+  private tryMockLogin(credentials: LoginCredentials): AuthResponse | null {
+    const match = this.mockAccounts.find(account =>
+      account.email.toLowerCase() === credentials.email.toLowerCase() &&
+      account.password === credentials.password
+    );
+
+    if (!match) {
+      return null;
+    }
+
+    return {
+      user: match.user,
+      token: `mock-token-${match.user.id}`,
+      refreshToken: `mock-refresh-${match.user.id}`,
+      expiresIn: 3600
+    };
   }
 
   /**

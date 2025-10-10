@@ -5,12 +5,14 @@ import { RouterModule } from '@angular/router';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { IconName } from '../../shared/icon/icon-definitions';
 import { ContextPanelComponent } from '../../shared/context-panel/context-panel.component';
+import { DeliveryTrackerComponent } from '../../delivery/delivery-tracker/delivery-tracker.component';
 import { finalize } from 'rxjs';
 
 import { DeliveriesService } from '../../../services/deliveries.service';
 import { StockService } from '../../../services/stock.service';
 import { ToastService } from '../../../services/toast.service';
 import { FlowContextService } from '../../../services/flow-context.service';
+import type { PolicyMarket } from '../../../services/market-policy.service';
 import { 
   DeliveryOrder,
   DeliveryStatus,
@@ -33,7 +35,7 @@ interface DeliveriesContextSnapshot {
 @Component({
   selector: 'app-ops-deliveries',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, IconComponent, ContextPanelComponent],
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent, ContextPanelComponent, DeliveryTrackerComponent],
   templateUrl: './ops-deliveries.component.html',
   styleUrls: ['./ops-deliveries.component.scss']
 })
@@ -54,6 +56,7 @@ export class OpsDeliveriesComponent implements OnInit, OnDestroy {
   stockPositions = signal<StockPosition[]>([]);
   stockAlerts = signal<StockAlert[]>([]);
   availableRoutes = signal<Array<{ id: string; name: string; market: Market }>>([]);
+  trackerMarket = signal<PolicyMarket>('aguascalientes');
 
   performanceMetrics = signal<{ totalDeliveries: number; onTimePercentage: number; avgTransitDays: number; delayedDeliveries: number } | null>(null);
   metricsLoading = signal<boolean>(false);

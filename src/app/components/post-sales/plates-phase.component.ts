@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IconName } from '../shared/icon/icon-definitions';
@@ -61,7 +61,24 @@ export class PlatesPhaseComponent {
   ]);
 
   // Signals
-  clientId = signal<string>('client_001');
+  private readonly caseIdSignal = signal<string | null>(null);
+  private readonly clientIdSignal = signal<string | null>(null);
+  @Input()
+  set caseId(value: string | null) {
+    this.caseIdSignal.set(value ?? null);
+  }
+
+  @Input()
+  set clientId(value: string | null) {
+    this.clientIdSignal.set(value ?? null);
+    if (value) {
+      this.loadPlatesData(value);
+    }
+  }
+
+  @Output()
+  phaseNavigate = new EventEmitter<'documents'>();
+
   clientInfo = signal<{ name: string; vin: string } | null>(null);
   vehicleInfo = signal<any | null>(null);
   tarjetaCirculacion = signal<DocumentFile | null>(null);
@@ -157,9 +174,10 @@ export class PlatesPhaseComponent {
     return isValid ? null : { invalidPlaca: true };
   };
 
-  private loadPlatesData(): void {
+  private loadPlatesData(clientId?: string | null): void {
+    const name = clientId ? `Cliente ${clientId}` : 'Cliente Postventa';
     this.clientInfo.set({
-      name: 'José Hernández Pérez',
+      name,
       vin: '3N1CN7AP8KL123456'
     });
 
@@ -319,6 +337,12 @@ export class PlatesPhaseComponent {
 
     this.isSubmitting.set(true);
 
+    const clientId = this.clientIdSignal();
+    if (!clientId) {
+      this.isSubmitting.set(false);
+      return;
+    }
+
     const platesData: PlatesData = {
       numeroPlacas: this.platesForm.get('numeroPlacas')?.value,
       estado: this.platesForm.get('estado')?.value,
@@ -328,7 +352,7 @@ export class PlatesPhaseComponent {
       hologramas: this.platesForm.get('hologramas')?.value
     };
 
-    this.importTracker.completePlatesPhase(this.clientId(), platesData).subscribe({
+    this.importTracker.completePlatesPhase(clientId, platesData).subscribe({
       next: () => {
         this.isSubmitting.set(false);
         this.postSalesRecordId.set(`PSR_${Date.now()}`);
@@ -345,7 +369,15 @@ export class PlatesPhaseComponent {
   }
 
   goBack(): void {
-    this.router.navigate(['/post-sales/documents', this.clientId()]);
+    if (this.phaseNavigate.observers.length > 0) {
+      this.phaseNavigate.emit('documents');
+      return;
+    }
+
+    const clientId = this.clientIdSignal();
+    if (clientId) {
+      this.router.navigate(['/post-sales/documents', clientId]);
+    }
   }
 
   viewPostSalesDashboard(): void {

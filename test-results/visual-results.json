@@ -1,7 +1,7 @@
 {
   "config": {
-    "configFile": "/Users/josuehernandez/pwa_angular/playwright.config.ts",
-    "rootDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+    "configFile": "/Users/juanjosuehernandeztapia/pwa_angular_v3/playwright.config.ts",
+    "rootDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e",
     "forbidOnly": false,
     "fullyParallel": true,
     "globalSetup": null,
@@ -13,7 +13,7 @@
     "metadata": {
       "project": "Conductores PWA",
       "description": "Visual regression tests for UI components and pages",
-      "actualWorkers": 4
+      "actualWorkers": 1
     },
     "preserveOutput": "always",
     "reporter": [
@@ -35,17 +35,17 @@
     "quiet": false,
     "projects": [
       {
-        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "outputDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/test-results/visual",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 4
+          "actualWorkers": 1
         },
         "id": "chromium",
         "name": "chromium",
-        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.ts"
@@ -53,17 +53,17 @@
         "timeout": 60000
       },
       {
-        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "outputDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/test-results/visual",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 4
+          "actualWorkers": 1
         },
         "id": "firefox",
         "name": "firefox",
-        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.ts"
@@ -71,17 +71,17 @@
         "timeout": 60000
       },
       {
-        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "outputDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/test-results/visual",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 4
+          "actualWorkers": 1
         },
         "id": "webkit",
         "name": "webkit",
-        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.ts"
@@ -89,17 +89,17 @@
         "timeout": 60000
       },
       {
-        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "outputDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/test-results/visual",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 4
+          "actualWorkers": 1
         },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
-        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.ts"
@@ -107,17 +107,17 @@
         "timeout": 60000
       },
       {
-        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "outputDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/test-results/visual",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 4
+          "actualWorkers": 1
         },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
-        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.ts"
@@ -125,17 +125,17 @@
         "timeout": 60000
       },
       {
-        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "outputDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/test-results/visual",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 4
+          "actualWorkers": 1
         },
         "id": "iPad",
         "name": "iPad",
-        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.ts"
@@ -143,17 +143,17 @@
         "timeout": 60000
       },
       {
-        "outputDir": "/Users/josuehernandez/pwa_angular/test-results/visual",
+        "outputDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/test-results/visual",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
           "project": "Conductores PWA",
           "description": "Visual regression tests for UI components and pages",
-          "actualWorkers": 4
+          "actualWorkers": 1
         },
         "id": "High DPI",
         "name": "High DPI",
-        "testDir": "/Users/josuehernandez/pwa_angular/tests/e2e",
+        "testDir": "/Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.ts"
@@ -165,31 +165,31 @@
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
     "version": "1.55.0",
-    "workers": 4,
+    "workers": 5,
     "webServer": {
-      "command": "npm run serve:prod",
-      "url": "http://localhost:4200",
+      "command": "npm run serve:testing",
+      "url": "http://localhost:4300",
       "reuseExistingServer": true,
       "timeout": 120000
     }
   },
   "suites": [
     {
-      "title": "qa-visual-final.spec.ts",
-      "file": "qa-visual-final.spec.ts",
+      "title": "business-logic-detection.spec.ts",
+      "file": "business-logic-detection.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "QA Visual Final - Screenshots & Accessibility",
-          "file": "qa-visual-final.spec.ts",
-          "line": 56,
+          "title": "Business Logic Detection",
+          "file": "business-logic-detection.spec.ts",
+          "line": 110,
           "column": 6,
           "specs": [
             {
-              "title": "Login - Light Mode Screenshot & Accessibility",
-              "ok": true,
+              "title": "Simulador AGS Ahorro - flujo completo",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -202,1778 +202,67 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 6758,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Login { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
+                      "status": "failed",
+                      "duration": 22889,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 20000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/simulador/ags-ahorro**\" until \"load\"\n  navigated to \"http://localhost:4300/nueva-oportunidad?market=aguascalientes&clientType=individual&preselectedFlow=SIMULACION&targetSimulator=ags-ahorro&fromHub=true\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 20000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/simulador/ags-ahorro**\" until \"load\"\n  navigated to \"http://localhost:4300/nueva-oportunidad?market=aguascalientes&clientType=individual&preselectedFlow=SIMULACION&targetSimulator=ags-ahorro&fromHub=true\"\n============================================================\n    at /Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e/business-logic-detection.spec.ts:138:16",
+                        "location": {
+                          "file": "/Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e/business-logic-detection.spec.ts",
+                          "column": 16,
+                          "line": 138
                         },
+                        "snippet": "  136 |     await gotoSimHub(page);\n  137 |     await page.locator('[data-cy=\"sim-ags-ahorro\"]').click();\n> 138 |     await page.waitForURL('**/simulador/ags-ahorro**', { timeout: 20000 });\n      |                ^\n  139 |     await expect(page.locator('[data-cy=\"simulate-btn\"]')).toBeVisible();\n  140 |\n  141 |     await page.fill('[data-cy=\"unit-value\"]', scenario.unitValue.toString());"
+                      },
+                      "errors": [
                         {
-                          "text": "✅ Login - No accessibility violations found\n"
+                          "location": {
+                            "file": "/Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e/business-logic-detection.spec.ts",
+                            "column": 16,
+                            "line": 138
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 20000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/simulador/ags-ahorro**\" until \"load\"\n  navigated to \"http://localhost:4300/nueva-oportunidad?market=aguascalientes&clientType=individual&preselectedFlow=SIMULACION&targetSimulator=ags-ahorro&fromHub=true\"\n============================================================\n\n  136 |     await gotoSimHub(page);\n  137 |     await page.locator('[data-cy=\"sim-ags-ahorro\"]').click();\n> 138 |     await page.waitForURL('**/simulador/ags-ahorro**', { timeout: 20000 });\n      |                ^\n  139 |     await expect(page.locator('[data-cy=\"simulate-btn\"]')).toBeVisible();\n  140 |\n  141 |     await page.fill('[data-cy=\"unit-value\"]', scenario.unitValue.toString());\n    at /Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e/business-logic-detection.spec.ts:138:16"
                         }
                       ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:35:54.045Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--57d42-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-961047d6e1322913196a",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Login - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2183,
-                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-01T08:36:05.210Z",
+                      "startTime": "2025-10-09T23:10:48.811Z",
                       "annotations": [],
                       "attachments": [
                         {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--fa80c-ogin---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-d1f9633cedb568e34530",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Dashboard - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3322,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Dashboard { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/juanjosuehernandeztapia/pwa_angular_v3/test-results/visual/business-logic-detection-B-5dc19-AGS-Ahorro---flujo-completo-chromium/test-failed-1.png"
                         },
                         {
-                          "text": "✅ Dashboard - No accessibility violations found\n"
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/juanjosuehernandeztapia/pwa_angular_v3/test-results/visual/business-logic-detection-B-5dc19-AGS-Ahorro---flujo-completo-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/juanjosuehernandeztapia/pwa_angular_v3/test-results/visual/business-logic-detection-B-5dc19-AGS-Ahorro---flujo-completo-chromium/error-context.md"
                         }
                       ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:07.424Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3f12a-de-Screenshot-Accessibility-chromium/video.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3f12a-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        }
-                      ]
+                      "errorLocation": {
+                        "file": "/Users/juanjosuehernandeztapia/pwa_angular_v3/tests/e2e/business-logic-detection.spec.ts",
+                        "column": 16,
+                        "line": 138
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "0b662dbc0449cce45d24-347c32d71b5559e27020",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Dashboard - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1722,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:10.774Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--ccf26-oard---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-69d9761451a54fbc2edd",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Cotizador AGS - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3015,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Cotizador AGS { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Cotizador AGS - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:12.514Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--d17a3-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--d17a3-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-ee6fc33672826f100fbd",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Cotizador AGS - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1734,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:15.539Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--ad9de--AGS---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-ca840cca08f292b3d9a0",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Cotizador EdoMex - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2654,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Cotizador EdoMex { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Cotizador EdoMex - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:17.285Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--fcae1-de-Screenshot-Accessibility-chromium/video.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--fcae1-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-6019f2ed6fbff1feabbe",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Cotizador EdoMex - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1633,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:19.952Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--5bd52-oMex---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-c281c4ab13331c1f79f2",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Cotizador Colectivo - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2611,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Cotizador Colectivo { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Cotizador Colectivo - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:21.600Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--e6c4d-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--e6c4d-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-3386da63ace21b3bfb21",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Cotizador Colectivo - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1520,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "📋 QA Report generated: /Users/josuehernandez/pwa_angular/QA-REPORT.md\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:24.221Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--36407-tivo---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-95dff0ab78a22b407d9f",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Simulador AGS - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 6709,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Simulador AGS { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Simulador AGS - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:35:54.052Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--6d5b0-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-9fd9aecdca1995a69a6f",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Simulador AGS - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 2137,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:05.159Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--c5e96--AGS---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-c9558015f5f2a6a61142",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Simulador EdoMex Individual - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 3242,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Simulador EdoMex Individual { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Simulador EdoMex Individual - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:07.318Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--117de-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--117de-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-a4e46fdd98d512fcdc51",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Simulador EdoMex Individual - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1738,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:10.578Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--6e7a8-dual---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-eab2c0cf1152aa1f9e78",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Simulador EdoMex Colectivo - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 2624,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Simulador EdoMex Colectivo { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Simulador EdoMex Colectivo - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:12.328Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--62131-de-Screenshot-Accessibility-chromium/video.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--62131-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-8e600f8a9f58f57052d2",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Simulador EdoMex Colectivo - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1779,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:14.960Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--b26e8-tivo---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-819a6789f3a60c22165b",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Protección - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 2455,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Protección { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Protección - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:16.751Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3fd8a-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3fd8a-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-195074b67e982a8577e6",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Protección - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1672,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:19.218Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--e626e-ción---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-123edd02c623bf04c72d",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "AVI - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 2340,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT AVI { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ AVI - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:20.899Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--75ede-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--75ede-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-cb4a63307685b9e0f327",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "AVI - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1660,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "📋 QA Report generated: /Users/josuehernandez/pwa_angular/QA-REPORT.md\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:23.248Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--7d7a8--AVI---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-9a7e8703ffa4d5419204",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Documentos - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 6716,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Documentos { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Documentos - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:35:54.051Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--cfea0-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--cfea0-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-cde48c7178b885bd1570",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Documentos - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 2372,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:05.168Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--230c0-ntos---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-ca72781edf0025b3bd57",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Entregas - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 3269,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Entregas { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Entregas - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:07.562Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3caa5-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--3caa5-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-3c3a4c5a0d5afdc0530b",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Entregas - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1840,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:10.845Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--c1157-egas---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-14c3acde997eae00c3b1",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Configuración - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 2816,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Configuración { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Configuración - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:12.711Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--82616-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--82616-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-483b8e3cec2fcfa41b7d",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Configuración - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1839,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:15.540Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--8bf15-ción---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-d363e08544b9a62edef3",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Postventa - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 2637,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Postventa { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Postventa - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:17.388Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--5a004-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--5a004-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-a7beb6aa3c2f99bf88c2",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Postventa - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1701,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:20.047Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--da920-enta---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-4a8b7b8b9efab9866a57",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "GNV Salud - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 2809,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT GNV Salud { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ GNV Salud - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:21.763Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--76d0f-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--76d0f-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-03330cbc9a325cb30baa",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "GNV Salud - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1593,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "📋 QA Report generated: /Users/josuehernandez/pwa_angular/QA-REPORT.md\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:24.581Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--f70b9-alud---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-26a91f91cf731d7faf0c",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Integraciones - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 6691,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Integraciones { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Integraciones - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:35:54.043Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--01d5e-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-a41f821192ddbac45caf",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Integraciones - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 2168,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:05.138Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--a9042-ones---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-240898e023015f788470",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Administración - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 2650,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Administración { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Administración - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:07.316Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--260a9-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--260a9-de-Screenshot-Accessibility-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-ef0187c5a1d115e84141",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Administración - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1821,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:09.981Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--33ca7-ción---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-7c5c8b6bc4f6bfcf8700",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Offline - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 2421,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Offline { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Offline - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:11.819Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--285f6-de-Screenshot-Accessibility-chromium/video.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--285f6-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-e1a9ebeca8ed8c626e14",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Offline - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1920,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:14.251Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--e9342-line---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-4a2e7165102a195b61a6",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "Usage - Light Mode Screenshot & Accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 2374,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "HEAD SNAPSHOT Usage { title: \u001b[32m'Conductores PWA - Mobility Tech Platform'\u001b[39m, langAttr: \u001b[32m'es'\u001b[39m }\n"
-                        },
-                        {
-                          "text": "✅ Usage - No accessibility violations found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:16.184Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--fddd8-de-Screenshot-Accessibility-chromium/video.webm"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--fddd8-de-Screenshot-Accessibility-chromium/video-1.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-56ee1817f0e29f51b2f6",
-              "file": "qa-visual-final.spec.ts",
-              "line": 77,
-              "column": 9
-            },
-            {
-              "title": "Usage - Dark Mode Screenshot",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1674,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:18.567Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--9d403-sage---Dark-Mode-Screenshot-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-bdd03a6c85cb5de065fb",
-              "file": "qa-visual-final.spec.ts",
-              "line": 139,
-              "column": 9
-            },
-            {
-              "title": "QA Visual - Mobile Responsive Screenshots",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 7197,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-01T08:36:20.254Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--8413d-bile-Responsive-Screenshots-chromium/video.webm"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "0b662dbc0449cce45d24-1b5a0be692ed53123de6",
-              "file": "qa-visual-final.spec.ts",
-              "line": 192,
+              "id": "ef51a357355eda5b6ba4-0cb273e443e4baad5ab6",
+              "file": "business-logic-detection.spec.ts",
+              "line": 117,
               "column": 7
             },
             {
-              "title": "QA Visual - Form Accessibility Validation",
+              "title": "Simulador EdoMex Individual - cálculo de ahorro",
               "ok": true,
               "tags": [],
               "tests": [
@@ -1985,35 +274,59 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 2719,
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
                       "errors": [],
-                      "stdout": [
-                        {
-                          "text": "📋 QA Report generated: /Users/josuehernandez/pwa_angular/QA-REPORT.md\n"
-                        }
-                      ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-01T08:36:27.461Z",
+                      "startTime": "2025-10-09T23:11:11.970Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/josuehernandez/pwa_angular/test-results/visual/qa-visual-final-QA-Visual--424f0-rm-Accessibility-Validation-chromium/video.webm"
-                        }
-                      ]
+                      "attachments": []
                     }
                   ],
-                  "status": "expected"
+                  "status": "skipped"
                 }
               ],
-              "id": "0b662dbc0449cce45d24-b6a67130b9a336034cf3",
-              "file": "qa-visual-final.spec.ts",
-              "line": 216,
+              "id": "ef51a357355eda5b6ba4-1377ed740ca6eb1b1088",
+              "file": "business-logic-detection.spec.ts",
+              "line": 198,
+              "column": 7
+            },
+            {
+              "title": "Simulador EdoMex Colectivo - contribución y entregas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-09T23:11:11.970Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ef51a357355eda5b6ba4-bda0a7ded8cd2cefa6e3",
+              "file": "business-logic-detection.spec.ts",
+              "line": 269,
               "column": 7
             }
           ]
@@ -2023,11 +336,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-01T08:35:52.847Z",
-    "duration": 37491.094,
-    "expected": 40,
-    "skipped": 0,
-    "unexpected": 0,
+    "startTime": "2025-10-09T23:10:48.278Z",
+    "duration": 23707.417,
+    "expected": 0,
+    "skipped": 2,
+    "unexpected": 1,
     "flaky": 0
   }
 }

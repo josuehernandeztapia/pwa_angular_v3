@@ -210,8 +210,8 @@
           <span class="clientes-list__indicator clientes-list__indicator--opportunity" *ngIf="isHighValueClient(cliente)">
             Premium
           </span>
-          <span class="clientes-list__indicator clientes-list__indicator--risk" *ngIf="isAtRisk(cliente)">
-            Riesgo
+          <span *ngIf="isAtRisk(cliente)" [ngClass]="getRiskIndicatorClasses(cliente)">
+            {{ getRiskBadge(cliente) || 'Riesgo' }}
           </span>
           <span class="clientes-list__indicator clientes-list__indicator--protection" *ngIf="hasProtectionAvailable(cliente)">
             Protección

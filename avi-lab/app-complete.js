@@ -94,7 +94,19 @@ class AVILabComplete {
      * SETUP USER INTERFACE
      */
     setupUI() {
-        const app = document.getElementById('app');
+        let app = document.getElementById('app');
+        if (!app) {
+            const fallback = document.querySelector('.avi-lab-root, .container');
+            if (fallback) {
+                app = fallback;
+            } else {
+                app = document.createElement('div');
+                app.id = 'app';
+                app.className = 'avi-lab-root';
+                document.body.innerHTML = '';
+                document.body.appendChild(app);
+            }
+        }
         app.innerHTML = `
             <div class="avi-lab-complete">
                 <!-- Header -->

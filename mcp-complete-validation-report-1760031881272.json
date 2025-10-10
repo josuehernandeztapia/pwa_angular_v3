@@ -1,0 +1,272 @@
+{
+  "timestamp": "2025-10-09T17:44:41.271Z",
+  "tool": "Chrome DevTools MCP - Complete E2E Validation",
+  "description": "Comprehensive authentication + click-by-click validation of all sections",
+  "baseUrl": "http://localhost:4300",
+  "total": 9,
+  "passed": 8,
+  "failed": 1,
+  "successRate": 89,
+  "authenticationPassed": true,
+  "tests": [
+    {
+      "test": "Complete Authentication Flow",
+      "passed": true,
+      "details": "URL changed: true, Auth data: false, Storage: true",
+      "beforeUrl": "http://localhost:4300/login",
+      "afterUrl": "http://localhost:4300/dashboard",
+      "authData": {
+        "hasUserData": false,
+        "hasToken": false
+      },
+      "formFilled": true
+    },
+    {
+      "test": "Simuladores Validation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 377, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/simulador",
+        "pathname": "/simulador",
+        "title": "Simulador - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 1326,
+        "totalElements": 377,
+        "buttons": 23,
+        "inputs": 1,
+        "forms": 0,
+        "links": 14,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": true,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/simulador",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Cotizadores Validation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 355, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/cotizador",
+        "pathname": "/cotizador",
+        "title": "Cotizador - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 976,
+        "totalElements": 355,
+        "buttons": 21,
+        "inputs": 1,
+        "forms": 0,
+        "links": 13,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": true,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/cotizador",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Flow Builder Validation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 608, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/configuracion/flow-builder",
+        "pathname": "/configuracion/flow-builder",
+        "title": "Flow Builder - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 1820,
+        "totalElements": 608,
+        "buttons": 34,
+        "inputs": 4,
+        "forms": 0,
+        "links": 14,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": true,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/configuracion/flow-builder",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Onboarding Validation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 324, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/onboarding",
+        "pathname": "/onboarding",
+        "title": "Onboarding - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 825,
+        "totalElements": 324,
+        "buttons": 20,
+        "inputs": 1,
+        "forms": 0,
+        "links": 10,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": true,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/onboarding",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Productos Validation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 508, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/productos",
+        "pathname": "/productos",
+        "title": "Catálogo de Productos - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 1629,
+        "totalElements": 508,
+        "buttons": 33,
+        "inputs": 1,
+        "forms": 0,
+        "links": 10,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": true,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/productos",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Protección Validation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 418, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/proteccion",
+        "pathname": "/proteccion",
+        "title": "Protección - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 1447,
+        "totalElements": 418,
+        "buttons": 28,
+        "inputs": 4,
+        "forms": 1,
+        "links": 11,
+        "hasContent": true,
+        "hasErrors": 2,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": true
+        }
+      },
+      "url": "http://localhost:4300/proteccion",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Dashboard Validation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 561, Interactive: true, NotOnLogin: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/dashboard",
+        "pathname": "/dashboard",
+        "title": "Dashboard - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 1823,
+        "totalElements": 561,
+        "buttons": 40,
+        "inputs": 1,
+        "forms": 0,
+        "links": 10,
+        "hasContent": true,
+        "hasErrors": 0,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/dashboard",
+      "redirectedToLogin": false
+    },
+    {
+      "test": "Business Logic Detection",
+      "passed": false,
+      "details": "Error: page.evaluate: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:has-text(\"Calcular\"), button:has-text(\"Simular\"), .calculate-btn' is not a valid selector.\n    at eval (eval at evaluate (:291:30), <anonymous>:4:54)\n    at UtilityScript.evaluate (<anonymous>:293:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "error": "page.evaluate: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:has-text(\"Calcular\"), button:has-text(\"Simular\"), .calculate-btn' is not a valid selector.\n    at eval (eval at evaluate (:291:30), <anonymous>:4:54)\n    at UtilityScript.evaluate (<anonymous>:293:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+    }
+  ],
+  "screenshots": [
+    "mcp-complete-01-login-page-loaded-1760031845970.png",
+    "mcp-complete-02-demo-user-clicked-1760031847476.png",
+    "mcp-complete-03-auth-completed-1760031847946.png",
+    "mcp-complete-simuladores-1760031852057.png",
+    "mcp-complete-cotizadores-1760031856101.png",
+    "mcp-complete-flow-builder-1760031860144.png",
+    "mcp-complete-onboarding-1760031865138.png",
+    "mcp-complete-productos-1760031869117.png",
+    "mcp-complete-protección-1760031873139.png",
+    "mcp-complete-dashboard-1760031877178.png",
+    "mcp-complete-business-logic-error-1760031881205.png"
+  ],
+  "errors": [
+    "Console Error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Console Error: [monitoring:error] {service: AuthInterceptor, operation: http_error, message: Http failure response for http://localhost:3000/api/dashboard/activity?limit=15: 404 Not Found, metadata: Object, stack: undefined}",
+    "Console Error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Console Error: [monitoring:error] {service: AuthInterceptor, operation: http_error, message: Http failure response for http://localhost:3000/api/dashboard/stats: 404 Not Found, metadata: Object, stack: undefined}",
+    "Console Error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Console Error: [monitoring:error] {service: AuthInterceptor, operation: http_error, message: Http failure response for http://localhost:3000/api/dashboard/activity?limit=15: 404 Not Found, metadata: Object, stack: undefined}",
+    "Console Error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Console Error: [monitoring:error] {service: AuthInterceptor, operation: http_error, message: Http failure response for http://localhost:3000/api/dashboard/stats: 404 Not Found, metadata: Object, stack: undefined}"
+  ],
+  "method": "Playwright with Chrome DevTools MCP"
+}

@@ -1,0 +1,216 @@
+{
+  "timestamp": "2025-10-09T17:38:26.634Z",
+  "tool": "Fixed Auth Click by Click",
+  "description": "Focus on solving authentication and successful navigation",
+  "baseUrl": "http://localhost:4300",
+  "total": 7,
+  "passed": 6,
+  "failed": 1,
+  "successRate": 86,
+  "authenticationPassed": false,
+  "tests": [
+    {
+      "test": "Authentication Flow",
+      "passed": false,
+      "details": "URL changed: false, Auth data: false, Storage: false",
+      "beforeUrl": "http://localhost:4300/login",
+      "afterUrl": "http://localhost:4300/login",
+      "authData": {
+        "hasUserData": false,
+        "hasToken": false
+      }
+    },
+    {
+      "test": "Simuladores Navigation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 342, Interactive: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/login",
+        "pathname": "/login",
+        "title": "Iniciar Sesión - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 986,
+        "totalElements": 342,
+        "buttons": 25,
+        "inputs": 4,
+        "forms": 1,
+        "links": 12,
+        "hasContent": true,
+        "hasErrors": 3,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/login"
+    },
+    {
+      "test": "Cotizadores Navigation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 342, Interactive: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/login",
+        "pathname": "/login",
+        "title": "Iniciar Sesión - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 986,
+        "totalElements": 342,
+        "buttons": 25,
+        "inputs": 4,
+        "forms": 1,
+        "links": 12,
+        "hasContent": true,
+        "hasErrors": 3,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/login"
+    },
+    {
+      "test": "Flow Builder Navigation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 342, Interactive: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/login",
+        "pathname": "/login",
+        "title": "Iniciar Sesión - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 986,
+        "totalElements": 342,
+        "buttons": 25,
+        "inputs": 4,
+        "forms": 1,
+        "links": 12,
+        "hasContent": true,
+        "hasErrors": 3,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/login"
+    },
+    {
+      "test": "Onboarding Navigation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 342, Interactive: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/login",
+        "pathname": "/login",
+        "title": "Iniciar Sesión - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 986,
+        "totalElements": 342,
+        "buttons": 25,
+        "inputs": 4,
+        "forms": 1,
+        "links": 12,
+        "hasContent": true,
+        "hasErrors": 3,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/login"
+    },
+    {
+      "test": "Productos Navigation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 342, Interactive: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/login",
+        "pathname": "/login",
+        "title": "Iniciar Sesión - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 986,
+        "totalElements": 342,
+        "buttons": 25,
+        "inputs": 4,
+        "forms": 1,
+        "links": 12,
+        "hasContent": true,
+        "hasErrors": 3,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/login"
+    },
+    {
+      "test": "Protección Navigation",
+      "passed": true,
+      "details": "Loaded: true, Elements: 342, Interactive: true",
+      "metrics": {
+        "currentUrl": "http://localhost:4300/login",
+        "pathname": "/login",
+        "title": "Iniciar Sesión - Conductores PWA",
+        "hasAppRoot": true,
+        "hasAngularApp": true,
+        "isLoaded": true,
+        "bodyText": 986,
+        "totalElements": 342,
+        "buttons": 25,
+        "inputs": 4,
+        "forms": 1,
+        "links": 12,
+        "hasContent": true,
+        "hasErrors": 3,
+        "components": {
+          "simuladorMain": false,
+          "cotizadorMain": false,
+          "flowBuilder": false,
+          "onboardingMain": false,
+          "productsCatalog": false,
+          "proteccion": false
+        }
+      },
+      "url": "http://localhost:4300/login"
+    }
+  ],
+  "screenshots": [
+    "fixed-auth-01-login-page-loaded-1760031477128.png",
+    "fixed-auth-02-after-demo-click-1760031481347.png",
+    "fixed-auth-03-auth-completed-1760031481418.png",
+    "fixed-auth-simuladores-1760031485603.png",
+    "fixed-auth-cotizadores-1760031489807.png",
+    "fixed-auth-flow-builder-1760031494000.png",
+    "fixed-auth-onboarding-1760031498172.png",
+    "fixed-auth-productos-1760031502362.png",
+    "fixed-auth-protección-1760031506563.png"
+  ],
+  "errors": null
+}

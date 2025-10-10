@@ -24,6 +24,9 @@
         [attr.aria-pressed]="selectedMarket === market.value"
         [attr.aria-label]="'Filtrar por mercado: ' + market.label"
         (click)="selectMarket(market.value)"
+        [attr.data-market]="market.value"
+        [attr.data-qa]="'product-market-' + market.value"
+        [attr.data-cy]="'product-market-' + market.value"
       >
         <app-icon
           [name]="market.icon"
@@ -43,6 +46,9 @@
         [attr.aria-pressed]="selectedType === type.value"
         [attr.aria-label]="'Filtrar por tipo: ' + type.label"
         (click)="selectType(type.value)"
+        [attr.data-product-type]="type.value"
+        [attr.data-qa]="'product-type-' + type.value"
+        [attr.data-cy]="'product-type-' + type.value"
       >
         {{ type.label }}
       </button>
@@ -63,6 +69,11 @@
     <article
       *ngFor="let producto of filteredProducts; trackBy: trackByProductId"
       [ngClass]="getProductCardClasses(producto)"
+      data-qa="product-card"
+      [attr.data-product-id]="producto.id"
+      [attr.data-product-name]="producto.name"
+      [attr.data-market]="producto.market"
+      [attr.data-cy]="'product-card-' + producto.id"
     >
       <div *ngIf="producto.isPopular" class="catalog-card__badge">
         <app-icon name="star" [size]="20" class="catalog-card__badge-icon" aria-hidden="true" />

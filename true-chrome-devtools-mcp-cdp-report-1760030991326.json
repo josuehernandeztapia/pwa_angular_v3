@@ -1,0 +1,177 @@
+{
+  "timestamp": "2025-10-09T17:29:51.324Z",
+  "tool": "True Chrome DevTools MCP with CDP",
+  "baseUrl": "http://localhost:4300",
+  "cdpPort": 9223,
+  "total": 8,
+  "passed": 6,
+  "failed": 2,
+  "successRate": 75,
+  "tests": [
+    {
+      "test": "Authentication via CDP/Playwright",
+      "passed": false,
+      "details": "Login successful with 3 demo users, authenticated: false",
+      "errors": null,
+      "networkIssues": null
+    },
+    {
+      "test": "Simuladores Component Rendering",
+      "passed": true,
+      "details": "Structure: true, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "hasMainComponent": false,
+        "hasInteractiveElements": 30,
+        "totalButtons": 26,
+        "totalInputs": 4,
+        "totalSelects": 0,
+        "totalForms": 1,
+        "hasErrors": true,
+        "hasSimuladorMain": 0,
+        "hasSimulatorButtons": 26,
+        "hasInputFields": 4,
+        "hasPremiumCards": 1
+      },
+      "errors": null,
+      "networkIssues": null
+    },
+    {
+      "test": "Cotizadores Component Rendering",
+      "passed": true,
+      "details": "Structure: true, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "hasMainComponent": false,
+        "hasInteractiveElements": 30,
+        "totalButtons": 26,
+        "totalInputs": 4,
+        "totalSelects": 0,
+        "totalForms": 1,
+        "hasErrors": true,
+        "hasCotizadorMain": 0,
+        "hasNumberInputs": 0,
+        "hasFormGroups": 1
+      },
+      "errors": null,
+      "networkIssues": null
+    },
+    {
+      "test": "Flow Builder Component Rendering",
+      "passed": true,
+      "details": "Structure: true, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "hasMainComponent": false,
+        "hasInteractiveElements": 30,
+        "totalButtons": 26,
+        "totalInputs": 4,
+        "totalSelects": 0,
+        "totalForms": 1,
+        "hasErrors": true,
+        "hasFlowBuilder": 0,
+        "hasFlowPalette": 0,
+        "hasFlowCanvas": 0,
+        "hasFlowElements": 0
+      },
+      "errors": null,
+      "networkIssues": null
+    },
+    {
+      "test": "Onboarding Component Rendering",
+      "passed": true,
+      "details": "Structure: true, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "hasMainComponent": false,
+        "hasInteractiveElements": 30,
+        "totalButtons": 26,
+        "totalInputs": 4,
+        "totalSelects": 0,
+        "totalForms": 1,
+        "hasErrors": true,
+        "hasOnboardingMain": 0,
+        "hasMarketSelect": 0,
+        "hasFormControls": 4
+      },
+      "errors": null,
+      "networkIssues": null
+    },
+    {
+      "test": "Productos Component Rendering",
+      "passed": true,
+      "details": "Structure: true, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "hasMainComponent": false,
+        "hasInteractiveElements": 30,
+        "totalButtons": 26,
+        "totalInputs": 4,
+        "totalSelects": 0,
+        "totalForms": 1,
+        "hasErrors": true,
+        "hasProducts": 0,
+        "hasProductCards": 1
+      },
+      "errors": null,
+      "networkIssues": null
+    },
+    {
+      "test": "Protección Component Rendering",
+      "passed": true,
+      "details": "Structure: true, Interactive: true, Components: false",
+      "metrics": {
+        "hasAppRoot": true,
+        "hasAngularVersion": true,
+        "bodyChildrenCount": 4,
+        "hasMainComponent": false,
+        "hasInteractiveElements": 30,
+        "totalButtons": 26,
+        "totalInputs": 4,
+        "totalSelects": 0,
+        "totalForms": 1,
+        "hasErrors": true
+      },
+      "errors": null,
+      "networkIssues": null
+    },
+    {
+      "test": "Business Logic Detection",
+      "passed": false,
+      "details": "Calculation functions: false, Calculator inputs: false",
+      "metrics": {
+        "hasCalculation": false,
+        "hasCalculatorInputs": false,
+        "hasResults": false,
+        "numberInputs": 0,
+        "calculateButtons": 0
+      },
+      "errors": null,
+      "networkIssues": null
+    }
+  ],
+  "screenshots": [
+    "mcp-enhanced-01-login-page-1760030980681.png",
+    "mcp-enhanced-02-after-auth-click-1760030982060.png",
+    "mcp-enhanced-simuladores-1760030985959.png",
+    "mcp-enhanced-cotizadores-1760030986846.png",
+    "mcp-enhanced-flow builder-1760030987726.png",
+    "mcp-enhanced-onboarding-1760030988601.png",
+    "mcp-enhanced-productos-1760030989493.png",
+    "mcp-enhanced-protección-1760030990366.png",
+    "mcp-enhanced-03-business-logic-simuladores-1760030991247.png"
+  ],
+  "totalConsoleErrors": 0,
+  "totalNetworkErrors": 0,
+  "method": "Playwright Fallback"
+}

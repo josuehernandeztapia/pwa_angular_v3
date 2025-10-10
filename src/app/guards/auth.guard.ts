@@ -9,6 +9,7 @@ import {
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,10 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   }
 
   private checkAuthStatus(url: string): Observable<boolean> {
+    if (environment.testing && environment.bypassAuth) {
+      return of(true);
+    }
+
     return this.authService.isAuthenticated$.pipe(
       tap(isAuthenticated => {
         if (!isAuthenticated) {

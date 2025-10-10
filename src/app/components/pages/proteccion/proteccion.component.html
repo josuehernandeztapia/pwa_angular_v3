@@ -74,6 +74,16 @@
           <div class="risk-card__hint">Situación estable</div>
         </div>
       </div>
+    @if (riskEvaluation()) {
+      <section class="card proteccion-section">
+        <app-risk-panel
+          [riskEvaluation]="riskEvaluation"
+          [isLoading]="riskLoading"
+          [hasError]="riskError"
+        ></app-risk-panel>
+      </section>
+    }
+
     </section>
 
     <!-- Herramientas -->

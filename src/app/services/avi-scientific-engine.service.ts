@@ -38,19 +38,19 @@ interface CoherenceInputs {
 }
 
 // Coefficients by category (α, β, γ, δ)
-const COEFFICIENTS_BY_CATEGORY = {
-  BASIC_INFO: { a: 0.3, b: 0.2, c: 0.2, d: 0.3 },
-  DAILY_OPERATION: { a: 0.2, b: 0.25, c: 0.15, d: 0.4 },
-  OPERATIONAL_COSTS: { a: 0.2, b: 0.25, c: 0.15, d: 0.4 },
-  BUSINESS_STRUCTURE: { a: 0.25, b: 0.2, c: 0.2, d: 0.35 },
-  ASSETS: { a: 0.3, b: 0.2, c: 0.2, d: 0.3 },
-  CREDIT_HISTORY: { a: 0.15, b: 0.3, c: 0.25, d: 0.3 },
-  PAYMENT_INTENTION: { a: 0.2, b: 0.3, c: 0.2, d: 0.3 },
-  RISK_ASSESSMENT: { a: 0.2, b: 0.35, c: 0.2, d: 0.25 }
+const COEFFICIENTS_BY_CATEGORY: Record<string, { a: number; b: number; c: number; d: number }> = {
+  basic_info: { a: 0.3, b: 0.2, c: 0.2, d: 0.3 },
+  daily_operation: { a: 0.2, b: 0.25, c: 0.15, d: 0.4 },
+  operational_costs: { a: 0.2, b: 0.25, c: 0.15, d: 0.4 },
+  business_structure: { a: 0.25, b: 0.2, c: 0.2, d: 0.35 },
+  assets_patrimony: { a: 0.3, b: 0.2, c: 0.2, d: 0.3 },
+  credit_history: { a: 0.15, b: 0.3, c: 0.25, d: 0.3 },
+  payment_intention: { a: 0.2, b: 0.3, c: 0.2, d: 0.3 },
+  risk_evaluation: { a: 0.2, b: 0.35, c: 0.2, d: 0.25 }
 };
 
 // Lexical likelihood ratios (initially heuristic, to be calibrated)
-const LEXICAL_LR_MAP = {
+const LEXICAL_LR_MAP: { evasive: Record<string, number>; honest: Record<string, number> } = {
   evasive: {
     'aproximadamente': 3.2,
     'mas_o_menos': 2.8,
@@ -376,7 +376,7 @@ export class AVIScientificEngineService {
    * Get adaptive coefficients based on question weight and category
    */
   private getAdaptiveCoefficients(question: AVIQuestionEnhanced): { a: number; b: number; c: number; d: number } {
-    const base = COEFFICIENTS_BY_CATEGORY[question.category] || COEFFICIENTS_BY_CATEGORY.BASIC_INFO;
+    const base = COEFFICIENTS_BY_CATEGORY[question.category] || COEFFICIENTS_BY_CATEGORY['basic_info'];
     
     // For critical questions (weight 9-10), give more weight to coherence
     if (question.weight >= 9) {

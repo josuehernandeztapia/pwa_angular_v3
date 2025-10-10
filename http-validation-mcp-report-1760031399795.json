@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-10-09T17:36:39.794Z",
+  "tool": "HTTP Validation MCP",
+  "baseUrl": "http://localhost:4300",
+  "total": 8,
+  "passed": 0,
+  "failed": 8,
+  "successRate": 0,
+  "tests": [
+    {
+      "test": "Home/Login",
+      "path": "",
+      "passed": false,
+      "statusCode": "ERROR"
+    },
+    {
+      "test": "Simuladores",
+      "path": "/simuladores",
+      "passed": false,
+      "statusCode": "ERROR"
+    },
+    {
+      "test": "Cotizadores",
+      "path": "/cotizadores",
+      "passed": false,
+      "statusCode": "ERROR"
+    },
+    {
+      "test": "Flow Builder",
+      "path": "/configuracion/flow-builder",
+      "passed": false,
+      "statusCode": "ERROR"
+    },
+    {
+      "test": "Onboarding",
+      "path": "/onboarding",
+      "passed": false,
+      "statusCode": "ERROR"
+    },
+    {
+      "test": "Productos",
+      "path": "/productos",
+      "passed": false,
+      "statusCode": "ERROR"
+    },
+    {
+      "test": "Protección",
+      "path": "/proteccion",
+      "passed": false,
+      "statusCode": "ERROR"
+    },
+    {
+      "test": "Dashboard",
+      "path": "/dashboard",
+      "passed": false,
+      "statusCode": "ERROR"
+    }
+  ]
+}

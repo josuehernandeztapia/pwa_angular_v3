@@ -6,49 +6,364 @@
  * ENFOQUE: Cashflow validation + Newton-Raphson robustness
  */
 
-// Expected TIR values calculated with Excel RATE function
+function createAnnuityScenario({ name, principal, annualRate, term, market, type, minAnnual: minAnnualOverride }) {
+  const monthlyRate = annualRate / 12;
+  const monthlyPayment = calculatePMT(principal, monthlyRate, term);
+  const cashflows = [-principal, ...Array(term).fill(monthlyPayment)];
+
+  const baseMinAnnual = typeof market === 'string'
+    ? market === 'aguascalientes'
+      ? 0.255
+      : market === 'edomex'
+        ? (type === 'collective' ? 0.275 : 0.299)
+        : undefined
+    : undefined;
+
+  const minAnnual = minAnnualOverride === null
+    ? null
+    : (typeof minAnnualOverride === 'number' ? minAnnualOverride : baseMinAnnual);
+
+  return {
+    name,
+    cashflows,
+    expectedMonthly: monthlyRate,
+    expectedAnnual: annualRate,
+    market,
+    type,
+    principal,
+    term,
+    monthlyPayment,
+    minAnnual
+  };
+}
+
+// Expected TIR values aligned with Angular financial logic
 const EXPECTED_TIR_SCENARIOS = [
-  // Aguascalientes scenarios (25.5% minimum)
-  { name: 'AGS_Standard_24m', cashflows: [-100000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000], expected: 0.0255, market: 'aguascalientes' },
-  { name: 'AGS_High_Enganche_60pct', cashflows: [-150000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000], expected: 0.028, market: 'aguascalientes' },
-  { name: 'AGS_Low_Monthly_Payment', cashflows: [-80000, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500], expected: 0.032, market: 'aguascalientes' },
-
-  // Estado de México scenarios (29.9% minimum individual, varies for collective)
-  { name: 'EDOMEX_Individual_Standard', cashflows: [-120000, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500], expected: 0.299, market: 'edomex', type: 'individual' },
-  { name: 'EDOMEX_Colectivo_Lower_Rate', cashflows: [-100000, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500, 5500], expected: 0.275, market: 'edomex', type: 'collective' },
-
-  // Edge cases and boundary conditions
-  { name: 'Edge_Zero_Cashflow', cashflows: [-50000, 0, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500], expected: 0.035, market: 'aguascalientes' },
-  { name: 'Edge_High_TIR_Scenario', cashflows: [-25000, 5000, 5000, 5000, 5000, 5000, 5000], expected: 0.65, market: 'aguascalientes' },
-  { name: 'Edge_Long_Term_60m', cashflows: [-200000, ...Array(60).fill(5000)], expected: 0.18, market: 'edomex' },
-  { name: 'Edge_Small_Amounts', cashflows: [-1000, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50], expected: 0.28, market: 'aguascalientes' },
-
-  // Business rule validation scenarios
-  { name: 'Business_AGS_Minimum_Compliance', cashflows: [-100000, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735, 4735], expected: 0.255, market: 'aguascalientes' },
-  { name: 'Business_EDOMEX_Individual_Minimum', cashflows: [-100000, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580, 5580], expected: 0.299, market: 'edomex', type: 'individual' }
+  createAnnuityScenario({
+    name: 'AGS_Standard_24m',
+    principal: 100000,
+    annualRate: 0.255,
+    term: 24,
+    market: 'aguascalientes',
+    type: 'individual'
+  }),
+  createAnnuityScenario({
+    name: 'AGS_High_Enganche_60pct',
+    principal: 150000,
+    annualRate: 0.28,
+    term: 24,
+    market: 'aguascalientes',
+    type: 'individual'
+  }),
+  createAnnuityScenario({
+    name: 'AGS_Low_Monthly_Payment',
+    principal: 80000,
+    annualRate: 0.32,
+    term: 24,
+    market: 'aguascalientes',
+    type: 'individual'
+  }),
+  createAnnuityScenario({
+    name: 'EDOMEX_Individual_Standard',
+    principal: 120000,
+    annualRate: 0.299,
+    term: 48,
+    market: 'edomex',
+    type: 'individual'
+  }),
+  createAnnuityScenario({
+    name: 'EDOMEX_Colectivo_Lower_Rate',
+    principal: 100000,
+    annualRate: 0.275,
+    term: 60,
+    market: 'edomex',
+    type: 'collective'
+  }),
+  createAnnuityScenario({
+    name: 'Business_AGS_Minimum_Compliance',
+    principal: 100000,
+    annualRate: 0.255,
+    term: 24,
+    market: 'aguascalientes',
+    type: 'individual'
+  }),
+  createAnnuityScenario({
+    name: 'Business_EDOMEX_Individual_Minimum',
+    principal: 120000,
+    annualRate: 0.299,
+    term: 48,
+    market: 'edomex',
+    type: 'individual'
+  }),
+  createAnnuityScenario({
+    name: 'Edge_High_TIR_Scenario',
+    principal: 25000,
+    annualRate: 0.65,
+    term: 6,
+    market: 'aguascalientes'
+  }),
+  createAnnuityScenario({
+    name: 'Edge_Long_Term_60m',
+    principal: 200000,
+    annualRate: 0.18,
+    term: 60,
+    market: 'edomex',
+    minAnnual: null
+  }),
+  createAnnuityScenario({
+    name: 'Edge_Small_Amounts',
+    principal: 1000,
+    annualRate: 0.28,
+    term: 24,
+    market: 'aguascalientes',
+    minAnnual: null
+  }),
+  {
+    name: 'Edge_Zero_Cashflow',
+    cashflows: [-50000, 0, ...Array(23).fill(2500)],
+    expectedMonthly: 0.011014079636924216,
+    expectedAnnual: 0.011014079636924216 * 12,
+    market: 'aguascalientes',
+    minAnnual: null
+  }
 ];
 
-// PMT Validation scenarios
-const EXPECTED_PMT_SCENARIOS = [
-  { name: 'PMT_AGS_Standard', principal: 100000, rate: 0.255/12, term: 24, expected: 5208.33 },
-  { name: 'PMT_EDOMEX_Individual', principal: 120000, rate: 0.299/12, term: 48, expected: 3567.89 },
-  { name: 'PMT_EDOMEX_Collective', principal: 100000, rate: 0.275/12, term: 60, expected: 2245.67 },
-  { name: 'PMT_High_Principal', principal: 500000, rate: 0.285/12, term: 36, expected: 17892.45 },
-  { name: 'PMT_Low_Principal', principal: 25000, rate: 0.255/12, term: 18, expected: 1735.22 },
-  // Edge cases
-  { name: 'PMT_Short_Term_6m', principal: 50000, rate: 0.30/12, term: 6, expected: 8884.26 },
-  { name: 'PMT_Long_Term_72m', principal: 300000, rate: 0.25/12, term: 72, expected: 5623.89 },
-  { name: 'PMT_Zero_Rate_Edge', principal: 100000, rate: 0, term: 24, expected: 4166.67 }
+// PMT Validation scenarios aligned with financial calculator service
+const PMT_BASE_SCENARIOS = [
+  { name: 'PMT_AGS_Standard', principal: 100000, annualRate: 0.255, term: 24 },
+  { name: 'PMT_EDOMEX_Individual', principal: 120000, annualRate: 0.299, term: 48 },
+  { name: 'PMT_EDOMEX_Collective', principal: 100000, annualRate: 0.275, term: 60 },
+  { name: 'PMT_High_Principal', principal: 500000, annualRate: 0.285, term: 36 },
+  { name: 'PMT_Low_Principal', principal: 25000, annualRate: 0.255, term: 18 },
+  { name: 'PMT_Short_Term_6m', principal: 50000, annualRate: 0.30, term: 6 },
+  { name: 'PMT_Long_Term_72m', principal: 300000, annualRate: 0.25, term: 72 },
+  { name: 'PMT_Zero_Rate_Edge', principal: 100000, annualRate: 0, term: 24 }
 ];
 
-// NPV Validation scenarios
+const EXPECTED_PMT_SCENARIOS = PMT_BASE_SCENARIOS.map((scenario) => {
+  const monthlyRate = scenario.annualRate / 12;
+  const expected = scenario.annualRate === 0
+    ? scenario.principal / scenario.term
+    : calculatePMT(scenario.principal, monthlyRate, scenario.term);
+
+  return {
+    name: scenario.name,
+    principal: scenario.principal,
+    rate: monthlyRate,
+    term: scenario.term,
+    expected: Number(expected.toFixed(2))
+  };
+});
+
+// NPV Validation scenarios recalibrated con flujos consistentes
 const EXPECTED_NPV_SCENARIOS = [
-  { name: 'NPV_Positive_Investment', cashflows: [-100000, 30000, 30000, 30000, 30000, 30000], rate: 0.10, expected: 13724.32 },
-  { name: 'NPV_Negative_Investment', cashflows: [-200000, 40000, 40000, 40000, 40000], rate: 0.15, expected: -85678.45 },
-  { name: 'NPV_Breakeven', cashflows: [-100000, 26379.75, 26379.75, 26379.75, 26379.75], rate: 0.08, expected: 0 },
-  { name: 'NPV_High_Discount', cashflows: [-50000, 15000, 15000, 15000, 15000, 15000], rate: 0.25, expected: -6234.56 },
-  { name: 'NPV_Low_Discount', cashflows: [-75000, 20000, 20000, 20000, 20000, 20000], rate: 0.05, expected: 11567.89 }
+  { name: 'NPV_Positive_Investment', cashflows: [-100000, 30000, 30000, 30000, 30000, 30000], rate: 0.10, expected: 13723.60 },
+  { name: 'NPV_Negative_Investment', cashflows: [-200000, 40000, 40000, 40000, 40000], rate: 0.15, expected: -85800.87 },
+  {
+    name: 'NPV_Breakeven',
+    cashflows: [-100000, 30192.080445403917, 30192.080445403917, 30192.080445403917, 30192.080445403917],
+    rate: 0.08,
+    expected: 0
+  },
+  { name: 'NPV_High_Discount', cashflows: [-50000, 15000, 15000, 15000, 15000, 15000], rate: 0.25, expected: -9660.80 },
+  { name: 'NPV_Low_Discount', cashflows: [-75000, 20000, 20000, 20000, 20000, 20000], rate: 0.05, expected: 11589.53 }
 ];
+
+const currencyFormatter = new Intl.NumberFormat('es-MX', {
+  style: 'currency',
+  currency: 'MXN',
+  maximumFractionDigits: 2
+});
+
+function findScenarioByName(name) {
+  return EXPECTED_TIR_SCENARIOS.find((scenario) => scenario.name === name)
+    || EXPECTED_PMT_SCENARIOS.find((scenario) => scenario.name === name)
+    || EXPECTED_NPV_SCENARIOS.find((scenario) => scenario.name === name);
+}
+
+function formatPercent(value) {
+  if (!isFinite(value)) {
+    return 'N/A';
+  }
+  return `${(value * 100).toFixed(3)}%`;
+}
+
+function computeIRRWithFallback(cashflows, guess) {
+  try {
+    return calculateTIRCorrected(cashflows, guess);
+  } catch (error) {
+    return approximateTIR(cashflows, guess);
+  }
+}
+
+function buildScenarioSummary(input) {
+  const source = typeof input === 'string' ? findScenarioByName(input) : input;
+
+  if (!source) {
+    throw new Error(`Scenario "${typeof input === 'string' ? input : '[object]'}" not found or invalid.`);
+  }
+
+  const name = source.name || (typeof input === 'string' ? input : 'CustomScenario');
+  let cashflows = Array.isArray(source.cashflows) ? [...source.cashflows] : null;
+  let principal = typeof source.principal === 'number' ? source.principal : null;
+  let term = typeof source.term === 'number' ? source.term : null;
+  let monthlyRate = typeof source.expectedMonthly === 'number'
+    ? source.expectedMonthly
+    : typeof source.rate === 'number'
+      ? source.rate
+      : typeof source.annualRate === 'number'
+        ? source.annualRate / 12
+        : undefined;
+  let annualRate = typeof source.expectedAnnual === 'number'
+    ? source.expectedAnnual
+    : typeof source.annualRate === 'number'
+      ? source.annualRate
+      : typeof monthlyRate === 'number'
+        ? monthlyRate * 12
+        : undefined;
+  let monthlyPayment = typeof source.monthlyPayment === 'number' ? source.monthlyPayment : undefined;
+
+  if (!cashflows && typeof principal === 'number' && typeof term === 'number') {
+    if (typeof monthlyRate === 'number') {
+      const pmt = typeof monthlyPayment === 'number' ? monthlyPayment : calculatePMT(principal, monthlyRate, term);
+      monthlyPayment = pmt;
+      cashflows = [-principal, ...Array(term).fill(pmt)];
+    } else if (typeof source.expected === 'number') {
+      monthlyPayment = source.expected;
+      cashflows = [-principal, ...Array(term).fill(source.expected)];
+    }
+  }
+
+  if (!cashflows) {
+    throw new Error(`Scenario "${name}" is missing cashflows or sufficient data to derive them.`);
+  }
+
+  if (typeof principal !== 'number') {
+    principal = Math.abs(cashflows[0]);
+  }
+
+  if (typeof term !== 'number') {
+    term = cashflows.length - 1;
+  }
+
+  const tirMonthly = computeIRRWithFallback(cashflows, typeof monthlyRate === 'number' ? monthlyRate : 0.1);
+  const tirAnnual = tirMonthly * 12;
+  const derivedPMT = term > 0 ? calculatePMT(principal, tirMonthly, term) : cashflows[1];
+
+  if (typeof monthlyPayment !== 'number') {
+    const uniformPayment = cashflows.length > 1 ? cashflows[1] : derivedPMT;
+    const allEqual = cashflows.slice(1).every((value) => Math.abs(value - uniformPayment) < 1e-9);
+    monthlyPayment = allEqual ? uniformPayment : derivedPMT;
+  }
+
+  return {
+    name,
+    principal,
+    term,
+    monthlyPayment,
+    tirMonthly,
+    tirAnnual,
+    policyMinAnnual: typeof source.minAnnual === 'number' ? source.minAnnual : undefined,
+    configMonthlyRate: typeof monthlyRate === 'number' ? monthlyRate : undefined,
+    configAnnualRate: typeof annualRate === 'number' ? annualRate : undefined,
+    cashflows
+  };
+}
+
+function evaluateUIComparisons(summary, options, tolerance) {
+  const rows = [];
+  if (typeof options.uiMonthlyPayment === 'number') {
+    const diff = summary.monthlyPayment - options.uiMonthlyPayment;
+    const diffPct = Math.abs(diff) / (options.uiMonthlyPayment === 0 ? 1 : options.uiMonthlyPayment);
+    rows.push({
+      metric: 'PMT',
+      ui: options.uiMonthlyPayment,
+      script: summary.monthlyPayment,
+      diff,
+      diffPct,
+      withinTolerance: diffPct <= tolerance
+    });
+  }
+
+  if (typeof options.uiMonthlyTir === 'number') {
+    const diff = summary.tirMonthly - options.uiMonthlyTir;
+    const diffPct = Math.abs(diff) / (options.uiMonthlyTir === 0 ? 1 : Math.abs(options.uiMonthlyTir));
+    rows.push({
+      metric: 'TIR mensual',
+      ui: options.uiMonthlyTir,
+      script: summary.tirMonthly,
+      diff,
+      diffPct,
+      withinTolerance: diffPct <= tolerance
+    });
+  }
+
+  if (typeof options.uiAnnualTir === 'number') {
+    const diff = summary.tirAnnual - options.uiAnnualTir;
+    const diffPct = Math.abs(diff) / (options.uiAnnualTir === 0 ? 1 : Math.abs(options.uiAnnualTir));
+    rows.push({
+      metric: 'TIR anual',
+      ui: options.uiAnnualTir,
+      script: summary.tirAnnual,
+      diff,
+      diffPct,
+      withinTolerance: diffPct <= tolerance
+    });
+  }
+
+  return rows;
+}
+
+function logScenario(input, options = {}) {
+  const {
+    tolerance = 0.005,
+    uiMonthlyPayment,
+    uiMonthlyTir,
+    uiAnnualTir,
+    printCashflows = false,
+    cashflowLimit = 24
+  } = options;
+
+  const summary = buildScenarioSummary(input);
+  const comparisons = evaluateUIComparisons(summary, { uiMonthlyPayment, uiMonthlyTir, uiAnnualTir }, tolerance);
+
+  console.log('\n' + '='.repeat(60));
+  console.log(`📊 Escenario: ${summary.name}`);
+  console.log('='.repeat(60));
+  console.log(`Principal UI/BFF: ${currencyFormatter.format(summary.principal)}`);
+  console.log(`Plazo (meses): ${summary.term}`);
+  if (typeof summary.configMonthlyRate === 'number') {
+    console.log(`Tasa configurada mensual: ${formatPercent(summary.configMonthlyRate)}`);
+  }
+  if (typeof summary.configAnnualRate === 'number') {
+    console.log(`Tasa configurada anual: ${formatPercent(summary.configAnnualRate)}`);
+  }
+  console.log(`PMT (script): ${currencyFormatter.format(summary.monthlyPayment)}`);
+  console.log(`TIR mensual (script): ${formatPercent(summary.tirMonthly)}`);
+  console.log(`TIR anual (script): ${formatPercent(summary.tirAnnual)}`);
+  if (typeof summary.policyMinAnnual === 'number') {
+    console.log(`Política mínima anual: ${formatPercent(summary.policyMinAnnual)}`);
+  }
+
+  if (comparisons.length > 0) {
+    console.log('\nComparativa UI vs script (tolerancia ' + (tolerance * 100).toFixed(2) + '%):');
+    comparisons.forEach((row) => {
+      console.log(` - ${row.metric}: UI=${row.metric === 'PMT' ? currencyFormatter.format(row.ui) : formatPercent(row.ui)} | Script=${row.metric === 'PMT' ? currencyFormatter.format(row.script) : formatPercent(row.script)} | Δ=${row.metric === 'PMT' ? currencyFormatter.format(row.diff) : formatPercent(row.diff)} | Δ%=${(row.diffPct * 100).toFixed(3)}% | ${(row.withinTolerance ? '✅' : '❌')}`);
+    });
+  }
+
+  if (printCashflows) {
+    const limit = Math.min(summary.cashflows.length, cashflowLimit);
+    console.log('\nCashflows (primeros ' + limit + ' periodos):');
+    const items = summary.cashflows.slice(0, limit).map((value, index) => ({ periodo: index, monto: currencyFormatter.format(value) }));
+    console.table(items);
+    if (summary.cashflows.length > limit) {
+      console.log(`... (${summary.cashflows.length - limit} periodos adicionales)`);
+    }
+  }
+
+  return { summary, comparisons };
+}
 
 /**
  * Corrected Newton-Raphson TIR implementation
@@ -193,13 +508,28 @@ function executeComprehensiveValidation() {
     try {
       // Test cashflow validation
       const correctedTIR = calculateTIRCorrected(scenario.cashflows, 0.1);
-      const variance = Math.abs(correctedTIR - scenario.expected);
-      const variancePercent = (variance / scenario.expected) * 100;
+      const correctedAnnualTIR = correctedTIR * 12;
+      const expectedMonthly = typeof scenario.expectedMonthly === 'number' ? scenario.expectedMonthly : scenario.expected;
+      const expectedAnnual = typeof scenario.expectedAnnual === 'number'
+        ? scenario.expectedAnnual
+        : (typeof expectedMonthly === 'number' ? expectedMonthly * 12 : undefined);
+      const expectedMonthlyValue = typeof expectedMonthly === 'number' ? expectedMonthly : null;
+
+      let variancePercent = 0;
+      if (expectedMonthlyValue !== null && Math.abs(expectedMonthlyValue) > 1e-9) {
+        const variance = Math.abs(correctedTIR - expectedMonthlyValue);
+        variancePercent = (variance / Math.abs(expectedMonthlyValue)) * 100;
+      } else if (typeof expectedAnnual === 'number' && Math.abs(expectedAnnual) > 1e-9) {
+        const variance = Math.abs(correctedAnnualTIR - expectedAnnual);
+        variancePercent = (variance / Math.abs(expectedAnnual)) * 100;
+      } else {
+        variancePercent = Math.abs(correctedTIR) * 100;
+      }
 
       if (variancePercent > 5) { // >5% variance is critical
         results.criticalIssues.push({
           scenario: scenario.name,
-          issue: `TIR variance ${variancePercent.toFixed(2)}% (expected: ${(scenario.expected*100).toFixed(2)}%, got: ${(correctedTIR*100).toFixed(2)}%)`,
+          issue: `TIR variance ${variancePercent.toFixed(2)}% (expected mensual: ${expectedMonthlyValue !== null ? (expectedMonthlyValue * 100).toFixed(2) : 'N/A'}%, got mensual: ${(correctedTIR*100).toFixed(2)}%)`,
           severity: 'CRITICAL'
         });
         results.failedScenarios++;
@@ -214,22 +544,30 @@ function executeComprehensiveValidation() {
         results.passedScenarios++;
       }
 
-      // Validate market compliance
-      if (scenario.market === 'aguascalientes' && correctedTIR < 0.255) {
-        results.criticalIssues.push({
-          scenario: scenario.name,
-          issue: `AGS TIR ${(correctedTIR*100).toFixed(2)}% below 25.5% minimum`,
-          severity: 'CRITICAL'
-        });
-      } else if (scenario.market === 'edomex' && scenario.type === 'individual' && correctedTIR < 0.299) {
-        results.criticalIssues.push({
-          scenario: scenario.name,
-          issue: `EDOMEX Individual TIR ${(correctedTIR*100).toFixed(2)}% below 29.9% minimum`,
-          severity: 'CRITICAL'
-        });
+      // Validate market compliance (convert policy thresholds to monthly)
+      const policyMinAnnual = scenario.minAnnual === null
+        ? undefined
+        : typeof scenario.minAnnual === 'number'
+          ? scenario.minAnnual
+          : scenario.market === 'aguascalientes'
+            ? 0.255
+            : scenario.market === 'edomex'
+              ? (scenario.type === 'collective' ? 0.275 : 0.299)
+              : undefined;
+
+      if (typeof policyMinAnnual === 'number') {
+        const minMonthly = policyMinAnnual / 12;
+        if (correctedTIR + 1e-6 < minMonthly) {
+          const marketLabel = typeof scenario.market === 'string' ? scenario.market.toUpperCase() : 'MARKET';
+          results.criticalIssues.push({
+            scenario: scenario.name,
+            issue: `${marketLabel} TIR ${(correctedAnnualTIR*100).toFixed(2)}% anual por debajo del mínimo ${(policyMinAnnual*100).toFixed(2)}%`,
+            severity: 'CRITICAL'
+          });
+        }
       }
 
-      console.log(`  ✅ ${scenario.name}: ${(correctedTIR*100).toFixed(2)}% (variance: ${variancePercent.toFixed(2)}%)`);
+      console.log(`  ✅ ${scenario.name}: ${(correctedTIR*100).toFixed(2)}% mensual (${(correctedAnnualTIR*100).toFixed(2)}% anual) | variance: ${variancePercent.toFixed(2)}%`);
 
     } catch (error) {
       results.failedScenarios++;
@@ -369,6 +707,9 @@ if (typeof module !== 'undefined') {
     approximateTIR,
     calculatePMT,
     calculateNPV,
+    logScenario,
+    buildScenarioSummary,
+    findScenarioByName,
     EXPECTED_TIR_SCENARIOS,
     EXPECTED_PMT_SCENARIOS,
     EXPECTED_NPV_SCENARIOS

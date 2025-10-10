@@ -71,5 +71,35 @@ describe('OnboardingEngineService', () => {
       done();
     });
   });
-});
 
+  it('creates collective members with colectivo policy documents', (done) => {
+    const docsFixture = [
+      { id: 'doc-consent', name: 'Consentimiento', status: DocumentStatus.Pendiente },
+      { id: 'doc-ine-1', name: 'INE Integrante 1', status: DocumentStatus.Pendiente, group: 'member' },
+      { id: 'doc-ine-2', name: 'INE Integrante 2', status: DocumentStatus.Pendiente, group: 'member' },
+      { id: 'doc-rfc-1', name: 'RFC Integrante 1', status: DocumentStatus.Pendiente, group: 'member' },
+      { id: 'doc-rfc-2', name: 'RFC Integrante 2', status: DocumentStatus.Pendiente, group: 'member' }
+    ] as any;
+
+    docReqsSpy.getDocumentRequirements.and.returnValue(of(docsFixture));
+    clientDataSpy.addClient.and.callFake((member: Client) => of(member));
+
+    service.createCollectiveCreditMembers({
+      groupName: 'Ruta Centro',
+      memberNames: ['Ana', 'Beatriz'],
+      market: 'edomex',
+      ecosystemId: 'eco-1'
+    }).subscribe(members => {
+      expect(docReqsSpy.getDocumentRequirements).toHaveBeenCalled();
+      const lastCallArgs = docReqsSpy.getDocumentRequirements.calls.mostRecent().args[0];
+      expect(lastCallArgs.clientType).toBe('colectivo');
+      expect(lastCallArgs.collectiveSize).toBe(2);
+
+      expect(members.length).toBe(2);
+      expect(members[0].documents.some(doc => doc.id === 'doc-ine-1')).toBeTrue();
+      expect(members[0].documents.some(doc => doc.id === 'doc-ine-2')).toBeFalse();
+      expect(members[1].documents.some(doc => doc.id === 'doc-ine-2')).toBeTrue();
+      done();
+    });
+  });
+});

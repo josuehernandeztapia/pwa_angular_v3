@@ -141,6 +141,12 @@
 
           @if (step.done) {
             <section class="photo-wizard__review" data-cy="postventa-review">
+              @if (step.detectedValue) {
+                <div class="photo-wizard__detected" data-cy="postventa-detected-value">
+                  <span class="photo-wizard__detected-label">{{ getDetectedLabel(step.id) }}:</span>
+                  <code class="photo-wizard__detected-code">{{ step.detectedValue }}</code>
+                </div>
+              }
               @if ((step.confidence || 0) >= threshold && (!step.missing || step.missing.length === 0)) {
                 <div class="photo-wizard__review-card photo-wizard__review-card--success">
                   <span class="photo-wizard__review-dot" aria-hidden="true"></span>
@@ -254,6 +260,30 @@
     </section>
   }
 
+  @if (showAdvancedPhases) {
+    <section class="photo-wizard__phases">
+      <h3 class="photo-wizard__phases-title">Fases posteriores</h3>
+      <app-documents-phase
+        [caseId]="caseId"
+        [clientId]="clientId"
+        [postSalePhotoSnapshots]="photoSnapshots"
+        [reopenWizardStep]="reopenWizardStep"
+        (phaseNavigate)="onPhaseNavigate($event)"
+      ></app-documents-phase>
+      <app-delivery-phase
+        [caseId]="caseId"
+        [clientId]="clientId"
+        [reopenWizardStep]="reopenWizardStep"
+        (phaseNavigate)="onPhaseNavigate($event)"
+      ></app-delivery-phase>
+      <app-plates-phase
+        [caseId]="caseId"
+        [clientId]="clientId"
+        (phaseNavigate)="onPhaseNavigate($event)"
+      ></app-plates-phase>
+    </section>
+  }
+
   @if (enableAddToQuote) {
     <section class="photo-wizard__quote">
       <header class="photo-wizard__quote-header">
@@ -304,9 +334,17 @@
   </section>
 </ng-template>
 
-<app-manual-ocr-entry
-  [documentType]="manualEntryType || ''"
-  [isOpen]="showManualEntry"
-  (save)="onManualOCRSave($event)"
-  (cancel)="onManualCancel()"
-></app-manual-ocr-entry>
+@if (activeOCRMode) {
+  <div class="photo-wizard__ocr-overlay" role="dialog" aria-modal="true">
+    <div class="photo-wizard__ocr-panel">
+      <button type="button" class="photo-wizard__ocr-close" (click)="closeOcrOverlay()" aria-label="Cerrar">
+        <app-icon name="close" [size]="16" aria-hidden="true"></app-icon>
+      </button>
+      <app-ocr-scanner-enhanced
+        [mode]="activeOCRMode"
+        (valueDetected)="onOcrValueDetected($event)"
+        (scanError)="onOcrError($event)"
+      ></app-ocr-scanner-enhanced>
+    </div>
+  </div>
+}

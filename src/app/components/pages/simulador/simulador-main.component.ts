@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Chart } from 'chart.js/auto';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { IconName } from '../../shared/icon/icon-definitions';
+import { MarketPolicyService, PolicyClientType } from '../../../services/market-policy.service';
 
 interface SimulatorScenario {
   id: string;
@@ -12,7 +13,7 @@ interface SimulatorScenario {
   icon: IconName;
   description: string;
   market: 'aguascalientes' | 'edomex';
-  clientType: 'Individual' | 'Colectivo';
+  clientType: PolicyClientType;
   route: string;
   gradient: string;
 }
@@ -78,7 +79,8 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
   showComparisonModal = false;
   comparisonMode = false;
 
-  availableScenarios: SimulatorScenario[] = [
+  availableScenarios: SimulatorScenario[] = [];
+  private readonly baseScenarios: SimulatorScenario[] = [
     {
       id: 'ags-ahorro',
       title: 'Proyector de Ahorro y Liquidación',
@@ -86,7 +88,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
       icon: 'bank',
       description: 'Modela un plan de ahorro con aportación fuerte y recaudación para clientes de Aguascalientes.',
       market: 'aguascalientes',
-      clientType: 'Individual',
+      clientType: 'individual',
       route: '/simulador/ags-ahorro',
       gradient: 'ags-gradient'
     },
@@ -97,7 +99,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
       icon: 'chart',
       description: 'Proyecta el tiempo para alcanzar la meta de enganche para un cliente individual en EdoMex.',
       market: 'edomex',
-      clientType: 'Individual',
+      clientType: 'individual',
       route: '/simulador/edomex-individual',
       gradient: 'edomex-individual-gradient'
     },
@@ -108,7 +110,7 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
       icon: 'users',
       description: 'Modela el "efecto bola de nieve" para un grupo de crédito colectivo.',
       market: 'edomex',
-      clientType: 'Colectivo',
+      clientType: 'colectivo',
       route: '/simulador/tanda-colectiva',
       gradient: 'edomex-collective-gradient'
     }
@@ -116,10 +118,12 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private marketPolicy: MarketPolicyService
   ) {}
 
   ngOnInit(): void {
+    this.hydrateScenarioAvailability();
     this.analyzeContext();
     this.loadSavedSimulations();
   }
@@ -194,6 +198,18 @@ export class SimuladorMainComponent implements OnInit, AfterViewInit, AfterViewC
       // Fallback: show selector
       this.isRedirecting = false;
     }
+  }
+
+  private hydrateScenarioAvailability(): void {
+    const combos = new Set(
+      this.marketPolicy.getAvailablePolicies().map(policy => `${policy.market}:${policy.clientType}`)
+    );
+
+    const filtered = this.baseScenarios.filter(scenario =>
+      combos.has(`${scenario.market}:${scenario.clientType}`)
+    );
+
+    this.availableScenarios = filtered.length ? filtered : [...this.baseScenarios];
   }
 
   selectScenario(scenario: SimulatorScenario): void {

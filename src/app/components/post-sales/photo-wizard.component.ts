@@ -11,7 +11,11 @@ import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { ManualOCREntryComponent, ManualOCRData } from '../shared/manual-ocr-entry/manual-ocr-entry.component';
+import { ManualOCRData } from '../shared/manual-ocr-entry/manual-ocr-entry.component';
+import { OCRScannerEnhancedComponent, OCRScanResult, ScanMode } from './ocr-scanner-enhanced.component';
+import { DocumentsPhaseComponent } from './documents-phase.component';
+import { DeliveryPhaseComponent } from './delivery-phase.component';
+import { PlatesPhaseComponent } from './plates-phase.component';
 import { IconComponent } from '../shared/icon/icon.component';
 import { IconName } from '../shared/icon/icon-definitions';
 import { environment } from '../../../environments/environment';
@@ -41,9 +45,10 @@ type StepState = {
   missing?: string[];
   error?: string | null;
   offlineQueued?: boolean;
+  detectedValue?: string | null;
 };
 
-type StoredStepState = Pick<StepState, 'id' | 'done' | 'confidence' | 'missing' | 'error' | 'offlineQueued'>;
+type StoredStepState = Pick<StepState, 'id' | 'done' | 'confidence' | 'missing' | 'error' | 'offlineQueued' | 'detectedValue'>;
 
 type PostSaleFlowContextState = {
   caseId: string | null;
@@ -66,7 +71,7 @@ type PostSaleFlowContextState = {
 @Component({
   selector: 'app-photo-wizard',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgOptimizedImage, ManualOCREntryComponent, IconComponent],
+  imports: [CommonModule, FormsModule, NgOptimizedImage, OCRScannerEnhancedComponent, DocumentsPhaseComponent, DeliveryPhaseComponent, PlatesPhaseComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './photo-wizard.component.html',
   styleUrls: ['./photo-wizard.component.scss']
@@ -114,8 +119,8 @@ export class PhotoWizardComponent implements OnInit, OnDestroy {
   caseId: string | null = null;
   private caseStartedAt: number | null = null;
 
-  showManualEntry = false;
-  manualEntryType: StepId | null = null;
+  activeOCRMode: ScanMode | null = null;
+  ocrTargetStep: StepId | null = null;
   private sentFirstRecommendation = false;
   private sentNeedInfo = false;
   showVinDetectionBanner = false;
@@ -128,8 +133,10 @@ export class PhotoWizardComponent implements OnInit, OnDestroy {
   queueMessage: string | null = null;
   private queueMessageTimeout: ReturnType<typeof setTimeout> | null = null;
   private contractId: string | null = null;
-  private clientId: string | null = null;
+  clientId: string | null = null;
   photoSnapshots: Record<StepId, string | null> = this.createEmptyPhotoMap();
+  showAdvancedPhases = environment.features?.enablePostventa === true;
+  readonly reopenWizardStep = (step: StepId) => this.jumpTo(step);
 
   private createEmptyPhotoMap(): Record<StepId, string | null> {
     return {
@@ -294,42 +301,57 @@ export class PhotoWizardComponent implements OnInit, OnDestroy {
   }
 
   openManualEntry(stepId: StepId): void {
-    if (stepId === 'vin' || stepId === 'odometer') {
-      this.manualEntryType = stepId;
-      this.showManualEntry = true;
-    }
+    this.ocrTargetStep = stepId;
+    this.activeOCRMode = stepId === 'vin' ? 'vin' : stepId === 'odometer' ? 'odometer' : 'general';
   }
 
-  onManualOCRSave(data: ManualOCRData): void {
-    if (!this.manualEntryType) {
+  onOcrValueDetected(result: OCRScanResult): void {
+    if (!this.ocrTargetStep) {
+      this.closeOcrOverlay();
       return;
     }
 
-    const step = this.find(this.manualEntryType);
+    const step = this.find(this.ocrTargetStep);
     if (step) {
-      step.done = true;
-      step.confidence = data.confidence;
+      const confidence = Math.max(0, Math.min(1, (result.confidence || 0) / 100));
+      step.done = result.success;
+      step.confidence = confidence;
       step.missing = [];
       step.error = null;
       step.offlineQueued = false;
+      const formattedValue = this.normalizeDetectedValue(this.ocrTargetStep, result.value ?? '');
+      step.detectedValue = formattedValue || null;
+      if (!formattedValue) {
+        step.missing = ['manual_review'];
+      }
 
       if (this.caseId) {
+        const manualData: ManualOCRData = {
+          documentType: this.ocrTargetStep,
+          fields: this.buildManualEntryFields(this.ocrTargetStep, formattedValue, result.method),
+          confidence,
+          isManual: result.method === 'manual'
+        };
+
         this.postSale
-          .storeManualEntry(this.caseId, this.manualEntryType, data)
+          .storeManualEntry(this.caseId, this.ocrTargetStep, manualData)
           .pipe(takeUntil(this.destroy$))
           .subscribe();
       }
     }
 
-    this.showManualEntry = false;
-    this.manualEntryType = null;
     this.persistFlowState();
     this.cdr.markForCheck();
+    this.closeOcrOverlay();
   }
 
-  onManualCancel(): void {
-    this.showManualEntry = false;
-    this.manualEntryType = null;
+  onOcrError(_message: string): void {
+    this.closeOcrOverlay(false);
+  }
+
+  closeOcrOverlay(_resetError: boolean = true): void {
+    this.activeOCRMode = null;
+    this.ocrTargetStep = null;
   }
 
   next(): void {
@@ -374,6 +396,7 @@ export class PhotoWizardComponent implements OnInit, OnDestroy {
     step.missing = undefined;
     step.error = null;
     step.offlineQueued = false;
+    step.detectedValue = null;
     this.photoSnapshots = { ...this.photoSnapshots, [id]: null };
 
     if (id === 'vin') {
@@ -429,6 +452,79 @@ export class PhotoWizardComponent implements OnInit, OnDestroy {
     this.showVinDetectionBanner = false;
     this.vinRetryAttempt = 0;
     this.retake('vin');
+  }
+
+  getDetectedLabel(stepId: StepId): string {
+    switch (stepId) {
+      case 'vin':
+        return 'VIN detectado';
+      case 'odometer':
+        return 'Lectura odómetro';
+      case 'plate':
+        return 'Placa capturada';
+      case 'evidence':
+      default:
+        return 'Dato capturado';
+    }
+  }
+
+  onPhaseNavigate(phase: 'delivery' | 'documents' | 'plates'): void {
+    switch (phase) {
+      case 'delivery':
+        this.jumpTo('plate');
+        break;
+      case 'documents':
+        this.jumpTo('vin');
+        break;
+      case 'plates':
+        this.jumpTo('evidence');
+        break;
+    }
+  }
+
+  private normalizeDetectedValue(stepId: StepId, raw: string): string {
+    const trimmed = (raw ?? '').trim();
+    if (!trimmed) {
+      return '';
+    }
+
+    switch (stepId) {
+      case 'vin':
+        return trimmed.toUpperCase();
+      case 'plate':
+        return trimmed.replace(/\s+/g, '').toUpperCase();
+      case 'odometer':
+        return trimmed.replace(/[^0-9]/g, '') || trimmed;
+      default:
+        return trimmed;
+    }
+  }
+
+  private buildManualEntryFields(stepId: StepId, value: string, method: 'ocr' | 'manual'): Record<string, any> {
+    const fields: Record<string, any> = { source: method };
+
+    switch (stepId) {
+      case 'vin':
+        fields['vin'] = value;
+        if (value.length === 17) {
+          fields['length'] = value.length;
+        }
+        break;
+      case 'odometer': {
+        const numeric = parseInt(value.replace(/[^0-9]/g, ''), 10);
+        fields['kilometers'] = Number.isFinite(numeric) && !Number.isNaN(numeric) ? numeric : null;
+        fields['raw'] = value;
+        break;
+      }
+      case 'plate':
+        fields['plate'] = value;
+        break;
+      default:
+        fields['value'] = value;
+        break;
+    }
+
+    return fields;
   }
 
   addToQuote(part: PartSuggestion): void {
@@ -617,7 +713,8 @@ export class PhotoWizardComponent implements OnInit, OnDestroy {
       confidence: step.confidence,
       missing: step.missing ? [...step.missing] : undefined,
       error: step.error,
-      offlineQueued: step.offlineQueued
+      offlineQueued: step.offlineQueued,
+      detectedValue: step.detectedValue ?? null
     }));
 
     const payload: PostSaleFlowContextState = {
@@ -678,6 +775,7 @@ export class PhotoWizardComponent implements OnInit, OnDestroy {
         step.missing = entry.missing ? [...entry.missing] : undefined;
         step.error = entry.error ?? null;
         step.offlineQueued = entry.offlineQueued;
+        step.detectedValue = entry.detectedValue ?? null;
       });
     }
 

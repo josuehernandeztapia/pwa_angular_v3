@@ -26,6 +26,19 @@ export class ConnectionIndicatorComponent {
   public readonly connectionQuality = computed(() => this.offlineService.getConnectionQuality());
   public readonly pendingCount = computed(() => this.offlineCapabilities().pendingCount);
 
+  public readonly shouldShowDesktopCard = computed(() => {
+    if (!this.isOnline()) {
+      return true;
+    }
+
+    if ((this.pendingCount() ?? 0) > 0) {
+      return true;
+    }
+
+    const quality = this.connectionQuality();
+    return quality !== 'excellent' && quality !== 'good';
+  });
+
   public readonly showMobileBanner = computed(() => {
     return !this.isOnline() && this.mobileBannerVisible();
   });

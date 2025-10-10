@@ -17,10 +17,15 @@ Construida con **Angular 17+** y un stack de calidad enterprise.
 # Instalar dependencias
 npm ci
 
-# Servir en local
+# Servir en local con datos reales (requiere BFF activo en http://localhost:3000)
+npm run start:real
+# La PWA queda disponible en http://localhost:4301 y los servicios consumen endpoints `/api`
+
+# Servir en local con mocks heredados (solo para demostraciones rápidas)
 npm start
-# (equivalente a `ng serve --configuration=development --port=4300`)
-# La PWA queda disponible en http://localhost:4300 y el flujo de acceso arranca en /login
+# Equivalente a `ng serve --configuration=development --port=4300`
+# Puedes reactivar los mocks sin recompilar inyectando `globalThis.__USE_MOCK_DATA__ = true`
+# antes de cargar la app (por ejemplo desde la consola del navegador)
 
 # Acceso demo (http://localhost:4200)
 # Usuario: demo@conductores.com

@@ -61,8 +61,9 @@
           data-cy="onboarding-market-select"
         >
           <option value="">Selecciona un mercado</option>
-          <option value="aguascalientes">Aguascalientes</option>
-          <option value="edomex">Estado de México</option>
+          <option *ngFor="let market of marketOptions" [value]="market">
+            {{ getMarketLabel(market) }}
+          </option>
         </select>
       </div>
 
@@ -77,12 +78,13 @@
           data-cy="onboarding-sale-type"
         >
           <option value="">Selecciona tipo de venta</option>
-          <option value="contado">Venta de Contado</option>
-          <option value="financiero">Venta a Plazo</option>
+          <option *ngFor="let sale of saleTypeOptions" [value]="sale">
+            {{ sale === 'contado' ? 'Venta de Contado' : 'Venta a Plazo' }}
+          </option>
         </select>
       </div>
 
-      <div class="onboarding-main__form-field" *ngIf="form.market === 'edomex' && form.saleType === 'financiero'">
+      <div class="onboarding-main__form-field" *ngIf="form.saleType === 'financiero' && clientTypeOptions.length > 0">
         <label for="clientType" class="onboarding-main__label">Modalidad</label>
         <select
           id="clientType"
@@ -92,8 +94,9 @@
           data-cy="onboarding-client-type"
         >
           <option value="">Selecciona modalidad</option>
-          <option value="individual">Individual</option>
-          <option value="colectivo">Crédito Colectivo</option>
+          <option *ngFor="let type of clientTypeOptions" [value]="type">
+            {{ getClientTypeLabel(type) }}
+          </option>
         </select>
       </div>
 
@@ -194,6 +197,7 @@
           required
           aria-required="true"
           [attr.aria-describedby]="'name-error'"
+          data-cy="onboarding-client-name"
         />
         <div *ngIf="!form.name" id="name-error" class="onboarding-main__error" aria-live="polite">
           El nombre es requerido.
@@ -211,6 +215,7 @@
           required
           aria-required="true"
           [attr.aria-describedby]="'email-error'"
+          data-cy="onboarding-client-email"
         />
         <div *ngIf="form.email && !isValidEmail(form.email)" id="email-error" class="onboarding-main__error" aria-live="polite">
           Formato de email inválido.
@@ -233,6 +238,7 @@
           [attr.aria-describedby]="'phone-error'"
           pattern="^(\\+52\\s?)?(\\d{2}\\s?\\d{4}\\s?\\d{4}|\\d{3}\\s?\\d{3}\\s?\\d{4})$"
           placeholder="55 1234 5678"
+          data-cy="onboarding-client-phone"
         />
         <div *ngIf="form.phone && !isValidMexicanPhone(form.phone)" id="phone-error" class="onboarding-main__error" aria-live="polite">
           Formato inválido. Ej: 55 1234 5678
@@ -331,6 +337,7 @@
             class="btn btn-primary"
             [disabled]="!canProceedFromClientInfo()"
             (click)="createClient()"
+            data-cy="onboarding-create"
           >
             Crear Oportunidad
           </button>

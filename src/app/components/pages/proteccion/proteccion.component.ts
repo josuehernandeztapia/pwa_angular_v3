@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, OnInit, Optional } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, OnInit, Optional, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PdfExportService } from '../../../services/pdf-export.service';
@@ -12,7 +12,11 @@ import { environment } from '../../../../environments/environment';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { ContextPanelComponent } from '../../shared/context-panel/context-panel.component';
 import { OfflineQueueBannerComponent } from '../../shared/offline-queue-banner/offline-queue-banner.component';
+import { RiskPanelComponent, RiskEvaluation } from '../../risk-evaluation/risk-panel.component';
+import { RiskEvaluationService, RiskEvaluationRequest } from '../../../services/risk-evaluation.service';
 import { FlowContextService } from '../../../services/flow-context.service';
+import { ClientContextSnapshot } from '../../../models/client-context';
+import { ContractContextSnapshot } from '../../../models/contract-context';
 import { AnalyticsService } from '../../../services/analytics.service';
 import { ProtectionWorkflowService, ProtectionFlowContextState, ProtectionWorkflowOptions } from '../../../services/protection-workflow.service';
 import { Subject } from 'rxjs';
@@ -42,7 +46,7 @@ interface ProtectionFlowState {
 @Component({
   selector: 'app-proteccion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IconComponent, ContextPanelComponent, OfflineQueueBannerComponent],
+  imports: [CommonModule, ReactiveFormsModule, IconComponent, ContextPanelComponent, OfflineQueueBannerComponent, RiskPanelComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './proteccion.component.scss',
   templateUrl: './proteccion.component.html'
@@ -62,6 +66,7 @@ export class ProteccionComponent implements OnInit, OnDestroy {
   scenarios: ProtectionScenario[] = [];
   private readonly destroy$ = new Subject<void>();
   private persistTimer: any = null;
+  private riskEvalDebounce: ReturnType<typeof setTimeout> | null = null;
   private protectionState: ProtectionFlowState = {
     applied: false,
     appliedAt: null,
@@ -73,6 +78,10 @@ export class ProteccionComponent implements OnInit, OnDestroy {
     metadata: {},
     contractId: undefined
   };
+  riskEvaluation = signal<RiskEvaluation | null>(null);
+  riskLoading = signal(false);
+  riskError = signal(false);
+  private contextClientId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -82,6 +91,7 @@ export class ProteccionComponent implements OnInit, OnDestroy {
     private financialCalc: FinancialCalculatorService,
     private protectionEngine: ProtectionEngineService,
     private analytics: AnalyticsService,
+    private riskEvaluationService: RiskEvaluationService,
     private protectionWorkflow: ProtectionWorkflowService,
     @Optional() private readonly flowContext?: FlowContextService
   ) {
@@ -99,14 +109,226 @@ export class ProteccionComponent implements OnInit, OnDestroy {
 
     this.contractForm.valueChanges
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.schedulePersist());
+      .subscribe(() => {
+        this.schedulePersist();
+        this.requestRiskEvaluation();
+      });
+
+    this.initializeRiskPanel();
   }
 
   ngOnDestroy(): void {
     clearTimeout(this.persistTimer);
+    if (this.riskEvalDebounce) {
+      clearTimeout(this.riskEvalDebounce);
+      this.riskEvalDebounce = null;
+    }
     this.persistContext();
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private initializeRiskPanel(): void {
+    if (!environment.features.enableRiskPanel) {
+      this.loadFallbackRiskEvaluation('feature_disabled');
+      return;
+    }
+
+    this.contextClientId = this.resolveClientId();
+    this.evaluateRiskSnapshot();
+  }
+
+  private loadFallbackRiskEvaluation(reason: 'feature_disabled' | 'service_unavailable' | 'missing_client' = 'service_unavailable'): void {
+    const evaluation: RiskEvaluation = {
+      evaluationId: 'mock-eval-001',
+      processedAt: new Date(),
+      processingTimeMs: 1240,
+      algorithmVersion: '1.2.3',
+      decision: 'REVIEW',
+      riskCategory: 'MEDIO',
+      confidenceLevel: 0.76,
+      scoreBreakdown: {
+        creditScore: 720,
+        financialStability: 68,
+        behaviorHistory: 74,
+        paymentCapacity: 62,
+        geographicRisk: 58,
+        vehicleProfile: 82,
+        finalScore: 705
+      },
+      kiban: {
+        scoreRaw: 705,
+        scoreBand: 'B',
+        status: 'Evaluado',
+        reasons: [
+          { code: 'PAYMENT_HISTORY', desc: 'Historial de pagos consistente' },
+          { code: 'CREDIT_USAGE', desc: 'Uso de crédito moderado' }
+        ],
+        bureauRef: 'BUREAU-REF-705'
+      },
+      hase: {
+        riskScore01: 0.42,
+        category: 'MEDIO',
+        explain: [
+          { factor: 'FINANCIAL_STABILITY', weight: 0.28, impact: 'moderate' },
+          { factor: 'GNSS_BEHAVIOR', weight: 0.18, impact: 'low' }
+        ]
+      },
+      riskFactors: [
+        {
+          factorId: 'INCOME_VARIANCE',
+          factorName: 'Variación de ingresos',
+          description: 'Ingresos mensuales variables por temporada',
+          severity: 'MEDIA',
+          scoreImpact: -8,
+          mitigationRecommendations: ['Solicitar estados de cuenta adicionales', 'Monitorear durante 3 meses']
+        },
+        {
+          factorId: 'ROUTE_DEPENDENCY',
+          factorName: 'Dependencia de ruta',
+          description: 'Ruta con demanda irregular',
+          severity: 'BAJA',
+          scoreImpact: -3,
+          mitigationRecommendations: ['Diversificar horarios', 'Buscar rutas complementarias']
+        }
+      ],
+      financialRecommendations: {
+        maxLoanAmount: 280000,
+        minDownPayment: 65000,
+        maxTermMonths: 48,
+        suggestedInterestRate: 16.5,
+        estimatedMonthlyPayment: 9250,
+        resultingDebtToIncomeRatio: 0.42,
+        specialConditions: ['Revisar historial de combustible GNV', 'Solicitar seguro integral']
+      },
+      mitigationPlan: {
+        required: true,
+        actions: ['Actualizar comprobantes de domicilio', 'Entregar referencias adicionales'],
+        estimatedDays: 5,
+        expectedRiskReduction: 0.12
+      },
+      decisionReasons: [
+        'Relación deuda/ingreso aceptable con documentación adicional',
+        'Historial crediticio consistente con ligeras variaciones de ingreso'
+      ],
+      nextSteps: [
+        'Enviar contrato para revisión del comité',
+        'Solicitar validación de referencias comerciales'
+      ]
+    };
+
+    this.riskEvaluation.set(evaluation);
+    this.riskLoading.set(false);
+    this.riskError.set(true);
+    this.protectionState.score = evaluation.scoreBreakdown.finalScore;
+    this.protectionState.scoreSource = 'mock';
+    this.protectionState.fallbackUsed = true;
+    this.protectionState.metadata = {
+      ...(this.protectionState.metadata ?? {}),
+      riskFallbackReason: reason
+    };
+    this.schedulePersist();
+    this.cdr.markForCheck();
+  }
+
+  private requestRiskEvaluation(): void {
+    if (!environment.features.enableRiskPanel) {
+      return;
+    }
+
+    if (this.riskEvalDebounce) {
+      clearTimeout(this.riskEvalDebounce);
+    }
+
+    this.riskEvalDebounce = setTimeout(() => this.evaluateRiskSnapshot(), 400);
+  }
+
+  private evaluateRiskSnapshot(): void {
+    if (!environment.features.enableRiskPanel) {
+      return;
+    }
+
+    if (!this.riskEvaluationService) {
+      this.loadFallbackRiskEvaluation('service_unavailable');
+      return;
+    }
+
+    const clientId = this.resolveClientId();
+    if (!clientId) {
+      this.loadFallbackRiskEvaluation('missing_client');
+      return;
+    }
+
+    const request: RiskEvaluationRequest = {
+      clientId,
+      document: {
+        country: 'MX',
+        idType: 'RFC',
+        idNumber: this.resolveDocumentId(clientId)
+      },
+      meta: {
+        market: this.contractForm?.get('market')?.value ?? 'edomex',
+        product: 'proteccion',
+        voiceScore01: this.protectionState.score ?? undefined
+      }
+    };
+
+    this.riskLoading.set(true);
+    this.riskError.set(false);
+
+    this.riskEvaluationService
+      .evaluateRisk(request)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: evaluation => {
+          this.riskEvaluation.set(evaluation);
+          this.riskLoading.set(false);
+          this.riskError.set(false);
+          this.protectionState.score = evaluation.scoreBreakdown.finalScore;
+          this.protectionState.scoreSource = 'api';
+          this.protectionState.fallbackUsed = false;
+          this.contextClientId = clientId;
+          this.schedulePersist();
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.loadFallbackRiskEvaluation('service_unavailable');
+        }
+      });
+  }
+
+  private resolveClientId(): string | null {
+    if (this.contextClientId) {
+      return this.contextClientId;
+    }
+
+    const clientContext = this.flowContext?.getContextData<ClientContextSnapshot>('client');
+    if (clientContext?.clientId) {
+      this.contextClientId = clientContext.clientId;
+      return this.contextClientId;
+    }
+
+    const contractContext = this.flowContext?.getContextData<ContractContextSnapshot>('contract');
+    if (contractContext?.clientId) {
+      this.contextClientId = contractContext.clientId ?? null;
+      return this.contextClientId;
+    }
+
+    const stored = this.flowContext?.getContextData<ProtectionContextSnapshot>('proteccion');
+    if (stored?.form?.clientId) {
+      this.contextClientId = stored.form.clientId;
+      return this.contextClientId;
+    }
+
+    return null;
+  }
+
+  private resolveDocumentId(clientId: string): string {
+    const contractContext = this.flowContext?.getContextData<ContractContextSnapshot>('contract');
+    if (contractContext?.contractId) {
+      return contractContext.contractId;
+    }
+    return `${clientId}-RFC`;
   }
 
   private schedulePersist(): void {
@@ -147,6 +369,7 @@ export class ProteccionComponent implements OnInit, OnDestroy {
 
     if (stored.form) {
       this.contractForm.patchValue(stored.form, { emitEvent: false });
+      this.contextClientId = stored.form?.clientId ?? this.contextClientId;
     }
     this.scenarios = stored.scenarios ?? [];
     this.cobertura = stored.cobertura ?? this.cobertura;
@@ -169,6 +392,11 @@ export class ProteccionComponent implements OnInit, OnDestroy {
       if (typeof stored.state.score === 'number') {
         this.healthScore = Math.round(stored.state.score);
       }
+    }
+
+    if (!this.contextClientId) {
+      const clientContext = this.flowContext.getContextData<any>('client');
+      this.contextClientId = clientContext?.clientId ?? this.contextClientId;
     }
     this.cdr.markForCheck();
   }
@@ -280,14 +508,6 @@ export class ProteccionComponent implements OnInit, OnDestroy {
     return this.protectionState.advisorId ?? null;
   }
 
-  private resolveClientId(): string | null {
-    const documentos = this.flowContext?.getContextData<any>('documentos');
-    if (documentos?.flowContext?.clientId) {
-      return documentos.flowContext.clientId;
-    }
-    const onboarding = this.flowContext?.getContextData<any>('onboarding-wizard');
-    return onboarding?.currentClient?.id ?? null;
-  }
 
   openTool(tool: string): void {
     this.toast.info(`Abriendo herramienta: ${tool}`);

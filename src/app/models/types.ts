@@ -1,7 +1,7 @@
 // Core Business Types for Conductores PWA
 // Ported from React PWA to ensure full compatibility
 
-import { ImportStatus, ImportMilestoneStatus, DocumentFile, LegalDocuments, VehicleUnit } from './postventa';
+import { ImportStatus, ImportMilestoneStatus, DocumentFile, LegalDocuments, VehicleUnit, DeliveryChecklistItem, DeliveryData, PlatesData } from './postventa';
 import { CollectiveCreditGroup } from './tanda';
 import { AVICategory, QuestionType, AVIQuestionAnalytics, AVIQuestionEnhanced, AVIResponse, VoiceAnalysis, AVIScore, RedFlag } from './avi';
 import { Quote, ProductPackage, ProductComponent, CompleteBusinessScenario, ClientType, SimulatorMode } from './business';
@@ -47,7 +47,7 @@ export const DOC_NAME_COMPROBANTE = 'Comprobante de domicilio';
 // KYC doc occurrences may include provider suffix, so services use string includes()
 export const DOC_NAME_KYC_CONTAINS = 'Verificación Biométrica';
 
-export type Market = 'all' | 'aguascalientes' | 'edomex';
+export type Market = 'all' | 'aguascalientes' | 'edomex' | 'otros';
 
 export interface Document {
   id: string;
@@ -99,6 +99,7 @@ export interface SavingsPlan {
   goal: number;
   currency: 'MXN';
   totalValue: number; // Total value of the unit being saved for
+  currentSavings?: number;
   methods: {
     collection: boolean;
     voluntary: boolean;
@@ -327,7 +328,10 @@ export {
   LegalDocuments,
   VehicleUnit,
   ImportStatus,
-  ImportMilestoneStatus
+  ImportMilestoneStatus,
+  DeliveryChecklistItem,
+  DeliveryData,
+  PlatesData
 } from './postventa';
 
 export {

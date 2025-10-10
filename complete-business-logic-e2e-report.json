@@ -1,0 +1,281 @@
+{
+  "timestamp": "2025-10-09T04:26:34.167Z",
+  "testCategories": {
+    "cotizadores": {
+      "total": 4,
+      "passed": 0,
+      "failed": 4,
+      "tests": [
+        {
+          "name": "Estado de México - Individual",
+          "passed": false,
+          "error": "this.page.waitForTimeout is not a function",
+          "duration": "15653ms",
+          "timestamp": "2025-10-09T04:26:58.752Z"
+        },
+        {
+          "name": "Estado de México - Colectivo",
+          "passed": false,
+          "error": "this.page.waitForTimeout is not a function",
+          "duration": "15670ms",
+          "timestamp": "2025-10-09T04:27:16.523Z"
+        },
+        {
+          "name": "Aguascalientes - Individual",
+          "passed": false,
+          "error": "this.page.waitForTimeout is not a function",
+          "duration": "15661ms",
+          "timestamp": "2025-10-09T04:27:34.289Z"
+        },
+        {
+          "name": "Aguascalientes - Venta Plazos",
+          "passed": false,
+          "error": "this.page.waitForTimeout is not a function",
+          "duration": "15681ms",
+          "timestamp": "2025-10-09T04:27:52.106Z"
+        }
+      ]
+    },
+    "simuladores": {
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "tests": [
+        {
+          "name": "Hub Simulador AGS Ahorro",
+          "passed": false,
+          "error": "this.page.waitForTimeout is not a function",
+          "timestamp": "2025-10-09T04:27:55.263Z"
+        },
+        {
+          "name": "Hub Simulador EdoMex Individual",
+          "passed": false,
+          "error": "this.page.waitForTimeout is not a function",
+          "timestamp": "2025-10-09T04:27:56.330Z"
+        },
+        {
+          "name": "Hub Simulador Tanda Colectiva",
+          "passed": false,
+          "error": "this.page.waitForTimeout is not a function",
+          "timestamp": "2025-10-09T04:27:57.244Z"
+        }
+      ]
+    },
+    "products_cities": {
+      "total": 8,
+      "passed": 0,
+      "failed": 8,
+      "tests": [
+        {
+          "name": "Seguro Auto",
+          "passed": false,
+          "productFound": false,
+          "timestamp": "2025-10-09T04:27:57.328Z"
+        },
+        {
+          "name": "Seguro Hogar",
+          "passed": false,
+          "productFound": false,
+          "timestamp": "2025-10-09T04:27:57.331Z"
+        },
+        {
+          "name": "Seguro Vida",
+          "passed": false,
+          "productFound": false,
+          "timestamp": "2025-10-09T04:27:57.333Z"
+        },
+        {
+          "name": "Seguro Gastos Médicos",
+          "passed": false,
+          "productFound": false,
+          "timestamp": "2025-10-09T04:27:57.335Z"
+        },
+        {
+          "name": "Ciudad de México",
+          "passed": false,
+          "cityFound": false,
+          "timestamp": "2025-10-09T04:27:57.337Z"
+        },
+        {
+          "name": "Estado de México",
+          "passed": false,
+          "cityFound": false,
+          "timestamp": "2025-10-09T04:27:57.340Z"
+        },
+        {
+          "name": "Aguascalientes",
+          "passed": false,
+          "cityFound": false,
+          "timestamp": "2025-10-09T04:27:57.342Z"
+        },
+        {
+          "name": "Jalisco",
+          "passed": false,
+          "cityFound": false,
+          "timestamp": "2025-10-09T04:27:57.345Z"
+        }
+      ]
+    },
+    "tracking_flow": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "tests": [
+        {
+          "name": "Tracking System",
+          "passed": true,
+          "trackingData": {
+            "sessionData": null,
+            "userActions": null,
+            "navigationHistory": null,
+            "currentUser": "{\"id\":\"mock-admin\",\"name\":\"Maria Rodriguez\",\"email\":\"admin@conductores.com\",\"role\":\"admin\",\"permissions\":[\"dashboard:view\",\"clients:view\",\"quotes:create\",\"quotes:approve\",\"admin:manage\",\"postventa:manage\"]}"
+          },
+          "trackingActive": true,
+          "timestamp": "2025-10-09T04:27:57.421Z"
+        },
+        {
+          "name": "Flow Builder",
+          "passed": true,
+          "flowFound": false,
+          "contextExists": true,
+          "flowContext": [
+            {
+              "key": "offlineQueue",
+              "data": {
+                "pending": 0,
+                "endpoints": [],
+                "lastUpdated": 1759984076479
+              },
+              "breadcrumbs": [
+                "Dashboard",
+                "Offline"
+              ],
+              "timestamp": 1759984076479,
+              "expiresAt": null
+            }
+          ],
+          "timestamp": "2025-10-09T04:27:57.424Z"
+        }
+      ]
+    },
+    "documents": {
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "tests": [
+        {
+          "name": "PDF Generation",
+          "passed": false,
+          "pdfButtonFound": false,
+          "timestamp": "2025-10-09T04:27:59.217Z"
+        },
+        {
+          "name": "Document Download",
+          "passed": false,
+          "downloadFound": false,
+          "timestamp": "2025-10-09T04:27:59.223Z"
+        }
+      ]
+    },
+    "indexeddb": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "tests": [
+        {
+          "name": "IndexedDB Operations",
+          "passed": true,
+          "dbOperations": {
+            "databases": [],
+            "operations": [
+              {
+                "operation": "open",
+                "success": true,
+                "dbName": "test-conductores-db",
+                "version": 1
+              }
+            ],
+            "storage": {
+              "quota": 296630877388,
+              "usage": 85101,
+              "available": 296630792287
+            },
+            "dbTestPassed": true
+          },
+          "timestamp": "2025-10-09T04:27:59.236Z"
+        }
+      ]
+    }
+  },
+  "businessFlows": {},
+  "calculations": {},
+  "documents": {},
+  "database": {},
+  "screenshots": [
+    "business-logic-01-authentication-login-page-1759983996356.png",
+    "business-logic-02-authentication-dashboard-1759984002175.png",
+    "business-logic-03-cotizadores-main-page-1759984003020.png",
+    "business-logic-04-cotizador-EDOMEX-individual-1759984018752.png",
+    "business-logic-04-cotizador-EDOMEX-colectivo-1759984036523.png",
+    "business-logic-04-cotizador-AGS-individual-1759984054290.png",
+    "business-logic-04-cotizador-AGS-venta_plazos-1759984072106.png",
+    "business-logic-05-simulador-Hub-Simulador-AGS-Ahorro-1759984075263.png",
+    "business-logic-05-simulador-Hub-Simulador-EdoMex-Individual-1759984076330.png",
+    "business-logic-05-simulador-Hub-Simulador-Tanda-Colectiva-1759984077244.png",
+    "business-logic-06-products-cities-validation-1759984077345.png",
+    "business-logic-07-tracking-flow-builder-1759984077424.png",
+    "business-logic-08-documents-main-1759984079098.png"
+  ],
+  "errors": [
+    {
+      "type": "network_error",
+      "status": 404,
+      "url": "http://localhost:3000/api/dashboard/activity?limit=15",
+      "timestamp": "2025-10-09T04:26:42.179Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "http://localhost:4300/dashboard",
+      "timestamp": "2025-10-09T04:26:42.180Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[monitoring:error] JSHandle@object",
+      "url": "http://localhost:4300/dashboard",
+      "timestamp": "2025-10-09T04:26:42.180Z"
+    },
+    {
+      "type": "network_error",
+      "status": 404,
+      "url": "http://localhost:3000/api/dashboard/stats",
+      "timestamp": "2025-10-09T04:26:42.183Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "http://localhost:4300/dashboard",
+      "timestamp": "2025-10-09T04:26:42.183Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[monitoring:error] JSHandle@object",
+      "url": "http://localhost:4300/dashboard",
+      "timestamp": "2025-10-09T04:26:42.183Z"
+    }
+  ],
+  "totalTests": 20,
+  "passedTests": 3,
+  "score": 15,
+  "summary": {
+    "totalCategories": 6,
+    "totalTests": 20,
+    "passedTests": 3,
+    "failedTests": 17,
+    "successRate": "15.0%",
+    "finalScore": 15,
+    "totalScreenshots": 13,
+    "totalErrors": 6,
+    "status": "CRITICAL"
+  }
+}

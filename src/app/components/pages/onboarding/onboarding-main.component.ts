@@ -16,13 +16,15 @@ import { InterviewCheckpointModalComponent } from '../../shared/interview-checkp
 import { IconComponent } from '../../shared/icon/icon.component';
 import { ContextPanelComponent } from '../../shared/context-panel/context-panel.component';
 import { FlowContextService } from '../../../services/flow-context.service';
-import { MarketPolicyContext, PolicyClientType, PolicyMarket } from '../../../services/market-policy.service';
+import { MarketPolicyContext, MarketPolicyService, PolicyClientType, PolicyMarket, TandaPolicyMetadata } from '../../../services/market-policy.service';
 import { DocsCompletedGuard } from '../../../guards/docs-completed.guard';
 import { ProtectionRequiredGuard } from '../../../guards/protection-required.guard';
 import { AnalyticsService } from '../../../services/analytics.service';
 import { TandaValidGuard } from '../../../guards/tanda-valid.guard';
 import { PlazoGuard } from '../../../guards/plazo.guard';
 import { environment } from '../../../../environments/environment';
+import { FinancialCalculatorService } from '../../../services/financial-calculator.service';
+import { MathValidationSnapshot } from '../../../models/math-validation';
 
 type OnboardingStep = 'selection' | 'client_info' | 'documents' | 'kyc' | 'contracts' | 'completed';
 
@@ -35,14 +37,16 @@ interface DocumentGuardFlowContext {
   requiresIncomeProof?: boolean;
   monthlyPayment?: number;
   incomeThreshold?: number;
+  incomeThresholdRatio?: number;
+  policyContext?: MarketPolicyContext;
   quotationData?: any;
 }
 
 interface OnboardingForm {
   // Client selection
-  market: 'aguascalientes' | 'edomex' | '';
+  market: PolicyMarket | '';
   saleType: 'contado' | 'financiero' | '';
-  clientType: 'individual' | 'colectivo' | '';
+  clientType: PolicyClientType | '';
   ecosystemId?: string;
   
   // Client info
@@ -72,6 +76,7 @@ interface OnboardingContextSnapshot {
   aviDecision: 'GO' | 'REVIEW' | 'NO_GO' | null;
   aviScore: number | null;
   aviUpdatedAt: number | null;
+  mathValidation: MathValidationSnapshot | null;
 }
 
 @Component({
@@ -115,6 +120,10 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   newRouteName = '';
   availableEcosystems: Ecosystem[] = [];
   showRoutesPreview = false;
+  marketOptions: PolicyMarket[] = [];
+  saleTypeOptions: Array<'contado' | 'financiero'> = ['contado', 'financiero'];
+  clientTypeOptions: PolicyClientType[] = [];
+  private policyClientTypeIndex = new Map<PolicyMarket, PolicyClientType[]>();
 
   // State
   currentClient: Client | null = null;
@@ -136,6 +145,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
   aviDecision: 'GO' | 'REVIEW' | 'NO_GO' | null = null;
   aviScore: number | null = null;
   aviUpdatedAt: number | null = null;
+  mathValidation: MathValidationSnapshot | null = null;
 
 
   constructor(
@@ -147,6 +157,8 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     private ecosystemData: EcosystemDataService,
     private interviewCheckpoint: InterviewCheckpointService,
     private analytics: AnalyticsService,
+    private marketPolicy: MarketPolicyService,
+    private financialCalc: FinancialCalculatorService,
     @Optional() private flowContext?: FlowContextService,
     @Optional() private docsCompletedGuard?: DocsCompletedGuard,
     @Optional() private protectionRequiredGuard?: ProtectionRequiredGuard,
@@ -154,7 +166,99 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     @Optional() private plazoGuard?: PlazoGuard,
   ) { }
 
+  private refreshPolicyOptions(): void {
+    const policies = this.marketPolicy.getAvailablePolicies();
+    const index = new Map<PolicyMarket, Set<PolicyClientType>>();
+
+    policies.forEach(({ market, clientType }) => {
+      if (!index.has(market)) {
+        index.set(market, new Set<PolicyClientType>());
+      }
+      index.get(market)!.add(clientType);
+    });
+
+    this.policyClientTypeIndex = new Map(
+      Array.from(index.entries()).map(([market, clientTypes]) => [
+        market,
+        Array.from(clientTypes.values()).sort(),
+      ])
+    );
+
+    this.marketOptions = Array.from(this.policyClientTypeIndex.keys()).sort();
+    if (this.marketOptions.length === 0) {
+      this.marketOptions = ['aguascalientes', 'edomex'];
+    }
+    this.updateSaleTypeOptions();
+    this.updateClientTypeOptions();
+  }
+
+  private updateSaleTypeOptions(): void {
+    let next: Array<'contado' | 'financiero'> = ['contado', 'financiero'];
+
+    if (this.form.market) {
+      next = ['contado'];
+      const clientTypes = this.policyClientTypeIndex.get(this.form.market) ?? [];
+      if (clientTypes.length > 0) {
+        next.push('financiero');
+      }
+    }
+
+    this.saleTypeOptions = [...next];
+
+    if (this.form.saleType && !this.saleTypeOptions.includes(this.form.saleType)) {
+      this.form.saleType = '';
+    }
+  }
+
+  private updateClientTypeOptions(): void {
+    if (!this.form.market || this.form.saleType !== 'financiero') {
+      this.clientTypeOptions = [];
+      if (this.form.saleType !== 'financiero') {
+        this.form.clientType = '';
+      }
+      return;
+    }
+
+    const options = [...(this.policyClientTypeIndex.get(this.form.market) ?? [])];
+    const requiresSelection = options.length > 1 || options.some(type => type === 'colectivo');
+
+    if (!requiresSelection) {
+      this.clientTypeOptions = [];
+      this.form.clientType = options[0] ?? '';
+      return;
+    }
+
+    this.clientTypeOptions = options;
+
+    if (options.length === 1) {
+      this.form.clientType = options[0];
+    } else if (this.form.clientType && !options.includes(this.form.clientType)) {
+      this.form.clientType = '';
+    }
+  }
+
+  getMarketLabel(market: PolicyMarket): string {
+    switch (market) {
+      case 'aguascalientes':
+        return 'Aguascalientes';
+      case 'edomex':
+        return 'Estado de México';
+      default:
+        return market.charAt(0).toUpperCase() + market.slice(1);
+    }
+  }
+
+  getClientTypeLabel(clientType: PolicyClientType): string {
+    switch (clientType) {
+      case 'colectivo':
+        return 'Crédito Colectivo';
+      default:
+        return 'Individual';
+    }
+  }
+
   ngOnInit(): void {
+    this.refreshPolicyOptions();
     this.updateViewportState();
     const restored = this.restoreFromFlowContext();
 
@@ -164,6 +268,9 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
         this.draftFound = true;
       }
     }
+
+    this.updateSaleTypeOptions();
+    this.updateClientTypeOptions();
 
     this.draftSave$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       // Debounce manually via setTimeout pattern replaced by Subject usage in handlers
@@ -315,6 +422,9 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     this.form.saleType = '';
     this.form.clientType = '';
     this.form.ecosystemId = '';
+
+    this.updateSaleTypeOptions();
+    this.updateClientTypeOptions();
     
     // Load ecosystems when EdoMex is selected
     if (this.form.market === 'edomex') {
@@ -323,10 +433,21 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     } else {
       this.showRoutesPreview = false;
     }
+
+    this.onFormChange();
   }
 
   onSaleTypeChange(): void {
-    this.form.clientType = '';
+    if (this.form.saleType !== 'financiero') {
+      this.form.clientType = '';
+    }
+
+    this.updateClientTypeOptions();
+
+    if (this.form.saleType === 'financiero' && this.clientTypeOptions.length === 1) {
+      this.form.clientType = this.clientTypeOptions[0];
+    }
+
     this.onFormChange();
   }
 
@@ -790,6 +911,7 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     this.contractMessage = '';
     this.isGeneratingContract = false;
     this.clearDraft();
+    this.mathValidation = null;
   }
 
   // Inline validators for template-driven client_info step
@@ -939,7 +1061,8 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       draftFound: this.draftFound,
       aviDecision: this.aviDecision,
       aviScore: this.aviScore,
-      aviUpdatedAt: this.aviUpdatedAt
+      aviUpdatedAt: this.aviUpdatedAt,
+      mathValidation: this.mathValidation
     };
 
     this.flowContext.saveContext(this.contextKey, snapshot, { breadcrumbs: this.getBreadcrumbTrail() });
@@ -953,7 +1076,13 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     const existing = this.flowContext.getContextData<any>('documentos');
     const previousFlow: DocumentGuardFlowContext = existing?.flowContext ?? {};
 
-    const built = this.buildDocumentGuardFlowContext();
+    const cotizadorContext = this.flowContext.getContextData<any>('cotizador') ?? {};
+    const cotizadorQuotation = cotizadorContext.quotationData ?? {};
+    const cotizadorPolicyContext = this.clonePolicyContextSnapshot(
+      cotizadorContext.policyContext ?? cotizadorQuotation.policyContext ?? null
+    );
+
+    const built = this.buildDocumentGuardFlowContext(cotizadorPolicyContext, cotizadorQuotation);
     if (!built) {
       return;
     }
@@ -962,6 +1091,77 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       ...previousFlow,
       ...built,
     };
+
+    if (typeof flowContext.monthlyPayment !== 'number') {
+      const quotationMonthly = cotizadorQuotation.monthlyPayment;
+      if (typeof quotationMonthly === 'number' && Number.isFinite(quotationMonthly)) {
+        flowContext.monthlyPayment = quotationMonthly;
+      }
+    }
+
+    if (typeof flowContext.monthlyPayment !== 'number') {
+      const monthlyPayment = this.currentClient.paymentPlan?.monthlyPayment;
+      if (typeof monthlyPayment === 'number' && Number.isFinite(monthlyPayment)) {
+        flowContext.monthlyPayment = monthlyPayment;
+      }
+    }
+
+    if (typeof flowContext.incomeThreshold !== 'number') {
+      const quotationIncomeThreshold = cotizadorQuotation.incomeThreshold
+        ?? cotizadorQuotation.requiredIncomeThreshold
+        ?? cotizadorPolicyContext?.incomeThreshold
+        ?? existing?.flowContext?.quotationData?.incomeThreshold
+        ?? existing?.flowContext?.quotationData?.requiredIncomeThreshold;
+      if (typeof quotationIncomeThreshold === 'number' && Number.isFinite(quotationIncomeThreshold)) {
+        flowContext.incomeThreshold = quotationIncomeThreshold;
+      }
+    }
+
+    if (typeof flowContext.incomeThreshold !== 'number') {
+      const incomeThreshold = this.currentClient.paymentPlan?.monthlyGoal;
+      if (typeof incomeThreshold === 'number' && Number.isFinite(incomeThreshold)) {
+        flowContext.incomeThreshold = incomeThreshold;
+      }
+    }
+
+    if (typeof flowContext.incomeThresholdRatio !== 'number') {
+      if (typeof cotizadorPolicyContext?.incomeThresholdRatio === 'number') {
+        flowContext.incomeThresholdRatio = cotizadorPolicyContext.incomeThresholdRatio;
+      } else if (typeof previousFlow.incomeThresholdRatio === 'number') {
+        flowContext.incomeThresholdRatio = previousFlow.incomeThresholdRatio;
+      }
+    }
+
+    if (typeof flowContext.requiresIncomeProof !== 'boolean') {
+      if (typeof cotizadorQuotation.requiresIncomeProof === 'boolean') {
+        flowContext.requiresIncomeProof = cotizadorQuotation.requiresIncomeProof;
+      } else if (typeof cotizadorPolicyContext?.requiresIncomeProof === 'boolean') {
+        flowContext.requiresIncomeProof = cotizadorPolicyContext.requiresIncomeProof;
+      } else {
+        flowContext.requiresIncomeProof = this.determineIncomeProofRequirementFlag();
+      }
+    }
+
+    const tandaRules = cotizadorPolicyContext?.metadata?.tanda;
+    flowContext.collectiveMembers = this.normalizeCollectiveSize(
+      flowContext.collectiveMembers ?? cotizadorPolicyContext?.collectiveSize,
+      tandaRules
+    ) ?? flowContext.collectiveMembers;
+
+    if (!flowContext.quotationData && existing?.flowContext?.quotationData) {
+      flowContext.quotationData = existing.flowContext.quotationData;
+    }
+
+    flowContext.quotationData = {
+      ...cotizadorQuotation,
+      ...(flowContext.quotationData ?? {}),
+    };
+
+    if (cotizadorPolicyContext) {
+      const snapshot = this.clonePolicyContextSnapshot(cotizadorPolicyContext);
+      flowContext.policyContext = snapshot;
+      flowContext.quotationData.policyContext = snapshot;
+    }
 
     if (typeof flowContext.monthlyPayment !== 'number') {
       const monthlyPayment = this.currentClient.paymentPlan?.monthlyPayment;
@@ -978,13 +1178,19 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (!flowContext.quotationData && existing?.flowContext?.quotationData) {
-      flowContext.quotationData = existing.flowContext.quotationData;
+    const mathValidation = this.resolveMathValidationSnapshot({
+      quotation: cotizadorQuotation,
+      existingMath: existing?.mathValidation ?? this.mathValidation,
+      policyContext: cotizadorPolicyContext,
+      flowContext
+    });
+    if (mathValidation) {
+      this.mathValidation = mathValidation;
     }
 
     const payload = {
       flowContext,
-      policyContext: this.buildPolicyContextForDocuments(flowContext),
+      policyContext: this.buildPolicyContextForDocuments(flowContext, cotizadorPolicyContext),
       documents: this.currentClient.documents.map(doc => ({ ...doc })),
       completionStatus: { ...this.documentProgress },
       voiceVerified: this.kycStatus.status === 'completed',
@@ -995,7 +1201,8 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
             score: this.aviScore,
             updatedAt: this.aviUpdatedAt
           }
-        : undefined
+        : undefined,
+      mathValidation: mathValidation ?? null
     };
 
     this.flowContext.saveContext(
@@ -1005,43 +1212,117 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     );
   }
 
-  private buildDocumentGuardFlowContext(): DocumentGuardFlowContext | null {
+  private buildDocumentGuardFlowContext(
+    policyContext?: MarketPolicyContext | null,
+    quotationData: any = {}
+  ): DocumentGuardFlowContext | null {
     if (!this.form.market || !this.form.saleType) {
       return null;
     }
 
-    const collectiveMembers = this.form.clientType === 'colectivo'
-      ? this.form.memberNames.filter(name => name.trim()).length
-      : undefined;
+    const baseCollective = policyContext?.collectiveSize
+      ?? (this.form.clientType === 'colectivo'
+        ? this.form.memberNames.filter(name => name.trim()).length
+        : undefined);
 
-    const businessFlow = this.currentClient?.flow
+    const normalizedCollective = this.normalizeCollectiveSize(
+      baseCollective,
+      policyContext?.metadata?.tanda
+    );
+
+    const businessFlow = policyContext?.businessFlow
+      ?? this.currentClient?.flow
       ?? (this.form.clientType === 'colectivo'
         ? BusinessFlow.CreditoColectivo
         : BusinessFlow.VentaPlazo);
 
-    const monthlyPayment = this.currentClient?.paymentPlan?.monthlyPayment;
-    const incomeThreshold = this.currentClient?.paymentPlan?.monthlyGoal;
+    const monthlyPaymentFromQuotation = quotationData?.monthlyPayment;
+    const incomeThresholdFromQuotation = quotationData?.incomeThreshold ?? quotationData?.requiredIncomeThreshold;
 
     return {
       market: this.form.market as PolicyMarket,
       clientType: (this.form.clientType || 'individual') as PolicyClientType,
       saleType: this.form.saleType as 'contado' | 'financiero',
       businessFlow,
-      collectiveMembers,
-      requiresIncomeProof: this.determineIncomeProofRequirementFlag(),
-      monthlyPayment: typeof monthlyPayment === 'number' ? monthlyPayment : undefined,
-      incomeThreshold: typeof incomeThreshold === 'number' ? incomeThreshold : undefined,
+      collectiveMembers: normalizedCollective,
+      requiresIncomeProof: typeof quotationData?.requiresIncomeProof === 'boolean'
+        ? quotationData.requiresIncomeProof
+        : policyContext?.requiresIncomeProof ?? this.determineIncomeProofRequirementFlag(),
+      monthlyPayment: typeof monthlyPaymentFromQuotation === 'number' && Number.isFinite(monthlyPaymentFromQuotation)
+        ? monthlyPaymentFromQuotation
+        : undefined,
+      incomeThreshold: typeof incomeThresholdFromQuotation === 'number' && Number.isFinite(incomeThresholdFromQuotation)
+        ? incomeThresholdFromQuotation
+        : policyContext?.incomeThreshold,
+      incomeThresholdRatio: policyContext?.incomeThresholdRatio,
+      policyContext: policyContext ? this.clonePolicyContextSnapshot(policyContext) : undefined,
+      quotationData: Object.keys(quotationData || {}).length ? { ...quotationData } : undefined,
     };
   }
 
-  private buildPolicyContextForDocuments(flow: DocumentGuardFlowContext): MarketPolicyContext {
-    return {
+  private buildPolicyContextForDocuments(
+    flow: DocumentGuardFlowContext,
+    base?: MarketPolicyContext | null
+  ): MarketPolicyContext {
+    const context = base ? this.clonePolicyContextSnapshot(base)! : {
       market: flow.market,
       clientType: flow.clientType,
       saleType: flow.saleType,
       businessFlow: flow.businessFlow,
-      requiresIncomeProof: flow.requiresIncomeProof,
-      collectiveSize: flow.collectiveMembers
+    };
+
+    context.market = flow.market;
+    context.clientType = flow.clientType;
+    context.saleType = flow.saleType;
+    context.businessFlow = flow.businessFlow;
+
+    if (typeof flow.requiresIncomeProof === 'boolean') {
+      context.requiresIncomeProof = flow.requiresIncomeProof;
+    }
+
+    if (typeof flow.collectiveMembers === 'number') {
+      context.collectiveSize = flow.collectiveMembers;
+    } else if (context.collectiveSize !== undefined && (!context.collectiveSize || context.collectiveSize <= 0)) {
+      delete context.collectiveSize;
+    }
+
+    if (typeof flow.incomeThreshold === 'number') {
+      context.incomeThreshold = flow.incomeThreshold;
+    } else if (context.incomeThreshold !== undefined && !Number.isFinite(context.incomeThreshold)) {
+      delete context.incomeThreshold;
+    }
+
+    if (typeof flow.incomeThresholdRatio === 'number') {
+      context.incomeThresholdRatio = flow.incomeThresholdRatio;
+    }
+
+    return context;
+  }
+
+  private normalizeCollectiveSize(value: number | undefined, rules?: TandaPolicyMetadata | undefined): number | undefined {
+    if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
+      return undefined;
+    }
+
+    const min = rules?.minMembers ?? 1;
+    const max = rules?.maxMembers ?? Math.max(min, value);
+
+    return Math.min(Math.max(Math.round(value), min), max);
+  }
+
+  private clonePolicyContextSnapshot(context?: MarketPolicyContext | null): MarketPolicyContext | undefined {
+    if (!context) {
+      return undefined;
+    }
+
+    return {
+      ...context,
+      metadata: context.metadata
+        ? {
+            ...context.metadata,
+            tanda: context.metadata.tanda ? { ...context.metadata.tanda } : undefined,
+          }
+        : undefined,
     };
   }
 
@@ -1052,6 +1333,84 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     }
 
     return incomeDoc.isOptional === true ? false : true;
+  }
+
+  private resolveMathValidationSnapshot(params: {
+    quotation: any;
+    existingMath?: MathValidationSnapshot | null;
+    policyContext?: MarketPolicyContext | null;
+    flowContext: DocumentGuardFlowContext;
+  }): MathValidationSnapshot | null {
+    const quotation = params.quotation ?? {};
+    const existingMath = params.existingMath ?? null;
+
+    const principal = Number(quotation.amountToFinance ?? 0);
+    const term = Number(quotation.term ?? params.flowContext?.quotationData?.term ?? this.currentClient?.paymentPlan?.term ?? 0);
+    const monthlyPayment = Number(quotation.monthlyPayment ?? params.flowContext.monthlyPayment ?? this.currentClient?.paymentPlan?.monthlyPayment ?? 0);
+    const annualRate = quotation.annualRate ?? existingMath?.annualRate;
+
+    const snapshot = this.buildMathValidationSnapshotForOnboarding({
+      principal,
+      term,
+      monthlyPayment,
+      annualRate
+    });
+
+    if (snapshot) {
+      return snapshot;
+    }
+
+    return existingMath ?? null;
+  }
+
+  private buildMathValidationSnapshotForOnboarding(config: {
+    principal: number;
+    term: number;
+    monthlyPayment: number;
+    annualRate?: number;
+  }): MathValidationSnapshot | null {
+    const { principal, term, monthlyPayment } = config;
+    if (!Number.isFinite(principal) || principal <= 0) {
+      return null;
+    }
+    if (!Number.isFinite(term) || term <= 0) {
+      return null;
+    }
+    if (!Number.isFinite(monthlyPayment) || monthlyPayment <= 0) {
+      return null;
+    }
+
+    const tolerance = 0.005;
+    const annualRate = Number.isFinite(config.annualRate) ? config.annualRate : undefined;
+    const monthlyRate = annualRate != null ? annualRate / 12 : undefined;
+
+    const expectedMonthly = monthlyRate != null && monthlyRate > 0
+      ? this.financialCalc.annuity(principal, monthlyRate, term)
+      : principal / term;
+
+    const deltaPayment = monthlyPayment - expectedMonthly;
+    const reference = Math.abs(expectedMonthly) > 1e-9 ? Math.abs(expectedMonthly) : Math.abs(monthlyPayment) || 1;
+    const deltaPercent = deltaPayment / reference;
+
+    const payments = Array.from({ length: term }, () => monthlyPayment);
+    const cashflows = this.financialCalc.generateCashFlows(principal, payments, term);
+    const tirMonthly = this.financialCalc.calculateTIR(cashflows, monthlyRate ?? 0.1);
+    const tirAnnual = tirMonthly * 12;
+
+    return {
+      principal,
+      monthlyPayment,
+      term,
+      annualRate,
+      expectedMonthlyPayment: expectedMonthly,
+      deltaPayment,
+      deltaPercent,
+      withinTolerance: Math.abs(deltaPercent) <= tolerance,
+      tolerance,
+      tirMonthly,
+      tirAnnual,
+      lastUpdated: Date.now()
+    };
   }
 
   private restoreFromFlowContext(): boolean {
@@ -1078,6 +1437,10 @@ export class OnboardingMainComponent implements OnInit, OnDestroy {
     this.aviDecision = stored.aviDecision ?? this.aviDecision;
     this.aviScore = stored.aviScore ?? this.aviScore;
     this.aviUpdatedAt = stored.aviUpdatedAt ?? this.aviUpdatedAt;
+    this.mathValidation = stored.mathValidation ?? this.mathValidation;
+
+    this.updateSaleTypeOptions();
+    this.updateClientTypeOptions();
 
     this.onStepChange();
     return true;

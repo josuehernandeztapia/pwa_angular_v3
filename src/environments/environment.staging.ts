@@ -1,18 +1,10 @@
-export const environment = {
+import { createEnvironment } from './environment.base';
+
+export const environment = createEnvironment({
   production: true,
   apiUrl: 'https://bff-staging.conductores.com/api',
   appName: 'Conductores PWA (Staging)',
   version: '1.0.0-stg',
-  
-  // BFF API maps (new)
-  api: {
-    flows: '/bff/flows',
-    postventa: '/bff/postventa',
-    quotes: '/bff/odoo/quotes',
-    users: '/bff/users',
-    labs: '/bff/lab'
-  },
-
   features: {
     enableMockData: false,
     enableAnalytics: true,
@@ -42,13 +34,11 @@ export const environment = {
     enableUsageModule: false,
     enableGlobalSearch: true,
     enableSecurityConfig: true,
-    // Integrations (BFF) flags
     enableKycBff: true,
     enablePaymentsBff: true,
     enableContractsBff: true,
     enableAutomationBff: true,
     enableAviMicroLocalBff: true,
-    // New parity flags (staging enabled)
     enableLabs: true,
     enablePostventa: true,
     enableClaimsModule: true,
@@ -59,7 +49,6 @@ export const environment = {
     enablePerfil: true,
     enableQaTools: true
   },
-  // Optional overrides for BFF base URLs per integration
   integrations: {
     odoo: { baseUrl: '' },
     gnv: { baseUrl: '' },
@@ -68,7 +57,6 @@ export const environment = {
     contracts: { baseUrl: '' },
     automation: { baseUrl: '' }
   },
-  // External services (staging safe defaults)
   services: {
     metamap: {
       clientId: '',
@@ -84,15 +72,6 @@ export const environment = {
       baseUrl: 'https://sandbox.mifiel.com/api/v1'
     }
   },
-  endpoints: {
-    auth: '/auth',
-    clients: '/clients',
-    quotes: '/quotes',
-    scenarios: '/scenarios',
-    documents: '/documents',
-    payments: '/payments',
-    reports: '/reports'
-  },
   analytics: {
     eventsEndpoint: 'analytics/events',
     metricsEndpoint: 'analytics/metrics',
@@ -103,7 +82,6 @@ export const environment = {
     datadogEndpoint: 'monitoring/datadog',
     slackWebhook: ''
   },
-  // Finance config required by several components/services
   finance: {
     irrToleranceBps: 50,
     minPaymentRatio: 0.5,
@@ -127,4 +105,4 @@ export const environment = {
       activeThreshold: 0.8
     }
   }
-};
+});

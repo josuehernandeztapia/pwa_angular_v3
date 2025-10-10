@@ -27,6 +27,7 @@ interface StoredDocumentContext {
     requiresIncomeProof?: boolean;
     monthlyPayment?: number;
     incomeThreshold?: number;
+    incomeThresholdRatio?: number;
     quotationData?: any;
   };
 }
@@ -137,12 +138,26 @@ export class DocsCompletedGuard implements CanActivate {
       businessFlow: flow.businessFlow ?? BusinessFlow.VentaPlazo,
       requiresIncomeProof: flow.requiresIncomeProof,
       collectiveSize: flow.collectiveMembers,
+      incomeThreshold: flow.incomeThreshold,
+      incomeThresholdRatio: flow.incomeThresholdRatio,
     };
   }
 
   private requiresIncomeDocument(policyContext: MarketPolicyContext, stored: StoredDocumentContext): boolean {
+    if (policyContext.requiresIncomeProof === false) {
+      return false;
+    }
+
+    if (policyContext.requiresIncomeProof === true) {
+      return true;
+    }
+
     if (stored.flowContext?.requiresIncomeProof === true) {
       return true;
+    }
+
+    if (stored.flowContext?.requiresIncomeProof === false) {
+      return false;
     }
 
     const monthlyPayment = this.extractMonthlyPayment(stored);
@@ -188,6 +203,10 @@ export class DocsCompletedGuard implements CanActivate {
   }
 
   private extractIncomeThreshold(stored: StoredDocumentContext, policyContext: MarketPolicyContext): number | null {
+    if (typeof policyContext.incomeThreshold === 'number' && Number.isFinite(policyContext.incomeThreshold)) {
+      return policyContext.incomeThreshold;
+    }
+
     const flowThreshold = stored.flowContext?.incomeThreshold;
     if (typeof flowThreshold === 'number' && Number.isFinite(flowThreshold)) {
       return flowThreshold;
@@ -205,12 +224,17 @@ export class DocsCompletedGuard implements CanActivate {
       }
     }
 
-    const ratio = this.marketPolicy.getIncomeThreshold(policyContext);
-    if (typeof ratio === 'number' && Number.isFinite(ratio)) {
+    const ratio = policyContext.incomeThresholdRatio;
+    if (typeof ratio === 'number' && Number.isFinite(ratio) && ratio > 0) {
       const monthlyPayment = this.extractMonthlyPayment(stored);
       if (monthlyPayment !== null) {
         return monthlyPayment * ratio;
       }
+    }
+
+    const threshold = this.marketPolicy.getIncomeThreshold(policyContext);
+    if (typeof threshold === 'number' && Number.isFinite(threshold)) {
+      return threshold;
     }
 
     return null;

@@ -520,12 +520,13 @@ export class HumanMicrocopyService {
     }
 
     if (personalization?.timeOfDay && context.timeOfDay) {
-      const greetings = {
+      const greetings: Record<'morning' | 'afternoon' | 'evening', string> = {
         morning: 'Buenos días',
         afternoon: 'Buenas tardes', 
         evening: 'Buenas noches'
       };
-      personalized = personalized.replace(/\{greeting\}/g, greetings[context.timeOfDay] || 'Hola');
+      const key = (context.timeOfDay as 'morning' | 'afternoon' | 'evening') ?? 'morning';
+      personalized = personalized.replace(/\{greeting\}/g, greetings[key] ?? 'Hola');
     }
 
     if (personalization?.businessContext && context.business) {
@@ -577,5 +578,12 @@ export class HumanMicrocopyService {
    */
   hasMicrocopy(id: string): boolean {
     return id in this.microcopyRegistry;
+  }
+
+  /**
+   * Register a new context for microcopy
+   */
+  registerContext(id: string, config: MicrocopyConfig): void {
+    this.microcopyRegistry[id] = config;
   }
 }

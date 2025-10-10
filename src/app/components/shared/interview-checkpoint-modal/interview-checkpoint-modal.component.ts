@@ -15,6 +15,8 @@ import { InterviewCheckpointService } from '../../../services/interview-checkpoi
 import { VoiceRecorderComponent } from '../voice-recorder/voice-recorder.component';
 import { IconComponent } from '../icon/icon.component';
 import { IconName } from '../icon/icon-definitions';
+import { AVIInterviewComponent } from '../../avi-interview/avi-interview.component';
+import { environment } from '../../../../environments/environment';
 
 interface CheckpointModalData {
   clientId: string;
@@ -27,7 +29,7 @@ interface CheckpointModalData {
 @Component({
   selector: 'app-interview-checkpoint-modal',
   standalone: true,
-  imports: [CommonModule, VoiceRecorderComponent, IconComponent],
+  imports: [CommonModule, VoiceRecorderComponent, IconComponent, AVIInterviewComponent],
   templateUrl: './interview-checkpoint-modal.component.html',
   styleUrls: ['./interview-checkpoint-modal.component.scss']
 })
@@ -49,6 +51,7 @@ export class InterviewCheckpointModalComponent implements OnInit, OnDestroy, OnC
   modalTitleId: string = `modal_title_${Math.random().toString(36).slice(2)}`;
   modalDescId: string = `modal_desc_${Math.random().toString(36).slice(2)}`;
   private previouslyFocusedElement: HTMLElement | null = null;
+  readonly aviEnabled = environment.features.enableAVISystem ?? false;
 
   private destroy$ = new Subject<void>();
 
@@ -122,7 +125,37 @@ export class InterviewCheckpointModalComponent implements OnInit, OnDestroy, OnC
   onInterviewApproved(result: any): void {
     this.isInterviewInProgress = false;
     this.errorMessage = '';
+    if (this.modalData?.clientId) {
+      this.checkpointService.completeInterview(this.modalData.clientId, result?.validationResult ?? {});
+    }
     this.interviewCompleted.emit(result);
+  }
+
+  onAdvancedInterviewStarted(): void {
+    if (this.modalData?.clientId) {
+      this.checkpointService.startInterview(this.modalData.clientId);
+    }
+    this.isInterviewInProgress = true;
+    this.errorMessage = '';
+  }
+
+  onAdvancedInterviewCompleted(payload: { validationResult: any }): void {
+    this.isInterviewInProgress = false;
+    this.errorMessage = '';
+    if (this.modalData?.clientId) {
+      const checkpoint = this.checkpointService.completeInterview(this.modalData.clientId, payload.validationResult);
+      this.modalData = {
+        ...this.modalData,
+        checkpoint
+      };
+    }
+    this.interviewCompleted.emit(payload);
+    this.continueToUpload();
+  }
+
+  onAdvancedInterviewCancelled(): void {
+    this.isInterviewInProgress = false;
+    this.errorMessage = '';
   }
 
   onRecorderError(error: any): void {
@@ -133,6 +166,9 @@ export class InterviewCheckpointModalComponent implements OnInit, OnDestroy, OnC
   onRecordStart(): void {
     this.isInterviewInProgress = true;
     this.errorMessage = '';
+    if (this.modalData?.clientId) {
+      this.checkpointService.startInterview(this.modalData.clientId);
+    }
   }
 
   retryInterview(): void {

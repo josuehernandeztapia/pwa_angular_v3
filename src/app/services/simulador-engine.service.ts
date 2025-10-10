@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { TandaGroupSim, TandaSimConfig } from '../models/tanda';
 import { round2 } from '../utils/math.util';
+import { MarketPolicyService, MarketPolicyContext } from './market-policy.service';
+import { BusinessFlow } from '../models/types';
 import { FinancialCalculatorService } from './financial-calculator.service';
 import { TandaEngineService } from './tanda-engine.service';
 
@@ -34,7 +36,8 @@ export class SimuladorEngineService {
 
   constructor(
     private tandaEngine: TandaEngineService,
-    private financialCalc: FinancialCalculatorService
+    private financialCalc: FinancialCalculatorService,
+    private marketPolicy: MarketPolicyService
   ) { }
 
   // AGS Scenario: Projector de Ahorro y Liquidación
@@ -143,9 +146,28 @@ export class SimuladorEngineService {
     snowballEffect: any;
   }> {
     
-    // Normalize and guard member count
-    const memberCount = Math.max(0, Math.floor(config.memberCount || 0));
-    if (memberCount === 0) {
+    const policyContext: MarketPolicyContext = {
+      market: 'edomex',
+      clientType: 'colectivo',
+      saleType: 'financiero',
+      businessFlow: BusinessFlow.CreditoColectivo,
+      collectiveSize: config.memberCount,
+    };
+
+    let metadata;
+    try {
+      metadata = this.marketPolicy.getPolicyMetadata(policyContext);
+    } catch {
+      metadata = undefined;
+    }
+
+    const tandaRules = metadata?.tanda;
+    const minMembers = Math.max(1, tandaRules?.minMembers ?? 5);
+    const maxMembers = Math.max(minMembers, tandaRules?.maxMembers ?? 20);
+
+    const normalizedMemberCount = Math.max(minMembers, Math.min(Math.floor(config.memberCount || minMembers), maxMembers));
+
+    if (normalizedMemberCount === 0) {
       const zeroScenario: SavingsScenario = {
         type: 'EDOMEX_COLLECTIVE',
         targetAmount: 0,
@@ -163,12 +185,16 @@ export class SimuladorEngineService {
     }
 
     // Calculate individual monthly contribution from collection + voluntary
-    const collectionPerMember = round2(Math.max(0, config.avgConsumption) * Math.max(0, config.overpricePerLiter));
-    const totalContributionPerMember = round2(collectionPerMember + Math.max(0, config.voluntaryMonthly));
+    const baseCollection = round2(Math.max(0, config.avgConsumption) * Math.max(0, config.overpricePerLiter));
+    const minContribution = tandaRules?.minContribution ?? baseCollection;
+    const maxContribution = tandaRules?.maxContribution ?? baseCollection;
+    const collectionPerMember = round2(Math.min(Math.max(baseCollection, minContribution), maxContribution));
+    const voluntaryPerMember = Math.max(0, config.voluntaryMonthly);
+    const totalContributionPerMember = round2(collectionPerMember + voluntaryPerMember);
 
     // Create tanda configuration
     const tandaInput: TandaGroupSim = this.tandaEngine.generateBaselineTanda(
-      memberCount,
+      normalizedMemberCount,
       config.unitPrice,
       totalContributionPerMember
     );
@@ -184,12 +210,12 @@ export class SimuladorEngineService {
     const timeline = this.tandaEngine.getProjectedTimeline(tandaResult);
 
     // Calculate total savings target for the group
-    const totalUnitsToDeliver = memberCount;
+    const totalUnitsToDeliver = normalizedMemberCount;
     const downPaymentPerUnit = round2(config.unitPrice * 0.15); // 15%
     const totalSavingsTarget = round2(downPaymentPerUnit * totalUnitsToDeliver);
 
     // Compute extended timing metrics
-    const monthsToFirstAward = tandaResult.firstAwardT || 12;
+    const monthsToFirstAward = tandaResult.firstAwardT || (tandaRules?.minRounds ?? 12);
     const monthsToFullDelivery = tandaResult.lastAwardT || monthsToFirstAward;
     // Business rule for UX/tests: prefer first award timing for "monthsToTarget"
     const monthsToTarget = monthsToFirstAward;
@@ -198,9 +224,9 @@ export class SimuladorEngineService {
       type: 'EDOMEX_COLLECTIVE',
       targetAmount: totalSavingsTarget,
       monthsToTarget,
-      monthlyContribution: round2(totalContributionPerMember * memberCount), // Total group contribution
-      collectionContribution: round2(collectionPerMember * memberCount),
-      voluntaryContribution: round2(Math.max(0, config.voluntaryMonthly) * memberCount),
+      monthlyContribution: round2(totalContributionPerMember * normalizedMemberCount), // Total group contribution
+      collectionContribution: round2(collectionPerMember * normalizedMemberCount),
+      voluntaryContribution: round2(voluntaryPerMember * normalizedMemberCount),
       projectedBalance: snowballEffect.totalSavings,
       timeline: timeline.map(t => ({
         month: t.month,
@@ -325,3 +351,4 @@ export class SimuladorEngineService {
     return { summary, keyNumbers, timeline };
   }
 }
+

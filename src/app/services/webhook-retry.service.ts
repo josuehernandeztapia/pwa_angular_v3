@@ -12,9 +12,9 @@
  */
 
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, timer, throwError, of } from 'rxjs';
-import { map, catchError, retry, tap, switchMap, mergeMap } from 'rxjs/operators';
+import { map, catchError, tap, finalize } from 'rxjs/operators';
 import { MonitoringService } from './monitoring.service';
 
 import { environment } from '../../environments/environment';
@@ -167,25 +167,23 @@ export class WebhookRetryService {
     this.processingStates.set(webhookState.id, true);
     this.updateWebhookState(webhookState.id, 'PROCESSING');
 
+    webhookState.attempts = Math.max(webhookState.attempts, 0) + 1;
+
     return this.executeWebhookCall(payload).pipe(
-      WebhookRetryUtils.withExponentialBackoff(config),
       tap(() => {
-        // Record success for circuit breaker
         this.webhookRetryUtils.recordSuccess(payload.endpoint);
       }),
-      map(response => ({
+      map((response: any) => ({
         success: true,
         webhookId: webhookState.id,
-        attempts: webhookState.attempts + 1,
-        processingTimeMs: 0, // Will be calculated in caller
-        statusCode: response.status || 200,
-        response: response.data
+        attempts: webhookState.attempts,
+        processingTimeMs: 0,
+        statusCode: 200,
+        response
       })),
       catchError(error => {
-        // Record failure for circuit breaker
         this.webhookRetryUtils.recordFailure(payload.endpoint);
 
-        // Check if we should move to dead letter queue
         const maxAttempts = config.maxAttempts;
         if (webhookState.attempts >= maxAttempts) {
           this.deadLetterQueue.addFailedWebhook(
@@ -195,12 +193,12 @@ export class WebhookRetryService {
             webhookState.attempts
           );
 
-          this.updateWebhookState(webhookState.id, 'DEAD_LETTER', error.message);
+          this.updateWebhookState(webhookState.id, 'DEAD_LETTER', error?.message);
         }
 
         return throwError(() => error);
       }),
-      tap(() => {
+      finalize(() => {
         this.processingStates.delete(webhookState.id);
       })
     );
@@ -217,18 +215,23 @@ export class WebhookRetryService {
       ...payload.headers
     };
 
-    const options = { headers };
+    const method = payload.type.includes('DELETE') ? 'DELETE' :
+                   payload.type.includes('PUT') ? 'PUT' :
+                   payload.type.includes('GET') ? 'GET' : 'POST';
 
-    // Use different HTTP methods based on webhook type
-    const method = payload.type.includes('DELETE') ? 'delete' :
-                  payload.type.includes('PUT') ? 'put' :
-                  payload.type.includes('GET') ? 'get' : 'post';
+    const options: any = {
+      headers,
+      responseType: 'json'
+    };
 
-    if (method === 'get' || method === 'delete') {
-      return this.http[method](payload.endpoint, options);
+    if (method === 'GET' || method === 'DELETE') {
+      return this.http.request(method, payload.endpoint, options);
     }
 
-    return this.http[method](payload.endpoint, payload.data, options);
+    return this.http.request(method, payload.endpoint, {
+      ...options,
+      body: payload.data
+    });
   }
 
   /**
@@ -257,7 +260,6 @@ export class WebhookRetryService {
   }
 
   private retryWebhook(webhookState: PersistentWebhookState): void {
-    webhookState.attempts++;
     webhookState.updatedAt = new Date().toISOString();
 
     this.processWebhook(webhookState).subscribe({
@@ -357,11 +359,11 @@ export class WebhookRetryService {
   /**
    * Public observables for reactive UI
    */
-  get metrics$() {
+  get metricsObservable$() {
     return this.metrics$.asObservable();
   }
 
-  get persistentQueue$() {
+  get persistentQueueObservable$() {
     return this.persistentQueue$.asObservable();
   }
 
@@ -499,7 +501,7 @@ export class WebhookRetryService {
         'WebhookRetryService',
         'updatePersistentQueue',
         error,
-        { queueLength: this.pendingWebhooks.size },
+        { queueLength: this.persistentQueue$.value.length },
         'medium'
       );
     }

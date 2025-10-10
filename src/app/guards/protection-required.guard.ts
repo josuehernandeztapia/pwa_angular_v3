@@ -5,6 +5,7 @@ import { BusinessFlow, Document } from '../models/types';
 import { FlowContextService } from '../services/flow-context.service';
 import { MarketPolicyContext, MarketPolicyService } from '../services/market-policy.service';
 import { ToastService } from '../services/toast.service';
+import { MathValidationSnapshot } from '../models/math-validation';
 
 interface StoredDocumentContext {
   flowContext?: {
@@ -20,6 +21,7 @@ interface StoredDocumentContext {
   };
   policyContext?: MarketPolicyContext;
   documents?: Document[];
+  mathValidation?: MathValidationSnapshot | null;
 }
 
 interface ProtectionContextSnapshot {
@@ -34,6 +36,7 @@ interface ProtectionContextSnapshot {
 export class ProtectionRequiredGuard implements CanActivate {
   private readonly documentsContextKey = 'documentos';
   private readonly protectionContextKeys = ['protection', 'proteccion'];
+  private failureMessage = 'Aplica la cobertura de Protección obligatoria antes de continuar.';
 
   constructor(
     private readonly flowContext: FlowContextService,
@@ -56,7 +59,7 @@ export class ProtectionRequiredGuard implements CanActivate {
       return true;
     }
 
-    this.toast.warning('Aplica la cobertura de Protección obligatoria antes de continuar.');
+    this.toast.warning(this.failureMessage);
 
     if (!this.router) {
       return false;
@@ -75,7 +78,8 @@ export class ProtectionRequiredGuard implements CanActivate {
   private hasClearance(): boolean {
     const policyContext = this.getPolicyContext();
     if (!policyContext) {
-      return true;
+      this.failureMessage = 'Configura la cotización antes de continuar con la protección.';
+      return false;
     }
 
     if (!this.marketPolicy.requiresProtection(policyContext)) {
@@ -87,13 +91,15 @@ export class ProtectionRequiredGuard implements CanActivate {
       return true;
     }
 
+    this.failureMessage = 'Aplica la cobertura de Protección obligatoria antes de continuar.';
     return false;
   }
 
   private getPolicyContext(): MarketPolicyContext | null {
     const stored = this.flowContext.getContextData<StoredDocumentContext>(this.documentsContextKey);
     if (!stored) {
-      return null;
+      const cotizadorSnapshot = this.flowContext.getContextData<any>('cotizador');
+      return cotizadorSnapshot?.policyContext ?? null;
     }
 
     if (stored.policyContext) {
@@ -102,7 +108,8 @@ export class ProtectionRequiredGuard implements CanActivate {
 
     const flow = stored.flowContext;
     if (!flow?.market || !flow?.clientType) {
-      return null;
+      const cotizadorSnapshot = this.flowContext.getContextData<any>('cotizador');
+      return cotizadorSnapshot?.policyContext ?? null;
     }
 
     return {

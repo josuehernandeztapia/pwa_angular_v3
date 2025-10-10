@@ -3,6 +3,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { Location } from '@angular/common';
+import { environment } from '../../environments/environment';
 import { IconName } from '../components/shared/icon/icon-definitions';
 
 export interface BreadcrumbItem {
@@ -34,6 +35,16 @@ export interface QuickAction {
   disabled?: boolean;
   tooltip?: string;
   active?: boolean;
+}
+
+export interface ShellNavigationItem {
+  label: string;
+  route: string;
+  iconType: IconName;
+  dataCy?: string;
+  badge?: number;
+  featureFlag?: keyof typeof environment.features;
+  children?: ShellNavigationItem[];
 }
 
 @Injectable({
@@ -280,6 +291,72 @@ export class NavigationService {
   /**
    * Get quick actions for current route
    */
+  getShellNavigationItems(): ShellNavigationItem[] {
+    const items: ShellNavigationItem[] = [
+      { label: 'Dashboard', route: '/dashboard', iconType: 'home', dataCy: 'nav-dashboard' },
+      { label: 'Clientes', route: '/clientes', iconType: 'users', dataCy: 'nav-clientes' },
+      {
+        label: 'Cotizador',
+        route: '/cotizador',
+        iconType: 'calculator',
+        dataCy: 'nav-cotizador',
+        children: [
+          { label: 'AGS Individual', route: '/cotizador/ags-individual', iconType: 'user', dataCy: 'nav-cotizador-ags' },
+          { label: 'EdoMex Colectivo', route: '/cotizador/edomex-colectivo', iconType: 'users', dataCy: 'nav-cotizador-edomex' }
+        ]
+      },
+      {
+        label: 'Simulador',
+        route: '/simulador',
+        iconType: 'target',
+        dataCy: 'nav-simulador',
+        children: [
+          { label: 'Plan de Ahorro', route: '/simulador/ags-ahorro', iconType: 'piggy-bank', dataCy: 'nav-simulador-ahorro' },
+          { label: 'Venta a Plazo', route: '/simulador/edomex-individual', iconType: 'credit-card', dataCy: 'nav-simulador-plazo' },
+          { label: 'Tanda Colectiva', route: '/simulador/tanda-colectiva', iconType: 'users', dataCy: 'nav-simulador-tanda' }
+        ]
+      },
+      { label: 'Documentos', route: '/documentos', iconType: 'document', dataCy: 'nav-documentos' },
+      { label: 'Entregas', route: '/entregas', iconType: 'truck', dataCy: 'nav-entregas' },
+      { label: 'GNV', route: '/gnv', iconType: 'fuel', dataCy: 'nav-gnv', featureFlag: 'enableGnvBff' },
+      { label: 'Protección', route: '/proteccion', iconType: 'shield', dataCy: 'nav-proteccion' },
+      {
+        label: 'Configuración',
+        route: '/configuracion',
+        iconType: 'settings',
+        dataCy: 'nav-configuracion',
+        children: [
+          { label: 'General', route: '/configuracion', iconType: 'settings', dataCy: 'nav-config-general' },
+          { label: 'Políticas', route: '/configuracion/politicas', iconType: 'document-text', dataCy: 'nav-config-politicas' },
+          { label: 'Flow Builder', route: '/configuracion/flow-builder', iconType: 'link', dataCy: 'nav-config-flow', featureFlag: 'enableFlowBuilder' },
+          { label: 'Integraciones', route: '/integraciones', iconType: 'package', dataCy: 'nav-integraciones', featureFlag: 'enableIntegrationsConfig' },
+          { label: 'Administración', route: '/administracion', iconType: 'shield', dataCy: 'nav-admin', featureFlag: 'enableAdminConfig' },
+          { label: 'Uso del Sistema', route: '/usage', iconType: 'device-mobile', dataCy: 'nav-usage', featureFlag: 'enableUsageModule' }
+        ]
+      }
+    ];
+
+    return this.filterNavigationItems(items);
+  }
+
+  private filterNavigationItems(items: ShellNavigationItem[]): ShellNavigationItem[] {
+    return items
+      .filter(item => this.isFeatureEnabled(item.featureFlag))
+      .map(item => ({
+        ...item,
+        children: item.children ? this.filterNavigationItems(item.children) : undefined
+      }));
+  }
+
+  private isFeatureEnabled(flag?: keyof typeof environment.features): boolean {
+    if (!flag) {
+      return true;
+    }
+
+    const features = environment.features as Record<string, any>;
+    return features[flag] !== false;
+  }
+
   getQuickActions(): Observable<QuickAction[]> {
     return this.navigationState$.pipe(
       map(state => {

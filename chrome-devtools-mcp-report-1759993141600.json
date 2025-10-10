@@ -1,0 +1,123 @@
+{
+  "timestamp": "2025-10-09T06:59:01.599Z",
+  "total": 21,
+  "passed": 1,
+  "failed": 20,
+  "successRate": 5,
+  "tests": [
+    {
+      "test": "Authentication",
+      "passed": true,
+      "details": "Login successful"
+    },
+    {
+      "test": "Simulador AGS Ahorro",
+      "passed": false,
+      "details": "[data-cy=\"sim-ags-ahorro\"] not found"
+    },
+    {
+      "test": "Simulador EdoMex Individual",
+      "passed": false,
+      "details": "[data-cy=\"sim-edomex-individual\"] not found"
+    },
+    {
+      "test": "Simulador Tanda Colectiva",
+      "passed": false,
+      "details": "[data-cy=\"sim-tanda-colectiva\"] not found"
+    },
+    {
+      "test": "Cotizador Sum PMT",
+      "passed": false,
+      "details": "[data-cy=\"sum-pmt\"] not found"
+    },
+    {
+      "test": "Cotizador Rate Display",
+      "passed": false,
+      "details": "[data-cy=\"rate-display\"] not found"
+    },
+    {
+      "test": "Cotizador PMT Class",
+      "passed": false,
+      "details": ".pmt not found"
+    },
+    {
+      "test": "Cotizador PMT Partial Class",
+      "passed": false,
+      "details": "[class*=\"pmt\"] not found"
+    },
+    {
+      "test": "Flow Builder Flow Header",
+      "passed": false,
+      "details": "[data-cy=\"flow-header\"] not found"
+    },
+    {
+      "test": "Flow Builder Flow Palette",
+      "passed": false,
+      "details": "[data-cy=\"flow-palette\"] not found"
+    },
+    {
+      "test": "Flow Builder Flow Canvas",
+      "passed": false,
+      "details": "[data-cy=\"flow-canvas\"] not found"
+    },
+    {
+      "test": "Flow Builder Flow Properties",
+      "passed": false,
+      "details": "[data-cy=\"flow-properties\"] not found"
+    },
+    {
+      "test": "Flow Builder Clear Button",
+      "passed": false,
+      "details": "[data-cy=\"btn-limpiar\"] not found"
+    },
+    {
+      "test": "Flow Builder Save Button",
+      "passed": false,
+      "details": "[data-cy=\"btn-guardar\"] not found"
+    },
+    {
+      "test": "Flow Builder Deploy Button",
+      "passed": false,
+      "details": "[data-cy=\"btn-deploy\"] not found"
+    },
+    {
+      "test": "Onboarding INE Upload",
+      "passed": false,
+      "details": "[data-cy=\"doc-upload-ine\"] not found"
+    },
+    {
+      "test": "Onboarding Income Upload",
+      "passed": false,
+      "details": "[data-cy=\"doc-upload-income\"] not found"
+    },
+    {
+      "test": "Onboarding Address Upload",
+      "passed": false,
+      "details": "[data-cy=\"doc-upload-address\"] not found"
+    },
+    {
+      "test": "Onboarding General File Input",
+      "passed": false,
+      "details": "input[type=\"file\"] not found"
+    },
+    {
+      "test": "Products Detection",
+      "passed": false,
+      "details": "No products found"
+    },
+    {
+      "test": "Market Filters",
+      "passed": false,
+      "details": "No market filters found"
+    }
+  ],
+  "screenshots": [
+    "mcp-01-login-page-1759993120960.png",
+    "mcp-02-after-auth-1759993127415.png",
+    "mcp-03-simuladores-1759993128246.png",
+    "mcp-05-cotizadores-1759993131229.png",
+    "mcp-06-flow-builder-1759993134011.png",
+    "mcp-07-onboarding-1759993136780.png",
+    "mcp-08-productos-1759993139532.png"
+  ]
+}

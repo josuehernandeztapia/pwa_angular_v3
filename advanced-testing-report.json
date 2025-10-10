@@ -1,0 +1,1723 @@
+{
+  "timestamp": "2025-10-06T06:02:47.540Z",
+  "summary": {
+    "performance": 100,
+    "accessibility": 80,
+    "pwa": 75,
+    "security": 60,
+    "overall": 79
+  },
+  "details": {
+    "performance": {
+      "requests": [
+        {
+          "url": "http://localhost:4300/",
+          "method": "GET",
+          "resourceType": "document",
+          "timestamp": 1759730551193
+        },
+        {
+          "url": "http://localhost:4300/@vite/client",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551217
+        },
+        {
+          "url": "http://localhost:4300/assets/fonts/inter-var.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "timestamp": 1759730551218
+        },
+        {
+          "url": "http://localhost:4300/main.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551218
+        },
+        {
+          "url": "http://localhost:4300/polyfills.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551220
+        },
+        {
+          "url": "http://localhost:4300/styles.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "timestamp": 1759730551221
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/node_modules/vite/dist/client/env.mjs",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551275
+        },
+        {
+          "url": "http://localhost:4300/chunk-MGTJA2QV.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551295
+        },
+        {
+          "url": "http://localhost:4300/chunk-2BQXL6SH.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551296
+        },
+        {
+          "url": "http://localhost:4300/chunk-K74OBFCH.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551296
+        },
+        {
+          "url": "http://localhost:4300/chunk-NT6JLNHC.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551296
+        },
+        {
+          "url": "http://localhost:4300/chunk-MEJ65X3U.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551296
+        },
+        {
+          "url": "http://localhost:4300/chunk-AUYQL5UN.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551296
+        },
+        {
+          "url": "http://localhost:4300/chunk-ZF43GWEW.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551296
+        },
+        {
+          "url": "http://localhost:4300/chunk-H3GSCVOQ.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551296
+        },
+        {
+          "url": "http://localhost:4300/chunk-T3DOKNNK.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/chunk-XBPYQKYG.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/chunk-GZBQEXQF.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/chunk-LEH5FRK7.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/chunk-SYMD2UZN.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/chunk-H5H4DZJH.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/chunk-6677EK5Q.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/chunk-BGMJ2HJH.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/chunk-UV5MZEFZ.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/chunk-GEG5LB3Z.js",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_platform-browser.js?v=67db753e",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_router.js?v=67db753e",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551297
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/rxjs_operators.js?v=67db753e",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551306
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_common_http.js?v=67db753e",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551307
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_core.js?v=67db753e",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551308
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/lucide-angular.js?v=67db753e",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551309
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_service-worker.js?v=67db753e",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551310
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/rxjs.js?v=67db753e",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551312
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_common.js?v=67db753e",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551312
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_forms.js?v=67db753e",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551312
+        },
+        {
+          "url": "http://localhost:4300/manifest.webmanifest",
+          "method": "GET",
+          "resourceType": "other",
+          "timestamp": 1759730551315
+        },
+        {
+          "url": "http://localhost:4300/",
+          "method": "GET",
+          "resourceType": "other",
+          "timestamp": 1759730551316
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-YGP5ZB37.js?v=bc17f62c",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551358
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-OCMG5G3C.js?v=bc17f62c",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551358
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-TDSQ655J.js?v=bc17f62c",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551358
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-YV74OZ5W.js?v=bc17f62c",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551359
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-4RMHXXWK.js?v=bc17f62c",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551359
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-LFVCTHGI.js?v=bc17f62c",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551359
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-AJN3JCM6.js?v=bc17f62c",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551359
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-KBUIKKCC.js?v=bc17f62c",
+          "method": "GET",
+          "resourceType": "script",
+          "timestamp": 1759730551360
+        },
+        {
+          "url": "http://localhost:4300/manifest.webmanifest",
+          "method": "GET",
+          "resourceType": "manifest",
+          "timestamp": 1759730551417
+        },
+        {
+          "url": "http://localhost:4300/favicon.ico",
+          "method": "GET",
+          "resourceType": "other",
+          "timestamp": 1759730551417
+        },
+        {
+          "url": "http://localhost:4300/assets/icons/icon-144x144.png",
+          "method": "GET",
+          "resourceType": "other",
+          "timestamp": 1759730551421
+        }
+      ],
+      "resources": [
+        {
+          "url": "http://localhost:4300/",
+          "status": 200,
+          "contentLength": "14603",
+          "contentType": "text/html",
+          "timing": {
+            "requestTime": 45409.113793,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 0.328,
+            "sendEnd": 0.369,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 10.108,
+            "receiveHeadersEnd": 10.161
+          },
+          "timestamp": 1759730551206
+        },
+        {
+          "url": "http://localhost:4300/@vite/client",
+          "status": 200,
+          "contentLength": "136106",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.139135,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 1.294,
+            "sendEnd": 1.367,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 8.678,
+            "receiveHeadersEnd": 8.724
+          },
+          "timestamp": 1759730551230
+        },
+        {
+          "url": "http://localhost:4300/assets/fonts/inter-var.woff2",
+          "status": 404,
+          "contentLength": "167",
+          "contentType": "text/html; charset=utf-8",
+          "timing": {
+            "requestTime": 45409.140591,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": 0.386,
+            "dnsEnd": 0.389,
+            "connectStart": 0.395,
+            "connectEnd": 0.498,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 0.543,
+            "sendEnd": 0.563,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 10.157,
+            "receiveHeadersEnd": 10.218
+          },
+          "timestamp": 1759730551232
+        },
+        {
+          "url": "http://localhost:4300/main.js",
+          "status": 200,
+          "contentLength": "474326",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.14105,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": 0.134,
+            "dnsEnd": 0.135,
+            "connectStart": 0.137,
+            "connectEnd": 0.214,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 0.33,
+            "sendEnd": 0.355,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 18.565,
+            "receiveHeadersEnd": 18.61
+          },
+          "timestamp": 1759730551275
+        },
+        {
+          "url": "http://localhost:4300/styles.css",
+          "status": 200,
+          "contentLength": "131860",
+          "contentType": "text/css",
+          "timing": {
+            "requestTime": 45409.141296,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": 0.394,
+            "dnsEnd": 0.396,
+            "connectStart": 0.397,
+            "connectEnd": 0.465,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 0.476,
+            "sendEnd": 0.529,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 24.416,
+            "receiveHeadersEnd": 24.428
+          },
+          "timestamp": 1759730551279
+        },
+        {
+          "url": "http://localhost:4300/polyfills.js",
+          "status": 200,
+          "contentLength": "348994",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.141229,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": 0.286,
+            "dnsEnd": 0.289,
+            "connectStart": 0.291,
+            "connectEnd": 0.38,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 0.392,
+            "sendEnd": 0.453,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 24.14,
+            "receiveHeadersEnd": 24.17
+          },
+          "timestamp": 1759730551289
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/node_modules/vite/dist/client/env.mjs",
+          "status": 200,
+          "contentLength": "4021",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.197122,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 0.9,
+            "sendEnd": 0.96,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 5.685,
+            "receiveHeadersEnd": 5.834
+          },
+          "timestamp": 1759730551298
+        },
+        {
+          "url": "http://localhost:4300/chunk-MGTJA2QV.js",
+          "status": 200,
+          "contentLength": "6603",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.220463,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 2.624,
+            "sendEnd": 2.687,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 6.297,
+            "receiveHeadersEnd": 6.338
+          },
+          "timestamp": 1759730551319
+        },
+        {
+          "url": "http://localhost:4300/chunk-2BQXL6SH.js",
+          "status": 200,
+          "contentLength": "24119",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.220621,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 2.59,
+            "sendEnd": 2.614,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 7.275,
+            "receiveHeadersEnd": 7.31
+          },
+          "timestamp": 1759730551320
+        },
+        {
+          "url": "http://localhost:4300/chunk-K74OBFCH.js",
+          "status": 200,
+          "contentLength": "18788",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.220859,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 2.398,
+            "sendEnd": 2.417,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 7.699,
+            "receiveHeadersEnd": 7.731
+          },
+          "timestamp": 1759730551322
+        },
+        {
+          "url": "http://localhost:4300/chunk-NT6JLNHC.js",
+          "status": 200,
+          "contentLength": "122596",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.220956,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 2.592,
+            "sendEnd": 2.635,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 8.85,
+            "receiveHeadersEnd": 8.874
+          },
+          "timestamp": 1759730551323
+        },
+        {
+          "url": "http://localhost:4300/chunk-MEJ65X3U.js",
+          "status": 200,
+          "contentLength": "39156",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.221013,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 2.615,
+            "sendEnd": 2.672,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 9.823,
+            "receiveHeadersEnd": 9.852
+          },
+          "timestamp": 1759730551324
+        },
+        {
+          "url": "http://localhost:4300/chunk-T3DOKNNK.js",
+          "status": 200,
+          "contentLength": "32628",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.223454,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 5.966,
+            "sendEnd": 5.989,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 11.064,
+            "receiveHeadersEnd": 11.099
+          },
+          "timestamp": 1759730551333
+        },
+        {
+          "url": "http://localhost:4300/chunk-XBPYQKYG.js",
+          "status": 200,
+          "contentLength": "14824",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.223927,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 7.4,
+            "sendEnd": 7.439,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 10.971,
+            "receiveHeadersEnd": 11.002
+          },
+          "timestamp": 1759730551333
+        },
+        {
+          "url": "http://localhost:4300/chunk-AUYQL5UN.js",
+          "status": 200,
+          "contentLength": "901",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.221064,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": 2.648,
+            "dnsEnd": 2.653,
+            "connectStart": 2.659,
+            "connectEnd": 2.92,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 2.953,
+            "sendEnd": 2.99,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 15.198,
+            "receiveHeadersEnd": 15.23
+          },
+          "timestamp": 1759730551335
+        },
+        {
+          "url": "http://localhost:4300/chunk-GZBQEXQF.js",
+          "status": 200,
+          "contentLength": "25239",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.224112,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 7.648,
+            "sendEnd": 7.698,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 11.607,
+            "receiveHeadersEnd": 11.625
+          },
+          "timestamp": 1759730551336
+        },
+        {
+          "url": "http://localhost:4300/chunk-ZF43GWEW.js",
+          "status": 200,
+          "contentLength": "144157",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.221149,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 6.673,
+            "sendEnd": 6.71,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 11.845,
+            "receiveHeadersEnd": 11.867
+          },
+          "timestamp": 1759730551336
+        },
+        {
+          "url": "http://localhost:4300/chunk-H3GSCVOQ.js",
+          "status": 200,
+          "contentLength": "109818",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.223356,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 5.863,
+            "sendEnd": 5.909,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 10.589,
+            "receiveHeadersEnd": 10.605
+          },
+          "timestamp": 1759730551337
+        },
+        {
+          "url": "http://localhost:4300/chunk-LEH5FRK7.js",
+          "status": 200,
+          "contentLength": "32004",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.224183,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 13.439,
+            "sendEnd": 13.47,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 15.062,
+            "receiveHeadersEnd": 15.083
+          },
+          "timestamp": 1759730551342
+        },
+        {
+          "url": "http://localhost:4300/chunk-SYMD2UZN.js",
+          "status": 200,
+          "contentLength": "7319",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.224272,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 13.405,
+            "sendEnd": 13.449,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 15.489,
+            "receiveHeadersEnd": 15.519
+          },
+          "timestamp": 1759730551352
+        },
+        {
+          "url": "http://localhost:4300/chunk-H5H4DZJH.js",
+          "status": 200,
+          "contentLength": "20816",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.224343,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 13.465,
+            "sendEnd": 13.502,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 15.887,
+            "receiveHeadersEnd": 15.904
+          },
+          "timestamp": 1759730551355
+        },
+        {
+          "url": "http://localhost:4300/chunk-6677EK5Q.js",
+          "status": 200,
+          "contentLength": "6717",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.224431,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 13.571,
+            "sendEnd": 13.605,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 16.507,
+            "receiveHeadersEnd": 16.519
+          },
+          "timestamp": 1759730551356
+        },
+        {
+          "url": "http://localhost:4300/chunk-BGMJ2HJH.js",
+          "status": 200,
+          "contentLength": "43378",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.224479,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 13.59,
+            "sendEnd": 13.611,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 17.409,
+            "receiveHeadersEnd": 17.426
+          },
+          "timestamp": 1759730551356
+        },
+        {
+          "url": "http://localhost:4300/chunk-GEG5LB3Z.js",
+          "status": 200,
+          "contentLength": "2305",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.224647,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 15.398,
+            "sendEnd": 15.438,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 18.826,
+            "receiveHeadersEnd": 18.859
+          },
+          "timestamp": 1759730551356
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_platform-browser.js?v=67db753e",
+          "status": 200,
+          "contentLength": "2855",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.224709,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 15.892,
+            "sendEnd": 15.943,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 19.438,
+            "receiveHeadersEnd": 19.451
+          },
+          "timestamp": 1759730551356
+        },
+        {
+          "url": "http://localhost:4300/chunk-UV5MZEFZ.js",
+          "status": 200,
+          "contentLength": "165627",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.224528,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 13.614,
+            "sendEnd": 13.657,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 18.573,
+            "receiveHeadersEnd": 18.589
+          },
+          "timestamp": 1759730551356
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/rxjs_operators.js?v=67db753e",
+          "status": 200,
+          "contentLength": "3379",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.227013,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 14.354,
+            "sendEnd": 14.49,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 20.535,
+            "receiveHeadersEnd": 20.555
+          },
+          "timestamp": 1759730551360
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_common_http.js?v=67db753e",
+          "status": 200,
+          "contentLength": "2597",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.228118,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 14.485,
+            "sendEnd": 14.542,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 20.919,
+            "receiveHeadersEnd": 20.939
+          },
+          "timestamp": 1759730551361
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_router.js?v=67db753e",
+          "status": 200,
+          "contentLength": "202307",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.22479,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 16.075,
+            "sendEnd": 16.124,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 22.189,
+            "receiveHeadersEnd": 22.231
+          },
+          "timestamp": 1759730551361
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_core.js?v=67db753e",
+          "status": 200,
+          "contentLength": "23647",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.228908,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 15.089,
+            "sendEnd": 15.194,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 21.403,
+            "receiveHeadersEnd": 21.425
+          },
+          "timestamp": 1759730551362
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_common.js?v=67db753e",
+          "status": 200,
+          "contentLength": "4992",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.232487,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 16.261,
+            "sendEnd": 16.291,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 27.548,
+            "receiveHeadersEnd": 27.568
+          },
+          "timestamp": 1759730551362
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/rxjs.js?v=67db753e",
+          "status": 200,
+          "contentLength": "5076",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.232064,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 15.885,
+            "sendEnd": 15.928,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 30.018,
+            "receiveHeadersEnd": 30.06
+          },
+          "timestamp": 1759730551363
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_forms.js?v=67db753e",
+          "status": 200,
+          "contentLength": "207501",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.232827,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 16.612,
+            "sendEnd": 16.645,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 34.235,
+            "receiveHeadersEnd": 34.283
+          },
+          "timestamp": 1759730551364
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_service-worker.js?v=67db753e",
+          "status": 200,
+          "contentLength": "13979",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.230496,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 14.284,
+            "sendEnd": 14.308,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 41.638,
+            "receiveHeadersEnd": 41.754
+          },
+          "timestamp": 1759730551364
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/lucide-angular.js?v=67db753e",
+          "status": 200,
+          "contentLength": "693947",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.230243,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 14.495,
+            "sendEnd": 14.513,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 27.76,
+            "receiveHeadersEnd": 27.81
+          },
+          "timestamp": 1759730551365
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-YGP5ZB37.js?v=bc17f62c",
+          "status": 200,
+          "contentLength": "58844",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.278293,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 2.243,
+            "sendEnd": 2.344,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 3.212,
+            "receiveHeadersEnd": 3.226
+          },
+          "timestamp": 1759730551366
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-OCMG5G3C.js?v=bc17f62c",
+          "status": 200,
+          "contentLength": "77064",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.278476,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 2.209,
+            "sendEnd": 2.237,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 3.801,
+            "receiveHeadersEnd": 3.817
+          },
+          "timestamp": 1759730551366
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-TDSQ655J.js?v=bc17f62c",
+          "status": 200,
+          "contentLength": "177583",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.278836,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 1.969,
+            "sendEnd": 2.054,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 5.117,
+            "receiveHeadersEnd": 5.156
+          },
+          "timestamp": 1759730551366
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-4RMHXXWK.js?v=bc17f62c",
+          "status": 200,
+          "contentLength": "27668",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.279221,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 1.713,
+            "sendEnd": 1.723,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 8.29,
+            "receiveHeadersEnd": 8.305
+          },
+          "timestamp": 1759730551369
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-KBUIKKCC.js?v=bc17f62c",
+          "status": 200,
+          "contentLength": "3565",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.279973,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 2.85,
+            "sendEnd": 2.889,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 9.3,
+            "receiveHeadersEnd": 9.318
+          },
+          "timestamp": 1759730551370
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-LFVCTHGI.js?v=bc17f62c",
+          "status": 200,
+          "contentLength": "772",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.279646,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 1.999,
+            "sendEnd": 2.013,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 9.987,
+            "receiveHeadersEnd": 10.021
+          },
+          "timestamp": 1759730551371
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-AJN3JCM6.js?v=bc17f62c",
+          "status": 200,
+          "contentLength": "146071",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.27987,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 2.262,
+            "sendEnd": 2.277,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 8.974,
+            "receiveHeadersEnd": 9.01
+          },
+          "timestamp": 1759730551372
+        },
+        {
+          "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-YV74OZ5W.js?v=bc17f62c",
+          "status": 200,
+          "contentLength": "794050",
+          "contentType": "text/javascript",
+          "timing": {
+            "requestTime": 45409.278978,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 1.93,
+            "sendEnd": 1.945,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 7.834,
+            "receiveHeadersEnd": 7.862
+          },
+          "timestamp": 1759730551375
+        },
+        {
+          "url": "http://localhost:4300/manifest.webmanifest",
+          "status": 304,
+          "contentLength": 0,
+          "contentType": "unknown",
+          "timing": {
+            "requestTime": 45409.337059,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 0.247,
+            "sendEnd": 0.303,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 2.348,
+            "receiveHeadersEnd": 2.385
+          },
+          "timestamp": 1759730551420
+        },
+        {
+          "url": "http://localhost:4300/favicon.ico",
+          "status": 200,
+          "contentLength": "15086",
+          "contentType": "image/x-icon",
+          "timing": {
+            "requestTime": 45409.337404,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 1.634,
+            "sendEnd": 1.683,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 11.639,
+            "receiveHeadersEnd": 11.692
+          },
+          "timestamp": 1759730551430
+        },
+        {
+          "url": "http://localhost:4300/assets/icons/icon-144x144.png",
+          "status": 200,
+          "contentLength": "68",
+          "contentType": "image/png",
+          "timing": {
+            "requestTime": 45409.341171,
+            "proxyStart": -1,
+            "proxyEnd": -1,
+            "dnsStart": -1,
+            "dnsEnd": -1,
+            "connectStart": -1,
+            "connectEnd": -1,
+            "sslStart": -1,
+            "sslEnd": -1,
+            "workerStart": -1,
+            "workerReady": -1,
+            "workerFetchStart": -1,
+            "workerRespondWithSettled": -1,
+            "sendStart": 0.62,
+            "sendEnd": 0.667,
+            "pushStart": 0,
+            "pushEnd": 0,
+            "receiveHeadersStart": 27.716,
+            "receiveHeadersEnd": 27.757
+          },
+          "timestamp": 1759730551450
+        }
+      ],
+      "coreWebVitals": {
+        "domContentLoaded": 115,
+        "loadComplete": 126
+      },
+      "metrics": {
+        "Timestamp": 45418.038082,
+        "Documents": 9,
+        "Frames": 5,
+        "JSEventListeners": 53,
+        "Nodes": 276,
+        "LayoutCount": 5,
+        "RecalcStyleCount": 14,
+        "LayoutDuration": 0.000618,
+        "RecalcStyleDuration": 0.003606,
+        "ScriptDuration": 0.048939,
+        "TaskDuration": 0.149955,
+        "JSHeapUsedSize": 20197292,
+        "JSHeapTotalSize": 25493504
+      },
+      "resourceSummary": {
+        "totalRequests": 46,
+        "jsFiles": 40,
+        "cssFiles": 1,
+        "images": 2,
+        "avgResponseTime": 0
+      }
+    },
+    "security": {
+      "https": false,
+      "csp": {
+        "present": false,
+        "content": null
+      },
+      "cookies": [
+        {
+          "name": "",
+          "secure": false,
+          "httpOnly": false,
+          "sameSite": false
+        }
+      ],
+      "forms": []
+    },
+    "accessibility": {
+      "headings": [],
+      "images": {
+        "total": 0,
+        "withAlt": 0,
+        "withoutAlt": 0
+      },
+      "formElements": {
+        "total": 0,
+        "withLabels": 0
+      },
+      "colorContrast": {
+        "backgroundColors": [
+          "rgb(255, 255, 255)"
+        ],
+        "textColors": [
+          "rgb(255, 255, 255)",
+          "rgb(8, 8, 8)"
+        ]
+      },
+      "aria": {
+        "total": 0,
+        "roles": []
+      }
+    },
+    "functionality": {},
+    "pwa": {
+      "serviceWorker": {
+        "supported": true,
+        "registered": false
+      },
+      "manifest": {
+        "present": true,
+        "href": "http://localhost:4300/manifest.webmanifest"
+      },
+      "offline": {
+        "onlineStatus": true,
+        "cacheAPI": true,
+        "localStorage": true,
+        "indexedDB": true
+      },
+      "notifications": {
+        "supported": true,
+        "permission": "default"
+      },
+      "deviceAPIs": {
+        "geolocation": true,
+        "camera": true,
+        "vibration": true,
+        "battery": true
+      }
+    },
+    "authentication": {
+      "loadTime": 3851,
+      "currentUrl": "http://localhost:4300/",
+      "elementsFound": {
+        "loginForm": false,
+        "emailInput": false,
+        "passwordInput": false,
+        "submitButton": false,
+        "loginComponent": false,
+        "loginText": false,
+        "authText": false,
+        "bodyContent": "",
+        "htmlContent": "<html lang=\"es\" class=\"\"><head>\n  <script type=\"module\" src=\"/@vite/client\"></script>\n\n  <meta charset=\"utf-8\">\n  <title>Conductores PWA - Mobility Tech Platform</title>\n  <base href=\"/\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes\">\n  <meta name=\"color-scheme\" content=\"dark\">\n  <meta name=\"description\" content=\"Plataforma Mobility Tech para conductores con evaluación de riesgo KIBAN, gestión de entregas y monitoreo GNV en tiempo real\">\n  <meta name=\"keywords\" content=\"mobility tech,conductores,kiban,gnv,riesgo,movilidad\">\n  <meta name=\"author\" content=\"Conductores PWA Team\">\n\n  <!-- Favicon and App Icons -->\n  <link rel=\"icon\" type=\"image/x-icon\" href=\"favicon.ico\">\n  <link rel=\"manifest\" href=\"manifest.webmanifest\">\n  <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"assets/icons/icon-192x192.png\">\n  <link rel=\"apple-touch-icon\" sizes=\"512x512\" href=\"assets/icons/icon-512x512.png\">\n\n  <!-- PWA and Mobile Configuration -->\n"
+      },
+      "loginAttempted": false
+    },
+    "uiux": {
+      "colorPalette": {
+        "backgroundColors": 1,
+        "textColors": 2,
+        "uniqueColors": 2
+      },
+      "typography": {
+        "uniqueFonts": 3,
+        "fonts": [
+          "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto",
+          "Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+          "-apple-system, \"system-ui\", \"Segoe UI\", Roboto, Oxygen, Ubuntu, sans-serif"
+        ]
+      },
+      "buttonConsistency": {
+        "totalButtons": 0,
+        "uniqueStyles": 0
+      }
+    }
+  }
+}

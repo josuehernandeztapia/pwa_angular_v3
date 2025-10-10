@@ -95,7 +95,7 @@ export interface AVIScore {
     redFlags: RedFlag[];
     recommendations: string[];
     processingTime: number;
-    confidence: number; // 0-1, aligned with HASE model
+    confidence?: number; // 0-1, aligned con HASE model
 }
 
 // AVI Session for tracking complete evaluation process

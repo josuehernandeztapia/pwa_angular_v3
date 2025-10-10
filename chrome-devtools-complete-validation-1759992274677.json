@@ -1,0 +1,57 @@
+{
+  "timestamp": "2025-10-09T06:44:33.192Z",
+  "total": 7,
+  "passed": 0,
+  "failed": 7,
+  "tests": [
+    {
+      "name": "Authentication Flow",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/\", waiting until \"networkidle\"\u001b[22m\n",
+      "timestamp": "2025-10-09T06:44:34.470Z"
+    },
+    {
+      "name": "Simuladores Navigation",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/simulador\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/simulador\", waiting until \"networkidle\"\u001b[22m\n",
+      "timestamp": "2025-10-09T06:44:34.517Z"
+    },
+    {
+      "name": "Cotizadores Navigation",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/cotizador\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/cotizador\", waiting until \"networkidle\"\u001b[22m\n",
+      "timestamp": "2025-10-09T06:44:34.545Z"
+    },
+    {
+      "name": "Flow Builder Navigation",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/configuracion/flow-builder\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/configuracion/flow-builder\", waiting until \"networkidle\"\u001b[22m\n",
+      "timestamp": "2025-10-09T06:44:34.601Z"
+    },
+    {
+      "name": "Onboarding Navigation",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/onboarding\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/onboarding\", waiting until \"networkidle\"\u001b[22m\n",
+      "timestamp": "2025-10-09T06:44:34.641Z"
+    },
+    {
+      "name": "Products Navigation",
+      "passed": false,
+      "details": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4300/productos\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4300/productos\", waiting until \"networkidle\"\u001b[22m\n",
+      "timestamp": "2025-10-09T06:44:34.671Z"
+    },
+    {
+      "name": "Business Logic",
+      "passed": false,
+      "details": "page.evaluate: Execution context was destroyed, most likely because of a navigation",
+      "timestamp": "2025-10-09T06:44:34.677Z"
+    }
+  ],
+  "screenshots": [],
+  "summary": {
+    "successRate": 0,
+    "totalTests": 7,
+    "passedTests": 0,
+    "failedTests": 7
+  }
+}

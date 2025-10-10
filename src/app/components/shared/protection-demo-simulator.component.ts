@@ -10,6 +10,8 @@ interface BaseQuote {
   amountToFinance: number;
   monthlyPayment: number;
   term: number;
+  market?: string;
+  monthsPaid?: number;
 }
 
 @Component({
@@ -48,7 +50,14 @@ export class ProtectionDemoSimulatorComponent implements OnInit {
 
     this.isLoading = true;
     try {
-      const results = await this.simulationService.simulateProtectionDemo(this.baseQuote, numMonths);
+      const results = await this.simulationService.simulateProtectionDemo(
+        {
+          ...this.baseQuote,
+          market: this.baseQuote.market ?? 'aguascalientes',
+          monthsPaid: this.baseQuote.monthsPaid ?? 12,
+        },
+        numMonths
+      );
       this.scenarios = results;
       if (results.length === 0) {
         this.toast.info("No se pudieron generar escenarios. El plazo restante es muy corto.");

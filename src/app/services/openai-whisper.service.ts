@@ -254,20 +254,22 @@ export class OpenAIWhisperService {
     let pauseFrequency = 0;
     let voiceTremor = 0.3; // Default
 
-    if (response.words) {
+    if (response.words && response.words.length > 0) {
+      const words = response.words;
       // Analizar patrones de timing entre palabras
-      const wordTimings = response.words.map((word, index) => {
+      const wordTimings = words.map((word, index) => {
         if (index === 0) return 0;
-        return word.start - response.words[index - 1].end;
+        const previous = words[index - 1];
+        return previous ? word.start - previous.end : 0;
       }).filter(timing => timing > 0);
 
       // Calcular frecuencia de pausas
       const longPauses = wordTimings.filter(timing => timing > 0.5).length;
-      pauseFrequency = longPauses / wordTimings.length;
+      pauseFrequency = wordTimings.length > 0 ? longPauses / wordTimings.length : 0;
 
       // Estimar variación de pitch basado en confianza de palabras
-      if (response.words.every(w => w.confidence)) {
-        const confidences = response.words.map(w => w.confidence!);
+      if (words.every(w => w.confidence)) {
+        const confidences = words.map(w => w.confidence!);
         const avgConfidence = confidences.reduce((a, b) => a + b, 0) / confidences.length;
         const variance = confidences.reduce((acc, conf) => acc + Math.pow(conf - avgConfidence, 2), 0) / confidences.length;
         pitchVariance = Math.min(1, variance * 5); // Escalar a 0-1

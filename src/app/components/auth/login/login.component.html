@@ -149,11 +149,12 @@
         <div class="tip-title">Usuarios de prueba disponibles:</div>
         <div class="demo-users-grid">
           <button
-            *ngFor="let user of demoUsers"
+            *ngFor="let user of demoUsers; let i = index"
             type="button"
             class="demo-user-card"
             (click)="selectDemoUser(user)"
             [attr.aria-label]="'Seleccionar usuario demo: ' + user.name + ' (' + user.role + ')'"
+            [attr.data-cy]="'demo-user-' + user.role + '-' + i"
           >
             <div class="demo-user-avatar">
               <app-icon

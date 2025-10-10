@@ -9,13 +9,15 @@ import { Quote, ProductPackage, ClientType, SimulatorMode } from '../../../model
 import { TandaMilestone } from '../../../models/tanda';
 import { CotizadorEngineService, ProductComponent } from '../../../services/cotizador-engine.service';
 import { FlowContextService } from '../../../services/flow-context.service';
-import { MarketPolicyContext, MarketPolicyService, PolicyClientType, PolicyMarket } from '../../../services/market-policy.service';
+import { MarketPolicyContext, MarketPolicyMetadata, MarketPolicyService, PolicyClientType, PolicyMarket, TandaPolicyMetadata } from '../../../services/market-policy.service';
 import { PdfExportService } from '../../../services/pdf-export.service';
 import { SavingsProjectionChartComponent } from '../../shared/savings-projection-chart.component';
 import { TandaTimelineComponent } from '../../shared/tanda-timeline.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { OfflineQueueBannerComponent } from '../../shared/offline-queue-banner/offline-queue-banner.component';
 import { ToastService } from '../../../services/toast.service';
+import { FinancialCalculatorService } from '../../../services/financial-calculator.service';
+import { MathValidationSnapshot } from '../../../models/math-validation';
 
 interface CollectionUnit {
   id: number;
@@ -97,6 +99,12 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
   clientType: ClientType | '' = '';
   pkg: ProductPackage | null = null;
   isLoading = false;
+  marketOptions: PolicyMarket[] = [];
+  clientTypeOptions: PolicyClientType[] = [];
+  private policyClientTypeIndex = new Map<PolicyMarket, PolicyClientType[]>();
+  tandaLimits = { min: 2, max: 20 };
+  private currentPolicyMetadata?: MarketPolicyMetadata;
+  private currentPolicyContext: MarketPolicyContext | null = null;
 
   // State for Acquisition Mode (port exacto líneas 125-131)
   selectedOptions: Record<string, boolean> = {};
@@ -150,10 +158,107 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
     private pdf: PdfExportService,
     private toast: ToastService,
     private marketPolicy: MarketPolicyService,
+    private financialCalc: FinancialCalculatorService,
     @Optional() private flowContext?: FlowContextService
   ) {}
 
+  private refreshPolicyOptions(): void {
+    const policies = this.marketPolicy.getAvailablePolicies();
+    const index = new Map<PolicyMarket, Set<PolicyClientType>>();
+
+    policies.forEach(({ market, clientType }) => {
+      if (!index.has(market)) {
+        index.set(market, new Set<PolicyClientType>());
+      }
+      index.get(market)!.add(clientType);
+    });
+
+    this.policyClientTypeIndex = new Map(
+      Array.from(index.entries()).map(([market, clientTypes]) => [
+        market,
+        Array.from(clientTypes.values()).sort((a, b) => {
+          if (a === b) {
+            return 0;
+          }
+          if (a === 'individual') {
+            return -1;
+          }
+          if (b === 'individual') {
+            return 1;
+          }
+          return a.localeCompare(b);
+        }),
+      ])
+    );
+
+    this.marketOptions = Array.from(this.policyClientTypeIndex.keys()).sort();
+    if (this.marketOptions.length === 0) {
+      this.marketOptions = ['aguascalientes', 'edomex'];
+    }
+
+    this.updateClientTypeOptions();
+  }
+
+  private updateClientTypeOptions(): void {
+    if (!this.market || this.isVentaDirecta) {
+      this.clientTypeOptions = [];
+      if (!this.isVentaDirecta) {
+        this.clientType = this.clientType || 'individual';
+      }
+      return;
+    }
+
+    const options = [...(this.policyClientTypeIndex.get(this.market as PolicyMarket) ?? ['individual'])];
+
+    if (options.length === 1) {
+      this.clientTypeOptions = [];
+      this.clientType = options[0];
+      return;
+    }
+
+    this.clientTypeOptions = options;
+    if (this.clientType && !options.includes(this.clientType as PolicyClientType)) {
+      this.clientType = '';
+    }
+  }
+
+  getMarketLabel(market: PolicyMarket | Market): string {
+    switch (market) {
+      case 'aguascalientes':
+        return 'Aguascalientes';
+      case 'edomex':
+        return 'Estado de México';
+      default:
+        return market;
+    }
+  }
+
+  getClientTypeLabel(clientType: PolicyClientType | ClientType): string {
+    return clientType === 'colectivo' ? 'Crédito Colectivo' : 'Individual';
+  }
+
+  private applyPolicyMetadata(metadata: MarketPolicyMetadata | undefined, clientType: PolicyClientType): void {
+    this.currentPolicyMetadata = metadata;
+
+    const defaultLimits = { min: 2, max: 20 };
+    if (!metadata?.tanda || clientType !== 'colectivo') {
+      this.tandaLimits = defaultLimits;
+      return;
+    }
+
+    const min = Math.max(metadata.tanda.minMembers ?? defaultLimits.min, 1);
+    const max = Math.max(metadata.tanda.maxMembers ?? Math.max(defaultLimits.max, min), min);
+    this.tandaLimits = { min, max };
+
+    if (!Number.isFinite(this.tandaMembers) || this.tandaMembers <= 0) {
+      this.tandaMembers = metadata.tanda.minMembers ?? min;
+    }
+
+    this.tandaMembers = Math.min(Math.max(this.tandaMembers, min), max);
+  }
+
   ngOnInit(): void {
+    this.refreshPolicyOptions();
     // Port exacto de useEffect desde React líneas 150-162
     if (this.client) {
       const clientMarket = this.client.ecosystemId ? 'edomex' : 'aguascalientes';
@@ -171,6 +276,7 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
       this.fetchPackage();
     }
 
+    this.updateClientTypeOptions();
     this.persistFlowContextSnapshot('init');
   }
 
@@ -324,10 +430,21 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
   onMarketChange(): void {
     this.clientType = '';
     this.pkg = null;
+    this.currentPolicyContext = null;
+    this.applyPolicyMetadata(undefined, 'individual');
+    this.updateClientTypeOptions();
+
+    if (!this.clientType && !this.isVentaDirecta && this.clientTypeOptions.length === 1) {
+      this.clientType = this.clientTypeOptions[0];
+    }
+
     this.persistFlowContextSnapshot('market-change');
   }
 
   onClientTypeChange(): void {
+    if (!this.clientType && this.clientTypeOptions.length === 1) {
+      this.clientType = this.clientTypeOptions[0];
+    }
     if (this.market && this.clientType) {
       this.fetchPackage();
     }
@@ -371,24 +488,43 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
 
   // Port exacto de fetchPackage desde React líneas 164-200
   private fetchPackage(): void {
-    if (!this.market || !this.clientType) {
+    if (!this.market) {
       this.pkg = null;
       return;
     }
 
-    let packageKey: string;
-    const isTandaScenario = this.initialMode === 'savings' && this.market === 'edomex' && this.clientType === 'colectivo';
+    const resolvedClientType = this.resolveClientType() ?? 'individual';
+    const saleType: 'contado' | 'financiero' = this.isVentaDirecta ? 'contado' : 'financiero';
+    const businessFlow = this.resolveBusinessFlow(resolvedClientType, saleType);
+    const policyContext = this.buildPolicyContext(
+      this.market as PolicyMarket,
+      resolvedClientType,
+      saleType,
+      businessFlow,
+      this.resolveCollectiveMembers(resolvedClientType)
+    );
 
-    if (isTandaScenario) {
-      packageKey = 'edomex-colectivo';
-    } else if (this.client?.flow === BusinessFlow.VentaDirecta) {
-      packageKey = `${this.market}-directa`;
-    } else {
-      packageKey = `${this.market}-plazo`;
+    try {
+      const metadata = policyContext ? this.marketPolicy.getPolicyMetadata(policyContext) : undefined;
+      this.applyPolicyMetadata(metadata, resolvedClientType);
+    } catch {
+      this.applyPolicyMetadata(undefined, resolvedClientType);
     }
 
+    const normalizedCollectiveMembers = this.resolveCollectiveMembers(resolvedClientType);
+    this.currentPolicyContext = {
+      ...(policyContext || {}),
+      collectiveSize: normalizedCollectiveMembers,
+      market: this.market as PolicyMarket || 'aguascalientes',
+      clientType: resolvedClientType,
+    } as MarketPolicyContext;
+
     this.isLoading = true;
-    this.cotizadorEngine.getProductPackage(packageKey).subscribe({
+    this.cotizadorEngine.getProductPackageForContext({
+      market: this.market as PolicyMarket,
+      clientType: resolvedClientType,
+      saleType,
+    }).subscribe({
       next: (data) => {
         this.pkg = data;
         const initialOptions: Record<string, boolean> = {};
@@ -398,7 +534,10 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
         this.selectedOptions = initialOptions;
         this.term = data.terms[0] || 0;
         this.downPaymentPercentage = data.minDownPaymentPercentage * 100;
-        this.tandaMembers = data.defaultMembers || 5;
+        if (resolvedClientType === 'colectivo') {
+          const defaultMembers = data.defaultMembers ?? this.tandaLimits.min;
+          this.tandaMembers = Math.min(Math.max(defaultMembers, this.tandaLimits.min), this.tandaLimits.max);
+        }
         this.amortizationTable = [];
         this.collectionUnits = [];
         this.voluntaryContribution = '0';
@@ -518,40 +657,90 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
     const monthlyPayment = this.resolveMonthlyPayment();
 
     const existing = this.flowContext.getContextData<any>('cotizador') ?? {};
-    const policyContext = this.buildPolicyContext(market, clientType, saleType, businessFlow, collectiveMembers);
+    const existingQuotation = existing.quotationData ?? {};
+    const existingPolicyContext = existing.policyContext ?? existingQuotation.policyContext;
 
-    let incomeThreshold: number | undefined;
-    let incomeThresholdRatio: number | undefined;
+    const tandaRules = this.currentPolicyMetadata?.tanda
+      ?? existingPolicyContext?.metadata?.tanda
+      ?? existingQuotation?.policyContext?.metadata?.tanda;
 
-    if (policyContext && monthlyPayment !== undefined && saleType === 'financiero') {
-      const ratio = this.marketPolicy.getIncomeThreshold(policyContext);
-      if (typeof ratio === 'number' && Number.isFinite(ratio) && ratio > 0) {
-        incomeThresholdRatio = ratio;
-        incomeThreshold = monthlyPayment * ratio;
+    const normalizedCollectiveMembers = this.normalizeCollectiveSize(
+      collectiveMembers ?? existingQuotation.collectiveMembers ?? existing.collectiveMembers,
+      tandaRules
+    );
+
+    const basePolicyContext = this.currentPolicyContext
+      ? { ...this.currentPolicyContext }
+      : this.buildPolicyContext(market, clientType, saleType, businessFlow, normalizedCollectiveMembers);
+
+    const policyContext = basePolicyContext ? { ...basePolicyContext } : null;
+
+    let incomeThreshold: number | undefined = this.currentPolicyMetadata?.income?.threshold
+      ?? existing.incomeThreshold
+      ?? existing.flowContext?.incomeThreshold
+      ?? existingQuotation.incomeThreshold
+      ?? existingPolicyContext?.incomeThreshold;
+
+    if (incomeThreshold === undefined && policyContext) {
+      const fallbackThreshold = this.marketPolicy.getIncomeThreshold(policyContext);
+      if (typeof fallbackThreshold === 'number' && Number.isFinite(fallbackThreshold)) {
+        incomeThreshold = fallbackThreshold;
       }
     }
 
-    if (incomeThreshold === undefined && typeof existing.incomeThreshold === 'number') {
-      incomeThreshold = existing.incomeThreshold;
-    }
-    if (incomeThresholdRatio === undefined && typeof existing.incomeThresholdRatio === 'number') {
-      incomeThresholdRatio = existing.incomeThresholdRatio;
+    let incomeThresholdRatio: number | undefined = existing.incomeThresholdRatio
+      ?? existing.flowContext?.incomeThresholdRatio
+      ?? existingQuotation.incomeThresholdRatio
+      ?? existingPolicyContext?.incomeThresholdRatio;
+
+    let requiresIncomeProof: boolean | undefined = existingQuotation.requiresIncomeProof
+      ?? existing.requiresIncomeProof
+      ?? existing.flowContext?.requiresIncomeProof
+      ?? existingPolicyContext?.requiresIncomeProof;
+
+    if (saleType === 'financiero') {
+      if (typeof monthlyPayment === 'number' && typeof incomeThreshold === 'number') {
+        requiresIncomeProof = monthlyPayment > incomeThreshold;
+      } else if (typeof requiresIncomeProof !== 'boolean') {
+        requiresIncomeProof = false;
+      }
+    } else {
+      requiresIncomeProof = false;
     }
 
-    const requiresIncomeProof = saleType === 'financiero'
-      ? (incomeThreshold !== undefined && monthlyPayment !== undefined
-          ? monthlyPayment > incomeThreshold
-          : existing.requiresIncomeProof)
-      : false;
-
-    if (policyContext && typeof requiresIncomeProof === 'boolean') {
+    if (policyContext) {
+      policyContext.collectiveSize = normalizedCollectiveMembers;
       policyContext.requiresIncomeProof = requiresIncomeProof;
+      if (typeof incomeThreshold === 'number') {
+        policyContext.incomeThreshold = incomeThreshold;
+      } else {
+        delete policyContext.incomeThreshold;
+      }
+      if (typeof incomeThresholdRatio === 'number') {
+        policyContext.incomeThresholdRatio = incomeThresholdRatio;
+      } else {
+        delete policyContext.incomeThresholdRatio;
+      }
+      if (tandaRules) {
+        policyContext.metadata = {
+          ...(policyContext.metadata ?? {}),
+          tanda: this.cloneTandaRules(tandaRules),
+        };
+      }
     }
 
-    const membersArray = this.buildMembersArray(collectiveMembers, existing.members);
+    const membersArray = this.buildMembersArray(normalizedCollectiveMembers, existing.members);
+    const policyContextSnapshot = policyContext ? this.clonePolicyContext(policyContext) : undefined;
+
+    const mathValidation = this.buildMathValidationSnapshot({
+      principal: this.amountToFinance,
+      term: this.term,
+      monthlyPayment,
+      annualRate: this.pkg?.rate
+    }) ?? existingQuotation.mathValidation ?? existing.mathValidation ?? null;
 
     const quotationData = {
-      ...existing.quotationData,
+      ...existingQuotation,
       market,
       clientType,
       saleType,
@@ -563,17 +752,35 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
       incomeThreshold,
       incomeThresholdRatio,
       requiresIncomeProof,
-      collectiveMembers,
+      collectiveMembers: normalizedCollectiveMembers,
       members: membersArray,
       includeInsurance: this.includeInsurance,
       insuranceAmount: this.includeInsurance ? this.toNumber(this.insuranceAmount) : 0,
       insuranceMode: this.includeInsurance ? this.insuranceMode : 'contado',
       origin,
       updatedAt: Date.now(),
+      policyContext: policyContextSnapshot ?? existingQuotation.policyContext,
+      mathValidation
     };
+
+    const flowContextSnapshot = existing.flowContext ? { ...existing.flowContext } : undefined;
+    if (flowContextSnapshot) {
+      flowContextSnapshot.collectiveMembers = normalizedCollectiveMembers ?? flowContextSnapshot.collectiveMembers;
+      flowContextSnapshot.requiresIncomeProof = requiresIncomeProof;
+      if (typeof incomeThreshold === 'number') {
+        flowContextSnapshot.incomeThreshold = incomeThreshold;
+      }
+      if (typeof monthlyPayment === 'number') {
+        flowContextSnapshot.monthlyPayment = monthlyPayment;
+      }
+      if (policyContextSnapshot) {
+        (flowContextSnapshot as any).policyContext = policyContextSnapshot;
+      }
+    }
 
     const payload = {
       ...existing,
+      flowContext: flowContextSnapshot ?? existing.flowContext,
       market,
       clientType,
       saleType,
@@ -584,10 +791,11 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
       incomeThreshold,
       incomeThresholdRatio,
       requiresIncomeProof,
-      collectiveMembers,
+      collectiveMembers: normalizedCollectiveMembers,
       members: membersArray,
       quotationData,
-      policyContext,
+      policyContext: policyContextSnapshot ?? existingPolicyContext ?? null,
+      mathValidation
     };
 
     this.flowContext.saveContext('cotizador', payload, {
@@ -627,7 +835,10 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
       return undefined;
     }
     const members = Number(this.tandaMembers);
-    return Number.isFinite(members) && members > 0 ? members : undefined;
+    if (!Number.isFinite(members) || members <= 0) {
+      return undefined;
+    }
+    return Math.min(Math.max(members, this.tandaLimits.min), this.tandaLimits.max);
   }
 
   private resolveMonthlyPayment(): number | undefined {
@@ -651,6 +862,57 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
       saleType,
       businessFlow,
       collectiveSize: collectiveMembers,
+    };
+  }
+
+  private normalizeCollectiveSize(value: number | undefined, tanda?: TandaPolicyMetadata | undefined): number | undefined {
+    if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
+      return undefined;
+    }
+
+    const min = tanda?.minMembers ?? this.tandaLimits.min;
+    const max = tanda?.maxMembers ?? this.tandaLimits.max;
+
+    return Math.min(Math.max(Math.round(value), min), max);
+  }
+
+  private cloneTandaRules(rules?: TandaPolicyMetadata): TandaPolicyMetadata | undefined {
+    if (!rules) {
+      return undefined;
+    }
+
+    const {
+      minMembers,
+      maxMembers,
+      minContribution,
+      maxContribution,
+      minRounds,
+      maxRounds,
+      validationEndpoint,
+      scheduleEndpoint,
+    } = rules;
+
+    return {
+      minMembers,
+      maxMembers,
+      minContribution,
+      maxContribution,
+      minRounds,
+      maxRounds,
+      validationEndpoint,
+      scheduleEndpoint,
+    };
+  }
+
+  private clonePolicyContext(context: MarketPolicyContext): MarketPolicyContext {
+    return {
+      ...context,
+      metadata: context.metadata
+        ? {
+            ...context.metadata,
+            tanda: this.cloneTandaRules(context.metadata.tanda),
+          }
+        : undefined,
     };
   }
 
@@ -698,5 +960,58 @@ export class CotizadorMainComponent implements OnInit, OnDestroy {
     } catch (e) {
       this.toast.error('No se pudo generar el PDF');
     }
+  }
+
+  private buildMathValidationSnapshot(config: {
+    principal: number;
+    monthlyPayment?: number;
+    term?: number;
+    annualRate?: number;
+  }): MathValidationSnapshot | undefined {
+    const principal = config.principal;
+    const term = typeof config.term === 'number' ? config.term : this.term;
+    const monthlyPayment = typeof config.monthlyPayment === 'number' ? config.monthlyPayment : this.monthlyPayment;
+    const annualRate = typeof config.annualRate === 'number' ? config.annualRate : this.pkg?.rate;
+
+    if (!Number.isFinite(principal) || principal <= 0) {
+      return undefined;
+    }
+    if (!Number.isFinite(term) || term <= 0) {
+      return undefined;
+    }
+    if (!Number.isFinite(monthlyPayment) || monthlyPayment <= 0) {
+      return undefined;
+    }
+
+    const tolerance = 0.005; // 0.5%
+    const monthlyRate = Number.isFinite(annualRate) && annualRate != null ? annualRate / 12 : undefined;
+
+    const expectedMonthly = monthlyRate != null && monthlyRate > 0
+      ? this.financialCalc.annuity(principal, monthlyRate, term)
+      : principal / term;
+
+    const deltaPayment = monthlyPayment - expectedMonthly;
+    const reference = Math.abs(expectedMonthly) > 1e-9 ? Math.abs(expectedMonthly) : Math.abs(monthlyPayment) || 1;
+    const deltaPercent = deltaPayment / reference;
+
+    const payments = Array.from({ length: term }, () => monthlyPayment);
+    const cashflows = this.financialCalc.generateCashFlows(principal, payments, term);
+    const tirMonthly = this.financialCalc.calculateTIR(cashflows, monthlyRate ?? 0.1);
+    const tirAnnual = tirMonthly * 12;
+
+    return {
+      principal,
+      monthlyPayment,
+      term,
+      annualRate,
+      expectedMonthlyPayment: expectedMonthly,
+      deltaPayment,
+      deltaPercent,
+      withinTolerance: Math.abs(deltaPercent) <= tolerance,
+      tolerance,
+      tirMonthly,
+      tirAnnual,
+      lastUpdated: Date.now()
+    };
   }
 }

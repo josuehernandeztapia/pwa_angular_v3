@@ -135,6 +135,17 @@ describe('CotizadorEngineService', () => {
       });
     });
 
+    it('maps policy context to existing package keys', (done) => {
+      service.getProductPackageForContext({
+        market: 'edomex',
+        saleType: 'financiero',
+        clientType: 'colectivo'
+      }).subscribe(pkg => {
+        (expect(pkg.name) as any).toBe('Paquete Crédito Colectivo - EdoMex');
+        done();
+      });
+    });
+
     it('should get EdoMex directa package', (done) => {
       service.getProductPackage('edomex-directa').subscribe(pkg => {
         (expect(pkg.name) as any).toBe('Paquete Compra de Contado - EdoMex');

@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { OCRService, OCRProgress } from '../../services/ocr.service';
 import { IconComponent } from "../shared/icon/icon.component"
-import { HumanMessageComponent } from '../human-message/human-message.component';
+import { HumanMessageComponent } from '../shared/human-message/human-message.component';
 import { HumanMicrocopyService } from '../../services/human-microcopy.service';
 
 export interface OCRScanResult {
@@ -76,21 +76,24 @@ export class OCRScannerEnhancedComponent implements OnInit, OnDestroy {
   private initializeMicrocopy() {
     // Add OCR-specific microcopy contexts
     this.microcopyService.registerContext('ocr-manual-verification', {
-      message: 'No pudimos detectar el {{field}} con suficiente confianza ({{confidence}}%). Por favor, revisa y corrige si es necesario.',
-      tone: 'helpful',
-      actionable: true
+      id: 'ocr-manual-verification',
+      primaryText: 'No pudimos detectar el {{field}} con suficiente confianza ({{confidence}}%). Por favor, revisa y corrige si es necesario.',
+      tone: 'supportive',
+      context: 'error'
     });
 
     this.microcopyService.registerContext('manual-entry-guidance', {
-      message: 'Ingresa el {{field}} manualmente. Asegúrate de que la información sea correcta.',
-      tone: 'instructional',
-      actionable: true
+      id: 'manual-entry-guidance',
+      primaryText: 'Ingresa el {{field}} manualmente. Asegúrate de que la información sea correcta.',
+      tone: 'explanatory',
+      context: 'guidance'
     });
 
     this.microcopyService.registerContext('ocr-error', {
-      message: 'No pudimos procesar la imagen: {{error}}. {{canRetry ? "Puedes reintentar o usar entrada manual." : "Por favor, usa entrada manual."}}',
-      tone: 'apologetic',
-      actionable: true
+      id: 'ocr-error',
+      primaryText: 'No pudimos procesar la imagen: {{error}}. {{canRetry ? "Puedes reintentar o usar entrada manual." : "Por favor, usa entrada manual."}}',
+      tone: 'empathetic',
+      context: 'error'
     });
   }
 
@@ -135,11 +138,11 @@ export class OCRScannerEnhancedComponent implements OnInit, OnDestroy {
         case 'vin':
           result = await this.ocrService.extractVINFromImage(file);
           this.ocrResult = {
-            value: result.vin,
+            value: result['vin'],
             confidence: result.confidence,
             needsManualEntry: result.needsManualEntry
           };
-          this.detectedValue = result.vin;
+          this.detectedValue = result['vin'];
           break;
           
         case 'odometer':
@@ -280,11 +283,11 @@ export class OCRScannerEnhancedComponent implements OnInit, OnDestroy {
     }
   }
 
-  getScannerIcon(): string {
+  getScannerIcon(): 'truck' | 'calculator' | 'camera' {
     switch (this.mode) {
-      case 'vin': return 'car';
-      case 'odometer': return 'speedometer';
-      default: return 'scan';
+      case 'vin': return 'truck';
+      case 'odometer': return 'calculator';
+      default: return 'camera';
     }
   }
 

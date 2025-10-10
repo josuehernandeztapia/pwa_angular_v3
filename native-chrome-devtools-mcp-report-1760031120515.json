@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-10-09T17:32:00.514Z",
+  "tool": "Native Chrome DevTools MCP with True CDP",
+  "method": "Pure Chrome DevTools Protocol (No Chromium/Playwright)",
+  "baseUrl": "http://localhost:4300",
+  "cdpPort": 9222,
+  "total": 0,
+  "passed": 0,
+  "failed": 0,
+  "successRate": 0,
+  "tests": [],
+  "screenshots": []
+}

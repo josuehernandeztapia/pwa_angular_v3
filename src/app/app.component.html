@@ -2,78 +2,12 @@
 <a class="skip-link" href="#main-content">Saltar al contenido</a>
 
 <div class="app-shell">
-  <!-- Sidebar Navigation -->
-  <aside class="app-shell__sidebar">
-    <div class="app-shell__sidebar-header">Conductores</div>
+  <app-navigation class="app-shell__navigation"></app-navigation>
 
-    <nav class="app-shell__nav" role="navigation" aria-label="Navegación principal">
-      <div class="app-shell__nav-section">
-        <div class="app-shell__nav-label">Principal</div>
-        <div class="app-shell__nav-links">
-          <a routerLink="/dashboard" class="app-shell__nav-link" data-cy="nav-dashboard">
-            <app-icon name="home"></app-icon>
-            <span>Dashboard</span>
-          </a>
-          <a routerLink="/clientes" class="app-shell__nav-link" data-cy="nav-clientes">
-            <!-- <app-icon name="users"></app-icon> -->
-            <span>Clientes</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="app-shell__nav-section">
-        <div class="app-shell__nav-label">Herramientas</div>
-        <div class="app-shell__nav-links">
-          <a routerLink="/cotizador" class="app-shell__nav-link" data-cy="nav-cotizador">
-            <!-- <app-icon name="calculator"></app-icon> -->
-            <span>Cotizador</span>
-          </a>
-          <a routerLink="/simulador" class="app-shell__nav-link" data-cy="nav-simulador">
-            <!-- <app-icon name="chart"></app-icon> -->
-            <span>Simulador</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="app-shell__nav-section">
-        <div class="app-shell__nav-label">Operaciones</div>
-        <div class="app-shell__nav-links">
-          <a routerLink="/documentos" class="app-shell__nav-link" data-cy="nav-documentos">
-            <!-- <app-icon name="document"></app-icon> -->
-            <span>Documentos</span>
-          </a>
-          <a routerLink="/entregas" class="app-shell__nav-link" data-cy="nav-entregas">
-            <!-- <app-icon name="truck"></app-icon> -->
-            <span>Entregas</span>
-          </a>
-          <a routerLink="/gnv" class="app-shell__nav-link" data-cy="nav-gnv">
-            <!-- <app-icon name="fuel"></app-icon> -->
-            <span>GNV</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="app-shell__nav-section">
-        <div class="app-shell__nav-label">Servicios</div>
-        <div class="app-shell__nav-links">
-          <a routerLink="/proteccion" class="app-shell__nav-link" data-cy="nav-proteccion">
-            <!-- <app-icon name="shield"></app-icon> -->
-            <span>Protección</span>
-          </a>
-          <a routerLink="/configuracion" class="app-shell__nav-link" data-cy="nav-configuracion">
-            <!-- <app-icon name="settings"></app-icon> -->
-            <span>Configuración</span>
-          </a>
-        </div>
-      </div>
-    </nav>
-  </aside>
-
-  <!-- Main Content Area -->
-  <div class="app-shell__main">
-    <header class="app-shell__topbar">
-      <div class="app-shell__topbar-left">
-        <div class="app-shell__topbar-info">
+  <div class="app-shell__layout">
+    <header class="app-shell__topbar" role="banner">
+      <div class="app-shell__topbar-start">
+        <div class="app-shell__org" aria-live="polite">
           Organización: <span data-cy="org-name">mvpcoductores</span>
         </div>
         <nav
@@ -83,7 +17,10 @@
           aria-live="polite"
         >
           <ng-container *ngIf="breadcrumbs.length">
-            <span class="app-shell__breadcrumb" *ngFor="let crumb of breadcrumbs; let last = last; trackBy: trackBreadcrumb">
+            <span
+              class="app-shell__breadcrumb"
+              *ngFor="let crumb of breadcrumbs; let last = last; trackBy: trackBreadcrumb"
+            >
               {{ crumb }}
               <span *ngIf="!last" class="app-shell__breadcrumb-separator">/</span>
             </span>
@@ -93,9 +30,31 @@
 
       <app-global-search
         *ngIf="isGlobalSearchEnabled"
-        class="app-shell__global-search"></app-global-search>
+        class="app-shell__global-search"
+      ></app-global-search>
 
       <div class="app-shell__topbar-actions">
+        <app-update-banner class="app-shell__update-banner"></app-update-banner>
+        <ng-container *ngIf="offlineState$ | async as offlineState">
+          <button
+            *ngIf="offlineState.isOffline || offlineState.pending > 0"
+            type="button"
+            class="app-shell__offline-btn"
+            (click)="flushOfflineQueue()"
+            [disabled]="offlineState.pending === 0 || offlineState.isOffline"
+            data-cy="offline-queue-flush-now"
+            [attr.aria-live]="offlineState.isOffline ? 'polite' : null"
+            [attr.aria-label]="offlineState.isOffline ? 'Sin conexión. Espera para sincronizar.' : 'Sincronizar acciones pendientes'"
+            [attr.title]="offlineState.isOffline ? 'Sin conexión. Espera para sincronizar.' : 'Sincronizar acciones pendientes'"
+          >
+            <span class="app-shell__offline-dot" [class.is-offline]="offlineState.isOffline"></span>
+            <span class="app-shell__offline-label">
+              {{ offlineState.isOffline ? 'Sin conexión' : 'Cola offline' }}
+            </span>
+            <span class="app-shell__offline-count" *ngIf="offlineState.pending > 0">{{ offlineState.pending }}</span>
+          </button>
+        </ng-container>
+
         <ng-container *ngIf="quickActions$ | async as quickActions">
           <div
             class="app-shell__quick-actions"
@@ -128,16 +87,26 @@
         </ng-container>
         <button class="btn btn-secondary btn-sm" data-cy="date-range">Rango de fechas</button>
         <button class="btn btn-primary btn-sm" data-cy="export">
-          <!-- <app-icon name="download" aria-hidden="true"></app-icon> -->
           Exportar
         </button>
         <button
           class="btn btn-ghost btn-sm"
           (click)="toggleDarkMode()"
           data-cy="dark-toggle"
-          [attr.aria-label]="isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'">
-          <!-- <app-icon name="moon" *ngIf="!isDarkMode"></app-icon> -->
-          <!-- <app-icon name="sun" *ngIf="isDarkMode"></app-icon> -->
+          [attr.aria-label]="isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+        >
+          <app-icon
+            *ngIf="!isDarkMode"
+            name="moon"
+            [size]="16"
+            aria-hidden="true"
+          ></app-icon>
+          <app-icon
+            *ngIf="isDarkMode"
+            name="sun"
+            [size]="16"
+            aria-hidden="true"
+          ></app-icon>
         </button>
       </div>
     </header>
@@ -153,13 +122,9 @@
   <app-bottom-nav-bar
     class="app-shell__mobile-nav"
     role="navigation"
-    aria-label="Navegación móvil">
+    aria-label="Navegación móvil"
+  >
   </app-bottom-nav-bar>
-}
-
-<!-- Update Banner for PWA updates -->
-@defer (on idle) {
-  <app-update-banner></app-update-banner>
 }
 
 <!-- Offline Status Indicator -->

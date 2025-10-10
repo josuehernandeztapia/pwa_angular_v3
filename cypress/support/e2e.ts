@@ -92,8 +92,13 @@ declare global {
       
       /**
        * Custom command to simulate network conditions
-       */
+      */
       simulateNetworkCondition(condition: 'online' | 'offline' | 'slow'): Chainable<void>;
+
+      /**
+       * Inject bypass auth credentials into localStorage for testing builds
+       */
+      useTestingBypassAuth(): Chainable<void>;
     }
   }
 }

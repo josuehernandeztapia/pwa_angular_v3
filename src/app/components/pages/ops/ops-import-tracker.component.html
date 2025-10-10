@@ -150,6 +150,23 @@
             <span class="ops-import-tracker__summary-value">{{ status.syncStatus || '—' }}</span>
           </div>
         </div>
+        <div class="ops-import-tracker__summary-card ops-import-tracker__summary-card--unit" *ngIf="status.assignedUnit as unit">
+          <app-icon
+            class="ops-import-tracker__summary-icon"
+            name="truck"
+            [size]="20"
+            aria-hidden="true"
+          ></app-icon>
+          <div class="ops-import-tracker__summary-content">
+            <span class="ops-import-tracker__summary-label">Unidad asignada</span>
+            <span class="ops-import-tracker__summary-value">
+              {{ unit.modelo }} {{ unit.year }} · VIN {{ unit.vin }}
+            </span>
+            <span class="ops-import-tracker__summary-meta" *ngIf="unit.assignedAt">
+              Asignada {{ unit.assignedAt | date: 'short' }}
+            </span>
+          </div>
+        </div>
       </div>
 
       <section class="ops-import-tracker__milestones">
@@ -164,9 +181,9 @@
                 aria-hidden="true"
               ></app-icon>
               <div class="ops-import-tracker__milestone-details">
-                <span class="ops-import-tracker__milestone-name">{{ m }}</span>
+                <span class="ops-import-tracker__milestone-name">{{ formatMilestoneName(m) }}</span>
                 <span class="ops-import-tracker__milestone-status">
-                  {{ ($any(status)[m]?.status) || 'pending' }}
+                  {{ getMilestoneState(status, m) }}
                 </span>
               </div>
             </div>

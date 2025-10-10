@@ -1,0 +1,64 @@
+{
+  "timestamp": "2025-10-06T09:14:56.605Z",
+  "branch": "main",
+  "postMergeValidations": [
+    {
+      "name": "Login page carga correctamente",
+      "status": "PASS",
+      "type": "page_load",
+      "details": "Página cargó correctamente: http://localhost:4300/login",
+      "timestamp": "2025-10-06T09:14:58.291Z"
+    },
+    {
+      "name": "Demo users cards están presentes",
+      "status": "PASS",
+      "type": "element_check",
+      "details": "Elemento encontrado: .demo-users-grid",
+      "timestamp": "2025-10-06T09:14:58.293Z"
+    },
+    {
+      "name": "BFF endpoints están configurados",
+      "status": "PASS",
+      "type": "network_check",
+      "details": "Endpoint respondió correctamente: 200",
+      "timestamp": "2025-10-06T09:14:58.310Z"
+    },
+    {
+      "name": "AuthService integración funcional",
+      "status": "FAIL",
+      "type": "js_check",
+      "details": "JavaScript check: falló",
+      "timestamp": "2025-10-06T09:14:58.311Z"
+    }
+  ],
+  "screenshots": [
+    "post-merge-Login-page-carga-correctamente-1759742098170.png"
+  ],
+  "errors": [
+    {
+      "type": "console_error",
+      "message": "Access to XMLHttpRequest at 'http://localhost:3000/auth/demo-users' from origin 'http://localhost:4300' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "timestamp": "2025-10-06T09:14:57.593Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[monitoring:error] JSHandle@object",
+      "timestamp": "2025-10-06T09:14:57.593Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: net::ERR_FAILED",
+      "timestamp": "2025-10-06T09:14:57.595Z"
+    }
+  ],
+  "score": 75,
+  "summary": {
+    "totalValidations": 4,
+    "passedValidations": 3,
+    "failedValidations": 1,
+    "warningValidations": 0,
+    "finalScore": 75,
+    "successRate": "75.0%",
+    "status": "MERGE_ISSUES"
+  }
+}

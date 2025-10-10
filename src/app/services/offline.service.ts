@@ -294,6 +294,7 @@ export class OfflineService {
 
     if (this.analytics) {
       this.analytics.track('offline_queue_flush', {
+        feature: 'global-shell',
         remaining: this.pendingRequests.length,
         processed: requests.length,
       });

@@ -39,6 +39,7 @@ interface FlowContext {
   incomeThreshold?: number;
   incomeThresholdRatio?: number;
   tandaRules?: TandaPolicyMetadata;
+  policyContext?: MarketPolicyContext;
   protection?: {
     required: boolean;
     coverageOptions: string[];
@@ -274,18 +275,42 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
     const saleType = this.flowContext.saleType ?? 'financiero';
     this.flowContext.saleType = saleType;
 
-    const requiresIncomeProof = this.determineIncomeProofRequirement();
+    const policyContextFromFlow = this.clonePolicyContext(this.flowContext.policyContext);
+
+    const requiresIncomeProof = this.determineIncomeProofRequirement(policyContextFromFlow ?? undefined);
     this.flowContext.requiresIncomeProof = requiresIncomeProof;
 
-    const collectiveSize = this.determineCollectiveSize();
+    const collectiveSize = this.determineCollectiveSize(policyContextFromFlow ?? undefined);
     if (typeof collectiveSize === 'number') {
       this.flowContext.collectiveMembers = collectiveSize;
     } else {
       this.flowContext.collectiveMembers = undefined;
     }
 
-    this.policyContext = this.buildPolicyContext(saleType, requiresIncomeProof, collectiveSize);
-    this.policyMetadata = this.marketPolicy.getPolicyMetadata(this.policyContext);
+    if (policyContextFromFlow) {
+      policyContextFromFlow.requiresIncomeProof = requiresIncomeProof;
+      if (typeof collectiveSize === 'number') {
+        policyContextFromFlow.collectiveSize = collectiveSize;
+      } else {
+        delete policyContextFromFlow.collectiveSize;
+      }
+      if (typeof this.flowContext.incomeThreshold === 'number') {
+        policyContextFromFlow.incomeThreshold = this.flowContext.incomeThreshold;
+      }
+      if (typeof this.flowContext.incomeThresholdRatio === 'number') {
+        policyContextFromFlow.incomeThresholdRatio = this.flowContext.incomeThresholdRatio;
+      }
+      this.policyContext = policyContextFromFlow;
+    } else {
+      this.policyContext = this.buildPolicyContext(saleType, requiresIncomeProof, collectiveSize);
+    }
+
+    if (this.policyContext) {
+      this.flowContext.policyContext = this.clonePolicyContext(this.policyContext) ?? undefined;
+      this.policyMetadata = this.marketPolicy.getPolicyMetadata(this.policyContext);
+    } else {
+      this.policyMetadata = null;
+    }
 
     this.initializeTandaValidation();
 
@@ -1181,9 +1206,13 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
     this.persistFlowState();
   }
 
-  private determineIncomeProofRequirement(): boolean {
+  private determineIncomeProofRequirement(policyContext: MarketPolicyContext | null = this.flowContext?.policyContext ?? null): boolean {
     if (!this.flowContext) {
       return false;
+    }
+
+    if (typeof policyContext?.requiresIncomeProof === 'boolean') {
+      return policyContext.requiresIncomeProof;
     }
 
     if (typeof this.flowContext.requiresIncomeProof === 'boolean') {
@@ -1212,8 +1241,9 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
         return monthlyPayment > incomeThreshold;
       }
 
-      if (this.policyContext) {
-        const ratio = this.marketPolicy.getIncomeThreshold(this.policyContext);
+      const contextForThreshold = policyContext ?? this.policyContext;
+      if (contextForThreshold) {
+        const ratio = this.marketPolicy.getIncomeThreshold(contextForThreshold);
         if (typeof ratio === 'number' && Number.isFinite(ratio) && ratio > 0) {
           const derivedThreshold = monthlyPayment * ratio;
           this.flowContext.incomeThreshold = derivedThreshold;
@@ -1232,29 +1262,33 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  private determineCollectiveSize(): number | undefined {
+  private determineCollectiveSize(policyContext: MarketPolicyContext | null = this.flowContext?.policyContext ?? null): number | undefined {
     if (!this.flowContext) {
       return undefined;
     }
 
+    if (typeof policyContext?.collectiveSize === 'number') {
+      return this.normalizeCollectiveSize(policyContext.collectiveSize, policyContext.metadata?.tanda);
+    }
+
     if (typeof this.flowContext.collectiveMembers === 'number') {
-      return this.flowContext.collectiveMembers;
+      return this.normalizeCollectiveSize(this.flowContext.collectiveMembers, policyContext?.metadata?.tanda);
     }
 
     const quotation = this.flowContext.quotationData ?? {};
     if (Array.isArray(quotation.members)) {
-      return quotation.members.length;
+      return this.normalizeCollectiveSize(quotation.members.length, policyContext?.metadata?.tanda);
     }
     if (Array.isArray(quotation.groupMembers)) {
-      return quotation.groupMembers.length;
+      return this.normalizeCollectiveSize(quotation.groupMembers.length, policyContext?.metadata?.tanda);
     }
 
     const simulator = this.flowContext.simulatorData ?? {};
     if (Array.isArray(simulator.members)) {
-      return simulator.members.length;
+      return this.normalizeCollectiveSize(simulator.members.length, policyContext?.metadata?.tanda);
     }
     if (typeof simulator.memberCount === 'number') {
-      return simulator.memberCount;
+      return this.normalizeCollectiveSize(simulator.memberCount, policyContext?.metadata?.tanda);
     }
 
     return undefined;
@@ -1321,6 +1355,18 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
 
     const ratio = (monthlyPayment / threshold) * 100;
     return `Pago mensual estimado ${this.formatCurrency(monthlyPayment)} supera el umbral (${this.formatCurrency(threshold)} – ${ratio.toFixed(0)}%). Adjunta comprobante de ingresos o ajusta el plan.`;
+  }
+
+  getDocUploadDataCy(docId: string | null | undefined): string {
+    if (!docId) {
+      return 'doc-upload';
+    }
+    const normalized = docId
+      .replace(/^doc[-_]?/i, '')
+      .replace(/[^a-z0-9]+/gi, '-')
+      .replace(/^-+|-+$/g, '')
+      .toLowerCase();
+    return `doc-upload-${normalized || 'generic'}`;
   }
 
   private formatCurrency(value: number): string {
@@ -1930,6 +1976,33 @@ export class DocumentUploadFlowComponent implements OnInit, OnDestroy {
       fraudRisk: 'UNKNOWN'
     };
     this.persistFlowState();
+  }
+
+  private normalizeCollectiveSize(value: number | undefined, rules?: TandaPolicyMetadata | undefined): number | undefined {
+    if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
+      return undefined;
+    }
+
+    const min = rules?.minMembers ?? 1;
+    const max = rules?.maxMembers ?? Math.max(min, value);
+
+    return Math.min(Math.max(Math.round(value), min), max);
+  }
+
+  private clonePolicyContext(context?: MarketPolicyContext | null): MarketPolicyContext | null {
+    if (!context) {
+      return null;
+    }
+
+    return {
+      ...context,
+      metadata: context.metadata
+        ? {
+            ...context.metadata,
+            tanda: context.metadata.tanda ? { ...context.metadata.tanda } : undefined,
+          }
+        : undefined,
+    };
   }
 
   private buildPolicyContext(

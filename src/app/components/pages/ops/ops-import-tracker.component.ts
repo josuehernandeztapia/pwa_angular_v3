@@ -6,6 +6,7 @@ import { catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil, t
 import { IntegratedImportTrackerService, ImportTrackerMetrics, IntegratedImportStatus } from '../../../services/integrated-import-tracker.service';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { IconName } from '../../shared/icon/icon-definitions';
+import { ImportMilestoneStatus, ImportStatus } from '../../../models/postventa';
 
 @Component({
   selector: 'app-ops-import-tracker',
@@ -31,20 +32,37 @@ export class OpsImportTrackerComponent implements OnDestroy {
   clientIdCtrl = new FormControl<string>('');
   currentClientId: string | null = null;
 
-  milestoneKeys: (keyof IntegratedImportStatus)[] = [
+  milestoneKeys: (keyof ImportStatus)[] = [
     'pedidoPlanta',
     'unidadFabricada',
     'transitoMaritimo',
     'enAduana',
-    'liberada'
-  ] as any;
+    'liberada',
+    'entregada',
+    'documentosTransferidos',
+    'placasEntregadas'
+  ];
 
-  readonly milestoneIcons: Partial<Record<keyof IntegratedImportStatus, IconName>> = {
+  readonly milestoneIcons: Partial<Record<keyof ImportStatus, IconName>> = {
     pedidoPlanta: 'factory',
     unidadFabricada: 'cube',
     transitoMaritimo: 'ship',
     enAduana: 'customs',
-    liberada: 'check-circle'
+    liberada: 'check-circle',
+    entregada: 'truck',
+    documentosTransferidos: 'document-text',
+    placasEntregadas: 'map'
+  };
+
+  private readonly milestoneLabels: Partial<Record<keyof ImportStatus, string>> = {
+    pedidoPlanta: 'Pedido en planta',
+    unidadFabricada: 'Unidad fabricada',
+    transitoMaritimo: 'Tránsito marítimo',
+    enAduana: 'En aduana',
+    liberada: 'Liberada',
+    entregada: 'Entrega final',
+    documentosTransferidos: 'Documentos transferidos',
+    placasEntregadas: 'Placas entregadas'
   };
 
   constructor(private tracker: IntegratedImportTrackerService) {
@@ -75,16 +93,25 @@ export class OpsImportTrackerComponent implements OnDestroy {
     }
   }
 
+  formatMilestoneName(key: keyof ImportStatus): string {
+    return this.milestoneLabels[key] ?? key;
+  }
+
+  getMilestoneState(status: IntegratedImportStatus | null, milestone: keyof ImportStatus): string {
+    const milestoneData = status ? (status[milestone] as ImportMilestoneStatus | undefined) : undefined;
+    return milestoneData?.status ?? 'pending';
+  }
+
   private fetchStatus(clientId: string): Observable<IntegratedImportStatus | null> {
     return this.tracker.getIntegratedImportStatus(clientId).pipe(
       catchError(() => of(null))
     );
   }
 
-  setMilestone(milestone: keyof IntegratedImportStatus, state: 'completed' | 'in_progress' | 'pending'): void {
+  setMilestone(milestone: keyof ImportStatus, state: 'completed' | 'in_progress' | 'pending'): void {
     const id = (this.clientIdCtrl.value || '').trim();
     if (!id) return;
-    if (!['pedidoPlanta','unidadFabricada','transitoMaritimo','enAduana','liberada'].includes(milestone as string)) return;
+    if (!this.milestoneKeys.includes(milestone)) return;
     this.tracker.updateImportMilestone(id, milestone as any, state).pipe(takeUntil(this.destroy$)).subscribe(() => this.refresh());
   }
 

@@ -1,0 +1,38 @@
+{
+  "timestamp": "2025-10-06T06:28:17.164Z",
+  "totalTests": 6,
+  "passedTests": 3,
+  "percentage": 50,
+  "results": [
+    {
+      "test": "Root redirect to login",
+      "passed": true
+    },
+    {
+      "test": "Login form elements",
+      "passed": true
+    },
+    {
+      "test": "AuthGuard protection",
+      "passed": true
+    },
+    {
+      "test": "Login success (asesor)",
+      "passed": false
+    },
+    {
+      "test": "Login success (supervisor)",
+      "passed": false
+    },
+    {
+      "test": "Login success (admin)",
+      "passed": false
+    }
+  ],
+  "usersTested": [
+    "asesor",
+    "supervisor",
+    "admin"
+  ],
+  "environment": "http://localhost:4300"
+}

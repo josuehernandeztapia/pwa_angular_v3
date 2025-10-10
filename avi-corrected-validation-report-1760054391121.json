@@ -1,0 +1,94 @@
+{
+  "timestamp": "2025-10-09T23:59:51.115Z",
+  "tool": "AVI Corrected E2E Validation",
+  "description": "Corrected validation addressing specific AVI system routes and integration points",
+  "baseUrl": "http://localhost:4300",
+  "total": 6,
+  "passed": 3,
+  "failed": 3,
+  "successRate": 50,
+  "aviSystemOperational": false,
+  "tests": [
+    {
+      "test": "AVI Authentication (Corrected)",
+      "passed": true,
+      "details": "URL changed to: http://localhost:4300/register",
+      "url": "http://localhost:4300/register"
+    },
+    {
+      "test": "AVI Laboratory Validation (Corrected)",
+      "passed": false,
+      "details": "Working routes: 0/2 - ",
+      "workingRoutes": [],
+      "failedRoutes": [
+        "http://localhost:4300/lab/tanda-enhanced -> No lab content detected",
+        "http://localhost:4300/lab/tanda-consensus -> No lab content detected"
+      ],
+      "totalChecked": 2
+    },
+    {
+      "test": "AVI Services Validation (Corrected)",
+      "passed": false,
+      "details": "Error: SyntaxError: Failed to execute 'querySelector' on 'Document': 'button[data-cy*=\"avi\"], button:contains(\"AVI\"), button[class*=\"avi\"], [data-testid*=\"avi\"]' is not a valid selector.",
+      "error": "SyntaxError: Failed to execute 'querySelector' on 'Document': 'button[data-cy*=\"avi\"], button:contains(\"AVI\"), button[class*=\"avi\"], [data-testid*=\"avi\"]' is not a valid selector."
+    },
+    {
+      "test": "Document Flow + AVI Integration (Corrected)",
+      "passed": true,
+      "details": "Accessible: true, Components: true, Flow: true, AVI: false",
+      "elements": {
+        "hasDocumentFlow": true,
+        "hasAVIIntegration": false,
+        "hasFlowSteps": false,
+        "hasAngularComponents": true,
+        "totalElements": 362,
+        "pageText": "\n  Saltar al contenidoConductores PWAAAAADAna DomínguezAsesor FinancieroNueva OportunidadDashboardClientesCotizadorSimuladorDocumentosEntregasGNVProtecciónConfiguraciónAyudaConfiguraciónSalirNotificaciones×Cerrar centro de notificacionesActivar Notificaciones Recibe alertas de pagos y actualizaciones importantes  Activar  Después No hay notificacionesLas notificaciones aparecerán aquí Organización: mvpcoductores Dashboard / Offline Ctrl + KNueva versión disponible Actualizar ahora Rango de fecha"
+      },
+      "url": "http://localhost:4300/login",
+      "aviGuardWorking": true
+    },
+    {
+      "test": "AVI Configuration Flow (Corrected)",
+      "passed": true,
+      "details": "Config Page: true, AVI Config: false, Angular: true, Elements: 378",
+      "elements": {
+        "hasConfigPage": true,
+        "hasAVIConfig": false,
+        "hasFlowBuilder": false,
+        "hasAngularApp": true,
+        "totalElements": 378,
+        "hasButtons": true,
+        "hasNavigation": true
+      },
+      "url": "http://localhost:4300/login"
+    },
+    {
+      "test": "AVI Environment Complete (Corrected)",
+      "passed": false,
+      "details": "Angular: false, Microphone: true, Storage: true, Chrome: true",
+      "environment": {
+        "hasAngularFramework": false,
+        "hasServiceWorker": true,
+        "hasMicrophoneAPI": true,
+        "hasLocalStorage": true,
+        "hasConsoleErrors": {},
+        "currentUrl": "http://localhost:4300/login",
+        "userAgent": true,
+        "screenResolution": "1470x956",
+        "timestamp": "2025-10-09T23:59:50.905Z"
+      },
+      "readyForAVI": false
+    }
+  ],
+  "screenshots": [
+    "avi-corrected-01-authentication-start-1760054364335.png",
+    "avi-corrected-02-authentication-complete-1760054377472.png",
+    "avi-corrected-04-onboarding-avi-check-1760054387714.png",
+    "avi-corrected-05-document-flow-avi-1760054389102.png",
+    "avi-corrected-06-avi-configuration-1760054390439.png"
+  ],
+  "errors": [
+    "AVI Services validation error: SyntaxError: Failed to execute 'querySelector' on 'Document': 'button[data-cy*=\"avi\"], button:contains(\"AVI\"), button[class*=\"avi\"], [data-testid*=\"avi\"]' is not a valid selector."
+  ],
+  "method": "Puppeteer with corrected routes and selectors"
+}

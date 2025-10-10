@@ -4,7 +4,19 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IconComponent } from '../../shared/icon/icon.component';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService, AuthResponse } from '../../../services/auth.service';
+
+interface DemoUser {
+  email: string;
+  role: string;
+  name: string;
+}
+
+type LoginFormValue = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+};
 
 @Component({
   selector: 'app-login',
@@ -18,7 +30,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   showPassword = false;
   isLoading = false;
   errorMessage = '';
-  demoUsers: any[] = [];
+  demoUsers: DemoUser[] = [];
+
+  private readonly fallbackDemoUsers: DemoUser[] = [
+    { email: 'asesor@conductores.com', role: 'asesor', name: 'Ana Torres' },
+    { email: 'supervisor@conductores.com', role: 'supervisor', name: 'Carlos Mendez' },
+    { email: 'admin@conductores.com', role: 'admin', name: 'Maria Rodriguez' }
+  ];
 
   private subscriptions = new Subscription();
 
@@ -32,6 +50,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: ['', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false]
     });
+
+    this.demoUsers = [...this.fallbackDemoUsers];
   }
 
   ngOnInit(): void {
@@ -60,23 +80,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = '';
 
-    const credentials = this.loginForm.value;
+    const { email, password, rememberMe } = this.loginForm.getRawValue() as LoginFormValue;
 
-    // Use AuthService for login
     const loginCredentials = {
-      email: credentials.email,
-      password: credentials.password
+      email,
+      password,
+      rememberMe
     };
 
     const loginSub = this.authService.login(loginCredentials)
       .subscribe({
-        next: (response) => {
+        next: (response: AuthResponse) => {
           this.isLoading = false;
           // If we receive a response, login was successful
           // AuthService returns AuthResponse with user, token, etc.
           if (response && response.user && response.token) {
             // Store remember me preference if needed
-            if (credentials.rememberMe) {
+            if (rememberMe) {
               localStorage.setItem('rememberLogin', 'true');
             }
             // AuthService handles token and user storage, just navigate
@@ -85,9 +105,12 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.errorMessage = 'Error en la respuesta del servidor. Intente nuevamente.';
           }
         },
-        error: (error) => {
+        error: (error: unknown) => {
           this.isLoading = false;
-          this.errorMessage = error.message || 'Credenciales incorrectas. Verifique su email y contraseña.';
+          const message = error instanceof Error ? error.message : null;
+          this.errorMessage = message && message.trim().length > 0
+            ? message
+            : 'Credenciales incorrectas. Verifique su email y contraseña.';
         }
       });
 
@@ -96,32 +119,30 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private loadDemoUsers(): void {
     this.authService.getDemoUsers().subscribe({
-      next: (response) => {
-        this.demoUsers = response.users || [];
+      next: (response: { users?: DemoUser[] } | null) => {
+        this.demoUsers = response?.users && response.users.length
+          ? response.users
+          : this.fallbackDemoUsers;
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.warn('Failed to load demo users:', error);
-        // Fallback to default demo users
-        this.demoUsers = [
-          { email: 'asesor@conductores.com', role: 'asesor', name: 'Ana Torres' },
-          { email: 'supervisor@conductores.com', role: 'supervisor', name: 'Carlos Mendez' },
-          { email: 'admin@conductores.com', role: 'admin', name: 'Maria Rodriguez' }
-        ];
+        this.demoUsers = this.fallbackDemoUsers;
       }
     });
   }
 
-  selectDemoUser(user: any): void {
+  selectDemoUser(user: DemoUser): void {
     this.loginForm.patchValue({
       email: user.email,
-      password: this.getDemoPassword(user.role)
+      password: this.getDemoPassword(user.role),
+      rememberMe: false
     });
 
     // Clear any previous error messages
     this.errorMessage = '';
   }
 
-  private getDemoPassword(role: string): string {
+  private getDemoPassword(role: DemoUser['role'] | string): string {
     switch (role) {
       case 'asesor': return 'demo123';
       case 'supervisor': return 'super123';
@@ -133,7 +154,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   // Methods referenced by unit spec
   performLogin(credentials: { email: string; password: string }): void {
     // Simple delegation to onSubmit flow
-    this.loginForm.patchValue(credentials);
+    this.loginForm.patchValue({
+      email: credentials.email,
+      password: credentials.password,
+      rememberMe: false
+    });
     this.onSubmit();
   }
 }

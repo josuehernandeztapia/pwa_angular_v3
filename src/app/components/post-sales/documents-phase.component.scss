@@ -20,6 +20,33 @@
   box-shadow: var(--shadow-md);
 }
 
+.documents-phase__wizard-context {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-dark, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--border-dark, rgba(255, 255, 255, 0.08));
+}
+
+.documents-phase__wizard-text {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+}
+
+.documents-phase__wizard-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.documents-phase__wizard-action {
+  font-size: 0.85rem;
+}
+
 .documents-phase__phase {
   display: inline-flex;
   align-items: center;

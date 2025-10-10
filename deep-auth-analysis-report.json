@@ -1,0 +1,1090 @@
+{
+  "timestamp": "2025-10-06T06:11:51.416Z",
+  "summary": [
+    {
+      "area": "Angular Bootstrap",
+      "status": "✅",
+      "description": "Angular successfully loaded"
+    },
+    {
+      "area": "Routing System",
+      "status": "❌",
+      "description": "Router not accessible"
+    },
+    {
+      "area": "Auth Service",
+      "status": "❌",
+      "description": "AuthService availability in DI container"
+    },
+    {
+      "area": "Component Rendering",
+      "status": "❌",
+      "description": "Component initialization status"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "⚠️",
+      "title": "Router Access Issues",
+      "description": "Cannot access Angular Router from injector"
+    },
+    {
+      "severity": "🚨",
+      "title": "Console Errors Detected",
+      "description": "16 critical errors found in console"
+    },
+    {
+      "severity": "⚠️",
+      "title": "Router Outlet Missing",
+      "description": "No active router-outlet found for component rendering"
+    }
+  ],
+  "recommendations": [
+    "🗺️ Verify Angular Router configuration in app.config.ts",
+    "🚨 Resolve console errors that may block component rendering",
+    "📦 Add router-outlet to app.component.html for route rendering",
+    "🔍 Use Angular DevTools browser extension for deeper component inspection"
+  ],
+  "details": {
+    "routingAnalysis": {
+      "currentUrl": "http://localhost:4300/",
+      "currentPath": "/",
+      "hashMode": false,
+      "routerPresent": false,
+      "routerState": null,
+      "navigatedRoutes": []
+    },
+    "angularBootstrap": {
+      "windowNg": true,
+      "windowAngular": false,
+      "appRootPresent": true,
+      "appRootContent": "",
+      "scriptsLoaded": [
+        {
+          "src": "http://localhost:4300/main.js",
+          "loaded": true
+        }
+      ],
+      "angularVersion": null,
+      "routerOutlet": false,
+      "angularDevMode": true
+    },
+    "authGuardBehavior": {
+      "initialUrl": "http://localhost:4300/",
+      "redirectOccurred": false,
+      "expectedRedirectUrl": null,
+      "guardPresent": false,
+      "authServicePresent": false,
+      "localStorageAuth": {
+        "authToken": null,
+        "refreshToken": null,
+        "currentUser": null,
+        "rememberMe": null
+      },
+      "unauthenticatedTest": {
+        "finalUrl": "http://localhost:4300/dashboard",
+        "finalPath": "/dashboard",
+        "wasRedirected": false
+      }
+    },
+    "serviceAnalysis": {
+      "availableServices": [],
+      "authServiceMethods": null,
+      "httpClientPresent": false,
+      "interceptorsActive": false
+    },
+    "consoleErrors": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": "2025-10-06T06:11:33.064Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connecting...",
+        "timestamp": "2025-10-06T06:11:33.111Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connected.",
+        "timestamp": "2025-10-06T06:11:33.125Z"
+      },
+      {
+        "type": "error",
+        "text": "Error starting app: JSHandle@error",
+        "timestamp": "2025-10-06T06:11:33.203Z"
+      },
+      {
+        "type": "error",
+        "text": "Error while trying to use the following icon from the Manifest: http://localhost:4300/assets/icons/icon-144x144.png (Download error or resource isn't a valid image)",
+        "timestamp": "2025-10-06T06:11:33.250Z"
+      },
+      {
+        "type": "warn",
+        "text": "The resource http://localhost:4300/assets/fonts/inter-var.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+        "timestamp": "2025-10-06T06:11:36.250Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": "2025-10-06T06:11:36.325Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connecting...",
+        "timestamp": "2025-10-06T06:11:36.335Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connected.",
+        "timestamp": "2025-10-06T06:11:36.364Z"
+      },
+      {
+        "type": "error",
+        "text": "Error starting app: JSHandle@error",
+        "timestamp": "2025-10-06T06:11:36.401Z"
+      },
+      {
+        "type": "error",
+        "text": "Error while trying to use the following icon from the Manifest: http://localhost:4300/assets/icons/icon-144x144.png (Download error or resource isn't a valid image)",
+        "timestamp": "2025-10-06T06:11:36.447Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": "2025-10-06T06:11:38.441Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connecting...",
+        "timestamp": "2025-10-06T06:11:38.454Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connected.",
+        "timestamp": "2025-10-06T06:11:38.477Z"
+      },
+      {
+        "type": "error",
+        "text": "Error starting app: JSHandle@error",
+        "timestamp": "2025-10-06T06:11:38.514Z"
+      },
+      {
+        "type": "error",
+        "text": "Error while trying to use the following icon from the Manifest: http://localhost:4300/assets/icons/icon-144x144.png (Download error or resource isn't a valid image)",
+        "timestamp": "2025-10-06T06:11:38.541Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": "2025-10-06T06:11:40.555Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connecting...",
+        "timestamp": "2025-10-06T06:11:40.564Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connected.",
+        "timestamp": "2025-10-06T06:11:40.586Z"
+      },
+      {
+        "type": "error",
+        "text": "Error starting app: JSHandle@error",
+        "timestamp": "2025-10-06T06:11:40.628Z"
+      },
+      {
+        "type": "error",
+        "text": "Error while trying to use the following icon from the Manifest: http://localhost:4300/assets/icons/icon-144x144.png (Download error or resource isn't a valid image)",
+        "timestamp": "2025-10-06T06:11:40.654Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": "2025-10-06T06:11:42.677Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connecting...",
+        "timestamp": "2025-10-06T06:11:42.691Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connected.",
+        "timestamp": "2025-10-06T06:11:42.711Z"
+      },
+      {
+        "type": "error",
+        "text": "Error starting app: JSHandle@error",
+        "timestamp": "2025-10-06T06:11:42.750Z"
+      },
+      {
+        "type": "error",
+        "text": "Error while trying to use the following icon from the Manifest: http://localhost:4300/assets/icons/icon-144x144.png (Download error or resource isn't a valid image)",
+        "timestamp": "2025-10-06T06:11:42.777Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": "2025-10-06T06:11:44.969Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connecting...",
+        "timestamp": "2025-10-06T06:11:44.982Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connected.",
+        "timestamp": "2025-10-06T06:11:45.002Z"
+      },
+      {
+        "type": "error",
+        "text": "Error starting app: JSHandle@error",
+        "timestamp": "2025-10-06T06:11:45.042Z"
+      },
+      {
+        "type": "error",
+        "text": "Error while trying to use the following icon from the Manifest: http://localhost:4300/assets/icons/icon-144x144.png (Download error or resource isn't a valid image)",
+        "timestamp": "2025-10-06T06:11:45.075Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": "2025-10-06T06:11:47.099Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connecting...",
+        "timestamp": "2025-10-06T06:11:47.114Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connected.",
+        "timestamp": "2025-10-06T06:11:47.136Z"
+      },
+      {
+        "type": "error",
+        "text": "Error starting app: JSHandle@error",
+        "timestamp": "2025-10-06T06:11:47.183Z"
+      },
+      {
+        "type": "error",
+        "text": "Error while trying to use the following icon from the Manifest: http://localhost:4300/assets/icons/icon-144x144.png (Download error or resource isn't a valid image)",
+        "timestamp": "2025-10-06T06:11:47.211Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": "2025-10-06T06:11:49.229Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connecting...",
+        "timestamp": "2025-10-06T06:11:49.244Z"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connected.",
+        "timestamp": "2025-10-06T06:11:49.263Z"
+      },
+      {
+        "type": "error",
+        "text": "Error starting app: JSHandle@error",
+        "timestamp": "2025-10-06T06:11:49.303Z"
+      },
+      {
+        "type": "error",
+        "text": "Error while trying to use the following icon from the Manifest: http://localhost:4300/assets/icons/icon-144x144.png (Download error or resource isn't a valid image)",
+        "timestamp": "2025-10-06T06:11:49.322Z"
+      }
+    ],
+    "networkRequests": [
+      {
+        "url": "http://localhost:4300/",
+        "method": "GET",
+        "resourceType": "document",
+        "timestamp": "2025-10-06T06:11:33.022Z",
+        "headers": {
+          "accept-language": "es-419,es;q=0.9",
+          "upgrade-insecure-requests": "1",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@vite/client",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.042Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/assets/fonts/inter-var.woff2",
+        "method": "GET",
+        "resourceType": "font",
+        "timestamp": "2025-10-06T06:11:33.043Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/main.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.043Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/styles.css",
+        "method": "GET",
+        "resourceType": "stylesheet",
+        "timestamp": "2025-10-06T06:11:33.062Z",
+        "headers": {
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "text/css,*/*;q=0.1"
+        }
+      },
+      {
+        "url": "http://localhost:4300/polyfills.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.065Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/node_modules/vite/dist/client/env.mjs",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.073Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/@vite/client",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-MGTJA2QV.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.078Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-2BQXL6SH.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.079Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-K74OBFCH.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.080Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-NT6JLNHC.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.081Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-MEJ65X3U.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.092Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-AUYQL5UN.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.092Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-ZF43GWEW.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.093Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-H3GSCVOQ.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.094Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-T3DOKNNK.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.095Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-XBPYQKYG.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.096Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-GZBQEXQF.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.106Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-LEH5FRK7.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.106Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-SYMD2UZN.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.108Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-H5H4DZJH.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.109Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-6677EK5Q.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.110Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-BGMJ2HJH.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.110Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-UV5MZEFZ.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.110Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/chunk-GEG5LB3Z.js",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.110Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_platform-browser.js?v=67db753e",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.111Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_router.js?v=67db753e",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.112Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/rxjs_operators.js?v=67db753e",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.112Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_common_http.js?v=67db753e",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.112Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_core.js?v=67db753e",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.112Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/lucide-angular.js?v=67db753e",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.113Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_service-worker.js?v=67db753e",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.114Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/rxjs.js?v=67db753e",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.114Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_common.js?v=67db753e",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.114Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_forms.js?v=67db753e",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.116Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/main.js",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/manifest.webmanifest",
+        "method": "GET",
+        "resourceType": "other",
+        "timestamp": "2025-10-06T06:11:33.126Z",
+        "headers": {
+          "accept": "*/*",
+          "accept-language": "es-419,es;q=0.9",
+          "referer": "http://localhost:4300/",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"macOS\""
+        }
+      },
+      {
+        "url": "http://localhost:4300/",
+        "method": "GET",
+        "resourceType": "other",
+        "timestamp": "2025-10-06T06:11:33.127Z",
+        "headers": {
+          "accept": "*/*",
+          "accept-language": "es-419,es;q=0.9",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"macOS\""
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-LFVCTHGI.js?v=bc17f62c",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.141Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/rxjs_operators.js?v=67db753e",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-AJN3JCM6.js?v=bc17f62c",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.141Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/rxjs_operators.js?v=67db753e",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-KBUIKKCC.js?v=bc17f62c",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.142Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/rxjs_operators.js?v=67db753e",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-OCMG5G3C.js?v=bc17f62c",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.142Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_common_http.js?v=67db753e",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-TDSQ655J.js?v=bc17f62c",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.142Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_common_http.js?v=67db753e",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-YV74OZ5W.js?v=bc17f62c",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.142Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_common_http.js?v=67db753e",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-4RMHXXWK.js?v=bc17f62c",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.142Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_common_http.js?v=67db753e",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/chunk-YGP5ZB37.js?v=bc17f62c",
+        "method": "GET",
+        "resourceType": "script",
+        "timestamp": "2025-10-06T06:11:33.143Z",
+        "headers": {
+          "origin": "http://localhost:4300",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/@fs/Users/juanjosuehernandeztapia/pwa_angular_v3/.angular/cache/17.3.17/vite/deps/@angular_platform-browser.js?v=67db753e",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/manifest.webmanifest",
+        "method": "GET",
+        "resourceType": "manifest",
+        "timestamp": "2025-10-06T06:11:33.209Z",
+        "headers": {
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "*/*"
+        }
+      },
+      {
+        "url": "http://localhost:4300/favicon.ico",
+        "method": "GET",
+        "resourceType": "other",
+        "timestamp": "2025-10-06T06:11:33.218Z",
+        "headers": {
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8"
+        }
+      },
+      {
+        "url": "http://localhost:4300/assets/icons/icon-144x144.png",
+        "method": "GET",
+        "resourceType": "other",
+        "timestamp": "2025-10-06T06:11:33.236Z",
+        "headers": {
+          "sec-ch-ua-platform": "\"macOS\"",
+          "referer": "http://localhost:4300/",
+          "accept-language": "es-419,es;q=0.9",
+          "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+          "sec-ch-ua-mobile": "?0",
+          "accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8"
+        }
+      }
+    ],
+    "stateManagement": {
+      "localStorageKeys": [],
+      "sessionStorageKeys": [],
+      "cookieCount": 0,
+      "observables": {
+        "currentUser$": false,
+        "isAuthenticated$": false
+      }
+    },
+    "componentLifecycle": {
+      "appRootInitialized": false,
+      "componentsDetected": [
+        {
+          "tagName": "APP-ROOT",
+          "classList": [],
+          "hasNgContent": false
+        }
+      ],
+      "routerOutletActive": false,
+      "loadingStates": {
+        "hasLoadingSpinner": false,
+        "hasLoadingText": false
+      }
+    }
+  }
+}

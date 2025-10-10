@@ -1,0 +1,207 @@
+{
+  "timestamp": "2025-10-09T17:19:29.165Z",
+  "tool": "Chrome DevTools Auth Debug",
+  "baseUrl": "http://localhost:4300",
+  "total": 3,
+  "passed": 2,
+  "failed": 1,
+  "successRate": 67,
+  "tests": [
+    {
+      "test": "Initial Load",
+      "passed": true,
+      "details": "Found 3 demo users, app-root: true",
+      "data": {
+        "title": "Iniciar Sesión - Conductores PWA",
+        "url": "http://localhost:4300/login",
+        "hasAppRoot": true,
+        "bodyText": "Saltar al contenido\nConductores PWA\nA\nA\nA\nAD\nAna Domínguez\nAsesor Financiero\nNueva Oportunidad\nDashboard\nClientes\nCotizador\nSimulador\nDocumentos\nEntregas\nGNV\nProtección\nConfiguración\nAyuda\nConfiguración\nSalir\nNotificaciones\n×\nCerrar centro de notificaciones\nActivar Notificaciones\n\nRecibe alertas de pagos y actualizaciones importantes\n\nActivar\nDespués\n\nNo hay notificaciones\n\nLas notificaciones aparecerán aquí\n\nOrganización: mvpcoductores\nDashboard /\nOffline\nCTRL + K\nNueva versión disponible\nActua",
+        "demoUsers": [
+          {
+            "text": "Ana Torres\nAsesor\nasesor@conductores.com",
+            "dataCy": "demo-user-asesor-0",
+            "visible": true
+          },
+          {
+            "text": "Carlos Mendez\nSupervisor\nsupervisor@conductores.com",
+            "dataCy": "demo-user-supervisor-1",
+            "visible": true
+          },
+          {
+            "text": "Maria Rodriguez\nAdmin\nadmin@conductores.com",
+            "dataCy": "demo-user-admin-2",
+            "visible": true
+          }
+        ],
+        "allButtons": [
+          {
+            "text": "",
+            "classes": "app-nav__notifications",
+            "visible": true
+          },
+          {
+            "text": "A",
+            "classes": "app-nav__a11y-btn is-active",
+            "visible": true
+          },
+          {
+            "text": "A",
+            "classes": "app-nav__a11y-btn",
+            "visible": true
+          },
+          {
+            "text": "A",
+            "classes": "app-nav__a11y-btn",
+            "visible": true
+          },
+          {
+            "text": "",
+            "classes": "app-nav__contrast",
+            "visible": true
+          },
+          {
+            "text": "",
+            "classes": "app-nav__collapse",
+            "visible": true
+          },
+          {
+            "text": "",
+            "classes": "app-nav__user-menu-toggle",
+            "visible": true
+          },
+          {
+            "text": "Nueva Oportunidad",
+            "classes": "app-nav__cta-button",
+            "visible": true
+          },
+          {
+            "text": "Ayuda",
+            "classes": "app-nav__item",
+            "visible": true
+          },
+          {
+            "text": "Configuración",
+            "classes": "app-nav__item",
+            "visible": true
+          },
+          {
+            "text": "Salir",
+            "classes": "app-nav__item app-nav__item--logout",
+            "visible": true
+          },
+          {
+            "text": "×\nCerrar centro de notificaciones",
+            "classes": "notification-center__close",
+            "visible": true
+          },
+          {
+            "text": "Activar",
+            "classes": "notification-center__permission-primary",
+            "visible": true
+          },
+          {
+            "text": "Después",
+            "classes": "notification-center__permission-secondary",
+            "visible": true
+          },
+          {
+            "text": "Actualizar ahora",
+            "classes": "update-banner__action",
+            "visible": true
+          },
+          {
+            "text": "Rango de fechas",
+            "classes": "btn btn-secondary btn-sm",
+            "visible": true
+          },
+          {
+            "text": "Exportar",
+            "classes": "btn btn-primary btn-sm",
+            "visible": true
+          },
+          {
+            "text": "",
+            "classes": "btn btn-ghost btn-sm",
+            "visible": true
+          },
+          {
+            "text": "",
+            "classes": "password-toggle",
+            "visible": true
+          },
+          {
+            "text": "¿Olvidaste tu contraseña?",
+            "classes": "link-button",
+            "visible": true
+          },
+          {
+            "text": "Iniciar Sesión",
+            "classes": "btn btn-primary submit-button",
+            "visible": true
+          },
+          {
+            "text": "Ana Torres\nAsesor\nasesor@conductores.com",
+            "classes": "demo-user-card",
+            "visible": true
+          },
+          {
+            "text": "Carlos Mendez\nSupervisor\nsupervisor@conductores.com",
+            "classes": "demo-user-card",
+            "visible": true
+          },
+          {
+            "text": "Maria Rodriguez\nAdmin\nadmin@conductores.com",
+            "classes": "demo-user-card",
+            "visible": true
+          },
+          {
+            "text": "",
+            "classes": "offline-indicator__dismiss",
+            "visible": true
+          },
+          {
+            "text": "Instalar",
+            "classes": "pwa-install__floating",
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "test": "Demo User Click",
+      "passed": true,
+      "details": "URL: /login, Error: false",
+      "data": {
+        "url": "http://localhost:4300/login",
+        "pathname": "/login",
+        "hasError": false,
+        "bodyText": "Saltar al contenido\nConductores PWA\nA\nA\nA\nAD\nAna Domínguez\nAsesor Financiero\nNueva Oportunidad\nDashboard\nClientes\nCotizador\nSimulador\nDocumentos\nEntregas\nGNV\nProtección\nConfiguración\nAyuda\nConfiguración\nSalir\nNotificaciones\n×\nCerrar centro de notificaciones\nActivar Notificaciones\n\nRecibe alertas de pagos y actualizaciones importantes\n\nActivar\nDespués\n\nNo hay notificaciones\n\nLas notificaciones aparecerán aquí\n\nOrganización: mvpcoductores\nDashboard /\nOffline\nCTRL + K\nNueva versión disponible\nActua",
+        "localStorage": {
+          "redirectUrl": "/dashboard"
+        },
+        "hasSimuladorMain": false,
+        "hasNavigation": true,
+        "currentComponent": "<a _ngcontent-ng-c4147547740=\"\" href=\"#main-content\" class=\"skip-link\">Saltar al contenido</a><div _ngcontent-ng-c4147547740=\"\" class=\"app-shell\"><app-navigation _ngcontent-ng-c4147547740=\"\" class=\"ap"
+      }
+    },
+    {
+      "test": "Direct Routing",
+      "passed": false,
+      "details": "Direct /simuladores - Error: true",
+      "data": {
+        "url": "http://localhost:4300/404",
+        "pathname": "/404",
+        "hasError": true,
+        "hasSimuladorMain": false,
+        "hasAppRoot": true,
+        "bodyText": "Saltar al contenido\nConductores PWA\nA\nA\nA\nAD\nAna Domínguez\nAsesor Financiero\nNueva Oportunidad\nDashboard\nClientes\nCotizador\nSimulador\nDocumentos\nEntregas\nGNV\nProtección\nConfiguración\nAyuda\nConfiguración\nSalir\nNotificaciones\n×\nCerrar centro de notificaciones\nActivar Notificaciones\n\nRecibe alertas de "
+      }
+    }
+  ],
+  "screenshots": [
+    "auth-debug-01-initial-load-1760030363896.png",
+    "auth-debug-02-after-click-1760030364849.png",
+    "auth-debug-03-post-analysis-1760030367918.png",
+    "auth-debug-04-direct-simuladores-1760030369106.png"
+  ]
+}

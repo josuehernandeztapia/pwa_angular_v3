@@ -1,0 +1,209 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - generic:
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - img [ref=e10]
+            - generic [ref=e13]: Conductores PWA
+          - generic [ref=e14]:
+            - button "Abrir notificaciones" [ref=e15] [cursor=pointer]:
+              - img [ref=e17] [cursor=pointer]
+            - generic [ref=e20]:
+              - button "Tamaño de fuente base" [ref=e21] [cursor=pointer]: A
+              - button "Tamaño de fuente pequeño" [ref=e22] [cursor=pointer]: A
+              - button "Tamaño de fuente grande" [ref=e23] [cursor=pointer]: A
+              - button "Alternar alto contraste" [ref=e24] [cursor=pointer]:
+                - img [ref=e26] [cursor=pointer]
+            - button "Alternar navegación" [ref=e28] [cursor=pointer]:
+              - img [ref=e30] [cursor=pointer]
+        - generic [ref=e32]:
+          - generic [ref=e34]: AD
+          - generic [ref=e35]:
+            - generic [ref=e36]: Ana Domínguez
+            - generic [ref=e37]: Asesor Financiero
+          - button "Menu de usuario" [ref=e38] [cursor=pointer]:
+            - img [ref=e40] [cursor=pointer]
+        - button "Nueva oportunidad" [ref=e43] [cursor=pointer]:
+          - img [ref=e46] [cursor=pointer]
+          - generic [ref=e47] [cursor=pointer]: Nueva Oportunidad
+        - navigation [ref=e48]:
+          - link "Dashboard" [ref=e49] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e52] [cursor=pointer]
+            - generic [ref=e55] [cursor=pointer]: Dashboard
+          - link "Clientes" [ref=e56] [cursor=pointer]:
+            - /url: /clientes
+            - img [ref=e59] [cursor=pointer]
+            - generic [ref=e62] [cursor=pointer]: Clientes
+          - link "Cotizador" [ref=e63] [cursor=pointer]:
+            - /url: /cotizador
+            - img [ref=e66] [cursor=pointer]
+            - generic [ref=e68] [cursor=pointer]: Cotizador
+          - link "Simulador" [ref=e69] [cursor=pointer]:
+            - /url: /simulador
+            - img [ref=e72] [cursor=pointer]
+            - generic [ref=e76] [cursor=pointer]: Simulador
+          - link "Documentos" [ref=e77] [cursor=pointer]:
+            - /url: /documentos
+            - img [ref=e80] [cursor=pointer]
+            - generic [ref=e82] [cursor=pointer]: Documentos
+          - link "Entregas" [ref=e83] [cursor=pointer]:
+            - /url: /entregas
+            - img [ref=e86] [cursor=pointer]
+            - generic [ref=e91] [cursor=pointer]: Entregas
+          - link "GNV" [ref=e92] [cursor=pointer]:
+            - /url: /gnv
+            - img [ref=e95] [cursor=pointer]
+            - generic [ref=e98] [cursor=pointer]: GNV
+          - link "Protección" [ref=e99] [cursor=pointer]:
+            - /url: /proteccion
+            - img [ref=e102] [cursor=pointer]
+            - generic [ref=e104] [cursor=pointer]: Protección
+          - link "Configuración" [ref=e105] [cursor=pointer]:
+            - /url: /configuracion
+            - img [ref=e108] [cursor=pointer]
+            - generic [ref=e111] [cursor=pointer]: Configuración
+        - generic [ref=e112]:
+          - button "Ayuda" [ref=e113] [cursor=pointer]:
+            - img [ref=e116] [cursor=pointer]
+            - generic [ref=e119] [cursor=pointer]: Ayuda
+          - button "Configuración" [ref=e120] [cursor=pointer]:
+            - img [ref=e123] [cursor=pointer]
+            - generic [ref=e126] [cursor=pointer]: Configuración
+          - button "Salir" [ref=e127] [cursor=pointer]:
+            - img [ref=e130] [cursor=pointer]
+            - generic [ref=e133] [cursor=pointer]: Salir
+      - generic [ref=e134]:
+        - banner [ref=e135]:
+          - heading [level=3] [ref=e137]: Notificaciones
+          - button [ref=e139] [cursor=pointer]:
+            - generic [ref=e140] [cursor=pointer]: ×
+            - generic [ref=e141] [cursor=pointer]: Cerrar centro de notificaciones
+        - generic [ref=e143]:
+          - img [ref=e146]
+          - generic [ref=e149]:
+            - generic [ref=e150]: Activar Notificaciones
+            - paragraph [ref=e151]: Recibe alertas de pagos y actualizaciones importantes
+          - generic [ref=e152]:
+            - button [ref=e153] [cursor=pointer]: Activar
+            - button [ref=e154] [cursor=pointer]: Después
+        - generic [ref=e156]:
+          - img [ref=e159]
+          - paragraph [ref=e162]: No hay notificaciones
+          - paragraph [ref=e163]: Las notificaciones aparecerán aquí
+    - generic [ref=e164]:
+      - banner [ref=e165]:
+        - generic [ref=e166]:
+          - generic [ref=e167]:
+            - text: "Organización:"
+            - generic [ref=e168]: mvpcoductores
+          - navigation "Breadcrumb" [ref=e169]:
+            - generic [ref=e170]:
+              - text: Dashboard
+              - generic [ref=e171]: /
+            - generic [ref=e172]: Offline
+        - generic [ref=e175]:
+          - img [ref=e177]
+          - combobox "Buscar" [ref=e180]
+          - generic [ref=e181]: Ctrl + K
+        - generic [ref=e182]:
+          - generic:
+            - status:
+              - generic:
+                - generic: Nueva versión disponible
+                - button: Actualizar ahora
+          - button "Rango de fechas" [ref=e183] [cursor=pointer]
+          - button "Exportar" [ref=e184] [cursor=pointer]
+          - button "Cambiar a modo oscuro" [ref=e185] [cursor=pointer]:
+            - img [ref=e187] [cursor=pointer]
+      - main [ref=e189]:
+        - generic [ref=e191]:
+          - generic [ref=e192]:
+            - generic [ref=e193]:
+              - button "Volver" [ref=e194] [cursor=pointer]: Regresar
+              - heading "Generador de Oportunidades Inteligente" [level=1] [ref=e195]
+              - generic [ref=e197]: Aguascalientes
+            - paragraph [ref=e198]: Creando oportunidad para Aguascalientes con contexto inteligente del Dashboard
+            - generic [ref=e201]:
+              - generic [ref=e203]: Cliente
+              - generic [ref=e205]: Tipo
+              - generic [ref=e207]: Mercado
+              - generic [ref=e209]: Confirmar
+          - generic [ref=e210]:
+            - generic [ref=e211]:
+              - generic [ref=e212]:
+                - heading "Información del Cliente" [level=2] [ref=e213]
+                - generic [ref=e214]:
+                  - generic [ref=e215]: Nombre Completo *
+                  - textbox "Nombre Completo *" [ref=e217]
+                - generic [ref=e218]:
+                  - generic [ref=e219]:
+                    - generic [ref=e220]:
+                      - text: WhatsApp *
+                      - generic [ref=e221]: Principal vía de contacto
+                    - generic [ref=e222]:
+                      - generic [ref=e223]: MX +52
+                      - textbox "WhatsApp * Principal vía de contacto" [ref=e224]
+                      - img [ref=e227]
+                  - generic [ref=e229]:
+                    - generic [ref=e230]:
+                      - text: Email
+                      - generic [ref=e231]: Opcional
+                    - textbox "Email Opcional" [ref=e232]
+                - generic [ref=e234]:
+                  - generic [ref=e235]: RFC
+                  - textbox "RFC" [ref=e236]
+              - generic [ref=e237]:
+                - heading "¿Qué quieres modelar para este cliente?" [level=2] [ref=e238]
+                - paragraph [ref=e239]: Selecciona el tipo de oportunidad que mejor se adapte a las necesidades del cliente
+                - generic [ref=e240]:
+                  - generic [ref=e242] [cursor=pointer]:
+                    - heading "Adquisición de Unidad" [level=3] [ref=e243] [cursor=pointer]
+                    - paragraph [ref=e244] [cursor=pointer]: Cliente listo para comprar. Generar cotización rápida y transparente.
+                    - generic [ref=e245] [cursor=pointer]: Modo Cotizador
+                  - generic [ref=e247] [cursor=pointer]:
+                    - heading "Plan de Ahorro" [level=3] [ref=e248] [cursor=pointer]
+                    - paragraph [ref=e249] [cursor=pointer]: Modelar capacidad de ahorro y proyecciones financieras.
+                    - generic [ref=e250] [cursor=pointer]: Modo Simulador
+            - generic [ref=e252]:
+              - heading "Guía Rápida" [level=3] [ref=e253]:
+                - img [ref=e255]
+                - text: Guía Rápida
+              - generic [ref=e259]:
+                - heading "¿Cuándo usar Cotizador?" [level=4] [ref=e260]:
+                  - img [ref=e262]
+                  - text: ¿Cuándo usar Cotizador?
+                - list [ref=e263]:
+                  - listitem [ref=e264]: Cliente con decisión de compra
+                  - listitem [ref=e265]: Tiene claridad sobre enganche
+                  - listitem [ref=e266]: Necesita información de pagos
+              - generic [ref=e267]:
+                - heading "¿Cuándo usar Simulador?" [level=4] [ref=e268]:
+                  - img [ref=e270]
+                  - text: ¿Cuándo usar Simulador?
+                - list [ref=e271]:
+                  - listitem [ref=e272]: Cliente explora opciones
+                  - listitem [ref=e273]: Necesita planear ahorro
+                  - listitem [ref=e274]: Quiere ver proyecciones
+              - generic [ref=e275]:
+                - heading "Diferencias por Mercado" [level=4] [ref=e276]
+                - generic [ref=e277]:
+                  - generic [ref=e278]:
+                    - strong [ref=e279]: "Aguascalientes:"
+                    - generic [ref=e280]: "Plazos: 12-24 meses"
+                    - generic [ref=e281]: "Enganche: 20% mín."
+                  - generic [ref=e282]:
+                    - strong [ref=e283]: "Estado de México:"
+                    - generic [ref=e284]: "Plazos: 48-60 meses"
+                    - generic [ref=e285]: "Individual: 25% mín."
+                    - generic [ref=e286]: "Colectivo: 15% mín."
+  - button "Opciones de instalación" [ref=e288] [cursor=pointer]:
+    - img [ref=e291] [cursor=pointer]
+    - generic [ref=e293] [cursor=pointer]: Instalar
+```

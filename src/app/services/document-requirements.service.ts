@@ -2,58 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { BusinessFlow, DOC_NAME_COMPROBANTE, DOC_NAME_INE, DOC_NAME_KYC_CONTAINS, Document, DocumentStatus } from '../models/types';
-import { MarketPolicyContext, MarketPolicyService } from './market-policy.service';
+import { MarketPolicyContext, MarketPolicyService, PolicyClientType } from './market-policy.service';
 
-// Port exacto de document requirement checklists desde React simulationService.ts líneas 10-33
-const VENTA_DIRECTA_CONTADO_DOCS: Document[] = [
-  { id: '1', name: DOC_NAME_INE, status: DocumentStatus.Pendiente },
-  { id: '2', name: DOC_NAME_COMPROBANTE, status: DocumentStatus.Pendiente },
-  { id: '3', name: 'Constancia de situación fiscal', status: DocumentStatus.Pendiente },
-];
-
-const AGUASCALIENTES_FINANCIERO_DOCS: Document[] = [
-  { id: '1', name: DOC_NAME_INE, status: DocumentStatus.Pendiente },
-  { id: '2', name: DOC_NAME_COMPROBANTE, status: DocumentStatus.Pendiente },
-  { id: '3', name: 'Tarjeta de circulación', status: DocumentStatus.Pendiente },
-  { id: '4', name: 'Copia de la concesión', status: DocumentStatus.Pendiente },
-  { id: '5', name: 'Constancia de situación fiscal', status: DocumentStatus.Pendiente },
-  { id: '6', name: `${DOC_NAME_KYC_CONTAINS} (Metamap)`, status: DocumentStatus.Pendiente },
-];
-
-const EDOMEX_MIEMBRO_DOCS: Document[] = [
-  ...AGUASCALIENTES_FINANCIERO_DOCS,
-  { 
-    id: '7', 
-    name: 'Carta Aval de Ruta', 
-    status: DocumentStatus.Pendiente, 
-    tooltip: "Documento emitido y validado por el Ecosistema/Ruta." 
-  },
-  { 
-    id: '8', 
-    name: 'Convenio de Dación en Pago', 
-    status: DocumentStatus.Pendiente, 
-    tooltip: "Convenio que formaliza el colateral social." 
-  },
-];
-
-const AHORRO_PROGRAMADO_DOCS: Document[] = [
-  { id: '1', name: DOC_NAME_INE, status: DocumentStatus.Pendiente },
-  { id: '2', name: DOC_NAME_COMPROBANTE, status: DocumentStatus.Pendiente },
-  { 
-    id: '3', 
-    name: 'Tarjeta de circulación', 
-    status: DocumentStatus.Pendiente,
-    tooltip: "Requerida para identificar la unidad que se dará de alta en el programa de ahorro"
-  },
-  { 
-    id: '4', 
-    name: 'Copia de la factura (Opcional)', 
-    status: DocumentStatus.Pendiente,
-    tooltip: "Documento adicional para validar la propiedad del vehículo"
-  }
-];
-
-// Port exacto de contract signature documents desde React
 const CONTRATO_VENTA_PLAZO_DOCS: Document[] = [
   { id: 'contract1', name: 'Contrato Venta a Plazo', status: DocumentStatus.Pendiente },
 ];
@@ -87,42 +37,18 @@ export class DocumentRequirementsService {
     requiresIncomeProof?: boolean;
     collectiveSize?: number;
   }): Observable<Document[]> {
-    // Legacy special case for savings
-    if (config.businessFlow === BusinessFlow.AhorroProgramado) {
-      if (config.market === 'aguascalientes') {
-        const documents = AHORRO_PROGRAMADO_DOCS.map(d => ({ ...d }));
-        return of(documents).pipe(delay(100));
-      }
-
-      const documents = [
-        ...EDOMEX_MIEMBRO_DOCS.map(d => ({ ...d })),
-        {
-          id: '9',
-          name: 'Copia de la factura (Opcional)',
-          status: DocumentStatus.Pendiente,
-          tooltip: 'Documento adicional para validar la propiedad del vehículo',
-          isOptional: true
-        }
-      ];
-      return of(documents).pipe(delay(100));
-    }
-
-    if (config.saleType === 'contado' || config.businessFlow === BusinessFlow.VentaDirecta) {
-      const documents = VENTA_DIRECTA_CONTADO_DOCS.map(d => ({ ...d }));
-      return of(documents).pipe(delay(50));
-    }
-
     const policyContext: MarketPolicyContext = {
       market: config.market,
-      clientType: config.clientType ?? 'individual',
+      clientType: (config.clientType ?? 'individual') as PolicyClientType,
       saleType: config.saleType,
       businessFlow: config.businessFlow,
       requiresIncomeProof: config.requiresIncomeProof,
-      collectiveSize: config.collectiveSize
+      collectiveSize: config.collectiveSize,
     };
 
     const policy = this.marketPolicy.getPolicyDocuments(policyContext);
     const documents = this.marketPolicy.toDocuments(policy);
+
     return of(documents).pipe(delay(50));
   }
 

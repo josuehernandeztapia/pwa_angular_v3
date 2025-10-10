@@ -138,18 +138,25 @@
         <div class="cotizador-main__stack cotizador-main__stack--loose">
           <div>
             <label for="market" class="label">Mercado</label>
-            <select id="market" [(ngModel)]="market" (change)="onMarketChange()" class="select">
+            <select id="market" [(ngModel)]="market" (change)="onMarketChange()" class="select" data-qa="cotizador-market">
               <option value="">-- Seleccionar mercado --</option>
-              <option value="aguascalientes">Aguascalientes</option>
-              <option value="edomex">Estado de México</option>
+              <option *ngFor="let option of marketOptions" [value]="option">
+                {{ getMarketLabel(option) }}
+              </option>
             </select>
           </div>
           <div>
             <label for="clientType" class="label">Tipo de Cliente</label>
-            <select id="clientType" [(ngModel)]="clientType" (change)="onClientTypeChange()" [disabled]="!market" class="select">
+            <select id="clientType" [(ngModel)]="clientType" (change)="onClientTypeChange()" [disabled]="!market" class="select" data-qa="cotizador-client-type">
               <option value="">-- Seleccionar tipo --</option>
-              <option value="individual">Individual</option>
-              <option value="colectivo" *ngIf="market === 'edomex'">Crédito Colectivo</option>
+              <ng-container *ngIf="clientTypeOptions.length; else defaultClientType">
+                <option *ngFor="let option of clientTypeOptions" [value]="option">
+                  {{ getClientTypeLabel(option) }}
+                </option>
+              </ng-container>
+              <ng-template #defaultClientType>
+                <option value="individual">Individual</option>
+              </ng-template>
             </select>
           </div>
         </div>
@@ -203,6 +210,7 @@
                 (input)="onDownPaymentDirectChange()"
                 class="input"
                 placeholder="Ej: 400,000"
+                data-qa="cotizador-downpayment-direct"
               />
             </div>
           </div>
@@ -222,6 +230,7 @@
                   class="cotizador-main__slider"
                   [attr.aria-describedby]="'dp-note'"
                   [attr.title]="'Ajusta el % de enganche. Mínimo según política y paquete'"
+                  data-qa="cotizador-downpayment-slider"
                 />
                 <div class="help-text" id="dp-note">
                   Mínimo: {{ pkg.minDownPaymentPercentage * 100 }}% ({{ formatCurrency(minDownPaymentRequired) }})
@@ -230,7 +239,7 @@
 
               <div>
                 <label for="term" class="label label--required">Plazo</label>
-                <select id="term" [(ngModel)]="term" (change)="onTermChange()" class="select" title="Selecciona el plazo del financiamiento en meses">
+                <select id="term" [(ngModel)]="term" (change)="onTermChange()" class="select" title="Selecciona el plazo del financiamiento en meses" data-qa="cotizador-term">
                   <option *ngFor="let t of pkg.terms" [value]="t">{{ t }} meses</option>
                 </select>
               </div>
@@ -276,8 +285,8 @@
               <input
                 type="range"
                 id="tandaMembers"
-                min="2"
-                max="20"
+                [min]="tandaLimits.min"
+                [max]="tandaLimits.max"
                 [(ngModel)]="tandaMembers"
                 (input)="onTandaMembersChange()"
                 class="cotizador-main__slider" title="Número de integrantes del grupo"

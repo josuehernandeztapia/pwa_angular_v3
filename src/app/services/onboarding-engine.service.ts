@@ -144,15 +144,16 @@ export class OnboardingEngineService {
 
       config.memberNames.forEach((memberName, index) => {
         const memberId = `collective-${baseTimestamp}-${index + 1}`;
-        
+
         this.documentReqs.getDocumentRequirements({
           market: config.market,
           saleType: 'financiero',
-          businessFlow: BusinessFlow.CreditoColectivo
+          businessFlow: BusinessFlow.CreditoColectivo,
+          clientType: 'colectivo',
+          collectiveSize: config.memberNames.length
         }).subscribe((documents: AppDocument[]) => {
-          const memberDocs = documents.map((d: AppDocument) => ({ 
-            ...d, 
-            id: `${memberId}-${d.id}` 
+          const memberDocs = this.filterCollectiveDocuments(documents, index).map((doc: AppDocument) => ({
+            ...doc
           }));
 
           const member: Client = {
@@ -188,6 +189,22 @@ export class OnboardingEngineService {
         });
       });
     }).pipe(delay(1200));
+  }
+
+  private filterCollectiveDocuments(documents: AppDocument[], memberIndex: number): AppDocument[] {
+    const suffix = `-${memberIndex + 1}`;
+
+    return documents.filter(doc => {
+      if (doc.group !== 'member') {
+        return true;
+      }
+
+      if (doc.id.startsWith('doc-ine-') || doc.id.startsWith('doc-rfc-')) {
+        return doc.id.endsWith(suffix);
+      }
+
+      return true;
+    });
   }
 
   /**

@@ -1,20 +1,20 @@
-<div class="flow-builder-container">
+<div class="flow-builder-container" data-cy="flow-builder">
 
-  <div class="flow-builder-header premium-card">
+  <div class="flow-builder-header premium-card" data-cy="flow-builder-header">
     <div class="header-left">
       <h1>Flow Builder</h1>
       <span class="subtitle">Crear ciudad/flujo visualmente</span>
     </div>
     <div class="header-right">
-      <button class="btn-secondary" (click)="clearFlow()">Limpiar</button>
-      <button class="btn-secondary" (click)="saveFlow()">Guardar</button>
-      <button class="btn-primary" (click)="deployFlow()" [disabled]="!canDeploy">Deploy</button>
+      <button class="btn-secondary" (click)="clearFlow()" data-cy="flow-clear">Limpiar</button>
+      <button class="btn-secondary" (click)="saveFlow()" data-cy="flow-save">Guardar</button>
+      <button class="btn-primary" (click)="deployFlow()" [disabled]="!canDeploy" data-cy="flow-deploy">Deploy</button>
     </div>
   </div>
 
   <div class="flow-builder-content">
 
-    <div class="nodes-palette premium-card">
+    <div class="nodes-palette premium-card" data-cy="flow-palette">
       <div class="palette-header">
         <h3>Componentes</h3>
         <input
@@ -26,7 +26,7 @@
       </div>
 
       <div class="palette-content">
-        <div *ngIf="getSelectedMarketCode()" class="market-info-panel">
+        <div *ngIf="getSelectedMarketCode()" class="market-info-panel" data-cy="flow-market-context">
           <div class="market-info-header">
             <span class="market-icon"></span>
             <div class="market-details">
@@ -78,7 +78,7 @@
       </div>
     </div>
 
-    <div class="flow-canvas-container premium-card">
+    <div class="flow-canvas-container premium-card" data-cy="flow-canvas-container">
       <div class="canvas-toolbar">
         <div class="zoom-controls">
           <button
@@ -120,6 +120,7 @@
         (mousedown)="onCanvasMouseDown($event)"
         (mousemove)="onCanvasMouseMove($event)"
         (mouseup)="onCanvasMouseUp($event)"
+        data-cy="flow-canvas"
       >
 
         <svg class="connections-layer" [attr.viewBox]="'0 0 ' + canvasWidth + ' ' + canvasHeight">
@@ -214,7 +215,7 @@
       </div>
     </div>
 
-    <div class="properties-panel" [class.panel-collapsed]="!selectedNode && !selectedConnection">
+    <div class="properties-panel" [class.panel-collapsed]="!selectedNode && !selectedConnection" data-cy="flow-properties">
       <div class="panel-header">
         <h3>Propiedades</h3>
         <button class="panel-toggle" (click)="togglePropertiesPanel()">
@@ -320,7 +321,7 @@
     </div>
   </div>
 
-  <div class="flow-modal" *ngIf="showGenerationModal" (click)="closeGenerationModal()">
+  <div class="flow-modal" *ngIf="showGenerationModal" (click)="closeGenerationModal()" data-cy="flow-generation-modal">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Generar Flujo</h3>

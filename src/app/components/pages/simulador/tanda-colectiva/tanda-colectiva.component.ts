@@ -83,36 +83,43 @@ export class TandaColectivaComponent implements OnInit, OnDestroy, AfterViewInit
     this.router.navigate(['/simuladores']);
   }
 
-  simulateTanda(): void {
-    if (!this.configForm.valid) return;
+  async simulateTanda(): Promise<void> {
+    if (!this.configForm.valid || this.isSimulating) return;
 
     const values = this.configForm.value;
+    const config: CollectiveScenarioConfig = {
+      memberCount: values.memberCount,
+      unitPrice: values.unitPrice,
+      avgConsumption: values.avgConsumption,
+      overpricePerLiter: values.overpricePerLiter,
+      voluntaryMonthly: values.voluntaryMonthly || 0
+    };
+
     this.isSimulating = true;
     this.loadingService.show('Simulando estrategia de tanda colectiva...');
 
-    // Simulate async calculation
-    setTimeout(() => {
-      const config: CollectiveScenarioConfig = {
-        memberCount: values.memberCount,
-        unitPrice: values.unitPrice,
-        avgConsumption: values.avgConsumption,
-        overpricePerLiter: values.overpricePerLiter,
-        voluntaryMonthly: values.voluntaryMonthly || 0
-      };
+    try {
+      const result = await this.simuladorEngine.generateEdoMexCollectiveScenario(config);
 
-      this.simulationResult = this.simuladorEngine.generateEdoMexCollectiveScenario(config);
+      if (!result?.scenario) {
+        throw new Error('Escenario colectivo no disponible');
+      }
 
-      this.simulationResult.scenario.monthsToFirstAward = Math.ceil(values.unitPrice / this.simulationResult.scenario.monthlyContribution);
-      this.simulationResult.scenario.monthsToFullDelivery = this.simulationResult.scenario.monthsToFirstAward * values.memberCount;
+      result.scenario.monthsToFirstAward = Math.ceil(config.unitPrice / result.scenario.monthlyContribution);
+      result.scenario.monthsToFullDelivery = result.scenario.monthsToFirstAward * config.memberCount;
 
+      this.simulationResult = result;
       this.persistFlowContextSnapshot(config, 'tanda-simulation');
 
+      setTimeout(() => this.initializeCharts(), 100);
+    } catch (error) {
+      console.error('[TandaColectiva] Error al simular tanda colectiva', error);
+      this.toast.error('No se pudo ejecutar la simulación colectiva');
+      this.simulationResult = null;
+    } finally {
       this.isSimulating = false;
       this.loadingService.hide();
-
-      // Initialize charts after simulation
-      setTimeout(() => this.initializeCharts(), 100);
-    }, 1500);
+    }
   }
 
   resetForm(): void {

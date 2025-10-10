@@ -13,7 +13,7 @@ import { HumanMicrocopyService } from '../../services/human-microcopy.service';
 
 // Premium component imports (standalone components)
 import { IconComponent } from "../shared/icon/icon.component"
-import { HumanMessageComponent } from '../ui/human-message.component';
+import { HumanMessageComponent } from '../shared/human-message/human-message.component';
 
 export interface RiskEvaluation {
   evaluationId: string;
@@ -57,7 +57,7 @@ export interface RiskEvaluation {
     mitigationRecommendations: string[];
   }>;
   
-  financialRecommendations: {
+  financialRecommendations?: {
     maxLoanAmount: number;
     minDownPayment: number;
     maxTermMonths: number;
@@ -67,15 +67,15 @@ export interface RiskEvaluation {
     specialConditions?: string[];
   };
   
-  mitigationPlan: {
+  mitigationPlan?: {
     required: boolean;
     actions: string[];
     estimatedDays: number;
     expectedRiskReduction: number;
   };
   
-  decisionReasons: string[];
-  nextSteps: string[];
+  decisionReasons?: string[];
+  nextSteps?: string[];
 }
 
 @Component({
@@ -119,7 +119,7 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
 
   // Score-related methods
   getScoreClass(): string {
-    const score = this.riskEvaluation()?.kiban.scoreRaw || 0;
+    const score = this.riskEvaluation()?.kiban?.scoreRaw || 0;
     if (score >= 750) return 'risk-panel__score-value--excellent';
     if (score >= 650) return 'risk-panel__score-value--good';
     if (score >= 550) return 'risk-panel__score-value--fair';
@@ -127,13 +127,13 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
   }
 
   getBandClass(): string {
-    const band = this.riskEvaluation()?.kiban.scoreBand || '';
+    const band = this.riskEvaluation()?.kiban?.scoreBand || '';
     const normalized = this.normalizeClassSegment(band || '');
     return normalized ? `risk-panel__score-band--${normalized}` : '';
   }
 
   getScorePercentage(): number {
-    const score = this.riskEvaluation()?.kiban.scoreRaw || 0;
+    const score = this.riskEvaluation()?.kiban?.scoreRaw || 0;
     return Math.min(100, Math.max(0, ((score - 300) / 550) * 100));
   }
 
@@ -150,14 +150,14 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
     return normalized ? `risk-panel__hase-category--${normalized}` : '';
   }
 
-  getFactorIcon(factor: string): string {
-    const iconMap: Record<string, string> = {
+  getFactorIcon(factor: string): 'shield' | 'microphone' | 'truck' | 'information-circle' | 'alert-circle' {
+    const iconMap: Record<string, 'shield' | 'microphone' | 'truck' | 'information-circle' | 'alert-circle'> = {
       'KIBAN_SCORE': 'shield',
       'AVI_VOICE': 'microphone',
       'GNV_HISTORY': 'truck',
-      'GEO_RISK': 'map-pin'
+      'GEO_RISK': 'information-circle'
     };
-    return iconMap[factor] || 'circle';
+    return iconMap[factor] || 'alert-circle';
   }
 
   getFactorDisplayName(factor: string): string {
@@ -201,25 +201,25 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
     return normalized ? `risk-panel__risk-factor--severity-${normalized}` : '';
   }
 
-  getSeverityIcon(severity: string): string {
-    const iconMap: Record<string, string> = {
-      'BAJA': 'info',
+  getSeverityIcon(severity: string): 'information-circle' | 'alert-triangle' | 'x-circle' | 'alert-circle' {
+    const iconMap: Record<string, 'information-circle' | 'alert-triangle' | 'x-circle' | 'alert-circle'> = {
+      'BAJA': 'information-circle',
       'MEDIA': 'alert-triangle',
-      'ALTA': 'alert-octagon',
-      'CRITICA': 'x-octagon'
+      'ALTA': 'x-circle',
+      'CRITICA': 'x-circle'
     };
     return iconMap[severity] || 'alert-circle';
   }
 
   // Decision methods
-  getDecisionIcon(): string {
+  getDecisionIcon(): 'check-circle' | 'information-circle' | 'x-circle' | 'alert-circle' {
     const decision = this.riskEvaluation()?.decision || '';
-    const iconMap: Record<string, string> = {
+    const iconMap: Record<string, 'check-circle' | 'information-circle' | 'x-circle' | 'alert-circle'> = {
       'GO': 'check-circle',
-      'REVIEW': 'clock',
+      'REVIEW': 'information-circle',
       'NO-GO': 'x-circle'
     };
-    return iconMap[decision] || 'help-circle';
+    return iconMap[decision] || 'alert-circle';
   }
 
   getDecisionClass(): string {
@@ -238,8 +238,21 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
     return displayMap[decision] || decision;
   }
 
+  getDecisionMicrocopyId(): string {
+    const decision = this.riskEvaluation()?.decision;
+    switch (decision) {
+      case 'GO':
+        return 'decision-go';
+      case 'NO-GO':
+        return 'decision-nogo';
+      case 'REVIEW':
+      default:
+        return 'decision-review';
+    }
+  }
+
   getDecisionMessageContext(): string {
-    const decision = this.riskEvaluation()?.decision || '';
+    const decision = this.riskEvaluation()?.decision || 'REVIEW';
     return `decision-${decision.toLowerCase().replace('-', '')}`;
   }
 
@@ -249,7 +262,7 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
 
   // Financial methods
   getDebtRatioClass(): string {
-    const ratio = this.riskEvaluation()?.financialRecommendations.resultingDebtToIncomeRatio || 0;
+    const ratio = this.riskEvaluation()?.financialRecommendations?.resultingDebtToIncomeRatio || 0;
     if (ratio <= 35) return 'risk-panel__financial-value--ratio-good';
     if (ratio <= 45) return 'risk-panel__financial-value--ratio-acceptable';
     return 'risk-panel__financial-value--ratio-high';
@@ -312,8 +325,8 @@ export class RiskPanelComponent implements OnInit, OnDestroy {
     return {
       decision: this.riskEvaluation()?.decision,
       riskCategory: this.riskEvaluation()?.riskCategory,
-      score: this.riskEvaluation()?.kiban.scoreRaw,
-      band: this.riskEvaluation()?.kiban.scoreBand
+      score: this.riskEvaluation()?.kiban?.scoreRaw,
+      band: this.riskEvaluation()?.kiban?.scoreBand
     };
   }
 }

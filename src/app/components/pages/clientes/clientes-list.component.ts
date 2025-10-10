@@ -7,6 +7,11 @@ import { ToastService } from '../../../services/toast.service';
 import { Client, BusinessFlow } from '../../../models/types';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { FlowContextService } from '../../../services/flow-context.service';
+import { RiskEvaluationService } from '../../../services/risk-evaluation.service';
+import { RiskEvaluation } from '../../risk-evaluation/risk-panel.component';
+import { forkJoin, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-clientes-list',
@@ -40,10 +45,13 @@ export class ClientesListComponent implements OnInit {
   // State
   isLoading = true;
   totalClientes = 0;
+  private readonly riskFeatureEnabled = environment.features.enableRiskEvaluation === true;
+  private riskEvaluations = new Map<string, RiskEvaluation>();
 
   constructor(
     private apiService: ApiService,
     private toast: ToastService,
+    private riskEvaluationService: RiskEvaluationService,
     @Optional() private flowContext?: FlowContextService
   ) {}
 
@@ -60,6 +68,7 @@ export class ClientesListComponent implements OnInit {
         this.clientes = clientes;
         this.filteredClientes = [...this.clientes];
         this.totalClientes = this.clientes.length;
+        this.hydrateRiskEvaluations(this.clientes);
         this.updatePagination();
         this.isLoading = false;
       },
@@ -223,26 +232,119 @@ export class ClientesListComponent implements OnInit {
     };
   }
 
+  private hydrateRiskEvaluations(clientes: Client[]): void {
+    if (!this.riskFeatureEnabled || clientes.length === 0) {
+      return;
+    }
+
+    const evaluationRequests = clientes.map(cliente =>
+      this.riskEvaluationService.getEvaluationHistory(cliente.id).pipe(
+        map(history => ({ clientId: cliente.id, evaluation: history[0] ?? null })),
+        catchError(() => of({ clientId: cliente.id, evaluation: null }))
+      )
+    );
+
+    forkJoin(evaluationRequests).subscribe(results => {
+      let updated = false;
+      results.forEach(result => {
+        if (result.evaluation) {
+          this.riskEvaluations.set(result.clientId, result.evaluation);
+          updated = true;
+        }
+      });
+
+      if (updated) {
+        this.paginatedClientes = [...this.paginatedClientes];
+      }
+    });
+  }
+
+  private getRiskEvaluation(cliente: Client): RiskEvaluation | null {
+    return this.riskEvaluations.get(cliente.id) ?? null;
+  }
+
+  getRiskBadge(cliente: Client): string | null {
+    const evaluation = this.getRiskEvaluation(cliente);
+    if (!evaluation) {
+      return null;
+    }
+
+    const decisionLabelMap: Record<RiskEvaluation['decision'], string> = {
+      GO: 'GO',
+      REVIEW: 'Revision',
+      'NO-GO': 'No-Go'
+    };
+
+    const categoryLabelMap: Record<RiskEvaluation['riskCategory'], string> = {
+      BAJO: 'bajo',
+      MEDIO: 'medio',
+      ALTO: 'alto',
+      CRITICO: 'critico'
+    };
+
+    return `${decisionLabelMap[evaluation.decision]} · Riesgo ${categoryLabelMap[evaluation.riskCategory]}`;
+  }
+
+  getRiskIndicatorClasses(cliente: Client): Record<string, boolean> {
+    const evaluation = this.getRiskEvaluation(cliente);
+    const baseClasses: Record<string, boolean> = {
+      'clientes-list__indicator': true,
+      'clientes-list__indicator--risk': true
+    };
+
+    if (!evaluation) {
+      return baseClasses;
+    }
+
+    const normalized = evaluation.riskCategory.toLowerCase();
+    return {
+      ...baseClasses,
+      [`clientes-list__indicator--risk-${normalized}`]: true
+    };
+  }
+
   isClientUrgent(cliente: Client): boolean {
-    return (cliente.healthScore !== undefined && cliente.healthScore < 40) || 
-           cliente.status === 'En Riesgo' || 
+    const evaluation = this.getRiskEvaluation(cliente);
+    if (evaluation) {
+      return evaluation.decision === 'NO-GO' || evaluation.riskCategory === 'CRITICO';
+    }
+
+    return (cliente.healthScore !== undefined && cliente.healthScore < 40) ||
+           cliente.status === 'En Riesgo' ||
            cliente.status === 'Documentos Incompletos';
   }
 
   isHighValueClient(cliente: Client): boolean {
-    return (cliente.healthScore !== undefined && cliente.healthScore >= 90) && 
+    const evaluation = this.getRiskEvaluation(cliente);
+    if (evaluation) {
+      return evaluation.decision === 'GO' && evaluation.scoreBreakdown.finalScore >= 80;
+    }
+
+    return (cliente.healthScore !== undefined && cliente.healthScore >= 90) &&
            cliente.status === 'Activo';
   }
 
   isAtRisk(cliente: Client): boolean {
-    return (cliente.healthScore !== undefined && cliente.healthScore < 60) || 
+    const evaluation = this.getRiskEvaluation(cliente);
+    if (evaluation) {
+      return evaluation.decision === 'NO-GO' ||
+             evaluation.decision === 'REVIEW' ||
+             evaluation.riskCategory === 'ALTO' ||
+             evaluation.riskCategory === 'CRITICO';
+    }
+
+    return (cliente.healthScore !== undefined && cliente.healthScore < 60) ||
            cliente.status === 'En Riesgo';
   }
   
   hasProtectionAvailable(cliente: Client): boolean {
-    // Protection only available for financial products
-    const financialFlows = ['VentaPlazo', 'AhorroProgramado', 'CreditoColectivo'];
-    return financialFlows.includes(cliente.flow as string);
+    const flowsWithProtection = new Set<BusinessFlow>([
+      BusinessFlow.VentaPlazo,
+      BusinessFlow.AhorroProgramado,
+      BusinessFlow.CreditoColectivo,
+    ]);
+
+    return flowsWithProtection.has(cliente.flow);
   }
 
   // === SELECTION MANAGEMENT ===
