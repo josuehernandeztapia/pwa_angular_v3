@@ -66,6 +66,30 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.showPassword = !this.showPassword;
   }
 
+  onPasswordPaste(event: ClipboardEvent): void {
+    // Explicitly allow paste operation
+    event.preventDefault();
+    const pastedData = event.clipboardData?.getData('text') || '';
+
+    // Update the form control value
+    this.loginForm.get('password')?.setValue(pastedData);
+
+    // Clear any previous error messages
+    this.errorMessage = '';
+  }
+
+  onEmailPaste(event: ClipboardEvent): void {
+    // Explicitly allow paste operation
+    event.preventDefault();
+    const pastedData = event.clipboardData?.getData('text') || '';
+
+    // Update the form control value
+    this.loginForm.get('email')?.setValue(pastedData);
+
+    // Clear any previous error messages
+    this.errorMessage = '';
+  }
+
   isFieldInvalid(field: string): boolean {
     const control = this.loginForm.get(field);
     return !!(control && control.invalid && (control.dirty || control.touched));

@@ -39,6 +39,7 @@
             required
             aria-required="true"
             data-cy="login-email"
+            (paste)="onEmailPaste($event)"
           >
         <div *ngIf="isFieldInvalid('email')" class="error-text" role="alert">
           <span *ngIf="loginForm.get('email')?.errors?.['required']">
@@ -67,6 +68,8 @@
             required
             aria-required="true"
             data-cy="login-password"
+            (paste)="onPasswordPaste($event)"
+            spellcheck="false"
           >
           <button
             type="button"

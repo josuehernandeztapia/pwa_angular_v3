@@ -54,7 +54,7 @@ const baseEnvironment = {
   
   // Feature flags
   features: {
-    enableMockData: useMockData,
+    enableMockData: true, // Always enable mock data for development
     enableAnalytics: false,
     enablePushNotifications: true,
     enableOfflineMode: true,
