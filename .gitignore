@@ -56,3 +56,9 @@ bff/coverage/
 *.orig
 tests/visual/**/*.webm.bak
 .github/workflows/*.bak
+
+# Video files (prevent Git LFS issues)
+*.mp4
+*.mov
+*.avi
+cypress/videos/

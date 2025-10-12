@@ -13,9 +13,11 @@ Construida con **Angular 17+** y un stack de calidad enterprise.
 
 ## [TOOLS] Instalación rápida
 
+⚠️ **IMPORTANTE**: Si tienes problemas de clonado, ver [CLONE-INSTRUCTIONS.md](./CLONE-INSTRUCTIONS.md)
+
 ```bash
-# Instalar dependencias
-npm ci
+# Instalar dependencias (usar legacy-peer-deps si hay warnings)
+npm ci --legacy-peer-deps
 
 # Servir en local con datos reales (requiere BFF activo en http://localhost:3000)
 npm run start:real
